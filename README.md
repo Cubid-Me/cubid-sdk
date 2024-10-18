@@ -37,7 +37,7 @@ const CubidSDK = require('cubid-sdk');
 const cubid = new CubidSDK('your_dapp_id', 'your_api_key');
 ```
 
-### API Methods
+### API Methods (examples, non-exhaustive list)
 
 #### 1. **Create a New User**
 
