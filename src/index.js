@@ -103,6 +103,18 @@ class CubidSDK {
     async createUser({ email, phone }) {
         return this.makePostRequest('create_user', { dapp_id: this.dapp_id, apikey: this.api_key, email, phone });
     }
+
+      /**
+   * Saves a secret for a user.
+   * @param {Object} params - The parameters for the API call.
+   * @param {string} params.user_id - The ID of the user.
+   * @param {string} params.secret - The secret to be saved.
+   * @returns {Promise<Object>} - The success status of the operation.
+   */
+  async saveSecret({ user_id, secret }) {
+    return this.makePostRequest('save_secret', { user_id, api_key: this.api_key, secret });
+  }
+
 }
 
 module.exports = CubidSDK;
