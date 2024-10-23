@@ -1,6 +1,3 @@
-Here's a sample **README.md** for your file:
-
----
 
 # Cubid SDK
 
@@ -23,6 +20,10 @@ npm install cubid-sdk
 ```
 
 For more information, visit the [npm package page](https://www.npmjs.com/package/cubid-sdk).
+
+## API Keys
+
+Use Cubid's [Admin Console](https://admin.cubid.me/admin) to configure your App and get provisioned with a dApp ID and API Keys.
 
 ## Usage
 
@@ -63,7 +64,38 @@ cubid.fetchExactLocation({ user_id: 'user123' })
   .catch(error => console.error('Error fetching location:', error));
 ```
 
-#### 4. **Save Secret for a User**
+#### 4. **Fetch User Location (Approximate)**
+
+```javascript
+cubid.fetchApproxLocation({ user_id: 'user123' })
+  .then(response => console.log('Approximate location data:', response))
+  .catch(error => console.error('Error fetching approximate location:', error));
+```
+
+#### 5. **Fetch Rough Location (Rough)**
+
+```javascript
+cubid.fetchRoughLocation({ user_id: 'user123' })
+  .then(response => console.log('Rough location data:', response))
+  .catch(error => console.error('Error fetching rough location:', error));
+```
+
+#### 6. **Fetch User Data**
+
+```javascript
+cubid.fetchUserData({ user_id: 'user123' })
+  .then(response => console.log('User data:', response))
+  .catch(error => console.error('Error fetching user data:', error));
+```
+
+#### 7. **Fetch Score**
+
+```javascript
+cubid.fetchScore({ user_id: 'user123' })
+  .then(response => console.log('Score data:', response))
+  .catch(error => console.error('Error fetching score:', error));
+```
+#### 8. **Save Secret for a User**
 
 ```javascript
 cubid.saveSecret({ user_id: 'user123', secret: 'mySuperSecretKey' })
@@ -82,7 +114,3 @@ You can view the full source code for this SDK [here](https://github.com/Cubid-M
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-This README provides a clear overview of the SDK, installation instructions, usage examples, and links to relevant documentation, making it easy for developers to integrate and use the SDK.
