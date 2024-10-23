@@ -1,4 +1,3 @@
-import '@near-wallet-selector/modal-ui/styles.css';
 export declare class Wallet {
     constructor({ createAccessKeyFor, network }: any);
     startUp(): Promise<any>;

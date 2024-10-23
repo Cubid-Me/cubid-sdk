@@ -1,4 +1,3 @@
-import "@near-wallet-selector/modal-ui/styles.css";
 export declare const stampsWithId: {
     facebook: number;
     github: number;

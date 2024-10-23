@@ -42,7 +42,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Stamps = exports.stampsWithId = void 0;
 const react_1 = __importStar(require("react"));
 const axios_1 = __importDefault(require("axios"));
-require("@near-wallet-selector/modal-ui/styles.css");
 const socialDataToMap = [
     {
         local_key: "facebook_data",

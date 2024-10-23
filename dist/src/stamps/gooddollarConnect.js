@@ -47,7 +47,6 @@ const axios_1 = __importDefault(require("axios"));
 const react_toastify_1 = require("react-toastify");
 const wagmi_1 = require("wagmi");
 const web3_1 = __importDefault(require("web3"));
-require("@near-wallet-selector/modal-ui/styles.css");
 const useAuth_1 = __importDefault(require("@/hooks/useAuth"));
 const button_1 = require("@/components/ui/button");
 const card_1 = require("@/components/ui/card");

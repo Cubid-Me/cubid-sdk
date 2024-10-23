@@ -13,7 +13,6 @@ import { toast } from "react-toastify"
 import { useAccount } from "wagmi"
 import Web3 from "web3"
 
-import "@near-wallet-selector/modal-ui/styles.css"
 import useAuth from "@/hooks/useAuth"
 import { Button } from "@/components/ui/button"
 import {
