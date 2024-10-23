@@ -14,7 +14,6 @@ import { useWallet as useSolanaWallet, useConnection as useSolanaConnection, use
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 import { useStamps } from "../hooks/useStamps"
-import "@near-wallet-selector/modal-ui/styles.css"
 
 import useAuth from "../hooks/useAuth"
 import { useCreatedByAppId } from "../hooks/useCreatedByApp"
