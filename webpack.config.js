@@ -20,6 +20,10 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.css$/,
+        use: ["postcss-loader"],
+      },
     ],
   },
   resolve: {
