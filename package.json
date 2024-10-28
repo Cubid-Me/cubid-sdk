@@ -1,6 +1,6 @@
 {
   "name": "cubid-sdk",
-  "version": "1.0.22",
+  "version": "1.0.24",
   "description": "Cubid SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
