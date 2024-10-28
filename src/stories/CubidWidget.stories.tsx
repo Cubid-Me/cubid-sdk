@@ -26,16 +26,34 @@ type Story = StoryObj<typeof meta>;
 export const GoogleWidget: Story = {
     args: {
         stampToRender: "google",
-        uuid: "9ca584b0-dd55-441a-b72e-d06a72ff156d",
+        uuid: "4295b01e-4726-44e5-802b-eec14eefe38b",
         page_id: "35",
-        api_key: "653529fd-a25b-4340-ba2b-d87ded675ed1",
+        api_key: "8c354e51-d323-482a-86ca-e931cd0e91d8",
     },
 };
 export const DiscordWidget: Story = {
     args: {
         stampToRender: "discord",
-        uuid: "9ca584b0-dd55-441a-b72e-d06a72ff156d",
+        uuid: "4295b01e-4726-44e5-802b-eec14eefe38b",
         page_id: "35",
-        api_key: "653529fd-a25b-4340-ba2b-d87ded675ed1",
+        api_key: "8c354e51-d323-482a-86ca-e931cd0e91d8",
+    },
+};
+
+export const AddressWidget: Story = {
+    args: {
+        stampToRender: "address",
+        uuid: "4295b01e-4726-44e5-802b-eec14eefe38b",
+        page_id: "35",
+        api_key: "8c354e51-d323-482a-86ca-e931cd0e91d8",
+    },
+};
+
+export const PhoneWidget: Story = {
+    args: {
+        stampToRender: "phone",
+        uuid: "4295b01e-4726-44e5-802b-eec14eefe38b",
+        page_id: "35",
+        api_key: "8c354e51-d323-482a-86ca-e931cd0e91d8",
     },
 };

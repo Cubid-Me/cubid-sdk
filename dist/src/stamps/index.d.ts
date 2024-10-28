@@ -1,0 +1,28 @@
+import 'tailwindcss/tailwind.css';
+import React from "react";
+export declare const stampsWithId: {
+    facebook: number;
+    github: number;
+    google: number;
+    twitter: number;
+    discord: number;
+    poh: number;
+    iah: number;
+    brightid: number;
+    gitcoin: number;
+    instagram: number;
+    phone: number;
+    gooddollar: number;
+    "near-wallet": number;
+    fractal: number;
+    evm: number;
+    email: number;
+    solana: number;
+    telegram: number;
+    worldcoin: number;
+    near: number;
+    "lens-protocol": number;
+    farcaster: number;
+    address: number;
+};
+export declare const Stamps: ({ stampToRender, uuid, page_id, api_key, isGrid, }: any) => React.JSX.Element;

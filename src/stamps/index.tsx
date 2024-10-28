@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 "use client";
@@ -7,6 +6,34 @@ import 'tailwindcss/tailwind.css';
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useProfile as useFarcasterProfile, SignInButton } from '@farcaster/auth-kit';
+import { PhoneNumberConnect } from './phoneNumberConnect'
+import { LocationSearchPanel } from './setLocationPanel'
+
+export const stampsWithId = {
+  facebook: 1,
+  github: 2,
+  google: 3,
+  twitter: 4,
+  discord: 5,
+  poh: 6,
+  iah: 7,
+  brightid: 8,
+  gitcoin: 9,
+  instagram: 10,
+  phone: 11,
+  gooddollar: 12,
+  "near-wallet": 15,
+  fractal: 17,
+  evm: 14,
+  email: 13,
+  solana: 53,
+  telegram: 27,
+  worldcoin: 26,
+  near: 15,
+  "lens-protocol": 66,
+  'farcaster': 68,
+  'address': 70
+}
 
 const socialDataToMap = [
   {
@@ -65,6 +92,8 @@ export const Stamps = ({
 }: any) => {
   const [allStamps, setAllStamps] = useState([]);
   const [stampLoading, setStampLoading] = useState(true);
+  const [phoneOpen, setPhoneOpen] = useState(false);
+  const [addressOpen, setAddressOpen] = useState(false);
 
   const { isAuthenticated: isFarcasterAuthenticated, profile } = useFarcasterProfile();
 
@@ -168,6 +197,64 @@ export const Stamps = ({
           </div>
         </div>
       )}
+      {stampToRender === "phone" && (
+        <div className={`border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md`}>
+          <div className="flex flex-col items-start">
+            <img
+              src="https://i.pinimg.com/736x/84/4e/8c/844e8cd4ab26c82286238471f0e5a901.jpg"
+              alt="Farcaster logo"
+              className="mb-1 size-10 rounded-md"
+            />
+            <h2 className="text-xl font-bold">Phone</h2>
+            {doesStampExist(stampsWithId.phone) ? (
+              <p className="text-sm text-gray-600 mt-1">Your Phone is verified</p>
+            ) : (
+              <div className="bg-white w-[fit-content] rounded-lg">
+                <p className="text-sm text-gray-600">Connect your phone</p>
+                <button
+                  onClick={() => {
+                    setPhoneOpen(true)
+                  }}
+                  className="bg-blue-500 text-white py-2 px-4 rounded mt-2"
+                >
+                  Connect Phone
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {stampToRender === "address" && (
+        <div className={`border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md`}>
+          <div className="flex flex-col items-start">
+            <img
+              src="https://thumbs.dreamstime.com/b/destination-place-pin-red-pointer-map-position-mark-125211341.jpg"
+              alt="Farcaster logo"
+              className="mb-1 size-10 rounded-md"
+            />
+            <h2 className="text-xl font-bold">Address</h2>
+            {doesStampExist(stampsWithId.address) ? (
+              <p className="text-sm text-gray-600 mt-1">Your Address is added</p>
+            ) : (
+              <div className="bg-white w-[fit-content] rounded-lg">
+                <p className="text-sm text-gray-600">Add your address</p>
+                <button
+                  onClick={() => {
+                    setAddressOpen(true)
+                  }}
+                  className="bg-blue-500 text-white py-2 px-4 rounded mt-2"
+                >
+                  Add Address
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      <PhoneNumberConnect apikey={api_key} open={phoneOpen} onClose={() => setPhoneOpen(false)} fetchStamps={fetchStampData} page_id={page_id} uuid={uuid} />
+      <LocationSearchPanel  fetchStamps={fetchStampData}  apikey={api_key} open={addressOpen} onClose={() => {
+        setAddressOpen(false)
+      }}  page_id={page_id} uuid={uuid}  />
     </div>
   );
 };
