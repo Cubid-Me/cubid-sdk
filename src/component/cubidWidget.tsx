@@ -34,7 +34,7 @@ const stampsWithId = {
  * @param {Object} props - The component props.
  * @param {string} props.title - The title of the widget.
  */
-export const CubidWidget = ({ stampToRender, uuid, page_id, api_key }: { stampToRender: string, uuid: string, page_id: string, api_key: string }) => {
+export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange }: { stampToRender: string, uuid: string, page_id: string, api_key: string, onStampChange: () => void }) => {
     const [allStamps, setAllStamps] = useState([])
     const [user_email, setUserEmail] = useState()
 
@@ -69,7 +69,7 @@ export const CubidWidget = ({ stampToRender, uuid, page_id, api_key }: { stampTo
                 <AdvancedCredentialCollection allStampIds={allStamps.map((item: { id: number }) => item.id) as any} email={user_email} uuid={uuid} refresh={fetchStampData} apikey={api_key} />
             )}
             <div className="p-3">
-                <Stamps stampToRender={stampToRender} uuid={uuid} page_id={page_id} api_key={api_key} />
+                <Stamps stampToRender={stampToRender} uuid={uuid} onStampChange={onStampChange} page_id={page_id} api_key={api_key} />
             </div>
         </>
     );

@@ -89,6 +89,7 @@ export const Stamps = ({
   page_id,
   api_key,
   isGrid,
+  onStampChange
 }: any) => {
   const [allStamps, setAllStamps] = useState([]);
   const [stampLoading, setStampLoading] = useState(true);
@@ -101,6 +102,7 @@ export const Stamps = ({
     if (!uuid) return;
     setStampLoading(true);
     try {
+      onStampChange()
       const response = await axios.post(`https://passport.cubid.me/api/v2/identity/fetch_stamps`, {
         user_id: uuid,
         apikey: api_key,
@@ -112,7 +114,7 @@ export const Stamps = ({
     } finally {
       setStampLoading(false);
     }
-  }, [uuid, api_key, page_id]);
+  }, [uuid, api_key, page_id, onStampChange]);
 
   useEffect(() => {
     fetchStampData();
@@ -252,9 +254,9 @@ export const Stamps = ({
         </div>
       )}
       <PhoneNumberConnect apikey={api_key} open={phoneOpen} onClose={() => setPhoneOpen(false)} fetchStamps={fetchStampData} page_id={page_id} uuid={uuid} />
-      <LocationSearchPanel  fetchStamps={fetchStampData}  apikey={api_key} open={addressOpen} onClose={() => {
+      <LocationSearchPanel fetchStamps={fetchStampData} apikey={api_key} open={addressOpen} onClose={() => {
         setAddressOpen(false)
-      }}  page_id={page_id} uuid={uuid}  />
+      }} page_id={page_id} uuid={uuid} />
     </div>
   );
 };
