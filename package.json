@@ -1,12 +1,12 @@
 {
   "name": "cubid-sdk",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Cubid SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc && cp -r build.css dist/index.css",
-    "prepare": "tsc",
+    "prepare": "tsc && cp -r build.css dist/index.css",
     "start": "tsc && node dist/index.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
