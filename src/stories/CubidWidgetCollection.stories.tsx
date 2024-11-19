@@ -1,4 +1,3 @@
-import 'tailwindcss/tailwind.css'
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { CubidWidgetCollection } from '../component/cubidWidget';

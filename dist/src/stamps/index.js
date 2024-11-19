@@ -39,12 +39,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Stamps = exports.stampsWithId = void 0;
-require("tailwindcss/tailwind.css");
 const react_1 = __importStar(require("react"));
 const axios_1 = __importDefault(require("axios"));
-const auth_kit_1 = require("@farcaster/auth-kit");
 const phoneNumberConnect_1 = require("./phoneNumberConnect");
 const setLocationPanel_1 = require("./setLocationPanel");
+let useFarcasterProfile, SignInButton;
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    const authKit = yield Promise.resolve().then(() => __importStar(require("@farcaster/auth-kit")));
+    useFarcasterProfile = authKit.useProfile;
+    SignInButton = authKit.SignInButton;
+}))();
 exports.stampsWithId = {
     facebook: 1,
     github: 2,
@@ -67,8 +71,8 @@ exports.stampsWithId = {
     worldcoin: 26,
     near: 15,
     "lens-protocol": 66,
-    'farcaster': 68,
-    'address': 70
+    farcaster: 68,
+    address: 70
 };
 const socialDataToMap = [
     {
@@ -84,7 +88,7 @@ const socialDataToMap = [
         supabase_key: "github",
         stampTypeId: 2,
         title: "Github",
-        image: "https://play-lh.googleusercontent.com/PCpXdqvUWfCW1mXhH1Y_98yBpgsWxuTSTofy3NGMo9yBTATDyzVkqU580bfSln50bFU",
+        image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxITEhITERIWFRAVFRUWFxYRFhUYFRAYFREaFxcSFhMYHCghGR4lGxYVITEiJSkrLi4uFx8zODMtNygtLi0BCgoKDQ0ODw8PDysZFRkrKysrKy0rKys3KystKy0tLSsrKystKys3KystKysrKystKysrKysrKysrKy0rKystK//AABEIAOAA4AMBIgACEQEDEQH/xAAcAAEAAgMBAQEAAAAAAAAAAAAABwgBBQYEAgP/xABJEAABAwICBwQECQkGBwAAAAABAAIDBBEFIQYHEjFBUXETImGBQnKRoQgUIzJic4KisSQzNVJTsrPBwkOSk6PD4RUlVGN0g4T/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAQL/xAAXEQEBAQEAAAAAAAAAAAAAAAAAAREx/9oADAMBAAIRAxEAPwCcUREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBF8yPABJIAGZJyA81yuK6yMLp7h9ZG5w3thvK4HlaMHNB1iKLKzXnQN/NwVEnjsxsHvdf3LUS6/Bfu4cSObqkA+wRH8VcE1IoVj1+Z97DiBzbUgn2GIfittR686B352Coj8bMePc6/uTBKiLk8J1j4XUWDKyNrjkGzXiJO61pAM7rqo3ggEEEHcRmD0Kg+kREBERAREQEREBERAREQEREBERARYJUfaw9Z8FBtQw2mrbfNv3IMsjKRx47Az6b0HaYvjEFLGZamVsUY9J5tc8gN5PgFEGlOu83LMOhFv21QDn4thH4uPkopx7HKisl7WqldJJwvk2MfqsaMmjotctSJraY5pDV1jtqqqJJc7hrz3G+rGLNHsWrCIqgiIgIiIoVs8D0hq6M3paiSLO5aw9x3rRm7T7FrEREz6La8DcMxGEW/bU43eLoT+LT5KX8IxiCqjEtNK2WM+kw3seRHA+BzVOVssBx2oo5RLSyujfle2bZAPRew5OHVTF1cJFHurvWhBX7MM9oa3g2/cn8YieP0Tn1Ug3WVZREQEREBERAREQEREBYKyo01w6fGij+K0zvyyVty4HOmjOW165ztysTyuGs1r6zzAX0dC75cZSzg/mOcbPp8z6Pid0FON7km5OZJzJJNySeJWEW8QReqmw6eQF0UMsjRkXRxveAeRLR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",
         color: "secondary",
     },
     {
@@ -112,18 +116,18 @@ const socialDataToMap = [
         color: "error",
     },
 ];
-const Stamps = ({ stampToRender, uuid, page_id, api_key, isGrid, }) => {
+const Stamps = ({ stampToRender, uuid, page_id, api_key, isGrid, onStampChange }) => {
+    var _a;
     const [allStamps, setAllStamps] = (0, react_1.useState)([]);
     const [stampLoading, setStampLoading] = (0, react_1.useState)(true);
     const [phoneOpen, setPhoneOpen] = (0, react_1.useState)(false);
     const [addressOpen, setAddressOpen] = (0, react_1.useState)(false);
-    const { isAuthenticated: isFarcasterAuthenticated, profile } = (0, auth_kit_1.useProfile)();
+    const { isAuthenticated: isFarcasterAuthenticated, profile } = (_a = useFarcasterProfile === null || useFarcasterProfile === void 0 ? void 0 : useFarcasterProfile()) !== null && _a !== void 0 ? _a : {};
     const fetchStampData = (0, react_1.useCallback)(() => __awaiter(void 0, void 0, void 0, function* () {
-        if (!uuid)
-            return;
         setStampLoading(true);
         try {
-            const response = yield axios_1.default.post(`https://passport.cubid.me/api/v2/identity/fetch_stamps`, {
+            onStampChange === null || onStampChange === void 0 ? void 0 : onStampChange();
+            const response = yield axios_1.default.post("https://passport.cubid.me/api/v2/identity/fetch_stamps", {
                 user_id: uuid,
                 apikey: api_key,
                 page_id: page_id,
@@ -136,14 +140,14 @@ const Stamps = ({ stampToRender, uuid, page_id, api_key, isGrid, }) => {
         finally {
             setStampLoading(false);
         }
-    }), [uuid, api_key, page_id]);
+    }), [uuid, api_key, page_id, onStampChange]);
     (0, react_1.useEffect)(() => {
         fetchStampData();
     }, [fetchStampData]);
     (0, react_1.useEffect)(() => {
         if (isFarcasterAuthenticated && (profile === null || profile === void 0 ? void 0 : profile.fid) && (profile === null || profile === void 0 ? void 0 : profile.username)) {
             (() => __awaiter(void 0, void 0, void 0, function* () {
-                yield axios_1.default.post('https://passport.cubid.me/api/v2/identity/add_stamp', {
+                yield axios_1.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
                     page_id,
                     stamp_type: "farcaster",
                     stampData: { uniquevalue: profile.fid, identity: profile.username },
@@ -157,46 +161,44 @@ const Stamps = ({ stampToRender, uuid, page_id, api_key, isGrid, }) => {
         return allStamps.some(({ stamptype }) => stamptype === stamp_id);
     };
     const handleSocialConnect = (supabase_key) => {
-        // Add your sign-in logic here
+        window.location.href = `https://allow.cubid.me/widget-allow?uid=${uuid}&social_provider=${supabase_key}&page_id=${page_id}`;
     };
-    return (react_1.default.createElement("div", { className: `grid grid-cols-1 ${stampLoading ? "pointer-events-none" : ""}` },
+    return (react_1.default.createElement("div", { style: {
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            pointerEvents: stampLoading ? "none" : "auto"
+        } },
         socialDataToMap
             .filter((item) => item.supabase_key === stampToRender)
-            .map((item) => (react_1.default.createElement("div", { className: `border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md`, key: item.supabase_key },
-            react_1.default.createElement("div", { className: "flex flex-col items-start" },
-                react_1.default.createElement("img", { src: item.image, alt: `${item.title} logo`, className: "mb-1 size-10 rounded-xl" }),
-                react_1.default.createElement("h2", { className: "text-xl font-bold" }, item.title),
-                react_1.default.createElement("p", { className: "text-sm text-gray-600 mt-1" }, doesStampExist(item.stampTypeId)
+            .map((item) => (react_1.default.createElement("div", { style: {
+                border: "1px solid #ccc",
+                width: isGrid ? "100%" : "300px",
+                height: "190px",
+                borderRadius: "12px",
+                padding: "16px 24px",
+                marginBottom: "16px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }, key: item.supabase_key },
+            react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" } },
+                react_1.default.createElement("img", { src: item.image, alt: `${item.title} logo`, style: { marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" } }),
+                react_1.default.createElement("h2", { style: { fontSize: "20px", fontWeight: "bold" } }, item.title),
+                react_1.default.createElement("p", { style: { fontSize: "14px", color: "#666", marginTop: "4px" } }, doesStampExist(item.stampTypeId)
                     ? `Your ${item.supabase_key} account is verified`
                     : `Connect your ${item.supabase_key} to verify`)),
-            react_1.default.createElement("div", { className: "flex justify-between mt-4" }, doesStampExist(item.stampTypeId) ? (react_1.default.createElement("button", { className: "bg-blue-500 text-white py-2 px-4 rounded-xl" }, "Verified Stamp")) : (react_1.default.createElement("button", { onClick: () => handleSocialConnect(item.supabase_key), className: "bg-blue-500 text-white py-2 px-4 rounded" }, "Connect Account")))))),
-        stampToRender === "farcaster" && (react_1.default.createElement("div", { className: `border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md` },
-            react_1.default.createElement("div", { className: "flex flex-col items-start" },
-                react_1.default.createElement("img", { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB0LwYIlZ9aYglKkSRuhEH0TM6VkCmqRqXpQ&s", alt: "Farcaster logo", className: "mb-1 size-10 rounded-md" }),
-                react_1.default.createElement("h2", { className: "text-xl font-bold" }, "Farcaster"),
-                doesStampExist(4) ? (react_1.default.createElement("p", { className: "text-sm text-gray-600 mt-1" }, "Your Farcaster is verified")) : (react_1.default.createElement("div", { className: "bg-white w-[fit-content] rounded-lg mt-2" },
-                    react_1.default.createElement(auth_kit_1.SignInButton, null)))))),
-        stampToRender === "phone" && (react_1.default.createElement("div", { className: `border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md` },
-            react_1.default.createElement("div", { className: "flex flex-col items-start" },
-                react_1.default.createElement("img", { src: "https://i.pinimg.com/736x/84/4e/8c/844e8cd4ab26c82286238471f0e5a901.jpg", alt: "Farcaster logo", className: "mb-1 size-10 rounded-md" }),
-                react_1.default.createElement("h2", { className: "text-xl font-bold" }, "Phone"),
-                doesStampExist(exports.stampsWithId.phone) ? (react_1.default.createElement("p", { className: "text-sm text-gray-600 mt-1" }, "Your Phone is verified")) : (react_1.default.createElement("div", { className: "bg-white w-[fit-content] rounded-lg" },
-                    react_1.default.createElement("p", { className: "text-sm text-gray-600" }, "Connect your phone"),
-                    react_1.default.createElement("button", { onClick: () => {
-                            setPhoneOpen(true);
-                        }, className: "bg-blue-500 text-white py-2 px-4 rounded mt-2" }, "Connect Phone")))))),
-        stampToRender === "address" && (react_1.default.createElement("div", { className: `border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md` },
-            react_1.default.createElement("div", { className: "flex flex-col items-start" },
-                react_1.default.createElement("img", { src: "https://thumbs.dreamstime.com/b/destination-place-pin-red-pointer-map-position-mark-125211341.jpg", alt: "Farcaster logo", className: "mb-1 size-10 rounded-md" }),
-                react_1.default.createElement("h2", { className: "text-xl font-bold" }, "Address"),
-                doesStampExist(exports.stampsWithId.address) ? (react_1.default.createElement("p", { className: "text-sm text-gray-600 mt-1" }, "Your Address is added")) : (react_1.default.createElement("div", { className: "bg-white w-[fit-content] rounded-lg" },
-                    react_1.default.createElement("p", { className: "text-sm text-gray-600" }, "Add your address"),
-                    react_1.default.createElement("button", { onClick: () => {
-                            setAddressOpen(true);
-                        }, className: "bg-blue-500 text-white py-2 px-4 rounded mt-2" }, "Add Address")))))),
+            react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginTop: "16px" } }, doesStampExist(item.stampTypeId) ? (react_1.default.createElement("button", { style: {
+                    backgroundColor: "#28a745",
+                    color: "#fff",
+                    padding: "8px 16px",
+                    borderRadius: "12px",
+                    border: "none"
+                } }, "Verified Stamp")) : (react_1.default.createElement("button", { onClick: () => handleSocialConnect(item.supabase_key), style: {
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    padding: "8px 16px",
+                    borderRadius: "12px",
+                    border: "none"
+                } }, "Connect Account")))))),
         react_1.default.createElement(phoneNumberConnect_1.PhoneNumberConnect, { apikey: api_key, open: phoneOpen, onClose: () => setPhoneOpen(false), fetchStamps: fetchStampData, page_id: page_id, uuid: uuid }),
-        react_1.default.createElement(setLocationPanel_1.LocationSearchPanel, { fetchStamps: fetchStampData, apikey: api_key, open: addressOpen, onClose: () => {
-                setAddressOpen(false);
-            }, page_id: page_id, uuid: uuid })));
+        react_1.default.createElement(setLocationPanel_1.LocationSearchPanel, { fetchStamps: fetchStampData, apikey: api_key, open: addressOpen, onClose: () => setAddressOpen(false), page_id: page_id, uuid: uuid })));
 };
 exports.Stamps = Stamps;

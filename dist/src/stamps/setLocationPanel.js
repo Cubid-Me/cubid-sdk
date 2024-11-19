@@ -17,10 +17,9 @@ const react_1 = __importDefault(require("react"));
 const axios_1 = __importDefault(require("axios"));
 const lodash_debounce_1 = __importDefault(require("lodash.debounce"));
 const react_toastify_1 = require("react-toastify");
+const button_1 = require("../component/button");
 const input_1 = require("../component/input");
-require("react-phone-input-2/lib/style.css");
-const alert_dialog_1 = require("../component/alert-dialog");
-const LocationSearchPanel = ({ open, onClose, apikey, page_id, uuid, fetchStamps }) => {
+const LocationSearchPanel = ({ open, onClose, apikey, page_id, uuid, fetchStamps, }) => {
     const [locationInput, setLocationInput] = react_1.default.useState("");
     const [allLocations, setAllLocations] = react_1.default.useState([]);
     const [selectedLocation, setSelectedLocation] = react_1.default.useState(null);
@@ -41,27 +40,28 @@ const LocationSearchPanel = ({ open, onClose, apikey, page_id, uuid, fetchStamps
         setLocationInput(e.target.value);
         handleLocationSearch(e.target.value);
     };
-    return (react_1.default.createElement(react_1.default.Fragment, null, open && (react_1.default.createElement(alert_dialog_1.AlertDialog, { open: open },
-        react_1.default.createElement(alert_dialog_1.AlertDialogContent, { style: { borderRadius: 10 }, className: "bg-white rounded-xl shadow-lg overflow-hidden max-w-sm h-[400px] mx-auto p-6" },
-            react_1.default.createElement(alert_dialog_1.AlertDialogHeader, { className: "mb-4" },
-                react_1.default.createElement(alert_dialog_1.AlertDialogTitle, { className: "text-2xl font-bold text-gray-800" }, "Location Search"),
-                react_1.default.createElement(alert_dialog_1.AlertDialogDescription, { className: "mt-2 text-gray-600" },
-                    react_1.default.createElement(input_1.Input, { placeholder: "Search and select home or work address", value: locationInput, onChange: handleLocationChange, className: "mt-4 w-full border border-gray-300 rounded-lg p-2 shadow focus:outline-none focus:shadow-outline" }),
-                    react_1.default.createElement("div", { className: "h-[200px] overflow-y-auto mt-3" }, allLocations.map((item) => (react_1.default.createElement("div", { key: item.name, onClick: () => {
-                            setLocationInput(item.formatted_address);
-                            setSelectedLocation(item);
-                        }, className: `cursor-pointer pb-2 ${(selectedLocation === null || selectedLocation === void 0 ? void 0 : selectedLocation.formatted_address) === item.formatted_address ? "font-bold" : ""}` }, item.formatted_address)))))),
-            react_1.default.createElement(alert_dialog_1.AlertDialogFooter, { className: "mt-6 flex absolute bottom-[10px] right-[10px] justify-between space-x-2" },
-                react_1.default.createElement(alert_dialog_1.AlertDialogCancel, { onClick: onClose, style: { borderRadius: 10 }, className: "bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md" }, "Cancel"),
-                react_1.default.createElement(alert_dialog_1.AlertDialogCancel, { onClick: () => __awaiter(void 0, void 0, void 0, function* () {
+    if (!open)
+        return null; // Render nothing if the modal is not open
+    return (react_1.default.createElement("div", { style: { backgroundColor: "#000000AB", zIndex: 1000 }, className: "fixed inset-0 flex items-center justify-center" },
+        react_1.default.createElement("div", { className: "bg-white rounded-xl shadow-lg overflow-hidden max-w-sm w-full p-6" },
+            react_1.default.createElement("h2", { className: "text-2xl font-bold text-gray-800 mb-4" }, "Location Search"),
+            react_1.default.createElement("p", { className: "mt-2 text-gray-600" },
+                react_1.default.createElement(input_1.Input, { placeholder: "Search and select home or work address", value: locationInput, style: { backgroundColor: "white", color: "black" }, onChange: handleLocationChange, className: "mt-4 w-full border border-gray-300 rounded-lg p-2 shadow focus:outline-none focus:shadow-outline" })),
+            react_1.default.createElement("div", { className: "h-[200px] overflow-y-auto mt-3" }, allLocations.map((item) => (react_1.default.createElement("div", { key: item.name, onClick: () => {
+                    setLocationInput(item.formatted_address);
+                    setSelectedLocation(item);
+                }, style: { color: "black" }, className: `cursor-pointer pb-2 ${(selectedLocation === null || selectedLocation === void 0 ? void 0 : selectedLocation.formatted_address) === item.formatted_address ? "font-bold" : ""}` }, item.formatted_address)))),
+            react_1.default.createElement("div", { className: "flex justify-between space-x-4 mt-4" },
+                react_1.default.createElement(button_1.Button, { onClick: onClose, style: { borderRadius: 10 }, className: "bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md" }, "Cancel"),
+                react_1.default.createElement(button_1.Button, { onClick: () => __awaiter(void 0, void 0, void 0, function* () {
                         yield axios_1.default.post('https://passport.cubid.me/api/v2/identity/add_stamp', {
                             page_id,
                             stamp_type: "address",
                             stampData: Object.assign({ uniquevalue: `${uuid}-${selectedLocation === null || selectedLocation === void 0 ? void 0 : selectedLocation.formatted_address}`, identity: selectedLocation === null || selectedLocation === void 0 ? void 0 : selectedLocation.formatted_address }, selectedLocation),
                             user_data: { uuid },
                         });
-                        onClose();
                         fetchStamps();
-                    }), style: { borderRadius: 10 }, disabled: !Boolean(selectedLocation), className: "bg-blue-500 hover:bg-gray-400 text-white py-2 px-4 rounded-md" }, "Save Location")))))));
+                        onClose();
+                    }), style: { borderRadius: 10 }, disabled: !Boolean(selectedLocation), className: "bg-blue-500 hover:bg-blue-400 text-white py-2 px-4 rounded-md" }, "Save Location")))));
 };
 exports.LocationSearchPanel = LocationSearchPanel;

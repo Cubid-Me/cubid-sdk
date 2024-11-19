@@ -26,7 +26,6 @@ const lucide_react_1 = require("lucide-react");
 const react_2 = __importDefault(require("react"));
 const axios_1 = __importDefault(require("axios"));
 const DAPP_NAME = "YourDAppName";
-const USER_EMAIL = "user@example.com";
 function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampIds }) {
     const [passcodeRequested, setPasscodeRequested] = (0, react_1.useState)(false);
     const [passcode, setPasscode] = (0, react_1.useState)('');
@@ -61,7 +60,8 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
         const { data } = yield axios_1.default.post("https://passport.cubid.me/api/verify/verify-email", {
             email: email,
             apikey,
-            otp: passcode
+            otp: passcode,
+            dappuser_id: uuid
         });
         if (data.success) {
             setCubidAuthenticated(true);
@@ -95,6 +95,18 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
             description: `Your credentials have been shared.`,
         });
     });
+    function maskEmail(email) {
+        // Split the email into the local part and the domain
+        const [localPart, domain] = email.split("@");
+        // Mask the first part of the local part (show first character only)
+        const maskedLocal = localPart[0] + "*".repeat(localPart.length - 1);
+        // Split the domain into the name and the extension (e.g., gmail.com -> gmail, com)
+        const [domainName, extension] = domain.split(".");
+        // Mask part of the domain name (show first character only)
+        const maskedDomain = domainName[0] + "*".repeat(domainName.length - 1);
+        // Return the email in the masked format
+        return `${maskedLocal}@${maskedDomain}.${extension}`;
+    }
     return (react_2.default.createElement("div", { className: "w-full p-3 mx-auto space-y-6" },
         react_2.default.createElement(card_1.Card, { className: credentialShared ? "bg-green-50 rounded-xl border-green-200" : (cubidAuthenticated ? "bg-yellow-50 rounded-xl border-yellow-200" : "bg-red-50 rounded-xl border-red-200") },
             react_2.default.createElement(card_1.CardHeader, null,
@@ -104,7 +116,10 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
             react_2.default.createElement(card_1.CardContent, null, !cubidAuthenticated ? (react_2.default.createElement(react_2.default.Fragment, null,
                 react_2.default.createElement("p", { className: "mb-4 text-red-600" }, "We found a credential on Cubid account for a different app. Get a one-time passcode to access it."),
                 !passcodeRequested ? (react_2.default.createElement(button_1.Button, { className: "!bg-red-600 !text-white rounded-xl", onClick: handlePasscodeRequest }, "Send me a passcode")) : (react_2.default.createElement("div", { className: "space-y-4" },
-                    react_2.default.createElement("p", null, "Check your email for the passcode we just sent"),
+                    react_2.default.createElement("p", null,
+                        "Check your email - ",
+                        maskEmail(email),
+                        " for the passcode we just sent"),
                     react_2.default.createElement("div", { className: "flex space-x-2" },
                         react_2.default.createElement(input_1.Input, { placeholder: "Enter passcode here", value: passcode, className: 'rounded-xl', onChange: (e) => setPasscode(e.target.value) }),
                         react_2.default.createElement(button_1.Button, { onClick: handlePasscodeVerify }, "OK")),
@@ -116,21 +131,13 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
                 react_2.default.createElement("p", { className: "mb-4 text-yellow-700" },
                     "Nice, you've authenticated with Cubid.",
                     react_2.default.createElement("br", null),
-                    react_2.default.createElement("br", null),
-                    "Twitter Credential available: ",
-                    react_2.default.createElement("strong", null, selectedTwitterHandle)),
+                    react_2.default.createElement("br", null)),
                 showTwitterHandles ? (react_2.default.createElement(react_2.default.Fragment, null,
                     react_2.default.createElement(radio_group_1.RadioGroup, { value: selectedTwitterHandle, onValueChange: setSelectedTwitterHandle, className: "mb-4" }, twitterHandles.map((handle) => (react_2.default.createElement("div", { key: handle, className: "flex items-center space-x-2" },
                         react_2.default.createElement(radio_group_1.RadioGroupItem, { value: handle, id: handle }),
                         react_2.default.createElement(label_1.Label, { htmlFor: handle }, handle))))),
-                    react_2.default.createElement(button_1.Button, { onClick: handleAuthorize, className: "w-full" },
-                        "Authorize ",
-                        DAPP_NAME,
-                        " to see this credential"))) : (react_2.default.createElement(react_2.default.Fragment, null,
-                    react_2.default.createElement(button_1.Button, { onClick: handleAuthorize, className: "w-full mb-4" },
-                        "Authorize ",
-                        DAPP_NAME,
-                        " to see this credential"))))))),
+                    react_2.default.createElement(button_1.Button, { onClick: handleAuthorize, style: { backgroundColor: "#007AFF" }, className: "w-full text-white rounded-xl" }, "Authorize App to see this credential"))) : (react_2.default.createElement(react_2.default.Fragment, null,
+                    react_2.default.createElement(button_1.Button, { onClick: handleAuthorize, style: { backgroundColor: "#007AFF" }, className: "w-full text-white rounded-xl mb-4" }, "Authorize App to see this credential"))))))),
         react_2.default.createElement(dialog_1.Dialog, { open: showAddCredentialModal, onOpenChange: setShowAddCredentialModal },
             react_2.default.createElement(dialog_1.DialogContent, null,
                 react_2.default.createElement(dialog_1.DialogHeader, null,

@@ -1029,10 +1029,10 @@
   resolved "https://registry.npmjs.org/@base2/pretty-print-object/-/pretty-print-object-1.0.1.tgz"
   integrity sha512-4iri8i1AqYHJE2DstZYkyEprg6Pq6sKx3xn5FpySk9sNhH7qN2LLlHJCfDTZRILNwQNPD7mATWM0TBui7uC1pA==
 
-"@celo/abis-12@npm:@celo/abis@12.0.0-canary.35":
-  version "12.0.0-canary.35"
-  resolved "https://registry.npmjs.org/@celo/abis/-/abis-12.0.0-canary.35.tgz"
-  integrity sha512-6MdEX96TGTaiiqATWDHwdsv3XoUMc0GRr1KVDPH0JKFqxs3/ATnoekAUL+bBn6rzuI+KFnKhRHjcPm4Qjq9EHg==
+"@celo/abis-12@npm:@celo/abis@12.0.0-canary.60":
+  version "12.0.0-canary.60"
+  resolved "https://registry.npmjs.org/@celo/abis/-/abis-12.0.0-canary.60.tgz"
+  integrity sha512-LLyFbVNOzer4nk19q1g9Svxdnptcz7KVZB2yed3kELrhzRA8HqWVGIAFQV8/PR2ObyxdIHhGWpZTjWsWWo0nJw==
 
 "@celo/abis@11.0.0":
   version "11.0.0"
@@ -1062,12 +1062,12 @@
     web3-eth-contract "1.10.4"
 
 "@celo/contractkit@^8.3.0":
-  version "8.3.0"
-  resolved "https://registry.npmjs.org/@celo/contractkit/-/contractkit-8.3.0.tgz"
-  integrity sha512-Y2A6Pr+tkb+SYgt09qeF1Z09JZN/AcXXKjHkbc83LEeb6qtCxnWNhxXUY8Mu1Bnk5+Oyf+jrWJPenmuuFIufuQ==
+  version "8.3.1"
+  resolved "https://registry.npmjs.org/@celo/contractkit/-/contractkit-8.3.1.tgz"
+  integrity sha512-23rJHn2QVbX0LXYDDNR7jI1WgmP9EqroAhI+rFVTuPKQyjzV2wJT8cMAmcE84Xc6sAezkiBT6rt2viX2POUiVA==
   dependencies:
     "@celo/abis" "11.0.0"
-    "@celo/abis-12" "npm:@celo/abis@12.0.0-canary.35"
+    "@celo/abis-12" "npm:@celo/abis@12.0.0-canary.60"
     "@celo/base" "^6.1.0"
     "@celo/connect" "^6.0.2"
     "@celo/utils" "^7.0.0"
@@ -6621,9 +6621,9 @@ electron-to-chromium@^1.5.28:
   integrity sha512-dfdv/2xNjX0P8Vzme4cfzHqnPm5xsZXwsolTYr0eyW18IUmNyG08vL+fttvinTfhKfIKdRoqkDIC9e9iWQCNYQ==
 
 elliptic@^6.4.0, elliptic@^6.5.4, elliptic@^6.5.7:
-  version "6.5.7"
-  resolved "https://registry.npmjs.org/elliptic/-/elliptic-6.5.7.tgz"
-  integrity sha512-ESVCtTwiA+XhY3wyh24QqRGBoP3rEdDUl3EDUUo9tft074fi19IrdpH7hLCMMP3CIj7jb3W96rn8lt/BqIlt5Q==
+  version "6.6.0"
+  resolved "https://registry.npmjs.org/elliptic/-/elliptic-6.6.0.tgz"
+  integrity sha512-dpwoQcLc/2WLQvJvLRHKZ+f9FgOdjnq11rurqwekGQygGPsYSK29OMMD2WalatiqQ+XGFDglTNixpPfI+lpaAA==
   dependencies:
     bn.js "^4.11.9"
     brorand "^1.1.0"

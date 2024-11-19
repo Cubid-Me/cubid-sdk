@@ -1,4 +1,3 @@
-import 'tailwindcss/tailwind.css';
 import React from "react";
 export declare const stampsWithId: {
     facebook: number;
@@ -25,4 +24,4 @@ export declare const stampsWithId: {
     farcaster: number;
     address: number;
 };
-export declare const Stamps: ({ stampToRender, uuid, page_id, api_key, isGrid, }: any) => React.JSX.Element;
+export declare const Stamps: ({ stampToRender, uuid, page_id, api_key, isGrid, onStampChange }: any) => React.JSX.Element;

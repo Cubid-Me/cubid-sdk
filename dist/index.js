@@ -117,11 +117,12 @@ class CubidSDK {
      * @param {Object} params - The parameters for the API call.
      * @param {string} params.email - The email of the new user.
      * @param {string} params.phone - The phone number of the new user.
+     *  * @param {string} params.evm - The evm address of the new user.
      * @returns {Promise<Object>} - The newly created user data.
      */
     createUser(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ email, phone }) {
-            return this.makePostRequest('create_user', { dapp_id: this.dapp_id, apikey: this.api_key, email, phone });
+        return __awaiter(this, arguments, void 0, function* ({ email, phone, evm }) {
+            return this.makePostRequest('create_user', { dapp_id: this.dapp_id, apikey: this.api_key, email, phone, evm });
         });
     }
     /**

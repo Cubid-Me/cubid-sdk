@@ -38,9 +38,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CubidWidgetCollection = exports.CubidWidget = void 0;
 const react_1 = __importStar(require("react"));
 const index_1 = require("../stamps/index");
-require("tailwindcss/tailwind.css");
 const addStampVerify_1 = require("../stamps/addStampVerify");
 const axios_1 = __importDefault(require("axios"));
+const providers_1 = require("./providers");
 const stampsWithId = {
     facebook: 1,
     github: 2,
@@ -70,7 +70,7 @@ const stampsWithId = {
  * @param {Object} props - The component props.
  * @param {string} props.title - The title of the widget.
  */
-const CubidWidget = ({ stampToRender, uuid, page_id, api_key }) => {
+const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange }) => {
     var _a;
     const [allStamps, setAllStamps] = (0, react_1.useState)([]);
     const [user_email, setUserEmail] = (0, react_1.useState)();
@@ -94,13 +94,13 @@ const CubidWidget = ({ stampToRender, uuid, page_id, api_key }) => {
         fetchStampData();
     }, [fetchStampData]);
     const showAllowCreds = (_a = allStamps.filter((item) => !item.permAvailable && stampsWithId[stampToRender] === item.stamptype)) === null || _a === void 0 ? void 0 : _a[0];
-    return (react_1.default.createElement(react_1.default.Fragment, null,
+    return (react_1.default.createElement(providers_1.Provider, null,
         allStamps.length !== 0 && showAllowCreds && (react_1.default.createElement(addStampVerify_1.AdvancedCredentialCollection, { allStampIds: allStamps.map((item) => item.id), email: user_email, uuid: uuid, refresh: fetchStampData, apikey: api_key })),
         react_1.default.createElement("div", { className: "p-3" },
-            react_1.default.createElement(index_1.Stamps, { stampToRender: stampToRender, uuid: uuid, page_id: page_id, api_key: api_key }))));
+            react_1.default.createElement(index_1.Stamps, { stampToRender: stampToRender, uuid: uuid, onStampChange: onStampChange, page_id: page_id, api_key: api_key }))));
 };
 exports.CubidWidget = CubidWidget;
-const CubidWidgetCollection = ({ stampToRender, uuid, page_id, api_key }) => {
+const CubidWidgetCollection = ({ stampToRender, uuid, page_id, api_key, onStampChange }) => {
     const [allStamps, setAllStamps] = (0, react_1.useState)([]);
     const [user_email, setUserEmail] = (0, react_1.useState)();
     const [showAllowCreds, setShowAllowCreds] = (0, react_1.useState)(false);
@@ -123,13 +123,15 @@ const CubidWidgetCollection = ({ stampToRender, uuid, page_id, api_key }) => {
     (0, react_1.useEffect)(() => {
         fetchStampData();
     }, [fetchStampData]);
-    stampToRender.map((_) => {
-        var _a;
-        const showAllowCreds = (_a = allStamps.filter((item) => !item.permAvailable && stampsWithId[_] === item.stamptype)) === null || _a === void 0 ? void 0 : _a[0];
-        setShowAllowCreds(Boolean(showAllowCreds));
-    });
-    return (react_1.default.createElement(react_1.default.Fragment, null,
+    (0, react_1.useEffect)(() => {
+        stampToRender.map((_) => {
+            var _a;
+            const showAllowCreds = (_a = allStamps.filter((item) => !item.permAvailable && stampsWithId[_] === item.stamptype)) === null || _a === void 0 ? void 0 : _a[0];
+            setShowAllowCreds(Boolean(showAllowCreds));
+        });
+    }, [allStamps]);
+    return (react_1.default.createElement(providers_1.Provider, null,
         allStamps.length !== 0 && showAllowCreds && (react_1.default.createElement(addStampVerify_1.AdvancedCredentialCollection, { allStampIds: allStamps.map((item) => item.id), email: user_email, uuid: uuid, refresh: fetchStampData, apikey: api_key })),
-        react_1.default.createElement("div", { className: "grid md:grid-cols-3 px-3 gap-4 grid-cols-1" }, stampToRender.map((item) => (react_1.default.createElement(index_1.Stamps, { isGrid: true, stampToRender: item, uuid: uuid, page_id: page_id, api_key: api_key }))))));
+        react_1.default.createElement("div", { className: "grid md:grid-cols-3 px-3 gap-4 grid-cols-1" }, stampToRender.map((item) => (react_1.default.createElement(index_1.Stamps, { isGrid: true, onStampChange: onStampChange, stampToRender: item, uuid: uuid, page_id: page_id, api_key: api_key }))))));
 };
 exports.CubidWidgetCollection = CubidWidgetCollection;

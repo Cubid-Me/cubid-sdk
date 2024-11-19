@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Stamps } from '../stamps/index'
-import 'tailwindcss/tailwind.css'
 import { AdvancedCredentialCollection } from '../stamps/addStampVerify'
 import axios from 'axios';
+import { Provider } from './providers'
 
 const stampsWithId = {
     facebook: 1,
@@ -34,7 +34,7 @@ const stampsWithId = {
  * @param {Object} props - The component props.
  * @param {string} props.title - The title of the widget.
  */
-export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange }: { stampToRender: string, uuid: string, page_id: string, api_key: string, onStampChange: () => void }) => {
+export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange }: { stampToRender: string, uuid: string, page_id: string, api_key: string, onStampChange?: () => void }) => {
     const [allStamps, setAllStamps] = useState([])
     const [user_email, setUserEmail] = useState()
 
@@ -64,18 +64,18 @@ export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChan
     const showAllowCreds = allStamps.filter((item) => !item.permAvailable && stampsWithId[stampToRender] === item.stamptype)?.[0]
 
     return (
-        <>
+        <Provider>
             {allStamps.length !== 0 && showAllowCreds && (
                 <AdvancedCredentialCollection allStampIds={allStamps.map((item: { id: number }) => item.id) as any} email={user_email} uuid={uuid} refresh={fetchStampData} apikey={api_key} />
             )}
             <div className="p-3">
                 <Stamps stampToRender={stampToRender} uuid={uuid} onStampChange={onStampChange} page_id={page_id} api_key={api_key} />
             </div>
-        </>
+        </Provider>
     );
 };
 
-export const CubidWidgetCollection = ({ stampToRender, uuid, page_id, api_key }: { stampToRender: string[], uuid: string, page_id: string, api_key: string }) => {
+export const CubidWidgetCollection = ({ stampToRender, uuid, page_id, api_key, onStampChange }: { stampToRender: string[], uuid: string, page_id: string, api_key: string, onStampChange?: () => void }) => {
     const [allStamps, setAllStamps] = useState([])
     const [user_email, setUserEmail] = useState()
     const [showAllowCreds, setShowAllowCreds] = useState(false);
@@ -102,22 +102,26 @@ export const CubidWidgetCollection = ({ stampToRender, uuid, page_id, api_key }:
         fetchStampData()
     }, [fetchStampData])
 
-    stampToRender.map((_) => {
-        const showAllowCreds = allStamps.filter((item) => !item.permAvailable && stampsWithId[_] === item.stamptype)?.[0]
-        setShowAllowCreds(Boolean(showAllowCreds))
-    })
+    useEffect(() => {
+        stampToRender.map((_) => {
+            const showAllowCreds = allStamps.filter((item) => !item.permAvailable && stampsWithId[_] === item.stamptype)?.[0]
+            setShowAllowCreds(Boolean(showAllowCreds))
+        })
+    }, [allStamps])
+
+
 
 
     return (
-        <>
+        <Provider>
             {allStamps.length !== 0 && showAllowCreds && (
                 <AdvancedCredentialCollection allStampIds={allStamps.map((item: { id: number }) => item.id) as any} email={user_email} uuid={uuid} refresh={fetchStampData} apikey={api_key} />
             )}
             <div className="grid md:grid-cols-3 px-3 gap-4 grid-cols-1">
                 {stampToRender.map((item) => (
-                    <Stamps isGrid stampToRender={item} uuid={uuid} page_id={page_id} api_key={api_key} />
+                    <Stamps isGrid onStampChange={onStampChange} stampToRender={item} uuid={uuid} page_id={page_id} api_key={api_key} />
                 ))}
             </div>
-        </>
+        </Provider>
     );
 };

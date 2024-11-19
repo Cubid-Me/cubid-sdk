@@ -70,11 +70,13 @@ declare class CubidSDK {
      * @param {Object} params - The parameters for the API call.
      * @param {string} params.email - The email of the new user.
      * @param {string} params.phone - The phone number of the new user.
+     *  * @param {string} params.evm - The evm address of the new user.
      * @returns {Promise<Object>} - The newly created user data.
      */
-    createUser({ email, phone }: {
+    createUser({ email, phone, evm }: {
         email: any;
         phone: any;
+        evm: any;
     }): Promise<any>;
     /**
  * Saves a secret for a user.
