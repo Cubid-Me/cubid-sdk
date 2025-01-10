@@ -18,13 +18,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -43,6 +53,8 @@ const react_1 = __importStar(require("react"));
 const axios_1 = __importDefault(require("axios"));
 const phoneNumberConnect_1 = require("./phoneNumberConnect");
 const setLocationPanel_1 = require("./setLocationPanel");
+const addStampVerify_1 = require("./addStampVerify");
+const infoTooltip_1 = require("../component/infoTooltip");
 let useFarcasterProfile, SignInButton;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const authKit = yield Promise.resolve().then(() => __importStar(require("@farcaster/auth-kit")));
@@ -116,12 +128,13 @@ const socialDataToMap = [
         color: "error",
     },
 ];
-const Stamps = ({ stampToRender, uuid, page_id, api_key, isGrid, onStampChange }) => {
+const Stamps = ({ stampToRender, uuid, page_id, api_key, isGrid, onStampChange, showAllowCreds, email, allStampIds, refresh }) => {
     var _a;
     const [allStamps, setAllStamps] = (0, react_1.useState)([]);
     const [stampLoading, setStampLoading] = (0, react_1.useState)(true);
     const [phoneOpen, setPhoneOpen] = (0, react_1.useState)(false);
     const [addressOpen, setAddressOpen] = (0, react_1.useState)(false);
+    const [verifyStampFlow, setVerifyStampFlow] = (0, react_1.useState)(false);
     const { isAuthenticated: isFarcasterAuthenticated, profile } = (_a = useFarcasterProfile === null || useFarcasterProfile === void 0 ? void 0 : useFarcasterProfile()) !== null && _a !== void 0 ? _a : {};
     const fetchStampData = (0, react_1.useCallback)(() => __awaiter(void 0, void 0, void 0, function* () {
         setStampLoading(true);
@@ -163,6 +176,20 @@ const Stamps = ({ stampToRender, uuid, page_id, api_key, isGrid, onStampChange }
     const handleSocialConnect = (supabase_key) => {
         window.location.href = `https://allow.cubid.me/widget-allow?uid=${uuid}&social_provider=${supabase_key}&page_id=${page_id}`;
     };
+    (0, react_1.useEffect)(() => {
+        const interval = setInterval(() => {
+            if (localStorage.getItem("logged_in") == uuid && Boolean(showAllowCreds)) {
+                setVerifyStampFlow(true);
+            }
+            else if (!Boolean(showAllowCreds)) {
+                setVerifyStampFlow(false);
+            }
+        }, 1000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, [uuid, showAllowCreds, refresh]);
+    console.log({ showAllowCreds, stampToRender }, localStorage.getItem("logged_in") == uuid);
     return (react_1.default.createElement("div", { style: {
             display: "grid",
             gridTemplateColumns: "1fr",
@@ -182,22 +209,87 @@ const Stamps = ({ stampToRender, uuid, page_id, api_key, isGrid, onStampChange }
             react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" } },
                 react_1.default.createElement("img", { src: item.image, alt: `${item.title} logo`, style: { marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" } }),
                 react_1.default.createElement("h2", { style: { fontSize: "20px", fontWeight: "bold" } }, item.title),
-                react_1.default.createElement("p", { style: { fontSize: "14px", color: "#666", marginTop: "4px" } }, doesStampExist(item.stampTypeId)
+                react_1.default.createElement("p", { style: { fontSize: "14px", color: "#666", marginTop: "4px" } }, showAllowCreds ? react_1.default.createElement("span", { className: "font-bold" }, "You need to verify your stamp") : doesStampExist(item.stampTypeId)
                     ? `Your ${item.supabase_key} account is verified`
                     : `Connect your ${item.supabase_key} to verify`)),
-            react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginTop: "16px" } }, doesStampExist(item.stampTypeId) ? (react_1.default.createElement("button", { style: {
-                    backgroundColor: "#28a745",
-                    color: "#fff",
-                    padding: "8px 16px",
-                    borderRadius: "12px",
-                    border: "none"
-                } }, "Verified Stamp")) : (react_1.default.createElement("button", { onClick: () => handleSocialConnect(item.supabase_key), style: {
-                    backgroundColor: "#007bff",
-                    color: "#fff",
-                    padding: "8px 16px",
-                    borderRadius: "12px",
-                    border: "none"
-                } }, "Connect Account")))))),
+            verifyStampFlow ? react_1.default.createElement(react_1.default.Fragment, null,
+                react_1.default.createElement(addStampVerify_1.AdvancedCredentialCollection, { uuid: uuid, refresh: () => {
+                        setVerifyStampFlow(false);
+                        refresh();
+                    }, allStampIds: allStampIds, email: email, apikey: api_key })) : react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginTop: "16px" } }, showAllowCreds ?
+                react_1.default.createElement("div", null,
+                    react_1.default.createElement("button", { style: {
+                            backgroundColor: "#FFBF00",
+                            color: "#fff",
+                            padding: "8px 16px",
+                            borderRadius: "12px",
+                            border: "none"
+                        }, onClick: () => {
+                            setVerifyStampFlow(true);
+                        } }, "Verify Stamp"),
+                    react_1.default.createElement("span", { style: { paddingLeft: 10 } },
+                        react_1.default.createElement(infoTooltip_1.InfoTooltip, { content: react_1.default.createElement(react_1.default.Fragment, null,
+                                react_1.default.createElement("p", { style: { fontSize: 14, color: "red" } },
+                                    "We found a cubid credential for a different app.",
+                                    react_1.default.createElement("br", null),
+                                    " Send a one time passcode to verify it")) })))
+                : doesStampExist(item.stampTypeId) ? (react_1.default.createElement("button", { style: {
+                        backgroundColor: "#28a745",
+                        color: "#fff",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        border: "none"
+                    } }, "Verified Stamp")) : (react_1.default.createElement("button", { onClick: () => handleSocialConnect(item.supabase_key), style: {
+                        backgroundColor: "#007bff",
+                        color: "#fff",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        border: "none"
+                    } }, "Connect Account")))))),
+        stampToRender === "phone" && (react_1.default.createElement("div", { style: {
+                border: "1px solid #ccc",
+                width: isGrid ? "100%" : "300px",
+                borderRadius: "12px",
+                padding: "16px 24px",
+                marginBottom: "16px",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+            } },
+            react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" } },
+                react_1.default.createElement("img", { src: "https://i.pinimg.com/736x/84/4e/8c/844e8cd4ab26c82286238471f0e5a901.jpg", alt: "Farcaster logo", style: { marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" } }),
+                react_1.default.createElement("h2", { style: { fontSize: "20px", fontWeight: "bold" } }, "Phone"),
+                doesStampExist(exports.stampsWithId.phone) ? (react_1.default.createElement("button", { style: {
+                        backgroundColor: "#28a745",
+                        color: "#fff",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        border: "none"
+                    } }, "Verified Stamp")) : (react_1.default.createElement("div", { style: { borderRadius: "8px", padding: "8px 12px" } },
+                    react_1.default.createElement("p", { style: { fontSize: "14px", color: "#666" } }, "Connect your phone"),
+                    react_1.default.createElement("button", { onClick: () => {
+                            setPhoneOpen(true);
+                        }, style: {
+                            backgroundColor: "#007bff",
+                            color: "#fff",
+                            padding: "8px 16px",
+                            borderRadius: "12px",
+                            border: "none",
+                            marginTop: "8px"
+                        } }, "Connect Phone")))))),
+        stampToRender === "farcaster" && (react_1.default.createElement("div", { className: `border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md` },
+            react_1.default.createElement("div", { className: "flex flex-col items-start" },
+                react_1.default.createElement("img", { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB0LwYIlZ9aYglKkSRuhEH0TM6VkCmqRqXpQ&s", alt: "Farcaster logo", className: "mb-1 size-10 rounded-md" }),
+                react_1.default.createElement("h2", { className: "text-xl font-bold" }, "Farcaster"),
+                doesStampExist(4) ? (react_1.default.createElement("p", { className: "text-sm text-gray-600 mt-1" }, "Your Farcaster is verified")) : (react_1.default.createElement("div", { className: "bg-white w-[fit-content] rounded-lg mt-2" },
+                    react_1.default.createElement(SignInButton, null)))))),
+        stampToRender === "address" && (react_1.default.createElement("div", { className: `border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md` },
+            react_1.default.createElement("div", { className: "flex flex-col items-start" },
+                react_1.default.createElement("img", { src: "https://thumbs.dreamstime.com/b/destination-place-pin-red-pointer-map-position-mark-125211341.jpg", alt: "Farcaster logo", className: "mb-1 size-10 rounded-md" }),
+                react_1.default.createElement("h2", { className: "text-xl font-bold" }, "Address"),
+                doesStampExist(exports.stampsWithId.address) ? (react_1.default.createElement("p", { className: "text-sm text-gray-600 mt-1" }, "Your Address is added")) : (react_1.default.createElement("div", { className: "bg-white w-[fit-content] rounded-lg" },
+                    react_1.default.createElement("p", { className: "text-sm text-gray-600" }, "Add your address"),
+                    react_1.default.createElement("button", { onClick: () => {
+                            setAddressOpen(true);
+                        }, className: "bg-blue-500 text-white py-2 px-4 rounded mt-2" }, "Add Address")))))),
         react_1.default.createElement(phoneNumberConnect_1.PhoneNumberConnect, { apikey: api_key, open: phoneOpen, onClose: () => setPhoneOpen(false), fetchStamps: fetchStampData, page_id: page_id, uuid: uuid }),
         react_1.default.createElement(setLocationPanel_1.LocationSearchPanel, { fetchStamps: fetchStampData, apikey: api_key, open: addressOpen, onClose: () => setAddressOpen(false), page_id: page_id, uuid: uuid })));
 };

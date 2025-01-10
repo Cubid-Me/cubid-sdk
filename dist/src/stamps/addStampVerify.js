@@ -1,5 +1,37 @@
-'use client';
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,29 +46,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdvancedCredentialCollection = AdvancedCredentialCollection;
-const react_1 = require("react");
-const button_1 = require("../component/button");
-const input_1 = require("../component/input");
-const label_1 = require("../component/label");
-const card_1 = require("../component/card");
-const dialog_1 = require("../component/dialog");
-const radio_group_1 = require("../component/radio-group");
-const use_toast_1 = require("../component/use-toast");
-const lucide_react_1 = require("lucide-react");
-const react_2 = __importDefault(require("react"));
+const react_1 = __importStar(require("react"));
 const axios_1 = __importDefault(require("axios"));
 const DAPP_NAME = "YourDAppName";
 function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampIds }) {
-    const [passcodeRequested, setPasscodeRequested] = (0, react_1.useState)(false);
+    const [passcodeRequested, setPasscodeRequested] = (0, react_1.useState)(true);
     const [passcode, setPasscode] = (0, react_1.useState)('');
     const [resendCountdown, setResendCountdown] = (0, react_1.useState)(60);
     const [cubidAuthenticated, setCubidAuthenticated] = (0, react_1.useState)(false);
     const [credentialShared, setCredentialShared] = (0, react_1.useState)(false);
-    const [showAddCredentialModal, setShowAddCredentialModal] = (0, react_1.useState)(false);
+    const [showTwitterHandles, setShowTwitterHandles] = (0, react_1.useState)(false);
     const [twitterHandles, setTwitterHandles] = (0, react_1.useState)(['@twitterUser123', '@anotherUser456']);
     const [selectedTwitterHandle, setSelectedTwitterHandle] = (0, react_1.useState)('@twitterUser123');
-    const [showTwitterHandles, setShowTwitterHandles] = (0, react_1.useState)(false);
-    const { toast } = (0, use_toast_1.useToast)();
+    const [grantPerm, setGrantPerm] = (0, react_1.useState)(false);
     (0, react_1.useEffect)(() => {
         let timer;
         if (passcodeRequested && resendCountdown > 0) {
@@ -45,104 +67,128 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
         return () => clearTimeout(timer);
     }, [passcodeRequested, resendCountdown]);
     const handlePasscodeRequest = () => __awaiter(this, void 0, void 0, function* () {
-        setPasscodeRequested(true);
-        setResendCountdown(60);
         yield axios_1.default.post("https://passport.cubid.me/api/verify/send-dapp-email", {
-            email: email,
-            apikey
+            email,
+            apikey,
         });
-        toast({
-            title: "Passcode Sent",
-            description: "Check your email for the passcode we just sent.",
-        });
+        setPasscode(60);
+        alert("Passcode Sent. Check your email for the passcode we just sent.");
     });
     const handlePasscodeVerify = () => __awaiter(this, void 0, void 0, function* () {
         const { data } = yield axios_1.default.post("https://passport.cubid.me/api/verify/verify-email", {
-            email: email,
+            email,
             apikey,
             otp: passcode,
-            dappuser_id: uuid
+            dappuser_id: uuid,
         });
         if (data.success) {
-            setCubidAuthenticated(true);
-            toast({
-                title: "Authentication Successful",
-                description: "You have successfully authenticated with CUBID.",
+            yield axios_1.default.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
+                apikey,
+                user_id: uuid,
+                stamp_id_array: allStampIds,
             });
+            yield refresh();
+            yield refresh();
+            yield axios_1.default.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
+                apikey,
+                user_id: uuid,
+                stamp_id_array: allStampIds,
+            });
+            yield refresh();
+            yield refresh();
+            setCredentialShared(true);
+            localStorage.setItem("logged_in", uuid);
         }
         else {
-            toast({
-                title: "Authentication Failed",
-                description: "The passcode you entered is incorrect. Please try again.",
-                variant: "destructive",
-            });
+            alert("Authentication Failed. The passcode you entered is incorrect. Please try again.");
         }
     });
-    const handleCloseAddCredentialModal = () => {
-        setShowAddCredentialModal(false);
-        setShowTwitterHandles(true);
-    };
     const handleAuthorize = () => __awaiter(this, void 0, void 0, function* () {
         yield axios_1.default.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
             apikey,
             user_id: uuid,
-            stamp_id_array: allStampIds
+            stamp_id_array: allStampIds,
         });
-        refresh();
+        yield refresh();
+        yield refresh();
+        yield refresh();
         setCredentialShared(true);
-        toast({
-            title: "Credential Shared",
-            description: `Your credentials have been shared.`,
-        });
     });
-    function maskEmail(email) {
-        // Split the email into the local part and the domain
-        const [localPart, domain] = email.split("@");
-        // Mask the first part of the local part (show first character only)
-        const maskedLocal = localPart[0] + "*".repeat(localPart.length - 1);
-        // Split the domain into the name and the extension (e.g., gmail.com -> gmail, com)
-        const [domainName, extension] = domain.split(".");
-        // Mask part of the domain name (show first character only)
-        const maskedDomain = domainName[0] + "*".repeat(domainName.length - 1);
-        // Return the email in the masked format
-        return `${maskedLocal}@${maskedDomain}.${extension}`;
+    (0, react_1.useEffect)(() => {
+        if (localStorage.getItem("logged_in") === uuid) {
+            setGrantPerm(true);
+        }
+        setInterval(() => {
+            if (localStorage.getItem("logged_in") === uuid) {
+                setGrantPerm(true);
+            }
+            else {
+                setGrantPerm(false);
+            }
+        }, 1000);
+    }, [uuid]);
+    (0, react_1.useEffect)(() => {
+        if (localStorage.getItem("logged_in") != uuid) {
+            handlePasscodeRequest();
+        }
+    }, []);
+    console.log({ email });
+    if (grantPerm) {
+        return (react_1.default.createElement("button", { onClick: handleAuthorize, style: {
+                width: '100%',
+                padding: '8px 16px',
+                backgroundColor: '#007AFF',
+                color: '#FFF',
+                borderRadius: '8px',
+                marginTop: '8px',
+            } }, "Grant Permission"));
     }
-    return (react_2.default.createElement("div", { className: "w-full p-3 mx-auto space-y-6" },
-        react_2.default.createElement(card_1.Card, { className: credentialShared ? "bg-green-50 rounded-xl border-green-200" : (cubidAuthenticated ? "bg-yellow-50 rounded-xl border-yellow-200" : "bg-red-50 rounded-xl border-red-200") },
-            react_2.default.createElement(card_1.CardHeader, null,
-                react_2.default.createElement(card_1.CardTitle, { className: "flex items-center text-red-600" },
-                    credentialShared ? react_2.default.createElement(lucide_react_1.Check, { className: "mr-2" }) : react_2.default.createElement(lucide_react_1.AlertCircle, { className: "mr-2" }),
-                    credentialShared ? "Credential Shared" : (cubidAuthenticated ? "Credential Available" : "Unauthenticated Credential detected"))),
-            react_2.default.createElement(card_1.CardContent, null, !cubidAuthenticated ? (react_2.default.createElement(react_2.default.Fragment, null,
-                react_2.default.createElement("p", { className: "mb-4 text-red-600" }, "We found a credential on Cubid account for a different app. Get a one-time passcode to access it."),
-                !passcodeRequested ? (react_2.default.createElement(button_1.Button, { className: "!bg-red-600 !text-white rounded-xl", onClick: handlePasscodeRequest }, "Send me a passcode")) : (react_2.default.createElement("div", { className: "space-y-4" },
-                    react_2.default.createElement("p", null,
-                        "Check your email - ",
-                        maskEmail(email),
-                        " for the passcode we just sent"),
-                    react_2.default.createElement("div", { className: "flex space-x-2" },
-                        react_2.default.createElement(input_1.Input, { placeholder: "Enter passcode here", value: passcode, className: 'rounded-xl', onChange: (e) => setPasscode(e.target.value) }),
-                        react_2.default.createElement(button_1.Button, { onClick: handlePasscodeVerify }, "OK")),
-                    react_2.default.createElement(button_1.Button, { disabled: resendCountdown > 0, onClick: handlePasscodeRequest },
-                        "Resend ",
-                        resendCountdown > 0 ? `(${resendCountdown}s)` : ''))))) : credentialShared ? (react_2.default.createElement("p", { className: "mb-4 text-green-700" },
+    return (react_1.default.createElement("div", { style: { width: '100%', marginBottom: '16px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' } },
+        react_1.default.createElement("div", { style: {
+                padding: '16px',
+                borderRadius: '8px',
+                border: `2px solid ${credentialShared ? '#38A169' : cubidAuthenticated ? '#D69E2E' : '#E53E3E'}`,
+                backgroundColor: credentialShared ? '#F0FFF4' : cubidAuthenticated ? '#FEFCBF' : '#FFF5F5',
+            } },
+            react_1.default.createElement("div", { style: { marginTop: '' } }, !cubidAuthenticated ? (react_1.default.createElement(react_1.default.Fragment, null, !passcodeRequested ? (react_1.default.createElement(react_1.default.Fragment, null)) : (react_1.default.createElement("div", null,
+                react_1.default.createElement("p", null,
+                    "Check your email - ",
+                    email && email,
+                    " for the passcode we just sent."),
+                react_1.default.createElement("div", { style: { alignItems: 'center', gap: '8px' } },
+                    react_1.default.createElement("input", { type: "text", placeholder: "Enter passcode here", value: passcode, style: { padding: '8px', borderRadius: '8px', border: '1px solid #DDD' }, onChange: (e) => setPasscode(e.target.value) }),
+                    react_1.default.createElement("div", { style: { marginTop: 10 } },
+                        react_1.default.createElement("button", { onClick: handlePasscodeVerify, style: { padding: '8px 16px', backgroundColor: '#3182CE', color: '#FFF', borderRadius: '8px' } }, "OK"))),
+                react_1.default.createElement("button", { onClick: handlePasscodeRequest, disabled: resendCountdown > 0, style: {
+                        marginTop: '8px',
+                        padding: '8px 16px',
+                        backgroundColor: '#E2E8F0',
+                        color: '#4A5568',
+                        borderRadius: '8px',
+                        cursor: resendCountdown > 0 ? 'not-allowed' : 'pointer',
+                    } },
+                    "Resend ",
+                    resendCountdown > 0 ? `(${resendCountdown}s)` : ''))))) : credentialShared ? (react_1.default.createElement("p", { style: { color: '#38A169' } },
                 "Twitter Credential data: ",
-                react_2.default.createElement("strong", null, selectedTwitterHandle))) : (react_2.default.createElement(react_2.default.Fragment, null,
-                react_2.default.createElement("p", { className: "mb-4 text-yellow-700" },
-                    "Nice, you've authenticated with Cubid.",
-                    react_2.default.createElement("br", null),
-                    react_2.default.createElement("br", null)),
-                showTwitterHandles ? (react_2.default.createElement(react_2.default.Fragment, null,
-                    react_2.default.createElement(radio_group_1.RadioGroup, { value: selectedTwitterHandle, onValueChange: setSelectedTwitterHandle, className: "mb-4" }, twitterHandles.map((handle) => (react_2.default.createElement("div", { key: handle, className: "flex items-center space-x-2" },
-                        react_2.default.createElement(radio_group_1.RadioGroupItem, { value: handle, id: handle }),
-                        react_2.default.createElement(label_1.Label, { htmlFor: handle }, handle))))),
-                    react_2.default.createElement(button_1.Button, { onClick: handleAuthorize, style: { backgroundColor: "#007AFF" }, className: "w-full text-white rounded-xl" }, "Authorize App to see this credential"))) : (react_2.default.createElement(react_2.default.Fragment, null,
-                    react_2.default.createElement(button_1.Button, { onClick: handleAuthorize, style: { backgroundColor: "#007AFF" }, className: "w-full text-white rounded-xl mb-4" }, "Authorize App to see this credential"))))))),
-        react_2.default.createElement(dialog_1.Dialog, { open: showAddCredentialModal, onOpenChange: setShowAddCredentialModal },
-            react_2.default.createElement(dialog_1.DialogContent, null,
-                react_2.default.createElement(dialog_1.DialogHeader, null,
-                    react_2.default.createElement(dialog_1.DialogTitle, null, "Add Twitter Credential"),
-                    react_2.default.createElement(dialog_1.DialogDescription, null, "OAuth process would happen here")),
-                react_2.default.createElement(dialog_1.DialogFooter, null,
-                    react_2.default.createElement(button_1.Button, { onClick: handleCloseAddCredentialModal }, "OK"))))));
+                react_1.default.createElement("strong", null, selectedTwitterHandle))) : (react_1.default.createElement(react_1.default.Fragment, null,
+                react_1.default.createElement("p", { style: { color: '#D69E2E' } }, "Nice, you've authenticated with Cubid."),
+                showTwitterHandles ? (react_1.default.createElement("div", null,
+                    twitterHandles.map((handle) => (react_1.default.createElement("div", { key: handle, style: { display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' } },
+                        react_1.default.createElement("input", { type: "radio", id: handle, value: handle, checked: selectedTwitterHandle === handle, onChange: () => setSelectedTwitterHandle(handle) }),
+                        react_1.default.createElement("label", { htmlFor: handle }, handle)))),
+                    react_1.default.createElement("button", { onClick: handleAuthorize, style: {
+                            width: '100%',
+                            padding: '8px 16px',
+                            backgroundColor: '#007AFF',
+                            color: '#FFF',
+                            borderRadius: '8px',
+                            marginTop: '8px',
+                        } }, "Authorize App to see this credential"))) : (react_1.default.createElement("button", { onClick: handleAuthorize, style: {
+                        width: '100%',
+                        padding: '8px 16px',
+                        backgroundColor: '#007AFF',
+                        color: '#FFF',
+                        borderRadius: '8px',
+                        marginTop: '8px',
+                    } }, "Authorize App to see this credential"))))))));
 }

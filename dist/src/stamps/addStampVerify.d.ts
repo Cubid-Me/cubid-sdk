@@ -1,8 +1,8 @@
 import React from 'react';
 export declare function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampIds }: {
-    email: string;
-    apikey: string;
-    refresh: () => Promise<void>;
-    uuid: string;
-    allStampIds: Array<number>;
+    email: any;
+    apikey: any;
+    refresh: any;
+    uuid: any;
+    allStampIds: any;
 }): React.JSX.Element;

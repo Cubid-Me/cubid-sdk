@@ -1,200 +1,217 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { Button } from "../component/button"
-import { Input } from "../component/input"
-import { Label } from "../component/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../component/card"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../component/dialog"
-import { RadioGroup, RadioGroupItem } from "../component/radio-group"
-import { useToast } from "../component/use-toast"
-import { AlertCircle, Check } from 'lucide-react'
-import React from 'react';
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const DAPP_NAME = "YourDAppName"
+const DAPP_NAME = "YourDAppName";
 
-export function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampIds }: { email: string, apikey: string, refresh: () => Promise<void>, uuid: string, allStampIds: Array<number> }) {
-  const [passcodeRequested, setPasscodeRequested] = useState(false)
-  const [passcode, setPasscode] = useState('')
-  const [resendCountdown, setResendCountdown] = useState(60)
-  const [cubidAuthenticated, setCubidAuthenticated] = useState(false)
-  const [credentialShared, setCredentialShared] = useState(false)
-  const [showAddCredentialModal, setShowAddCredentialModal] = useState(false)
-  const [twitterHandles, setTwitterHandles] = useState(['@twitterUser123', '@anotherUser456'])
-  const [selectedTwitterHandle, setSelectedTwitterHandle] = useState('@twitterUser123')
-  const [showTwitterHandles, setShowTwitterHandles] = useState(false)
-  const { toast } = useToast()
+export function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampIds }) {
+  const [passcodeRequested, setPasscodeRequested] = useState(true);
+  const [passcode, setPasscode] = useState('');
+  const [resendCountdown, setResendCountdown] = useState(60);
+  const [cubidAuthenticated, setCubidAuthenticated] = useState(false);
+  const [credentialShared, setCredentialShared] = useState(false);
+  const [showTwitterHandles, setShowTwitterHandles] = useState(false);
+  const [twitterHandles, setTwitterHandles] = useState(['@twitterUser123', '@anotherUser456']);
+  const [selectedTwitterHandle, setSelectedTwitterHandle] = useState('@twitterUser123');
+  const [grantPerm, setGrantPerm] = useState(false)
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timer;
     if (passcodeRequested && resendCountdown > 0) {
-      timer = setTimeout(() => setResendCountdown(resendCountdown - 1), 1000)
+      timer = setTimeout(() => setResendCountdown(resendCountdown - 1), 1000);
     }
-    return () => clearTimeout(timer)
-  }, [passcodeRequested, resendCountdown])
+    return () => clearTimeout(timer);
+  }, [passcodeRequested, resendCountdown]);
 
   const handlePasscodeRequest = async () => {
-    setPasscodeRequested(true)
-    setResendCountdown(60)
     await axios.post("https://passport.cubid.me/api/verify/send-dapp-email", {
-      email: email,
-      apikey
-    })
-    toast({
-      title: "Passcode Sent",
-      description: "Check your email for the passcode we just sent.",
-    })
-  }
+      email,
+      apikey,
+    });
+    setPasscode(60 as any)
+    alert("Passcode Sent. Check your email for the passcode we just sent.");
+  };
 
   const handlePasscodeVerify = async () => {
     const { data } = await axios.post("https://passport.cubid.me/api/verify/verify-email", {
-      email: email,
+      email,
       apikey,
       otp: passcode,
-      dappuser_id: uuid
-    })
+      dappuser_id: uuid,
+    });
     if (data.success) {
-      setCubidAuthenticated(true)
-      toast({
-        title: "Authentication Successful",
-        description: "You have successfully authenticated with CUBID.",
-      })
+      await axios.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
+        apikey,
+        user_id: uuid,
+        stamp_id_array: allStampIds,
+      });
+      await refresh();
+      await refresh();
+      await axios.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
+        apikey,
+        user_id: uuid,
+        stamp_id_array: allStampIds,
+      });
+      await refresh();
+      await refresh();
+      setCredentialShared(true);
+      localStorage.setItem("logged_in", uuid)
+
     } else {
-      toast({
-        title: "Authentication Failed",
-        description: "The passcode you entered is incorrect. Please try again.",
-        variant: "destructive",
-      })
+      alert("Authentication Failed. The passcode you entered is incorrect. Please try again.");
     }
-  }
-
-
-  const handleCloseAddCredentialModal = () => {
-    setShowAddCredentialModal(false)
-    setShowTwitterHandles(true)
-  }
+  };
 
   const handleAuthorize = async () => {
     await axios.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
       apikey,
       user_id: uuid,
-      stamp_id_array: allStampIds
-    })
-    refresh()
-    setCredentialShared(true)
-    toast({
-      title: "Credential Shared",
-      description: `Your credentials have been shared.`,
-    })
-  }
+      stamp_id_array: allStampIds,
+    });
+    await refresh();
+   await refresh();
+   await  refresh();
+    setCredentialShared(true);
+  };
 
-  function maskEmail(email) {
-    // Split the email into the local part and the domain
-    const [localPart, domain] = email.split("@");
+  useEffect(() => {
+    if (localStorage.getItem("logged_in") === uuid) {
+      setGrantPerm(true)
+    }
+    setInterval(() => {
+      if (localStorage.getItem("logged_in") === uuid) {
+        setGrantPerm(true)
+      } else {
+        setGrantPerm(false)
+      }
+    }, 1000)
+  }, [uuid])
 
-    // Mask the first part of the local part (show first character only)
-    const maskedLocal = localPart[0] + "*".repeat(localPart.length - 1);
+  useEffect(() => {
+    if (localStorage.getItem("logged_in") != uuid) {
+      handlePasscodeRequest()
+    }
+  }, [])
 
-    // Split the domain into the name and the extension (e.g., gmail.com -> gmail, com)
-    const [domainName, extension] = domain.split(".");
+  console.log({ email })
 
-    // Mask part of the domain name (show first character only)
-    const maskedDomain = domainName[0] + "*".repeat(domainName.length - 1);
-
-    // Return the email in the masked format
-    return `${maskedLocal}@${maskedDomain}.${extension}`;
+  if (grantPerm) {
+    return (
+      <button
+        onClick={handleAuthorize}
+        style={{
+          width: '100%',
+          padding: '8px 16px',
+          backgroundColor: '#007AFF',
+          color: '#FFF',
+          borderRadius: '8px',
+          marginTop: '8px',
+        }}
+      >
+        Grant Permission
+      </button>
+    )
   }
 
   return (
-    <div className="w-full p-3 mx-auto space-y-6">
-      <Card className={credentialShared ? "bg-green-50 rounded-xl border-green-200" : (cubidAuthenticated ? "bg-yellow-50 rounded-xl border-yellow-200" : "bg-red-50 rounded-xl border-red-200")}>
-        <CardHeader>
-          <CardTitle className="flex items-center text-red-600">
-            {credentialShared ? <Check className="mr-2" /> : <AlertCircle className="mr-2" />}
-            {credentialShared ? "Credential Shared" : (cubidAuthenticated ? "Credential Available" : "Unauthenticated Credential detected")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+
+    <div style={{ width: '100%', marginBottom: '16px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{
+        padding: '16px',
+        borderRadius: '8px',
+        border: `2px solid ${credentialShared ? '#38A169' : cubidAuthenticated ? '#D69E2E' : '#E53E3E'}`,
+        backgroundColor: credentialShared ? '#F0FFF4' : cubidAuthenticated ? '#FEFCBF' : '#FFF5F5',
+      }}>
+        <div style={{ marginTop: '' }}>
           {!cubidAuthenticated ? (
             <>
-              <p className="mb-4 text-red-600">
-                We found a credential on Cubid account for a different app. Get a one-time passcode to access it.
-              </p>
               {!passcodeRequested ? (
-                <Button className="!bg-red-600 !text-white rounded-xl" onClick={handlePasscodeRequest}>Send me a passcode</Button>
+                <></>
               ) : (
-                <div className="space-y-4">
-                  <p>Check your email - {maskEmail(email)} for the passcode we just sent</p>
-                  <div className="flex space-x-2">
-                    <Input
+                <div>
+                  <p>Check your email - {email && email} for the passcode we just sent.</p>
+                  <div style={{ alignItems: 'center', gap: '8px' }}>
+                    <input
+                      type="text"
                       placeholder="Enter passcode here"
                       value={passcode}
-                      className='rounded-xl'
+                      style={{ padding: '8px', borderRadius: '8px', border: '1px solid #DDD' }}
                       onChange={(e) => setPasscode(e.target.value)}
                     />
-                    <Button onClick={handlePasscodeVerify}>OK</Button>
+                    <div style={{ marginTop: 10 }}>
+                      <button onClick={handlePasscodeVerify} style={{ padding: '8px 16px', backgroundColor: '#3182CE', color: '#FFF', borderRadius: '8px' }}>
+                        OK
+                      </button>
+                    </div>
                   </div>
-                  <Button
-                    disabled={resendCountdown > 0}
+                  <button
                     onClick={handlePasscodeRequest}
+                    disabled={resendCountdown > 0}
+                    style={{
+                      marginTop: '8px',
+                      padding: '8px 16px',
+                      backgroundColor: '#E2E8F0',
+                      color: '#4A5568',
+                      borderRadius: '8px',
+                      cursor: resendCountdown > 0 ? 'not-allowed' : 'pointer',
+                    }}
                   >
                     Resend {resendCountdown > 0 ? `(${resendCountdown}s)` : ''}
-                  </Button>
+                  </button>
                 </div>
               )}
             </>
           ) : credentialShared ? (
-            <p className="mb-4 text-green-700">
-              Twitter Credential data: <strong>{selectedTwitterHandle}</strong>
-            </p>
+            <p style={{ color: '#38A169' }}>Twitter Credential data: <strong>{selectedTwitterHandle}</strong></p>
           ) : (
             <>
-              <p className="mb-4 text-yellow-700">
-                Nice, you've authenticated with Cubid.
-                <br /><br />
-              </p>
+              <p style={{ color: '#D69E2E' }}>Nice, you've authenticated with Cubid.</p>
               {showTwitterHandles ? (
-                <>
-                  <RadioGroup value={selectedTwitterHandle} onValueChange={setSelectedTwitterHandle} className="mb-4">
-                    {twitterHandles.map((handle) => (
-                      <div key={handle} className="flex items-center space-x-2">
-                        <RadioGroupItem value={handle} id={handle} />
-                        <Label htmlFor={handle}>{handle}</Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                  <Button onClick={handleAuthorize} style={{ backgroundColor: "#007AFF" }} className="w-full text-white rounded-xl">
+                <div>
+                  {twitterHandles.map((handle) => (
+                    <div key={handle} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                      <input
+                        type="radio"
+                        id={handle}
+                        value={handle}
+                        checked={selectedTwitterHandle === handle}
+                        onChange={() => setSelectedTwitterHandle(handle)}
+                      />
+                      <label htmlFor={handle}>{handle}</label>
+                    </div>
+                  ))}
+                  <button
+                    onClick={handleAuthorize}
+                    style={{
+                      width: '100%',
+                      padding: '8px 16px',
+                      backgroundColor: '#007AFF',
+                      color: '#FFF',
+                      borderRadius: '8px',
+                      marginTop: '8px',
+                    }}
+                  >
                     Authorize App to see this credential
-                  </Button>
-                </>
+                  </button>
+                </div>
               ) : (
-                <>
-                  <Button onClick={handleAuthorize} style={{ backgroundColor: "#007AFF" }} className="w-full text-white rounded-xl mb-4">
-                    Authorize App to see this credential
-                  </Button>
-                  {/* <Button onClick={handleAddCredential} variant="outline" className="w-full">
-                    Add a different Twitter Credential
-                  </Button> */}
-                </>
+                <button
+                  onClick={handleAuthorize}
+                  style={{
+                    width: '100%',
+                    padding: '8px 16px',
+                    backgroundColor: '#007AFF',
+                    color: '#FFF',
+                    borderRadius: '8px',
+                    marginTop: '8px',
+                  }}
+                >
+                  Authorize App to see this credential
+                </button>
               )}
             </>
           )}
-        </CardContent>
-      </Card>
-
-      <Dialog open={showAddCredentialModal} onOpenChange={setShowAddCredentialModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Twitter Credential</DialogTitle>
-            <DialogDescription>
-              OAuth process would happen here
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button onClick={handleCloseAddCredentialModal}>OK</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
