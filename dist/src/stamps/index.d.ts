@@ -1,4 +1,3 @@
-import React from "react";
 export declare const stampsWithId: {
     facebook: number;
     github: number;
@@ -24,4 +23,4 @@ export declare const stampsWithId: {
     farcaster: number;
     address: number;
 };
-export declare const Stamps: ({ stampToRender, uuid, page_id, api_key, isGrid, onStampChange, showAllowCreds, email, allStampIds, refresh }: any) => React.JSX.Element;
+export declare const Stamps: ({ stampToRender, uuid, page_id, api_key, isGrid, onStampChange, showAllowCreds, email, allStampIds, refresh }: any) => any;

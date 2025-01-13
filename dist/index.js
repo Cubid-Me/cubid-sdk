@@ -1,5 +1,4 @@
 "use strict";
-// src/index.js
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9,11 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CubidWidget = exports.CubidSDK = void 0;
-const axios = require('axios');
-const cubidWidget_1 = require("./src/component/cubidWidget");
+exports.CubidSDK = exports.Provider = exports.CubidWidget = void 0;
+const axios_1 = __importDefault(require("axios"));
+var cubidWidget_1 = require("./src/component/cubidWidget");
 Object.defineProperty(exports, "CubidWidget", { enumerable: true, get: function () { return cubidWidget_1.CubidWidget; } });
+var providers_1 = require("./src/component/providers");
+Object.defineProperty(exports, "Provider", { enumerable: true, get: function () { return providers_1.Provider; } });
 class CubidSDK {
     constructor(dapp_id, api_key) {
         this.dapp_id = dapp_id;
@@ -29,7 +33,7 @@ class CubidSDK {
     makePostRequest(endpoint_1) {
         return __awaiter(this, arguments, void 0, function* (endpoint, data = {}) {
             try {
-                const response = yield axios({
+                const response = yield (0, axios_1.default)({
                     url: `${this.baseUrl}/${endpoint}`,
                     method: 'POST',
                     headers: {

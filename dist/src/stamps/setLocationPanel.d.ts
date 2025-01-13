@@ -1,4 +1,3 @@
-import React from "react";
 export declare const LocationSearchPanel: ({ open, onClose, apikey, page_id, uuid, fetchStamps, }: {
     open: boolean;
     onClose: () => void;
@@ -6,4 +5,4 @@ export declare const LocationSearchPanel: ({ open, onClose, apikey, page_id, uui
     page_id?: string;
     uuid: string;
     fetchStamps: () => void;
-}) => React.JSX.Element;
+}) => any;

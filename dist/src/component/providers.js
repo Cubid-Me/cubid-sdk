@@ -41,13 +41,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Provider = void 0;
-const react_1 = __importDefault(require("react"));
+exports.Provider = exports.wallet = void 0;
+const react_1 = __importStar(require("react"));
 let AuthKitProvider = ({ children }) => react_1.default.createElement(react_1.default.Fragment, null, children);
+const wagmi_1 = require("wagmi");
+const chains_1 = require("wagmi/chains");
+const react_2 = require("@web3modal/wagmi/react");
+const config_1 = require("@web3modal/wagmi/react/config");
+const react_query_1 = require("@tanstack/react-query");
+const providerNear_1 = require("./providerNear");
+const providerSolana_1 = require("./providerSolana");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const authKit = yield Promise.resolve().then(() => __importStar(require("@farcaster/auth-kit")));
     AuthKitProvider = authKit.AuthKitProvider;
@@ -57,7 +61,43 @@ const config = {
     domain: 'example.com',
     siweUri: 'https://example.com/login',
 };
-const Provider = ({ children }) => {
-    return react_1.default.createElement(AuthKitProvider, { config: config }, children);
+exports.wallet = new providerNear_1.Wallet({
+    createAccessKeyFor: "registry.i-am-human.near",
+});
+exports.wallet.startUp();
+const queryClient = new react_query_1.QueryClient();
+const Provider = (props) => {
+    const [wagmiConfig, setWagmiConfig] = (0, react_1.useState)((0, wagmi_1.createConfig)({
+        chains: [chains_1.mainnet, chains_1.sepolia],
+        transports: {
+            [chains_1.mainnet.id]: (0, wagmi_1.http)(),
+            [chains_1.sepolia.id]: (0, wagmi_1.http)(),
+        },
+    }));
+    const [configSet, setConfigSet] = (0, react_1.useState)(false);
+    (0, react_1.useEffect)(() => {
+        // 1. Get projectId
+        const projectId = "6833ed2c1539b9d27e8840c51f53bd0c";
+        const metadata = {
+            name: "Web3Modal",
+            description: "Web3Modal Example",
+            url: "https://web3modal.com",
+            icons: ["https://avatars.githubusercontent.com/u/37784886"],
+        };
+        const chains = [chains_1.mainnet];
+        const wagmiConfig = (0, config_1.defaultWagmiConfig)({ chains, projectId, metadata });
+        (0, react_2.createWeb3Modal)({ wagmiConfig, projectId, chains });
+        setConfigSet(true);
+    }, []);
+    if (!wagmiConfig) {
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    }
+    if (!configSet) {
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    }
+    return react_1.default.createElement(AuthKitProvider, { config: config },
+        react_1.default.createElement(providerSolana_1.SolanaAppWalletProvider, null,
+            react_1.default.createElement(wagmi_1.WagmiProvider, { config: wagmiConfig },
+                react_1.default.createElement(react_query_1.QueryClientProvider, { client: queryClient }, props === null || props === void 0 ? void 0 : props.children))));
 };
 exports.Provider = Provider;

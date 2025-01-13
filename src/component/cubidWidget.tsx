@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Stamps } from '../stamps/index'
 import axios from 'axios';
@@ -62,7 +63,7 @@ export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChan
 
     const showAllowCreds = allStamps.filter((item) => !item.permAvailable && stampsWithId[stampToRender] === item.stamptype)?.[0]
     return (
-        <Provider>
+        <>
             <div className="p-3">
                 <Stamps
                     allStampIds={[...allStamps.filter((item) => item.stamptype == stampsWithId[stampToRender])].map((item: { id: number }) => item.id)}
@@ -70,7 +71,7 @@ export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChan
                     email={user_email}
                     stampToRender={stampToRender} uuid={uuid} onStampChange={onStampChange} page_id={page_id} api_key={api_key} showAllowCreds={showAllowCreds} />
             </div>
-        </Provider>
+        </>
     );
 };
 

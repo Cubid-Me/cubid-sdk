@@ -1,8 +1,8 @@
 export declare const useStamps: ({ user }: {
     user?: any;
 }) => {
-    stamps: any[];
-    stampCollector: any[];
-    fetchNearAndGitcoinStamps: () => Promise<void>;
-    gitcoinScore: number;
+    stamps: any;
+    stampCollector: any;
+    fetchNearAndGitcoinStamps: any;
+    gitcoinScore: any;
 };

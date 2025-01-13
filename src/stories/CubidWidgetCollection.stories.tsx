@@ -1,10 +1,16 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { CubidWidgetCollection } from '../component/cubidWidget';
+import { Provider } from '../component/providers';
+
+const PropsWithComp = (props) => {
+    return <Provider><CubidWidgetCollection {...props} /></Provider>
+}
 
 const meta = {
     title: 'Cubid/WidgetCollection',
-    component: CubidWidgetCollection,
+    component: PropsWithComp,
     // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
     tags: ['autodocs'],
     parameters: {

@@ -2,6 +2,6 @@ export declare const useAuth: () => {
     loading: boolean;
     user: {};
     supabaseUser: {};
-    getUser: () => Promise<void>;
+    getUser: any;
 };
 export default useAuth;

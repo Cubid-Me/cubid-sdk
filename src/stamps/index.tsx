@@ -11,7 +11,6 @@ import { InfoTooltip } from '../component/infoTooltip'
 import { Button } from "../component/button";
 import { LoginOptions } from '../component/loginOptions'
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-import "@near-wallet-selector/modal-ui/styles.css"
 import { wallet } from '../component/providers'
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet as useSolanaWallet, useConnection as useSolanaConnection } from "@solana/wallet-adapter-react";
@@ -969,31 +968,86 @@ export const Stamps = ({
       }
       {
         stampToRender === "address" && (
-          <div className={`border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md`}>
-            <div className="flex flex-col items-start">
-              <img
-                src="https://thumbs.dreamstime.com/b/destination-place-pin-red-pointer-map-position-mark-125211341.jpg"
-                alt="Farcaster logo"
-                className="mb-1 size-10 rounded-md"
-              />
-              <h2 className="text-xl font-bold">Address</h2>
-              {doesStampExist(stampsWithId.address) ? (
-                <p className="text-sm text-gray-600 mt-1">Your Address is added</p>
-              ) : (
-                <div className="bg-white w-[fit-content] rounded-lg">
-                  <p className="text-sm text-gray-600">Add your address</p>
-                  <button
-                    onClick={() => {
-                      setAddressOpen(true)
+          <>
+            <div
+              style={{
+                border: "1px solid #e5e7eb",
+                width: isGrid ? "100%" : "300px",
+                borderRadius: "0.75rem", // Tailwind: rounded-xl
+                padding: "1rem 1.5rem",  // p-4 & px-6
+                marginBottom: "1rem",    // mb-4
+                boxShadow: "0 1px 2px rgba(0,0,0,0.05)" // shadow-md
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start"
+                }}
+              >
+                <img
+                  src="https://thumbs.dreamstime.com/b/destination-place-pin-red-pointer-map-position-mark-125211341.jpg"
+                  alt="Farcaster logo"
+                  style={{
+                    marginBottom: "0.25rem", // mb-1
+                    width: "2.5rem",         // w-10
+                    height: "2.5rem",        // h-10
+                    borderRadius: "0.375rem" // rounded-md
+                  }}
+                />
+                <h2
+                  style={{
+                    fontSize: "1.25rem", // text-xl
+                    fontWeight: 700      // font-bold
+                  }}
+                >
+                  Address
+                </h2>
+                {doesStampExist(stampsWithId.address) ? (
+                  <p
+                    style={{
+                      fontSize: "0.875rem", // text-sm
+                      color: "#4b5563",     // text-gray-600
+                      marginTop: "0.25rem"  // mt-1
                     }}
-                    className="bg-blue-500 text-white py-2 px-4 rounded mt-2"
                   >
-                    Add Address
-                  </button>
-                </div>
-              )}
+                    Your Address is added
+                  </p>
+                ) : (
+                  <div
+                    style={{
+                      width: "fit-content",
+                      borderRadius: "0.5rem" // rounded-lg
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontSize: "0.875rem", // text-sm
+                        color: "#4b5563"      // text-gray-600
+                      }}
+                    >
+                      Add your address
+                    </p>
+                    <button
+                      onClick={() => setAddressOpen(true)}
+                      style={{
+                        backgroundColor: "#3b82f6", // bg-blue-500
+                        color: "#fff",              // text-white
+                        padding: "0.5rem 1rem",     // py-2 px-4
+                        borderRadius: "0.25rem",    // rounded
+                        marginTop: "0.5rem",        // mt-2
+                        cursor: "pointer",
+                        border: "none"
+                      }}
+                    >
+                      Add Address
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          </>
         )
       }
       <PhoneNumberConnect

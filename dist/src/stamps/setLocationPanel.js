@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocationSearchPanel = void 0;
+// @ts-nocheck
 const react_1 = __importDefault(require("react"));
 const axios_1 = __importDefault(require("axios"));
 const lodash_debounce_1 = __importDefault(require("lodash.debounce"));

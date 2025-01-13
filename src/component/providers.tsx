@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 let AuthKitProvider: any = ({ children }) => <>{children}</>;
-import { WagmiConfig, createConfig, http } from "wagmi"
+import { WagmiProvider, createConfig, http } from "wagmi"
 import { mainnet, sepolia } from "wagmi/chains"
 import { createWeb3Modal } from "@web3modal/wagmi/react"
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config"
@@ -14,13 +14,13 @@ import { SolanaAppWalletProvider } from './providerSolana'
     AuthKitProvider = authKit.AuthKitProvider;
 })
 
+
 const config = {
     rpcUrl: 'https://mainnet.optimism.io',
     domain: 'example.com',
     siweUri: 'https://example.com/login',
 };
 
-const queryClient = new QueryClient()
 
 export const wallet = new Wallet({
     createAccessKeyFor: "registry.i-am-human.near",
@@ -28,7 +28,10 @@ export const wallet = new Wallet({
 
 wallet.startUp()
 
-export const Provider = ({ children }) => {
+const queryClient = new QueryClient()
+
+
+export const Provider = (props:any) => {
     const [wagmiConfig, setWagmiConfig] = useState(
         createConfig({
             chains: [mainnet, sepolia],
@@ -53,7 +56,7 @@ export const Provider = ({ children }) => {
         const chains: any = [mainnet]
 
         const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
-        createWeb3Modal({ wagmiConfig, projectId, chains })
+        createWeb3Modal({ wagmiConfig, projectId, chains } as any)
         setConfigSet(true)
     }, [])
 
@@ -65,12 +68,14 @@ export const Provider = ({ children }) => {
         return <></>
     }
 
-    return <WagmiConfig config={wagmiConfig as any}>
-            <QueryClientProvider client={queryClient}>
-                <AuthKitProvider config={config}>
-                    <SolanaAppWalletProvider>
-                    {children}
-                    </SolanaAppWalletProvider>
-                    </AuthKitProvider>
-            </QueryClientProvider></WagmiConfig>
+
+    return <AuthKitProvider config={config}>
+        <SolanaAppWalletProvider>
+            <WagmiProvider config={wagmiConfig as any}>
+                <QueryClientProvider client={queryClient}>
+                    {props?.children}
+                </QueryClientProvider>
+            </WagmiProvider>
+        </SolanaAppWalletProvider>
+    </AuthKitProvider>
 }

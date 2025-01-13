@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CubidWidgetCollection = exports.CubidWidget = void 0;
+// @ts-nocheck
 const react_1 = __importDefault(require("react"));
 const index_1 = require("../stamps/index");
 const axios_1 = __importDefault(require("axios"));
-const providers_1 = require("./providers");
 const stampsWithId = {
     facebook: 1,
     github: 2,
@@ -70,7 +70,7 @@ const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange }) =
         fetchStampData();
     }, [fetchStampData]);
     const showAllowCreds = (_a = allStamps.filter((item) => !item.permAvailable && stampsWithId[stampToRender] === item.stamptype)) === null || _a === void 0 ? void 0 : _a[0];
-    return (react_1.default.createElement(providers_1.Provider, null,
+    return (react_1.default.createElement(react_1.default.Fragment, null,
         react_1.default.createElement("div", { className: "p-3" },
             react_1.default.createElement(index_1.Stamps, { allStampIds: [...allStamps.filter((item) => item.stamptype == stampsWithId[stampToRender])].map((item) => item.id), refresh: fetchStampData, email: user_email, stampToRender: stampToRender, uuid: uuid, onStampChange: onStampChange, page_id: page_id, api_key: api_key, showAllowCreds: showAllowCreds }))));
 };

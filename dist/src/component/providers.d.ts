@@ -1,4 +1,3 @@
-import React from "react";
-export declare const Provider: ({ children }: {
-    children: any;
-}) => React.JSX.Element;
+import { Wallet } from './providerNear';
+export declare const wallet: Wallet;
+export declare const Provider: (props: any) => any;

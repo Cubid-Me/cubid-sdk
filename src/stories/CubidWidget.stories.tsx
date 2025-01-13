@@ -1,12 +1,18 @@
+import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react';
 import 'react-phone-input-2/lib/style.css'
 import '@farcaster/auth-kit/styles.css';
 
 import { CubidWidget } from '../component/cubidWidget';
+import { Provider } from '../component/providers';
+
+const PropsWithComp = (props) => {
+    return <Provider><CubidWidget {...props} /></Provider>
+}
 
 const meta = {
     title: 'Cubid/Widget',
-    component: CubidWidget,
+    component: PropsWithComp,
     // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
     tags: ['autodocs'],
     parameters: {

@@ -1,4 +1,3 @@
-import React from "react";
 export declare const PhoneNumberConnect: ({ open, fetchStamps, onClose, page_id, uuid, apikey, }: {
     open: boolean;
     fetchStamps: () => void;
@@ -6,4 +5,4 @@ export declare const PhoneNumberConnect: ({ open, fetchStamps, onClose, page_id,
     page_id?: string;
     uuid: string;
     apikey: string;
-}) => React.JSX.Element;
+}) => any;

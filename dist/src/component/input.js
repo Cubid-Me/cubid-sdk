@@ -45,6 +45,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Input = void 0;
+// @ts-nocheck
 const React = __importStar(require("react"));
 const utils_1 = require("../lib/utils");
 const Input = React.forwardRef((_a, ref) => {

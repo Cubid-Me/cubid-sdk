@@ -1,5 +1,6 @@
-import { CubidWidget } from './src/component/cubidWidget';
-declare class CubidSDK {
+export { CubidWidget } from './src/component/cubidWidget';
+export { Provider } from './src/component/providers';
+export declare class CubidSDK {
     dapp_id: any;
     api_key: any;
     baseUrl: string;
@@ -90,4 +91,3 @@ declare class CubidSDK {
         secret: any;
     }): Promise<any>;
 }
-export { CubidSDK, CubidWidget };

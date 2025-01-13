@@ -21,7 +21,7 @@
     }
   },
   "include": [
-    "./**/*.ts",
+    "./**/*.ts", "index.tsx",
   ], // Include all .ts files in the src directory
   "exclude": [
     "node_modules",
