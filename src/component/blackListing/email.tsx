@@ -183,10 +183,10 @@ export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
     // Mock verification - replace with actual API call
     if (otp.join('') === '123456') {
       setSuccess(true);
-      if (onSuccess) {
-        onSuccess();
-      }
       setTimeout(() => {
+        if (onSuccess) {
+          onSuccess();
+        }
         handleClose();
       }, 2000);
     } else {

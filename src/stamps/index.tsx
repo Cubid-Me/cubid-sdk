@@ -107,7 +107,8 @@ export const Stamps = ({
   showAllowCreds,
   email,
   allStampIds,
-  refresh
+  refresh,
+  onBlacklistVerify
 }: any) => {
   const [allStamps, setAllStamps] = useState([]);
   const [stampLoading, setStampLoading] = useState(true);
@@ -122,8 +123,9 @@ export const Stamps = ({
 
   const [blacklist, setBlacklist] = useState(false)
   const [blacklistCred, setBlacklistCred] = useState({
-    type: '',
-    value: ''
+    "type": "",
+    "value": "",
+    "actual": ""
   })
 
   const fetchStampData = useCallback(async () => {
@@ -288,23 +290,56 @@ export const Stamps = ({
 
   const [showTelegramScript, setShowTelegramScript] = useState(false)
 
+  function detectInputFormat(input) {
+    if (typeof input !== 'string') {
+      return 'invalid';
+    }
+
+    // Email regex pattern
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Phone regex pattern - supports multiple formats:
+    // +1234567890, 123-456-7890, (123) 456-7890, 123.456.7890
+    const phonePattern = /^(\+\d{1,3}[ -]?)?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
+    // Ethereum wallet address pattern (starts with 0x followed by 40 hexadecimal characters)
+    const walletPattern = /^0x[a-fA-F0-9]{40}$/;
+
+    // Test the input against each pattern
+    if (emailPattern.test(input)) {
+      return 'email';
+    } else if (phonePattern.test(input)) {
+      return 'phone';
+    } else if (walletPattern.test(input)) {
+      return 'wallet';
+    }
+
+    return 'unknown';
+  }
+
+
   return (
     <>
       <VerificationModal
-        type="email"
+        type={blacklistCred.type}
+        credType={detectInputFormat(blacklistCred.value)}
         isOpen={blacklist}
         onClose={() => {
           setBlacklist(false)
         }}
-        onSuccess={() => { }}
+        onSuccess={() => {
+          setBlacklist(false)
+          onBlacklistVerify({ secondaryAcc: blacklistCred.value })
+        }}
         onError={() => { }}
         duplicateInfo={{
-          maskedEmail: "harjaapdhillon.hrizn@gmail.com"
+          maskedEmail: blacklistCred?.value,
         }}
         realInfo={{
-          email: "harjaapdhillon.hrizn@gmail.com"
+          email: blacklistCred.value
         }}
       />
+      {console.log({ blacklistCred })}
       <div
         style={{
           display: "grid",

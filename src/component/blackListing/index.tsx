@@ -8,6 +8,7 @@ type VerificationState = 'duplicate-alert' | 'verification' | 'support';
 
 interface VerificationProps {
   type: VerificationType;
+  credType: VerificationType;
   isOpen: boolean;
   onClose?: () => void;
   onSuccess?: () => void;
@@ -31,7 +32,8 @@ export const VerificationModal: React.FC<VerificationProps> = ({
   onSuccess,
   onError,
   duplicateInfo,
-  realInfo
+  realInfo,
+  credType
 }) => {
   const [verificationState, setVerificationState] = useState<VerificationState>(
     duplicateInfo ? 'duplicate-alert' : 'verification'
@@ -109,9 +111,9 @@ export const VerificationModal: React.FC<VerificationProps> = ({
     setVerificationState('support');
     window.location.href = '/support';
   };
-
+  console.log({ type,credType })
   const getDuplicateContent = () => {
-    const duplicateValue = type === 'email'
+    const duplicateValue = credType === 'email'
       ? duplicateInfo?.maskedEmail
       : type === 'phone'
         ? duplicateInfo?.maskedPhone
@@ -126,8 +128,8 @@ export const VerificationModal: React.FC<VerificationProps> = ({
     return {
       title: `Duplicate ${credentialType.charAt(0).toUpperCase() + credentialType.slice(1)} Detected`,
       description: type === 'wallet'
-        ? `Oops! It seems like this wallet address was already registered to account ${duplicateInfo?.maskedAddress}. Was that you? We don't allow account duplication, so to prevent blacklisting, we would strongly encourage you to rectify immediately. If this isn't your account then you may have been hacked.`
-        : `Oops! It seems like this ${credentialType} was already registered to account ${duplicateInfo?.maskedEmail}. Was that you? We don't allow account duplication, so to prevent blacklisting, we would strongly encourage you to rectify immediately. If ${duplicateValue} is not your ${credentialType} then you may have been hacked.`,
+        ? `Oops! It seems like this wallet address was already registered to account ${duplicateInfo?.maskedAddress}. Was that you? We don't allow account duplication, so to prevent blacklisting, we would strongly encourage you to rectify immediately`
+        : `Oops! It seems like this ${credentialType} was already registered to account ${duplicateInfo?.maskedEmail}. Was that you? We don't allow account duplication, so to prevent blacklisting, we would strongly encourage you to rectify immediately`,
       primaryButton: `That's my ${credentialType} too. Send me a passcode`,
       secondaryButton: "I may have been hacked. Contact support"
     };
@@ -172,7 +174,7 @@ export const VerificationModal: React.FC<VerificationProps> = ({
       }
 
       case 'verification':
-        switch (type) {
+        switch (credType) {
           case 'email':
             return <EmailVerificationModal
               isOpen={true}

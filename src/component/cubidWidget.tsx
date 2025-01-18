@@ -34,7 +34,7 @@ const stampsWithId = {
  * @param {Object} props - The component props.
  * @param {string} props.title - The title of the widget.
  */
-export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange }: { stampToRender: string, uuid: string, page_id: string, api_key: string, onStampChange?: () => void }) => {
+export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange, onBlacklistVerify }: { stampToRender: string, uuid: string, page_id: string, api_key: string, onStampChange?: () => void }) => {
     const [allStamps, setAllStamps] = React.useState([])
     const [user_email, setUserEmail] = React.useState()
 
@@ -56,7 +56,7 @@ export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChan
         }
     }, [uuid, api_key, page_id])
 
-   React.useEffect(() => {
+    React.useEffect(() => {
         fetchStampData()
     }, [fetchStampData])
 
@@ -69,6 +69,7 @@ export const CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChan
                     allStampIds={[...allStamps.filter((item) => item.stamptype == stampsWithId[stampToRender])].map((item: { id: number }) => item.id)}
                     refresh={fetchStampData}
                     email={user_email}
+                    onBlacklistVerify={onBlacklistVerify}
                     stampToRender={stampToRender} uuid={uuid} onStampChange={onStampChange} page_id={page_id} api_key={api_key} showAllowCreds={showAllowCreds} />
             </div>
         </>

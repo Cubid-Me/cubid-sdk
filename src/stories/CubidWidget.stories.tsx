@@ -59,7 +59,7 @@ export const AddressWidget: Story = {
 export const PhoneWidget: Story = {
     args: {
         stampToRender: "phone",
-        uuid: "82df4ce6-1414-4c34-9c34-67a7092d9edc",
+        uuid: "82df4ce6-1414-4c34-9c34-67a7092d9ede\n",
         page_id: "35",
         api_key: "8c354e51-d323-482a-86ca-e931cd0e91d8",
     },

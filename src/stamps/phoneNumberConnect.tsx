@@ -71,10 +71,13 @@ export const PhoneNumberConnect = ({
           })
           setBlacklist(true)
           setBlacklistCred({
-            type: "email",
-            value: all_email?.email1
+            type: "phone",
+            value: all_email?.email1,
+            actual: phoneInput
           })
         }
+      } else {
+        alert("Incorrect OTP")
       }
     } catch (error) {
       toast.error("OTP verification failed.");
