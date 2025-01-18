@@ -1,13 +1,16 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-
-import { CubidWidgetCollection } from '../component/cubidWidget';
-import { Provider } from '../component/providers';
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StampCollection = void 0;
+const react_1 = __importDefault(require("react"));
+const cubidWidget_1 = require("../component/cubidWidget");
+const providers_1 = require("../component/providers");
 const PropsWithComp = (props) => {
-    return <Provider><CubidWidgetCollection {...props} /></Provider>
-}
-
+    return react_1.default.createElement(providers_1.Provider, null,
+        react_1.default.createElement(cubidWidget_1.CubidWidgetCollection, Object.assign({}, props)));
+};
 const meta = {
     title: 'Cubid/WidgetCollection',
     component: PropsWithComp,
@@ -23,11 +26,8 @@ const meta = {
         page_id: "",
         api_key: "",
     },
-} satisfies Meta<typeof CubidWidgetCollection>;
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
+};
+exports.default = meta;
 const allStampTypes = {
     facebook: 1,
     github: 2,
@@ -50,9 +50,8 @@ const allStampTypes = {
     "lens-protocol": 66,
     farcaster: 68,
     address: 70
-}
-
-export const StampCollection: Story = {
+};
+exports.StampCollection = {
     args: {
         stampToRender: Object.keys(allStampTypes),
         uuid: "158c64cf-7418-4fb2-b36e-068029c3c486",

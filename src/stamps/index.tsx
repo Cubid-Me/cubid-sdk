@@ -14,6 +14,7 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { wallet } from '../component/providers'
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet as useSolanaWallet, useConnection as useSolanaConnection } from "@solana/wallet-adapter-react";
+import { VerificationModal } from '../component/blackListing/index'
 
 let useFarcasterProfile, SignInButton;
 
@@ -119,6 +120,12 @@ export const Stamps = ({
   const { disconnect } = useDisconnect()
   const [lensModalOpen, setLensModalOpen] = useState(false)
 
+  const [blacklist, setBlacklist] = useState(false)
+  const [blacklistCred, setBlacklistCred] = useState({
+    type: '',
+    value: ''
+  })
+
   const fetchStampData = useCallback(async () => {
     setStampLoading(true);
     try {
@@ -140,7 +147,7 @@ export const Stamps = ({
     if (address) {
       const {
         data: { stamps, scores },
-      } = await axios.post("/api/gitcoin-passport-data", { address })
+      } = await axios.post("https://passport.cubid.me/api/gitcoin-passport-data", { address })
       const stampId = stampsWithId.gitcoin
 
       if (scores.score !== "0E-9") {
@@ -282,18 +289,118 @@ export const Stamps = ({
   const [showTelegramScript, setShowTelegramScript] = useState(false)
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr",
-        pointerEvents: stampLoading ? "none" : "auto"
-      }}
-    >
-      {socialDataToMap
-        .filter((item) => item.supabase_key === stampToRender)
-        .map((item) => (
-          <div
-            style={{
+    <>
+      <VerificationModal
+        type="email"
+        isOpen={blacklist}
+        onClose={() => {
+          setBlacklist(false)
+        }}
+        onSuccess={() => { }}
+        onError={() => { }}
+        duplicateInfo={{
+          maskedEmail: "harjaapdhillon.hrizn@gmail.com"
+        }}
+        realInfo={{
+          email: "harjaapdhillon.hrizn@gmail.com"
+        }}
+      />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          pointerEvents: stampLoading ? "none" : "auto"
+        }}
+      >
+        {socialDataToMap
+          .filter((item) => item.supabase_key === stampToRender)
+          .map((item) => (
+            <div
+              style={{
+                border: "1px solid #ccc",
+                width: isGrid ? "100%" : "300px",
+                height: "190px",
+                borderRadius: "12px",
+                padding: "16px 24px",
+                marginBottom: "16px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              }}
+              key={item.supabase_key}
+            >
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                <img
+                  src={item.image}
+                  alt={`${item.title} logo`}
+                  style={{ marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" }}
+                />
+                <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>{item.title}</h2>
+                <p style={{ fontSize: "14px", color: "#666", marginTop: "4px" }}>
+                  {showAllowCreds ? <span className="font-bold">You need to verify your stamp</span> : doesStampExist(item.stampTypeId)
+                    ? `Your ${item.supabase_key} account is verified`
+                    : `Connect your ${item.supabase_key} to verify`}
+                </p>
+              </div>
+              {verifyStampFlow ? <>
+                <AdvancedCredentialCollection uuid={uuid} refresh={() => {
+                  setVerifyStampFlow(false)
+                  refresh()
+                }} allStampIds={allStampIds} email={email} apikey={api_key} />
+              </> : <div style={{ display: "flex", justifyContent: "space-between", marginTop: "16px" }}>
+                {showAllowCreds ?
+                  <div>
+                    <button
+                      style={{
+                        backgroundColor: "#FFBF00",
+                        color: "#fff",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        border: "none"
+                      }}
+                      onClick={() => {
+                        setVerifyStampFlow(true)
+                      }}
+                    >
+                      Verify Stamp
+                    </button>
+                    <span style={{ paddingLeft: 10 }}>
+                      <InfoTooltip content={<>
+                        <p style={{ fontSize: 14, color: "red" }}>We found a cubid credential for a different app.<br /> Send a one time passcode to verify it</p>
+                      </>} />
+                    </span>
+                  </div>
+                  : doesStampExist(item.stampTypeId) ? (
+                    <button
+                      style={{
+                        backgroundColor: "#28a745",
+                        color: "#fff",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        border: "none"
+                      }}
+                    >
+                      Verified Stamp
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleSocialConnect(item.supabase_key)}
+                      style={{
+                        backgroundColor: "#007bff",
+                        color: "#fff",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        border: "none"
+                      }}
+                    >
+                      Connect Account
+                    </button>
+                  )}
+              </div>}
+
+            </div>
+          ))}
+        {stampToRender === "iah" &&
+          <>
+            <div style={{
               border: "1px solid #ccc",
               width: isGrid ? "100%" : "300px",
               height: "190px",
@@ -301,51 +408,530 @@ export const Stamps = ({
               padding: "16px 24px",
               marginBottom: "16px",
               boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-            }}
-            key={item.supabase_key}
-          >
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-              <img
-                src={item.image}
-                alt={`${item.title} logo`}
-                style={{ marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" }}
-              />
-              <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>{item.title}</h2>
-              <p style={{ fontSize: "14px", color: "#666", marginTop: "4px" }}>
-                {showAllowCreds ? <span className="font-bold">You need to verify your stamp</span> : doesStampExist(item.stampTypeId)
-                  ? `Your ${item.supabase_key} account is verified`
-                  : `Connect your ${item.supabase_key} to verify`}
-              </p>
-            </div>
-            {verifyStampFlow ? <>
-              <AdvancedCredentialCollection uuid={uuid} refresh={() => {
-                setVerifyStampFlow(false)
-                refresh()
-              }} allStampIds={allStampIds} email={email} apikey={api_key} />
-            </> : <div style={{ display: "flex", justifyContent: "space-between", marginTop: "16px" }}>
-              {showAllowCreds ?
-                <div>
+            }}>
+              <div className="flex items-center space-x-4">
+                <img
+                  src={
+                    "data:image/png;base64,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"
+                  }
+                  alt="Image"
+                  className="mb-1 size-10 rounded-md"
+                />
+                <h2 className="font-bold">I-Am-Human</h2>
+              </div>
+              <div>
+                {doesStampExist(stampsWithId["iah"]) ? (
+                  <p className="text-green-600">Your NEAR account is verified</p>
+                ) : (
+                  <p>Use a NEAR wallet to connect your IAH-verified account</p>
+                )}
+              </div>
+              <div className="mt-4">
+                {false ? (
+                  <div className="flex justify-between">
+                    <div className="flex items-center space-x-2">
+                      <button style={{
+                        borderRadius: 10
+                      }} className="bg-green-500 text-white px-4 py-2 rounded">Verified Stamp</button>
+                    </div>
+                    <div className="relative">
+                    </div>
+                  </div>
+                ) : (
                   <button
-                    style={{
-                      backgroundColor: "#FFBF00",
-                      color: "#fff",
-                      padding: "8px 16px",
-                      borderRadius: "12px",
-                      border: "none"
-                    }}
                     onClick={() => {
-                      setVerifyStampFlow(true)
+                      wallet.signIn()
                     }}
+                    style={{
+                      borderRadius: 10
+                    }}
+                    className="bg-blue-500 text-white px-4 py-2"
                   >
-                    Verify Stamp
+                    Connect Wallet
                   </button>
-                  <span style={{ paddingLeft: 10 }}>
-                    <InfoTooltip content={<>
-                      <p style={{ fontSize: 14, color: "red" }}>We found a cubid credential for a different app.<br /> Send a one time passcode to verify it</p>
-                    </>} />
-                  </span>
+                )}
+              </div>
+            </div>
+          </>
+        }
+        {stampToRender === "brightid" && <p>brightid</p>}
+        {stampToRender === "gitcoin" &&
+          <>
+            <div
+              style={{
+                border: "1px solid #ccc",
+                width: isGrid ? "100%" : "300px",
+                height: "190px",
+                borderRadius: "12px",
+                padding: "16px 24px",
+                marginBottom: "16px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              }}
+            >
+              <div className="items-center">
+                <img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAP1BMVEUAQzsAQzsAQzsAPTQAQDgANy2WpaM/Yl0ALiP///+otbMACAAAJxpSb2rd4uJogXzK0dCBlZIjUUq7xcTz9fUp8LglAAAAAnRSTlMm5BIqaH0AAADfSURBVHgBfNKBCsMgDEXRzSQ2z0a12v//1tUyoM61FxTgYCDg6/V2N71nG9Q9dEFiJ3yD5BfxC/9HRVgRjO4wIvmsMiMZvnnlH2RJSFFNY0ESHlETEPSckJF0QPHICHLkRBI2uqIiWa7ii7cNaHJ9SRGZSBN2AGUvOuCGyseV14ywNgwoHtQvI4O3ABtww8IU0ZaGJGUfXnKFF6ceQAMQ5Ip9TXVOaq7qyu+eFFGMHdNxrMEG7CMLK/U0jNi1L7/lo1gmdFIbvs3oWLTGs4Un7NFZtxHnnvH5U3+GLzsAAOyFDgN+WSNyAAAAAElFTkSuQmCC"
+                  alt="Image"
+                  className="mb-1 size-10 rounded-md"
+                />
+                <div>
+                  <h2 className="font-bold">Gitcoin Passport</h2>
+                  <p className="text-gray-600">Connect to import your existing Gitcoin Passport</p>
                 </div>
-                : doesStampExist(item.stampTypeId) ? (
+              </div>
+              <div className="mt-2">
+                {doesStampExist(stampsWithId.gitcoin) ? (
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <button style={{ borderRadius: 10 }} className="bg-green-500 text-white px-4 py-2 rounded">Verified Stamp</button>
+                  </div>
+                ) : (
+                  <>
+                    {gitcoinModalOpen && (
+                      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+                        <div className="bg-white rounded-lg p-6 w-96">
+                          <p className="text-xl font-bold mb-2">
+                            Connect Web3 Wallet for Gitcoin Passport
+                          </p>
+                          {connectors.map((connector) => (
+                            <button
+                              key={connector.uid}
+                              className="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4"
+                              onClick={() => connect({ connector })}
+                            >
+                              {connector.name}
+                            </button>
+                          ))}
+                          <button
+                            className="mt-4 text-red-500"
+                            style={{ borderRadius: 10 }}
+                            onClick={() => setGitcoinModalOpen(false)}
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded"
+                      onClick={() => setGitcoinModalOpen(true)}
+                    >
+                      Connect Gitcoin
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        }
+        {stampToRender === "instagram" && <p>instagram</p>}
+        {stampToRender === "gooddollar" && <p>gooddollar</p>}
+        {stampToRender === "near-wallet" &&
+          <>
+            <div style={{
+              border: "1px solid #ccc",
+              width: isGrid ? "100%" : "300px",
+              height: "190px",
+              borderRadius: "12px",
+              padding: "16px 24px",
+              marginBottom: "16px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }}>
+              <div className="flex items-center space-x-4">
+                <img
+                  src={
+                    "data:image/png;base64,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"
+                  }
+                  alt="Image"
+                  className="mb-1 size-10 rounded-md"
+                />
+                <h2 className="font-bold">Near</h2>
+              </div>
+              <div>
+                {doesStampExist(stampsWithId["iah"]) ? (
+                  <p className="text-green-600">Your NEAR account is verified</p>
+                ) : (
+                  <p>Use a NEAR wallet</p>
+                )}
+              </div>
+              <div className="mt-4">
+                {false ? (
+                  <div className="flex justify-between">
+                    <div className="flex items-center space-x-2">
+                      <button style={{
+                        borderRadius: 10
+                      }} className="bg-green-500 text-white px-4 py-2 rounded">Verified Stamp</button>
+                    </div>
+                    <div className="relative">
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      wallet.signIn()
+                    }}
+                    style={{
+                      borderRadius: 10
+                    }}
+                    className="bg-blue-500 text-white px-4 py-2"
+                  >
+                    Connect Wallet
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        }
+        {stampToRender === "fractal" && <p>fractal</p>}
+        {stampToRender === "solana" && <>
+          <div style={{
+            border: "1px solid #ccc",
+            width: isGrid ? "100%" : "300px",
+            height: "190px",
+            borderRadius: "12px",
+            padding: "16px 24px",
+            marginBottom: "16px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+          }}>
+            <div className="items-center">
+              <img
+                src="data:image/webp;base64,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"
+                alt="Image"
+                className="mb-1 object-cover rounded-md"
+                style={{
+                  width: 40,
+                  height: 40
+                }}
+              />
+              <div>
+                <h2 className="font-bold">Solana</h2>
+                {doesStampExist(stampsWithId["solana"]) ? (
+                  <div className="flex items-center space-x-1">
+                    <p className="text-gray-600">Your Solana address is verified</p>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#00e64d"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  <p className="text-gray-600">Connect to Solana</p>
+                )}
+              </div>
+            </div>
+            <div className="mt-4">
+              {doesStampExist(stampsWithId["solana"]) ? (
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <button
+                    onClick={() => {
+                      // connect worldcoin wallet
+                    }}
+                    style={{
+                      borderRadius: 10
+                    }} className="bg-green-500 text-white px-4 py-2 rounded"
+                  >
+                    Solana Connected
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <WalletMultiButton />
+                </>
+              )}
+            </div>
+          </div>
+        </>}
+        {stampToRender === "telegram" && <>
+          <div style={{
+            border: "1px solid #ccc",
+            width: isGrid ? "100%" : "300px",
+            height: "190px",
+            borderRadius: "12px",
+            padding: "16px 24px",
+            marginBottom: "16px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+          }}>
+            <div className="items-center">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/2048px-Telegram_2019_Logo.svg.png"
+                alt="Image"
+                className="mb-1 size-10 rounded-md object-cover"
+              />
+              <div>
+                <h2 className="font-bold">Telegram</h2>
+                {doesStampExist(stampsWithId.telegram) ? (
+                  <div className="flex items-center space-x-1">
+                    <p className="text-gray-600">Your telegram is verified</p>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#00e64d"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  <p className="text-gray-600">Verify your telegram</p>
+                )}
+              </div>
+            </div>
+            <div className="mt-4">
+              {doesStampExist(stampsWithId.telegram) ? (
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <button className="bg-green-500 text-white px-4 py-2 rounded">
+                    Verified Stamp
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      setShowTelegramScript(true)
+                    }}
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Connect Telegram
+                  </button>
+                  {showTelegramScript && (
+                    <div className="p-3">
+                      <script
+                        async
+                        src="https://telegram.org/js/telegram-widget.js?22"
+                        data-telegram-login="cubid_bot"
+                        data-size="medium"
+                        data-auth-url="https://passport.cubid.me/telegram"
+                        data-request-access="write"
+                      ></script>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </>}
+        {stampToRender === "worldcoin" && <p>worldcoin</p>}
+        {stampToRender === "near" &&
+          <>
+            <div style={{
+              border: "1px solid #ccc",
+              width: isGrid ? "100%" : "300px",
+              height: "190px",
+              borderRadius: "12px",
+              padding: "16px 24px",
+              marginBottom: "16px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }}>
+              <div className="flex items-center space-x-4">
+                <img
+                  src={
+                    "data:image/png;base64,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"
+                  }
+                  alt="Image"
+                  className="mb-1 size-10 rounded-md"
+                />
+                <h2 className="font-bold">Near</h2>
+              </div>
+              <div>
+                {doesStampExist(stampsWithId["iah"]) ? (
+                  <p className="text-green-600">Your NEAR account is verified</p>
+                ) : (
+                  <p>Use a NEAR wallet</p>
+                )}
+              </div>
+              <div className="mt-4">
+                {false ? (
+                  <div className="flex justify-between">
+                    <div className="flex items-center space-x-2">
+                      <button style={{
+                        borderRadius: 10
+                      }} className="bg-green-500 text-white px-4 py-2 rounded">Verified Stamp</button>
+                    </div>
+                    <div className="relative">
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      wallet.signIn()
+                    }}
+                    style={{
+                      borderRadius: 10
+                    }}
+                    className="bg-blue-500 text-white px-4 py-2"
+                  >
+                    Connect Wallet
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        }
+
+        {stampToRender === "lens-protocol" && (
+
+          <div style={{
+            border: "1px solid #ccc",
+            borderRadius: "12px",
+            marginBottom: "16px",
+            padding: "16px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            height: "auto",
+          }}
+          >
+            {/* Header section */}
+            <div className="mb-3">
+              <img
+                src={
+                  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAZlBMVEX////r6+uDg4VMTU9TVFaYmJn6+vrCw8MAAAAfICQlJioaGx/k5eXy8vIpKi4sLTCwsLFub3FcXV4XGB0VFxvc3N3Ozs55enshIyZDREcJDBKAgYK6urs1Njk8PD+bm53V1danqKn7JVr2AAAAm0lEQVR4AdXOxQGAIABAUZVuu3P/Ie2WBfwXhUc5v831AETYboQyzoWQNlNMmzkOnGd+EHrSj8xanKRZmJHDYJxzlhd6Qw2inOdltZm3bVnt+inr9Y3zyBKHCyalsaUbNaMUdmzV+h5uQ7a9iJS2jZG7Pbcr9cfK1Nmrc/Y00fTOmazKi7UQSF22cRkLxkRc8ouuEtIhNBDX+WkTbzIRXoEbjE4AAAAASUVORK5CYII='
+                }
+                alt="Image"
+                className="mb-1 w-10 h-10 rounded-md"
+              />
+              <h3 className="text-xl font-bold">Lens Protocol</h3>
+              {/* If the stamp is verified, show success else show prompt */}
+              {doesStampExist(stampsWithId["lens-protocol"]) ? (
+                <div className="flex items-center space-x-1 text-sm text-gray-600 mt-1">
+                  <p>Your Lens Protocol is verified</p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="#00e64d"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.75L11.25 15 15 9.75M21 12a9 
+               9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                <p className="text-sm texAccountt-gray-600 mt-1">
+                  Use a Lens Protocol
+                </p>
+              )}
+            </div>
+
+            {/* Content section */}
+            <div>
+              {doesStampExist(stampsWithId["lens-protocol"]) ? (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Button>Verified Stamp</Button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {address ? (
+                    <>
+                      <LoginOptions
+                        wallet={address ?? ""}
+                        onSuccess={async (args) => {
+                          await axios.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+                            page_id,
+                            stamp_type: "lens-protocol",
+                            stampData: {
+                              uniquevalue: args?.handle?.linkedTo?.nftTokenId,
+                              identity: args.handle?.fullHandle,
+                              ...args,
+                              metdata: { ...args?.metadata, picture: null },
+                            },
+                            user_data: { uuid },
+                          });
+                          disconnect()
+                          fetchStampData()
+                          // window.location.reload()
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {lensModalOpen && (
+                        <div
+                          style={{
+                            border: "1px solid #eee",
+                            borderRadius: "8px",
+                            padding: "16px",
+                            marginTop: "8px",
+                          }}
+                        >
+                          <p className="text-lg font-semibold mb-2">
+                            Connect Web3 Wallet for Lens
+                          </p>
+                          {connectors.map((connector) => (
+                            <Button
+                              key={connector.uid}
+                              variant="secondary"
+                              className="bg-blue-500 mb-4 text-white"
+                              style={{ width: "200px" }}
+                              onClick={() => {
+                                localStorage?.setItem("lens-loggin", "true")
+                                connect({ connector })
+                              }}
+                            >
+                              {connector.name}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
+
+                      <Button
+                        variant="outline"
+                        className="bg-blue-500 text-white"
+                        style={{ marginTop: "8px", borderRadius: 10 }}
+                        onClick={() => {
+                          setLensModalOpen(true)
+                        }}
+                      >
+                        Connect Lens Wallet
+                      </Button>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        )
+        }
+
+        {
+          stampToRender === "phone" && (
+            <div
+              style={{
+                border: "1px solid #ccc",
+                width: isGrid ? "100%" : "300px",
+                borderRadius: "12px",
+                padding: "16px 24px",
+                marginBottom: "16px",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                <img
+                  src="https://i.pinimg.com/736x/84/4e/8c/844e8cd4ab26c82286238471f0e5a901.jpg"
+                  alt="Farcaster logo"
+                  style={{ marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" }}
+                />
+                <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>Phone</h2>
+                {doesStampExist(stampsWithId.phone) ? (
                   <button
                     style={{
                       backgroundColor: "#28a745",
@@ -358,82 +944,136 @@ export const Stamps = ({
                     Verified Stamp
                   </button>
                 ) : (
-                  <button
-                    onClick={() => handleSocialConnect(item.supabase_key)}
+                  <div style={{ borderRadius: "8px", padding: "8px 12px" }}>
+                    <p style={{ fontSize: "14px", color: "#666" }}>Connect your phone</p>
+                    <button
+                      onClick={() => {
+                        setPhoneOpen(true);
+                      }}
+                      style={{
+                        backgroundColor: "#007bff",
+                        color: "#fff",
+                        padding: "8px 16px",
+                        borderRadius: "12px",
+                        border: "none",
+                        marginTop: "8px"
+                      }}
+                    >
+                      Connect Phone
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )
+        }
+
+        {
+          stampToRender === "farcaster" && (
+            <div className={`border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md`}>
+              <div className="flex flex-col items-start">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB0LwYIlZ9aYglKkSRuhEH0TM6VkCmqRqXpQ&s"
+                  alt="Farcaster logo"
+                  className="mb-1 size-10 rounded-md"
+                />
+                <h2 className="text-xl font-bold">Farcaster</h2>
+                {doesStampExist(4) ? (
+                  <p className="text-sm text-gray-600 mt-1">Your Farcaster is verified</p>
+                ) : (
+                  <div className="bg-white w-[fit-content] rounded-lg mt-2">
+                    <SignInButton />
+                  </div>
+                )}
+              </div>
+            </div>
+          )
+        }
+        {
+          stampToRender === "address" && (
+            <>
+              <div
+                style={{
+                  border: "1px solid #e5e7eb",
+                  width: isGrid ? "100%" : "300px",
+                  borderRadius: "0.75rem", // Tailwind: rounded-xl
+                  padding: "1rem 1.5rem",  // p-4 & px-6
+                  marginBottom: "1rem",    // mb-4
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.05)" // shadow-md
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start"
+                  }}
+                >
+                  <img
+                    src="https://thumbs.dreamstime.com/b/destination-place-pin-red-pointer-map-position-mark-125211341.jpg"
+                    alt="Farcaster logo"
                     style={{
-                      backgroundColor: "#007bff",
-                      color: "#fff",
-                      padding: "8px 16px",
-                      borderRadius: "12px",
-                      border: "none"
+                      marginBottom: "0.25rem", // mb-1
+                      width: "2.5rem",         // w-10
+                      height: "2.5rem",        // h-10
+                      borderRadius: "0.375rem" // rounded-md
+                    }}
+                  />
+                  <h2
+                    style={{
+                      fontSize: "1.25rem", // text-xl
+                      fontWeight: 700      // font-bold
                     }}
                   >
-                    Connect Account
-                  </button>
-                )}
-            </div>}
-
-          </div>
-        ))}
-      {stampToRender === "iah" &&
-        <>
-          <div style={{
-            border: "1px solid #ccc",
-            width: isGrid ? "100%" : "300px",
-            height: "190px",
-            borderRadius: "12px",
-            padding: "16px 24px",
-            marginBottom: "16px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}>
-            <div className="flex items-center space-x-4">
-              <img
-                src={
-                  "data:image/png;base64,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"
-                }
-                alt="Image"
-                className="mb-1 size-10 rounded-md"
-              />
-              <h2 className="font-bold">I-Am-Human</h2>
-            </div>
-            <div>
-              {doesStampExist(stampsWithId["iah"]) ? (
-                <p className="text-green-600">Your NEAR account is verified</p>
-              ) : (
-                <p>Use a NEAR wallet to connect your IAH-verified account</p>
-              )}
-            </div>
-            <div className="mt-4">
-              {false ? (
-                <div className="flex justify-between">
-                  <div className="flex items-center space-x-2">
-                    <button style={{
-                      borderRadius: 10
-                    }} className="bg-green-500 text-white px-4 py-2 rounded">Verified Stamp</button>
-                  </div>
-                  <div className="relative">
-                  </div>
+                    Address
+                  </h2>
+                  {doesStampExist(stampsWithId.address) ? (
+                    <p
+                      style={{
+                        fontSize: "0.875rem", // text-sm
+                        color: "#4b5563",     // text-gray-600
+                        marginTop: "0.25rem"  // mt-1
+                      }}
+                    >
+                      Your Address is added
+                    </p>
+                  ) : (
+                    <div
+                      style={{
+                        width: "fit-content",
+                        borderRadius: "0.5rem" // rounded-lg
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "0.875rem", // text-sm
+                          color: "#4b5563"      // text-gray-600
+                        }}
+                      >
+                        Add your address
+                      </p>
+                      <button
+                        onClick={() => setAddressOpen(true)}
+                        style={{
+                          backgroundColor: "#3b82f6", // bg-blue-500
+                          color: "#fff",              // text-white
+                          padding: "0.5rem 1rem",     // py-2 px-4
+                          borderRadius: "0.25rem",    // rounded
+                          marginTop: "0.5rem",        // mt-2
+                          cursor: "pointer",
+                          border: "none"
+                        }}
+                      >
+                        Add Address
+                      </button>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    wallet.signIn()
-                  }}
-                  style={{
-                    borderRadius: 10
-                  }}
-                  className="bg-blue-500 text-white px-4 py-2"
-                >
-                  Connect Wallet
-                </button>
-              )}
-            </div>
-          </div>
-        </>
-      }
-      {stampToRender === "brightid" && <p>brightid</p>}
-      {stampToRender === "gitcoin" &&
-        <>
+              </div>
+            </>
+          )
+        }
+        {stampToRender === "evm" && (
           <div
             style={{
               border: "1px solid #ccc",
@@ -442,45 +1082,98 @@ export const Stamps = ({
               borderRadius: "12px",
               padding: "16px 24px",
               marginBottom: "16px",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
             }}
           >
-            <div className="items-center">
+            <div style={{ alignItems: "center" }}>
               <img
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAP1BMVEUAQzsAQzsAQzsAPTQAQDgANy2WpaM/Yl0ALiP///+otbMACAAAJxpSb2rd4uJogXzK0dCBlZIjUUq7xcTz9fUp8LglAAAAAnRSTlMm5BIqaH0AAADfSURBVHgBfNKBCsMgDEXRzSQ2z0a12v//1tUyoM61FxTgYCDg6/V2N71nG9Q9dEFiJ3yD5BfxC/9HRVgRjO4wIvmsMiMZvnnlH2RJSFFNY0ESHlETEPSckJF0QPHICHLkRBI2uqIiWa7ii7cNaHJ9SRGZSBN2AGUvOuCGyseV14ywNgwoHtQvI4O3ABtww8IU0ZaGJGUfXnKFF6ceQAMQ5Ip9TXVOaq7qyu+eFFGMHdNxrMEG7CMLK/U0jNi1L7/lo1gmdFIbvs3oWLTGs4Un7NFZtxHnnvH5U3+GLzsAAOyFDgN+WSNyAAAAAElFTkSuQmCC"
+                src="data:image/png;base64,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"
                 alt="Image"
-                className="mb-1 size-10 rounded-md"
+                style={{
+                  marginBottom: "4px",
+                  borderRadius: "50%",
+                  height: "40px",
+                  width: "40px",
+                }}
               />
               <div>
-                <h2 className="font-bold">Gitcoin Passport</h2>
-                <p className="text-gray-600">Connect to import your existing Gitcoin Passport</p>
+                <h2 style={{ fontWeight: "bold", fontSize: "16px" }}>EVM Wallet</h2>
+                <p style={{ color: "#757575", fontSize: "14px" }}>
+                  Connect to evm wallet
+                </p>
               </div>
             </div>
-            <div className="mt-2">
-              {doesStampExist(stampsWithId.gitcoin) ? (
+            <div style={{ marginTop: "8px" }}>
+              {doesStampExist(stampsWithId.evm) ? (
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <button style={{ borderRadius: 10 }} className="bg-green-500 text-white px-4 py-2 rounded">Verified Stamp</button>
+                  <button
+                    style={{
+                      borderRadius: "10px",
+                      backgroundColor: "#4caf50",
+                      color: "white",
+                      padding: "8px 16px",
+                      border: "none",
+                    }}
+                  >
+                    Verified Stamp
+                  </button>
                 </div>
               ) : (
                 <>
-                  {lensModalOpen && (
-                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-                      <div className="bg-white rounded-lg p-6 w-96">
-                        <p className="text-xl font-bold mb-2">
-                          Connect Web3 Wallet for Gitcoin Passport
+                  {gitcoinModalOpen && (
+                    <div
+                      style={{
+                        position: "fixed",
+                        inset: "0",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 50,
+                      }}
+                    >
+                      <div
+                        style={{
+                          backgroundColor: "white",
+                          borderRadius: "12px",
+                          padding: "24px",
+                          width: "24rem",
+                        }}
+                      >
+                        <p
+                          style={{
+                            fontSize: "20px",
+                            fontWeight: "bold",
+                            marginBottom: "12px",
+                          }}
+                        >
+                          Connect Web3 Wallet
                         </p>
                         {connectors.map((connector) => (
                           <button
                             key={connector.uid}
-                            className="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4"
+                            style={{
+                              backgroundColor: "#007bff",
+                              color: "white",
+                              padding: "8px 16px",
+                              borderRadius: "8px",
+                              width: "100%",
+                              marginBottom: "8px",
+                              border: "none",
+                            }}
                             onClick={() => connect({ connector })}
                           >
                             {connector.name}
                           </button>
                         ))}
                         <button
-                          className="mt-4 text-red-500"
-                          style={{ borderRadius: 10 }}
+                          style={{
+                            marginTop: "16px",
+                            color: "#ff0000",
+                            borderRadius: "10px",
+                            background: "none",
+                            border: "none",
+                          }}
                           onClick={() => setGitcoinModalOpen(false)}
                         >
                           Close
@@ -489,583 +1182,41 @@ export const Stamps = ({
                     </div>
                   )}
                   <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    style={{
+                      backgroundColor: "#007bff",
+                      color: "white",
+                      padding: "8px 16px",
+                      borderRadius: "8px",
+                      border: "none",
+                    }}
                     onClick={() => setGitcoinModalOpen(true)}
                   >
-                    Connect Gitcoin
+                    Connect Evm Wallet
                   </button>
                 </>
               )}
             </div>
           </div>
-        </>
-      }
-      {stampToRender === "instagram" && <p>instagram</p>}
-      {stampToRender === "gooddollar" && <p>gooddollar</p>}
-      {stampToRender === "near-wallet" &&
-        <>
-          <div style={{
-            border: "1px solid #ccc",
-            width: isGrid ? "100%" : "300px",
-            height: "190px",
-            borderRadius: "12px",
-            padding: "16px 24px",
-            marginBottom: "16px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}>
-            <div className="flex items-center space-x-4">
-              <img
-                src={
-                  "data:image/png;base64,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"
-                }
-                alt="Image"
-                className="mb-1 size-10 rounded-md"
-              />
-              <h2 className="font-bold">Near</h2>
-            </div>
-            <div>
-              {doesStampExist(stampsWithId["iah"]) ? (
-                <p className="text-green-600">Your NEAR account is verified</p>
-              ) : (
-                <p>Use a NEAR wallet</p>
-              )}
-            </div>
-            <div className="mt-4">
-              {false ? (
-                <div className="flex justify-between">
-                  <div className="flex items-center space-x-2">
-                    <button style={{
-                      borderRadius: 10
-                    }} className="bg-green-500 text-white px-4 py-2 rounded">Verified Stamp</button>
-                  </div>
-                  <div className="relative">
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    wallet.signIn()
-                  }}
-                  style={{
-                    borderRadius: 10
-                  }}
-                  className="bg-blue-500 text-white px-4 py-2"
-                >
-                  Connect Wallet
-                </button>
-              )}
-            </div>
-          </div>
-        </>
-      }
-      {stampToRender === "fractal" && <p>fractal</p>}
-      {stampToRender === "solana" && <>
-        <div style={{
-          border: "1px solid #ccc",
-          width: isGrid ? "100%" : "300px",
-          height: "190px",
-          borderRadius: "12px",
-          padding: "16px 24px",
-          marginBottom: "16px",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <div className="items-center">
-            <img
-              src="data:image/webp;base64,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"
-              alt="Image"
-              className="mb-1 object-cover rounded-md"
-              style={{
-                width: 40,
-                height: 40
-              }}
-            />
-            <div>
-              <h2 className="font-bold">Solana</h2>
-              {doesStampExist(stampsWithId["solana"]) ? (
-                <div className="flex items-center space-x-1">
-                  <p className="text-gray-600">Your Solana address is verified</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="#00e64d"
-                    className="size-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-              ) : (
-                <p className="text-gray-600">Connect to Solana</p>
-              )}
-            </div>
-          </div>
-          <div className="mt-4">
-            {doesStampExist(stampsWithId["solana"]) ? (
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <button
-                  onClick={() => {
-                    // connect worldcoin wallet
-                  }}
-                  style={{
-                    borderRadius: 10
-                  }} className="bg-green-500 text-white px-4 py-2 rounded"
-                >
-                  Solana Connected
-                </button>
-              </div>
-            ) : (
-              <>
-                <WalletMultiButton />
-              </>
-            )}
-          </div>
-        </div>
-      </>}
-      {stampToRender === "telegram" && <>
-        <div style={{
-          border: "1px solid #ccc",
-          width: isGrid ? "100%" : "300px",
-          height: "190px",
-          borderRadius: "12px",
-          padding: "16px 24px",
-          marginBottom: "16px",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <div className="items-center">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/2048px-Telegram_2019_Logo.svg.png"
-              alt="Image"
-              className="mb-1 size-10 rounded-md object-cover"
-            />
-            <div>
-              <h2 className="font-bold">Telegram</h2>
-              {doesStampExist(stampsWithId.telegram) ? (
-                <div className="flex items-center space-x-1">
-                  <p className="text-gray-600">Your telegram is verified</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="#00e64d"
-                    className="size-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-              ) : (
-                <p className="text-gray-600">Verify your telegram</p>
-              )}
-            </div>
-          </div>
-          <div className="mt-4">
-            {doesStampExist(stampsWithId.telegram) ? (
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <button className="bg-green-500 text-white px-4 py-2 rounded">
-                  Verified Stamp
-                </button>
-              </div>
-            ) : (
-              <>
-                <button
-                  onClick={() => {
-                    setShowTelegramScript(true)
-                  }}
-                  className="bg-blue-500 text-white px-4 py-2 rounded"
-                >
-                  Connect Telegram
-                </button>
-                {showTelegramScript && (
-                  <div className="p-3">
-                    <script
-                      async
-                      src="https://telegram.org/js/telegram-widget.js?22"
-                      data-telegram-login="cubid_bot"
-                      data-size="medium"
-                      data-auth-url="https://passport.cubid.me/telegram"
-                      data-request-access="write"
-                    ></script>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      </>}
-      {stampToRender === "worldcoin" && <p>worldcoin</p>}
-      {stampToRender === "near" &&
-        <>
-          <div style={{
-            border: "1px solid #ccc",
-            width: isGrid ? "100%" : "300px",
-            height: "190px",
-            borderRadius: "12px",
-            padding: "16px 24px",
-            marginBottom: "16px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}>
-            <div className="flex items-center space-x-4">
-              <img
-                src={
-                  "data:image/png;base64,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"
-                }
-                alt="Image"
-                className="mb-1 size-10 rounded-md"
-              />
-              <h2 className="font-bold">Near</h2>
-            </div>
-            <div>
-              {doesStampExist(stampsWithId["iah"]) ? (
-                <p className="text-green-600">Your NEAR account is verified</p>
-              ) : (
-                <p>Use a NEAR wallet</p>
-              )}
-            </div>
-            <div className="mt-4">
-              {false ? (
-                <div className="flex justify-between">
-                  <div className="flex items-center space-x-2">
-                    <button style={{
-                      borderRadius: 10
-                    }} className="bg-green-500 text-white px-4 py-2 rounded">Verified Stamp</button>
-                  </div>
-                  <div className="relative">
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    wallet.signIn()
-                  }}
-                  style={{
-                    borderRadius: 10
-                  }}
-                  className="bg-blue-500 text-white px-4 py-2"
-                >
-                  Connect Wallet
-                </button>
-              )}
-            </div>
-          </div>
-        </>
-      }
-
-      {stampToRender === "lens-protocol" && (
-
-        <div style={{
-          border: "1px solid #ccc",
-          borderRadius: "12px",
-          marginBottom: "16px",
-          padding: "16px",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-          height: "auto",
-        }}
-        >
-          {/* Header section */}
-          <div className="mb-3">
-            <img
-              src={
-                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAZlBMVEX////r6+uDg4VMTU9TVFaYmJn6+vrCw8MAAAAfICQlJioaGx/k5eXy8vIpKi4sLTCwsLFub3FcXV4XGB0VFxvc3N3Ozs55enshIyZDREcJDBKAgYK6urs1Njk8PD+bm53V1danqKn7JVr2AAAAm0lEQVR4AdXOxQGAIABAUZVuu3P/Ie2WBfwXhUc5v831AETYboQyzoWQNlNMmzkOnGd+EHrSj8xanKRZmJHDYJxzlhd6Qw2inOdltZm3bVnt+inr9Y3zyBKHCyalsaUbNaMUdmzV+h5uQ7a9iJS2jZG7Pbcr9cfK1Nmrc/Y00fTOmazKi7UQSF22cRkLxkRc8ouuEtIhNBDX+WkTbzIRXoEbjE4AAAAASUVORK5CYII='
-              }
-              alt="Image"
-              className="mb-1 w-10 h-10 rounded-md"
-            />
-            <h3 className="text-xl font-bold">Lens Protocol</h3>
-            {/* If the stamp is verified, show success else show prompt */}
-            {doesStampExist(stampsWithId["lens-protocol"]) ? (
-              <div className="flex items-center space-x-1 text-sm text-gray-600 mt-1">
-                <p>Your Lens Protocol is verified</p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="#00e64d"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12.75L11.25 15 15 9.75M21 12a9 
-               9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-            ) : (
-              <p className="text-sm texAccountt-gray-600 mt-1">
-                Use a Lens Protocol
-              </p>
-            )}
-          </div>
-
-          {/* Content section */}
-          <div>
-            {doesStampExist(stampsWithId["lens-protocol"]) ? (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Button>Verified Stamp</Button>
-                </div>
-              </div>
-            ) : (
-              <>
-                {address ? (
-                  <>
-                    <LoginOptions
-                      wallet={address ?? ""}
-                      onSuccess={async (args) => {
-                        await axios.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
-                          page_id,
-                          stamp_type: "lens-protocol",
-                          stampData: {
-                            uniquevalue: args?.handle?.linkedTo?.nftTokenId,
-                            identity: args.handle?.fullHandle,
-                            ...args,
-                            metdata: { ...args?.metadata, picture: null },
-                          },
-                          user_data: { uuid },
-                        });
-                        disconnect()
-                        fetchStampData()
-                        // window.location.reload()
-                      }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    {lensModalOpen && (
-                      <div
-                        style={{
-                          border: "1px solid #eee",
-                          borderRadius: "8px",
-                          padding: "16px",
-                          marginTop: "8px",
-                        }}
-                      >
-                        <p className="text-lg font-semibold mb-2">
-                          Connect Web3 Wallet for Lens
-                        </p>
-                        {connectors.map((connector) => (
-                          <Button
-                            key={connector.uid}
-                            variant="secondary"
-                            className="bg-blue-500 mb-4 text-white"
-                            style={{ width: "200px" }}
-                            onClick={() => {
-                              localStorage?.setItem("lens-loggin", "true")
-                              connect({ connector })
-                            }}
-                          >
-                            {connector.name}
-                          </Button>
-                        ))}
-                      </div>
-                    )}
-
-                    <Button
-                      variant="outline"
-                      className="bg-blue-500 text-white"
-                      style={{ marginTop: "8px", borderRadius: 10 }}
-                      onClick={() => {
-                        setLensModalOpen(true)
-                      }}
-                    >
-                      Connect Lens Wallet
-                    </Button>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )
-      }
-
-      {
-        stampToRender === "phone" && (
-          <div
-            style={{
-              border: "1px solid #ccc",
-              width: isGrid ? "100%" : "300px",
-              borderRadius: "12px",
-              padding: "16px 24px",
-              marginBottom: "16px",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-              <img
-                src="https://i.pinimg.com/736x/84/4e/8c/844e8cd4ab26c82286238471f0e5a901.jpg"
-                alt="Farcaster logo"
-                style={{ marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" }}
-              />
-              <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>Phone</h2>
-              {doesStampExist(stampsWithId.phone) ? (
-                <button
-                  style={{
-                    backgroundColor: "#28a745",
-                    color: "#fff",
-                    padding: "8px 16px",
-                    borderRadius: "12px",
-                    border: "none"
-                  }}
-                >
-                  Verified Stamp
-                </button>
-              ) : (
-                <div style={{ borderRadius: "8px", padding: "8px 12px" }}>
-                  <p style={{ fontSize: "14px", color: "#666" }}>Connect your phone</p>
-                  <button
-                    onClick={() => {
-                      setPhoneOpen(true);
-                    }}
-                    style={{
-                      backgroundColor: "#007bff",
-                      color: "#fff",
-                      padding: "8px 16px",
-                      borderRadius: "12px",
-                      border: "none",
-                      marginTop: "8px"
-                    }}
-                  >
-                    Connect Phone
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        )
-      }
-
-      {
-        stampToRender === "farcaster" && (
-          <div className={`border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md`}>
-            <div className="flex flex-col items-start">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB0LwYIlZ9aYglKkSRuhEH0TM6VkCmqRqXpQ&s"
-                alt="Farcaster logo"
-                className="mb-1 size-10 rounded-md"
-              />
-              <h2 className="text-xl font-bold">Farcaster</h2>
-              {doesStampExist(4) ? (
-                <p className="text-sm text-gray-600 mt-1">Your Farcaster is verified</p>
-              ) : (
-                <div className="bg-white w-[fit-content] rounded-lg mt-2">
-                  <SignInButton />
-                </div>
-              )}
-            </div>
-          </div>
-        )
-      }
-      {
-        stampToRender === "address" && (
-          <>
-            <div
-              style={{
-                border: "1px solid #e5e7eb",
-                width: isGrid ? "100%" : "300px",
-                borderRadius: "0.75rem", // Tailwind: rounded-xl
-                padding: "1rem 1.5rem",  // p-4 & px-6
-                marginBottom: "1rem",    // mb-4
-                boxShadow: "0 1px 2px rgba(0,0,0,0.05)" // shadow-md
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start"
-                }}
-              >
-                <img
-                  src="https://thumbs.dreamstime.com/b/destination-place-pin-red-pointer-map-position-mark-125211341.jpg"
-                  alt="Farcaster logo"
-                  style={{
-                    marginBottom: "0.25rem", // mb-1
-                    width: "2.5rem",         // w-10
-                    height: "2.5rem",        // h-10
-                    borderRadius: "0.375rem" // rounded-md
-                  }}
-                />
-                <h2
-                  style={{
-                    fontSize: "1.25rem", // text-xl
-                    fontWeight: 700      // font-bold
-                  }}
-                >
-                  Address
-                </h2>
-                {doesStampExist(stampsWithId.address) ? (
-                  <p
-                    style={{
-                      fontSize: "0.875rem", // text-sm
-                      color: "#4b5563",     // text-gray-600
-                      marginTop: "0.25rem"  // mt-1
-                    }}
-                  >
-                    Your Address is added
-                  </p>
-                ) : (
-                  <div
-                    style={{
-                      width: "fit-content",
-                      borderRadius: "0.5rem" // rounded-lg
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontSize: "0.875rem", // text-sm
-                        color: "#4b5563"      // text-gray-600
-                      }}
-                    >
-                      Add your address
-                    </p>
-                    <button
-                      onClick={() => setAddressOpen(true)}
-                      style={{
-                        backgroundColor: "#3b82f6", // bg-blue-500
-                        color: "#fff",              // text-white
-                        padding: "0.5rem 1rem",     // py-2 px-4
-                        borderRadius: "0.25rem",    // rounded
-                        marginTop: "0.5rem",        // mt-2
-                        cursor: "pointer",
-                        border: "none"
-                      }}
-                    >
-                      Add Address
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </>
-        )
-      }
-      <PhoneNumberConnect
-        apikey={api_key}
-        open={phoneOpen}
-        onClose={() => setPhoneOpen(false)}
-        fetchStamps={fetchStampData}
-        page_id={page_id}
-        uuid={uuid}
-      />
-      <LocationSearchPanel
-        fetchStamps={fetchStampData}
-        apikey={api_key}
-        open={addressOpen}
-        onClose={() => setAddressOpen(false)}
-        page_id={page_id}
-        uuid={uuid}
-      />
-    </div >
+        )}
+        <PhoneNumberConnect
+          apikey={api_key}
+          open={phoneOpen}
+          onClose={() => setPhoneOpen(false)}
+          fetchStamps={fetchStampData}
+          page_id={page_id}
+          uuid={uuid}
+          setBlacklist={setBlacklist}
+          setBlacklistCred={setBlacklistCred}
+        />
+        <LocationSearchPanel
+          fetchStamps={fetchStampData}
+          apikey={api_key}
+          open={addressOpen}
+          onClose={() => setAddressOpen(false)}
+          page_id={page_id}
+          uuid={uuid}
+        />
+      </div >
+    </>
   );
 };

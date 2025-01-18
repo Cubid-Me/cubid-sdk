@@ -15,6 +15,8 @@ export const PhoneNumberConnect = ({
   page_id,
   uuid,
   apikey,
+  setBlacklist,
+  setBlacklistCred
 }: {
   open: boolean;
   fetchStamps: () => void;
@@ -22,6 +24,8 @@ export const PhoneNumberConnect = ({
   page_id?: string;
   uuid: string;
   apikey: string;
+  setBlacklist: any;
+  setBlacklistCred: any
 }) => {
   const [phoneInput, setPhoneInput] = React.useState("");
   const [otpSent, setOtpSent] = React.useState(false);
@@ -56,7 +60,21 @@ export const PhoneNumberConnect = ({
           stampData: { uniquevalue: phoneInput, identity: phoneInput },
           user_data: { uuid },
         });
+        const { data: blacklist_creds } = await axios.post("https://passport.cubid.me/api/v2/fetch_blacklisted_creds", {
+          apikey,
+          cred: phoneInput
+        })
         fetchStamps();
+        if (blacklist_creds?.is_blacklisted) {
+          const { data: { all_email } } = await axios.post('https://passport.cubid.me/api/v2/find_users_with_blacklist', {
+            cred: phoneInput, apikey
+          })
+          setBlacklist(true)
+          setBlacklistCred({
+            type: "email",
+            value: all_email?.email1
+          })
+        }
       }
     } catch (error) {
       toast.error("OTP verification failed.");
