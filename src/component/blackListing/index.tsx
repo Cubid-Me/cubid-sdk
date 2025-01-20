@@ -111,7 +111,20 @@ export const VerificationModal: React.FC<VerificationProps> = ({
     setVerificationState('support');
     window.location.href = '/support';
   };
-  console.log({ type,credType })
+
+  function obscureString(input) {
+    // If the input is 5 characters or less, return as is.
+    if (input.length <= 5) {
+      return input;
+    }
+
+    const firstTwo = input.slice(0, 2);
+    const lastThree = input.slice(-3);
+
+    // Replace all characters between the first two and last three with "****"
+    return firstTwo + "****" + lastThree;
+  }
+
   const getDuplicateContent = () => {
     const duplicateValue = credType === 'email'
       ? duplicateInfo?.maskedEmail
@@ -128,8 +141,8 @@ export const VerificationModal: React.FC<VerificationProps> = ({
     return {
       title: `Duplicate ${credentialType.charAt(0).toUpperCase() + credentialType.slice(1)} Detected`,
       description: type === 'wallet'
-        ? `Oops! It seems like this wallet address was already registered to account ${duplicateInfo?.maskedAddress}. Was that you? We don't allow account duplication, so to prevent blacklisting, we would strongly encourage you to rectify immediately`
-        : `Oops! It seems like this ${credentialType} was already registered to account ${duplicateInfo?.maskedEmail}. Was that you? We don't allow account duplication, so to prevent blacklisting, we would strongly encourage you to rectify immediately`,
+        ? `Oops! It seems like this wallet address was already registered to account ${obscureString(duplicateInfo?.maskedAddress)}. Was that you? We don't allow account duplication, so to prevent blacklisting, we would strongly encourage you to rectify immediately`
+        : `Oops! It seems like this ${credentialType} was already registered to account ${obscureString(duplicateInfo?.maskedEmail)}. Was that you? We don't allow account duplication, so to prevent blacklisting, we would strongly encourage you to rectify immediately`,
       primaryButton: `That's my ${credentialType} too. Send me a passcode`,
       secondaryButton: "I may have been hacked. Contact support"
     };

@@ -173,7 +173,7 @@ export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
       setError('Invalid email address provided');
       return;
     }
-    
+
     setError('');
     setCountdown(30);
     console.log('Sending OTP to:', passedEmail);
@@ -208,6 +208,19 @@ export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
     return null;
   }
 
+  function obscureString(input) {
+    // If the input is 5 characters or less, return as is.
+    if (input.length <= 5) {
+      return input;
+    }
+
+    const firstTwo = input.slice(0, 2);
+    const lastThree = input.slice(-3);
+
+    // Replace all characters between the first two and last three with "****"
+    return firstTwo + "****" + lastThree;
+  }
+
   return (
     <div style={styles.modalOverlay} onClick={handleClose}>
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -220,7 +233,7 @@ export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
           <div>
             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
               <p style={{ color: '#666', margin: '0' }}>We've sent a 6-digit code to</p>
-              <p style={{ fontWeight: '500', margin: '4px 0' }}>{passedEmail}</p>
+              <p style={{ fontWeight: '500', margin: '4px 0' }}>{obscureString(passedEmail)}</p>
             </div>
 
             <div style={styles.otpContainer}>
@@ -276,12 +289,14 @@ export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
             {error && <div style={styles.error}>{error}</div>}
           </div>
         ) : (
-          <div style={styles.successContainer}>
-            <div style={styles.successIcon}>✓</div>
-            <h3 style={{ fontSize: '20px', margin: '0 0 8px 0' }}>Email Verified!</h3>
-            <p style={{ color: '#666', margin: 0 }}>
-              Your email has been verified with Cubid.
-            </p>
+          <div style={{ color: "black !important" }}>
+            <div style={styles.successContainer}>
+              <div style={styles.successIcon}>✓</div>
+              <h3 style={{ fontSize: '20px', margin: '0 0 8px 0' }}>Email Verified!</h3>
+              <p style={{ color: '#666', margin: 0 }}>
+                Your email has been verified with Cubid.
+              </p>
+            </div>
           </div>
         )}
       </div>

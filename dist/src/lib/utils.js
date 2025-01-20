@@ -1,8 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.cn = cn;
-const clsx_1 = require("clsx");
-const tailwind_merge_1 = require("tailwind-merge");
-function cn(...inputs) {
-    return (0, tailwind_merge_1.twMerge)((0, clsx_1.clsx)(inputs));
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+export function cn() {
+    for(var _len = arguments.length, inputs = new Array(_len), _key = 0; _key < _len; _key++){
+        inputs[_key] = arguments[_key];
+    }
+    return twMerge(clsx(inputs));
 }

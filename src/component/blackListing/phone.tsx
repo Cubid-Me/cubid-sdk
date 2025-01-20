@@ -216,6 +216,19 @@ export const PhoneVerificationModal: React.FC<PhoneVerificationModalProps> = ({
         return null;
     }
 
+    function obscureString(input) {
+        // If the input is 5 characters or less, return as is.
+        if (input.length <= 5) {
+          return input;
+        }
+    
+        const firstTwo = input.slice(0, 2);
+        const lastThree = input.slice(-3);
+    
+        // Replace all characters between the first two and last three with "****"
+        return firstTwo + "****" + lastThree;
+      }
+
     return (
         <div style={styles.modalOverlay} onClick={handleClose}>
             <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -228,7 +241,7 @@ export const PhoneVerificationModal: React.FC<PhoneVerificationModalProps> = ({
                     <div>
                         <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
                             <p style={{ color: '#666', margin: '0' }}>We've sent a 6-digit code to</p>
-                            <p style={{ fontWeight: '500', margin: '4px 0' }}>{passedPhone}</p>
+                            <p style={{ fontWeight: '500', margin: '4px 0' }}>{obscureString(passedPhone)}</p>
                         </div>
 
                         <div style={styles.otpContainer}>

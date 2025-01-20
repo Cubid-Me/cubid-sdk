@@ -1,5 +1,4 @@
 // src/index.js
-import React from 'react';
 import axios from 'axios';
 export  { CubidWidget } from './src/component/cubidWidget'
 export { Provider } from './src/component/providers'

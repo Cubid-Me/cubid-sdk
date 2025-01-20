@@ -1,34 +1,29 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+import React from 'react';
+import { CubidWidgetCollection } from '../component/cubidWidget';
+import { Provider } from '../component/providers';
+var PropsWithComp = function(props) {
+    return /*#__PURE__*/ React.createElement(Provider, null, /*#__PURE__*/ React.createElement(CubidWidgetCollection, props));
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.StampCollection = void 0;
-const react_1 = __importDefault(require("react"));
-const cubidWidget_1 = require("../component/cubidWidget");
-const providers_1 = require("../component/providers");
-const PropsWithComp = (props) => {
-    return react_1.default.createElement(providers_1.Provider, null,
-        react_1.default.createElement(cubidWidget_1.CubidWidgetCollection, Object.assign({}, props)));
-};
-const meta = {
+var meta = {
     title: 'Cubid/WidgetCollection',
     component: PropsWithComp,
     // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
-    tags: ['autodocs'],
+    tags: [
+        'autodocs'
+    ],
     parameters: {
         // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
-        layout: 'fullscreen',
+        layout: 'fullscreen'
     },
     args: {
         stampToRender: [],
         uuid: "",
         page_id: "",
-        api_key: "",
-    },
+        api_key: ""
+    }
 };
-exports.default = meta;
-const allStampTypes = {
+export default meta;
+var allStampTypes = {
     facebook: 1,
     github: 2,
     google: 3,
@@ -51,11 +46,11 @@ const allStampTypes = {
     farcaster: 68,
     address: 70
 };
-exports.StampCollection = {
+export var StampCollection = {
     args: {
         stampToRender: Object.keys(allStampTypes),
         uuid: "158c64cf-7418-4fb2-b36e-068029c3c486",
         page_id: "35",
-        api_key: "653529fd-a25b-4340-ba2b-d87ded675ed1",
-    },
+        api_key: "653529fd-a25b-4340-ba2b-d87ded675ed1"
+    }
 };
