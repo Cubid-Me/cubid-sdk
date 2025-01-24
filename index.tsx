@@ -1,27 +1,90 @@
-// src/index.js
-import axios from 'axios';
-export  { CubidWidget } from './src/component/cubidWidget'
-export { Provider } from './src/component/providers'
+// src/index.ts
+import axios, { AxiosResponse } from 'axios';
+import { split, combine } from 'shamir-secret-sharing';
+import { ethers } from 'ethers';
+
+export { CubidWidget } from './src/component/cubidWidget';
+export { Provider } from './src/component/providers';
+
+// Interfaces
+interface WalletInfo {
+    privateKey?: string;
+    address: string;
+}
+
+interface EncryptionResult {
+    user_shares?: string[];
+    public_address: string;
+}
+
+interface ApiResponse {
+    secret?: string;
+    [key: string]: any;
+}
+
+interface UserCreateParams {
+    email?: string;
+    phone?: string;
+    evm?: string;
+}
+
+interface EncryptParams {
+    user_id?: string;
+}
+
+interface DecryptParams {
+    userShares?: string[];
+    user_id?: string;
+}
+
+interface UserParams {
+    user_id?: string;
+}
+
+interface SecretParams extends UserParams {
+    secret?: string;
+}
 
 export class CubidSDK {
-    dapp_id: any;
-    api_key: any;
-    baseUrl: string;
-    constructor(dapp_id, api_key) {
+    private readonly dapp_id: string;
+    private readonly api_key: string;
+    private readonly baseUrl: string;
+    private readonly TOTAL_SHARES: number = 3;  // Always create 3 shares
+    private readonly THRESHOLD: number = 2;     // Need 2 shares to reconstruct
+
+    constructor(dapp_id: string, api_key: string) {
         this.dapp_id = dapp_id;
         this.api_key = api_key;
         this.baseUrl = 'https://passport.cubid.me/api/v2';
     }
 
     /**
-     * Helper function to make POST HTTP requests.
-     * @param {string} endpoint - API endpoint to be called.
-     * @param {Object} data - The payload to be sent in the POST request.
-     * @returns {Promise<Object>} - The response from the API.
+     * Converts a hex string to Uint8Array
      */
-    async makePostRequest(endpoint, data = {}) {
+    private hexToBytes(hex: string): Uint8Array {
+        hex = hex.replace('0x', '');
+        const bytes = new Uint8Array(hex.length / 2);
+        for (let i = 0; i < hex.length; i += 2) {
+            bytes[i / 2] = parseInt(hex.slice(i, i + 2), 16);
+        }
+        return bytes;
+    }
+
+    /**
+     * Converts Uint8Array to hex string
+     */
+    private bytesToHex(bytes: Uint8Array): string {
+        return '0x' + Array.from(bytes)
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
+    }
+
+    /**
+     * Helper function to make POST HTTP requests
+     */
+    private async makePostRequest<T>(endpoint: string, data: Record<string, any> = {}): Promise<T> {
         try {
-            const response = await axios({
+            const response: AxiosResponse<T> = await axios({
                 url: `${this.baseUrl}/${endpoint}`,
                 method: 'POST',
                 headers: {
@@ -33,91 +96,125 @@ export class CubidSDK {
             });
             return response.data;
         } catch (error) {
-            throw new Error(`API request to ${endpoint} failed: ${error.message}`);
+            throw new Error(`API request to ${endpoint} failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+    }
+
+    private async generateEthereumKey(): Promise<WalletInfo> {
+        const wallet = ethers.Wallet.createRandom();
+        return {
+            privateKey: wallet.privateKey,
+            address: wallet.address
+        };
+    }
+
+    /**
+     * Generates and encrypts an Ethereum private key using Shamir's Secret Sharing
+     */
+    async encryptPrivateKey({ user_id }: EncryptParams): Promise<EncryptionResult> {
+        try {
+            console.log('Starting private key encryption process for user:', user_id);
+
+            if (!user_id) {
+                throw new Error('User ID is required');
+            }
+
+            const walletInfo = await this.generateEthereumKey();
+            const secretBytes = this.hexToBytes(walletInfo.privateKey);
+            const shares = await split(secretBytes, this.TOTAL_SHARES, this.THRESHOLD);
+            const hexShares = shares.map(share => this.bytesToHex(share));
+            const [userShare1, userShare2, apiShare] = hexShares;
+
+            await this.saveSecret({
+                user_id,
+                secret: apiShare,
+            });
+
+            return {
+                user_shares: [userShare1, userShare2],
+                public_address: walletInfo.address
+            };
+
+        } catch (error) {
+            console.error('Encryption process failed:', {
+                error: error instanceof Error ? error.message : 'Unknown error',
+                stack: error instanceof Error ? error.stack : '',
+                userId: user_id,
+                timestamp: new Date().toISOString()
+            });
+
+            throw new Error(`Encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
 
     /**
-     * Fetches approximate location data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The approximate location data.
+     * Decrypts a private key using user shares and retrieving API share
      */
-    async fetchApproxLocation({ user_id }) {
-        return this.makePostRequest('identity/fetch_approx_location', { apikey: this.api_key, user_id });
+    async decryptPrivateKey({ userShares, user_id }: DecryptParams): Promise<string> {
+        try {
+            if (!Array.isArray(userShares) || userShares.length !== 2) {
+                throw new Error('Exactly two user shares are required');
+            }
+
+            if (!user_id) {
+                throw new Error('User ID is required');
+            }
+
+            const apiShareResponse = await this.fetchUserData({ user_id });
+            if (!apiShareResponse?.secret) {
+                throw new Error('Failed to retrieve share from API');
+            }
+
+            const shareBytes = [...userShares, apiShareResponse.secret].map(share => this.hexToBytes(share));
+            const recoveredBytes = await combine(shareBytes.slice(0, this.THRESHOLD));
+
+            return this.bytesToHex(recoveredBytes);
+
+        } catch (error) {
+            throw new Error(`Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
     }
 
-    /**
-     * Fetches exact location data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The exact location data.
-     */
-    async fetchExactLocation({ user_id }) {
-        return this.makePostRequest('identity/fetch_exact_location', { apikey: this.api_key, user_id });
+    // API Methods
+    async fetchApproxLocation({ user_id }: UserParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('identity/fetch_approx_location', { apikey: this.api_key, user_id });
     }
 
-    /**
-     * Fetches identity data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The identity data.
-     */
-    async fetchIdentity({ user_id }) {
-        return this.makePostRequest('identity/fetch_identity', { apikey: this.api_key, user_id });
+    async fetchExactLocation({ user_id }: UserParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('identity/fetch_exact_location', { apikey: this.api_key, user_id });
     }
 
-    /**
-     * Fetches rough location data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The rough location data.
-     */
-    async fetchRoughLocation({ user_id }) {
-        return this.makePostRequest('identity/fetch_rough_location', { apikey: this.api_key, user_id });
+    async fetchIdentity({ user_id }: UserParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('identity/fetch_identity', { apikey: this.api_key, user_id });
     }
 
-    /**
-     * Fetches user data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The user data.
-     */
-    async fetchUserData({ user_id }) {
-        return this.makePostRequest('identity/fetch_user_data', { apikey: this.api_key, user_id });
+    async fetchRoughLocation({ user_id }: UserParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('identity/fetch_rough_location', { apikey: this.api_key, user_id });
     }
 
-    /**
-     * Fetches the score for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The score data.
-     */
-    async fetchScore({ user_id }) {
-        return this.makePostRequest('score/fetch_score', { apikey: this.api_key, user_id });
+    async fetchUserData({ user_id }: UserParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('identity/fetch_user_data', { apikey: this.api_key, user_id });
     }
 
-    /**
-     * Creates a new user in the system.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.email - The email of the new user.
-     * @param {string} params.phone - The phone number of the new user.
-     *  * @param {string} params.evm - The evm address of the new user.
-     * @returns {Promise<Object>} - The newly created user data.
-     */
-    async createUser({ email, phone, evm }) {
-        return this.makePostRequest('create_user', { dapp_id: this.dapp_id, apikey: this.api_key, email, phone, evm });
+    async fetchScore({ user_id }: UserParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('score/fetch_score', { apikey: this.api_key, user_id });
     }
 
-    /**
- * Saves a secret for a user.
- * @param {Object} params - The parameters for the API call.
- * @param {string} params.user_id - The ID of the user.
- * @param {string} params.secret - The secret to be saved.
- * @returns {Promise<Object>} - The success status of the operation.
- */
-    async saveSecret({ user_id, secret }) {
-        return this.makePostRequest('save_secret', { user_id, api_key: this.api_key, secret });
+    async createUser({ email, phone, evm }: UserCreateParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('create_user', {
+            dapp_id: this.dapp_id,
+            apikey: this.api_key,
+            email,
+            phone,
+            evm
+        });
     }
 
+    async saveSecret({ user_id, secret }: SecretParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('save_secret', {
+            user_id,
+            api_key: this.api_key,
+            secret
+        });
+    }
 }

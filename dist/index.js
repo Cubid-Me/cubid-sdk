@@ -1,4 +1,15 @@
-// src/index.js
+// src/index.ts
+function _array_like_to_array(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+    return arr2;
+}
+function _array_with_holes(arr) {
+    if (Array.isArray(arr)) return arr;
+}
+function _array_without_holes(arr) {
+    if (Array.isArray(arr)) return _array_like_to_array(arr);
+}
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -59,6 +70,60 @@ function _define_property(obj, key, value) {
         obj[key] = value;
     }
     return obj;
+}
+function _instanceof(left, right) {
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+        return !!right[Symbol.hasInstance](left);
+    } else {
+        return left instanceof right;
+    }
+}
+function _iterable_to_array(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+function _iterable_to_array_limit(arr, i) {
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+    if (_i == null) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _s, _e;
+    try {
+        for(_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true){
+            _arr.push(_s.value);
+            if (i && _arr.length === i) break;
+        }
+    } catch (err) {
+        _d = true;
+        _e = err;
+    } finally{
+        try {
+            if (!_n && _i["return"] != null) _i["return"]();
+        } finally{
+            if (_d) throw _e;
+        }
+    }
+    return _arr;
+}
+function _non_iterable_rest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _non_iterable_spread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _sliced_to_array(arr, i) {
+    return _array_with_holes(arr) || _iterable_to_array_limit(arr, i) || _unsupported_iterable_to_array(arr, i) || _non_iterable_rest();
+}
+function _to_consumable_array(arr) {
+    return _array_without_holes(arr) || _iterable_to_array(arr) || _unsupported_iterable_to_array(arr) || _non_iterable_spread();
+}
+function _unsupported_iterable_to_array(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _array_like_to_array(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
 }
 function _ts_generator(thisArg, body) {
     var f, y, t, g, _ = {
@@ -156,6 +221,8 @@ function _ts_generator(thisArg, body) {
     }
 }
 import axios from 'axios';
+import { split, combine } from 'shamir-secret-sharing';
+import { ethers } from 'ethers';
 export { CubidWidget } from './src/component/cubidWidget';
 export { Provider } from './src/component/providers';
 export var CubidSDK = /*#__PURE__*/ function() {
@@ -165,18 +232,42 @@ export var CubidSDK = /*#__PURE__*/ function() {
         _define_property(this, "dapp_id", void 0);
         _define_property(this, "api_key", void 0);
         _define_property(this, "baseUrl", void 0);
+        _define_property(this, "TOTAL_SHARES", 3) // Always create 3 shares
+        ;
+        _define_property(this, "THRESHOLD", 2) // Need 2 shares to reconstruct
+        ;
         this.dapp_id = dapp_id;
         this.api_key = api_key;
         this.baseUrl = 'https://passport.cubid.me/api/v2';
     }
     _create_class(CubidSDK, [
         {
+            key: "hexToBytes",
+            value: /**
+     * Converts a hex string to Uint8Array
+     */ function hexToBytes(hex) {
+                hex = hex.replace('0x', '');
+                var bytes = new Uint8Array(hex.length / 2);
+                for(var i = 0; i < hex.length; i += 2){
+                    bytes[i / 2] = parseInt(hex.slice(i, i + 2), 16);
+                }
+                return bytes;
+            }
+        },
+        {
+            key: "bytesToHex",
+            value: /**
+     * Converts Uint8Array to hex string
+     */ function bytesToHex(bytes) {
+                return '0x' + Array.from(bytes).map(function(b) {
+                    return b.toString(16).padStart(2, '0');
+                }).join('');
+            }
+        },
+        {
             key: "makePostRequest",
             value: /**
-     * Helper function to make POST HTTP requests.
-     * @param {string} endpoint - API endpoint to be called.
-     * @param {Object} data - The payload to be sent in the POST request.
-     * @returns {Promise<Object>} - The response from the API.
+     * Helper function to make POST HTTP requests
      */ function makePostRequest(endpoint) {
                 var data = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
                 var _this = this;
@@ -212,7 +303,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
                                 ];
                             case 2:
                                 error = _state.sent();
-                                throw new Error("API request to ".concat(endpoint, " failed: ").concat(error.message));
+                                throw new Error("API request to ".concat(endpoint, " failed: ").concat(_instanceof(error, Error) ? error.message : 'Unknown error'));
                             case 3:
                                 return [
                                     2
@@ -223,13 +314,165 @@ export var CubidSDK = /*#__PURE__*/ function() {
             }
         },
         {
-            key: "fetchApproxLocation",
+            key: "generateEthereumKey",
+            value: function generateEthereumKey() {
+                return _async_to_generator(function() {
+                    var wallet;
+                    return _ts_generator(this, function(_state) {
+                        wallet = ethers.Wallet.createRandom();
+                        return [
+                            2,
+                            {
+                                privateKey: wallet.privateKey,
+                                address: wallet.address
+                            }
+                        ];
+                    });
+                })();
+            }
+        },
+        {
+            key: "encryptPrivateKey",
             value: /**
-     * Fetches approximate location data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The approximate location data.
-     */ function fetchApproxLocation(param) {
+     * Generates and encrypts an Ethereum private key using Shamir's Secret Sharing
+     */ function encryptPrivateKey(param) {
+                var user_id = param.user_id;
+                var _this = this;
+                return _async_to_generator(function() {
+                    var walletInfo, secretBytes, shares, hexShares, _hexShares, userShare1, userShare2, apiShare, error;
+                    return _ts_generator(this, function(_state) {
+                        switch(_state.label){
+                            case 0:
+                                _state.trys.push([
+                                    0,
+                                    4,
+                                    ,
+                                    5
+                                ]);
+                                console.log('Starting private key encryption process for user:', user_id);
+                                if (!user_id) {
+                                    throw new Error('User ID is required');
+                                }
+                                return [
+                                    4,
+                                    _this.generateEthereumKey()
+                                ];
+                            case 1:
+                                walletInfo = _state.sent();
+                                secretBytes = _this.hexToBytes(walletInfo.privateKey);
+                                return [
+                                    4,
+                                    split(secretBytes, _this.TOTAL_SHARES, _this.THRESHOLD)
+                                ];
+                            case 2:
+                                shares = _state.sent();
+                                hexShares = shares.map(function(share) {
+                                    return _this.bytesToHex(share);
+                                });
+                                _hexShares = _sliced_to_array(hexShares, 3), userShare1 = _hexShares[0], userShare2 = _hexShares[1], apiShare = _hexShares[2];
+                                return [
+                                    4,
+                                    _this.saveSecret({
+                                        user_id: user_id,
+                                        secret: apiShare
+                                    })
+                                ];
+                            case 3:
+                                _state.sent();
+                                return [
+                                    2,
+                                    {
+                                        user_shares: [
+                                            userShare1,
+                                            userShare2
+                                        ],
+                                        public_address: walletInfo.address
+                                    }
+                                ];
+                            case 4:
+                                error = _state.sent();
+                                console.error('Encryption process failed:', {
+                                    error: _instanceof(error, Error) ? error.message : 'Unknown error',
+                                    stack: _instanceof(error, Error) ? error.stack : '',
+                                    userId: user_id,
+                                    timestamp: new Date().toISOString()
+                                });
+                                throw new Error("Encryption failed: ".concat(_instanceof(error, Error) ? error.message : 'Unknown error'));
+                            case 5:
+                                return [
+                                    2
+                                ];
+                        }
+                    });
+                })();
+            }
+        },
+        {
+            key: "decryptPrivateKey",
+            value: /**
+     * Decrypts a private key using user shares and retrieving API share
+     */ function decryptPrivateKey(param) {
+                var userShares = param.userShares, user_id = param.user_id;
+                var _this = this;
+                return _async_to_generator(function() {
+                    var apiShareResponse, shareBytes, recoveredBytes, error;
+                    return _ts_generator(this, function(_state) {
+                        switch(_state.label){
+                            case 0:
+                                _state.trys.push([
+                                    0,
+                                    3,
+                                    ,
+                                    4
+                                ]);
+                                if (!Array.isArray(userShares) || userShares.length !== 2) {
+                                    throw new Error('Exactly two user shares are required');
+                                }
+                                if (!user_id) {
+                                    throw new Error('User ID is required');
+                                }
+                                return [
+                                    4,
+                                    _this.fetchUserData({
+                                        user_id: user_id
+                                    })
+                                ];
+                            case 1:
+                                apiShareResponse = _state.sent();
+                                if (!(apiShareResponse === null || apiShareResponse === void 0 ? void 0 : apiShareResponse.secret)) {
+                                    throw new Error('Failed to retrieve share from API');
+                                }
+                                shareBytes = _to_consumable_array(userShares).concat([
+                                    apiShareResponse.secret
+                                ]).map(function(share) {
+                                    return _this.hexToBytes(share);
+                                });
+                                return [
+                                    4,
+                                    combine(shareBytes.slice(0, _this.THRESHOLD))
+                                ];
+                            case 2:
+                                recoveredBytes = _state.sent();
+                                return [
+                                    2,
+                                    _this.bytesToHex(recoveredBytes)
+                                ];
+                            case 3:
+                                error = _state.sent();
+                                throw new Error("Decryption failed: ".concat(_instanceof(error, Error) ? error.message : 'Unknown error'));
+                            case 4:
+                                return [
+                                    2
+                                ];
+                        }
+                    });
+                })();
+            }
+        },
+        {
+            key: "fetchApproxLocation",
+            value: // API Methods
+            function fetchApproxLocation(param) {
                 var user_id = param.user_id;
                 var _this = this;
                 return _async_to_generator(function() {
@@ -247,12 +490,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
         },
         {
             key: "fetchExactLocation",
-            value: /**
-     * Fetches exact location data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The exact location data.
-     */ function fetchExactLocation(param) {
+            value: function fetchExactLocation(param) {
                 var user_id = param.user_id;
                 var _this = this;
                 return _async_to_generator(function() {
@@ -270,12 +508,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
         },
         {
             key: "fetchIdentity",
-            value: /**
-     * Fetches identity data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The identity data.
-     */ function fetchIdentity(param) {
+            value: function fetchIdentity(param) {
                 var user_id = param.user_id;
                 var _this = this;
                 return _async_to_generator(function() {
@@ -293,12 +526,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
         },
         {
             key: "fetchRoughLocation",
-            value: /**
-     * Fetches rough location data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The rough location data.
-     */ function fetchRoughLocation(param) {
+            value: function fetchRoughLocation(param) {
                 var user_id = param.user_id;
                 var _this = this;
                 return _async_to_generator(function() {
@@ -316,12 +544,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
         },
         {
             key: "fetchUserData",
-            value: /**
-     * Fetches user data for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The user data.
-     */ function fetchUserData(param) {
+            value: function fetchUserData(param) {
                 var user_id = param.user_id;
                 var _this = this;
                 return _async_to_generator(function() {
@@ -339,12 +562,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
         },
         {
             key: "fetchScore",
-            value: /**
-     * Fetches the score for a user.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.user_id - The ID of the user.
-     * @returns {Promise<Object>} - The score data.
-     */ function fetchScore(param) {
+            value: function fetchScore(param) {
                 var user_id = param.user_id;
                 var _this = this;
                 return _async_to_generator(function() {
@@ -362,14 +580,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
         },
         {
             key: "createUser",
-            value: /**
-     * Creates a new user in the system.
-     * @param {Object} params - The parameters for the API call.
-     * @param {string} params.email - The email of the new user.
-     * @param {string} params.phone - The phone number of the new user.
-     *  * @param {string} params.evm - The evm address of the new user.
-     * @returns {Promise<Object>} - The newly created user data.
-     */ function createUser(param) {
+            value: function createUser(param) {
                 var email = param.email, phone = param.phone, evm = param.evm;
                 var _this = this;
                 return _async_to_generator(function() {
@@ -390,13 +601,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
         },
         {
             key: "saveSecret",
-            value: /**
- * Saves a secret for a user.
- * @param {Object} params - The parameters for the API call.
- * @param {string} params.user_id - The ID of the user.
- * @param {string} params.secret - The secret to be saved.
- * @returns {Promise<Object>} - The success status of the operation.
- */ function saveSecret(param) {
+            value: function saveSecret(param) {
                 var user_id = param.user_id, secret = param.secret;
                 var _this = this;
                 return _async_to_generator(function() {

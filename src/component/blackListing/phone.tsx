@@ -219,15 +219,15 @@ export const PhoneVerificationModal: React.FC<PhoneVerificationModalProps> = ({
     function obscureString(input) {
         // If the input is 5 characters or less, return as is.
         if (input.length <= 5) {
-          return input;
+            return input;
         }
-    
+
         const firstTwo = input.slice(0, 2);
         const lastThree = input.slice(-3);
-    
+
         // Replace all characters between the first two and last three with "****"
         return firstTwo + "****" + lastThree;
-      }
+    }
 
     return (
         <div style={styles.modalOverlay} onClick={handleClose}>
@@ -295,12 +295,14 @@ export const PhoneVerificationModal: React.FC<PhoneVerificationModalProps> = ({
                         </div>
                     </div>
                 ) : (
-                    <div style={styles.successContainer}>
-                        <div style={styles.successIcon}>✓</div>
-                        <h3 style={{ fontSize: '20px', margin: '0 0 8px 0' }}>Phone Verified!</h3>
-                        <p style={{ color: '#666', margin: 0 }}>
-                            Your phone number has been verified with Cubid.
-                        </p>
+                    <div style={{ color: "black !important" }}>
+                        <div style={styles.successContainer}>
+                            <div style={styles.successIcon}>✓</div>
+                            <h3 style={{ fontSize: '20px', margin: '0 0 8px 0' }}>Phone Verified!</h3>
+                            <p style={{ color: '#666', margin: 0 }}>
+                                Your phone number has been verified with Cubid.
+                            </p>
+                        </div>
                     </div>
                 )}
             </div>

@@ -415,6 +415,10 @@ export var PhoneVerificationModal = function(param) {
         },
         disabled: countdown > 0
     }, countdown > 0 ? "Resend in ".concat(countdown, "s") : 'Resend Code'))) : /*#__PURE__*/ React.createElement("div", {
+        style: {
+            color: "black !important"
+        }
+    }, /*#__PURE__*/ React.createElement("div", {
         style: styles.successContainer
     }, /*#__PURE__*/ React.createElement("div", {
         style: styles.successIcon
@@ -428,5 +432,5 @@ export var PhoneVerificationModal = function(param) {
             color: '#666',
             margin: 0
         }
-    }, "Your phone number has been verified with Cubid."))));
+    }, "Your phone number has been verified with Cubid.")))));
 };

@@ -1,4 +1,3 @@
-// @ts-nocheck
 function _array_like_to_array(arr, len) {
     if (len == null || len > arr.length) len = arr.length;
     for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
@@ -36,6 +35,19 @@ function _async_to_generator(fn) {
         });
     };
 }
+function _define_property(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, {
+            value: value,
+            enumerable: true,
+            configurable: true,
+            writable: true
+        });
+    } else {
+        obj[key] = value;
+    }
+    return obj;
+}
 function _iterable_to_array_limit(arr, i) {
     var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
     if (_i == null) return;
@@ -62,6 +74,45 @@ function _iterable_to_array_limit(arr, i) {
 }
 function _non_iterable_rest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _object_spread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {};
+        var ownKeys = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+            ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+                return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+            }));
+        }
+        ownKeys.forEach(function(key) {
+            _define_property(target, key, source[key]);
+        });
+    }
+    return target;
+}
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) {
+            symbols = symbols.filter(function(sym) {
+                return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+            });
+        }
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _object_spread_props(target, source) {
+    source = source != null ? source : {};
+    if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+        ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
 }
 function _sliced_to_array(arr, i) {
     return _array_with_holes(arr) || _iterable_to_array_limit(arr, i) || _unsupported_iterable_to_array(arr, i) || _non_iterable_rest();
@@ -171,24 +222,19 @@ function _ts_generator(thisArg, body) {
 }
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-var DAPP_NAME = "YourDAppName";
 export function AdvancedCredentialCollection(param) {
-    var email = param.email, apikey = param.apikey, refresh = param.refresh, uuid = param.uuid, allStampIds = param.allStampIds;
-    var _useState = _sliced_to_array(useState(true), 2), passcodeRequested = _useState[0], setPasscodeRequested = _useState[1];
-    var _useState1 = _sliced_to_array(useState(''), 2), passcode = _useState1[0], setPasscode = _useState1[1];
-    var _useState2 = _sliced_to_array(useState(60), 2), resendCountdown = _useState2[0], setResendCountdown = _useState2[1];
-    var _useState3 = _sliced_to_array(useState(false), 2), cubidAuthenticated = _useState3[0], setCubidAuthenticated = _useState3[1];
-    var _useState4 = _sliced_to_array(useState(false), 2), credentialShared = _useState4[0], setCredentialShared = _useState4[1];
-    var _useState5 = _sliced_to_array(useState(false), 2), showTwitterHandles = _useState5[0], setShowTwitterHandles = _useState5[1];
-    var _useState6 = _sliced_to_array(useState([
-        '@twitterUser123',
-        '@anotherUser456'
-    ]), 2), twitterHandles = _useState6[0], setTwitterHandles = _useState6[1];
-    var _useState7 = _sliced_to_array(useState('@twitterUser123'), 2), selectedTwitterHandle = _useState7[0], setSelectedTwitterHandle = _useState7[1];
-    var _useState8 = _sliced_to_array(useState(false), 2), grantPerm = _useState8[0], setGrantPerm = _useState8[1];
+    var email = param.email, apikey = param.apikey, refresh = param.refresh, uuid = param.uuid, allStampIds = param.allStampIds, onClose = param.onClose;
+    // State management for different modal stages and data
+    var _useState = _sliced_to_array(useState(true), 2), isOpen = _useState[0], setIsOpen = _useState[1];
+    var _useState1 = _sliced_to_array(useState('confirmation'), 2), currentStep = _useState1[0], setCurrentStep = _useState1[1];
+    var _useState2 = _sliced_to_array(useState(''), 2), passcode = _useState2[0], setPasscode = _useState2[1];
+    var _useState3 = _sliced_to_array(useState(60), 2), resendCountdown = _useState3[0], setResendCountdown = _useState3[1];
+    var _useState4 = _sliced_to_array(useState(false), 2), isLoading = _useState4[0], setIsLoading = _useState4[1];
+    var _useState5 = _sliced_to_array(useState(''), 2), error = _useState5[0], setError = _useState5[1];
+    // Handle countdown timer for resending passcode
     useEffect(function() {
         var timer;
-        if (passcodeRequested && resendCountdown > 0) {
+        if (currentStep === 'passcode' && resendCountdown > 0) {
             timer = setTimeout(function() {
                 return setResendCountdown(resendCountdown - 1);
             }, 1000);
@@ -197,14 +243,32 @@ export function AdvancedCredentialCollection(param) {
             return clearTimeout(timer);
         };
     }, [
-        passcodeRequested,
-        resendCountdown
+        resendCountdown,
+        currentStep
     ]);
+    // Check if user is already logged in
+    useEffect(function() {
+        if (localStorage.getItem("logged_in") === uuid) {
+            setCurrentStep('authorized');
+        }
+    }, [
+        uuid
+    ]);
+    // Handle initial passcode request
     var handlePasscodeRequest = /*#__PURE__*/ function() {
         var _ref = _async_to_generator(function() {
+            var err;
             return _ts_generator(this, function(_state) {
                 switch(_state.label){
                     case 0:
+                        _state.trys.push([
+                            0,
+                            2,
+                            3,
+                            4
+                        ]);
+                        setIsLoading(true);
+                        setError('');
                         return [
                             4,
                             axios.post("https://passport.cubid.me/api/verify/send-dapp-email", {
@@ -214,8 +278,25 @@ export function AdvancedCredentialCollection(param) {
                         ];
                     case 1:
                         _state.sent();
-                        setPasscode(60);
-                        alert("Passcode Sent. Check your email for the passcode we just sent.");
+                        setCurrentStep('passcode');
+                        setResendCountdown(60);
+                        return [
+                            3,
+                            4
+                        ];
+                    case 2:
+                        err = _state.sent();
+                        setError('Failed to send passcode. Please try again.');
+                        return [
+                            3,
+                            4
+                        ];
+                    case 3:
+                        setIsLoading(false);
+                        return [
+                            7
+                        ];
+                    case 4:
                         return [
                             2
                         ];
@@ -226,12 +307,21 @@ export function AdvancedCredentialCollection(param) {
             return _ref.apply(this, arguments);
         };
     }();
+    // Handle passcode verification
     var handlePasscodeVerify = /*#__PURE__*/ function() {
         var _ref = _async_to_generator(function() {
-            var data;
+            var data, err;
             return _ts_generator(this, function(_state) {
                 switch(_state.label){
                     case 0:
+                        _state.trys.push([
+                            0,
+                            6,
+                            7,
+                            8
+                        ]);
+                        setIsLoading(true);
+                        setError('');
                         return [
                             4,
                             axios.post("https://passport.cubid.me/api/verify/verify-email", {
@@ -245,7 +335,7 @@ export function AdvancedCredentialCollection(param) {
                         data = _state.sent().data;
                         if (!data.success) return [
                             3,
-                            8
+                            4
                         ];
                         return [
                             4,
@@ -263,44 +353,33 @@ export function AdvancedCredentialCollection(param) {
                         ];
                     case 3:
                         _state.sent();
-                        return [
-                            4,
-                            refresh()
-                        ];
-                    case 4:
-                        _state.sent();
-                        return [
-                            4,
-                            axios.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
-                                apikey: apikey,
-                                user_id: uuid,
-                                stamp_id_array: allStampIds
-                            })
-                        ];
-                    case 5:
-                        _state.sent();
-                        return [
-                            4,
-                            refresh()
-                        ];
-                    case 6:
-                        _state.sent();
-                        return [
-                            4,
-                            refresh()
-                        ];
-                    case 7:
-                        _state.sent();
-                        setCredentialShared(true);
                         localStorage.setItem("logged_in", uuid);
+                        setCurrentStep('authorized');
                         return [
                             3,
-                            9
+                            5
+                        ];
+                    case 4:
+                        setError('Invalid passcode. Please try again.');
+                        _state.label = 5;
+                    case 5:
+                        return [
+                            3,
+                            8
+                        ];
+                    case 6:
+                        err = _state.sent();
+                        setError('Verification failed. Please try again.');
+                        return [
+                            3,
+                            8
+                        ];
+                    case 7:
+                        setIsLoading(false);
+                        return [
+                            7
                         ];
                     case 8:
-                        alert("Authentication Failed. The passcode you entered is incorrect. Please try again.");
-                        _state.label = 9;
-                    case 9:
                         return [
                             2
                         ];
@@ -311,11 +390,21 @@ export function AdvancedCredentialCollection(param) {
             return _ref.apply(this, arguments);
         };
     }();
+    // Handle final authorization
     var handleAuthorize = /*#__PURE__*/ function() {
         var _ref = _async_to_generator(function() {
+            var err;
             return _ts_generator(this, function(_state) {
                 switch(_state.label){
                     case 0:
+                        _state.trys.push([
+                            0,
+                            3,
+                            4,
+                            5
+                        ]);
+                        setIsLoading(true);
+                        setError('');
                         return [
                             4,
                             axios.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
@@ -332,19 +421,25 @@ export function AdvancedCredentialCollection(param) {
                         ];
                     case 2:
                         _state.sent();
+                        setIsOpen(false);
+                        onClose === null || onClose === void 0 ? void 0 : onClose();
                         return [
-                            4,
-                            refresh()
+                            3,
+                            5
                         ];
                     case 3:
-                        _state.sent();
+                        err = _state.sent();
+                        setError('Authorization failed. Please try again.');
                         return [
-                            4,
-                            refresh()
+                            3,
+                            5
                         ];
                     case 4:
-                        _state.sent();
-                        setCredentialShared(true);
+                        setIsLoading(false);
+                        return [
+                            7
+                        ];
+                    case 5:
                         return [
                             2
                         ];
@@ -355,148 +450,172 @@ export function AdvancedCredentialCollection(param) {
             return _ref.apply(this, arguments);
         };
     }();
-    useEffect(function() {
-        if (localStorage.getItem("logged_in") === uuid) {
-            setGrantPerm(true);
-        }
-        setInterval(function() {
-            if (localStorage.getItem("logged_in") === uuid) {
-                setGrantPerm(true);
-            } else {
-                setGrantPerm(false);
-            }
-        }, 1000);
-    }, [
-        uuid
-    ]);
-    useEffect(function() {
-        if (localStorage.getItem("logged_in") != uuid) {
-            handlePasscodeRequest();
-        }
-    }, []);
-    console.log({
-        email: email
-    });
-    if (grantPerm) {
-        return /*#__PURE__*/ React.createElement("button", {
-            onClick: handleAuthorize,
-            style: {
-                width: '100%',
-                padding: '8px 16px',
-                backgroundColor: '#007AFF',
-                color: '#FFF',
-                borderRadius: '8px',
-                marginTop: '8px'
-            }
-        }, "Grant Permission");
-    }
-    return /*#__PURE__*/ React.createElement("div", {
-        style: {
-            width: '100%',
-            marginBottom: '16px',
-            margin: '0 auto',
+    // Styles object for reusable styles
+    var styles = {
+        modalOverlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             display: 'flex',
-            flexDirection: 'column',
-            gap: '16px'
-        }
-    }, /*#__PURE__*/ React.createElement("div", {
-        style: {
-            padding: '16px',
-            borderRadius: '8px',
-            border: "2px solid ".concat(credentialShared ? '#38A169' : cubidAuthenticated ? '#D69E2E' : '#E53E3E'),
-            backgroundColor: credentialShared ? '#F0FFF4' : cubidAuthenticated ? '#FEFCBF' : '#FFF5F5'
-        }
-    }, /*#__PURE__*/ React.createElement("div", {
-        style: {
-            marginTop: ''
-        }
-    }, !cubidAuthenticated ? /*#__PURE__*/ React.createElement(React.Fragment, null, !passcodeRequested ? /*#__PURE__*/ React.createElement(React.Fragment, null) : /*#__PURE__*/ React.createElement("div", null, /*#__PURE__*/ React.createElement("p", null, "Check your email - ", email && email, " for the passcode we just sent."), /*#__PURE__*/ React.createElement("div", {
-        style: {
             alignItems: 'center',
-            gap: '8px'
-        }
-    }, /*#__PURE__*/ React.createElement("input", {
-        type: "text",
-        placeholder: "Enter passcode here",
-        value: passcode,
-        style: {
-            padding: '8px',
-            borderRadius: '8px',
-            border: '1px solid #DDD'
+            justifyContent: 'center',
+            zIndex: 1000
         },
-        onChange: function(e) {
-            return setPasscode(e.target.value);
-        }
-    }), /*#__PURE__*/ React.createElement("div", {
-        style: {
-            marginTop: 10
-        }
-    }, /*#__PURE__*/ React.createElement("button", {
-        onClick: handlePasscodeVerify,
-        style: {
-            padding: '8px 16px',
-            backgroundColor: '#3182CE',
-            color: '#FFF',
-            borderRadius: '8px'
-        }
-    }, "OK"))), /*#__PURE__*/ React.createElement("button", {
-        onClick: handlePasscodeRequest,
-        disabled: resendCountdown > 0,
-        style: {
-            marginTop: '8px',
-            padding: '8px 16px',
-            backgroundColor: '#E2E8F0',
-            color: '#4A5568',
+        modalContent: {
+            backgroundColor: '#ffffff',
             borderRadius: '8px',
-            cursor: resendCountdown > 0 ? 'not-allowed' : 'pointer'
-        }
-    }, "Resend ", resendCountdown > 0 ? "(".concat(resendCountdown, "s)") : ''))) : credentialShared ? /*#__PURE__*/ React.createElement("p", {
-        style: {
-            color: '#38A169'
-        }
-    }, "Twitter Credential data: ", /*#__PURE__*/ React.createElement("strong", null, selectedTwitterHandle)) : /*#__PURE__*/ React.createElement(React.Fragment, null, /*#__PURE__*/ React.createElement("p", {
-        style: {
-            color: '#D69E2E'
-        }
-    }, "Nice, you've authenticated with Cubid."), showTwitterHandles ? /*#__PURE__*/ React.createElement("div", null, twitterHandles.map(function(handle) {
-        return /*#__PURE__*/ React.createElement("div", {
-            key: handle,
-            style: {
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                marginTop: '8px'
-            }
-        }, /*#__PURE__*/ React.createElement("input", {
-            type: "radio",
-            id: handle,
-            value: handle,
-            checked: selectedTwitterHandle === handle,
-            onChange: function() {
-                return setSelectedTwitterHandle(handle);
-            }
-        }), /*#__PURE__*/ React.createElement("label", {
-            htmlFor: handle
-        }, handle));
-    }), /*#__PURE__*/ React.createElement("button", {
-        onClick: handleAuthorize,
-        style: {
+            padding: '24px',
+            width: '90%',
+            maxWidth: '440px',
+            position: 'relative',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        },
+        header: {
+            marginBottom: '20px'
+        },
+        title: {
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#1a1a1a',
+            marginBottom: '8px'
+        },
+        description: {
+            fontSize: '16px',
+            color: '#4a5568',
+            lineHeight: '1.5'
+        },
+        input: {
             width: '100%',
-            padding: '8px 16px',
-            backgroundColor: '#007AFF',
-            color: '#FFF',
-            borderRadius: '8px',
-            marginTop: '8px'
+            padding: '12px',
+            border: '1px solid #e2e8f0',
+            borderRadius: '6px',
+            fontSize: '16px',
+            marginBottom: '16px'
+        },
+        error: {
+            backgroundColor: '#FEE2E2',
+            color: '#DC2626',
+            padding: '12px',
+            borderRadius: '6px',
+            marginBottom: '16px'
+        },
+        buttonContainer: {
+            display: 'flex',
+            gap: '12px',
+            justifyContent: 'flex-end',
+            marginTop: '24px'
+        },
+        button: {
+            padding: '10px 16px',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            border: 'none',
+            transition: 'background-color 0.2s'
+        },
+        primaryButton: {
+            backgroundColor: '#2563EB',
+            color: '#ffffff'
+        },
+        secondaryButton: {
+            backgroundColor: '#E5E7EB',
+            color: '#374151'
+        },
+        disabledButton: {
+            opacity: 0.5,
+            cursor: 'not-allowed'
         }
-    }, "Authorize App to see this credential")) : /*#__PURE__*/ React.createElement("button", {
-        onClick: handleAuthorize,
-        style: {
-            width: '100%',
-            padding: '8px 16px',
-            backgroundColor: '#007AFF',
-            color: '#FFF',
-            borderRadius: '8px',
-            marginTop: '8px'
+    };
+    // Render different content based on current step
+    var renderContent = function() {
+        switch(currentStep){
+            case 'confirmation':
+                return /*#__PURE__*/ React.createElement(React.Fragment, null, /*#__PURE__*/ React.createElement("div", {
+                    style: styles.header
+                }, /*#__PURE__*/ React.createElement("h2", {
+                    style: styles.title
+                }, "Credential Authorization Required"), /*#__PURE__*/ React.createElement("p", {
+                    style: styles.description
+                }, "It looks like this credential has already been registered for a different app in the Cubid ecosystem. Get a passcode to approve using it in this app too.")), /*#__PURE__*/ React.createElement("div", {
+                    style: styles.buttonContainer
+                }, /*#__PURE__*/ React.createElement("button", {
+                    style: _object_spread({}, styles.button, styles.secondaryButton),
+                    onClick: function() {
+                        return setIsOpen(false);
+                    }
+                }, "Cancel"), /*#__PURE__*/ React.createElement("button", {
+                    style: _object_spread({}, styles.button, styles.primaryButton, isLoading ? styles.disabledButton : {}),
+                    onClick: handlePasscodeRequest,
+                    disabled: isLoading
+                }, isLoading ? 'Sending...' : 'Send Passcode')));
+            case 'passcode':
+                return /*#__PURE__*/ React.createElement(React.Fragment, null, /*#__PURE__*/ React.createElement("div", {
+                    style: styles.header
+                }, /*#__PURE__*/ React.createElement("h2", {
+                    style: styles.title
+                }, "Enter Verification Code"), /*#__PURE__*/ React.createElement("p", {
+                    style: styles.description
+                }, "Please check your email (", email, ") for the verification code we just sent.")), /*#__PURE__*/ React.createElement("input", {
+                    type: "text",
+                    placeholder: "Enter passcode",
+                    value: passcode,
+                    onChange: function(e) {
+                        return setPasscode(e.target.value);
+                    },
+                    style: styles.input,
+                    maxLength: 6
+                }), error && /*#__PURE__*/ React.createElement("div", {
+                    style: styles.error
+                }, error), /*#__PURE__*/ React.createElement("button", {
+                    style: _object_spread(_object_spread_props(_object_spread({}, styles.button, styles.secondaryButton), {
+                        width: '100%',
+                        marginBottom: '16px'
+                    }), resendCountdown > 0 || isLoading ? styles.disabledButton : {}),
+                    disabled: resendCountdown > 0 || isLoading,
+                    onClick: handlePasscodeRequest
+                }, "Resend Code ", resendCountdown > 0 ? "(".concat(resendCountdown, "s)") : ''), /*#__PURE__*/ React.createElement("div", {
+                    style: styles.buttonContainer
+                }, /*#__PURE__*/ React.createElement("button", {
+                    style: _object_spread({}, styles.button, styles.secondaryButton),
+                    onClick: function() {
+                        return setIsOpen(false);
+                    }
+                }, "Cancel"), /*#__PURE__*/ React.createElement("button", {
+                    style: _object_spread({}, styles.button, styles.primaryButton, isLoading || !passcode ? styles.disabledButton : {}),
+                    onClick: handlePasscodeVerify,
+                    disabled: isLoading || !passcode
+                }, isLoading ? 'Verifying...' : 'Verify')));
+            case 'authorized':
+                return /*#__PURE__*/ React.createElement(React.Fragment, null, /*#__PURE__*/ React.createElement("div", {
+                    style: styles.header
+                }, /*#__PURE__*/ React.createElement("h2", {
+                    style: styles.title
+                }, "Authorization Successful"), /*#__PURE__*/ React.createElement("p", {
+                    style: styles.description
+                }, "You've successfully authenticated with Cubid. Click below to complete the authorization process.")), /*#__PURE__*/ React.createElement("div", {
+                    style: styles.buttonContainer
+                }, /*#__PURE__*/ React.createElement("button", {
+                    style: _object_spread({}, styles.button, styles.primaryButton, isLoading ? styles.disabledButton : {}),
+                    onClick: handleAuthorize,
+                    disabled: isLoading
+                }, isLoading ? 'Processing...' : 'Complete Authorization')));
         }
-    }, "Authorize App to see this credential")))));
+    };
+    if (!isOpen) return null;
+    return /*#__PURE__*/ React.createElement("div", {
+        style: styles.modalOverlay,
+        onClick: function() {
+            return setIsOpen(false);
+        }
+    }, /*#__PURE__*/ React.createElement("div", {
+        style: styles.modalContent,
+        onClick: function(e) {
+            return e.stopPropagation();
+        }
+    }, renderContent()));
 }
+export default AdvancedCredentialCollection;

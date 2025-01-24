@@ -409,6 +409,10 @@ export var EmailVerificationModal = function(param) {
     }, countdown > 0 ? "Resend in ".concat(countdown, "s") : 'Resend Code')), error && /*#__PURE__*/ React.createElement("div", {
         style: styles.error
     }, error)) : /*#__PURE__*/ React.createElement("div", {
+        style: {
+            color: "black !important"
+        }
+    }, /*#__PURE__*/ React.createElement("div", {
         style: styles.successContainer
     }, /*#__PURE__*/ React.createElement("div", {
         style: styles.successIcon
@@ -422,5 +426,5 @@ export var EmailVerificationModal = function(param) {
             color: '#666',
             margin: 0
         }
-    }, "Your email has been verified with Cubid."))));
+    }, "Your email has been verified with Cubid.")))));
 };
