@@ -223,6 +223,7 @@ function _ts_generator(thisArg, body) {
 import axios from 'axios';
 import { split, combine } from 'shamir-secret-sharing';
 import { ethers } from 'ethers';
+import { generateNEARWallet } from './src/lib/generateNearWallet';
 export { CubidWidget } from './src/component/cubidWidget';
 export { Provider } from './src/component/providers';
 export var CubidSDK = /*#__PURE__*/ function() {
@@ -332,39 +333,83 @@ export var CubidSDK = /*#__PURE__*/ function() {
             }
         },
         {
+            key: "generateNearKey",
+            value: function generateNearKey() {
+                return _async_to_generator(function() {
+                    var wallet;
+                    return _ts_generator(this, function(_state) {
+                        switch(_state.label){
+                            case 0:
+                                return [
+                                    4,
+                                    generateNEARWallet()
+                                ];
+                            case 1:
+                                wallet = _state.sent();
+                                return [
+                                    2,
+                                    {
+                                        privateKey: wallet.privateKey,
+                                        address: wallet.publicKey
+                                    }
+                                ];
+                        }
+                    });
+                })();
+            }
+        },
+        {
             key: "encryptPrivateKey",
             value: /**
      * Generates and encrypts an Ethereum private key using Shamir's Secret Sharing
      */ function encryptPrivateKey(param) {
-                var user_id = param.user_id;
+                var user_id = param.user_id, wallet_type = param.wallet_type;
                 var _this = this;
                 return _async_to_generator(function() {
-                    var walletInfo, secretBytes, shares, hexShares, _hexShares, userShare1, userShare2, apiShare, error;
+                    var walletInfo, _tmp, secretBytes, shares, hexShares, _hexShares, userShare1, userShare2, apiShare, error;
                     return _ts_generator(this, function(_state) {
                         switch(_state.label){
                             case 0:
                                 _state.trys.push([
                                     0,
-                                    4,
+                                    7,
                                     ,
-                                    5
+                                    8
                                 ]);
                                 console.log('Starting private key encryption process for user:', user_id);
                                 if (!user_id) {
                                     throw new Error('User ID is required');
                                 }
+                                if (!(wallet_type === "near")) return [
+                                    3,
+                                    2
+                                ];
+                                return [
+                                    4,
+                                    _this.generateNearKey()
+                                ];
+                            case 1:
+                                _tmp = _state.sent();
+                                return [
+                                    3,
+                                    4
+                                ];
+                            case 2:
                                 return [
                                     4,
                                     _this.generateEthereumKey()
                                 ];
-                            case 1:
-                                walletInfo = _state.sent();
+                            case 3:
+                                _tmp = _state.sent();
+                                _state.label = 4;
+                            case 4:
+                                walletInfo = _tmp;
                                 secretBytes = _this.hexToBytes(walletInfo.privateKey);
                                 return [
                                     4,
                                     split(secretBytes, _this.TOTAL_SHARES, _this.THRESHOLD)
                                 ];
-                            case 2:
+                            case 5:
                                 shares = _state.sent();
                                 hexShares = shares.map(function(share) {
                                     return _this.bytesToHex(share);
@@ -377,7 +422,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
                                         secret: apiShare
                                     })
                                 ];
-                            case 3:
+                            case 6:
                                 _state.sent();
                                 return [
                                     2,
@@ -389,7 +434,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
                                         public_address: walletInfo.address
                                     }
                                 ];
-                            case 4:
+                            case 7:
                                 error = _state.sent();
                                 console.error('Encryption process failed:', {
                                     error: _instanceof(error, Error) ? error.message : 'Unknown error',
@@ -398,7 +443,7 @@ export var CubidSDK = /*#__PURE__*/ function() {
                                     timestamp: new Date().toISOString()
                                 });
                                 throw new Error("Encryption failed: ".concat(_instanceof(error, Error) ? error.message : 'Unknown error'));
-                            case 5:
+                            case 8:
                                 return [
                                     2
                                 ];

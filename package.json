@@ -1,6 +1,6 @@
 {
   "name": "cubid-sdk",
-  "version": "1.7.7",
+  "version": "1.8.3",
   "description": "Cubid SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -41,6 +41,8 @@
     "@wagmi/core": "^2.16.3",
     "@web3modal/wagmi": "^5.1.11",
     "axios": "^1.7.7",
+    "base-encode": "^1.0.9",
+    "bs58": "^6.0.0",
     "buffer": "^6.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

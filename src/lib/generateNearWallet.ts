@@ -1,42 +1,47 @@
-// Import required dependencies
 const { keyStores, KeyPair, connect } = require('near-api-js');
 const { sha256 } = require('js-sha256');
-const { encode } = require('bs58');
+const baseEncode = require('base-encode');  // A simpler base encoding library
 
-async function generateNEARWallet() {
-    // Step 1: Generate a new key pair
-    // NEAR uses Ed25519 for its cryptographic operations
+export async function generateNEARWallet() {
+    // First, we create our keypair - this is the foundation of our wallet's security
     const keyPair = KeyPair.fromRandom('ed25519');
-
-    // Step 2: Get the public key
-    // The public key will be used as the account identifier
+    
+    // Extract the public key - this is what others will see and use to identify our wallet
     const publicKey = keyPair.getPublicKey();
-
-    // Step 3: Get the private key
-    // Keep this secure! Never share your private key
+    
+    // Store the private key - this must be kept secure as it controls wallet access
     const privateKey = keyPair.toString();
-
-    // Step 4: Create an implicit account ID
-    // In NEAR, implicit accounts are derived from the public key
-    const publicKeyBytes = Buffer.from(publicKey.toString().split(':')[1], 'base64');
-    const accountId = encode(sha256(publicKeyBytes));
-
-    // Step 5: Connect to NEAR network (testnet in this example)
+    
+    // Now we'll create our account ID through a series of transformations:
+    // First, get the raw public key data by removing the encoding prefix
+    const publicKeyBase64 = publicKey.toString().split(':')[1];
+    
+    // Convert our base64 key into raw bytes
+    const publicKeyBytes = Buffer.from(publicKeyBase64, 'base64');
+    
+    // Create a cryptographic hash of these bytes
+    const hashedKey = sha256(publicKeyBytes);
+    
+    // Convert the hash to base58 format - this creates our readable account ID
+    const accountId = baseEncode(Buffer.from(hashedKey), 'base58');
+    
+    // Configure our connection to the NEAR testnet
     const config = {
         networkId: 'testnet',
         keyStore: new keyStores.InMemoryKeyStore(),
         nodeUrl: 'https://rpc.testnet.near.org'
     };
-
+    
+    // Establish our connection to the NEAR network
     const near = await connect(config);
-
-    // Step 6: Create the complete wallet object
+    
+    // Create our complete wallet object containing all necessary information
     const wallet = {
         accountId: accountId,
         publicKey: publicKey.toString(),
         privateKey: privateKey,
         network: config.networkId
     };
-
+    
     return wallet;
 }

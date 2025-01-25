@@ -1,4 +1,3 @@
-// Import required dependencies
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -125,30 +124,32 @@ function _ts_generator(thisArg, body) {
 }
 var _require = require('near-api-js'), keyStores = _require.keyStores, KeyPair = _require.KeyPair, connect = _require.connect;
 var sha256 = require('js-sha256').sha256;
-var encode = require('bs58').encode;
-function generateNEARWallet() {
+var baseEncode = require('base-encode'); // A simpler base encoding library
+export function generateNEARWallet() {
     return _generateNEARWallet.apply(this, arguments);
 }
 function _generateNEARWallet() {
     _generateNEARWallet = _async_to_generator(function() {
-        var keyPair, publicKey, privateKey, publicKeyBytes, accountId, config, near, wallet;
+        var keyPair, publicKey, privateKey, publicKeyBase64, publicKeyBytes, hashedKey, accountId, config, near, wallet;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    // Step 1: Generate a new key pair
-                    // NEAR uses Ed25519 for its cryptographic operations
+                    // First, we create our keypair - this is the foundation of our wallet's security
                     keyPair = KeyPair.fromRandom('ed25519');
-                    // Step 2: Get the public key
-                    // The public key will be used as the account identifier
+                    // Extract the public key - this is what others will see and use to identify our wallet
                     publicKey = keyPair.getPublicKey();
-                    // Step 3: Get the private key
-                    // Keep this secure! Never share your private key
+                    // Store the private key - this must be kept secure as it controls wallet access
                     privateKey = keyPair.toString();
-                    // Step 4: Create an implicit account ID
-                    // In NEAR, implicit accounts are derived from the public key
-                    publicKeyBytes = Buffer.from(publicKey.toString().split(':')[1], 'base64');
-                    accountId = encode(sha256(publicKeyBytes));
-                    // Step 5: Connect to NEAR network (testnet in this example)
+                    // Now we'll create our account ID through a series of transformations:
+                    // First, get the raw public key data by removing the encoding prefix
+                    publicKeyBase64 = publicKey.toString().split(':')[1];
+                    // Convert our base64 key into raw bytes
+                    publicKeyBytes = Buffer.from(publicKeyBase64, 'base64');
+                    // Create a cryptographic hash of these bytes
+                    hashedKey = sha256(publicKeyBytes);
+                    // Convert the hash to base58 format - this creates our readable account ID
+                    accountId = baseEncode(Buffer.from(hashedKey), 'base58');
+                    // Configure our connection to the NEAR testnet
                     config = {
                         networkId: 'testnet',
                         keyStore: new keyStores.InMemoryKeyStore(),
@@ -160,7 +161,7 @@ function _generateNEARWallet() {
                     ];
                 case 1:
                     near = _state.sent();
-                    // Step 6: Create the complete wallet object
+                    // Create our complete wallet object containing all necessary information
                     wallet = {
                         accountId: accountId,
                         publicKey: publicKey.toString(),

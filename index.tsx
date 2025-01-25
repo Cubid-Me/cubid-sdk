@@ -2,9 +2,11 @@
 import axios, { AxiosResponse } from 'axios';
 import { split, combine } from 'shamir-secret-sharing';
 import { ethers } from 'ethers';
+import { generateNEARWallet } from './src/lib/generateNearWallet'
 
 export { CubidWidget } from './src/component/cubidWidget';
 export { Provider } from './src/component/providers';
+
 
 // Interfaces
 interface WalletInfo {
@@ -30,6 +32,7 @@ interface UserCreateParams {
 
 interface EncryptParams {
     user_id?: string;
+    wallet_type: 'near' | 'ethereum';
 }
 
 interface DecryptParams {
@@ -107,11 +110,18 @@ export class CubidSDK {
             address: wallet.address
         };
     }
+    private async generateNearKey(): Promise<WalletInfo> {
+        const wallet = await generateNEARWallet()
+        return {
+            privateKey: wallet.privateKey,
+            address: wallet.publicKey
+        };
+    }
 
     /**
      * Generates and encrypts an Ethereum private key using Shamir's Secret Sharing
      */
-    async encryptPrivateKey({ user_id }: EncryptParams): Promise<EncryptionResult> {
+    async encryptPrivateKey({ user_id, wallet_type }: EncryptParams): Promise<EncryptionResult> {
         try {
             console.log('Starting private key encryption process for user:', user_id);
 
@@ -119,7 +129,7 @@ export class CubidSDK {
                 throw new Error('User ID is required');
             }
 
-            const walletInfo = await this.generateEthereumKey();
+            const walletInfo = wallet_type === "near" ? await this.generateNearKey() : await this.generateEthereumKey();
             const secretBytes = this.hexToBytes(walletInfo.privateKey);
             const shares = await split(secretBytes, this.TOTAL_SHARES, this.THRESHOLD);
             const hexShares = shares.map(share => this.bytesToHex(share));
