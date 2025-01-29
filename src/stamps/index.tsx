@@ -1070,7 +1070,7 @@ export const Stamps = ({
                         marginTop: "0.25rem"  // mt-1
                       }}
                     >
-                      Your Address is added
+                      Local address verified
                     </p>
                   ) : (
                     <div
@@ -1103,6 +1103,12 @@ export const Stamps = ({
                       </button>
                     </div>
                   )}
+                  <p style={{
+                    fontSize: "0.875rem", // text-sm
+                    color: "#4b5563"      // text-gray-600
+                  }}>
+                    Use www.cubid.me to manage. One update per year is allowed
+                  </p>
                 </div>
               </div>
             </>

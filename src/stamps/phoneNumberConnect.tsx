@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+// @ts-nocheck
+import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
@@ -76,7 +77,7 @@ const OTPInput = ({ length = 6, value, onChange }) => {
       {otp.map((digit, index) => (
         <input
           key={index}
-          ref={(el: any) => inputRefs.current[index] = el}
+          ref={(el) => inputRefs.current[index] = el}
           type="text"
           inputMode="numeric"
           maxLength={1}
@@ -84,7 +85,7 @@ const OTPInput = ({ length = 6, value, onChange }) => {
           onChange={e => handleChange(e, index)}
           onKeyDown={e => handleKeyDown(e, index)}
           onPaste={handlePaste}
-          style={inputStyle as any}
+          style={inputStyle}
           onFocus={e => e.target.style.borderColor = '#22C55E'}
           onBlur={e => e.target.style.borderColor = '#E2E8F0'}
         />
@@ -106,8 +107,16 @@ export const PhoneNumberConnect = ({
   const [phoneInput, setPhoneInput] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otpCode, setOtpCode] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  const resendTimerRef = useRef(null);
 
   const sendOtp = async () => {
+    if (!phoneInput) {
+      toast.error("Please enter a valid phone number.");
+      return;
+    }
+
     try {
       await axios.post("https://passport.cubid.me/api/v2/twillio/send-otp", {
         phone: `+${phoneInput}`,
@@ -115,12 +124,20 @@ export const PhoneNumberConnect = ({
       });
       setOtpSent(true);
       toast.success("OTP sent!");
+
+      // Start cooldown timer (e.g., 60 seconds)
+      setResendCooldown(60);
     } catch (error) {
       toast.error("Failed to send OTP.");
     }
   };
 
   const verifyOtp = async () => {
+    if (otpCode.length !== 6) {
+      toast.error("Please enter the complete OTP.");
+      return;
+    }
+
     try {
       const { data: verify_data } = await axios.post("https://passport.cubid.me/api/v2/twillio/verify-otp", {
         phone: `+${phoneInput}`,
@@ -129,18 +146,22 @@ export const PhoneNumberConnect = ({
       });
       if (verify_data.status === "approved") {
         toast.success("OTP Verified");
-        onClose();
+        handleClose(); // Use handleClose to reset states
+
         await axios.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           page_id,
           stamp_type: "phone",
           stampData: { uniquevalue: phoneInput, identity: phoneInput },
           user_data: { uuid },
         });
+
         const { data: blacklist_creds } = await axios.post("https://passport.cubid.me/api/v2/fetch_blacklisted_creds", {
           apikey,
           cred: phoneInput
         });
-        fetchStamps();
+
+        await fetchStamps();
+
         if (blacklist_creds?.is_blacklisted) {
           const { data: { all_email } } = await axios.post('https://passport.cubid.me/api/v2/find_users_with_blacklist', {
             cred: phoneInput, apikey
@@ -159,6 +180,41 @@ export const PhoneNumberConnect = ({
       toast.error("OTP verification failed.");
     }
   };
+
+  const handleClose = () => {
+    // Reset all states
+    setPhoneInput("");
+    setOtpSent(false);
+    setOtpCode("");
+    setResendCooldown(0);
+    if (resendTimerRef.current) {
+      clearInterval(resendTimerRef.current);
+      resendTimerRef.current = null;
+    }
+    onClose();
+  };
+
+  useEffect(() => {
+    // Handle cooldown timer
+    if (resendCooldown > 0) {
+      resendTimerRef.current = setInterval(() => {
+        setResendCooldown(prev => {
+          if (prev <= 1) {
+            clearInterval(resendTimerRef.current);
+            resendTimerRef.current = null;
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (resendTimerRef.current) {
+        clearInterval(resendTimerRef.current);
+      }
+    };
+  }, [resendCooldown]);
 
   if (!open) return null;
 
@@ -220,6 +276,16 @@ export const PhoneNumberConnect = ({
     cursor: 'pointer'
   };
 
+  const resendButtonStyle = {
+    backgroundColor: '#3B82F6',
+    color: 'white',
+    padding: '6px 12px',
+    borderRadius: '8px',
+    border: 'none',
+    cursor: resendCooldown === 0 ? 'pointer' : 'not-allowed',
+    marginTop: '12px'
+  };
+
   const messageStyle = {
     fontSize: '14px',
     color: '#4B5563',
@@ -228,13 +294,13 @@ export const PhoneNumberConnect = ({
   };
 
   return (
-    <div style={overlayStyle as any}>
+    <div style={overlayStyle}>
       <div style={modalStyle}>
         <h2 style={titleStyle}>Phone Number Connect</h2>
         <div style={contentStyle}>
           {otpSent ? (
             <div>
-              <p style={messageStyle as any}>Enter the verification code sent to your phone</p>
+              <p style={messageStyle}>Enter the verification code sent to your phone</p>
               <OTPInput
                 length={6}
                 value={otpCode}
@@ -246,6 +312,15 @@ export const PhoneNumberConnect = ({
               >
                 Verify OTP
               </button>
+              <div style={{ textAlign: 'center', marginTop: '12px' }}>
+                <button
+                  onClick={sendOtp}
+                  style={resendButtonStyle}
+                  disabled={resendCooldown !== 0}
+                >
+                  {resendCooldown === 0 ? 'Resend OTP' : `Resend in ${resendCooldown}s`}
+                </button>
+              </div>
             </div>
           ) : (
             <>
@@ -266,7 +341,7 @@ export const PhoneNumberConnect = ({
         </div>
         <div style={buttonContainerStyle}>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             style={secondaryButtonStyle}
           >
             Cancel

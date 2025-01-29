@@ -58,6 +58,7 @@ export const LocationSearchPanel = ({
             className="mt-4 w-full border border-gray-300 rounded-lg p-2 shadow focus:outline-none focus:shadow-outline"
           />
         </p>
+        <p>We use www.cubid.me to verify residency anonymously. This app will only have access to your approximate location, not your address details. You are allowed max one adress update per year</p>
         <div className="h-[200px] overflow-y-auto mt-3">
           {allLocations.map((item: any) => (
             <div
@@ -86,7 +87,7 @@ export const LocationSearchPanel = ({
                 stampData: { uniquevalue: `${uuid}-${selectedLocation?.formatted_address}`, identity: selectedLocation?.formatted_address, ...selectedLocation },
                 user_data: { uuid },
               });
-              fetchStamps();
+              await fetchStamps();
               onClose();
             }} style={{ borderRadius: 10 }}
             disabled={!Boolean(selectedLocation)}

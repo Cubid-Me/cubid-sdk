@@ -1,7 +1,9 @@
 {
+  "types": ["node"],
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "declaration": true,
     "outDir": "./dist",
     "strict": false,
@@ -16,14 +18,15 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
-    "moduleResolution": "node", // Added moduleResolution
     "allowJs": true, // Added allowJs
     "resolveJsonModule": true, // Added resolveJsonModule
     "isolatedModules": true, // Added isolatedModules
     "noEmit": true, // Added noEmit for development
-    "incremental": true // Added incremental compilation
+    "incremental": false // Added incremental compilation
   },
   "include": [
     "./**/*.ts",
@@ -33,5 +36,5 @@
   "exclude": [
     "node_modules",
     "dist"
-  ]
+  ],
 }

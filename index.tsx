@@ -2,7 +2,86 @@
 import axios, { AxiosResponse } from 'axios';
 import { split, combine } from 'shamir-secret-sharing';
 import { ethers } from 'ethers';
-import { generateNEARWallet } from './src/lib/generateNearWallet'
+import { keyStores, KeyPair, connect } from 'near-api-js';
+import { sha256 } from 'js-sha256';
+
+// Helper function to convert a buffer to base58
+// This implementation uses Node.js built-in Buffer capabilities
+function toBase58(buffer) {
+    const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    const BASE = ALPHABET.length;
+
+    // Convert buffer to a number array
+    const digits = Array.from(buffer);
+    let output = '';
+
+    // Perform base conversion manually
+    let n = BigInt(0);
+    for (const digit of digits) {
+        n = n * BigInt(256) + BigInt(digit as any);
+    }
+
+    // Extract base58 digits
+    while (n > 0) {
+        output = ALPHABET[Number(n % BigInt(BASE))] + output;
+        n = n / BigInt(BASE);
+    }
+
+    // Add leading zeros from input
+    for (let i = 0; i < buffer.length && buffer[i] === 0; i++) {
+        output = ALPHABET[0] + output;
+    }
+
+    return output;
+}
+
+export async function generateNEARWallet() {
+    try {
+        // Generate a new ED25519 key pair
+        const keyPair = KeyPair.fromRandom('ed25519');
+
+        // Get the public key and private key
+        const publicKey = keyPair.getPublicKey();
+        const privateKey = keyPair.toString();
+
+        // Extract the base64 portion of the public key
+        // The public key string comes in format "ed25519:base64string"
+        const publicKeyBase64 = publicKey.toString().split(':')[1];
+
+        // Convert the public key to bytes
+        const publicKeyBytes = Buffer.from(publicKeyBase64, 'base64');
+
+        // Create a SHA-256 hash of the public key bytes
+        const hashedKeyBytes = Buffer.from(sha256(publicKeyBytes), 'hex');
+
+        // Convert the hash to our custom base58 format
+        const accountId = toBase58(hashedKeyBytes);
+
+        // Configure connection to NEAR testnet
+        const config = {
+            networkId: 'testnet',
+            keyStore: new keyStores.InMemoryKeyStore(),
+            nodeUrl: 'https://rpc.testnet.near.org'
+        };
+
+        // Establish connection to NEAR network
+        const near = await connect(config as any);
+
+        // Create and return the wallet object
+        const wallet = {
+            accountId: accountId,
+            publicKey: publicKey.toString(),
+            privateKey: privateKey,
+            network: config.networkId
+        };
+
+        return wallet;
+
+    } catch (error) {
+        console.error('Error generating NEAR wallet:', error);
+        throw error;
+    }
+}
 
 export { CubidWidget } from './src/component/cubidWidget';
 export { Provider } from './src/component/providers';
@@ -47,6 +126,8 @@ interface UserParams {
 interface SecretParams extends UserParams {
     secret?: string;
 }
+
+
 
 export class CubidSDK {
     private readonly dapp_id: string;
@@ -104,40 +185,96 @@ export class CubidSDK {
     }
 
     private async generateEthereumKey(): Promise<WalletInfo> {
-        const wallet = ethers.Wallet.createRandom();
-        return {
-            privateKey: wallet.privateKey,
-            address: wallet.address
-        };
-    }
-    private async generateNearKey(): Promise<WalletInfo> {
-        const wallet = await generateNEARWallet()
-        return {
-            privateKey: wallet.privateKey,
-            address: wallet.publicKey
-        };
-    }
-
-    /**
-     * Generates and encrypts an Ethereum private key using Shamir's Secret Sharing
-     */
-    async encryptPrivateKey({ user_id, wallet_type }: EncryptParams): Promise<EncryptionResult> {
+        console.log('Starting Ethereum wallet generation');
         try {
-            console.log('Starting private key encryption process for user:', user_id);
+            const wallet = ethers.Wallet.createRandom();
+            console.log('Successfully generated Ethereum wallet', {
+                addressPrefix: wallet.address.slice(0, 6), // Log only first few chars of address for identification
+                timestamp: new Date().toISOString()
+            });
+            return {
+                privateKey: wallet.privateKey,
+                address: wallet.address
+            };
+        } catch (error) {
+            console.error('Failed to generate Ethereum wallet:', {
+                error: error instanceof Error ? error.message : 'Unknown error',
+                stack: error instanceof Error ? error.stack : '',
+                timestamp: new Date().toISOString()
+            });
+            throw error;
+        }
+    }
 
+    private async generateNearKey(): Promise<WalletInfo> {
+        console.log('Starting NEAR wallet generation');
+        try {
+            const wallet = await generateNEARWallet();
+            console.log('Successfully generated NEAR wallet', {
+                addressPrefix: wallet.publicKey.slice(0, 6), // Log only first few chars for identification
+                timestamp: new Date().toISOString()
+            });
+            return {
+                privateKey: wallet.privateKey,
+                address: wallet.publicKey
+            };
+        } catch (error) {
+            console.error('Failed to generate NEAR wallet:', {
+                error: error instanceof Error ? error.message : 'Unknown error',
+                stack: error instanceof Error ? error.stack : '',
+                timestamp: new Date().toISOString()
+            });
+            throw error;
+        }
+    }
+
+    async encryptPrivateKey({ user_id, wallet_type }: EncryptParams): Promise<EncryptionResult> {
+        console.log('Starting private key encryption process', {
+            userId: user_id,
+            walletType: wallet_type,
+            timestamp: new Date().toISOString()
+        });
+
+        try {
             if (!user_id) {
+                console.error('Encryption failed: Missing user ID');
                 throw new Error('User ID is required');
             }
 
-            const walletInfo = wallet_type === "near" ? await this.generateNearKey() : await this.generateEthereumKey();
+            // Log wallet generation start
+            console.log(`Generating ${wallet_type} wallet`);
+            const walletInfo = wallet_type === "near" ?
+                await this.generateNearKey() :
+                await this.generateEthereumKey();
+
+            console.log('Converting private key to bytes for sharing');
             const secretBytes = this.hexToBytes(walletInfo.privateKey);
+
+            console.log('Generating Shamir shares', {
+                totalShares: this.TOTAL_SHARES,
+                threshold: this.THRESHOLD,
+                timestamp: new Date().toISOString()
+            });
             const shares = await split(secretBytes, this.TOTAL_SHARES, this.THRESHOLD);
+
+            console.log('Converting shares to hex format');
             const hexShares = shares.map(share => this.bytesToHex(share));
             const [userShare1, userShare2, apiShare] = hexShares;
 
+            console.log('Saving API share to storage', {
+                userId: user_id,
+                timestamp: new Date().toISOString()
+            });
             await this.saveSecret({
                 user_id,
                 secret: apiShare,
+            });
+
+            console.log('Successfully completed encryption process', {
+                userId: user_id,
+                walletType: wallet_type,
+                addressPrefix: walletInfo.address.slice(0, 6),
+                timestamp: new Date().toISOString()
             });
 
             return {
@@ -150,6 +287,7 @@ export class CubidSDK {
                 error: error instanceof Error ? error.message : 'Unknown error',
                 stack: error instanceof Error ? error.stack : '',
                 userId: user_id,
+                walletType: wallet_type,
                 timestamp: new Date().toISOString()
             });
 
@@ -157,30 +295,66 @@ export class CubidSDK {
         }
     }
 
-    /**
-     * Decrypts a private key using user shares and retrieving API share
-     */
     async decryptPrivateKey({ userShares, user_id }: DecryptParams): Promise<string> {
+        console.log('Starting private key decryption process', {
+            userId: user_id,
+            hasUserShares: Boolean(userShares?.length),
+            timestamp: new Date().toISOString()
+        });
+
         try {
             if (!Array.isArray(userShares) || userShares.length !== 2) {
+                console.error('Decryption failed: Invalid number of user shares', {
+                    userId: user_id,
+                    providedShares: userShares?.length,
+                    timestamp: new Date().toISOString()
+                });
                 throw new Error('Exactly two user shares are required');
             }
 
             if (!user_id) {
+                console.error('Decryption failed: Missing user ID');
                 throw new Error('User ID is required');
             }
 
+            console.log('Fetching API share from storage', {
+                userId: user_id,
+                timestamp: new Date().toISOString()
+            });
             const apiShareResponse = await this.fetchUserData({ user_id });
+
             if (!apiShareResponse?.secret) {
+                console.error('Failed to retrieve API share', {
+                    userId: user_id,
+                    timestamp: new Date().toISOString()
+                });
                 throw new Error('Failed to retrieve share from API');
             }
 
+            console.log('Converting shares to bytes for combination');
             const shareBytes = [...userShares, apiShareResponse.secret].map(share => this.hexToBytes(share));
+
+            console.log('Combining shares to recover secret', {
+                numberOfShares: shareBytes.length,
+                threshold: this.THRESHOLD,
+                timestamp: new Date().toISOString()
+            });
             const recoveredBytes = await combine(shareBytes.slice(0, this.THRESHOLD));
+
+            console.log('Successfully completed decryption process', {
+                userId: user_id,
+                timestamp: new Date().toISOString()
+            });
 
             return this.bytesToHex(recoveredBytes);
 
         } catch (error) {
+            console.error('Decryption process failed:', {
+                error: error instanceof Error ? error.message : 'Unknown error',
+                stack: error instanceof Error ? error.stack : '',
+                userId: user_id,
+                timestamp: new Date().toISOString()
+            });
             throw new Error(`Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }

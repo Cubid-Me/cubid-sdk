@@ -1,76 +1,38 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// index.tsx
-var index_exports = {};
-__export(index_exports, {
-  CubidSDK: () => CubidSDK,
-  CubidWidget: () => CubidWidget,
-  Provider: () => Provider,
-  generateNEARWallet: () => generateNEARWallet
-});
-module.exports = __toCommonJS(index_exports);
-
 // polyfills.js
-var import_buffer = require("buffer");
-var import_process = __toESM(require("process"));
-var import_crypto_browserify = __toESM(require("crypto-browserify"));
-var import_stream_browserify = __toESM(require("stream-browserify"));
-var import_path_browserify = __toESM(require("path-browserify"));
-window.Buffer = import_buffer.Buffer;
-window.process = import_process.default;
-window.crypto = import_crypto_browserify.default;
-window.stream = import_stream_browserify.default;
-window.path = import_path_browserify.default;
+import { Buffer } from "buffer";
+import process from "process";
+import crypto from "crypto-browserify";
+import stream from "stream-browserify";
+import path from "path-browserify";
+window.Buffer = Buffer;
+window.process = process;
+window.crypto = crypto;
+window.stream = stream;
+window.path = path;
 
 // index.tsx
-var import_axios6 = __toESM(require("axios"));
-var import_shamir_secret_sharing = require("shamir-secret-sharing");
-var import_ethers = require("ethers");
-var import_near_api_js2 = require("near-api-js");
-var import_js_sha256 = require("js-sha256");
+import axios6 from "axios";
+import { split, combine } from "shamir-secret-sharing";
+import { ethers } from "ethers";
+import { keyStores, KeyPair, connect } from "near-api-js";
+import { sha256 } from "js-sha256";
 
 // src/component/cubidWidget.tsx
-var import_react14 = __toESM(require("react"));
+import React14 from "react";
 
 // src/stamps/index.tsx
-var import_react13 = require("react");
-var import_axios4 = __toESM(require("axios"));
+import { useCallback, useEffect as useEffect8, useState as useState10 } from "react";
+import axios4 from "axios";
 
 // src/stamps/phoneNumberConnect.tsx
-var import_react = require("react");
-var import_axios = __toESM(require("axios"));
-var import_react_toastify = require("react-toastify");
-var import_react_phone_input_2 = __toESM(require("react-phone-input-2"));
-var import_jsx_runtime = require("react/jsx-runtime");
+import { useRef, useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import PhoneInput from "react-phone-input-2";
+import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 var OTPInput = ({ length = 6, value, onChange }) => {
-  const [otp, setOtp] = (0, import_react.useState)(new Array(length).fill(""));
-  const inputRefs = (0, import_react.useRef)([]);
+  const [otp, setOtp] = useState(new Array(length).fill(""));
+  const inputRefs = useRef([]);
   const handleChange = (e, index) => {
     const val = e.target.value;
     if (isNaN(val)) return;
@@ -122,7 +84,7 @@ var OTPInput = ({ length = 6, value, onChange }) => {
     borderColor: "#22C55E",
     boxShadow: "0 0 0 3px rgba(34, 197, 94, 0.2)"
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: containerStyle, children: otp.map((digit, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+  return /* @__PURE__ */ jsx("div", { style: containerStyle, children: otp.map((digit, index) => /* @__PURE__ */ jsx(
     "input",
     {
       ref: (el) => inputRefs.current[index] = el,
@@ -150,55 +112,55 @@ var PhoneNumberConnect = ({
   setBlacklist,
   setBlacklistCred
 }) => {
-  const [phoneInput, setPhoneInput] = (0, import_react.useState)("");
-  const [otpSent, setOtpSent] = (0, import_react.useState)(false);
-  const [otpCode, setOtpCode] = (0, import_react.useState)("");
-  const [resendCooldown, setResendCooldown] = (0, import_react.useState)(0);
-  const resendTimerRef = (0, import_react.useRef)(null);
+  const [phoneInput, setPhoneInput] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const resendTimerRef = useRef(null);
   const sendOtp = async () => {
     if (!phoneInput) {
-      import_react_toastify.toast.error("Please enter a valid phone number.");
+      toast.error("Please enter a valid phone number.");
       return;
     }
     try {
-      await import_axios.default.post("https://passport.cubid.me/api/v2/twillio/send-otp", {
+      await axios.post("https://passport.cubid.me/api/v2/twillio/send-otp", {
         phone: `+${phoneInput}`,
         apikey
       });
       setOtpSent(true);
-      import_react_toastify.toast.success("OTP sent!");
+      toast.success("OTP sent!");
       setResendCooldown(60);
     } catch (error) {
-      import_react_toastify.toast.error("Failed to send OTP.");
+      toast.error("Failed to send OTP.");
     }
   };
   const verifyOtp = async () => {
     if (otpCode.length !== 6) {
-      import_react_toastify.toast.error("Please enter the complete OTP.");
+      toast.error("Please enter the complete OTP.");
       return;
     }
     try {
-      const { data: verify_data } = await import_axios.default.post("https://passport.cubid.me/api/v2/twillio/verify-otp", {
+      const { data: verify_data } = await axios.post("https://passport.cubid.me/api/v2/twillio/verify-otp", {
         phone: `+${phoneInput}`,
         otpCode,
         apikey
       });
       if (verify_data.status === "approved") {
-        import_react_toastify.toast.success("OTP Verified");
+        toast.success("OTP Verified");
         handleClose();
-        await import_axios.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           page_id,
           stamp_type: "phone",
           stampData: { uniquevalue: phoneInput, identity: phoneInput },
           user_data: { uuid }
         });
-        const { data: blacklist_creds } = await import_axios.default.post("https://passport.cubid.me/api/v2/fetch_blacklisted_creds", {
+        const { data: blacklist_creds } = await axios.post("https://passport.cubid.me/api/v2/fetch_blacklisted_creds", {
           apikey,
           cred: phoneInput
         });
         fetchStamps();
         if (blacklist_creds?.is_blacklisted) {
-          const { data: { all_email } } = await import_axios.default.post("https://passport.cubid.me/api/v2/find_users_with_blacklist", {
+          const { data: { all_email } } = await axios.post("https://passport.cubid.me/api/v2/find_users_with_blacklist", {
             cred: phoneInput,
             apikey
           });
@@ -210,10 +172,10 @@ var PhoneNumberConnect = ({
           });
         }
       } else {
-        import_react_toastify.toast.error("Incorrect OTP");
+        toast.error("Incorrect OTP");
       }
     } catch (error) {
-      import_react_toastify.toast.error("OTP verification failed.");
+      toast.error("OTP verification failed.");
     }
   };
   const handleClose = () => {
@@ -227,7 +189,7 @@ var PhoneNumberConnect = ({
     }
     onClose();
   };
-  (0, import_react.useEffect)(() => {
+  useEffect(() => {
     if (resendCooldown > 0) {
       resendTimerRef.current = setInterval(() => {
         setResendCooldown((prev) => {
@@ -313,11 +275,11 @@ var PhoneNumberConnect = ({
     textAlign: "center",
     marginBottom: "16px"
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: overlayStyle, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: modalStyle, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: titleStyle, children: "Phone Number Connect" }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: contentStyle, children: otpSent ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: messageStyle, children: "Enter the verification code sent to your phone" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+  return /* @__PURE__ */ jsx("div", { style: overlayStyle, children: /* @__PURE__ */ jsxs("div", { style: modalStyle, children: [
+    /* @__PURE__ */ jsx("h2", { style: titleStyle, children: "Phone Number Connect" }),
+    /* @__PURE__ */ jsx("div", { style: contentStyle, children: otpSent ? /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("p", { style: messageStyle, children: "Enter the verification code sent to your phone" }),
+      /* @__PURE__ */ jsx(
         OTPInput,
         {
           length: 6,
@@ -325,7 +287,7 @@ var PhoneNumberConnect = ({
           onChange: setOtpCode
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      /* @__PURE__ */ jsx(
         "button",
         {
           onClick: verifyOtp,
@@ -333,7 +295,7 @@ var PhoneNumberConnect = ({
           children: "Verify OTP"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { textAlign: "center", marginTop: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      /* @__PURE__ */ jsx("div", { style: { textAlign: "center", marginTop: "12px" }, children: /* @__PURE__ */ jsx(
         "button",
         {
           onClick: sendOtp,
@@ -342,9 +304,9 @@ var PhoneNumberConnect = ({
           children: resendCooldown === 0 ? "Resend OTP" : `Resend in ${resendCooldown}s`
         }
       ) })
-    ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        import_react_phone_input_2.default,
+    ] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx(
+        PhoneInput,
         {
           country: "us",
           value: phoneInput,
@@ -352,7 +314,7 @@ var PhoneNumberConnect = ({
           containerStyle: { marginBottom: "16px" }
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      /* @__PURE__ */ jsx(
         "button",
         {
           onClick: sendOtp,
@@ -361,7 +323,7 @@ var PhoneNumberConnect = ({
         }
       )
     ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: buttonContainerStyle, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    /* @__PURE__ */ jsx("div", { style: buttonContainerStyle, children: /* @__PURE__ */ jsx(
       "button",
       {
         onClick: handleClose,
@@ -373,26 +335,26 @@ var PhoneNumberConnect = ({
 };
 
 // src/stamps/setLocationPanel.tsx
-var import_react2 = __toESM(require("react"));
-var import_axios2 = __toESM(require("axios"));
-var import_lodash = __toESM(require("lodash.debounce"));
-var import_react_toastify2 = require("react-toastify");
+import React4 from "react";
+import axios2 from "axios";
+import debounce from "lodash.debounce";
+import { toast as toast2 } from "react-toastify";
 
 // src/component/button.tsx
-var React2 = __toESM(require("react"));
-var import_react_slot = require("@radix-ui/react-slot");
-var import_class_variance_authority = require("class-variance-authority");
+import * as React2 from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva } from "class-variance-authority";
 
 // src/lib/utils.ts
-var import_clsx = require("clsx");
-var import_tailwind_merge = require("tailwind-merge");
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 function cn(...inputs) {
-  return (0, import_tailwind_merge.twMerge)((0, import_clsx.clsx)(inputs));
+  return twMerge(clsx(inputs));
 }
 
 // src/component/button.tsx
-var import_jsx_runtime2 = require("react/jsx-runtime");
-var buttonVariants = (0, import_class_variance_authority.cva)(
+import { jsx as jsx2 } from "react/jsx-runtime";
+var buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
@@ -419,8 +381,8 @@ var buttonVariants = (0, import_class_variance_authority.cva)(
 );
 var Button = React2.forwardRef(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? import_react_slot.Slot : "button";
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    const Comp = asChild ? Slot : "button";
+    return /* @__PURE__ */ jsx2(
       Comp,
       {
         className: cn(buttonVariants({ variant, size, className })),
@@ -433,11 +395,11 @@ var Button = React2.forwardRef(
 Button.displayName = "Button";
 
 // src/component/input.tsx
-var React3 = __toESM(require("react"));
-var import_jsx_runtime3 = require("react/jsx-runtime");
+import * as React3 from "react";
+import { jsx as jsx3 } from "react/jsx-runtime";
 var Input = React3.forwardRef(
   ({ className, type, ...props }, ref) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+    return /* @__PURE__ */ jsx3(
       "input",
       {
         type,
@@ -454,7 +416,7 @@ var Input = React3.forwardRef(
 Input.displayName = "Input";
 
 // src/stamps/setLocationPanel.tsx
-var import_jsx_runtime4 = require("react/jsx-runtime");
+import { jsx as jsx4, jsxs as jsxs2 } from "react/jsx-runtime";
 var LocationSearchPanel = ({
   open,
   onClose,
@@ -463,17 +425,17 @@ var LocationSearchPanel = ({
   uuid,
   fetchStamps
 }) => {
-  const [locationInput, setLocationInput] = import_react2.default.useState("");
-  const [allLocations, setAllLocations] = import_react2.default.useState([]);
-  const [selectedLocation, setSelectedLocation] = import_react2.default.useState(null);
-  const handleLocationSearch = (0, import_lodash.default)(async (input) => {
+  const [locationInput, setLocationInput] = React4.useState("");
+  const [allLocations, setAllLocations] = React4.useState([]);
+  const [selectedLocation, setSelectedLocation] = React4.useState(null);
+  const handleLocationSearch = debounce(async (input) => {
     setSelectedLocation(null);
     if (input.length >= 2) {
       try {
-        const response = await import_axios2.default.post(`https://passport.cubid.me/api/v2/search-location`, { location_input: input, apikey });
+        const response = await axios2.post(`https://passport.cubid.me/api/v2/search-location`, { location_input: input, apikey });
         setAllLocations(response.data);
       } catch (error) {
-        import_react_toastify2.toast.error("Error fetching locations.");
+        toast2.error("Error fetching locations.");
       }
     }
   }, 500);
@@ -482,9 +444,9 @@ var LocationSearchPanel = ({
     handleLocationSearch(e.target.value);
   };
   if (!open) return null;
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { backgroundColor: "#000000AB", zIndex: 1e3 }, className: "fixed inset-0 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "bg-white rounded-xl shadow-lg overflow-hidden max-w-sm w-full p-6", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { className: "text-2xl font-bold text-gray-800 mb-4", children: "Location Search" }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "mt-2 text-gray-600", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+  return /* @__PURE__ */ jsx4("div", { style: { backgroundColor: "#000000AB", zIndex: 1e3 }, className: "fixed inset-0 flex items-center justify-center", children: /* @__PURE__ */ jsxs2("div", { className: "bg-white rounded-xl shadow-lg overflow-hidden max-w-sm w-full p-6", children: [
+    /* @__PURE__ */ jsx4("h2", { className: "text-2xl font-bold text-gray-800 mb-4", children: "Location Search" }),
+    /* @__PURE__ */ jsx4("p", { className: "mt-2 text-gray-600", children: /* @__PURE__ */ jsx4(
       Input,
       {
         placeholder: "Search and select home or work address",
@@ -494,7 +456,7 @@ var LocationSearchPanel = ({
         className: "mt-4 w-full border border-gray-300 rounded-lg p-2 shadow focus:outline-none focus:shadow-outline"
       }
     ) }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "h-[200px] overflow-y-auto mt-3", children: allLocations.map((item) => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+    /* @__PURE__ */ jsx4("div", { className: "h-[200px] overflow-y-auto mt-3", children: allLocations.map((item) => /* @__PURE__ */ jsx4(
       "div",
       {
         onClick: () => {
@@ -507,13 +469,13 @@ var LocationSearchPanel = ({
       },
       item.name
     )) }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex justify-between space-x-4 mt-4", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Button, { onClick: onClose, style: { borderRadius: 10 }, className: "bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md", children: "Cancel" }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+    /* @__PURE__ */ jsxs2("div", { className: "flex justify-between space-x-4 mt-4", children: [
+      /* @__PURE__ */ jsx4(Button, { onClick: onClose, style: { borderRadius: 10 }, className: "bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md", children: "Cancel" }),
+      /* @__PURE__ */ jsx4(
         Button,
         {
           onClick: async () => {
-            await import_axios2.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+            await axios2.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
               page_id,
               stamp_type: "address",
               stampData: { uniquevalue: `${uuid}-${selectedLocation?.formatted_address}`, identity: selectedLocation?.formatted_address, ...selectedLocation },
@@ -533,24 +495,24 @@ var LocationSearchPanel = ({
 };
 
 // src/stamps/addStampVerify.tsx
-var import_react3 = require("react");
-var import_axios3 = __toESM(require("axios"));
-var import_jsx_runtime5 = require("react/jsx-runtime");
+import { useState as useState2, useEffect as useEffect2 } from "react";
+import axios3 from "axios";
+import { Fragment as Fragment2, jsx as jsx5, jsxs as jsxs3 } from "react/jsx-runtime";
 function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampIds, onClose }) {
-  const [isOpen, setIsOpen] = (0, import_react3.useState)(true);
-  const [currentStep, setCurrentStep] = (0, import_react3.useState)("confirmation");
-  const [passcode, setPasscode] = (0, import_react3.useState)("");
-  const [resendCountdown, setResendCountdown] = (0, import_react3.useState)(60);
-  const [isLoading, setIsLoading] = (0, import_react3.useState)(false);
-  const [error, setError] = (0, import_react3.useState)("");
-  (0, import_react3.useEffect)(() => {
+  const [isOpen, setIsOpen] = useState2(true);
+  const [currentStep, setCurrentStep] = useState2("confirmation");
+  const [passcode, setPasscode] = useState2("");
+  const [resendCountdown, setResendCountdown] = useState2(60);
+  const [isLoading, setIsLoading] = useState2(false);
+  const [error, setError] = useState2("");
+  useEffect2(() => {
     let timer;
     if (currentStep === "passcode" && resendCountdown > 0) {
       timer = setTimeout(() => setResendCountdown(resendCountdown - 1), 1e3);
     }
     return () => clearTimeout(timer);
   }, [resendCountdown, currentStep]);
-  (0, import_react3.useEffect)(() => {
+  useEffect2(() => {
     if (localStorage.getItem("logged_in") === uuid) {
       setCurrentStep("authorized");
     }
@@ -559,7 +521,7 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
     try {
       setIsLoading(true);
       setError("");
-      await import_axios3.default.post("https://passport.cubid.me/api/verify/send-dapp-email", {
+      await axios3.post("https://passport.cubid.me/api/verify/send-dapp-email", {
         email,
         apikey
       });
@@ -575,14 +537,14 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
     try {
       setIsLoading(true);
       setError("");
-      const { data } = await import_axios3.default.post("https://passport.cubid.me/api/verify/verify-email", {
+      const { data } = await axios3.post("https://passport.cubid.me/api/verify/verify-email", {
         email,
         apikey,
         otp: passcode,
         dappuser_id: uuid
       });
       if (data.success) {
-        await import_axios3.default.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
+        await axios3.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
           apikey,
           user_id: uuid,
           stamp_id_array: allStampIds
@@ -603,7 +565,7 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
     try {
       setIsLoading(true);
       setError("");
-      await import_axios3.default.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
+      await axios3.post("https://passport.cubid.me/api/verify/add-stamp-perm", {
         apikey,
         user_id: uuid,
         stamp_id_array: allStampIds
@@ -699,13 +661,13 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
   const renderContent = () => {
     switch (currentStep) {
       case "confirmation":
-        return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles.header, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h2", { style: styles.title, children: "Credential Authorization Required" }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles.description, children: "It looks like this credential has already been registered for a different app in the Cubid ecosystem. Get a passcode to approve using it in this app too." })
+        return /* @__PURE__ */ jsxs3(Fragment2, { children: [
+          /* @__PURE__ */ jsxs3("div", { style: styles.header, children: [
+            /* @__PURE__ */ jsx5("h2", { style: styles.title, children: "Credential Authorization Required" }),
+            /* @__PURE__ */ jsx5("p", { style: styles.description, children: "It looks like this credential has already been registered for a different app in the Cubid ecosystem. Get a passcode to approve using it in this app too." })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles.buttonContainer, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          /* @__PURE__ */ jsxs3("div", { style: styles.buttonContainer, children: [
+            /* @__PURE__ */ jsx5(
               "button",
               {
                 style: { ...styles.button, ...styles.secondaryButton },
@@ -713,7 +675,7 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
                 children: "Cancel"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            /* @__PURE__ */ jsx5(
               "button",
               {
                 style: {
@@ -729,16 +691,16 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
           ] })
         ] });
       case "passcode":
-        return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles.header, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h2", { style: styles.title, children: "Enter Verification Code" }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("p", { style: styles.description, children: [
+        return /* @__PURE__ */ jsxs3(Fragment2, { children: [
+          /* @__PURE__ */ jsxs3("div", { style: styles.header, children: [
+            /* @__PURE__ */ jsx5("h2", { style: styles.title, children: "Enter Verification Code" }),
+            /* @__PURE__ */ jsxs3("p", { style: styles.description, children: [
               "Please check your email (",
               email,
               ") for the verification code we just sent."
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          /* @__PURE__ */ jsx5(
             "input",
             {
               type: "text",
@@ -749,8 +711,8 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
               maxLength: 6
             }
           ),
-          error && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: styles.error, children: error }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+          error && /* @__PURE__ */ jsx5("div", { style: styles.error, children: error }),
+          /* @__PURE__ */ jsxs3(
             "button",
             {
               style: {
@@ -768,8 +730,8 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles.buttonContainer, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          /* @__PURE__ */ jsxs3("div", { style: styles.buttonContainer, children: [
+            /* @__PURE__ */ jsx5(
               "button",
               {
                 style: { ...styles.button, ...styles.secondaryButton },
@@ -777,7 +739,7 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
                 children: "Cancel"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            /* @__PURE__ */ jsx5(
               "button",
               {
                 style: {
@@ -793,12 +755,12 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
           ] })
         ] });
       case "authorized":
-        return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles.header, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h2", { style: styles.title, children: "Authorization Successful" }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles.description, children: "You've successfully authenticated with Cubid. Click below to complete the authorization process." })
+        return /* @__PURE__ */ jsxs3(Fragment2, { children: [
+          /* @__PURE__ */ jsxs3("div", { style: styles.header, children: [
+            /* @__PURE__ */ jsx5("h2", { style: styles.title, children: "Authorization Successful" }),
+            /* @__PURE__ */ jsx5("p", { style: styles.description, children: "You've successfully authenticated with Cubid. Click below to complete the authorization process." })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: styles.buttonContainer, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          /* @__PURE__ */ jsx5("div", { style: styles.buttonContainer, children: /* @__PURE__ */ jsx5(
             "button",
             {
               style: {
@@ -815,7 +777,7 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
     }
   };
   if (!isOpen) return null;
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: styles.modalOverlay, onClick: () => setIsOpen(false), children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+  return /* @__PURE__ */ jsx5("div", { style: styles.modalOverlay, onClick: () => setIsOpen(false), children: /* @__PURE__ */ jsx5(
     "div",
     {
       style: styles.modalContent,
@@ -826,10 +788,10 @@ function AdvancedCredentialCollection({ email, apikey, refresh, uuid, allStampId
 }
 
 // src/component/infoTooltip.tsx
-var import_react4 = require("react");
-var import_jsx_runtime6 = require("react/jsx-runtime");
+import { useState as useState3 } from "react";
+import { jsx as jsx6, jsxs as jsxs4 } from "react/jsx-runtime";
 var InfoTooltip = ({ content }) => {
-  const [visible, setVisible] = (0, import_react4.useState)(false);
+  const [visible, setVisible] = useState3(false);
   const styles = {
     container: {
       position: "relative",
@@ -876,7 +838,7 @@ var InfoTooltip = ({ content }) => {
       transform: "translateX(-50%) rotate(45deg)"
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+  return /* @__PURE__ */ jsxs4(
     "div",
     {
       style: styles.container,
@@ -884,9 +846,9 @@ var InfoTooltip = ({ content }) => {
       onMouseLeave: () => setVisible(false),
       onClick: () => setVisible(!visible),
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: styles.icon, children: "i" }),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles.tooltip, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: styles.tooltipArrow }),
+        /* @__PURE__ */ jsx6("div", { style: styles.icon, children: "i" }),
+        /* @__PURE__ */ jsxs4("div", { style: styles.tooltip, children: [
+          /* @__PURE__ */ jsx6("div", { style: styles.tooltipArrow }),
           content
         ] })
       ]
@@ -895,13 +857,13 @@ var InfoTooltip = ({ content }) => {
 };
 
 // src/component/loginOptions.tsx
-var import_react5 = require("react");
-var import_react_web = require("@lens-protocol/react-web");
-var import_react_web2 = require("@lens-protocol/react-web");
-var import_react_toastify3 = require("react-toastify");
-var import_jsx_runtime7 = require("react/jsx-runtime");
+import { useEffect as useEffect3, useState as useState4 } from "react";
+import { useLogin } from "@lens-protocol/react-web";
+import { useProfilesManaged } from "@lens-protocol/react-web";
+import { toast as toast3 } from "react-toastify";
+import { jsx as jsx7 } from "react/jsx-runtime";
 function LoginAs({ profile, wallet: wallet2, onSuccess }) {
-  const { execute, loading } = (0, import_react_web.useLogin)();
+  const { execute, loading } = useLogin();
   const login = async () => {
     const result = await execute({
       address: wallet2,
@@ -913,44 +875,44 @@ function LoginAs({ profile, wallet: wallet2, onSuccess }) {
     localStorage.removeItem("lens-loggin");
     window.alert(result.error.message);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("button", { disabled: loading, onClick: login, children: profile.handle?.fullHandle ?? profile.id });
+  return /* @__PURE__ */ jsx7("button", { disabled: loading, onClick: login, children: profile.handle?.fullHandle ?? profile.id });
 }
 function LoginOptions({ wallet: wallet2, onSuccess }) {
-  const { data: profiles, error, loading } = (0, import_react_web2.useProfilesManaged)({
+  const { data: profiles, error, loading } = useProfilesManaged({
     for: wallet2,
     includeOwned: true
   });
-  const [disconnect, setDisconnect] = (0, import_react5.useState)(() => () => {
+  const [disconnect, setDisconnect] = useState4(() => () => {
   });
-  (0, import_react5.useEffect)(() => {
+  useEffect3(() => {
     if (typeof window !== "undefined") {
-      import("wagmi").then((module2) => {
-        const { useDisconnect: useDisconnect3 } = module2;
+      import("wagmi").then((module) => {
+        const { useDisconnect: useDisconnect3 } = module;
         const { disconnect: disconnectFn } = useDisconnect3();
         setDisconnect(() => disconnectFn);
       });
     }
   }, []);
-  (0, import_react5.useEffect)(() => {
+  useEffect3(() => {
     if (!loading && profiles.length === 0) {
       localStorage.removeItem("lens-loggin");
       disconnect();
-      import_react_toastify3.toast.error("No profiles managed by this wallet.");
+      toast3.error("No profiles managed by this wallet.");
     }
     if (profiles?.length) {
       onSuccess(profiles[0]);
     }
   }, [loading, profiles, onSuccess, disconnect]);
   if (loading) {
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { children: "Loading..." });
+    return /* @__PURE__ */ jsx7("p", { children: "Loading..." });
   }
   if (error) {
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { children: error });
+    return /* @__PURE__ */ jsx7("p", { children: error });
   }
   if (profiles.length === 0) {
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { children: "No profiles managed by this wallet." });
+    return /* @__PURE__ */ jsx7("p", { children: "No profiles managed by this wallet." });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { children: profiles.map((profile) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+  return /* @__PURE__ */ jsx7("div", { children: profiles.map((profile) => /* @__PURE__ */ jsx7(
     LoginAs,
     {
       wallet: wallet2,
@@ -962,30 +924,37 @@ function LoginOptions({ wallet: wallet2, onSuccess }) {
 }
 
 // src/stamps/index.tsx
-var import_wagmi3 = require("wagmi");
+import { useAccount as useAccount2, useConnect as useConnect2, useDisconnect as useDisconnect2 } from "wagmi";
 
 // src/component/providers.tsx
-var import_react7 = require("react");
-var import_wagmi = require("wagmi");
-var import_rainbowkit = require("@rainbow-me/rainbowkit");
-var import_chains = require("wagmi/chains");
-var import_chains2 = require("wagmi/chains");
-var import_react8 = require("@web3modal/wagmi/react");
-var import_config = require("@web3modal/wagmi/react/config");
-var import_react_query = require("@tanstack/react-query");
+import { useEffect as useEffect4, useState as useState5 } from "react";
+import { WagmiProvider } from "wagmi";
+import {
+  getDefaultConfig
+} from "@rainbow-me/rainbowkit";
+import {
+  polygon,
+  optimism,
+  arbitrum,
+  base
+} from "wagmi/chains";
+import { mainnet } from "wagmi/chains";
+import { createWeb3Modal } from "@web3modal/wagmi/react";
+import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // src/component/providerNear.tsx
-var import_near_api_js = require("near-api-js");
-var import_modal_ui = require("@near-wallet-selector/modal-ui");
-var import_core = require("@near-wallet-selector/core");
-var import_ledger = require("@near-wallet-selector/ledger");
-var import_my_near_wallet = require("@near-wallet-selector/my-near-wallet");
-var import_near_wallet = require("@near-wallet-selector/near-wallet");
-var import_sender = require("@near-wallet-selector/sender");
-var import_here_wallet = require("@near-wallet-selector/here-wallet");
-var sender = (0, import_sender.setupSender)();
-var hereWallet = (0, import_here_wallet.setupHereWallet)();
-var nearWallet = (0, import_near_wallet.setupNearWallet)();
+import { providers } from "near-api-js";
+import { setupModal } from "@near-wallet-selector/modal-ui";
+import { setupWalletSelector } from "@near-wallet-selector/core";
+import { setupLedger } from "@near-wallet-selector/ledger";
+import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
+import { setupNearWallet } from "@near-wallet-selector/near-wallet";
+import { setupSender } from "@near-wallet-selector/sender";
+import { setupHereWallet } from "@near-wallet-selector/here-wallet";
+var sender = setupSender();
+var hereWallet = setupHereWallet();
+var nearWallet = setupNearWallet();
 var THIRTY_TGAS = "30000000000000";
 var NO_DEPOSIT = "0";
 var Wallet = class {
@@ -999,13 +968,13 @@ var Wallet = class {
   }
   // To be called when the website loads
   async startUp() {
-    this.walletSelector = await (0, import_core.setupWalletSelector)({
+    this.walletSelector = await setupWalletSelector({
       network: this.network,
       modules: [
         nearWallet,
         // meteorWallet,
-        (0, import_my_near_wallet.setupMyNearWallet)(),
-        (0, import_ledger.setupLedger)(),
+        setupMyNearWallet(),
+        setupLedger(),
         sender,
         hereWallet
       ]
@@ -1024,7 +993,7 @@ var Wallet = class {
   // Sign-in method
   signIn() {
     const description = "Please select a wallet to sign in.";
-    const modal = (0, import_modal_ui.setupModal)(this.walletSelector, {
+    const modal = setupModal(this.walletSelector, {
       contractId: this.createAccessKeyFor,
       description
     });
@@ -1039,15 +1008,15 @@ var Wallet = class {
   // Make a read-only call to retrieve information from the network
   async viewMethod({ contractId, method, args = {} }) {
     const { network } = this.walletSelector.options;
-    const provider = new import_near_api_js.providers.JsonRpcProvider({ url: network.nodeUrl });
+    const provider = new providers.JsonRpcProvider({ url: network.nodeUrl });
     let res = await provider.query({
       request_type: "call_function",
       account_id: contractId,
       method_name: method,
-      args_base64: import_buffer.Buffer.from(JSON.stringify(args)).toString("base64"),
+      args_base64: Buffer.from(JSON.stringify(args)).toString("base64"),
       finality: "optimistic"
     });
-    return JSON.parse(import_buffer.Buffer.from(res.result).toString());
+    return JSON.parse(Buffer.from(res.result).toString());
   }
   // Call a method that changes the contract's state
   async callMethod({
@@ -1076,37 +1045,40 @@ var Wallet = class {
   // Get transaction result from the network
   async getTransactionResult(txhash) {
     const { network } = this.walletSelector.options;
-    const provider = new import_near_api_js.providers.JsonRpcProvider({ url: network.nodeUrl });
+    const provider = new providers.JsonRpcProvider({ url: network.nodeUrl });
     const transaction = await provider.txStatus(txhash, "unnused");
-    return import_near_api_js.providers.getTransactionLastResult(transaction);
+    return providers.getTransactionLastResult(transaction);
   }
 };
 
 // src/component/providerSolana.tsx
-var import_react6 = require("react");
-var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
-var import_wallet_adapter_base = require("@solana/wallet-adapter-base");
-var import_wallet_adapter_react_ui = require("@solana/wallet-adapter-react-ui");
-var import_web3 = require("@solana/web3.js");
-var import_jsx_runtime8 = require("react/jsx-runtime");
+import { useMemo } from "react";
+import {
+  ConnectionProvider,
+  WalletProvider
+} from "@solana/wallet-adapter-react";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { clusterApiUrl } from "@solana/web3.js";
+import { jsx as jsx8 } from "react/jsx-runtime";
 function SolanaAppWalletProvider({
   children
 }) {
-  const network = import_wallet_adapter_base.WalletAdapterNetwork.Devnet;
-  const endpoint = (0, import_react6.useMemo)(() => (0, import_web3.clusterApiUrl)(network), [network]);
-  const wallets = (0, import_react6.useMemo)(
+  const network = WalletAdapterNetwork.Devnet;
+  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const wallets = useMemo(
     () => [
       // manually add any legacy wallet adapters here
       // new UnsafeBurnerWalletAdapter(),
     ],
     [network]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_wallet_adapter_react.ConnectionProvider, { endpoint, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_wallet_adapter_react.WalletProvider, { wallets, autoConnect: true, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_wallet_adapter_react_ui.WalletModalProvider, { children }) }) });
+  return /* @__PURE__ */ jsx8(ConnectionProvider, { endpoint, children: /* @__PURE__ */ jsx8(WalletProvider, { wallets, autoConnect: true, children: /* @__PURE__ */ jsx8(WalletModalProvider, { children }) }) });
 }
 
 // src/component/providers.tsx
-var import_jsx_runtime9 = require("react/jsx-runtime");
-var AuthKitProvider = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_jsx_runtime9.Fragment, { children });
+import { Fragment as Fragment3, jsx as jsx9 } from "react/jsx-runtime";
+var AuthKitProvider = ({ children }) => /* @__PURE__ */ jsx9(Fragment3, { children });
 var config = {
   rpcUrl: "https://mainnet.optimism.io",
   domain: "example.com",
@@ -1116,20 +1088,20 @@ var wallet = new Wallet({
   createAccessKeyFor: "registry.i-am-human.near"
 });
 wallet.startUp();
-var queryClient = new import_react_query.QueryClient();
-var configForRainbow = (0, import_rainbowkit.getDefaultConfig)({
+var queryClient = new QueryClient();
+var configForRainbow = getDefaultConfig({
   appName: "My RainbowKit App",
   projectId: "YOUR_PROJECT_ID",
-  chains: [import_chains2.mainnet, import_chains.polygon, import_chains.optimism, import_chains.arbitrum, import_chains.base],
+  chains: [mainnet, polygon, optimism, arbitrum, base],
   ssr: true
   // If your dApp uses server side rendering (SSR)
 });
 var Provider = (props) => {
-  const [wagmiConfig, setWagmiConfig] = (0, import_react7.useState)(
+  const [wagmiConfig, setWagmiConfig] = useState5(
     configForRainbow
   );
-  const [configSet, setConfigSet] = (0, import_react7.useState)(false);
-  (0, import_react7.useEffect)(() => {
+  const [configSet, setConfigSet] = useState5(false);
+  useEffect4(() => {
     const projectId = "6833ed2c1539b9d27e8840c51f53bd0c";
     const metadata = {
       name: "Web3Modal",
@@ -1137,30 +1109,30 @@ var Provider = (props) => {
       url: "https://web3modal.com",
       icons: ["https://avatars.githubusercontent.com/u/37784886"]
     };
-    const chains = [import_chains2.mainnet];
-    const wagmiConfig2 = (0, import_config.defaultWagmiConfig)({ chains, projectId, metadata });
-    (0, import_react8.createWeb3Modal)({ wagmiConfig: wagmiConfig2, projectId, chains });
+    const chains = [mainnet];
+    const wagmiConfig2 = defaultWagmiConfig({ chains, projectId, metadata });
+    createWeb3Modal({ wagmiConfig: wagmiConfig2, projectId, chains });
     setConfigSet(true);
   }, []);
   if (!wagmiConfig) {
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_jsx_runtime9.Fragment, {});
+    return /* @__PURE__ */ jsx9(Fragment3, {});
   }
   if (!configSet) {
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_jsx_runtime9.Fragment, {});
+    return /* @__PURE__ */ jsx9(Fragment3, {});
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(AuthKitProvider, { config, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(SolanaAppWalletProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_wagmi.WagmiProvider, { config: wagmiConfig, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_react_query.QueryClientProvider, { client: queryClient, children: props?.children }) }) }) });
+  return /* @__PURE__ */ jsx9(AuthKitProvider, { config, children: /* @__PURE__ */ jsx9(SolanaAppWalletProvider, { children: /* @__PURE__ */ jsx9(WagmiProvider, { config: wagmiConfig, children: /* @__PURE__ */ jsx9(QueryClientProvider, { client: queryClient, children: props?.children }) }) }) });
 };
 
 // src/stamps/index.tsx
-var import_wallet_adapter_react_ui2 = require("@solana/wallet-adapter-react-ui");
-var import_wallet_adapter_react2 = require("@solana/wallet-adapter-react");
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useWallet as useSolanaWallet } from "@solana/wallet-adapter-react";
 
 // src/component/blackListing/index.tsx
-var import_react12 = require("react");
+import { useState as useState9 } from "react";
 
 // src/component/blackListing/email.tsx
-var import_react9 = require("react");
-var import_jsx_runtime10 = require("react/jsx-runtime");
+import { useState as useState6, useEffect as useEffect5 } from "react";
+import { jsx as jsx10, jsxs as jsxs5 } from "react/jsx-runtime";
 var EmailVerificationModal = ({
   isOpen,
   onClose,
@@ -1168,10 +1140,10 @@ var EmailVerificationModal = ({
   onError,
   email: passedEmail
 }) => {
-  const [otp, setOtp] = (0, import_react9.useState)(["", "", "", "", "", ""]);
-  const [error, setError] = (0, import_react9.useState)("");
-  const [success, setSuccess] = (0, import_react9.useState)(false);
-  const [countdown, setCountdown] = (0, import_react9.useState)(0);
+  const [otp, setOtp] = useState6(["", "", "", "", "", ""]);
+  const [error, setError] = useState6("");
+  const [success, setSuccess] = useState6(false);
+  const [countdown, setCountdown] = useState6(0);
   const handleClose = () => {
     if (onClose) {
       onClose();
@@ -1284,13 +1256,13 @@ var EmailVerificationModal = ({
       margin: "0 auto 1rem"
     }
   };
-  (0, import_react9.useEffect)(() => {
+  useEffect5(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1e3);
       return () => clearTimeout(timer);
     }
   }, [countdown]);
-  (0, import_react9.useEffect)(() => {
+  useEffect5(() => {
     if (isOpen && passedEmail) {
       sendOTP();
     }
@@ -1353,17 +1325,17 @@ var EmailVerificationModal = ({
     const lastThree = input.slice(-3);
     return firstTwo + "****" + lastThree;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles.modalOverlay, onClick: handleClose, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles.header, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h2", { style: styles.title, children: "CUBID" }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { style: styles.subtitle, children: "Enter Security Code" })
+  return /* @__PURE__ */ jsx10("div", { style: styles.modalOverlay, onClick: handleClose, children: /* @__PURE__ */ jsxs5("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
+    /* @__PURE__ */ jsxs5("div", { style: styles.header, children: [
+      /* @__PURE__ */ jsx10("h2", { style: styles.title, children: "CUBID" }),
+      /* @__PURE__ */ jsx10("h3", { style: styles.subtitle, children: "Enter Security Code" })
     ] }),
-    !success ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { textAlign: "center", marginBottom: "1rem" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: "#666", margin: "0" }, children: "We've sent a 6-digit code to" }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontWeight: "500", margin: "4px 0" }, children: obscureString(passedEmail) })
+    !success ? /* @__PURE__ */ jsxs5("div", { children: [
+      /* @__PURE__ */ jsxs5("div", { style: { textAlign: "center", marginBottom: "1rem" }, children: [
+        /* @__PURE__ */ jsx10("p", { style: { color: "#666", margin: "0" }, children: "We've sent a 6-digit code to" }),
+        /* @__PURE__ */ jsx10("p", { style: { fontWeight: "500", margin: "4px 0" }, children: obscureString(passedEmail) })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles.otpContainer, children: otp.map((digit, index) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+      /* @__PURE__ */ jsx10("div", { style: styles.otpContainer, children: otp.map((digit, index) => /* @__PURE__ */ jsx10(
         "input",
         {
           type: "text",
@@ -1379,7 +1351,7 @@ var EmailVerificationModal = ({
         },
         index
       )) }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+      /* @__PURE__ */ jsx10(
         "button",
         {
           style: {
@@ -1394,7 +1366,7 @@ var EmailVerificationModal = ({
           children: "Verify Code"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles.actionButtons, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+      /* @__PURE__ */ jsx10("div", { style: styles.actionButtons, children: /* @__PURE__ */ jsx10(
         "button",
         {
           style: {
@@ -1407,18 +1379,18 @@ var EmailVerificationModal = ({
           children: countdown > 0 ? `Resend in ${countdown}s` : "Resend Code"
         }
       ) }),
-      error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles.error, children: error })
-    ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { color: "black !important" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles.successContainer, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles.successIcon, children: "\u2713" }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { style: { fontSize: "20px", margin: "0 0 8px 0" }, children: "Email Verified!" }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { color: "#666", margin: 0 }, children: "Your email has been verified with Cubid." })
+      error && /* @__PURE__ */ jsx10("div", { style: styles.error, children: error })
+    ] }) : /* @__PURE__ */ jsx10("div", { style: { color: "black !important" }, children: /* @__PURE__ */ jsxs5("div", { style: styles.successContainer, children: [
+      /* @__PURE__ */ jsx10("div", { style: styles.successIcon, children: "\u2713" }),
+      /* @__PURE__ */ jsx10("h3", { style: { fontSize: "20px", margin: "0 0 8px 0" }, children: "Email Verified!" }),
+      /* @__PURE__ */ jsx10("p", { style: { color: "#666", margin: 0 }, children: "Your email has been verified with Cubid." })
     ] }) })
   ] }) });
 };
 
 // src/component/blackListing/phone.tsx
-var import_react10 = require("react");
-var import_jsx_runtime11 = require("react/jsx-runtime");
+import { useState as useState7, useEffect as useEffect6 } from "react";
+import { jsx as jsx11, jsxs as jsxs6 } from "react/jsx-runtime";
 var PhoneVerificationModal = ({
   isOpen,
   onClose,
@@ -1426,10 +1398,10 @@ var PhoneVerificationModal = ({
   onError,
   phone: passedPhone
 }) => {
-  const [otp, setOtp] = (0, import_react10.useState)(["", "", "", "", "", ""]);
-  const [error, setError] = (0, import_react10.useState)("");
-  const [success, setSuccess] = (0, import_react10.useState)(false);
-  const [countdown, setCountdown] = (0, import_react10.useState)(0);
+  const [otp, setOtp] = useState7(["", "", "", "", "", ""]);
+  const [error, setError] = useState7("");
+  const [success, setSuccess] = useState7(false);
+  const [countdown, setCountdown] = useState7(0);
   const handleClose = () => {
     if (onClose) {
       onClose();
@@ -1542,13 +1514,13 @@ var PhoneVerificationModal = ({
       margin: "0 auto 1rem"
     }
   };
-  (0, import_react10.useEffect)(() => {
+  useEffect6(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1e3);
       return () => clearTimeout(timer);
     }
   }, [countdown]);
-  (0, import_react10.useEffect)(() => {
+  useEffect6(() => {
     if (isOpen && passedPhone) {
       sendOTP();
     }
@@ -1618,17 +1590,17 @@ var PhoneVerificationModal = ({
     const lastThree = input.slice(-3);
     return firstTwo + "****" + lastThree;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: styles.modalOverlay, onClick: handleClose, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles.header, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("h2", { style: styles.title, children: "CUBID" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("h3", { style: styles.subtitle, children: "Enter Security Code" })
+  return /* @__PURE__ */ jsx11("div", { style: styles.modalOverlay, onClick: handleClose, children: /* @__PURE__ */ jsxs6("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
+    /* @__PURE__ */ jsxs6("div", { style: styles.header, children: [
+      /* @__PURE__ */ jsx11("h2", { style: styles.title, children: "CUBID" }),
+      /* @__PURE__ */ jsx11("h3", { style: styles.subtitle, children: "Enter Security Code" })
     ] }),
-    !success ? /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { textAlign: "center", marginBottom: "1rem" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { color: "#666", margin: "0" }, children: "We've sent a 6-digit code to" }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { fontWeight: "500", margin: "4px 0" }, children: obscureString(passedPhone) })
+    !success ? /* @__PURE__ */ jsxs6("div", { children: [
+      /* @__PURE__ */ jsxs6("div", { style: { textAlign: "center", marginBottom: "1rem" }, children: [
+        /* @__PURE__ */ jsx11("p", { style: { color: "#666", margin: "0" }, children: "We've sent a 6-digit code to" }),
+        /* @__PURE__ */ jsx11("p", { style: { fontWeight: "500", margin: "4px 0" }, children: obscureString(passedPhone) })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: styles.otpContainer, children: otp.map((digit, index) => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      /* @__PURE__ */ jsx11("div", { style: styles.otpContainer, children: otp.map((digit, index) => /* @__PURE__ */ jsx11(
         "input",
         {
           type: "text",
@@ -1644,7 +1616,7 @@ var PhoneVerificationModal = ({
         },
         index
       )) }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      /* @__PURE__ */ jsx11(
         "button",
         {
           style: {
@@ -1659,7 +1631,7 @@ var PhoneVerificationModal = ({
           children: "Verify Code"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: styles.actionButtons, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      /* @__PURE__ */ jsx11("div", { style: styles.actionButtons, children: /* @__PURE__ */ jsx11(
         "button",
         {
           style: {
@@ -1672,18 +1644,18 @@ var PhoneVerificationModal = ({
           children: countdown > 0 ? `Resend in ${countdown}s` : "Resend Code"
         }
       ) })
-    ] }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { color: "black !important" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles.successContainer, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: styles.successIcon, children: "\u2713" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("h3", { style: { fontSize: "20px", margin: "0 0 8px 0" }, children: "Phone Verified!" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { color: "#666", margin: 0 }, children: "Your phone number has been verified with Cubid." })
+    ] }) : /* @__PURE__ */ jsx11("div", { style: { color: "black !important" }, children: /* @__PURE__ */ jsxs6("div", { style: styles.successContainer, children: [
+      /* @__PURE__ */ jsx11("div", { style: styles.successIcon, children: "\u2713" }),
+      /* @__PURE__ */ jsx11("h3", { style: { fontSize: "20px", margin: "0 0 8px 0" }, children: "Phone Verified!" }),
+      /* @__PURE__ */ jsx11("p", { style: { color: "#666", margin: 0 }, children: "Your phone number has been verified with Cubid." })
     ] }) })
   ] }) });
 };
 
 // src/component/blackListing/wallet.tsx
-var import_react11 = require("react");
-var import_wagmi2 = require("wagmi");
-var import_jsx_runtime12 = require("react/jsx-runtime");
+import { useState as useState8, useEffect as useEffect7 } from "react";
+import { useConnect, useAccount, useDisconnect } from "wagmi";
+import { Fragment as Fragment4, jsx as jsx12, jsxs as jsxs7 } from "react/jsx-runtime";
 var WalletVerificationModal = ({
   isOpen,
   onClose,
@@ -1691,17 +1663,17 @@ var WalletVerificationModal = ({
   onError,
   address: passedAddress
 }) => {
-  const { connect: connect2, connectors, isPending: isLoading } = (0, import_wagmi2.useConnect)();
-  const { address, isConnected } = (0, import_wagmi2.useAccount)();
-  const { disconnect } = (0, import_wagmi2.useDisconnect)();
-  const [verificationAmount, setVerificationAmount] = (0, import_react11.useState)("");
-  const [step, setStep] = (0, import_react11.useState)("connect");
-  const [error, setError] = (0, import_react11.useState)("");
-  const [success, setSuccess] = (0, import_react11.useState)(false);
-  const [copied, setCopied] = (0, import_react11.useState)({ amount: false, address: false });
+  const { connect: connect2, connectors, isPending: isLoading } = useConnect();
+  const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
+  const [verificationAmount, setVerificationAmount] = useState8("");
+  const [step, setStep] = useState8("connect");
+  const [error, setError] = useState8("");
+  const [success, setSuccess] = useState8(false);
+  const [copied, setCopied] = useState8({ amount: false, address: false });
   const VERIFICATION_AMOUNT = "0.001";
   const CUBID_WALLET = "0x1234...5678";
-  (0, import_react11.useEffect)(() => {
+  useEffect7(() => {
     if (isConnected && address) {
       setStep("verify");
     }
@@ -1900,8 +1872,8 @@ var WalletVerificationModal = ({
   if (!isOpen) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles.modalOverlay, onClick: handleClose, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+  return /* @__PURE__ */ jsx12("div", { style: styles.modalOverlay, onClick: handleClose, children: /* @__PURE__ */ jsxs7("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
+    /* @__PURE__ */ jsx12(
       "button",
       {
         style: styles.modalCloseButton,
@@ -1910,14 +1882,14 @@ var WalletVerificationModal = ({
         children: "\xD7"
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles.header, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h2", { style: styles.title, children: "CUBID" }),
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h3", { style: styles.subtitle, children: "Verify Delivery Wallet" })
+    /* @__PURE__ */ jsxs7("div", { style: styles.header, children: [
+      /* @__PURE__ */ jsx12("h2", { style: styles.title, children: "CUBID" }),
+      /* @__PURE__ */ jsx12("h3", { style: styles.subtitle, children: "Verify Delivery Wallet" })
     ] }),
-    !success ? /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
-      step === "connect" ? /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(import_jsx_runtime12.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: { textAlign: "center", color: "#666", margin: "0 0 1rem 0" }, children: "Connect your wallet to begin verification." }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { marginBottom: "1rem" }, children: connectors.map((connector) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
+    !success ? /* @__PURE__ */ jsxs7("div", { children: [
+      step === "connect" ? /* @__PURE__ */ jsxs7(Fragment4, { children: [
+        /* @__PURE__ */ jsx12("p", { style: { textAlign: "center", color: "#666", margin: "0 0 1rem 0" }, children: "Connect your wallet to begin verification." }),
+        /* @__PURE__ */ jsx12("div", { style: { marginBottom: "1rem" }, children: connectors.map((connector) => /* @__PURE__ */ jsxs7(
           "button",
           {
             disabled: !connector.ready,
@@ -1926,29 +1898,29 @@ var WalletVerificationModal = ({
             onMouseOver: (e) => e.currentTarget.style.borderColor = "black",
             onMouseOut: (e) => e.currentTarget.style.borderColor = "#e2e2e2",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { children: connector.name }),
+              /* @__PURE__ */ jsx12("span", { children: connector.name }),
               !connector.ready && " (unsupported)",
               isLoading && " (connecting)"
             ]
           },
           connector.id
         )) })
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(import_jsx_runtime12.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles.verificationBox, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("p", { style: { margin: "0 0 1rem 0", textAlign: "center" }, children: [
+      ] }) : /* @__PURE__ */ jsxs7(Fragment4, { children: [
+        /* @__PURE__ */ jsxs7("div", { style: styles.verificationBox, children: [
+          /* @__PURE__ */ jsxs7("p", { style: { margin: "0 0 1rem 0", textAlign: "center" }, children: [
             "Connected: ",
             address?.slice(0, 6),
             "...",
             address?.slice(-4)
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { marginBottom: "1rem" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("label", { style: styles.label, children: "Send Amount:" }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles.valueContainer, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: styles.value, children: [
+          /* @__PURE__ */ jsxs7("div", { style: { marginBottom: "1rem" }, children: [
+            /* @__PURE__ */ jsx12("label", { style: styles.label, children: "Send Amount:" }),
+            /* @__PURE__ */ jsxs7("div", { style: styles.valueContainer, children: [
+              /* @__PURE__ */ jsxs7("span", { style: styles.value, children: [
                 VERIFICATION_AMOUNT,
                 " ETH"
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+              /* @__PURE__ */ jsx12(
                 "button",
                 {
                   style: styles.copyButton,
@@ -1958,11 +1930,11 @@ var WalletVerificationModal = ({
               )
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("label", { style: styles.label, children: "To Address:" }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles.valueContainer, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles.value, children: CUBID_WALLET }),
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+          /* @__PURE__ */ jsxs7("div", { children: [
+            /* @__PURE__ */ jsx12("label", { style: styles.label, children: "To Address:" }),
+            /* @__PURE__ */ jsxs7("div", { style: styles.valueContainer, children: [
+              /* @__PURE__ */ jsx12("span", { style: styles.value, children: CUBID_WALLET }),
+              /* @__PURE__ */ jsx12(
                 "button",
                 {
                   style: styles.copyButton,
@@ -1973,7 +1945,7 @@ var WalletVerificationModal = ({
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+        /* @__PURE__ */ jsx12(
           "a",
           {
             href: `https://etherscan.io/address/${CUBID_WALLET}`,
@@ -1983,9 +1955,9 @@ var WalletVerificationModal = ({
             children: "View on Etherscan \u2197"
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { marginTop: "1.5rem" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: { textAlign: "center", color: "#666", margin: "0 0 1rem 0" }, children: "After sending, enter the verification amount:" }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+        /* @__PURE__ */ jsxs7("div", { style: { marginTop: "1.5rem" }, children: [
+          /* @__PURE__ */ jsx12("p", { style: { textAlign: "center", color: "#666", margin: "0 0 1rem 0" }, children: "After sending, enter the verification amount:" }),
+          /* @__PURE__ */ jsx12(
             "input",
             {
               type: "text",
@@ -1999,7 +1971,7 @@ var WalletVerificationModal = ({
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+        /* @__PURE__ */ jsx12(
           "button",
           {
             style: {
@@ -2012,7 +1984,7 @@ var WalletVerificationModal = ({
             children: "Verify Transaction"
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+        /* @__PURE__ */ jsx12(
           "button",
           {
             style: {
@@ -2029,17 +2001,17 @@ var WalletVerificationModal = ({
           }
         )
       ] }),
-      error && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles.error, children: error })
-    ] }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles.successContainer, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles.successIcon, children: "\u2713" }),
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h3", { style: { fontSize: "20px", margin: "0 0 8px 0" }, children: "Wallet Verified!" }),
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: { color: "#666", margin: 0 }, children: "Your delivery wallet has been verified with Cubid." })
+      error && /* @__PURE__ */ jsx12("div", { style: styles.error, children: error })
+    ] }) : /* @__PURE__ */ jsxs7("div", { style: styles.successContainer, children: [
+      /* @__PURE__ */ jsx12("div", { style: styles.successIcon, children: "\u2713" }),
+      /* @__PURE__ */ jsx12("h3", { style: { fontSize: "20px", margin: "0 0 8px 0" }, children: "Wallet Verified!" }),
+      /* @__PURE__ */ jsx12("p", { style: { color: "#666", margin: 0 }, children: "Your delivery wallet has been verified with Cubid." })
     ] })
   ] }) });
 };
 
 // src/component/blackListing/index.tsx
-var import_jsx_runtime13 = require("react/jsx-runtime");
+import { jsx as jsx13, jsxs as jsxs8 } from "react/jsx-runtime";
 var VerificationModal = ({
   type,
   isOpen,
@@ -2050,7 +2022,7 @@ var VerificationModal = ({
   realInfo,
   credType
 }) => {
-  const [verificationState, setVerificationState] = (0, import_react12.useState)(
+  const [verificationState, setVerificationState] = useState9(
     duplicateInfo ? "duplicate-alert" : "verification"
   );
   const styles = {
@@ -2145,10 +2117,10 @@ var VerificationModal = ({
     switch (verificationState) {
       case "duplicate-alert": {
         const content = getDuplicateContent();
-        return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: styles.title, children: content.title }),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { ...styles.description, whiteSpace: "pre-line", wordBreak: type === "wallet" ? "break-all" : "normal" }, children: content.description }),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        return /* @__PURE__ */ jsxs8("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
+          /* @__PURE__ */ jsx13("div", { style: styles.title, children: content.title }),
+          /* @__PURE__ */ jsx13("div", { style: { ...styles.description, whiteSpace: "pre-line", wordBreak: type === "wallet" ? "break-all" : "normal" }, children: content.description }),
+          /* @__PURE__ */ jsx13(
             "button",
             {
               style: styles.primaryButton,
@@ -2158,7 +2130,7 @@ var VerificationModal = ({
               children: content.primaryButton
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          /* @__PURE__ */ jsx13(
             "button",
             {
               style: styles.secondaryButton,
@@ -2179,7 +2151,7 @@ var VerificationModal = ({
       case "verification":
         switch (credType) {
           case "email":
-            return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            return /* @__PURE__ */ jsx13(
               EmailVerificationModal,
               {
                 isOpen: true,
@@ -2190,7 +2162,7 @@ var VerificationModal = ({
               }
             );
           case "phone":
-            return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            return /* @__PURE__ */ jsx13(
               PhoneVerificationModal,
               {
                 isOpen: true,
@@ -2201,7 +2173,7 @@ var VerificationModal = ({
               }
             );
           case "wallet":
-            return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            return /* @__PURE__ */ jsx13(
               WalletVerificationModal,
               {
                 isOpen: true,
@@ -2219,11 +2191,11 @@ var VerificationModal = ({
     }
   };
   if (!isOpen) return null;
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: styles.modalOverlay, onClick: onClose, children: renderContent() });
+  return /* @__PURE__ */ jsx13("div", { style: styles.modalOverlay, onClick: onClose, children: renderContent() });
 };
 
 // src/stamps/index.tsx
-var import_jsx_runtime14 = require("react/jsx-runtime");
+import { Fragment as Fragment5, jsx as jsx14, jsxs as jsxs9 } from "react/jsx-runtime";
 var useFarcasterProfile;
 var SignInButton;
 (async () => {
@@ -2311,26 +2283,26 @@ var Stamps = ({
   refresh,
   onBlacklistVerify
 }) => {
-  const [allStamps, setAllStamps] = (0, import_react13.useState)([]);
-  const [stampLoading, setStampLoading] = (0, import_react13.useState)(true);
-  const [phoneOpen, setPhoneOpen] = (0, import_react13.useState)(false);
-  const [addressOpen, setAddressOpen] = (0, import_react13.useState)(false);
-  const [verifyStampFlow, setVerifyStampFlow] = (0, import_react13.useState)(false);
-  const { address } = (0, import_wagmi3.useAccount)();
-  const { connectors, connect: connect2 } = (0, import_wagmi3.useConnect)({});
-  const { disconnect } = (0, import_wagmi3.useDisconnect)();
-  const [lensModalOpen, setLensModalOpen] = (0, import_react13.useState)(false);
-  const [blacklist, setBlacklist] = (0, import_react13.useState)(false);
-  const [blacklistCred, setBlacklistCred] = (0, import_react13.useState)({
+  const [allStamps, setAllStamps] = useState10([]);
+  const [stampLoading, setStampLoading] = useState10(true);
+  const [phoneOpen, setPhoneOpen] = useState10(false);
+  const [addressOpen, setAddressOpen] = useState10(false);
+  const [verifyStampFlow, setVerifyStampFlow] = useState10(false);
+  const { address } = useAccount2();
+  const { connectors, connect: connect2 } = useConnect2({});
+  const { disconnect } = useDisconnect2();
+  const [lensModalOpen, setLensModalOpen] = useState10(false);
+  const [blacklist, setBlacklist] = useState10(false);
+  const [blacklistCred, setBlacklistCred] = useState10({
     "type": "",
     "value": "",
     "actual": ""
   });
-  const fetchStampData = (0, import_react13.useCallback)(async () => {
+  const fetchStampData = useCallback(async () => {
     setStampLoading(true);
     try {
       onStampChange?.();
-      const response = await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/fetch_stamps", {
+      const response = await axios4.post("https://passport.cubid.me/api/v2/identity/fetch_stamps", {
         user_id: uuid,
         apikey: api_key,
         page_id
@@ -2346,10 +2318,10 @@ var Stamps = ({
     if (address) {
       const {
         data: { stamps, scores }
-      } = await import_axios4.default.post("https://passport.cubid.me/api/gitcoin-passport-data", { address });
+      } = await axios4.post("https://passport.cubid.me/api/gitcoin-passport-data", { address });
       const stampId = stampsWithId.gitcoin;
       if (scores.score !== "0E-9") {
-        await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           stamp_type: "gitcoin",
           user_data: { user_id: uuid, uuid: "" },
           stampData: {
@@ -2361,7 +2333,7 @@ var Stamps = ({
           page_id
         });
       }
-      await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+      await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
         stamp_type: "evm",
         user_data: { user_id: uuid, uuid: "" },
         stampData: {
@@ -2374,19 +2346,19 @@ var Stamps = ({
       disconnect();
     }
   };
-  (0, import_react13.useEffect)(() => {
+  useEffect8(() => {
     if (address && !localStorage.getItem("lens-loggin")) {
       connectToWeb3Node(address);
     }
   }, [connectToWeb3Node, address]);
   const { isAuthenticated: isFarcasterAuthenticated, profile } = useFarcasterProfile?.() ?? {};
-  (0, import_react13.useEffect)(() => {
+  useEffect8(() => {
     fetchStampData();
   }, [fetchStampData]);
-  (0, import_react13.useEffect)(() => {
+  useEffect8(() => {
     if (isFarcasterAuthenticated && profile?.fid && profile?.username) {
       (async () => {
-        await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           page_id,
           stamp_type: "farcaster",
           stampData: { uniquevalue: profile.fid, identity: profile.username },
@@ -2402,7 +2374,7 @@ var Stamps = ({
   const handleSocialConnect = (supabase_key) => {
     window.location.href = `https://allow.cubid.me/widget-allow?uid=${uuid}&social_provider=${supabase_key}&page_id=${page_id}`;
   };
-  (0, import_react13.useEffect)(() => {
+  useEffect8(() => {
     const interval = setInterval(() => {
       if (localStorage.getItem("logged_in") == uuid && Boolean(showAllowCreds)) {
         setVerifyStampFlow(true);
@@ -2414,7 +2386,7 @@ var Stamps = ({
       clearInterval(interval);
     };
   }, [uuid, showAllowCreds, refresh]);
-  const fetchNearWallet = (0, import_react13.useCallback)(async () => {
+  const fetchNearWallet = useCallback(async () => {
     if (wallet?.accountId) {
       const dataCategory = await wallet.viewMethod({
         contractId: "registry.i-am-human.near",
@@ -2425,7 +2397,7 @@ var Stamps = ({
         }
       });
       if (uuid) {
-        await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           stamp_type: "iah",
           user_data: { uuid },
           stampData: {
@@ -2434,7 +2406,7 @@ var Stamps = ({
           },
           page_id
         });
-        await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           stamp_type: "near-wallet",
           user_data: { uuid },
           stampData: {
@@ -2447,13 +2419,13 @@ var Stamps = ({
       }
     }
   }, []);
-  const [gitcoinModalOpen, setGitcoinModalOpen] = (0, import_react13.useState)(false);
-  const { publicKey, connected: solConnected } = (0, import_wallet_adapter_react2.useWallet)();
-  (0, import_react13.useEffect)(() => {
+  const [gitcoinModalOpen, setGitcoinModalOpen] = useState10(false);
+  const { publicKey, connected: solConnected } = useSolanaWallet();
+  useEffect8(() => {
     (async () => {
       if (!doesStampExist(stampsWithId["solana"]) && solConnected) {
         const string_publicKey = publicKey?.toString();
-        await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           stamp_type: "solana",
           user_data: { uuid },
           stampData: {
@@ -2466,7 +2438,7 @@ var Stamps = ({
       }
     })();
   }, [publicKey, solConnected]);
-  const [showTelegramScript, setShowTelegramScript] = (0, import_react13.useState)(false);
+  const [showTelegramScript, setShowTelegramScript] = useState10(false);
   function detectInputFormat(input) {
     if (typeof input !== "string") {
       return "invalid";
@@ -2483,8 +2455,8 @@ var Stamps = ({
     }
     return "unknown";
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(import_jsx_runtime14.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+  return /* @__PURE__ */ jsxs9(Fragment5, { children: [
+    /* @__PURE__ */ jsx14(
       VerificationModal,
       {
         type: blacklistCred.type,
@@ -2508,7 +2480,7 @@ var Stamps = ({
       }
     ),
     console.log({ blacklistCred }),
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+    /* @__PURE__ */ jsxs9(
       "div",
       {
         style: {
@@ -2517,7 +2489,7 @@ var Stamps = ({
           pointerEvents: stampLoading ? "none" : "auto"
         },
         children: [
-          socialDataToMap.filter((item) => item.supabase_key === stampToRender).map((item) => /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+          socialDataToMap.filter((item) => item.supabase_key === stampToRender).map((item) => /* @__PURE__ */ jsxs9(
             "div",
             {
               style: {
@@ -2530,8 +2502,8 @@ var Stamps = ({
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                /* @__PURE__ */ jsxs9("div", { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" }, children: [
+                  /* @__PURE__ */ jsx14(
                     "img",
                     {
                       src: item.image,
@@ -2539,14 +2511,14 @@ var Stamps = ({
                       style: { marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" }
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { style: { fontSize: "20px", fontWeight: "bold" }, children: item.title }),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: { fontSize: "14px", color: "#666", marginTop: "4px" }, children: showAllowCreds ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "font-bold", children: "You need to verify your stamp" }) : doesStampExist(item.stampTypeId) ? `Your ${item.supabase_key} account is verified` : `Connect your ${item.supabase_key} to verify` })
+                  /* @__PURE__ */ jsx14("h2", { style: { fontSize: "20px", fontWeight: "bold" }, children: item.title }),
+                  /* @__PURE__ */ jsx14("p", { style: { fontSize: "14px", color: "#666", marginTop: "4px" }, children: showAllowCreds ? /* @__PURE__ */ jsx14("span", { className: "font-bold", children: "You need to verify your stamp" }) : doesStampExist(item.stampTypeId) ? `Your ${item.supabase_key} account is verified` : `Connect your ${item.supabase_key} to verify` })
                 ] }),
-                verifyStampFlow ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(AdvancedCredentialCollection, { uuid, refresh: () => {
+                verifyStampFlow ? /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsx14(AdvancedCredentialCollection, { uuid, refresh: () => {
                   setVerifyStampFlow(false);
                   refresh();
-                }, allStampIds, email, apikey: api_key }) }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { display: "flex", justifyContent: "space-between", marginTop: "16px" }, children: showAllowCreds ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                }, allStampIds, email, apikey: api_key }) }) : /* @__PURE__ */ jsx14("div", { style: { display: "flex", justifyContent: "space-between", marginTop: "16px" }, children: showAllowCreds ? /* @__PURE__ */ jsxs9("div", { children: [
+                  /* @__PURE__ */ jsx14(
                     "button",
                     {
                       style: {
@@ -2562,12 +2534,12 @@ var Stamps = ({
                       children: "Verify Stamp"
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { paddingLeft: 10 }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(InfoTooltip, { content: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("p", { style: { fontSize: 14, color: "red" }, children: [
+                  /* @__PURE__ */ jsx14("span", { style: { paddingLeft: 10 }, children: /* @__PURE__ */ jsx14(InfoTooltip, { content: /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsxs9("p", { style: { fontSize: 14, color: "red" }, children: [
                     "We found a cubid credential for a different app.",
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("br", {}),
+                    /* @__PURE__ */ jsx14("br", {}),
                     " Send a one time passcode to verify it"
                   ] }) }) }) })
-                ] }) : doesStampExist(item.stampTypeId) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                ] }) : doesStampExist(item.stampTypeId) ? /* @__PURE__ */ jsx14(
                   "button",
                   {
                     style: {
@@ -2579,7 +2551,7 @@ var Stamps = ({
                     },
                     children: "Verified Stamp"
                   }
-                ) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                ) : /* @__PURE__ */ jsx14(
                   "button",
                   {
                     onClick: () => handleSocialConnect(item.supabase_key),
@@ -2597,7 +2569,7 @@ var Stamps = ({
             },
             item.supabase_key
           )),
-          stampToRender === "iah" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: {
+          stampToRender === "iah" && /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsxs9("div", { style: {
             border: "1px solid #ccc",
             width: isGrid ? "100%" : "300px",
             height: "190px",
@@ -2606,8 +2578,8 @@ var Stamps = ({
             marginBottom: "16px",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center space-x-4", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+            /* @__PURE__ */ jsxs9("div", { className: "flex items-center space-x-4", children: [
+              /* @__PURE__ */ jsx14(
                 "img",
                 {
                   src: "data:image/png;base64,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",
@@ -2615,15 +2587,15 @@ var Stamps = ({
                   className: "mb-1 size-10 rounded-md"
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { className: "font-bold", children: "I-Am-Human" })
+              /* @__PURE__ */ jsx14("h2", { className: "font-bold", children: "I-Am-Human" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { children: doesStampExist(stampsWithId["iah"]) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-green-600", children: "Your NEAR account is verified" }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "Use a NEAR wallet to connect your IAH-verified account" }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "mt-4", children: false ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex justify-between", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: {
+            /* @__PURE__ */ jsx14("div", { children: doesStampExist(stampsWithId["iah"]) ? /* @__PURE__ */ jsx14("p", { className: "text-green-600", children: "Your NEAR account is verified" }) : /* @__PURE__ */ jsx14("p", { children: "Use a NEAR wallet to connect your IAH-verified account" }) }),
+            /* @__PURE__ */ jsx14("div", { className: "mt-4", children: false ? /* @__PURE__ */ jsxs9("div", { className: "flex justify-between", children: [
+              /* @__PURE__ */ jsx14("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ jsx14("button", { style: {
                 borderRadius: 10
               }, className: "bg-green-500 text-white px-4 py-2 rounded", children: "Verified Stamp" }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "relative" })
-            ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+              /* @__PURE__ */ jsx14("div", { className: "relative" })
+            ] }) : /* @__PURE__ */ jsx14(
               "button",
               {
                 onClick: () => {
@@ -2637,8 +2609,8 @@ var Stamps = ({
               }
             ) })
           ] }) }),
-          stampToRender === "brightid" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "brightid" }),
-          stampToRender === "gitcoin" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+          stampToRender === "brightid" && /* @__PURE__ */ jsx14("p", { children: "brightid" }),
+          stampToRender === "gitcoin" && /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsxs9(
             "div",
             {
               style: {
@@ -2651,8 +2623,8 @@ var Stamps = ({
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "items-center", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                /* @__PURE__ */ jsxs9("div", { className: "items-center", children: [
+                  /* @__PURE__ */ jsx14(
                     "img",
                     {
                       src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAP1BMVEUAQzsAQzsAQzsAPTQAQDgANy2WpaM/Yl0ALiP///+otbMACAAAJxpSb2rd4uJogXzK0dCBlZIjUUq7xcTz9fUp8LglAAAAAnRSTlMm5BIqaH0AAADfSURBVHgBfNKBCsMgDEXRzSQ2z0a12v//1tUyoM61FxTgYCDg6/V2N71nG9Q9dEFiJ3yD5BfxC/9HRVgRjO4wIvmsMiMZvnnlH2RJSFFNY0ESHlETEPSckJF0QPHICHLkRBI2uqIiWa7ii7cNaHJ9SRGZSBN2AGUvOuCGyseV14ywNgwoHtQvI4O3ABtww8IU0ZaGJGUfXnKFF6ceQAMQ5Ip9TXVOaq7qyu+eFFGMHdNxrMEG7CMLK/U0jNi1L7/lo1gmdFIbvs3oWLTGs4Un7NFZtxHnnvH5U3+GLzsAAOyFDgN+WSNyAAAAAElFTkSuQmCC",
@@ -2660,15 +2632,15 @@ var Stamps = ({
                       className: "mb-1 size-10 rounded-md"
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { className: "font-bold", children: "Gitcoin Passport" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-gray-600", children: "Connect to import your existing Gitcoin Passport" })
+                  /* @__PURE__ */ jsxs9("div", { children: [
+                    /* @__PURE__ */ jsx14("h2", { className: "font-bold", children: "Gitcoin Passport" }),
+                    /* @__PURE__ */ jsx14("p", { className: "text-gray-600", children: "Connect to import your existing Gitcoin Passport" })
                   ] })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "mt-2", children: doesStampExist(stampsWithId.gitcoin) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { display: "flex", justifyContent: "space-between" }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: { borderRadius: 10 }, className: "bg-green-500 text-white px-4 py-2 rounded", children: "Verified Stamp" }) }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(import_jsx_runtime14.Fragment, { children: [
-                  gitcoinModalOpen && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "bg-white rounded-lg p-6 w-96", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-xl font-bold mb-2", children: "Connect Web3 Wallet for Gitcoin Passport" }),
-                    connectors.map((connector) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                /* @__PURE__ */ jsx14("div", { className: "mt-2", children: doesStampExist(stampsWithId.gitcoin) ? /* @__PURE__ */ jsx14("div", { style: { display: "flex", justifyContent: "space-between" }, children: /* @__PURE__ */ jsx14("button", { style: { borderRadius: 10 }, className: "bg-green-500 text-white px-4 py-2 rounded", children: "Verified Stamp" }) }) : /* @__PURE__ */ jsxs9(Fragment5, { children: [
+                  gitcoinModalOpen && /* @__PURE__ */ jsx14("div", { className: "fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50", children: /* @__PURE__ */ jsxs9("div", { className: "bg-white rounded-lg p-6 w-96", children: [
+                    /* @__PURE__ */ jsx14("p", { className: "text-xl font-bold mb-2", children: "Connect Web3 Wallet for Gitcoin Passport" }),
+                    connectors.map((connector) => /* @__PURE__ */ jsx14(
                       "button",
                       {
                         className: "bg-blue-500 text-white px-4 py-2 rounded w-full mb-4",
@@ -2677,7 +2649,7 @@ var Stamps = ({
                       },
                       connector.uid
                     )),
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                    /* @__PURE__ */ jsx14(
                       "button",
                       {
                         className: "mt-4 text-red-500",
@@ -2687,7 +2659,7 @@ var Stamps = ({
                       }
                     )
                   ] }) }),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                  /* @__PURE__ */ jsx14(
                     "button",
                     {
                       className: "bg-blue-500 text-white px-4 py-2 rounded",
@@ -2699,9 +2671,9 @@ var Stamps = ({
               ]
             }
           ) }),
-          stampToRender === "instagram" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "instagram" }),
-          stampToRender === "gooddollar" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "gooddollar" }),
-          stampToRender === "near-wallet" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: {
+          stampToRender === "instagram" && /* @__PURE__ */ jsx14("p", { children: "instagram" }),
+          stampToRender === "gooddollar" && /* @__PURE__ */ jsx14("p", { children: "gooddollar" }),
+          stampToRender === "near-wallet" && /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsxs9("div", { style: {
             border: "1px solid #ccc",
             width: isGrid ? "100%" : "300px",
             height: "190px",
@@ -2710,8 +2682,8 @@ var Stamps = ({
             marginBottom: "16px",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center space-x-4", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+            /* @__PURE__ */ jsxs9("div", { className: "flex items-center space-x-4", children: [
+              /* @__PURE__ */ jsx14(
                 "img",
                 {
                   src: "data:image/png;base64,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",
@@ -2719,15 +2691,15 @@ var Stamps = ({
                   className: "mb-1 size-10 rounded-md"
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { className: "font-bold", children: "Near" })
+              /* @__PURE__ */ jsx14("h2", { className: "font-bold", children: "Near" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { children: doesStampExist(stampsWithId["iah"]) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-green-600", children: "Your NEAR account is verified" }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "Use a NEAR wallet" }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "mt-4", children: false ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex justify-between", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: {
+            /* @__PURE__ */ jsx14("div", { children: doesStampExist(stampsWithId["iah"]) ? /* @__PURE__ */ jsx14("p", { className: "text-green-600", children: "Your NEAR account is verified" }) : /* @__PURE__ */ jsx14("p", { children: "Use a NEAR wallet" }) }),
+            /* @__PURE__ */ jsx14("div", { className: "mt-4", children: false ? /* @__PURE__ */ jsxs9("div", { className: "flex justify-between", children: [
+              /* @__PURE__ */ jsx14("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ jsx14("button", { style: {
                 borderRadius: 10
               }, className: "bg-green-500 text-white px-4 py-2 rounded", children: "Verified Stamp" }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "relative" })
-            ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+              /* @__PURE__ */ jsx14("div", { className: "relative" })
+            ] }) : /* @__PURE__ */ jsx14(
               "button",
               {
                 onClick: () => {
@@ -2741,8 +2713,8 @@ var Stamps = ({
               }
             ) })
           ] }) }),
-          stampToRender === "fractal" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "fractal" }),
-          stampToRender === "solana" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: {
+          stampToRender === "fractal" && /* @__PURE__ */ jsx14("p", { children: "fractal" }),
+          stampToRender === "solana" && /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsxs9("div", { style: {
             border: "1px solid #ccc",
             width: isGrid ? "100%" : "300px",
             height: "190px",
@@ -2751,8 +2723,8 @@ var Stamps = ({
             marginBottom: "16px",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "items-center", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+            /* @__PURE__ */ jsxs9("div", { className: "items-center", children: [
+              /* @__PURE__ */ jsx14(
                 "img",
                 {
                   src: "data:image/webp;base64,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",
@@ -2764,11 +2736,11 @@ var Stamps = ({
                   }
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { className: "font-bold", children: "Solana" }),
-                doesStampExist(stampsWithId["solana"]) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center space-x-1", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-gray-600", children: "Your Solana address is verified" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+              /* @__PURE__ */ jsxs9("div", { children: [
+                /* @__PURE__ */ jsx14("h2", { className: "font-bold", children: "Solana" }),
+                doesStampExist(stampsWithId["solana"]) ? /* @__PURE__ */ jsxs9("div", { className: "flex items-center space-x-1", children: [
+                  /* @__PURE__ */ jsx14("p", { className: "text-gray-600", children: "Your Solana address is verified" }),
+                  /* @__PURE__ */ jsx14(
                     "svg",
                     {
                       xmlns: "http://www.w3.org/2000/svg",
@@ -2777,7 +2749,7 @@ var Stamps = ({
                       strokeWidth: 1.5,
                       stroke: "#00e64d",
                       className: "size-6",
-                      children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                      children: /* @__PURE__ */ jsx14(
                         "path",
                         {
                           strokeLinecap: "round",
@@ -2787,10 +2759,10 @@ var Stamps = ({
                       )
                     }
                   )
-                ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-gray-600", children: "Connect to Solana" })
+                ] }) : /* @__PURE__ */ jsx14("p", { className: "text-gray-600", children: "Connect to Solana" })
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "mt-4", children: doesStampExist(stampsWithId["solana"]) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { display: "flex", justifyContent: "space-between" }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+            /* @__PURE__ */ jsx14("div", { className: "mt-4", children: doesStampExist(stampsWithId["solana"]) ? /* @__PURE__ */ jsx14("div", { style: { display: "flex", justifyContent: "space-between" }, children: /* @__PURE__ */ jsx14(
               "button",
               {
                 onClick: () => {
@@ -2801,9 +2773,9 @@ var Stamps = ({
                 className: "bg-green-500 text-white px-4 py-2 rounded",
                 children: "Solana Connected"
               }
-            ) }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_wallet_adapter_react_ui2.WalletMultiButton, {}) }) })
+            ) }) : /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsx14(WalletMultiButton, {}) }) })
           ] }) }),
-          stampToRender === "telegram" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: {
+          stampToRender === "telegram" && /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsxs9("div", { style: {
             border: "1px solid #ccc",
             width: isGrid ? "100%" : "300px",
             height: "190px",
@@ -2812,8 +2784,8 @@ var Stamps = ({
             marginBottom: "16px",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "items-center", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+            /* @__PURE__ */ jsxs9("div", { className: "items-center", children: [
+              /* @__PURE__ */ jsx14(
                 "img",
                 {
                   src: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/2048px-Telegram_2019_Logo.svg.png",
@@ -2821,11 +2793,11 @@ var Stamps = ({
                   className: "mb-1 size-10 rounded-md object-cover"
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { className: "font-bold", children: "Telegram" }),
-                doesStampExist(stampsWithId.telegram) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center space-x-1", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-gray-600", children: "Your telegram is verified" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+              /* @__PURE__ */ jsxs9("div", { children: [
+                /* @__PURE__ */ jsx14("h2", { className: "font-bold", children: "Telegram" }),
+                doesStampExist(stampsWithId.telegram) ? /* @__PURE__ */ jsxs9("div", { className: "flex items-center space-x-1", children: [
+                  /* @__PURE__ */ jsx14("p", { className: "text-gray-600", children: "Your telegram is verified" }),
+                  /* @__PURE__ */ jsx14(
                     "svg",
                     {
                       xmlns: "http://www.w3.org/2000/svg",
@@ -2834,7 +2806,7 @@ var Stamps = ({
                       strokeWidth: 1.5,
                       stroke: "#00e64d",
                       className: "size-6",
-                      children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                      children: /* @__PURE__ */ jsx14(
                         "path",
                         {
                           strokeLinecap: "round",
@@ -2844,11 +2816,11 @@ var Stamps = ({
                       )
                     }
                   )
-                ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-gray-600", children: "Verify your telegram" })
+                ] }) : /* @__PURE__ */ jsx14("p", { className: "text-gray-600", children: "Verify your telegram" })
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "mt-4", children: doesStampExist(stampsWithId.telegram) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { display: "flex", justifyContent: "space-between" }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { className: "bg-green-500 text-white px-4 py-2 rounded", children: "Verified Stamp" }) }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(import_jsx_runtime14.Fragment, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+            /* @__PURE__ */ jsx14("div", { className: "mt-4", children: doesStampExist(stampsWithId.telegram) ? /* @__PURE__ */ jsx14("div", { style: { display: "flex", justifyContent: "space-between" }, children: /* @__PURE__ */ jsx14("button", { className: "bg-green-500 text-white px-4 py-2 rounded", children: "Verified Stamp" }) }) : /* @__PURE__ */ jsxs9(Fragment5, { children: [
+              /* @__PURE__ */ jsx14(
                 "button",
                 {
                   onClick: () => {
@@ -2858,7 +2830,7 @@ var Stamps = ({
                   children: "Connect Telegram"
                 }
               ),
-              showTelegramScript && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "p-3", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+              showTelegramScript && /* @__PURE__ */ jsx14("div", { className: "p-3", children: /* @__PURE__ */ jsx14(
                 "script",
                 {
                   async: true,
@@ -2871,8 +2843,8 @@ var Stamps = ({
               ) })
             ] }) })
           ] }) }),
-          stampToRender === "worldcoin" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "worldcoin" }),
-          stampToRender === "near" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: {
+          stampToRender === "worldcoin" && /* @__PURE__ */ jsx14("p", { children: "worldcoin" }),
+          stampToRender === "near" && /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsxs9("div", { style: {
             border: "1px solid #ccc",
             width: isGrid ? "100%" : "300px",
             height: "190px",
@@ -2881,8 +2853,8 @@ var Stamps = ({
             marginBottom: "16px",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center space-x-4", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+            /* @__PURE__ */ jsxs9("div", { className: "flex items-center space-x-4", children: [
+              /* @__PURE__ */ jsx14(
                 "img",
                 {
                   src: "data:image/png;base64,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",
@@ -2890,15 +2862,15 @@ var Stamps = ({
                   className: "mb-1 size-10 rounded-md"
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { className: "font-bold", children: "Near" })
+              /* @__PURE__ */ jsx14("h2", { className: "font-bold", children: "Near" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { children: doesStampExist(stampsWithId["iah"]) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-green-600", children: "Your NEAR account is verified" }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "Use a NEAR wallet" }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "mt-4", children: false ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex justify-between", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: {
+            /* @__PURE__ */ jsx14("div", { children: doesStampExist(stampsWithId["iah"]) ? /* @__PURE__ */ jsx14("p", { className: "text-green-600", children: "Your NEAR account is verified" }) : /* @__PURE__ */ jsx14("p", { children: "Use a NEAR wallet" }) }),
+            /* @__PURE__ */ jsx14("div", { className: "mt-4", children: false ? /* @__PURE__ */ jsxs9("div", { className: "flex justify-between", children: [
+              /* @__PURE__ */ jsx14("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ jsx14("button", { style: {
                 borderRadius: 10
               }, className: "bg-green-500 text-white px-4 py-2 rounded", children: "Verified Stamp" }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "relative" })
-            ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+              /* @__PURE__ */ jsx14("div", { className: "relative" })
+            ] }) : /* @__PURE__ */ jsx14(
               "button",
               {
                 onClick: () => {
@@ -2912,7 +2884,7 @@ var Stamps = ({
               }
             ) })
           ] }) }),
-          stampToRender === "lens-protocol" && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+          stampToRender === "lens-protocol" && /* @__PURE__ */ jsxs9(
             "div",
             {
               style: {
@@ -2924,8 +2896,8 @@ var Stamps = ({
                 height: "auto"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "mb-3", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                /* @__PURE__ */ jsxs9("div", { className: "mb-3", children: [
+                  /* @__PURE__ */ jsx14(
                     "img",
                     {
                       src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAZlBMVEX////r6+uDg4VMTU9TVFaYmJn6+vrCw8MAAAAfICQlJioaGx/k5eXy8vIpKi4sLTCwsLFub3FcXV4XGB0VFxvc3N3Ozs55enshIyZDREcJDBKAgYK6urs1Njk8PD+bm53V1danqKn7JVr2AAAAm0lEQVR4AdXOxQGAIABAUZVuu3P/Ie2WBfwXhUc5v831AETYboQyzoWQNlNMmzkOnGd+EHrSj8xanKRZmJHDYJxzlhd6Qw2inOdltZm3bVnt+inr9Y3zyBKHCyalsaUbNaMUdmzV+h5uQ7a9iJS2jZG7Pbcr9cfK1Nmrc/Y00fTOmazKi7UQSF22cRkLxkRc8ouuEtIhNBDX+WkTbzIRXoEbjE4AAAAASUVORK5CYII=",
@@ -2933,10 +2905,10 @@ var Stamps = ({
                       className: "mb-1 w-10 h-10 rounded-md"
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h3", { className: "text-xl font-bold", children: "Lens Protocol" }),
-                  doesStampExist(stampsWithId["lens-protocol"]) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center space-x-1 text-sm text-gray-600 mt-1", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { children: "Your Lens Protocol is verified" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                  /* @__PURE__ */ jsx14("h3", { className: "text-xl font-bold", children: "Lens Protocol" }),
+                  doesStampExist(stampsWithId["lens-protocol"]) ? /* @__PURE__ */ jsxs9("div", { className: "flex items-center space-x-1 text-sm text-gray-600 mt-1", children: [
+                    /* @__PURE__ */ jsx14("p", { children: "Your Lens Protocol is verified" }),
+                    /* @__PURE__ */ jsx14(
                       "svg",
                       {
                         xmlns: "http://www.w3.org/2000/svg",
@@ -2945,7 +2917,7 @@ var Stamps = ({
                         strokeWidth: 1.5,
                         stroke: "#00e64d",
                         className: "w-6 h-6",
-                        children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                        children: /* @__PURE__ */ jsx14(
                           "path",
                           {
                             strokeLinecap: "round",
@@ -2955,14 +2927,14 @@ var Stamps = ({
                         )
                       }
                     )
-                  ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-sm texAccountt-gray-600 mt-1", children: "Use a Lens Protocol" })
+                  ] }) : /* @__PURE__ */ jsx14("p", { className: "text-sm texAccountt-gray-600 mt-1", children: "Use a Lens Protocol" })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { children: doesStampExist(stampsWithId["lens-protocol"]) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Button, { children: "Verified Stamp" }) }) }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: address ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                /* @__PURE__ */ jsx14("div", { children: doesStampExist(stampsWithId["lens-protocol"]) ? /* @__PURE__ */ jsx14("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ jsx14("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ jsx14(Button, { children: "Verified Stamp" }) }) }) : /* @__PURE__ */ jsx14(Fragment5, { children: address ? /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsx14(
                   LoginOptions,
                   {
                     wallet: address ?? "",
                     onSuccess: async (args) => {
-                      await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+                      await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
                         page_id,
                         stamp_type: "lens-protocol",
                         stampData: {
@@ -2977,8 +2949,8 @@ var Stamps = ({
                       fetchStampData();
                     }
                   }
-                ) }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(import_jsx_runtime14.Fragment, { children: [
-                  lensModalOpen && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+                ) }) : /* @__PURE__ */ jsxs9(Fragment5, { children: [
+                  lensModalOpen && /* @__PURE__ */ jsxs9(
                     "div",
                     {
                       style: {
@@ -2988,8 +2960,8 @@ var Stamps = ({
                         marginTop: "8px"
                       },
                       children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-lg font-semibold mb-2", children: "Connect Web3 Wallet for Lens" }),
-                        connectors.map((connector) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                        /* @__PURE__ */ jsx14("p", { className: "text-lg font-semibold mb-2", children: "Connect Web3 Wallet for Lens" }),
+                        connectors.map((connector) => /* @__PURE__ */ jsx14(
                           Button,
                           {
                             variant: "secondary",
@@ -3006,7 +2978,7 @@ var Stamps = ({
                       ]
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                  /* @__PURE__ */ jsx14(
                     Button,
                     {
                       variant: "outline",
@@ -3022,7 +2994,7 @@ var Stamps = ({
               ]
             }
           ),
-          stampToRender === "phone" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          stampToRender === "phone" && /* @__PURE__ */ jsx14(
             "div",
             {
               style: {
@@ -3033,8 +3005,8 @@ var Stamps = ({
                 marginBottom: "16px",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
               },
-              children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+              children: /* @__PURE__ */ jsxs9("div", { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" }, children: [
+                /* @__PURE__ */ jsx14(
                   "img",
                   {
                     src: "https://i.pinimg.com/736x/84/4e/8c/844e8cd4ab26c82286238471f0e5a901.jpg",
@@ -3042,8 +3014,8 @@ var Stamps = ({
                     style: { marginBottom: "8px", width: "40px", height: "40px", borderRadius: "8px" }
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { style: { fontSize: "20px", fontWeight: "bold" }, children: "Phone" }),
-                doesStampExist(stampsWithId.phone) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                /* @__PURE__ */ jsx14("h2", { style: { fontSize: "20px", fontWeight: "bold" }, children: "Phone" }),
+                doesStampExist(stampsWithId.phone) ? /* @__PURE__ */ jsx14(
                   "button",
                   {
                     style: {
@@ -3055,9 +3027,9 @@ var Stamps = ({
                     },
                     children: "Verified Stamp"
                   }
-                ) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { borderRadius: "8px", padding: "8px 12px" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: { fontSize: "14px", color: "#666" }, children: "Connect your phone" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                ) : /* @__PURE__ */ jsxs9("div", { style: { borderRadius: "8px", padding: "8px 12px" }, children: [
+                  /* @__PURE__ */ jsx14("p", { style: { fontSize: "14px", color: "#666" }, children: "Connect your phone" }),
+                  /* @__PURE__ */ jsx14(
                     "button",
                     {
                       onClick: () => {
@@ -3078,8 +3050,8 @@ var Stamps = ({
               ] })
             }
           ),
-          stampToRender === "farcaster" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: `border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md`, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex flex-col items-start", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          stampToRender === "farcaster" && /* @__PURE__ */ jsx14("div", { className: `border ${isGrid ? "w-full" : "w-[300px]"} rounded-xl p-4 px-6 mb-4 shadow-md`, children: /* @__PURE__ */ jsxs9("div", { className: "flex flex-col items-start", children: [
+            /* @__PURE__ */ jsx14(
               "img",
               {
                 src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB0LwYIlZ9aYglKkSRuhEH0TM6VkCmqRqXpQ&s",
@@ -3087,10 +3059,10 @@ var Stamps = ({
                 className: "mb-1 size-10 rounded-md"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { className: "text-xl font-bold", children: "Farcaster" }),
-            doesStampExist(4) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "text-sm text-gray-600 mt-1", children: "Your Farcaster is verified" }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "bg-white w-[fit-content] rounded-lg mt-2", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(SignInButton, {}) })
+            /* @__PURE__ */ jsx14("h2", { className: "text-xl font-bold", children: "Farcaster" }),
+            doesStampExist(4) ? /* @__PURE__ */ jsx14("p", { className: "text-sm text-gray-600 mt-1", children: "Your Farcaster is verified" }) : /* @__PURE__ */ jsx14("div", { className: "bg-white w-[fit-content] rounded-lg mt-2", children: /* @__PURE__ */ jsx14(SignInButton, {}) })
           ] }) }),
-          stampToRender === "address" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          stampToRender === "address" && /* @__PURE__ */ jsx14(Fragment5, { children: /* @__PURE__ */ jsx14(
             "div",
             {
               style: {
@@ -3105,7 +3077,7 @@ var Stamps = ({
                 boxShadow: "0 1px 2px rgba(0,0,0,0.05)"
                 // shadow-md
               },
-              children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+              children: /* @__PURE__ */ jsxs9(
                 "div",
                 {
                   style: {
@@ -3114,7 +3086,7 @@ var Stamps = ({
                     alignItems: "flex-start"
                   },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                    /* @__PURE__ */ jsx14(
                       "img",
                       {
                         src: "https://thumbs.dreamstime.com/b/destination-place-pin-red-pointer-map-position-mark-125211341.jpg",
@@ -3131,7 +3103,7 @@ var Stamps = ({
                         }
                       }
                     ),
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                    /* @__PURE__ */ jsx14(
                       "h2",
                       {
                         style: {
@@ -3143,7 +3115,7 @@ var Stamps = ({
                         children: "Address"
                       }
                     ),
-                    doesStampExist(stampsWithId.address) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                    doesStampExist(stampsWithId.address) ? /* @__PURE__ */ jsx14(
                       "p",
                       {
                         style: {
@@ -3156,7 +3128,7 @@ var Stamps = ({
                         },
                         children: "Your Address is added"
                       }
-                    ) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+                    ) : /* @__PURE__ */ jsxs9(
                       "div",
                       {
                         style: {
@@ -3165,7 +3137,7 @@ var Stamps = ({
                           // rounded-lg
                         },
                         children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                          /* @__PURE__ */ jsx14(
                             "p",
                             {
                               style: {
@@ -3177,7 +3149,7 @@ var Stamps = ({
                               children: "Add your address"
                             }
                           ),
-                          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                          /* @__PURE__ */ jsx14(
                             "button",
                             {
                               onClick: () => setAddressOpen(true),
@@ -3206,7 +3178,7 @@ var Stamps = ({
               )
             }
           ) }),
-          stampToRender === "evm" && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+          stampToRender === "evm" && /* @__PURE__ */ jsxs9(
             "div",
             {
               style: {
@@ -3219,8 +3191,8 @@ var Stamps = ({
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { alignItems: "center" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                /* @__PURE__ */ jsxs9("div", { style: { alignItems: "center" }, children: [
+                  /* @__PURE__ */ jsx14(
                     "img",
                     {
                       src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAilBMVEX///+MjIw0NDQUFBQ5OTk8PDuPj48vLy9kZGQqKio4ODcAAABnZ2aBgYGJiYmEhIT39/fj4+MZGRkdHR3p6ena2tp7e3tEREQkJCTExMTR0dHx8fEbGxmXl5cODg5zc3OwsLBZWVmsrKyjo6O6urpOTk6dnZ3KysrV1dVdXVxISEgbGxpubm5RUVDZUcRMAAAKLklEQVR4nN2da3ubOBBGF9lAMDFOQi7kYsdN3CRt0v//9xZfQTAjzWCjEX6/tk9XZy0fjTVI/Pef47y7/g+6ztffR+kh9JzsIpEeQr9ZZRf5XHoQfeZ5Gl3Ei1vpYfSYj6wkjP9ID6O/fM2CklDdnK9ssmBDqGLpgfSV1Z6wOFPZ3E6DHaE6U9nMswPhecrmaRYcCM9TNhvAPaE6w8pmmWmERSQ9oFNno5ka4fnJZp41CONf0kM6bbaaqROqm5X0oE6aPWCN8Lxks9NMgzCQHtbpsteMTqgW19IDO1nmGUh4PrL5PHwLdUL1fS6yqQHqhKqQHtppUmmmRZhk0oM7RWqaaRGeh2zmmYEw/ic9vONT10ybUOWDl82VDtgiHL5s3jILYTKTHuJxuZ4GFsKhy2YeWAnj39KDPCYNzYCEg5ZNUzMwocqlx9k9Tc0ghMlUeqBd09IMQqgWd9JD7ZioDQgTDlU2bc1ghCpfSg+2SwDNoIQqv5IebocAmsEJhygbSDM44RBlA2nGQBj/lR4wN4/gtxAnHJxsruA5aiBUN8OSzTuoGSNhci89aE4QzRgJhyUbRDNmwvhBetj0YJoxE6r8TXrg1KCasRAORzaoZmyEQ5ENrhkboVp8SQ+eFAOfjXAYsjFoxko4CNmYNGMnVCP/ZWPSDIEweZUGsOXOOEfthGrxJI1giZmPQBiH0gjmmDVDIVSF1ycyLJohEarRszSGIRbN0AiTH2kMPDbN0AjVyF/ZWPlohP7KZmWdozRCb2XzbNUMlVAt/JSNXTNkQj9lQ9AMmVCNPqVxgFA+QTJhPJHGaYeiGTqhKj6kgZohaYZB6J9sPmgfIZ0wuZRG0vNF0gyH0DfZED9BDmGspKHqIWqGReiVbKia4RH6JBuqZpiE8YU02D5kzTAJ/ZEN/RNkEvpyYJiuGTahHweGGZphE/pxho+hGT6hD7LhaIZP6MOBYdYnyCeUlw1LM10IpWXD08ya8JJJKC2bOe8jjKLXccIklL2d4ImlmSj4CVWyGDEZRWXDAYyyC6XG42RUpmAhCh4YXjIq7tmvuOTbEY4WBePrKHc7wS1VM1F0/3vLtycsGXPGzygp2RA1U+rlIZ6MxzphyXhD/UJKHRimaWajlwNfnbBkpEpHSDYUwJ1exjAhXToisiFo5qAXAyFNOhKysWqmrhcTIU06Amf4LJrR9WImpEjHvWzMmmnqxUZIkI7z2wlMgG292Ant0nF8YNigGUgvNEKzdNxehYJqBtELkdAsHaeyQTSD6oVMaJKOy9sJwHN3JR+qFwahQToODwyDBwtNemERrgNLx5lsAM1Y9MImhKXj6iqUlmbseuETwtJxJJt5k8+uly6EkHTcHBjWNWOoXo4mBKTjQjba8V6qXroSrqNLx4Fsasd76Xo5hlCXTv9XoRwOxLD0chShLp3ez/BFnfRyJGFdOn3LZqsZtl6OJqxJp98DwxvNdNDLCQjX2Uqn19sJSs100suJCLfS6fN2gutZR72cinArnR5lM++ql9MRrqVT9HY7wdciOZbvBISjUZr2dlzh9iI/GvH4zzD91Wcb43OcCBOmN30/KPV+EwsSpqmDBxaff76lVotFeuHmccWnhyOm6hGEaeLuQNRb3nmqdiZMU6dnha7ubzpO1Y6Ei/TV9Rnou9+FO8JFOpa4+GSZdJmqXQjTdCnAt0424k9VPmGaCl4Edv2r4BY5XMJF+lf2gtNVzFw5mIRp6rJvCMtszpuqLMI0hVtqvWn1DfyXefU4Z0cYqbGf73sjvH2Fn2vh1ON0whR5iuY97XHleJxG8L/+QS4AqIRYjf0ZjnqtbT6y2TtY/D7/5KfsPWE19vNPofp93vRqFmRT2G7EepxEiNXYHy8qLHr+efE1DYIsg69zItXjBEKsxn6cxGFY9P6I26ZvMfsA/0dS6nErIVZj3/4pxmEYO7gObLOrj01Vez1uIVykE9hl0cskDMOJiwsldi3gLIO/KsvCPFXNhFiNvYrLCVrmxclPjP0tO7M5vOdlrsdNhFiNffcv2fCFiaNjpfunabLpEvxzYz2OE2I19tX0e7IFnLh6fK+6SSibwVt7hnocJcRq7GWhwl36Xiiq1B5MnEXwb5sIm6oIIVZjf/1NwgOgw58Z9Zusp7x6HH6+NP0H19iv+eQAqJxe5VZ/Ziibwovw4wSaqhBhOkJq7PwwQcNw7PYyEP1+yxmjHm8Tpil8PO0zjMNavh3fi7nSn22j1+NNQqzGvr0sJnXA2PkpvcYDmOR6vEGYFnDhMP/W+MKJ+xdDtU4eEutxjRCtsZU2QcvkAgeD2g+ZkurxpD5Bf0ANX29qbC0uF4oq7ZuvKPV4UvEp2E/By6TBFyqhm7GAR6Ht9XhymKBL8G+ukuYELRcKqePO4JXIWD0+203VZMdnqbG1vIhdMwge5LbU48lmgj4gNXZ7gq4XCsH3P8O3yxvr8QSvsd8KBfCFE8lXX2CH1Q31eEKpsfU5KnpcHT6XEBjqcUqNrS8Uy14JrEHv/cDqcXiF0GpsfaGQvtUMfufRdqoG1E2VRo2tJRG/4PvOcNISqccbKWvsZglTJffgIiXTaVmsyKlnDq4Qu8RevE4XfyFJgNfj+7Rr7HomfrxJwHIiGKnHNwFqbC0vnrzB03JNOT5VM9MEXVvGm/uEbVdFZTOosIRqbH2Oit7bosWwZOynaqsev/uNlDBVCvGFoor9OqxGPX51b5mgoYs+GifwqwAbU7Va2pAaW0vs2QsDrYBBVY8/PVgnqKM+Gie0u2rW9fjza2GdoKGrPhon1jdb7KbqB1pja/FnoahCu48nuqB8gO76aJzY396xIbwkEbrro3FCunOIRiizPWoP5dUBJELl7fvXTkTouI/GifGdcnRC/xaKKivrV5FAmHhxtS4W65JhJxToo3Five3TTph7uVBUQTdQqYS+LhRVbO/OsxC6feCiW44iHHv1QgQk5iXDQuj6gYtuMV6ebCaU7KNxYtpANRJOnFw/c4KYlgwjoWwfjRPDkmEilO6jcYJvoBoIxftonOAbqAbC2KPtUXvQnhtO6EMfjROs54YS+tFH4wRZMjBCT/ponCAbqBihL300TuANVIQwGcAbx9sBlwyYUHnwspUOAZcMmFD+gYtugXpuIGHuVR+NE6DnBhH61kfjhPQZetdH46S9ZACEQ1woqrSWjDahj300TpobqC1CL/tonDR7bi1CP/tonDR6bk1Cvx646BZ9A7VB6G8fjRMDocd9NE60DVSd0Oc+Gif1nptG6Orgcv+pLRl1Qs/7aJzUNlDrhMNfKKpUG6g1Qv/7aJwcloyKcAh9NE5ahIPoo3Gy30A9EL4Moo/Gya7ntid0f3C5/0R1wsH00TjZLhk7QomDy/1ns2RsCYfUR+NkvYG6IZQ6uNx71huoa8LxsPponJRLxpowFzu43H+WWUkYO32BmutEwaWSPLjcf25nl6OzXCiqPP4bZB+NE+f7v/8D2r0D2iDVf/AAAAAASUVORK5CYII=",
@@ -3233,12 +3205,12 @@ var Stamps = ({
                       }
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("h2", { style: { fontWeight: "bold", fontSize: "16px" }, children: "EVM Wallet" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: { color: "#757575", fontSize: "14px" }, children: "Connect to evm wallet" })
+                  /* @__PURE__ */ jsxs9("div", { children: [
+                    /* @__PURE__ */ jsx14("h2", { style: { fontWeight: "bold", fontSize: "16px" }, children: "EVM Wallet" }),
+                    /* @__PURE__ */ jsx14("p", { style: { color: "#757575", fontSize: "14px" }, children: "Connect to evm wallet" })
                   ] })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { marginTop: "8px" }, children: doesStampExist(stampsWithId.evm) ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { display: "flex", justifyContent: "space-between" }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                /* @__PURE__ */ jsx14("div", { style: { marginTop: "8px" }, children: doesStampExist(stampsWithId.evm) ? /* @__PURE__ */ jsx14("div", { style: { display: "flex", justifyContent: "space-between" }, children: /* @__PURE__ */ jsx14(
                   "button",
                   {
                     style: {
@@ -3250,8 +3222,8 @@ var Stamps = ({
                     },
                     children: "Verified Stamp"
                   }
-                ) }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(import_jsx_runtime14.Fragment, { children: [
-                  gitcoinModalOpen && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                ) }) : /* @__PURE__ */ jsxs9(Fragment5, { children: [
+                  gitcoinModalOpen && /* @__PURE__ */ jsx14(
                     "div",
                     {
                       style: {
@@ -3263,7 +3235,7 @@ var Stamps = ({
                         alignItems: "center",
                         zIndex: 50
                       },
-                      children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+                      children: /* @__PURE__ */ jsxs9(
                         "div",
                         {
                           style: {
@@ -3273,7 +3245,7 @@ var Stamps = ({
                             width: "24rem"
                           },
                           children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                            /* @__PURE__ */ jsx14(
                               "p",
                               {
                                 style: {
@@ -3284,7 +3256,7 @@ var Stamps = ({
                                 children: "Connect Web3 Wallet"
                               }
                             ),
-                            connectors.map((connector) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                            connectors.map((connector) => /* @__PURE__ */ jsx14(
                               "button",
                               {
                                 style: {
@@ -3301,7 +3273,7 @@ var Stamps = ({
                               },
                               connector.uid
                             )),
-                            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                            /* @__PURE__ */ jsx14(
                               "button",
                               {
                                 style: {
@@ -3320,7 +3292,7 @@ var Stamps = ({
                       )
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                  /* @__PURE__ */ jsx14(
                     "button",
                     {
                       style: {
@@ -3338,7 +3310,7 @@ var Stamps = ({
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          /* @__PURE__ */ jsx14(
             PhoneNumberConnect,
             {
               apikey: api_key,
@@ -3351,7 +3323,7 @@ var Stamps = ({
               setBlacklistCred
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          /* @__PURE__ */ jsx14(
             LocationSearchPanel,
             {
               fetchStamps: fetchStampData,
@@ -3369,8 +3341,8 @@ var Stamps = ({
 };
 
 // src/component/cubidWidget.tsx
-var import_axios5 = __toESM(require("axios"));
-var import_jsx_runtime15 = require("react/jsx-runtime");
+import axios5 from "axios";
+import { Fragment as Fragment6, jsx as jsx15 } from "react/jsx-runtime";
 var stampsWithId2 = {
   facebook: 1,
   github: 2,
@@ -3396,14 +3368,14 @@ var stampsWithId2 = {
   "farcaster": 68
 };
 var CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange, onBlacklistVerify }) => {
-  const [allStamps, setAllStamps] = import_react14.default.useState([]);
-  const [user_email, setUserEmail] = import_react14.default.useState();
-  const fetchStampData = import_react14.default.useCallback(async () => {
+  const [allStamps, setAllStamps] = React14.useState([]);
+  const [user_email, setUserEmail] = React14.useState();
+  const fetchStampData = React14.useCallback(async () => {
     if (uuid) {
       try {
         const {
           data: { all_stamps: dbData, email }
-        } = await import_axios5.default.post(`https://passport.cubid.me/api/v2/identity/fetch_stamps`, {
+        } = await axios5.post(`https://passport.cubid.me/api/v2/identity/fetch_stamps`, {
           user_id: uuid,
           apikey: api_key,
           page_id
@@ -3415,11 +3387,11 @@ var CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange, onBla
       }
     }
   }, [uuid, api_key, page_id]);
-  import_react14.default.useEffect(() => {
+  React14.useEffect(() => {
     fetchStampData();
   }, [fetchStampData]);
   const showAllowCreds = allStamps.filter((item) => !item.permAvailable && stampsWithId2[stampToRender] === item.stamptype)?.[0];
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_jsx_runtime15.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "p-3", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+  return /* @__PURE__ */ jsx15(Fragment6, { children: /* @__PURE__ */ jsx15("div", { className: "p-3", children: /* @__PURE__ */ jsx15(
     Stamps,
     {
       allStampIds: [...allStamps.filter((item) => item.stamptype == stampsWithId2[stampToRender])].map((item) => item.id),
@@ -3457,19 +3429,19 @@ function toBase58(buffer) {
 }
 async function generateNEARWallet() {
   try {
-    const keyPair = import_near_api_js2.KeyPair.fromRandom("ed25519");
+    const keyPair = KeyPair.fromRandom("ed25519");
     const publicKey = keyPair.getPublicKey();
     const privateKey = keyPair.toString();
     const publicKeyBase64 = publicKey.toString().split(":")[1];
-    const publicKeyBytes = import_buffer.Buffer.from(publicKeyBase64, "base64");
-    const hashedKeyBytes = import_buffer.Buffer.from((0, import_js_sha256.sha256)(publicKeyBytes), "hex");
+    const publicKeyBytes = Buffer.from(publicKeyBase64, "base64");
+    const hashedKeyBytes = Buffer.from(sha256(publicKeyBytes), "hex");
     const accountId = toBase58(hashedKeyBytes);
     const config2 = {
       networkId: "testnet",
-      keyStore: new import_near_api_js2.keyStores.InMemoryKeyStore(),
+      keyStore: new keyStores.InMemoryKeyStore(),
       nodeUrl: "https://rpc.testnet.near.org"
     };
-    const near = await (0, import_near_api_js2.connect)(config2);
+    const near = await connect(config2);
     const wallet2 = {
       accountId,
       publicKey: publicKey.toString(),
@@ -3517,7 +3489,7 @@ var CubidSDK = class {
    */
   async makePostRequest(endpoint, data = {}) {
     try {
-      const response = await (0, import_axios6.default)({
+      const response = await axios6({
         url: `${this.baseUrl}/${endpoint}`,
         method: "POST",
         headers: {
@@ -3535,7 +3507,7 @@ var CubidSDK = class {
   async generateEthereumKey() {
     console.log("Starting Ethereum wallet generation");
     try {
-      const wallet2 = import_ethers.ethers.Wallet.createRandom();
+      const wallet2 = ethers.Wallet.createRandom();
       console.log("Successfully generated Ethereum wallet", {
         addressPrefix: wallet2.address.slice(0, 6),
         // Log only first few chars of address for identification
@@ -3596,7 +3568,7 @@ var CubidSDK = class {
         threshold: this.THRESHOLD,
         timestamp: (/* @__PURE__ */ new Date()).toISOString()
       });
-      const shares = await (0, import_shamir_secret_sharing.split)(secretBytes, this.TOTAL_SHARES, this.THRESHOLD);
+      const shares = await split(secretBytes, this.TOTAL_SHARES, this.THRESHOLD);
       console.log("Converting shares to hex format");
       const hexShares = shares.map((share) => this.bytesToHex(share));
       const [userShare1, userShare2, apiShare] = hexShares;
@@ -3667,7 +3639,7 @@ var CubidSDK = class {
         threshold: this.THRESHOLD,
         timestamp: (/* @__PURE__ */ new Date()).toISOString()
       });
-      const recoveredBytes = await (0, import_shamir_secret_sharing.combine)(shareBytes.slice(0, this.THRESHOLD));
+      const recoveredBytes = await combine(shareBytes.slice(0, this.THRESHOLD));
       console.log("Successfully completed decryption process", {
         userId: user_id,
         timestamp: (/* @__PURE__ */ new Date()).toISOString()
@@ -3719,11 +3691,10 @@ var CubidSDK = class {
     });
   }
 };
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
+export {
   CubidSDK,
   CubidWidget,
   Provider,
   generateNEARWallet
-});
-//# sourceMappingURL=index.js.map
+};
+//# sourceMappingURL=index.mjs.map
