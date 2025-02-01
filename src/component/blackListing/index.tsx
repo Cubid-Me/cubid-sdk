@@ -24,6 +24,7 @@ interface VerificationProps {
     address?: string;
   }
   apikey?: string;
+  logoutUser?: () => void;
 }
 
 export const VerificationModal: React.FC<VerificationProps> = ({
@@ -35,7 +36,8 @@ export const VerificationModal: React.FC<VerificationProps> = ({
   duplicateInfo,
   realInfo,
   credType,
-  apikey
+  apikey,
+  logoutUser
 }) => {
   const [verificationState, setVerificationState] = useState<VerificationState>(
     duplicateInfo ? 'duplicate-alert' : 'verification'
@@ -183,6 +185,20 @@ export const VerificationModal: React.FC<VerificationProps> = ({
               }}
             >
               {content.secondaryButton}
+            </button>
+            <button
+              style={styles.secondaryButton}
+              onClick={handleContactSupport}
+              onMouseOver={e => {
+                e.currentTarget.style.backgroundColor = 'black';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.backgroundColor = 'white';
+                e.currentTarget.style.color = 'black';
+              }}
+            >
+              This was a mistake, Log me out !
             </button>
           </div>
         );

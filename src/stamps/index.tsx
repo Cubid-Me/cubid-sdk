@@ -108,7 +108,8 @@ export const Stamps = ({
   email,
   allStampIds,
   refresh,
-  onBlacklistVerify
+  onBlacklistVerify,
+  logoutUser
 }: any) => {
   const [allStamps, setAllStamps] = useState([]);
   const [stampLoading, setStampLoading] = useState(true);
@@ -329,6 +330,7 @@ export const Stamps = ({
   return (
     <>
       <VerificationModal
+        logoutUser={logoutUser}
         type={blacklistCred.type}
         credType={detectInputFormat(blacklistCred.value)}
         isOpen={blacklist}

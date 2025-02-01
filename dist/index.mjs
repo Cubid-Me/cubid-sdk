@@ -13,7 +13,7 @@ if (globalThis?.window !== "undefined") {
 }
 
 // index.tsx
-import axios6 from "axios";
+import axios8 from "axios";
 import { split, combine } from "shamir-secret-sharing";
 import { ethers } from "ethers";
 import { keyStores, KeyPair, connect } from "near-api-js";
@@ -24,7 +24,7 @@ import React14 from "react";
 
 // src/stamps/index.tsx
 import { useCallback, useEffect as useEffect8, useState as useState10 } from "react";
-import axios4 from "axios";
+import axios6 from "axios";
 
 // src/stamps/phoneNumberConnect.tsx
 import { useRef, useState, useEffect } from "react";
@@ -936,12 +936,12 @@ import {
   getDefaultConfig
 } from "@rainbow-me/rainbowkit";
 import {
+  mainnet,
   polygon,
   optimism,
   arbitrum,
   base
 } from "wagmi/chains";
-import { mainnet } from "wagmi/chains";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -1134,6 +1134,7 @@ import { useWallet as useSolanaWallet } from "@solana/wallet-adapter-react";
 import { useState as useState9 } from "react";
 
 // src/component/blackListing/email.tsx
+import axios4 from "axios";
 import { useState as useState6, useEffect as useEffect5 } from "react";
 import { jsx as jsx10, jsxs as jsxs5 } from "react/jsx-runtime";
 var EmailVerificationModal = ({
@@ -1141,7 +1142,8 @@ var EmailVerificationModal = ({
   onClose,
   onSuccess,
   onError,
-  email: passedEmail
+  email: passedEmail,
+  apikey
 }) => {
   const [otp, setOtp] = useState6(["", "", "", "", "", ""]);
   const [error, setError] = useState6("");
@@ -1286,17 +1288,26 @@ var EmailVerificationModal = ({
       if (prevInput) prevInput.focus();
     }
   };
-  const sendOTP = () => {
+  const sendOTP = async () => {
     if (!passedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(passedEmail)) {
       setError("Invalid email address provided");
       return;
     }
+    await axios4.post("https://passport.cubid.me/api/v2/email/send_otp", {
+      email: passedEmail,
+      apikey
+    });
     setError("");
     setCountdown(30);
     console.log("Sending OTP to:", passedEmail);
   };
-  const verifyOTP = () => {
-    if (otp.join("") === "123456") {
+  const verifyOTP = async () => {
+    const { data } = await axios4.post("https://passport.cubid.me/api/v2/email/verify_otp", {
+      email: passedEmail,
+      apikey,
+      otp: otp.join("").length
+    });
+    if (otp.join("").length === 6 && data?.is_verified) {
       setSuccess(true);
       setTimeout(() => {
         if (onSuccess) {
@@ -1392,6 +1403,7 @@ var EmailVerificationModal = ({
 };
 
 // src/component/blackListing/phone.tsx
+import axios5 from "axios";
 import { useState as useState7, useEffect as useEffect6 } from "react";
 import { jsx as jsx11, jsxs as jsxs6 } from "react/jsx-runtime";
 var PhoneVerificationModal = ({
@@ -1399,7 +1411,8 @@ var PhoneVerificationModal = ({
   onClose,
   onSuccess,
   onError,
-  phone: passedPhone
+  phone: passedPhone,
+  apikey
 }) => {
   const [otp, setOtp] = useState7(["", "", "", "", "", ""]);
   const [error, setError] = useState7("");
@@ -1548,7 +1561,7 @@ var PhoneVerificationModal = ({
     const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
     return phoneRegex.test(phone);
   };
-  const sendOTP = () => {
+  const sendOTP = async () => {
     if (!passedPhone || !validatePhoneNumber(passedPhone)) {
       setError("Invalid phone number provided");
       if (onError) {
@@ -1556,12 +1569,21 @@ var PhoneVerificationModal = ({
       }
       return;
     }
+    await axios5.post("https://passport.cubid.me/api/v2/twillio/send-otp", {
+      apikey,
+      phone: passedPhone
+    });
     setError("");
     setCountdown(30);
     console.log("Sending OTP to:", passedPhone);
   };
-  const verifyOTP = () => {
-    if (otp.join("") === "123456") {
+  const verifyOTP = async () => {
+    const { data } = await axios5.post("https://passport.cubid.me/api/v2/twillio/verify-otp", {
+      apikey,
+      phone: passedPhone,
+      otpCode: otp.join("")
+    });
+    if (otp.join("").length === 6 && data.status === "approved") {
       setSuccess(true);
       if (onSuccess) {
         onSuccess();
@@ -2023,7 +2045,8 @@ var VerificationModal = ({
   onError,
   duplicateInfo,
   realInfo,
-  credType
+  credType,
+  apikey
 }) => {
   const [verificationState, setVerificationState] = useState9(
     duplicateInfo ? "duplicate-alert" : "verification"
@@ -2159,6 +2182,7 @@ var VerificationModal = ({
               {
                 isOpen: true,
                 onClose,
+                apikey,
                 onSuccess,
                 onError,
                 email: realInfo?.email
@@ -2171,6 +2195,7 @@ var VerificationModal = ({
                 isOpen: true,
                 onClose,
                 onSuccess,
+                apikey,
                 onError,
                 phone: realInfo?.phone
               }
@@ -2305,7 +2330,7 @@ var Stamps = ({
     setStampLoading(true);
     try {
       onStampChange?.();
-      const response = await axios4.post("https://passport.cubid.me/api/v2/identity/fetch_stamps", {
+      const response = await axios6.post("https://passport.cubid.me/api/v2/identity/fetch_stamps", {
         user_id: uuid,
         apikey: api_key,
         page_id
@@ -2321,10 +2346,10 @@ var Stamps = ({
     if (address) {
       const {
         data: { stamps, scores }
-      } = await axios4.post("https://passport.cubid.me/api/gitcoin-passport-data", { address });
+      } = await axios6.post("https://passport.cubid.me/api/gitcoin-passport-data", { address });
       const stampId = stampsWithId.gitcoin;
       if (scores.score !== "0E-9") {
-        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios6.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           stamp_type: "gitcoin",
           user_data: { user_id: uuid, uuid: "" },
           stampData: {
@@ -2336,7 +2361,7 @@ var Stamps = ({
           page_id
         });
       }
-      await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+      await axios6.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
         stamp_type: "evm",
         user_data: { user_id: uuid, uuid: "" },
         stampData: {
@@ -2365,7 +2390,7 @@ var Stamps = ({
   useEffect8(() => {
     if (isFarcasterAuthenticated && profile?.fid && profile?.username) {
       (async () => {
-        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios6.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           page_id,
           stamp_type: "farcaster",
           stampData: { uniquevalue: profile.fid, identity: profile.username },
@@ -2404,7 +2429,7 @@ var Stamps = ({
         }
       });
       if (uuid) {
-        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios6.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           stamp_type: "iah",
           user_data: { uuid },
           stampData: {
@@ -2413,7 +2438,7 @@ var Stamps = ({
           },
           page_id
         });
-        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios6.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           stamp_type: "near-wallet",
           user_data: { uuid },
           stampData: {
@@ -2432,7 +2457,7 @@ var Stamps = ({
     (async () => {
       if (!doesStampExist(stampsWithId["solana"]) && solConnected) {
         const string_publicKey = publicKey?.toString();
-        await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+        await axios6.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
           stamp_type: "solana",
           user_data: { uuid },
           stampData: {
@@ -2472,6 +2497,7 @@ var Stamps = ({
         onClose: () => {
           setBlacklist(false);
         },
+        apikey: api_key,
         onSuccess: () => {
           setBlacklist(false);
           onBlacklistVerify({ secondaryAcc: blacklistCred.value });
@@ -2941,7 +2967,7 @@ var Stamps = ({
                   {
                     wallet: address ?? "",
                     onSuccess: async (args) => {
-                      await axios4.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
+                      await axios6.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
                         page_id,
                         stamp_type: "lens-protocol",
                         stampData: {
@@ -3354,7 +3380,7 @@ var Stamps = ({
 };
 
 // src/component/cubidWidget.tsx
-import axios5 from "axios";
+import axios7 from "axios";
 import { Fragment as Fragment6, jsx as jsx15 } from "react/jsx-runtime";
 var stampsWithId2 = {
   facebook: 1,
@@ -3388,7 +3414,7 @@ var CubidWidget = ({ stampToRender, uuid, page_id, api_key, onStampChange, onBla
       try {
         const {
           data: { all_stamps: dbData, email }
-        } = await axios5.post(`https://passport.cubid.me/api/v2/identity/fetch_stamps`, {
+        } = await axios7.post(`https://passport.cubid.me/api/v2/identity/fetch_stamps`, {
           user_id: uuid,
           apikey: api_key,
           page_id
@@ -3502,7 +3528,7 @@ var CubidSDK = class {
    */
   async makePostRequest(endpoint, data = {}) {
     try {
-      const response = await axios6({
+      const response = await axios8({
         url: `${this.baseUrl}/${endpoint}`,
         method: "POST",
         headers: {

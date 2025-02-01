@@ -75,6 +75,7 @@ export const LocationSearchPanel = ({
             </div>
           ))}
         </div>
+        {console.log({ selectedLocation })}
         <div className="flex justify-between space-x-4 mt-4">
           <Button onClick={onClose} style={{ borderRadius: 10 }} className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md">
             Cancel
