@@ -42,11 +42,13 @@ var import_process = __toESM(require("process"));
 var import_crypto_browserify = __toESM(require("crypto-browserify"));
 var import_stream_browserify = __toESM(require("stream-browserify"));
 var import_path_browserify = __toESM(require("path-browserify"));
-window.Buffer = import_buffer.Buffer;
-window.process = import_process.default;
-window.crypto = import_crypto_browserify.default;
-window.stream = import_stream_browserify.default;
-window.path = import_path_browserify.default;
+if (globalThis?.window !== "undefined") {
+  window.Buffer = import_buffer.Buffer;
+  window.process = import_process.default;
+  window.crypto = import_crypto_browserify.default;
+  window.stream = import_stream_browserify.default;
+  window.path = import_path_browserify.default;
+}
 
 // index.tsx
 var import_axios6 = __toESM(require("axios"));
@@ -192,13 +194,13 @@ var PhoneNumberConnect = ({
           stampData: { uniquevalue: phoneInput, identity: phoneInput },
           user_data: { uuid }
         });
-        const { data: blacklist_creds } = await import_axios.default.post("https://passport.cubid.me/api/v2/fetch_blacklisted_creds", {
+        const { data: blacklist_creds } = await import_axios.default.post("https://passport-backend-p49d.onrender.com/api/v2/fetch_blacklisted_creds", {
           apikey,
           cred: phoneInput
         });
-        fetchStamps();
+        await fetchStamps();
         if (blacklist_creds?.is_blacklisted) {
-          const { data: { all_email } } = await import_axios.default.post("https://passport.cubid.me/api/v2/find_users_with_blacklist", {
+          const { data: { all_email } } = await import_axios.default.post("https://passport-backend-p49d.onrender.com/api/v2/find_users_with_blacklist", {
             cred: phoneInput,
             apikey
           });
@@ -494,6 +496,7 @@ var LocationSearchPanel = ({
         className: "mt-4 w-full border border-gray-300 rounded-lg p-2 shadow focus:outline-none focus:shadow-outline"
       }
     ) }),
+    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "text-xs font-bold text-gray-800 mb-4", children: "We use www.cubid.me to verify residency anonymously. This app will only have access to your approximate location, not your address details. You are allowed max one adress update per year" }),
     /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "h-[200px] overflow-y-auto mt-3", children: allLocations.map((item) => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
       "div",
       {
@@ -519,7 +522,7 @@ var LocationSearchPanel = ({
               stampData: { uniquevalue: `${uuid}-${selectedLocation?.formatted_address}`, identity: selectedLocation?.formatted_address, ...selectedLocation },
               user_data: { uuid }
             });
-            fetchStamps();
+            await fetchStamps();
             onClose();
           },
           style: { borderRadius: 10 },
@@ -2384,6 +2387,10 @@ var Stamps = ({
     fetchStampData();
   }, [fetchStampData]);
   (0, import_react13.useEffect)(() => {
+    const intervalId = setInterval(fetchStampData, 2e3);
+    return () => clearInterval(intervalId);
+  }, [fetchStampData]);
+  (0, import_react13.useEffect)(() => {
     if (isFarcasterAuthenticated && profile?.fid && profile?.username) {
       (async () => {
         await import_axios4.default.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
@@ -3154,7 +3161,7 @@ var Stamps = ({
                           marginTop: "0.25rem"
                           // mt-1
                         },
-                        children: "Your Address is added"
+                        children: "Local address verified"
                       }
                     ) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
                       "div",
@@ -3200,7 +3207,13 @@ var Stamps = ({
                           )
                         ]
                       }
-                    )
+                    ),
+                    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: {
+                      fontSize: "0.875rem",
+                      // text-sm
+                      color: "#4b5563"
+                      // text-gray-600
+                    }, children: "Use www.cubid.me to manage. One update per year is allowed" })
                   ]
                 }
               )
@@ -3692,6 +3705,9 @@ var CubidSDK = class {
   }
   async fetchIdentity({ user_id }) {
     return this.makePostRequest("identity/fetch_identity", { apikey: this.api_key, user_id });
+  }
+  async fetchStamps({ user_id }) {
+    return this.makePostRequest("identity/fetch_stamps", { apikey: this.api_key, user_id });
   }
   async fetchRoughLocation({ user_id }) {
     return this.makePostRequest("identity/fetch_rough_location", { apikey: this.api_key, user_id });

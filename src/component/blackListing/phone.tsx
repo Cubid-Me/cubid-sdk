@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 interface PhoneVerificationModalProps {
@@ -6,6 +7,7 @@ interface PhoneVerificationModalProps {
     onSuccess?: () => void;
     onError?: any;
     phone?: string;
+    apikey?: string;
 }
 
 export const PhoneVerificationModal: React.FC<PhoneVerificationModalProps> = ({
@@ -13,7 +15,8 @@ export const PhoneVerificationModal: React.FC<PhoneVerificationModalProps> = ({
     onClose,
     onSuccess,
     onError,
-    phone: passedPhone
+    phone: passedPhone,
+    apikey
 }) => {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [error, setError] = useState('');
@@ -173,7 +176,7 @@ export const PhoneVerificationModal: React.FC<PhoneVerificationModalProps> = ({
         return phoneRegex.test(phone);
     };
 
-    const sendOTP = () => {
+    const sendOTP = async () => {
         if (!passedPhone || !validatePhoneNumber(passedPhone)) {
             setError('Invalid phone number provided');
             if (onError) {
@@ -181,15 +184,22 @@ export const PhoneVerificationModal: React.FC<PhoneVerificationModalProps> = ({
             }
             return;
         }
+        await axios.post("https://passport.cubid.me/api/v2/twillio/send-otp", {
+            apikey,
+            phone: passedPhone
+        })
         setError('');
         setCountdown(30);
         // Mock OTP send - replace with actual API call
         console.log('Sending OTP to:', passedPhone);
     };
 
-    const verifyOTP = () => {
+    const verifyOTP = async () => {
         // Mock verification - replace with actual API call
-        if (otp.join('') === '123456') {
+        const { data } = await axios.post('https://passport.cubid.me/api/v2/twillio/verify-otp', {
+            apikey, phone: passedPhone, otpCode: otp.join('')
+        })
+        if (otp.join('').length === 6 && data.status === "approved") {
             setSuccess(true);
             if (onSuccess) {
                 onSuccess();

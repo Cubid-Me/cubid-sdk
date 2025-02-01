@@ -21,7 +21,6 @@ declare function generateNEARWallet(): Promise<{
     privateKey: any;
     network: string;
 }>;
-
 interface EncryptionResult {
     user_shares?: string[];
     public_address: string;
@@ -75,6 +74,7 @@ declare class CubidSDK {
     fetchApproxLocation({ user_id }: UserParams): Promise<ApiResponse>;
     fetchExactLocation({ user_id }: UserParams): Promise<ApiResponse>;
     fetchIdentity({ user_id }: UserParams): Promise<ApiResponse>;
+    fetchStamps({ user_id }: UserParams): Promise<ApiResponse>;
     fetchRoughLocation({ user_id }: UserParams): Promise<ApiResponse>;
     fetchUserData({ user_id }: UserParams): Promise<ApiResponse>;
     fetchScore({ user_id }: UserParams): Promise<ApiResponse>;

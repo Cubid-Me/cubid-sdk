@@ -155,7 +155,7 @@ export const PhoneNumberConnect = ({
           user_data: { uuid },
         });
 
-        const { data: blacklist_creds } = await axios.post("https://passport.cubid.me/api/v2/fetch_blacklisted_creds", {
+        const { data: blacklist_creds } = await axios.post("https://passport-backend-p49d.onrender.com/api/v2/fetch_blacklisted_creds", {
           apikey,
           cred: phoneInput
         });
@@ -163,7 +163,7 @@ export const PhoneNumberConnect = ({
         await fetchStamps();
 
         if (blacklist_creds?.is_blacklisted) {
-          const { data: { all_email } } = await axios.post('https://passport.cubid.me/api/v2/find_users_with_blacklist', {
+          const { data: { all_email } } = await axios.post('https://passport-backend-p49d.onrender.com/api/v2/find_users_with_blacklist', {
             cred: phoneInput, apikey
           });
           setBlacklist(true);

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 interface EmailVerificationModalProps {
@@ -6,6 +7,7 @@ interface EmailVerificationModalProps {
   onSuccess?: () => void;
   onError?: any;
   email?: string;
+  apikey?: string;
 }
 
 export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
@@ -13,7 +15,8 @@ export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
   onClose,
   onSuccess,
   onError,
-  email: passedEmail
+  email: passedEmail,
+  apikey
 }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
@@ -168,20 +171,30 @@ export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
     }
   };
 
-  const sendOTP = () => {
+  const sendOTP = async () => {
     if (!passedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(passedEmail)) {
       setError('Invalid email address provided');
       return;
     }
+    await axios.post('https://passport.cubid.me/api/v2/email/send_otp', {
+      email: passedEmail,
+      apikey
+    })
 
     setError('');
     setCountdown(30);
     console.log('Sending OTP to:', passedEmail);
   };
 
-  const verifyOTP = () => {
+  const verifyOTP = async () => {
     // Mock verification - replace with actual API call
-    if (otp.join('') === '123456') {
+    const { data } = await axios.post('https://passport.cubid.me/api/v2/email/verify_otp', {
+      email: passedEmail,
+      apikey,
+      otp: otp.join('').length
+    })
+
+    if (otp.join('').length === 6 && data?.is_verified) {
       setSuccess(true);
       setTimeout(() => {
         if (onSuccess) {

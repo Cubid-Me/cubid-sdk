@@ -1,6 +1,6 @@
 {
   "name": "cubid-sdk",
-  "version": "1.9.4",
+  "version": "2.1.2",
   "description": "Cubid SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -115,13 +115,5 @@
     "util": "^0.12.5",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4"
-  },
-  "browser": {
-    "fs": false,
-    "path": "path-browserify",
-    "stream": "stream-browserify",
-    "crypto": "crypto-browserify",
-    "buffer": "buffer",
-    "process": "process"
   }
 }

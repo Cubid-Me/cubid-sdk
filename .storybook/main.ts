@@ -1,5 +1,5 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
-const webpack = require("webpack");
+import webpack from "webpack";
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -20,12 +20,12 @@ const config: StorybookConfig = {
     // Add polyfills for Node.js modules
     config.resolve.fallback = {
       ...(config.resolve.fallback || {}),
-      http: require.resolve("stream-http"),
-      https: require.resolve("https-browserify"),
-      stream: require.resolve("stream-browserify"),
-      buffer: require.resolve("buffer"),
-      util: require.resolve("util"),
-      process: require.resolve("process"),
+      http: "stream-http",
+      https:"https-browserify",
+      stream: "stream-browserify",
+      buffer: "buffer",
+      util: "util",
+      process: "process",
     };
 
     // Provide global variables

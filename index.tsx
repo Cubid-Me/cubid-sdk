@@ -83,10 +83,6 @@ export async function generateNEARWallet() {
     }
 }
 
-export { CubidWidget } from './src/component/cubidWidget';
-export { Provider } from './src/component/providers';
-
-
 // Interfaces
 interface WalletInfo {
     privateKey?: string;
@@ -372,6 +368,10 @@ export class CubidSDK {
         return this.makePostRequest<ApiResponse>('identity/fetch_identity', { apikey: this.api_key, user_id });
     }
 
+    async fetchStamps({ user_id }: UserParams): Promise<ApiResponse> {
+        return this.makePostRequest<ApiResponse>('identity/fetch_stamps', { apikey: this.api_key, user_id });
+    }
+
     async fetchRoughLocation({ user_id }: UserParams): Promise<ApiResponse> {
         return this.makePostRequest<ApiResponse>('identity/fetch_rough_location', { apikey: this.api_key, user_id });
     }
@@ -402,3 +402,6 @@ export class CubidSDK {
         });
     }
 }
+
+export { CubidWidget } from './src/component/cubidWidget';
+export { Provider } from './src/component/providers';

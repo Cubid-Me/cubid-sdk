@@ -23,6 +23,7 @@ interface VerificationProps {
     phone?: string;
     address?: string;
   }
+  apikey?: string;
 }
 
 export const VerificationModal: React.FC<VerificationProps> = ({
@@ -33,7 +34,8 @@ export const VerificationModal: React.FC<VerificationProps> = ({
   onError,
   duplicateInfo,
   realInfo,
-  credType
+  credType,
+  apikey
 }) => {
   const [verificationState, setVerificationState] = useState<VerificationState>(
     duplicateInfo ? 'duplicate-alert' : 'verification'
@@ -192,6 +194,7 @@ export const VerificationModal: React.FC<VerificationProps> = ({
             return <EmailVerificationModal
               isOpen={true}
               onClose={onClose}
+              apikey={apikey}
               onSuccess={onSuccess}
               onError={onError}
               email={realInfo?.email}
@@ -201,6 +204,7 @@ export const VerificationModal: React.FC<VerificationProps> = ({
               isOpen={true}
               onClose={onClose}
               onSuccess={onSuccess}
+              apikey={apikey}
               onError={onError}
               phone={realInfo?.phone}
             />;

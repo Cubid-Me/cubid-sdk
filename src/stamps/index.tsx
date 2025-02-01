@@ -193,6 +193,14 @@ export const Stamps = ({
   }, [fetchStampData]);
 
   useEffect(() => {
+    // Set up an interval to call fetchStampData every 2 seconds
+    const intervalId = setInterval(fetchStampData, 2000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [fetchStampData]); // Dependency array ensures the effect runs if fetchStampData changes
+
+  useEffect(() => {
     if (isFarcasterAuthenticated && profile?.fid && profile?.username) {
       (async () => {
         await axios.post("https://passport.cubid.me/api/v2/identity/add_stamp", {
@@ -327,6 +335,7 @@ export const Stamps = ({
         onClose={() => {
           setBlacklist(false)
         }}
+        apikey={api_key}
         onSuccess={() => {
           setBlacklist(false)
           onBlacklistVerify({ secondaryAcc: blacklistCred.value })
