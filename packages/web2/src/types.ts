@@ -7,13 +7,23 @@ import type {
   CubidVerifyPhoneOtpResponse
 } from "@cubid/core";
 export const WEB2_OAUTH_PROVIDERS = ["discord", "github", "google", "instagram", "linkedin", "twitter", "worldcoin"] as const;
+export const HOSTED_VERIFICATION_STAMP_TYPES = ["phone", "address"] as const;
 
 export type CubidOAuthProvider = (typeof WEB2_OAUTH_PROVIDERS)[number];
 export type CubidWeb2StampType = CubidOAuthProvider | "email" | "phone";
+export type CubidHostedVerificationStampType = (typeof HOSTED_VERIFICATION_STAMP_TYPES)[number];
 
 export interface CubidWeb2ClientOptions {
   allowPath?: "/allow" | "/widget-allow";
   passportOrigin?: string;
+}
+
+export interface HostedVerificationUrlRequest {
+  dappId?: number | string;
+  pageId?: number | string;
+  passportOrigin?: string;
+  stampToRender: CubidHostedVerificationStampType;
+  userId: string;
 }
 
 export interface ResolvedCubidWeb2ClientOptions {

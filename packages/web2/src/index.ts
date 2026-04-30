@@ -1,7 +1,9 @@
 export { createCubidWeb2Client } from "./client";
+export { buildHostedVerificationUrl } from "./hosted";
 export { WEB2_OAUTH_PROVIDERS } from "./types";
 export type {
   CubidAllowFlowParams,
+  CubidHostedVerificationStampType,
   CubidOAuthCallbackState,
   CubidOAuthProvider,
   CubidWeb2Client,
@@ -10,6 +12,7 @@ export type {
   EmailOtpStartRequest,
   EmailOtpVerifyRequest,
   EmailOtpVerifyResult,
+  HostedVerificationUrlRequest,
   OAuthAuthorizationUrlRequest,
   ParsedCubidAllowFlowParams,
   PhoneOtpStartRequest,

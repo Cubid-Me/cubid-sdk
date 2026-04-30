@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { buildHostedVerificationUrl } from "./hosted";
 import { createCubidWeb2Client } from "./client";
 
 function createApiClientStub() {
@@ -172,5 +173,23 @@ describe("@cubid/web2", () => {
       userId: "user-3"
     });
     expect(persisted.stampData).toEqual(stampData);
+  });
+
+  it("builds browser-safe hosted verification urls without requiring api keys", () => {
+    expect(
+      buildHostedVerificationUrl({
+        dappId: "33",
+        stampToRender: "address",
+        userId: "user-42"
+      })
+    ).toBe("https://passport.cubid.me/verify?dapp_id=33&user_id=user-42&stamp_type=address");
+
+    expect(
+      buildHostedVerificationUrl({
+        pageId: "20",
+        stampToRender: "phone",
+        userId: "user-42"
+      })
+    ).toBe("https://passport.cubid.me/allow?uid=user-42&page_id=20&stamp_type=phone");
   });
 });

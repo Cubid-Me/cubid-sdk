@@ -5,6 +5,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
+import { CubidWidget } from "./CubidWidget";
 import { CubidWeb2Provider } from "./context";
 import { EmailOtpForm } from "./EmailOtpForm";
 import { ProviderConnectButton } from "./ProviderConnectButton";
@@ -141,5 +142,40 @@ describe("@cubid/web2-react", () => {
     expect(packageJson.dependencies?.["@rainbow-me/rainbowkit"]).toBeUndefined();
     expect(packageJson.peerDependencies?.react).toBeDefined();
     expect(packageJson.peerDependencies?.["react-dom"]).toBeDefined();
+  });
+
+  it("opens the hosted Cubid verification flow and fires onStampChange after the popup closes", async () => {
+    const user = userEvent.setup();
+    const onStampChange = vi.fn();
+    const popup = {
+      closed: false,
+      close: vi.fn(),
+      focus: vi.fn()
+    };
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(popup as unknown as Window);
+
+    render(<CubidWidget dapp_id="33" onStampChange={onStampChange} stampToRender="address" uuid="user-42" />);
+
+    await user.click(screen.getByRole("button", { name: "Verify address with Cubid" }));
+
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://passport.cubid.me/verify?dapp_id=33&user_id=user-42&stamp_type=address",
+      "cubid-verification",
+      "width=600,height=800"
+    );
+
+    popup.closed = true;
+    await vi.waitFor(() => {
+      expect(onStampChange).toHaveBeenCalledTimes(1);
+    });
+
+    openSpy.mockRestore();
+  });
+
+  it("disables the hosted phone widget when the required page id is missing", () => {
+    render(<CubidWidget stampToRender="phone" uuid="user-42" />);
+
+    expect(screen.getByText("Cubid phone verification is not configured for this environment.")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Verify phone with Cubid" }).getAttribute("disabled")).not.toBeNull();
   });
 });
