@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -114,6 +114,26 @@ describe("@cubid/web2-react", () => {
       state: "state-1",
       url: "https://accounts.example/authorize?client_id=abc"
     });
+  });
+
+  it("keeps the email otp form in collect mode when sending the code fails", async () => {
+    const client = createClient();
+    client.email.startOtp = vi.fn(async () => ({ raw: { sent: false }, sent: false }));
+    const user = userEvent.setup();
+
+    const view = render(
+      <CubidWeb2Provider client={client as never}>
+        <EmailOtpForm />
+      </CubidWeb2Provider>
+    );
+    const form = within(view.container);
+
+    await user.type(form.getByLabelText("Email"), "hello@cubid.me");
+    await user.click(form.getByRole("button", { name: "Send email code" }));
+
+    expect(form.getByText("Unable to send code.")).toBeTruthy();
+    expect(form.queryByLabelText("OTP")).toBeNull();
+    expect(form.getByRole("button", { name: "Send email code" })).toBeTruthy();
   });
 
   it("forwards provider button errors instead of leaving an unhandled async rejection", async () => {

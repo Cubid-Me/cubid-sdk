@@ -52,7 +52,7 @@ export function EmailOtpForm({
 
         startTransition(() => {
           setStatus(result.sent ? "Code sent. Enter the OTP to finish verification." : "Unable to send code.");
-          setStep("verify");
+          setStep(result.sent ? "verify" : "collect");
         });
       } else if (step === "verify") {
         const result = await resolvedClient.email.verifyOtp({
