@@ -54,6 +54,11 @@ const snapshot = await cubid.syncIdentitySnapshot({
 })
 ```
 
+Treat that `userId` as an app-scoped integration identifier, not as a raw
+cross-app Cubid handle. When OIDC is in use, the pairwise `sub` should be
+treated the same way: stable for the relying party, but not reusable as a
+global identifier across apps.
+
 ## Supabase Edge / Deno
 
 Pass `fetch` explicitly when a runtime or test harness provides its own
@@ -99,6 +104,11 @@ Responses use SDK-friendly camelCase fields while retaining the original
 server payload in `raw` for migration/debugging. Malformed successful responses
 throw `CubidApiError` with `code: "MALFORMED_RESPONSE"` instead of returning an
 unsafe partial shape.
+
+Integration code should also assume identity and stamp payloads may be filtered
+by persisted selective-disclosure grants. Future Passport slices persist those
+grants from at least `allow_page` and `oidc`, so SDK helpers must not assume
+legacy `stamp_dappuser_permissions` rows are the only disclosure source.
 
 OTP helpers intentionally return delivery or verification metadata only. They
 never expose raw OTP values, even if a legacy server payload includes one.

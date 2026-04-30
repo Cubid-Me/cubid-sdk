@@ -82,9 +82,13 @@ Plan the migration from `@cubid/web3` into chain-specific packages such as `@cub
 - Timestamp completed: TBD
 - Feature branch: TBD
 - Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`
 
 Before adding new identity, disclosure, or stamp metadata helpers, reconcile the
 public SDK surface with Passport's app-scoped subject model, selective-disclosure
 grant contracts, and canonical stamp registry so the SDK does not expose raw
 cross-app identifiers or drift from the backend's stamp definitions.
+
+Future helper types should treat persisted disclosure grants from at least
+`allow_page` and `oidc` as first-class sources, and should not assume legacy
+`stamp_dappuser_permissions` rows are the only disclosure gate for stamp data.

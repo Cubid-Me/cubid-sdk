@@ -1,5 +1,17 @@
 # Session Log
 
+## session: s03-passport-disclosure-grant-inbox
+
+- Timestamp: 2026-04-30T23:55:00Z
+- Summary: Ingested the Passport inbox note about persisted selective-disclosure grants and tightened SDK docs/todo language around app-scoped identifiers.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`.
+  - Updated the public integration guide to prefer app-scoped `userId` or OIDC pairwise `sub` over raw/internal identifiers.
+  - Documented that returned identity/stamp data may be filtered by persisted selective-disclosure grants from `allow_page` and `oidc`, not only by legacy permission rows.
+  - Expanded the SDK todo follow-up to reference the new disclosure-grant persistence message directly.
+- Validation:
+  - Reviewed the current SDK docs and todo state after the edits.
+
 ## session: s02-repo-boundary-agents-note
 
 - Timestamp: 2026-04-30T23:40:10Z
