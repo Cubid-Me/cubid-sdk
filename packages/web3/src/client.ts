@@ -14,7 +14,7 @@ import type {
 } from "./types";
 
 function createDefaultVerification(): CubidWalletVerification {
-  return { isVerified: true };
+  return { isVerified: false };
 }
 
 function resolveStampType(stampType: CubidWeb3StampType | undefined, fallback: CubidWeb3StampType): CubidWeb3StampType {
@@ -46,6 +46,14 @@ export function createCubidWeb3Client(
       stampType,
       userId
     }: VerifyWalletRequest<TConnection>): Promise<VerifyWalletResult<TConnection>> => {
+      if (persistStamp && (!userId || pageId === undefined)) {
+        throw new Error("Persisting a wallet stamp requires both userId and pageId.");
+      }
+
+      if (persistStamp && !adapter.verify) {
+        throw new Error("Persisting a wallet stamp requires an adapter.verify implementation.");
+      }
+
       const verification = (await adapter.verify?.(connection)) ?? createDefaultVerification();
       const resolvedStampType = resolveStampType(stampType, defaultStampType);
       const stampData =
@@ -55,15 +63,18 @@ export function createCubidWeb3Client(
       let persistedStamp: VerifyWalletResult<TConnection>["persistedStamp"];
 
       if (persistStamp && verification.isVerified) {
-        if (!userId || pageId === undefined) {
+        const resolvedPageId = pageId;
+        const resolvedUserId = userId;
+
+        if (resolvedPageId === undefined || !resolvedUserId) {
           throw new Error("Persisting a wallet stamp requires both userId and pageId.");
         }
 
         persistedStamp = await apiClient.addStamp({
-          pageId,
+          pageId: resolvedPageId,
           stampData,
           stampType: resolvedStampType,
-          userId
+          userId: resolvedUserId
         });
       }
 

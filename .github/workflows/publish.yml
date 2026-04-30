@@ -71,7 +71,8 @@ jobs:
 
       - name: Publish @cubid/core to npm
         if: ${{ inputs.publish_npm }}
-        run: npm publish --workspace @cubid/core --access public --provenance
+        working-directory: packages/core
+        run: npm publish --access public --provenance
 
       - name: Publish @cubid/core to JSR
         if: ${{ inputs.publish_jsr }}

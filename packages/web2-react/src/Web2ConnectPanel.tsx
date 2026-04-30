@@ -4,6 +4,7 @@ import type {
   OAuthAuthorizationUrlRequest,
   StampPersistenceRequest
 } from "@cubid/web2";
+import type { ComponentPropsWithoutRef } from "react";
 
 import { EmailOtpForm } from "./EmailOtpForm";
 import { PhoneOtpForm } from "./PhoneOtpForm";
@@ -26,7 +27,7 @@ export interface Web2ConnectPanelProviderConfig {
   provider: CubidOAuthProvider;
 }
 
-export interface Web2ConnectPanelProps extends React.ComponentPropsWithoutRef<"section"> {
+export interface Web2ConnectPanelProps extends ComponentPropsWithoutRef<"section"> {
   client?: CubidWeb2Client;
   email?: false | Web2ConnectPanelEmailConfig;
   phone?: false | Web2ConnectPanelPhoneConfig;

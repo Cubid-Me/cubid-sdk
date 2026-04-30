@@ -115,6 +115,19 @@ describe("@cubid/web2-react", () => {
     });
   });
 
+  it("forwards provider button errors instead of leaving an unhandled async rejection", async () => {
+    const user = userEvent.setup();
+    const onError = vi.fn();
+
+    render(<ProviderConnectButton onError={onError} provider="google" />);
+
+    const buttons = screen.getAllByRole("button", { name: "Connect Google" });
+    await user.click(buttons[buttons.length - 1]!);
+
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(onError.mock.calls[0]?.[0]).toBeInstanceOf(Error);
+  });
+
   it("does not pull wallet or web3 dependencies into the react package", () => {
     const packageJson = JSON.parse(
       fs.readFileSync(path.resolve(process.cwd(), "packages/web2-react/package.json"), "utf8")

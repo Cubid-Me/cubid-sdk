@@ -4,6 +4,7 @@ import type {
   CubidWeb2Client,
   OAuthAuthorizationUrlRequest
 } from "@cubid/web2";
+import type { ComponentPropsWithoutRef, MouseEvent } from "react";
 
 import { useOptionalCubidWeb2Client } from "./context";
 
@@ -12,11 +13,12 @@ function labelForProvider(provider: CubidOAuthProvider) {
 }
 
 export interface ProviderConnectButtonProps
-  extends Omit<React.ComponentPropsWithoutRef<"button">, "onClick"> {
+  extends Omit<ComponentPropsWithoutRef<"button">, "onClick"> {
   authorizationRequest?: OAuthAuthorizationUrlRequest;
   authorizationUrl?: string;
   client?: CubidWeb2Client;
   navigate?: boolean;
+  onError?: (error: unknown) => void;
   onConnect?: (details: {
     provider: CubidOAuthProvider;
     state?: CubidOAuthCallbackState | string;
@@ -31,6 +33,7 @@ export function ProviderConnectButton({
   children,
   client,
   navigate = false,
+  onError,
   onConnect,
   provider,
   type = "button",
@@ -39,26 +42,35 @@ export function ProviderConnectButton({
   const contextualClient = useOptionalCubidWeb2Client();
   const resolvedClient = client ?? contextualClient ?? undefined;
 
-  async function handleClick() {
-    if (!resolvedClient && !authorizationUrl) {
-      throw new Error("ProviderConnectButton requires a CubidWeb2Client prop or provider when no authorizationUrl is supplied.");
-    }
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    void (async () => {
+      try {
+        if (!resolvedClient && !authorizationUrl) {
+          throw new Error(
+            "ProviderConnectButton requires a CubidWeb2Client prop or provider when no authorizationUrl is supplied."
+          );
+        }
 
-    const url =
-      authorizationUrl ??
-      (authorizationRequest && resolvedClient
-        ? resolvedClient.oauth.buildAuthorizationUrl(authorizationRequest)
-        : undefined);
+        const url =
+          authorizationUrl ??
+          (authorizationRequest && resolvedClient
+            ? resolvedClient.oauth.buildAuthorizationUrl(authorizationRequest)
+            : undefined);
 
-    await onConnect?.({
-      provider,
-      state: authorizationRequest?.state,
-      url
-    });
+        await onConnect?.({
+          provider,
+          state: authorizationRequest?.state,
+          url
+        });
 
-    if (navigate && url && typeof window !== "undefined") {
-      window.location.assign(url);
-    }
+        if (navigate && url && typeof window !== "undefined") {
+          window.location.assign(url);
+        }
+      } catch (error) {
+        event.preventDefault();
+        onError?.(error);
+      }
+    })();
   }
 
   return (

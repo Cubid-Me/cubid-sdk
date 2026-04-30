@@ -1,4 +1,5 @@
 import { startTransition, useId, useState } from "react";
+import type { ComponentPropsWithoutRef, FormEvent } from "react";
 
 import type { CubidWeb2Client, PhoneOtpVerifyResult, StampPersistenceRequest } from "@cubid/web2";
 
@@ -6,7 +7,7 @@ import { useOptionalCubidWeb2Client } from "./context";
 
 type PhoneOtpStartResult = Awaited<ReturnType<CubidWeb2Client["phone"]["startOtp"]>>;
 
-export interface PhoneOtpFormProps extends Omit<React.ComponentPropsWithoutRef<"form">, "onSubmit"> {
+export interface PhoneOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">, "onSubmit"> {
   client?: CubidWeb2Client;
   defaultPhone?: string;
   onError?: (error: unknown) => void;
@@ -34,7 +35,7 @@ export function PhoneOtpForm({
   const [isBusy, setIsBusy] = useState(false);
   const [status, setStatus] = useState<string>();
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsBusy(true);
 

@@ -79,6 +79,33 @@ describe("@cubid/web3", () => {
     ).rejects.toThrow("Persisting a wallet stamp requires both userId and pageId.");
   });
 
+  it("throws when stamp persistence is requested without adapter verification", async () => {
+    const apiClient = {
+      addStamp: vi.fn(async () => ({ success: true })),
+      config: {
+        apiKey: "api-key",
+        baseUrl: "https://passport.cubid.me/api/v2",
+        dappId: "dapp-id",
+        fetch
+      }
+    } as const;
+
+    const client = createCubidWeb3Client(apiClient as never);
+
+    await expect(
+      client.verifyWallet({
+        adapter: {
+          connect: async () => ({ address: "0xdef" }),
+          id: "adapter"
+        },
+        connection: { address: "0xdef" },
+        pageId: 4,
+        persistStamp: true,
+        userId: "user-1"
+      })
+    ).rejects.toThrow("Persisting a wallet stamp requires an adapter.verify implementation.");
+  });
+
   it("does not declare any web2 dependency edge", () => {
     const packageJson = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
       dependencies?: Record<string, string>;
