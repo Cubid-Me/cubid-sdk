@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s02-repo-boundary-agents-note
+
+- Timestamp: 2026-04-30T23:40:10Z
+- Summary: Recorded the `AGENTS.md` repo-boundary guidance update that landed in commit `8ed25ab1`.
+- Actions:
+  - Confirmed `AGENTS.md` now identifies `Cubid-Me/cubid-sdk` as the canonical public SDK home.
+  - Confirmed the guidance keeps private Passport/Admin/OIDC runtime code in `cubid-passport`.
+  - Confirmed cross-repo coordination folders are documented for SDK-to-Passport and Passport-to-SDK messages.
+- Validation:
+  - Reviewed the committed `AGENTS.md` contents and current repository status.
+- Follow-up:
+  - Future SDK-impacting backend changes from `cubid-passport` should continue to arrive through `agent-context/messages-from-cubid-passport/`.
+
 ## session: s01-core-adoption
 
 - Timestamp: 2026-04-30T14:10:00Z
