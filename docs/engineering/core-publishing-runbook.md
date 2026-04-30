@@ -13,7 +13,7 @@ The canonical public SDK home is `Cubid-Me/cubid-sdk`. Do not publish
 - JSR package: `@cubid/core`
 - GitHub repository: `Cubid-Me/cubid-sdk`
 - Workflow: `.github/workflows/publish.yml`
-- Release branch: `master`
+- Release branch: `main`
 - Release workflow trigger: manual `workflow_dispatch`
 
 Before a release, verify the current registry and local-auth state instead of
@@ -70,10 +70,10 @@ npm's trusted-publisher UI is package-settings based. If npm does not let you
 configure Trusted Publishing before the first package version exists, use this
 bootstrap path:
 
-1. Make sure this publishing setup PR has merged to `master`.
+1. Make sure this publishing setup PR has merged to `main`.
 2. Use the official npm org owner account, not an agent or personal automation
    token.
-3. Publish version `0.1.0` once from the clean `master` release commit with:
+3. Publish version `0.1.0` once from the clean `main` release commit with:
 
    ```sh
    pnpm --filter @cubid/core build
@@ -104,17 +104,17 @@ linked to the repository.
 
 ## Release Steps After Setup
 
-1. Ensure the release commit is merged to `master`.
+1. Ensure the release commit is merged to `main`.
 2. Open GitHub Actions for `Cubid-Me/cubid-sdk`.
 3. Select workflow `Publish Packages`.
 4. Click `Run workflow`.
-5. Select branch `master`.
+5. Select branch `main`.
 6. Set `publish_npm` and/or `publish_jsr` to `true`.
 7. Run the workflow.
 8. Confirm the workflow passes and the package pages show the new version.
 
 The workflow fails intentionally if a publish is dispatched from any branch
-other than `master`.
+other than `main`.
 
 ## Verification Commands
 

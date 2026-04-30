@@ -28,8 +28,8 @@ jobs:
       - name: Verify release branch
         if: ${{ inputs.publish_npm || inputs.publish_jsr }}
         run: |
-          if [ "$GITHUB_REF" != "refs/heads/master" ]; then
-            echo "Package releases must be dispatched from the master branch. Current ref: $GITHUB_REF"
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "Package releases must be dispatched from the main branch. Current ref: $GITHUB_REF"
             exit 1
           fi
 
