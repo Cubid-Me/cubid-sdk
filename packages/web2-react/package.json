@@ -1,0 +1,28 @@
+{
+  "name": "@cubid/web2-react",
+  "version": "0.1.0",
+  "description": "React components for Cubid web2 flows.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "dependencies": {
+    "@cubid/web2": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-dom",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}
