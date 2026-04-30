@@ -1,0 +1,24 @@
+{
+  "name": "@cubid/web3",
+  "version": "0.1.0",
+  "description": "Wallet-oriented Cubid helpers built on top of @cubid/core.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "dependencies": {
+    "@cubid/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

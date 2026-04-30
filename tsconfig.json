@@ -1,40 +1,9 @@
 {
-  "types": ["node"],
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "declaration": true,
-    "outDir": "./dist",
-    "strict": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx", // Changed from "react" to "react-jsx"
-    "lib": [
-      "dom",
-      "dom.iterable", // Added dom.iterable
-      "esnext"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
-    "allowJs": true, // Added allowJs
-    "resolveJsonModule": true, // Added resolveJsonModule
-    "isolatedModules": true, // Added isolatedModules
-    "noEmit": true, // Added noEmit for development
-    "incremental": false // Added incremental compilation
-  },
-  "include": [
-    "./**/*.ts",
-    "./**/*.tsx", // Added .tsx files
-    "index.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "files": [],
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/web2" },
+    { "path": "./packages/web2-react" },
+    { "path": "./packages/web3" }
+  ]
 }
