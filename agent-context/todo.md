@@ -42,19 +42,30 @@ Carry forward the useful older ergonomics that remain compatible with the strong
 
 Port Deno smoke checks, npm pack dry-runs, JSR dry-runs, and publish workflow scaffolding into this SDK repo so `@cubid/core` is validated as a public package from the correct canonical home.
 
-### S01.3 Publish `@cubid/core@0.1.0`
+### S01.3 Bootstrap-publish `@cubid/core@0.1.0`
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-01T00:00:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-01T00:06:00Z
 - Feature branch: `main`
 - Head: `b77fba14` at bootstrap publish start
 - Session-log reference(s): session: s05-core-bootstrap-publish
 
 Bootstrap npm publication and GitHub trusted publishing are now in place for
-`@cubid/core`. Remaining work for this item is to confirm the JSR publication
-path, verify provenance/install guidance end to end, and then mark the release
-flow fully complete from this SDK repo rather than `cubid-passport`.
+`@cubid/core` from this SDK repo.
+
+### S01.4 Finish `@cubid/core` cross-registry release verification
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Confirm the JSR publication path, verify provenance/install guidance end to
+end, and close out any remaining release verification steps for `@cubid/core`
+from this SDK repo rather than `cubid-passport`.
 
 ### S02. Rename the browser and React package layers
 

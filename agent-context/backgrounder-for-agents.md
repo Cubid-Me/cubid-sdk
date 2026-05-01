@@ -8,12 +8,7 @@ This repo is the canonical public SDK home for Cubid. It should contain public
 API clients, browser helpers, React bindings, chain integrations, developer
 docs, and publish tooling. It should not contain private Passport runtime code.
 
-The private parent repo lives separately at:
-
-```txt
-/Users/botmaster/src/cubid/cubid-passport
-```
-
+The private parent repo lives separately in the `cubid-passport` repository.
 That private repo owns hosted login, OIDC issuer endpoints, signing keys,
 provider secrets, passkey verification, abuse controls, consent persistence,
 service-role access, and database migrations.
@@ -154,19 +149,13 @@ Avoid:
 Before changing public SDK types, response models, auth flows, or other
 contracts that may affect Passport internals:
 
-1. Evaluate the impact on `cubid-passport`
-2. Keep the public SDK aligned with the real backend contract
-3. If follow-up is needed in Passport, create a note in:
+1. Evaluate the impact on `cubid-passport`.
+2. Keep the public SDK aligned with the real backend contract.
+3. If follow-up is needed in Passport, create a note in the `cubid-passport`
+   repo under `agent-context/messages-from-cubid-sdk/`.
 
-```txt
-/Users/botmaster/src/cubid/cubid-passport/agent-context/messages-from-cubid-sdk
-```
-
-Also treat any new dirty files in this repo's Passport inbox as incoming work:
-
-```txt
-/Users/botmaster/src/cubid/cubid-sdk-v2/agent-context/messages-from-cubid-passport
-```
+Also treat any new dirty files in this repo under
+`agent-context/messages-from-cubid-passport/` as incoming work.
 
 ## Current Product Reality
 

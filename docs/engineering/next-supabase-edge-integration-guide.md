@@ -86,10 +86,11 @@ await saveLocalIdentitySnapshot({
 })
 ```
 
-Apps should store the app-scoped `userId` or OIDC pairwise `sub`, a refresh
-timestamp, and only the claims or stamp summaries that the user actually
-consented to disclose. Do not store raw Cubid user IDs, dapp user UUIDs, or
-other cross-app/internal identifiers as public app-facing handles.
+Apps should store the app-scoped `userId` returned by `@cubid/core` or the OIDC
+pairwise `sub`, plus a refresh timestamp and only the claims or stamp summaries
+that the user actually consented to disclose. Do not replace those app-scoped
+handles with raw internal/global Cubid identifiers, dapp user UUIDs, or other
+cross-app identifiers when building public app-facing identity records.
 
 ## Phone OTP And Provider Handoff
 

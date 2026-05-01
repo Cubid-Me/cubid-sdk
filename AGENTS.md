@@ -5,8 +5,8 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 
 ## Boundary Rules
 
-- The private parent Cubid application/runtime repo lives separately at
-  `/Users/botmaster/src/cubid/cubid-passport`.
+- The private parent Cubid application/runtime repo lives separately in the
+  `cubid-passport` repository.
 - Keep private Passport/Admin/OIDC runtime code out of this repo.
 - Do not add non-API or non-SDK product code to this repo.
 - Do not publish public SDK packages from `cubid-passport`.
@@ -23,12 +23,11 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 ## Cross-Repo Coordination
 
 - When an SDK change has corresponding implementation or follow-up impact in
-  `cubid-passport`, create a note for the Passport-side agents in
-  `/Users/botmaster/src/cubid/cubid-passport/agent-context/messages-from-cubid-sdk`.
-- Treat any new dirty files in
-  `/Users/botmaster/src/cubid/cubid-sdk-v2/agent-context/messages-from-cubid-passport`
-  as incoming messages from Passport-side agents and review or address them as
-  part of the current task.
+  `cubid-passport`, create a note for the Passport-side agents in that repo
+  under `agent-context/messages-from-cubid-sdk/`.
+- Treat any new dirty files in this repo under
+  `agent-context/messages-from-cubid-passport/` as incoming messages from
+  Passport-side agents and review or address them as part of the current task.
 
 ## Current Migration Direction
 
