@@ -135,7 +135,7 @@ justified by real duplication.
 - Timestamp completed: TBD
 - Feature branch: TBD
 - Head: TBD
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-filtering-runtime.md`
 
 Before adding new identity, disclosure, or stamp metadata helpers, reconcile the
 public SDK surface with Passport's app-scoped subject model, selective-disclosure
@@ -145,3 +145,6 @@ cross-app identifiers or drift from the backend's stamp definitions.
 Future helper types should treat persisted disclosure grants from at least
 `allow_page` and `oidc` as first-class sources, and should not assume legacy
 `stamp_dappuser_permissions` rows are the only disclosure gate for stamp data.
+They should also distinguish privacy-limited outcomes such as `notGranted`
+from `notVerified`, `notFound`, or transport failure so downstream apps can
+explain why a score or stamp is absent without implying a backend error.

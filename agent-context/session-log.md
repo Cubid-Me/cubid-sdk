@@ -1,5 +1,16 @@
 # Session Log
 
+## session: s06-passport-runtime-disclosure-filtering-inbox
+
+- Timestamp: 2026-05-01T08:15:00Z
+- Summary: Ingested the Passport inbox note about runtime disclosure filtering and clarified that privacy-limited stamp and score results are valid success states.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-filtering-runtime.md`.
+  - Updated the public `@cubid/core` package docs and the Next/Supabase integration guide to treat missing stamps, redacted helper fields, and lower/zero scores as possible disclosure-limited outcomes rather than automatic failures.
+  - Expanded the future disclosure-helper roadmap to include explicit normalized privacy states such as `notGranted`.
+- Validation:
+  - Reviewed the affected SDK docs and roadmap entries after the edits.
+
 ## session: s05-core-bootstrap-publish
 
 - Timestamp: 2026-05-01T00:06:00Z

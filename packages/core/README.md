@@ -109,6 +109,10 @@ Integration code should also assume identity and stamp payloads may be filtered
 by persisted selective-disclosure grants. Future Passport slices persist those
 grants from at least `allow_page` and `oidc`, so SDK helpers must not assume
 legacy `stamp_dappuser_permissions` rows are the only disclosure source.
+Missing stamps, redacted email helper fields, or lower/zero score values can be
+valid privacy outcomes when a user has not granted disclosure for a stamp to a
+given app. Treat those responses as app-scoped disclosure limits first, not
+automatically as transport errors or a missing Cubid user.
 
 OTP helpers intentionally return delivery or verification metadata only. They
 never expose raw OTP values, even if a legacy server payload includes one.

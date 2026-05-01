@@ -34,6 +34,11 @@ partial or unsafe response shapes.
 OTP helpers must not expose raw OTP values. They normalize only delivery and
 verification metadata even if a legacy server payload contains a code.
 
+Identity and score helpers must also tolerate disclosure-limited success
+responses. Empty stamp arrays, missing stamp helper fields, or lower/zero
+scores may reflect active `selective_disclosure_grants` for the target app
+rather than transport failure or user absence.
+
 ## Publishing
 
 Use trusted publishing only. Do not publish this package with a local npm user

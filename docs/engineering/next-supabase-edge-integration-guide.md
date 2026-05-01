@@ -126,7 +126,9 @@ return {
 Treat returned stamp and identity data as disclosure-filtered. Future Passport
 slices persist selective-disclosure grants from both `allow_page` and `oidc`,
 so apps must not assume legacy `stamp_dappuser_permissions` rows are the only
-source of truth for what should be visible.
+source of truth for what should be visible. An empty stamp list, redacted email
+helper fields, or a lower/zero score can be a valid privacy-limited outcome for
+that app-scoped user, not just a sync failure.
 
 ## Stability Notes
 
