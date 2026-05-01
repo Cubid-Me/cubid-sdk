@@ -1,5 +1,42 @@
 # Session Log
 
+## session: s05-core-bootstrap-publish
+
+- Timestamp: 2026-05-01T00:06:00Z
+- Summary: Bootstrap-published `@cubid/core@0.1.0` to npm and configured GitHub trusted publishing for future releases.
+- Actions:
+  - Ran the final package validation flow for `@cubid/core` from `main`.
+  - Published `@cubid/core@0.1.0` to npm under the `cubid` scope.
+  - Bound npm trusted publishing to `Cubid-Me/cubid-sdk` and `.github/workflows/publish.yml`.
+  - Confirmed the public npm package page and `latest` dist-tag for `@cubid/core`.
+- Validation:
+  - Confirmed `@cubid/core` resolved publicly from npm at version `0.1.0`.
+  - Confirmed npm trusted publishing was attached to the repo workflow.
+
+## session: s04-hybrid-package-direction
+
+- Timestamp: 2026-05-01T00:15:00Z
+- Summary: Rewrote the agent backgrounder and nearby repo guidance to align on a hybrid public SDK package model.
+- Actions:
+  - Added `agent-context/backgrounder-for-agents.md` describing the public/private Cubid split and the target public package ecosystem.
+  - Updated `AGENTS.md` so the repo rules now explicitly preserve a first-class headless browser layer, a future React rename, chain package splits, and dedicated auth package boundaries.
+  - Updated `README.md` to describe both the current interim package names and the intended long-term names.
+  - Updated `agent-context/todo.md` so the roadmap now tracks browser-layer renaming, React renaming, chain-package splits, dedicated auth packages, and disclosure-aligned identity helpers separately.
+- Validation:
+  - Reviewed the current package manifests and entrypoints before updating the background guidance.
+
+## session: s03-passport-disclosure-grant-inbox
+
+- Timestamp: 2026-04-30T23:55:00Z
+- Summary: Ingested the Passport inbox note about persisted selective-disclosure grants and tightened SDK docs/todo language around app-scoped identifiers.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`.
+  - Updated the public integration guide to prefer app-scoped `userId` or OIDC pairwise `sub` over raw/internal identifiers.
+  - Documented that returned identity/stamp data may be filtered by persisted selective-disclosure grants from `allow_page` and `oidc`, not only by legacy permission rows.
+  - Expanded the SDK todo follow-up to reference the new disclosure-grant persistence message directly.
+- Validation:
+  - Reviewed the current SDK docs and todo state after the edits.
+
 ## session: s02-repo-boundary-agents-note
 
 - Timestamp: 2026-04-30T23:40:10Z

@@ -9,9 +9,17 @@ verification, migrations, and service-role access.
 Workspace packages:
 
 - `@cubid/core`: runtime-agnostic Cubid foundation client
-- `@cubid/web2`: headless browser helpers for OTP, allow-flow, and OAuth stamp sync
-- `@cubid/web2-react`: React provider and focused web2 flow components
-- `@cubid/web3`: wallet-oriented helpers built on top of `@cubid/core`
+- `@cubid/web2`: current headless browser helpers for OTP, hosted verification, allow-flow, and OAuth stamp sync
+- `@cubid/web2-react`: current React provider and focused browser-flow components
+- `@cubid/web3`: current wallet-oriented helpers built on top of `@cubid/core`
+
+Target package direction:
+
+- `@cubid/core`: stable runtime-agnostic API foundation
+- `@cubid/browser`: future name for the headless browser integration layer now represented by `@cubid/web2`
+- `@cubid/react`: future name for the React layer now represented by `@cubid/web2-react`
+- chain-specific packages such as `@cubid/evm`, `@cubid/wagmi`, `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`, and `@cubid/near` as the long-term replacement for the interim `@cubid/web3`
+- dedicated auth packages such as `@cubid/auth` and `@cubid/auth-react` when the hosted OIDC surface is ready for public SDK support
 
 ## Commands
 
@@ -48,4 +56,5 @@ import { createCubidApiClient } from "@cubid/core"
 
 `@cubid/web2`, `@cubid/web2-react`, and `@cubid/web3` remain higher-level
 helpers built on top of `@cubid/core`; they are not required for Supabase Edge
-usage.
+usage. Over time, expect those interim package names to migrate toward
+`@cubid/browser`, `@cubid/react`, and chain-specific packages.

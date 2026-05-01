@@ -42,18 +42,19 @@ Carry forward the useful older ergonomics that remain compatible with the strong
 
 Port Deno smoke checks, npm pack dry-runs, JSR dry-runs, and publish workflow scaffolding into this SDK repo so `@cubid/core` is validated as a public package from the correct canonical home.
 
-### S01.3 Publish `@cubid/core@0.1.0`
+### S01.3 Bootstrap-publish `@cubid/core@0.1.0`
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: requires restored Git checkout and human registry owner actions
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-05-01T00:00:00Z
+- Timestamp completed: 2026-05-01T00:06:00Z
+- Feature branch: `main`
+- Head: `b77fba14` at bootstrap publish start
+- Session-log reference(s): session: s05-core-bootstrap-publish
 
-After review and after the Git checkout is restored, publish `@cubid/core` from this SDK repo using npm/JSR trusted publishing. Confirm npm and JSR package pages, install/import examples, and provenance all point to the public SDK repo rather than `cubid-passport`.
+Bootstrap npm publication and GitHub trusted publishing are now in place for
+`@cubid/core` from this SDK repo.
 
-### S02. Rename or adapt the React package
+### S01.4 Finish `@cubid/core` cross-registry release verification
 
 - Status: Not started
 - Timestamp started: TBD
@@ -62,7 +63,43 @@ After review and after the Git checkout is restored, publish `@cubid/core` from 
 - Head: TBD
 - Session-log reference(s): TBD
 
-Plan the migration from `@cubid/web2-react` to `@cubid/react`, preserving the useful provider-connect, OTP, callback, and profile-completion primitives while keeping React-specific logic out of core.
+Confirm the JSR publication path, verify provenance/install guidance end to
+end, and close out any remaining release verification steps for `@cubid/core`
+from this SDK repo rather than `cubid-passport`.
+
+### S02. Rename the browser and React package layers
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Plan the migration from the interim `web2` package family toward clearer public
+names:
+
+- `@cubid/web2` -> `@cubid/browser`
+- `@cubid/web2-react` -> `@cubid/react`
+
+Preserve the useful hosted-verification, provider-connect, OTP, callback, and
+profile-completion primitives while keeping browser-specific logic out of core
+and React-specific logic out of the headless browser layer.
+
+### S02.1 Keep the headless browser layer first-class
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Before renaming packages, document and preserve the architectural rule that
+browser integration is not the same thing as React. The public SDK should keep
+a headless browser-safe layer for hosted verification launchers, OTP flow
+orchestration, callback parsing, and other client-side helpers that do not
+require a UI framework.
 
 ### S03. Split chain packages
 
@@ -75,16 +112,36 @@ Plan the migration from `@cubid/web2-react` to `@cubid/react`, preserving the us
 
 Plan the migration from `@cubid/web3` into chain-specific packages such as `@cubid/evm`, `@cubid/wagmi`, `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`, and `@cubid/near`, starting with lightweight contract boundaries before adding heavier SDK dependencies.
 
-### S04. Align future identity and stamp helpers with app-scoped disclosure contracts
+### S04. Create dedicated auth package boundaries when OIDC is ready
 
 - Status: Not started
 - Timestamp started: TBD
 - Timestamp completed: TBD
 - Feature branch: TBD
 - Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`
+- Session-log reference(s): TBD
+
+When "Sign in with Cubid" becomes a public SDK surface, prefer a dedicated auth
+package family such as `@cubid/auth` and `@cubid/auth-react` for PKCE/state
+helpers, callback parsing, token exchange, userinfo/session helpers, and React
+session bindings. Do not force those responsibilities into `@cubid/core`,
+`@cubid/browser`, or `@cubid/react` unless a narrower shared helper is clearly
+justified by real duplication.
+
+### S05. Align future identity and stamp helpers with app-scoped disclosure contracts
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`
 
 Before adding new identity, disclosure, or stamp metadata helpers, reconcile the
 public SDK surface with Passport's app-scoped subject model, selective-disclosure
 grant contracts, and canonical stamp registry so the SDK does not expose raw
 cross-app identifiers or drift from the backend's stamp definitions.
+
+Future helper types should treat persisted disclosure grants from at least
+`allow_page` and `oidc` as first-class sources, and should not assume legacy
+`stamp_dappuser_permissions` rows are the only disclosure gate for stamp data.

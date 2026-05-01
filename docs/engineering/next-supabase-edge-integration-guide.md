@@ -86,8 +86,11 @@ await saveLocalIdentitySnapshot({
 })
 ```
 
-Apps should store the app-scoped `userId` and a refresh timestamp, not raw Cubid
-credentials or unnecessary identity details.
+Apps should store the app-scoped `userId` returned by `@cubid/core` or the OIDC
+pairwise `sub`, plus a refresh timestamp and only the claims or stamp summaries
+that the user actually consented to disclose. Do not replace those app-scoped
+handles with raw internal/global Cubid identifiers, dapp user UUIDs, or other
+cross-app identifiers when building public app-facing identity records.
 
 ## Phone OTP And Provider Handoff
 
@@ -119,6 +122,11 @@ return {
   syncedAt: snapshot.syncedAt,
 }
 ```
+
+Treat returned stamp and identity data as disclosure-filtered. Future Passport
+slices persist selective-disclosure grants from both `allow_page` and `oidc`,
+so apps must not assume legacy `stamp_dappuser_permissions` rows are the only
+source of truth for what should be visible.
 
 ## Stability Notes
 
