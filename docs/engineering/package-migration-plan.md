@@ -3,6 +3,19 @@
 This plan turns the current interim package names into the longer-term public
 SDK layout without breaking working integrations unnecessarily.
 
+## Current Implementation Status
+
+The first rename and split slices now exist in the workspace:
+
+- `@cubid/browser` has been created from the former `@cubid/web2` surface
+- `@cubid/react` has been created from the former `@cubid/web2-react` surface
+- `@cubid/web2` and `@cubid/web2-react` now act as compatibility re-export packages
+- `@cubid/evm` has been created as the first chain-specific package
+- `@cubid/web3` still remains in place while later chain splits continue
+
+The remaining work is publication, deprecation messaging, API cleanup where
+justified, and additional chain-package extraction.
+
 ## Target Package Map
 
 Current:

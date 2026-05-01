@@ -1,5 +1,53 @@
 # Session Log
 
+## session: s13-evm-package-slice
+
+- Timestamp: 2026-05-01T09:50:00Z
+- Summary: Created the first real chain-specific package slice as `@cubid/evm`.
+- Actions:
+  - Copied the current `@cubid/web3` implementation into `packages/evm`.
+  - Renamed the public wallet contracts and factory names to EVM-specific equivalents such as `createCubidEvmClient`.
+  - Added package-level tests confirming the new package does not pull in browser, React, or wagmi dependency edges.
+  - Kept `@cubid/web3` in place so later chain splits can decide the compatibility strategy deliberately.
+- Validation:
+  - Ran the workspace test, typecheck, and build flows after the new package was added.
+
+## session: s12-browser-react-package-slices
+
+- Timestamp: 2026-05-01T09:42:00Z
+- Summary: Created real `@cubid/browser` and `@cubid/react` package slices and converted the old names into compatibility wrappers.
+- Actions:
+  - Copied the current `@cubid/web2` surface into `packages/browser`.
+  - Copied the current `@cubid/web2-react` surface into `packages/react`.
+  - Switched the React package imports to depend on `@cubid/browser`.
+  - Converted `@cubid/web2` and `@cubid/web2-react` into thin re-export compatibility packages.
+  - Updated workspace path aliases, Vitest aliases, and repo docs to reflect the new primary package names.
+- Validation:
+  - Ran the workspace test, typecheck, and build flows after the package-slice changes.
+
+## session: s11-core-jsr-live-publish-attempt
+
+- Timestamp: 2026-05-01T09:25:00Z
+- Summary: Attempted the first live JSR publish for `@cubid/core` and confirmed the remaining blocker is JSR-side authorization.
+- Actions:
+  - Triggered the `Publish Packages` workflow from `main` with `publish_npm=false` and `publish_jsr=true`.
+  - Observed GitHub Actions run `25208963795`.
+  - Confirmed the JSR publish step failed with `actorNotAuthorized`, indicating the package/repository binding is not yet authorized on the JSR side.
+  - Updated the release roadmap and publishing runbook to record the exact blocker and keep the remaining work scoped to JSR owner setup.
+- Validation:
+  - Reviewed the failed workflow logs and confirmed the repo-side validation phase still passed before the JSR publish step failed.
+
+## session: s10-app-disclosure-revocation-inbox
+
+- Timestamp: 2026-05-01T09:15:00Z
+- Summary: Ingested the Passport note about non-OIDC Allow Page grant history and revocation, and kept those routes out of the public core surface for now.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-01-e01-app-disclosure-revocation.md`.
+  - Updated the SDK target-state guidance so user-authenticated disclosure-grant list/revoke routes are treated as future account-management or auth-surface APIs, not as dapp server APIs for `@cubid/core`.
+  - Expanded the roadmap to note that revocation is now authoritative because Passport also clears matching legacy stamp permission rows.
+- Validation:
+  - Reviewed the updated target-state and roadmap notes after the edits.
+
 ## session: s09-profile-location-disclosure-taxonomy-inbox
 
 - Timestamp: 2026-05-01T09:05:00Z

@@ -49,12 +49,17 @@ Build toward this package ecosystem:
 @cubid/secrets
 ```
 
-The current workspace still uses these interim names:
+The current workspace now contains the target package names for the first
+browser/React/EVM slices, while compatibility and interim packages remain:
 
 ```txt
-@cubid/web2       -> future @cubid/browser
-@cubid/web2-react -> future @cubid/react
-@cubid/web3       -> future chain-specific packages
+@cubid/browser
+@cubid/react
+@cubid/evm
+
+@cubid/web2       -> compatibility wrapper around @cubid/browser
+@cubid/web2-react -> compatibility wrapper around @cubid/react
+@cubid/web3       -> interim shared wallet package pending further chain splits
 ```
 
 ## Package Responsibilities

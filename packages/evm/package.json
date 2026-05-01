@@ -1,7 +1,7 @@
 {
-  "name": "@cubid/web2-react",
+  "name": "@cubid/evm",
   "version": "0.1.0",
-  "description": "Compatibility wrapper around @cubid/react.",
+  "description": "EVM-oriented Cubid wallet helpers built on top of @cubid/core.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,17 +16,13 @@
   "files": ["dist"],
   "sideEffects": false,
   "dependencies": {
-    "@cubid/react": "workspace:*"
-  },
-  "peerDependencies": {
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0"
+    "@cubid/core": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-dom",
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   }
 }

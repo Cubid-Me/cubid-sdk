@@ -3,7 +3,7 @@ import type {
   CubidWeb2Client,
   OAuthAuthorizationUrlRequest,
   StampPersistenceRequest
-} from "@cubid/web2";
+} from "@cubid/browser";
 import type { ComponentPropsWithoutRef } from "react";
 
 import { EmailOtpForm } from "./EmailOtpForm";

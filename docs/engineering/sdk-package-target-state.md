@@ -50,6 +50,11 @@ helpers, and other client helpers that do not require React.
 hooks, React components, and context/provider helpers. It must not become the
 home for protocol logic that belongs in core or the generic browser layer.
 
+Future user-authenticated disclosure-grant management routes, such as Allow
+Page grant listing or revocation, should not be treated as dapp server APIs in
+`@cubid/core`. If the public SDK exposes them later, they should sit behind a
+dedicated account-management or auth boundary.
+
 Chain packages own chain-specific wallet, key, and signing behavior. Each chain
 package should avoid cross-chain assumptions. `@cubid/evm` may depend on
 `viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
@@ -72,6 +77,8 @@ but should not accumulate heavy crypto custody dependencies.
 - Reserve `@cubid/auth` and `@cubid/auth-react` for future hosted OIDC/login
   helpers instead of forcing those responsibilities into core or the generic
   React package.
+- Treat future user-authenticated disclosure-grant management routes as
+  account-management APIs, not dapp server APIs.
 - Create or expand a specialized package when adding a heavy dependency would
   pollute core or force unrelated consumers to install ecosystem-specific code.
 - Avoid duplicate protocol logic across packages; shared protocol contracts
@@ -84,14 +91,17 @@ npm-first foundation, then layers in package-ready integration surfaces:
 
 - `@cubid/core` now owns the runtime-agnostic API client, identity sync helpers,
   normalized responses, Deno validation, and Edge examples.
-- `@cubid/web2` is the interim home for the future `@cubid/browser` surface:
+- `@cubid/browser` now exists as the primary headless browser surface for
   hosted verification URLs, OTP orchestration, AllowPage helpers, and provider
   stamp sync.
-- `@cubid/web2-react` is the interim home for the future `@cubid/react`
-  surface: OTP forms, hosted verification widgets, provider connect buttons,
-  and optional React context.
-- `@cubid/web3` is the interim home for chain adapter boundaries that should
-  split into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific packages.
+- `@cubid/react` now exists as the primary React surface for OTP forms, hosted
+  verification widgets, provider connect buttons, and optional React context.
+- `@cubid/web2` and `@cubid/web2-react` now remain as compatibility wrappers
+  around those renamed packages during the migration window.
+- `@cubid/evm` now exists as the first real chain-specific package.
+- `@cubid/web3` remains the interim shared wallet package while the split
+  continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
+  packages.
 
 Live npm publication is complete for `@cubid/core`. JSR publication remains a
 separate owner-side setup and release task. See

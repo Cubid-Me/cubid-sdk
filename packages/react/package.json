@@ -1,7 +1,7 @@
 {
-  "name": "@cubid/web2-react",
+  "name": "@cubid/react",
   "version": "0.1.0",
-  "description": "Compatibility wrapper around @cubid/react.",
+  "description": "React components and hooks for Cubid browser flows.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,7 +16,7 @@
   "files": ["dist"],
   "sideEffects": false,
   "dependencies": {
-    "@cubid/react": "workspace:*"
+    "@cubid/browser": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.2.0",

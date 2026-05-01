@@ -1,8 +1,11 @@
 import { startTransition, useEffect, useRef, useState } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
-import { buildHostedVerificationUrl } from "@cubid/web2";
-import type { CubidHostedVerificationStampType, HostedVerificationUrlRequest } from "@cubid/web2";
+import { buildHostedVerificationUrl } from "@cubid/browser";
+import type {
+  CubidHostedVerificationStampType,
+  HostedVerificationUrlRequest
+} from "@cubid/browser";
 
 function toFriendlyStampName(stampToRender: CubidHostedVerificationStampType): string {
   return stampToRender === "address" ? "address" : "phone";

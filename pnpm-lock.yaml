@@ -57,6 +57,12 @@ importers:
         specifier: ^3.1.2
         version: 3.2.4(@types/node@24.12.2)(jsdom@26.1.0)(tsx@4.21.0)
 
+  packages/browser:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/core:
     devDependencies:
       '@types/node':
@@ -69,17 +75,35 @@ importers:
         specifier: 5.2.2
         version: 5.2.2
 
-  packages/web2:
+  packages/evm:
     dependencies:
       '@cubid/core':
         specifier: workspace:*
         version: link:../core
 
+  packages/react:
+    dependencies:
+      '@cubid/browser':
+        specifier: workspace:*
+        version: link:../browser
+      react:
+        specifier: '>=18.2.0'
+        version: 19.2.5
+      react-dom:
+        specifier: '>=18.2.0'
+        version: 19.2.5(react@19.2.5)
+
+  packages/web2:
+    dependencies:
+      '@cubid/browser':
+        specifier: workspace:*
+        version: link:../browser
+
   packages/web2-react:
     dependencies:
-      '@cubid/web2':
+      '@cubid/react':
         specifier: workspace:*
-        version: link:../web2
+        version: link:../react
       react:
         specifier: '>=18.2.0'
         version: 19.2.5

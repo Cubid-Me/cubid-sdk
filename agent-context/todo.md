@@ -73,17 +73,22 @@ SDK repo:
 
 ### S01.5 Link and publish `@cubid/core` on JSR
 
-- Status: Not started
-- Timestamp started: TBD
+- Status: In progress
+- Timestamp started: 2026-05-01T09:22:00Z
 - Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s07-core-cross-registry-verification
+- Feature branch: `dev`
+- Head: `fba54d8e` at live-publish attempt start
+- Session-log reference(s): session: s07-core-cross-registry-verification, session: s11-core-jsr-live-publish-attempt
 
 The remaining cross-registry release task is owner-side JSR setup and first
 live publication. `https://jsr.io/@cubid/core/meta.json` still returns 404, so
 the package must be created or linked in JSR and then published through the
 repo workflow before `jsr:@cubid/core` imports become live.
+
+The first GitHub Actions live publish attempt from `main` failed in run
+`25208963795` with JSR `actorNotAuthorized`, which confirms the remaining
+blocker is JSR-side package/repository authorization rather than repo-side build
+or packaging validation.
 
 ### S02. Rename the browser and React package layers
 
@@ -92,10 +97,10 @@ repo workflow before `jsr:@cubid/core` imports become live.
 - Timestamp completed: TBD
 - Feature branch: `dev`
 - Head: `f46c24dc` at planning start
-- Session-log reference(s): session: s08-package-migration-planning
+- Session-log reference(s): session: s08-package-migration-planning, session: s12-browser-react-package-slices
 
-Plan the migration from the interim `web2` package family toward clearer public
-names:
+Continue the migration from the interim `web2` package family toward clearer
+public names:
 
 - `@cubid/web2` -> `@cubid/browser`
 - `@cubid/web2-react` -> `@cubid/react`
@@ -106,18 +111,17 @@ and React-specific logic out of the headless browser layer.
 
 ### S02.1 Keep the headless browser layer first-class
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-05-01T09:30:00Z
+- Timestamp completed: 2026-05-01T09:42:00Z
+- Feature branch: `dev`
+- Head: `fba54d8e` at implementation start
+- Session-log reference(s): session: s12-browser-react-package-slices
 
-Before renaming packages, document and preserve the architectural rule that
-browser integration is not the same thing as React. The public SDK should keep
-a headless browser-safe layer for hosted verification launchers, OTP flow
-orchestration, callback parsing, and other client-side helpers that do not
-require a UI framework.
+`packages/browser` now exists as the first-class headless browser layer, and
+`@cubid/web2` now re-exports it as a compatibility package. The public SDK
+continues to keep hosted verification launchers, OTP flow orchestration,
+callback parsing, and other client-side helpers outside of React.
 
 ### S02.2 Write the browser and React migration plan
 
@@ -132,6 +136,19 @@ Document the staged migration from `@cubid/web2` to `@cubid/browser` and from
 `@cubid/web2-react` to `@cubid/react`, including compatibility-package
 strategy, preserved surface area, and release order.
 
+### S02.3 Create the renamed browser and React package slices
+
+- Status: Completed
+- Timestamp started: 2026-05-01T09:30:00Z
+- Timestamp completed: 2026-05-01T09:42:00Z
+- Feature branch: `dev`
+- Head: `fba54d8e` at implementation start
+- Session-log reference(s): session: s12-browser-react-package-slices
+
+Added `packages/browser` and `packages/react` from the existing public surfaces,
+switched React imports to depend on `@cubid/browser`, and converted
+`@cubid/web2` and `@cubid/web2-react` into compatibility re-export packages.
+
 ### S03. Split chain packages
 
 - Status: In progress
@@ -139,7 +156,7 @@ strategy, preserved surface area, and release order.
 - Timestamp completed: TBD
 - Feature branch: `dev`
 - Head: `f46c24dc` at planning start
-- Session-log reference(s): session: s08-package-migration-planning
+- Session-log reference(s): session: s08-package-migration-planning, session: s13-evm-package-slice
 
 Plan the migration from `@cubid/web3` into chain-specific packages such as `@cubid/evm`, `@cubid/wagmi`, `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`, and `@cubid/near`, starting with lightweight contract boundaries before adding heavier SDK dependencies.
 
@@ -156,6 +173,20 @@ Document the phased split from `@cubid/web3` into `@cubid/evm`,
 `@cubid/wagmi`, and later chain-specific packages, including compatibility
 package strategy and release order.
 
+### S03.2 Create the first `@cubid/evm` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-01T09:42:00Z
+- Timestamp completed: 2026-05-01T09:50:00Z
+- Feature branch: `dev`
+- Head: `fba54d8e` at implementation start
+- Session-log reference(s): session: s13-evm-package-slice
+
+Added `packages/evm` as the first chain-specific package, renamed the copied
+wallet contracts to EVM-specific public types and factory names, and kept
+`@cubid/web3` in place while later compatibility and ecosystem-specific splits
+remain pending.
+
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 
 - Status: Not started
@@ -171,6 +202,11 @@ helpers, callback parsing, token exchange, userinfo/session helpers, and React
 session bindings. Do not force those responsibilities into `@cubid/core`,
 `@cubid/browser`, or `@cubid/react` unless a narrower shared helper is clearly
 justified by real duplication.
+
+Future user-authenticated disclosure-grant management routes such as
+`/api/disclosures/app-grants/list` and `/api/disclosures/app-grants/revoke`
+should be evaluated under this same boundary. If the SDK exposes them later,
+model them as account-management APIs rather than dapp server APIs.
 
 ### S05. Align future identity and stamp helpers with app-scoped disclosure contracts
 
@@ -197,3 +233,8 @@ Profile and location disclosure claims now need the same treatment. Preserve
 typed public claim names such as `profile:name`, `profile:*`, `profile`,
 `cubid:profile`, `location:rough`, `location:approximate`, `location:exact`,
 and `location:*` when evolving SDK response metadata.
+
+Allow Page grant revocation now also clears matching legacy
+`stamp_dappuser_permissions` rows in Passport, so future disclosure-aware SDK
+helpers should treat revocation as authoritative rather than assuming legacy
+stamp fallback might still keep an app authorized.

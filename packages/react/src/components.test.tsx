@@ -47,7 +47,7 @@ function createClient() {
   };
 }
 
-describe("@cubid/web2-react", () => {
+describe("@cubid/react", () => {
   it("submits the email otp form and surfaces callback results", async () => {
     const client = createClient();
     const user = userEvent.setup();
@@ -151,12 +151,13 @@ describe("@cubid/web2-react", () => {
 
   it("does not pull wallet or web3 dependencies into the react package", () => {
     const packageJson = JSON.parse(
-      fs.readFileSync(path.resolve(process.cwd(), "packages/web2-react/package.json"), "utf8")
+      fs.readFileSync(path.resolve(process.cwd(), "packages/react/package.json"), "utf8")
     ) as {
       dependencies?: Record<string, string>;
       peerDependencies?: Record<string, string>;
     };
 
+    expect(packageJson.dependencies?.["@cubid/evm"]).toBeUndefined();
     expect(packageJson.dependencies?.["@cubid/web3"]).toBeUndefined();
     expect(packageJson.dependencies?.["wagmi"]).toBeUndefined();
     expect(packageJson.dependencies?.["@rainbow-me/rainbowkit"]).toBeUndefined();

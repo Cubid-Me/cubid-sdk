@@ -3,7 +3,7 @@ import type {
   CubidOAuthProvider,
   CubidWeb2Client,
   OAuthAuthorizationUrlRequest
-} from "@cubid/web2";
+} from "@cubid/browser";
 import type { ComponentPropsWithoutRef, MouseEvent } from "react";
 
 import { useOptionalCubidWeb2Client } from "./context";

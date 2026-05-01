@@ -34,6 +34,9 @@ Current verified state as of 2026-05-01:
 - npm trusted publishing: configured for `Cubid-Me/cubid-sdk`
 - JSR dry-run: passes locally from `packages/core`
 - JSR package page: not live yet (`https://jsr.io/@cubid/core/meta.json` 404)
+- GitHub Actions JSR publish attempt from `main`: failed in run `25208963795`
+  with `actorNotAuthorized`, which points to missing JSR-side package/repo
+  authorization rather than a repo-side build failure
 
 Do not publish from a personal npm account as a routine release path. Official
 Cubid packages should be owned by the npm `cubid` organization and released
@@ -110,6 +113,11 @@ npm automation token in this repository.
 JSR supports tokenless publishing from GitHub Actions after the package is
 linked to the repository. That owner-side linking and first live publication is
 still pending for `@cubid/core`.
+
+If the first live publish fails from GitHub Actions with
+`actorNotAuthorized`, treat that as confirmation that the JSR package is not
+yet authorized for `Cubid-Me/cubid-sdk`. Fix the JSR package/repository
+binding first, then re-run the publish workflow from `main`.
 
 ## Release Steps After Setup
 
