@@ -130,6 +130,17 @@ source of truth for what should be visible. An empty stamp list, redacted email
 helper fields, or a lower/zero score can be a valid privacy-limited outcome for
 that app-scoped user, not just a sync failure.
 
+The same rule now applies to profile and location helpers. Treat these claims as
+consent-gated:
+
+- profile name: `profile:name`, `profile:*`, `profile`, `cubid:profile`
+- rough location: `location:rough`, `location:approximate`, `location:exact`, `location:*`
+- approximate location: `location:approximate`, `location:exact`, `location:*`
+- exact location: `location:exact`, `location:*`
+
+`@cubid/core` now exposes disclosure metadata on those response models so apps
+can explain `notGranted` outcomes without implying the user record is missing.
+
 ## Stability Notes
 
 `@cubid/core` `0.x` is the pre-1.0 SDK foundation. The package should preserve

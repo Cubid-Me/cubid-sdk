@@ -39,6 +39,15 @@ responses. Empty stamp arrays, missing stamp helper fields, or lower/zero
 scores may reflect active `selective_disclosure_grants` for the target app
 rather than transport failure or user absence.
 
+Profile and location helpers should follow the same model. The public response
+types now carry typed disclosure metadata for:
+
+- profile name claims: `profile:name`, `profile:*`, `profile`, `cubid:profile`
+- location claims: `location:rough`, `location:approximate`, `location:exact`, `location:*`
+
+Consumers should treat `disclosure.state === "notGranted"` as a valid
+privacy-limited outcome for app-scoped routes.
+
 ## Publishing
 
 Use trusted publishing only. Do not publish this package with a local npm user

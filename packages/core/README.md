@@ -118,6 +118,20 @@ valid privacy outcomes when a user has not granted disclosure for a stamp to a
 given app. Treat those responses as app-scoped disclosure limits first, not
 automatically as transport errors or a missing Cubid user.
 
+Profile and location routes are now consent-gated too. `@cubid/core` exposes
+typed disclosure metadata so apps can distinguish privacy-limited success
+responses from transport failures:
+
+- `profileNameDisclosure.claims`: `profile:name`, `profile:*`, `profile`, `cubid:profile`
+- location disclosure claims:
+  - rough: `location:rough`, `location:approximate`, `location:exact`, `location:*`
+  - approximate: `location:approximate`, `location:exact`, `location:*`
+  - exact: `location:exact`, `location:*`
+
+When these helpers return `disclosure.state === "notGranted"`, treat null or
+missing profile/location fields as consent-gated for that app unless your app
+has stronger local knowledge about the user's granted claims.
+
 OTP helpers intentionally return delivery or verification metadata only. They
 never expose raw OTP values, even if a legacy server payload includes one.
 

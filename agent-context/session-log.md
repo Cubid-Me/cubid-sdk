@@ -1,5 +1,17 @@
 # Session Log
 
+## session: s09-profile-location-disclosure-taxonomy-inbox
+
+- Timestamp: 2026-05-01T09:05:00Z
+- Summary: Ingested the Passport profile/location disclosure taxonomy note and added typed disclosure metadata for those SDK response surfaces.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-01-e01-profile-location-disclosure-taxonomy.md`.
+  - Added typed disclosure claim and granularity names to `@cubid/core` response models for profile and location helpers.
+  - Updated the public SDK docs to explain the new claim names and to treat null/missing profile or location fields as potential `notGranted` outcomes.
+  - Expanded the disclosure-helper roadmap so future SDK work preserves the new profile/location claim taxonomy.
+- Validation:
+  - Ran package-level core tests and typecheck after the type and documentation updates.
+
 ## session: s08-package-migration-planning
 
 - Timestamp: 2026-05-01T08:52:00Z

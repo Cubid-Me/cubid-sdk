@@ -192,3 +192,8 @@ Future helper types should treat persisted disclosure grants from at least
 They should also distinguish privacy-limited outcomes such as `notGranted`
 from `notVerified`, `notFound`, or transport failure so downstream apps can
 explain why a score or stamp is absent without implying a backend error.
+
+Profile and location disclosure claims now need the same treatment. Preserve
+typed public claim names such as `profile:name`, `profile:*`, `profile`,
+`cubid:profile`, `location:rough`, `location:approximate`, `location:exact`,
+and `location:*` when evolving SDK response metadata.

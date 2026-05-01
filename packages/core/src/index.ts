@@ -132,6 +132,27 @@ export type CubidFetchScoreResponse = {
   scoringSchema: number | string | null
 }
 
+export type CubidDisclosureAvailability = "available" | "notGranted"
+
+export type CubidProfileDisclosureClaim =
+  | "profile:name"
+  | "profile:*"
+  | "profile"
+  | "cubid:profile"
+
+export type CubidLocationDisclosureClaim =
+  | "location:rough"
+  | "location:approximate"
+  | "location:exact"
+  | "location:*"
+
+export type CubidLocationGranularity = "rough" | "approximate" | "exact"
+
+export type CubidDisclosureState<TClaim extends string> = {
+  claims: readonly TClaim[]
+  state: CubidDisclosureAvailability
+}
+
 export type CubidFetchStampsInput = {
   userId: string
 }
@@ -169,7 +190,9 @@ export type CubidCoordinates = {
 export type CubidFetchApproxLocationResponse = {
   coordinates?: CubidCoordinates
   country?: string | null
+  disclosure: CubidDisclosureState<CubidLocationDisclosureClaim>
   error: unknown
+  granularity: "approximate"
   placeName?: string | null
   plusCode?: string | null
   postalCode?: string | null
@@ -179,7 +202,9 @@ export type CubidFetchApproxLocationResponse = {
 export type CubidFetchExactLocationResponse = {
   coordinates?: CubidCoordinates
   country?: string | null
+  disclosure: CubidDisclosureState<CubidLocationDisclosureClaim>
   error: unknown
+  granularity: "exact"
   place?: unknown
   raw: Record<string, unknown>
 }
@@ -187,7 +212,9 @@ export type CubidFetchExactLocationResponse = {
 export type CubidFetchRoughLocationResponse = {
   coordinates?: CubidCoordinates
   country?: unknown
+  disclosure: CubidDisclosureState<CubidLocationDisclosureClaim>
   error: unknown
+  granularity: "rough"
   plusCode?: string | null
   raw: Record<string, unknown>
 }
@@ -196,8 +223,12 @@ export type CubidFetchUserDataResponse = {
   coordinates?: CubidCoordinates
   country?: string | null
   error: unknown
+  locationDisclosure: CubidDisclosureState<CubidLocationDisclosureClaim> & {
+    granularity: "approximate"
+  }
   name?: string | null
   placeName?: string | null
+  profileNameDisclosure: CubidDisclosureState<CubidProfileDisclosureClaim>
   raw: Record<string, unknown>
 }
 
@@ -719,6 +750,30 @@ const normalizeStamps = (
   }
 }
 
+const PROFILE_NAME_DISCLOSURE_CLAIMS: readonly CubidProfileDisclosureClaim[] = [
+  "profile:name",
+  "profile:*",
+  "profile",
+  "cubid:profile",
+] as const
+
+const ROUGH_LOCATION_DISCLOSURE_CLAIMS: readonly CubidLocationDisclosureClaim[] =
+  ["location:rough", "location:approximate", "location:exact", "location:*"] as const
+
+const APPROX_LOCATION_DISCLOSURE_CLAIMS: readonly CubidLocationDisclosureClaim[] =
+  ["location:approximate", "location:exact", "location:*"] as const
+
+const EXACT_LOCATION_DISCLOSURE_CLAIMS: readonly CubidLocationDisclosureClaim[] =
+  ["location:exact", "location:*"] as const
+
+const disclosureState = <TClaim extends string>(
+  claims: readonly TClaim[],
+  isAvailable: boolean
+): CubidDisclosureState<TClaim> => ({
+  claims,
+  state: isAvailable ? "available" : "notGranted",
+})
+
 const normalizeApproxLocation = (
   payload: unknown,
   requestId?: string | null,
@@ -730,14 +785,30 @@ const normalizeApproxLocation = (
     requestId,
     status
   )
+  const coordinates = asCoordinates(record.coordinates)
+  const country = asString(record.country)
+  const placeName = asString(record.placename)
+  const plusCode = asString(record.pluscode)
+  const postalCode = asString(record.postalcode)
+  const hasApproxLocation =
+    Boolean(coordinates) ||
+    country !== null ||
+    placeName !== null ||
+    plusCode !== null ||
+    postalCode !== null
 
   return {
-    coordinates: asCoordinates(record.coordinates),
-    country: asString(record.country),
+    coordinates,
+    country,
+    disclosure: disclosureState(
+      APPROX_LOCATION_DISCLOSURE_CLAIMS,
+      hasApproxLocation
+    ),
     error: record.error ?? null,
-    placeName: asString(record.placename),
-    plusCode: asString(record.pluscode),
-    postalCode: asString(record.postalcode),
+    granularity: "approximate",
+    placeName,
+    plusCode,
+    postalCode,
     raw: record,
   }
 }
@@ -753,12 +824,19 @@ const normalizeExactLocation = (
     requestId,
     status
   )
+  const coordinates = asCoordinates(record.coordinates)
+  const country = asString(record.country)
+  const place = record.place
+  const hasExactLocation =
+    Boolean(coordinates) || country !== null || place !== undefined
 
   return {
-    coordinates: asCoordinates(record.coordinates),
-    country: asString(record.country),
+    coordinates,
+    country,
+    disclosure: disclosureState(EXACT_LOCATION_DISCLOSURE_CLAIMS, hasExactLocation),
     error: record.error ?? null,
-    place: record.place,
+    granularity: "exact",
+    place,
     raw: record,
   }
 }
@@ -774,12 +852,22 @@ const normalizeRoughLocation = (
     requestId,
     status
   )
+  const coordinates = asCoordinates(record.coordinates)
+  const country = record.country ?? record.cubid_country ?? null
+  const plusCode = asString(record.pluscode)
+  const hasRoughLocation =
+    Boolean(coordinates) || country !== null || plusCode !== null
 
   return {
-    coordinates: asCoordinates(record.coordinates),
-    country: record.country ?? record.cubid_country ?? null,
+    coordinates,
+    country,
+    disclosure: disclosureState(
+      ROUGH_LOCATION_DISCLOSURE_CLAIMS,
+      hasRoughLocation
+    ),
     error: record.error ?? null,
-    plusCode: asString(record.pluscode),
+    granularity: "rough",
+    plusCode,
     raw: record,
   }
 }
@@ -790,13 +878,27 @@ const normalizeUserData = (
   status?: number
 ): CubidFetchUserDataResponse => {
   const record = assertRecord(payload, "identity/fetch_user_data", requestId, status)
+  const coordinates = asCoordinates(record.coordinates)
+  const country = asString(record.country)
+  const name = asString(record.name)
+  const placeName = asString(record.placename)
+  const hasApproxLocation =
+    Boolean(coordinates) || country !== null || placeName !== null
 
   return {
-    coordinates: asCoordinates(record.coordinates),
-    country: asString(record.country),
+    coordinates,
+    country,
     error: record.error ?? null,
-    name: asString(record.name),
-    placeName: asString(record.placename),
+    locationDisclosure: {
+      ...disclosureState(APPROX_LOCATION_DISCLOSURE_CLAIMS, hasApproxLocation),
+      granularity: "approximate",
+    },
+    name,
+    placeName,
+    profileNameDisclosure: disclosureState(
+      PROFILE_NAME_DISCLOSURE_CLAIMS,
+      name !== null
+    ),
     raw: record,
   }
 }
