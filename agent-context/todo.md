@@ -87,12 +87,12 @@ repo workflow before `jsr:@cubid/core` imports become live.
 
 ### S02. Rename the browser and React package layers
 
-- Status: Not started
-- Timestamp started: TBD
+- Status: In progress
+- Timestamp started: 2026-05-01T08:40:00Z
 - Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Feature branch: `dev`
+- Head: `f46c24dc` at planning start
+- Session-log reference(s): session: s08-package-migration-planning
 
 Plan the migration from the interim `web2` package family toward clearer public
 names:
@@ -119,16 +119,42 @@ a headless browser-safe layer for hosted verification launchers, OTP flow
 orchestration, callback parsing, and other client-side helpers that do not
 require a UI framework.
 
+### S02.2 Write the browser and React migration plan
+
+- Status: Completed
+- Timestamp started: 2026-05-01T08:40:00Z
+- Timestamp completed: 2026-05-01T08:52:00Z
+- Feature branch: `dev`
+- Head: `f46c24dc` at planning start
+- Session-log reference(s): session: s08-package-migration-planning
+
+Document the staged migration from `@cubid/web2` to `@cubid/browser` and from
+`@cubid/web2-react` to `@cubid/react`, including compatibility-package
+strategy, preserved surface area, and release order.
+
 ### S03. Split chain packages
 
-- Status: Not started
-- Timestamp started: TBD
+- Status: In progress
+- Timestamp started: 2026-05-01T08:40:00Z
 - Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Feature branch: `dev`
+- Head: `f46c24dc` at planning start
+- Session-log reference(s): session: s08-package-migration-planning
 
 Plan the migration from `@cubid/web3` into chain-specific packages such as `@cubid/evm`, `@cubid/wagmi`, `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`, and `@cubid/near`, starting with lightweight contract boundaries before adding heavier SDK dependencies.
+
+### S03.1 Write the chain package split plan
+
+- Status: Completed
+- Timestamp started: 2026-05-01T08:40:00Z
+- Timestamp completed: 2026-05-01T08:52:00Z
+- Feature branch: `dev`
+- Head: `f46c24dc` at planning start
+- Session-log reference(s): session: s08-package-migration-planning
+
+Document the phased split from `@cubid/web3` into `@cubid/evm`,
+`@cubid/wagmi`, and later chain-specific packages, including compatibility
+package strategy and release order.
 
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 

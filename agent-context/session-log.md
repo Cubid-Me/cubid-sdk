@@ -1,5 +1,17 @@
 # Session Log
 
+## session: s08-package-migration-planning
+
+- Timestamp: 2026-05-01T08:52:00Z
+- Summary: Wrote concrete staged migration plans for the browser, React, and chain package transitions.
+- Actions:
+  - Reviewed the current `web2`, `web2-react`, and `web3` public surfaces to map what must be preserved during renames and splits.
+  - Added `docs/engineering/package-migration-plan.md` with phased execution plans for `@cubid/web2` -> `@cubid/browser`, `@cubid/web2-react` -> `@cubid/react`, and `@cubid/web3` -> chain packages.
+  - Updated `docs/engineering/sdk-package-target-state.md` to reflect the hybrid package architecture instead of the older direct-to-React target shape.
+  - Updated the repo roadmap so the browser/React rename work and chain split work are now explicitly tracked as in-progress planning efforts with completed planning subitems.
+- Validation:
+  - Reviewed current package entrypoints and tests before writing the migration plans.
+
 ## session: s07-core-cross-registry-verification
 
 - Timestamp: 2026-05-01T08:32:00Z
