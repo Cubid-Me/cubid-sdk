@@ -29,7 +29,7 @@ export async function ensureCubidUser(email: string) {
 
 ## Supabase Edge Usage
 
-Use the JSR package after publication:
+Use the JSR package after the package is linked and published there:
 
 ```ts
 import { createCubidApiClient } from "jsr:@cubid/core"

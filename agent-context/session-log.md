@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s07-core-cross-registry-verification
+
+- Timestamp: 2026-05-01T08:32:00Z
+- Summary: Verified the current cross-registry release status for `@cubid/core` and corrected docs that overstated live JSR availability.
+- Actions:
+  - Confirmed npm shows `@cubid/core@0.1.0` as the live `latest` release.
+  - Confirmed `pnpm --filter @cubid/core pack:dry-run` and `pnpm --filter @cubid/core jsr:dry-run` still succeed locally.
+  - Confirmed `https://jsr.io/@cubid/core/meta.json` currently returns 404, so the JSR package is not live yet.
+  - Updated public docs and the publishing runbook to say `npm:@cubid/core` is the current Deno fallback until JSR is linked and published.
+  - Split the roadmap so release verification is completed and the remaining owner-side JSR publication work is tracked separately.
+- Validation:
+  - Reviewed npm output, JSR dry-run output, and the updated release docs after the edits.
+
 ## session: s06-passport-runtime-disclosure-filtering-inbox
 
 - Timestamp: 2026-05-01T08:15:00Z

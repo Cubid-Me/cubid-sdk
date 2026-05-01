@@ -36,13 +36,15 @@ Target package direction:
 `@cubid/core` is the runtime-agnostic package in this workspace. It is the only
 Cubid package intended for direct use inside Deno and Supabase Edge Functions.
 
-Use the published package through JSR when you want a first-class Deno import:
+When `@cubid/core` is linked and published on JSR, use that package for a
+first-class Deno import:
 
 ```ts
 import { createCubidApiClient } from "jsr:@cubid/core"
 ```
 
-If your Deno environment prefers npm specifiers, the same package can be consumed through npm:
+Until the JSR package is live, Deno environments can consume the same package
+through npm specifiers:
 
 ```ts
 import { createCubidApiClient } from "npm:@cubid/core"

@@ -1,8 +1,9 @@
 # `@cubid/core` Publishing Runbook
 
 This runbook is the operator checklist for publishing `@cubid/core` to npm and
-JSR. The repo is already wired for tokenless publishing from GitHub Actions; the
-remaining setup happens in the npm and JSR account UIs.
+JSR. The repo is already wired for tokenless publishing from GitHub Actions.
+npm bootstrap publication and npm trusted publishing are complete; the
+remaining owner-side registry setup is on the JSR side.
 
 The canonical public SDK home is `Cubid-Me/cubid-sdk`. Do not publish
 `@cubid/core` from `cubid-passport`.
@@ -26,6 +27,13 @@ npm whoami
 
 If `npm view` returns a 404, the package has not been published yet. If
 `npm whoami` fails, the local machine is not authenticated to npm.
+
+Current verified state as of 2026-05-01:
+
+- npm: `@cubid/core@0.1.0` is live
+- npm trusted publishing: configured for `Cubid-Me/cubid-sdk`
+- JSR dry-run: passes locally from `packages/core`
+- JSR package page: not live yet (`https://jsr.io/@cubid/core/meta.json` 404)
 
 Do not publish from a personal npm account as a routine release path. Official
 Cubid packages should be owned by the npm `cubid` organization and released
@@ -100,7 +108,8 @@ npm automation token in this repository.
 5. Keep tokenless GitHub Actions publishing as the release path.
 
 JSR supports tokenless publishing from GitHub Actions after the package is
-linked to the repository.
+linked to the repository. That owner-side linking and first live publication is
+still pending for `@cubid/core`.
 
 ## Release Steps After Setup
 
@@ -136,7 +145,8 @@ npm view @cubid/core
 ```
 
 Also confirm JSR shows `@cubid/core` and that a Deno/Supabase Edge import can
-use `jsr:@cubid/core`.
+use `jsr:@cubid/core`. Until that package page exists, Deno consumers should
+use `npm:@cubid/core` instead.
 
 ## License
 

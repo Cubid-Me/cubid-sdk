@@ -56,16 +56,34 @@ Bootstrap npm publication and GitHub trusted publishing are now in place for
 
 ### S01.4 Finish `@cubid/core` cross-registry release verification
 
+- Status: Completed
+- Timestamp started: 2026-05-01T08:20:00Z
+- Timestamp completed: 2026-05-01T08:32:00Z
+- Feature branch: `dev`
+- Head: `f0ca53b9` at verification start
+- Session-log reference(s): session: s07-core-cross-registry-verification
+
+Verified the current cross-registry release state for `@cubid/core` from this
+SDK repo:
+
+- npm `@cubid/core@0.1.0` is live
+- npm trusted publishing is configured for `Cubid-Me/cubid-sdk`
+- npm pack dry-run and JSR dry-run both pass locally
+- docs now correctly describe JSR as pending rather than already live
+
+### S01.5 Link and publish `@cubid/core` on JSR
+
 - Status: Not started
 - Timestamp started: TBD
 - Timestamp completed: TBD
 - Feature branch: TBD
 - Head: TBD
-- Session-log reference(s): TBD
+- Session-log reference(s): session: s07-core-cross-registry-verification
 
-Confirm the JSR publication path, verify provenance/install guidance end to
-end, and close out any remaining release verification steps for `@cubid/core`
-from this SDK repo rather than `cubid-passport`.
+The remaining cross-registry release task is owner-side JSR setup and first
+live publication. `https://jsr.io/@cubid/core/meta.json` still returns 404, so
+the package must be created or linked in JSR and then published through the
+repo workflow before `jsr:@cubid/core` imports become live.
 
 ### S02. Rename the browser and React package layers
 
