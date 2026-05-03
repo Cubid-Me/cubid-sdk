@@ -42,6 +42,12 @@ types, and structured errors. It must stay runtime-agnostic: no React, Next.js,
 Node-only APIs, browser-only assumptions, wagmi, chain SDKs, or heavy
 dependencies.
 
+If public API v3 write helpers are added for routes such as `save_secret` or
+`accounts/generate`, they should treat idempotency as part of the contract:
+accept caller-provided idempotency keys, allow safe high-level defaults, and
+normalize backend conflicts like `idempotency_conflict` and
+`request_in_progress`.
+
 `@cubid/browser` may depend on `@cubid/core`. It owns browser-safe hosted
 verification helpers, OTP/browser flow orchestration, AllowPage URL/state
 helpers, and other client helpers that do not require React.
@@ -54,6 +60,11 @@ Future user-authenticated disclosure-grant management routes, such as Allow
 Page grant listing or revocation, should not be treated as dapp server APIs in
 `@cubid/core`. If the public SDK exposes them later, they should sit behind a
 dedicated account-management or auth boundary.
+
+Webhook verification helpers, when exposed publicly, should stay runtime-agnostic.
+They should verify Cubid's exact raw-body signature contract and preserve both
+canonical `eventType` and transition-friendly `legacyEventType` fields in
+public types and examples.
 
 Chain packages own chain-specific wallet, key, and signing behavior. Each chain
 package should avoid cross-chain assumptions. `@cubid/evm` may depend on

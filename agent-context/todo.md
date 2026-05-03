@@ -288,3 +288,31 @@ Allow Page grant revocation now also clears matching legacy
 `stamp_dappuser_permissions` rows in Passport, so future disclosure-aware SDK
 helpers should treat revocation as authoritative rather than assuming legacy
 stamp fallback might still keep an app authorized.
+
+### S06. Align future API v3 write helpers with idempotency requirements
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-03-e02-6-api-v3-idempotency.md`
+
+Before exposing SDK helpers for API v3 write routes such as `save_secret` or
+`accounts/generate`, add an idempotency-key option, prefer safe high-level key
+generation, and normalize backend `idempotency_conflict` and
+`request_in_progress` errors.
+
+### S07. Align future webhook helpers and docs with the v3 delivery contract
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-03-e02-7-api-v3-webhooks.md`
+
+When the public SDK adds webhook verification helpers or receiver examples,
+verify the v1 HMAC over the exact raw body, treat `eventId` and timestamp as
+replay-protection inputs, and document canonical v3 event names alongside the
+legacy transition names.

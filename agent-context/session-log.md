@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s19-v3-contract-inbox-followup
+
+- Timestamp: 2026-05-03T10:00:00Z
+- Summary: Ingested the new Passport API v3 idempotency and webhook contract notes as SDK follow-up guidance rather than speculative runtime code.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-e02-6-api-v3-idempotency.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-e02-7-api-v3-webhooks.md`.
+  - Updated the SDK package-target guidance so future v3 write helpers treat idempotency as a first-class public contract.
+  - Added roadmap entries for future API v3 idempotent write helpers and webhook verification or docs follow-up.
+  - Prepared an outbound reply for ChainCrew pointing them at the newly published Cubid package names and migration path.
+- Validation:
+  - Reviewed the updated target-state guidance, roadmap entries, and outbound ChainCrew reply after the edits.
+
 ## session: s18-evm-wagmi-publish
 
 - Timestamp: 2026-05-03T09:47:00Z
