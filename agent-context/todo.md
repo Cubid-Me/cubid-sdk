@@ -336,6 +336,54 @@ Allow Page grant revocation remains authoritative because Passport clears the
 matching legacy `stamp_dappuser_permissions` rows during migration as well, and
 runtime disclosure checks no longer fall back to those rows.
 
+### S05.1 Preserve typed disclosure metadata on routes that already prove privacy state
+
+- Status: Completed
+- Timestamp started: 2026-05-01T09:05:00Z
+- Timestamp completed: 2026-05-03T10:25:00Z
+- Feature branch: `dev`
+- Head: `73060cd7` at latest doc follow-up
+- Session-log reference(s): session: s09-profile-location-disclosure-taxonomy-inbox, session: s20-disclosure-grant-only-followup
+
+Keep the current typed disclosure metadata on the helper routes whose payloads
+already let the SDK distinguish privacy-limited success from missing transport
+data, especially profile and location helpers.
+
+### S05.2 Define the evidence threshold for future `notGranted` helper states
+
+- Status: In progress
+- Timestamp started: 2026-05-03T22:20:00Z
+- Timestamp completed: TBD
+- Feature branch: `dev`
+- Head: `1f788c6c` at follow-up start
+- Session-log reference(s): session: s24-s05-disclosure-roadmap-followup
+
+Before adding typed `notGranted` outcomes to score, identity, or stamp helpers,
+require one of the following backend signals:
+
+- an explicit disclosure state or claim list in the response payload
+- a route-specific null or omission contract that Passport documents as
+  disclosure-limited success rather than missing data
+- a separate metadata field that distinguishes "redacted for this app" from
+  "no data exists"
+
+Until then, keep those helpers normalized but disclosure-cautious in docs and
+examples instead of overcommitting to privacy-state inference in runtime types.
+
+### S05.3 Be ready to extend typed disclosure states when Passport exposes route-level signals
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+If Passport later adds route-level disclosure metadata for identity, stamps, or
+scores, extend `@cubid/core` response types and helper docs in a way that keeps
+`notGranted`, `notVerified`, `notFound`, and transport failure distinct for
+downstream apps.
+
 ### S06. Align future API v3 write helpers with idempotency requirements
 
 - Status: Not started

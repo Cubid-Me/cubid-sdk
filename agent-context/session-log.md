@@ -1,5 +1,16 @@
 # Session Log
 
+## session: s24-s05-disclosure-roadmap-followup
+
+- Timestamp: 2026-05-03T22:20:00Z
+- Summary: Turned the disclosure-helper follow-up into concrete roadmap subitems so future runtime states only land where Passport payloads actually prove privacy state.
+- Actions:
+  - Split roadmap task `S05` into completed, in-progress, and future-ready subitems instead of leaving the disclosure work as one broad bucket.
+  - Recorded that profile and location helpers already meet the evidence threshold for typed `notGranted` states.
+  - Documented the exact backend-signal requirements the SDK should demand before adding typed disclosure states to identity, stamp, or score helpers.
+- Validation:
+  - Reviewed the updated `agent-context/todo.md` entries for consistency with the current `@cubid/core` disclosure surface and existing Passport inbox notes.
+
 ## session: s23-chaincrew-workspace-dependency-followup
 
 - Timestamp: 2026-05-03T22:10:00Z
