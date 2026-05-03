@@ -1,5 +1,29 @@
 # Session Log
 
+## session: s16-wagmi-package-slice
+
+- Timestamp: 2026-05-02T00:42:00Z
+- Summary: Created the first `@cubid/wagmi` package slice on top of `@cubid/evm`.
+- Actions:
+  - Added `packages/wagmi` with `createCubidWagmiAdapter` and `useCubidWagmiAdapter`.
+  - Kept wagmi-specific React and signing dependencies isolated behind the new package boundary.
+  - Added package-level tests for the pure adapter builder and the hook-backed adapter surface.
+  - Updated the workspace aliases, test config, and publish workflow so the new package is part of the public SDK release graph.
+- Validation:
+  - Ran the workspace test, typecheck, and build flows after the wagmi package changes.
+
+## session: s15-browser-react-release-prep
+
+- Timestamp: 2026-05-02T00:42:00Z
+- Summary: Prepared `@cubid/browser` and `@cubid/react` for publication and made the interim names explicitly compatibility-only.
+- Actions:
+  - Added package-level README, license, repository metadata, and publish-file lists for the browser, React, EVM, wagmi, and interim compatibility packages.
+  - Updated `@cubid/web2` and `@cubid/web2-react` metadata and README copy so they clearly direct new integrations toward `@cubid/browser` and `@cubid/react`.
+  - Generalized the publish workflow so maintainers can select a workspace package instead of only publishing `@cubid/core`.
+  - Updated repo guidance to reflect that `@cubid/wagmi` now exists alongside the earlier browser, React, and EVM slices.
+- Validation:
+  - Ran the workspace test, typecheck, and build flows after the release-prep changes.
+
 ## session: s14-core-jsr-live-publish-success
 
 - Timestamp: 2026-05-02T00:23:00Z

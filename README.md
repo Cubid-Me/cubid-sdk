@@ -12,6 +12,7 @@ Workspace packages:
 - `@cubid/browser`: headless browser helpers for OTP, hosted verification, allow-flow, and OAuth stamp sync
 - `@cubid/react`: React provider and focused browser-flow components built on `@cubid/browser`
 - `@cubid/evm`: first chain-specific wallet helper package built on top of `@cubid/core`
+- `@cubid/wagmi`: wagmi-based React integration helpers built on top of `@cubid/evm`
 - `@cubid/web2`: compatibility wrapper around `@cubid/browser`
 - `@cubid/web2-react`: compatibility wrapper around `@cubid/react`
 - `@cubid/web3`: interim wallet-oriented helper package pending further chain-package splits
@@ -59,8 +60,9 @@ Node, Next.js, and other standard JS runtimes should continue to import the npm 
 import { createCubidApiClient } from "@cubid/core"
 ```
 
-`@cubid/browser`, `@cubid/react`, and `@cubid/evm` remain higher-level helpers
-built on top of `@cubid/core`; they are not required for Supabase Edge usage.
+`@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi` remain
+higher-level helpers built on top of `@cubid/core`; they are not required for
+Supabase Edge usage.
 `@cubid/web2` and `@cubid/web2-react` remain available as compatibility package
 names during the rename window, and `@cubid/web3` remains the interim umbrella
 package while the chain-specific split continues.

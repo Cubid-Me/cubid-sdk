@@ -19,6 +19,7 @@
       "@cubid/core": ["packages/core/src/index.ts"],
       "@cubid/evm": ["packages/evm/src/index.ts"],
       "@cubid/react": ["packages/react/src/index.ts"],
+      "@cubid/wagmi": ["packages/wagmi/src/index.ts"],
       "@cubid/web2": ["packages/web2/src/index.ts"],
       "@cubid/web2-react": ["packages/web2-react/src/index.ts"],
       "@cubid/web3": ["packages/web3/src/index.ts"]

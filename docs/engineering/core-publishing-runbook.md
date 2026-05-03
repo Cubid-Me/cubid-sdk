@@ -129,9 +129,10 @@ binding first, then re-run the publish workflow from `main`.
 3. Select workflow `Publish Packages`.
 4. Click `Run workflow`.
 5. Select branch `main`.
-6. Set `publish_npm` and/or `publish_jsr` to `true`.
-7. Run the workflow.
-8. Confirm the workflow passes and the package pages show the new version.
+6. Set `package_name` to `@cubid/core`.
+7. Set `publish_npm` and/or `publish_jsr` to `true`.
+8. Run the workflow.
+9. Confirm the workflow passes and the package pages show the new version.
 
 The workflow fails intentionally if a publish is dispatched from any branch
 other than `main`.

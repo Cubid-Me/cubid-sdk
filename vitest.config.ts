@@ -8,6 +8,7 @@ export default defineConfig({
       "@cubid/core": path.resolve(__dirname, "packages/core/src/index.ts"),
       "@cubid/evm": path.resolve(__dirname, "packages/evm/src/index.ts"),
       "@cubid/react": path.resolve(__dirname, "packages/react/src/index.ts"),
+      "@cubid/wagmi": path.resolve(__dirname, "packages/wagmi/src/index.ts"),
       "@cubid/web2": path.resolve(__dirname, "packages/web2/src/index.ts"),
       "@cubid/web2-react": path.resolve(__dirname, "packages/web2-react/src/index.ts"),
       "@cubid/web3": path.resolve(__dirname, "packages/web3/src/index.ts")
@@ -21,6 +22,7 @@ export default defineConfig({
           include: [
             "packages/browser/src/**/*.test.ts",
             "packages/evm/src/**/*.test.ts",
+            "packages/wagmi/src/**/*.test.ts",
             "packages/web3/src/**/*.test.ts"
           ],
           name: "node"
@@ -29,7 +31,7 @@ export default defineConfig({
       {
         test: {
           environment: "jsdom",
-          include: ["packages/react/src/**/*.test.tsx"],
+          include: ["packages/react/src/**/*.test.tsx", "packages/wagmi/src/**/*.test.tsx"],
           name: "jsdom"
         }
       }

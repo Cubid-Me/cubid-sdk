@@ -56,6 +56,7 @@ browser/React/EVM slices, while compatibility and interim packages remain:
 @cubid/browser
 @cubid/react
 @cubid/evm
+@cubid/wagmi
 
 @cubid/web2       -> compatibility wrapper around @cubid/browser
 @cubid/web2-react -> compatibility wrapper around @cubid/react

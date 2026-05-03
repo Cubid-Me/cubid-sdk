@@ -13,7 +13,12 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/browser"
+  },
   "sideEffects": false,
   "dependencies": {
     "@cubid/core": "workspace:*"

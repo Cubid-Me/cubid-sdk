@@ -1,7 +1,7 @@
 {
   "name": "@cubid/web2-react",
   "version": "0.1.0",
-  "description": "Compatibility wrapper around @cubid/react.",
+  "description": "Deprecated compatibility wrapper around @cubid/react. New apps should use @cubid/react directly.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -13,7 +13,12 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/web2-react"
+  },
   "sideEffects": false,
   "dependencies": {
     "@cubid/react": "workspace:*"

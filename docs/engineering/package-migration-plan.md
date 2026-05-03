@@ -11,6 +11,7 @@ The first rename and split slices now exist in the workspace:
 - `@cubid/react` has been created from the former `@cubid/web2-react` surface
 - `@cubid/web2` and `@cubid/web2-react` now act as compatibility re-export packages
 - `@cubid/evm` has been created as the first chain-specific package
+- `@cubid/wagmi` now exists as the wagmi-specific React integration layer on top of `@cubid/evm`
 - `@cubid/web3` still remains in place while later chain splits continue
 
 The remaining work is publication, deprecation messaging, API cleanup where
@@ -200,5 +201,5 @@ The migration can be considered complete when:
 - public docs no longer describe `web2`, `web2-react`, or `web3` as the target
   long-term package names
 - `@cubid/browser` and `@cubid/react` are published and documented
-- the first chain-specific packages are published with tests
+- the first chain-specific packages, including `@cubid/evm` and `@cubid/wagmi`, are published with tests
 - compatibility packages clearly signal deprecation status

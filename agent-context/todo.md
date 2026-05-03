@@ -108,6 +108,19 @@ Preserve the useful hosted-verification, provider-connect, OTP, callback, and
 profile-completion primitives while keeping browser-specific logic out of core
 and React-specific logic out of the headless browser layer.
 
+### S02.4 Add explicit compatibility and deprecation messaging to the interim package names
+
+- Status: Completed
+- Timestamp started: 2026-05-02T00:35:00Z
+- Timestamp completed: 2026-05-02T00:42:00Z
+- Feature branch: `dev`
+- Head: `24209743` at implementation start
+- Session-log reference(s): session: s15-browser-react-release-prep
+
+Added package-level README, metadata, and compatibility messaging for
+`@cubid/web2` and `@cubid/web2-react` so the old names now clearly direct new
+integrations toward `@cubid/browser` and `@cubid/react`.
+
 ### S02.1 Keep the headless browser layer first-class
 
 - Status: Completed
@@ -185,6 +198,19 @@ Added `packages/evm` as the first chain-specific package, renamed the copied
 wallet contracts to EVM-specific public types and factory names, and kept
 `@cubid/web3` in place while later compatibility and ecosystem-specific splits
 remain pending.
+
+### S03.3 Create the first `@cubid/wagmi` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-02T00:35:00Z
+- Timestamp completed: 2026-05-02T00:42:00Z
+- Feature branch: `dev`
+- Head: `24209743` at implementation start
+- Session-log reference(s): session: s16-wagmi-package-slice
+
+Added `packages/wagmi` as the wagmi-specific React integration layer on top of
+`@cubid/evm`, including a hook-backed adapter helper and package-level tests
+without leaking wagmi into the core, browser, or generic React packages.
 
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 

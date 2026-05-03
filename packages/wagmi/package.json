@@ -1,7 +1,7 @@
 {
-  "name": "@cubid/react",
+  "name": "@cubid/wagmi",
   "version": "0.1.0",
-  "description": "React components and hooks for Cubid browser flows.",
+  "description": "wagmi-based React helpers that adapt wallet flows onto @cubid/evm.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -17,21 +17,24 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
-    "directory": "packages/react"
+    "directory": "packages/wagmi"
   },
   "sideEffects": false,
   "dependencies": {
-    "@cubid/browser": "workspace:*"
+    "@cubid/evm": "workspace:*"
   },
   "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
     "react": ">=18.2.0",
-    "react-dom": ">=18.2.0"
+    "react-dom": ">=18.2.0",
+    "viem": "2.x",
+    "wagmi": ">=3.0.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-dom",
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-dom --external wagmi",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   }
 }
