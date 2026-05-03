@@ -1,5 +1,17 @@
 # Session Log
 
+## session: s20-disclosure-grant-only-followup
+
+- Timestamp: 2026-05-03T10:25:00Z
+- Summary: Ingested the Passport note that retired the legacy disclosure fallback and aligned the public SDK guidance with grant-only runtime semantics.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-e01-1-disclosure-fallback-retired.md`.
+  - Updated the public `@cubid/core` README and integration docs so app-facing identity, stamp, score, and location release are described as grant-backed only, with legacy permission rows treated as migration input.
+  - Clarified that the SDK should only expose typed `notGranted` states where backend payloads reliably distinguish privacy-limited success from genuinely empty data.
+  - Moved roadmap task `S05` to in progress and anchored it to the new grant-only runtime truth.
+- Validation:
+  - Reviewed the updated docs and roadmap entries after the edits.
+
 ## session: s19-v3-contract-inbox-followup
 
 - Timestamp: 2026-05-03T10:00:00Z

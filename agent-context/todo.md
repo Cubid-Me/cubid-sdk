@@ -260,34 +260,38 @@ model them as account-management APIs rather than dapp server APIs.
 
 ### S05. Align future identity and stamp helpers with app-scoped disclosure contracts
 
-- Status: Not started
-- Timestamp started: TBD
+- Status: In progress
+- Timestamp started: 2026-05-03T10:25:00Z
 - Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-filtering-runtime.md`
+- Feature branch: `dev`
+- Head: `f7dfa57f` at current follow-up start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-filtering-runtime.md`, `agent-context/messages-from-cubid-passport/2026-05-03-e01-1-disclosure-fallback-retired.md`, session: s20-disclosure-grant-only-followup
 
 Before adding new identity, disclosure, or stamp metadata helpers, reconcile the
 public SDK surface with Passport's app-scoped subject model, selective-disclosure
 grant contracts, and canonical stamp registry so the SDK does not expose raw
 cross-app identifiers or drift from the backend's stamp definitions.
 
-Future helper types should treat persisted disclosure grants from at least
-`allow_page` and `oidc` as first-class sources, and should not assume legacy
-`stamp_dappuser_permissions` rows are the only disclosure gate for stamp data.
-They should also distinguish privacy-limited outcomes such as `notGranted`
-from `notVerified`, `notFound`, or transport failure so downstream apps can
-explain why a score or stamp is absent without implying a backend error.
+Current SDK docs and examples now treat persisted disclosure grants from at
+least `allow_page` and `oidc` as the only active disclosure authority for
+app-facing data. Legacy `stamp_dappuser_permissions` rows are migration input
+only and must not be used as a fallback assumption in future helpers.
+
+Future helper types should still distinguish privacy-limited outcomes such as
+`notGranted` from `notVerified`, `notFound`, or transport failure so downstream
+apps can explain why a score or stamp is absent without implying a backend
+error. For now, only routes whose backend payloads reliably support that
+distinction, such as profile and location helpers, should expose typed
+`notGranted` states directly.
 
 Profile and location disclosure claims now need the same treatment. Preserve
 typed public claim names such as `profile:name`, `profile:*`, `profile`,
 `cubid:profile`, `location:rough`, `location:approximate`, `location:exact`,
 and `location:*` when evolving SDK response metadata.
 
-Allow Page grant revocation now also clears matching legacy
-`stamp_dappuser_permissions` rows in Passport, so future disclosure-aware SDK
-helpers should treat revocation as authoritative rather than assuming legacy
-stamp fallback might still keep an app authorized.
+Allow Page grant revocation remains authoritative because Passport clears the
+matching legacy `stamp_dappuser_permissions` rows during migration as well, and
+runtime disclosure checks no longer fall back to those rows.
 
 ### S06. Align future API v3 write helpers with idempotency requirements
 

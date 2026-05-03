@@ -42,6 +42,13 @@ types, and structured errors. It must stay runtime-agnostic: no React, Next.js,
 Node-only APIs, browser-only assumptions, wagmi, chain SDKs, or heavy
 dependencies.
 
+Disclosure-aware helpers in `@cubid/core` should treat
+`selective_disclosure_grants` as the only active source of truth for app-facing
+identity release. Legacy `stamp_dappuser_permissions` rows are migration input
+only and should not reappear in public SDK assumptions or examples. Typed
+`notGranted` response states should only be added where backend payloads
+reliably distinguish privacy-limited success from genuinely empty data.
+
 If public API v3 write helpers are added for routes such as `save_secret` or
 `accounts/generate`, they should treat idempotency as part of the contract:
 accept caller-provided idempotency keys, allow safe high-level defaults, and
