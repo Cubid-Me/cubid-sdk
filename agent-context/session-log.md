@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s21-pr4-copilot-review-followup
+
+- Timestamp: 2026-05-03T20:55:00Z
+- Summary: Addressed the first Copilot review round on PR #4 with runtime-safe fixes for the wagmi hook and exact-location disclosure metadata.
+- Actions:
+  - Preserved the real wagmi connector instances when wiring `useCubidWagmiAdapter` so connect flows still receive the connector objects returned by `useConnectors()`.
+  - Added hook coverage proving the adapter passes the raw connector object through to wagmi while still exposing simplified connector metadata to UI consumers.
+  - Tightened exact-location disclosure detection so `place: null` no longer marks the response as available when no exact-location data is actually present.
+  - Added a focused core test for the `place: null` exact-location edge case before replying on the Copilot threads.
+- Validation:
+  - `pnpm test`
+  - `pnpm typecheck`
+  - `pnpm lint`
+
 ## session: s20-disclosure-grant-only-followup
 
 - Timestamp: 2026-05-03T10:25:00Z

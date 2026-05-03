@@ -60,10 +60,7 @@ export function useCubidWagmiAdapter<
         connector
       };
     },
-    connectors: connectors.map((connector) => ({
-      id: connector.id,
-      name: connector.name
-    })),
+    connectors,
     disconnectAsync: async () => {
       await disconnectAsync();
     },

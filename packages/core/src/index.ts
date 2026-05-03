@@ -828,7 +828,7 @@ const normalizeExactLocation = (
   const country = asString(record.country)
   const place = record.place
   const hasExactLocation =
-    Boolean(coordinates) || country !== null || place !== undefined
+    Boolean(coordinates) || country !== null || place !== null && place !== undefined
 
   return {
     coordinates,

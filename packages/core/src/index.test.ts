@@ -499,6 +499,31 @@ test("location and profile helpers mark disclosure-limited null responses as not
   assert.equal(userData.locationDisclosure.state, "notGranted")
 })
 
+test("exact location treats null place values as disclosure-limited when no other data is present", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input) => {
+      const path = new URL(String(input)).pathname
+
+      if (path.endsWith("/fetch_exact_location")) {
+        return createJsonResponse({
+          country: null,
+          error: null,
+          place: null,
+        })
+      }
+
+      throw new Error(`Unexpected path ${path}`)
+    },
+  })
+
+  const exact = await client.fetchExactLocation({ userId: "dapp_user_123" })
+
+  assert.equal(exact.place, null)
+  assert.equal(exact.disclosure.state, "notGranted")
+})
+
 test("OTP wrappers normalize safe response metadata without returning OTP codes", async () => {
   const paths: string[] = []
   const client = createCubidApiClient({

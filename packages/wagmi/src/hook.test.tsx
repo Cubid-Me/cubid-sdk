@@ -3,17 +3,23 @@ import { describe, expect, it, vi } from "vitest";
 
 import { useCubidWagmiAdapter } from "./hook";
 
+const rawConnector = {
+  id: "injected",
+  name: "Injected",
+  transport: "browser-wallet"
+};
+
 const connectAsync = vi.fn(async () => ({
   accounts: ["0xabc"],
   chainId: 1,
-  connector: { id: "injected", name: "Injected" }
+  connector: rawConnector
 }));
 const disconnectAsync = vi.fn(async () => undefined);
 const signMessageAsync = vi.fn(async ({ message }: { message: string }) => `signed:${message}`);
 
 vi.mock("wagmi", () => ({
   useConnect: () => ({ mutateAsync: connectAsync }),
-  useConnectors: () => [{ id: "injected", name: "Injected" }],
+  useConnectors: () => [rawConnector],
   useConnection: () => ({
     accounts: ["0xabc"],
     chainId: 1,
@@ -34,12 +40,16 @@ describe("@cubid/wagmi hook", () => {
 
     const connection = await result.current.adapter.connect();
     const verification = await result.current.adapter.verify?.(connection);
+    const connectRequest = connectAsync.mock.calls[0] as
+      | [{ connector?: unknown }]
+      | undefined;
 
     expect(connection).toMatchObject({
       address: "0xabc",
       chainType: "evm",
       connectorId: "injected"
     });
+    expect(connectRequest?.[0].connector).toBe(rawConnector);
     expect(verification).toMatchObject({
       isVerified: true,
       metadata: {
