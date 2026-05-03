@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s22-pr4-codex-review-followup
+
+- Timestamp: 2026-05-03T21:12:00Z
+- Summary: Addressed the Codex review note on PR #4 by fixing the npm publish path for workspace packages.
+- Actions:
+  - Updated `.github/workflows/publish.yml` so non-core package validation uses `pnpm pack` and npm publication uses `pnpm publish --provenance --no-git-checks`.
+  - Updated the core publishing runbook so the documented bootstrap and workspace-package release guidance matches the pnpm-based publish path.
+  - Verified locally that `pnpm pack` for `@cubid/browser` rewrites the internal `@cubid/core` dependency from `workspace:*` to `0.1.0` in the packed manifest.
+- Validation:
+  - `pnpm lint`
+  - `pnpm --filter @cubid/browser pack --pack-destination /tmp/cubid-pack-check`
+  - `tar -xOf /tmp/cubid-pack-check/cubid-browser-0.1.0.tgz package/package.json`
+
 ## session: s21-pr4-copilot-review-followup
 
 - Timestamp: 2026-05-03T20:55:00Z

@@ -133,7 +133,8 @@ jobs:
           pnpm typecheck
           pnpm build
           cd "${{ steps.package.outputs.package_dir }}"
-          npm pack --dry-run
+          PACK_DIR="$(mktemp -d)"
+          pnpm pack --pack-destination "$PACK_DIR"
 
       - name: Reject unsupported JSR publish targets
         if: ${{ inputs.publish_jsr && steps.package.outputs.jsr_supported != 'true' }}
@@ -144,7 +145,7 @@ jobs:
       - name: Publish selected package to npm
         if: ${{ inputs.publish_npm }}
         working-directory: ${{ steps.package.outputs.package_dir }}
-        run: npm publish --access public --provenance
+        run: pnpm publish --access public --provenance --no-git-checks
 
       - name: Publish selected package to JSR
         if: ${{ inputs.publish_jsr }}

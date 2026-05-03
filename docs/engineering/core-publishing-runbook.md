@@ -90,7 +90,7 @@ bootstrap path:
    ```sh
    pnpm --filter @cubid/core build
    cd packages/core
-   npm publish --access public
+   pnpm publish --access public --no-git-checks
    ```
 
 4. Immediately configure Trusted Publishing with the fields above.
@@ -133,6 +133,11 @@ binding first, then re-run the publish workflow from `main`.
 7. Set `publish_npm` and/or `publish_jsr` to `true`.
 8. Run the workflow.
 9. Confirm the workflow passes and the package pages show the new version.
+
+For workspace packages beyond `@cubid/core`, keep the publish path on
+`pnpm publish` so internal workspace dependencies are rewritten to real
+published versions in the package metadata. The release workflow should not use
+`npm publish` for packages that depend on other `@cubid/*` workspace packages.
 
 The workflow fails intentionally if a publish is dispatched from any branch
 other than `main`.
