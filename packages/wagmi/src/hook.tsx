@@ -70,8 +70,16 @@ export function useCubidWagmiAdapter<
     signMessageAsync: async ({ message }) => signMessageAsync({ message })
   });
 
+  const currentAccounts =
+    "addresses" in connectionState &&
+    Array.isArray(connectionState.addresses)
+      ? connectionState.addresses
+      : "accounts" in connectionState && Array.isArray(connectionState.accounts)
+        ? connectionState.accounts
+        : undefined;
+
   const currentConnectionResult = toConnectResult({
-    accounts: connectionState.addresses,
+    accounts: currentAccounts,
     chainId: typeof connectionState.chainId === "number" ? connectionState.chainId : undefined,
     connector: connectionState.connector
       ? { id: connectionState.connector.id, name: connectionState.connector.name }

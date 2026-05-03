@@ -131,7 +131,7 @@ describe("@cubid/react", () => {
     await user.type(form.getByLabelText("Email"), "hello@cubid.me");
     await user.click(form.getByRole("button", { name: "Send email code" }));
 
-    expect(form.getByText("Unable to send code.")).toBeTruthy();
+    expect(await form.findByText("Unable to send code.")).toBeTruthy();
     expect(form.queryByLabelText("OTP")).toBeNull();
     expect(form.getByRole("button", { name: "Send email code" })).toBeTruthy();
   });
