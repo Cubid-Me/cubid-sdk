@@ -102,6 +102,27 @@ importers:
         specifier: '>=18.2.0'
         version: 19.2.5(react@19.2.5)
 
+  packages/wagmi:
+    dependencies:
+      '@cubid/evm':
+        specifier: workspace:*
+        version: link:../evm
+      '@tanstack/react-query':
+        specifier: '>=5.0.0'
+        version: 5.100.8(react@19.2.5)
+      react:
+        specifier: '>=18.2.0'
+        version: 19.2.5
+      react-dom:
+        specifier: '>=18.2.0'
+        version: 19.2.5(react@19.2.5)
+      viem:
+        specifier: 2.x
+        version: 2.48.8(typescript@5.9.3)
+      wagmi:
+        specifier: '>=3.0.0'
+        version: 3.6.9(@tanstack/query-core@5.100.8)(@tanstack/react-query@5.100.8(react@19.2.5))(@types/react@19.2.14)(react@19.2.5)(typescript@5.9.3)(viem@2.48.8(typescript@5.9.3))
+
   packages/web2:
     dependencies:
       '@cubid/browser':
