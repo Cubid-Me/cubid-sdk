@@ -158,6 +158,35 @@ export type CubidFetchStampsInput = {
   userId: string
 }
 
+export const CUBID_STAMP_TYPE_IDS = {
+  address: 70,
+  brightid: 8,
+  discord: 5,
+  email: 13,
+  evm: 14,
+  facebook: 1,
+  farcaster: 68,
+  fractal: 17,
+  github: 2,
+  gitcoin: 9,
+  gooddollar: 12,
+  google: 3,
+  iah: 7,
+  instagram: 10,
+  "lens-protocol": 66,
+  linkedin: 22,
+  near: 15,
+  "near-wallet": 15,
+  phone: 11,
+  poh: 6,
+  solana: 53,
+  telegram: 27,
+  twitter: 4,
+  worldcoin: 26,
+} as const
+
+export type CubidStampType = keyof typeof CUBID_STAMP_TYPE_IDS
+
 export type CubidRawStamp = Record<string, unknown> & {
   emailForVerification?: string | null
   permAvailable?: boolean
@@ -174,6 +203,17 @@ export type CubidStampRecord = {
   stampType?: string | null
   stampTypeId?: number
   uniqueValue?: string | null
+}
+
+export type CubidDisclosedStampSummary = {
+  stampType: CubidStampType | string
+  stampTypeId: number
+  status: "Verified" | "Unverified"
+  value: string | null
+}
+
+export type CubidAppScopedSubject = {
+  userId: string
 }
 
 export type CubidFetchStampsResponse = {
@@ -439,6 +479,9 @@ export type FetchScoreInput = CubidFetchScoreInput
 export type FetchScoreResponse = CubidFetchScoreResponse
 export type FetchStampsInput = CubidFetchStampsInput
 export type FetchStampsResponse = CubidFetchStampsResponse
+export type StampType = CubidStampType
+export type DisclosedStampSummary = CubidDisclosedStampSummary
+export type AppScopedSubject = CubidAppScopedSubject
 export type FetchApproxLocationResponse = CubidFetchApproxLocationResponse
 export type FetchExactLocationResponse = CubidFetchExactLocationResponse
 export type FetchRoughLocationResponse = CubidFetchRoughLocationResponse
@@ -872,6 +915,70 @@ const normalizeScore = (
   }
 }
 
+const STAMP_TYPE_NAMES_BY_ID = Object.entries(CUBID_STAMP_TYPE_IDS).reduce<
+  Record<number, CubidStampType>
+>((accumulator, [stampType, stampTypeId]) => {
+  if (accumulator[stampTypeId] === undefined || stampType !== "near-wallet") {
+    accumulator[stampTypeId] = stampType as CubidStampType
+  }
+  return accumulator
+}, {})
+
+export const getCubidStampTypeId = (stampType: string): number | null => {
+  const normalized = stampType.trim() as CubidStampType
+  return CUBID_STAMP_TYPE_IDS[normalized] ?? null
+}
+
+export const getCubidStampTypeName = (stampTypeId: number): CubidStampType | string =>
+  STAMP_TYPE_NAMES_BY_ID[stampTypeId] ?? String(stampTypeId)
+
+export const getCubidStampTypeNamesById = (): Record<number, string> => ({
+  ...STAMP_TYPE_NAMES_BY_ID,
+})
+
+export const createCubidAppScopedSubject = (
+  userId: string
+): CubidAppScopedSubject => ({
+  userId: assertNonEmptyString(userId, "userId", "app_scoped_subject"),
+})
+
+export const summarizeCubidDisclosedStamp = (
+  record: Pick<
+    CubidStampRecord,
+    "identity" | "isValid" | "stampType" | "stampTypeId" | "uniqueValue"
+  >
+): CubidDisclosedStampSummary => {
+  const rawStampTypeId = record.stampTypeId
+
+  if (
+    typeof rawStampTypeId !== "number" ||
+    !Number.isInteger(rawStampTypeId) ||
+    rawStampTypeId <= 0
+  ) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_STAMP_TYPE",
+      endpoint: "stamps/summarize",
+      message: "Stamp record is missing a valid stampTypeId.",
+    })
+  }
+  const stampTypeId = rawStampTypeId
+
+  const value =
+    typeof record.identity === "string"
+      ? record.identity
+      : typeof record.uniqueValue === "string"
+        ? record.uniqueValue
+        : null
+
+  return {
+    stampType: record.stampType ?? getCubidStampTypeName(stampTypeId),
+    stampTypeId,
+    status: record.isValid ? "Verified" : "Unverified",
+    value,
+  }
+}
+
 const normalizeStampRecord = (
   raw: unknown,
   requestId?: string | null,
@@ -883,6 +990,7 @@ const normalizeStampRecord = (
     requestId,
     status
   )
+  const stampTypeId = asNumber(record.stamptype)
 
   return {
     emailForVerification: asString(record.emailForVerification),
@@ -891,8 +999,12 @@ const normalizeStampRecord = (
     isValid: asBoolean(record.is_valid),
     permAvailable: asBoolean(record.permAvailable),
     raw: record,
-    stampType: asString(record.stamptype_string),
-    stampTypeId: asNumber(record.stamptype),
+    stampType:
+      asString(record.stamptype_string) ??
+      (typeof stampTypeId === "number"
+        ? getCubidStampTypeName(stampTypeId)
+        : null),
+    stampTypeId,
     uniqueValue: asString(record.uniquevalue),
   }
 }

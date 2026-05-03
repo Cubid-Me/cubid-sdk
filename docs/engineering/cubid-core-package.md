@@ -78,6 +78,21 @@ universal route-level signal that distinguishes "no active disclosure grant"
 from genuinely empty data, so `@cubid/core` should only expose typed
 `notGranted` states where the backend payload shape reliably supports it.
 
+To keep stamp metadata aligned with Passport's canonical registry, `@cubid/core`
+should also expose the shared public stamp-id helpers rather than encouraging
+downstream apps to maintain their own divergent maps:
+
+- `CUBID_STAMP_TYPE_IDS`
+- `getCubidStampTypeId`
+- `getCubidStampTypeName`
+- `getCubidStampTypeNamesById`
+- `summarizeCubidDisclosedStamp`
+
+For the app-scoped identity model, the public SDK should keep using `userId` as
+the stored integration identifier and may expose small validation helpers such
+as `createCubidAppScopedSubject`, but it should not mint new public types that
+smuggle raw internal Cubid identifiers back into app code.
+
 ## Publishing
 
 Use trusted publishing only. Do not publish this package with a local npm user

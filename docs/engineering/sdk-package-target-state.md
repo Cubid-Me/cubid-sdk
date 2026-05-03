@@ -60,6 +60,11 @@ Legacy `POST /api/v2/save_secret` is removed and should not reappear in public
 SDK wrappers or examples. The secret-write surface should continue to document
 that there is no matching public decrypt/read helper today.
 
+`@cubid/core` should also carry the canonical public stamp-id registry and
+small app-scoped subject helpers so downstream apps can stay aligned with
+Passport's disclosure-aware identity model without depending on private backend
+packages or copying stamp-id maps by hand.
+
 The current custody-chain surface on those helpers includes `evm`, `near`,
 `solana`, and `sui`. The SDK must keep those helpers limited to public account
 metadata and must not grow private-key or custody-secret return values.

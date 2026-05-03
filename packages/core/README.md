@@ -169,6 +169,15 @@ The SDK surface continues to normalize app-scoped identifiers to `userId`
 while translating to Passport's current wire keys such as `user_id` and
 `dapp_user_uuid` internally.
 
+`@cubid/core` now also exports small helpers for this model directly:
+
+- `createCubidAppScopedSubject(userId)`
+- `CUBID_STAMP_TYPE_IDS`
+- `getCubidStampTypeId(stampType)`
+- `getCubidStampTypeName(stampTypeId)`
+- `getCubidStampTypeNamesById()`
+- `summarizeCubidDisclosedStamp(record)`
+
 Custody helpers only return public account metadata such as chain, address,
 label, and custody status. They never return raw private keys, wrapped keys,
 ciphertext, IVs, auth tags, or Vault material. Sui public addresses are
@@ -210,6 +219,17 @@ Canonical public event names currently include:
 consumers can keep bridging from older backend names such as
 `credential_added` and `score_increase` while migrating toward the canonical
 `eventType`.
+
+## App-Scoped Identity And Stamp Metadata
+
+The public SDK now ships the canonical stamp-id map currently shared with
+Passport's internal stamp registry, including aliases such as
+`"near-wallet" -> 15`. Use those helpers when apps need a stable mapping
+between app-visible stamp names and backend `stamptype` ids.
+
+`createCubidAppScopedSubject` is intentionally small: it validates and wraps the
+app-scoped `userId` that your integration stores locally. It does not expose or
+derive raw cross-app identifiers.
 
 Profile-completion flows and React components are intentionally deferred to
 later SDK tasks.

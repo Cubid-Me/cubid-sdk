@@ -176,25 +176,20 @@ though the anonymous `npm view` endpoint briefly lagged after publication.
 
 ### S02.6 Republish `@cubid/browser` and `@cubid/react` with npm-resolvable dependency metadata
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-chaincrew/2026-05-03-published-package-workspace-dependency-note.md`, session: s23-chaincrew-workspace-dependency-followup
+- Status: Completed
+- Timestamp started: 2026-05-03T22:05:00Z
+- Timestamp completed: 2026-05-03T22:15:00Z
+- Feature branch: `main`
+- Head: `464e1949` at trusted-publisher retry start
+- Session-log reference(s): incoming message `agent-context/messages-from-chaincrew/2026-05-03-published-package-workspace-dependency-note.md`, session: s23-chaincrew-workspace-dependency-followup, session: s27-package-metadata-republish
 
-`@cubid/browser@0.1.0` and `@cubid/react@0.1.0` were published before the repo
-switched workspace-package releases to `pnpm publish`, so the live npm package
-metadata still exposes `workspace:*` dependency ranges. That breaks direct npm
-consumers even though the repo-side publish workflow is now fixed.
+Corrective patch releases are now live:
 
-Next release action:
+- `@cubid/browser@0.1.1`
+- `@cubid/react@0.1.1`
 
-- publish corrective patch versions with npm-resolvable internal ranges
-- confirm `npm view @cubid/browser dependencies` and `npm view @cubid/react dependencies`
-  no longer contain `workspace:*`
-- notify downstream consumers such as ChainCrew that their temporary pnpm
-  overrides can be removed after the corrected versions are live
+Verified npm metadata now resolves to normal package versions rather than
+`workspace:*`.
 
 ### S03. Split chain packages
 
@@ -261,24 +256,20 @@ npm access checks confirm both packages are public under the `cubid` org.
 
 ### S03.5 Republish `@cubid/evm` and `@cubid/wagmi` with npm-resolvable dependency metadata
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s23-chaincrew-workspace-dependency-followup
+- Status: Completed
+- Timestamp started: 2026-05-03T22:05:00Z
+- Timestamp completed: 2026-05-03T22:15:00Z
+- Feature branch: `main`
+- Head: `464e1949` at trusted-publisher retry start
+- Session-log reference(s): session: s23-chaincrew-workspace-dependency-followup, session: s27-package-metadata-republish
 
-`@cubid/evm@0.1.0` and `@cubid/wagmi@0.1.0` were also published before the
-workspace-package publish path switched to `pnpm publish`, so their live npm
-metadata still points at internal `workspace:*` dependency ranges.
+Corrective patch releases are now live:
 
-Next release action:
+- `@cubid/evm@0.1.1`
+- `@cubid/wagmi@0.1.1`
 
-- publish corrective patch versions for the chain packages too
-- verify `npm view @cubid/evm dependencies` and `npm view @cubid/wagmi dependencies`
-  no longer expose `workspace:*`
-- keep the public chain split moving only after the published install surface is
-  clean for downstream npm consumers
+Verified npm metadata now resolves to normal package versions rather than
+`workspace:*`.
 
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 
@@ -303,12 +294,12 @@ model them as account-management APIs rather than dapp server APIs.
 
 ### S05. Align future identity and stamp helpers with app-scoped disclosure contracts
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-03T10:25:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-03T22:40:00Z
 - Feature branch: `dev`
-- Head: `f7dfa57f` at current follow-up start
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-filtering-runtime.md`, `agent-context/messages-from-cubid-passport/2026-05-03-e01-1-disclosure-fallback-retired.md`, session: s20-disclosure-grant-only-followup
+- Head: `464e1949` at completion
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-filtering-runtime.md`, `agent-context/messages-from-cubid-passport/2026-05-03-e01-1-disclosure-fallback-retired.md`, session: s20-disclosure-grant-only-followup, session: s24-s05-disclosure-roadmap-followup, session: s28-s05-app-scoped-stamp-surface
 
 Before adding new identity, disclosure, or stamp metadata helpers, reconcile the
 public SDK surface with Passport's app-scoped subject model, selective-disclosure
@@ -351,12 +342,12 @@ data, especially profile and location helpers.
 
 ### S05.2 Define the evidence threshold for future `notGranted` helper states
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-03T22:20:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-03T22:40:00Z
 - Feature branch: `dev`
-- Head: `1f788c6c` at follow-up start
-- Session-log reference(s): session: s24-s05-disclosure-roadmap-followup
+- Head: `464e1949` at completion
+- Session-log reference(s): session: s24-s05-disclosure-roadmap-followup, session: s28-s05-app-scoped-stamp-surface
 
 Before adding typed `notGranted` outcomes to score, identity, or stamp helpers,
 require one of the following backend signals:
@@ -372,17 +363,19 @@ examples instead of overcommitting to privacy-state inference in runtime types.
 
 ### S05.3 Be ready to extend typed disclosure states when Passport exposes route-level signals
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-05-03T22:30:00Z
+- Timestamp completed: 2026-05-03T22:40:00Z
+- Feature branch: `dev`
+- Head: `464e1949` at completion
+- Session-log reference(s): session: s28-s05-app-scoped-stamp-surface
 
 If Passport later adds route-level disclosure metadata for identity, stamps, or
 scores, extend `@cubid/core` response types and helper docs in a way that keeps
 `notGranted`, `notVerified`, `notFound`, and transport failure distinct for
-downstream apps.
+downstream apps. The current tranche closes with canonical stamp-id helpers and
+app-scoped subject helpers in place, while further route-level disclosure-state
+expansion remains explicitly gated on backend evidence rather than guesswork.
 
 ### S06. Align future API v3 write helpers with idempotency requirements
 

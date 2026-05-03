@@ -2,10 +2,15 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 
 import {
+  createCubidAppScopedSubject,
   createCubidApiClient,
   CubidApiError,
+  getCubidStampTypeId,
+  getCubidStampTypeName,
+  getCubidStampTypeNamesById,
   type CubidFetch,
   parseCubidWebhookEvent,
+  summarizeCubidDisclosedStamp,
   verifyCubidWebhookSignature,
 } from "./index"
 
@@ -899,4 +904,71 @@ test("parseCubidWebhookEvent preserves canonical and legacy event names", () => 
   assert.equal(event.legacyEventType, "credential_added")
   assert.equal(event.data.stampType, "phone")
   assert.deepEqual(event.subject, { userId: "dapp_user_123" })
+})
+
+test("stamp registry helpers expose canonical names and ids", () => {
+  assert.equal(getCubidStampTypeId("email"), 13)
+  assert.equal(getCubidStampTypeId("near-wallet"), 15)
+  assert.equal(getCubidStampTypeName(13), "email")
+  assert.equal(getCubidStampTypeName(15), "near")
+  assert.equal(getCubidStampTypeName(999), "999")
+  assert.equal(getCubidStampTypeNamesById()[70], "address")
+})
+
+test("normalizeStamps falls back to canonical stamp names when string names are absent", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () =>
+      createJsonResponse({
+        all_stamps: [
+          {
+            id: 1,
+            identity: "user@example.com",
+            is_valid: true,
+            stamptype: 13,
+            uniquevalue: "user@example.com",
+          },
+        ],
+      }),
+  })
+
+  const response = await client.fetchStamps({ userId: "dapp_user_123" })
+
+  assert.equal(response.allStamps[0]?.stampType, "email")
+  assert.equal(response.allStamps[0]?.stampTypeId, 13)
+})
+
+test("app-scoped helpers validate user ids and summarize disclosed stamps", () => {
+  assert.deepEqual(createCubidAppScopedSubject("dapp_user_123"), {
+    userId: "dapp_user_123",
+  })
+
+  const summary = summarizeCubidDisclosedStamp({
+    identity: "user@example.com",
+    isValid: true,
+    stampType: undefined,
+    stampTypeId: 13,
+    uniqueValue: "user@example.com",
+  })
+
+  assert.deepEqual(summary, {
+    stampType: "email",
+    stampTypeId: 13,
+    status: "Verified",
+    value: "user@example.com",
+  })
+
+  assert.throws(
+    () =>
+      summarizeCubidDisclosedStamp({
+        isValid: true,
+        stampType: "email",
+        stampTypeId: undefined,
+      }),
+    (error) =>
+      error instanceof CubidApiError &&
+      error.code === "INVALID_STAMP_TYPE" &&
+      error.endpoint === "stamps/summarize"
+  )
 })

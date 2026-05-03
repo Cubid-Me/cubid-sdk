@@ -1,5 +1,44 @@
 # Session Log
 
+## session: s28-s05-app-scoped-stamp-surface
+
+- Timestamp: 2026-05-03T22:40:00Z
+- Summary: Finished the current S05 tranche by exporting the canonical stamp registry and a small app-scoped subject helper from `@cubid/core`.
+- Actions:
+  - Added `CUBID_STAMP_TYPE_IDS`, `getCubidStampTypeId`, `getCubidStampTypeName`, `getCubidStampTypeNamesById`, and `summarizeCubidDisclosedStamp` to align public SDK stamp metadata with Passport's canonical stamp registry.
+  - Added `createCubidAppScopedSubject` so downstream apps can validate and wrap app-scoped `userId` values without introducing raw cross-app identifiers.
+  - Updated stamp normalization so `fetchStamps` falls back to canonical stamp names when the backend returns only a numeric `stamptype`.
+  - Expanded public docs so the app-scoped subject model and canonical stamp helpers are part of the supported `@cubid/core` surface.
+  - Closed the current S05 roadmap tranche while keeping future `notGranted` expansion explicitly gated on stronger backend route signals.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s27-package-metadata-republish
+
+- Timestamp: 2026-05-03T22:15:00Z
+- Summary: Corrected the published npm metadata for the first non-core public packages and verified the new dependency ranges live on the registry.
+- Actions:
+  - Bumped `@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi` to `0.1.1` as metadata-only patch releases.
+  - Verified packed manifests locally before release so internal workspace dependencies rewrote to real published versions.
+  - Fixed the GitHub Actions webhook-helper typecheck issue that had blocked the first trusted-publishing retry.
+  - Added npm trusted-publisher bindings for `@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi`.
+  - Published and verified live corrective versions:
+    - `@cubid/browser@0.1.1`
+    - `@cubid/react@0.1.1`
+    - `@cubid/evm@0.1.1`
+    - `@cubid/wagmi@0.1.1`
+- Validation:
+  - `pnpm --filter @cubid/browser pack --pack-destination /tmp/cubid-browser-pack`
+  - `pnpm --filter @cubid/react pack --pack-destination /tmp/cubid-react-pack`
+  - `pnpm --filter @cubid/evm pack --pack-destination /tmp/cubid-evm-pack`
+  - `pnpm --filter @cubid/wagmi pack --pack-destination /tmp/cubid-wagmi-pack`
+  - `npm view @cubid/browser version dependencies --json`
+  - `npm view @cubid/react version dependencies --json`
+  - `npm view @cubid/evm version dependencies --json`
+  - `npm view @cubid/wagmi version dependencies --json`
+
 ## session: s26-s07-webhook-helpers
 
 - Timestamp: 2026-05-03T23:05:00Z

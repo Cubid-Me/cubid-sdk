@@ -92,6 +92,10 @@ that the user actually consented to disclose. Do not replace those app-scoped
 handles with raw internal/global Cubid identifiers, dapp user UUIDs, or other
 cross-app identifiers when building public app-facing identity records.
 
+If you need a light SDK-side wrapper for that stored identity, `@cubid/core`
+now exposes `createCubidAppScopedSubject(userId)`. It validates the app-scoped
+identifier without introducing any new cross-app subject model.
+
 ## Phone OTP And Provider Handoff
 
 `@cubid/core` exposes low-level OTP wrappers for server-controlled flows:
@@ -194,6 +198,16 @@ can explain `notGranted` outcomes without implying the user record is missing.
 For score, identity, and stamp routes, current v2 payloads still do not always
 prove whether a sparse response means "no active disclosure grant" or "no
 underlying data", so consumers should present those outcomes more cautiously.
+
+For canonical stamp metadata, the package also exposes:
+
+- `CUBID_STAMP_TYPE_IDS`
+- `getCubidStampTypeId`
+- `getCubidStampTypeName`
+- `summarizeCubidDisclosedStamp`
+
+That lets app code map between public stamp names and backend `stamptype` ids
+without keeping a separate local registry.
 
 For API v3 write errors, `CubidApiError` now preserves Passport conflict codes
 such as `idempotency_conflict` and `request_in_progress` so app servers can
