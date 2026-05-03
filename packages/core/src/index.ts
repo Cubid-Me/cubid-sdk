@@ -1368,6 +1368,9 @@ const concatBytes = (...chunks: Uint8Array[]): Uint8Array => {
 const bytesToHex = (bytes: Uint8Array): string =>
   Array.from(bytes, (value) => value.toString(16).padStart(2, "0")).join("")
 
+const toArrayBuffer = (bytes: Uint8Array): ArrayBuffer =>
+  bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer
+
 const hexToBytes = (value: string, endpoint: string): Uint8Array => {
   const normalized = value.trim().toLowerCase()
   if (!/^[0-9a-f]+$/.test(normalized) || normalized.length % 2 !== 0) {
@@ -1431,7 +1434,7 @@ const signWebhookPayload = async (
   const cryptoImpl = resolveCrypto()
   const key = await cryptoImpl.subtle.importKey(
     "raw",
-    textEncoder.encode(secret),
+    toArrayBuffer(textEncoder.encode(secret)),
     { hash: "SHA-256", name: "HMAC" },
     false,
     ["sign"]
@@ -1445,7 +1448,11 @@ const signWebhookPayload = async (
     toBytes(payload)
   )
 
-  const signature = await cryptoImpl.subtle.sign("HMAC", key, signatureInput)
+  const signature = await cryptoImpl.subtle.sign(
+    "HMAC",
+    key,
+    toArrayBuffer(signatureInput)
+  )
   return bytesToHex(new Uint8Array(signature))
 }
 
