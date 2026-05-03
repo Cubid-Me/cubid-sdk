@@ -35,9 +35,11 @@ OTP helpers must not expose raw OTP values. They normalize only delivery and
 verification metadata even if a legacy server payload contains a code.
 
 Identity and score helpers must also tolerate disclosure-limited success
-responses. Empty stamp arrays, missing stamp helper fields, or lower/zero
-scores may reflect active `selective_disclosure_grants` for the target app
-rather than transport failure or user absence.
+responses. Empty stamp arrays, omitted identity items, missing stamp helper
+fields, or lower/zero scores may reflect the absence of an active
+`selective_disclosure_grant` for the target app rather than transport failure
+or user absence. Legacy `stamp_dappuser_permissions` rows are no longer a live
+authorization fallback for these app-facing routes.
 
 Profile and location helpers should follow the same model. The public response
 types now carry typed disclosure metadata for:
@@ -47,6 +49,11 @@ types now carry typed disclosure metadata for:
 
 Consumers should treat `disclosure.state === "notGranted"` as a valid
 privacy-limited outcome for app-scoped routes.
+
+The current v2 score, identity, and stamp payloads still do not provide a
+universal route-level signal that distinguishes "no active disclosure grant"
+from genuinely empty data, so `@cubid/core` should only expose typed
+`notGranted` states where the backend payload shape reliably supports it.
 
 ## Publishing
 
