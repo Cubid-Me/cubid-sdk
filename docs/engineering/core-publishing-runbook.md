@@ -2,8 +2,8 @@
 
 This runbook is the operator checklist for publishing `@cubid/core` to npm and
 JSR. The repo is already wired for tokenless publishing from GitHub Actions.
-npm bootstrap publication and npm trusted publishing are complete; the
-remaining owner-side registry setup is on the JSR side.
+npm bootstrap publication, npm trusted publishing, and the first live JSR
+publication are complete.
 
 The canonical public SDK home is `Cubid-Me/cubid-sdk`. Do not publish
 `@cubid/core` from `cubid-passport`.
@@ -28,15 +28,17 @@ npm whoami
 If `npm view` returns a 404, the package has not been published yet. If
 `npm whoami` fails, the local machine is not authenticated to npm.
 
-Current verified state as of 2026-05-01:
+Current verified state as of 2026-05-02:
 
 - npm: `@cubid/core@0.1.0` is live
 - npm trusted publishing: configured for `Cubid-Me/cubid-sdk`
 - JSR dry-run: passes locally from `packages/core`
-- JSR package page: not live yet (`https://jsr.io/@cubid/core/meta.json` 404)
-- GitHub Actions JSR publish attempt from `main`: failed in run `25208963795`
+- JSR package page: live at `https://jsr.io/@cubid/core`
+- Earlier GitHub Actions JSR publish attempt from `main` failed in run `25208963795`
   with `actorNotAuthorized`, which points to missing JSR-side package/repo
   authorization rather than a repo-side build failure
+- JSR publish succeeded from GitHub Actions run `25265529712` after the package
+  was linked to `Cubid-Me/cubid-sdk`
 
 Do not publish from a personal npm account as a routine release path. Official
 Cubid packages should be owned by the npm `cubid` organization and released
@@ -48,13 +50,12 @@ through trusted publishing from GitHub Actions.
 - Run npm pack and JSR dry-runs to validate release artifacts.
 - Keep the GitHub Actions workflow ready for trusted publishing.
 - Open PRs that update package code, docs, and release automation.
-- After registry setup is complete, run the publish workflow from GitHub
-  Actions.
+- Run the publish workflow from GitHub Actions for future releases.
 
 ## What Needs A Human Account Owner
 
-You or another npm/JSR owner must do the first registry setup because it depends
-on account permissions and package ownership. This should be done with the
+You or another npm/JSR owner must handle registry ownership and repo-link setup
+because those depend on account permissions. This should be done with the
 official Cubid org accounts, not an agent-owned or personal workaround.
 
 ## npm Setup
@@ -107,12 +108,14 @@ npm automation token in this repository.
 3. Create or open package `@cubid/core`.
 4. In the package settings, link the GitHub repository:
    - Repository: `Cubid-Me/cubid-sdk`
-   - Workflow: `.github/workflows/publish.yml`
 5. Keep tokenless GitHub Actions publishing as the release path.
 
+JSR's current linked-repository UI may not expose a separate workflow-file
+field. That is fine. The successful publish from run `25265529712` confirms the
+repo link plus GitHub Actions OIDC permissions were sufficient for this repo's
+`.github/workflows/publish.yml`.
 JSR supports tokenless publishing from GitHub Actions after the package is
-linked to the repository. That owner-side linking and first live publication is
-still pending for `@cubid/core`.
+linked to the repository.
 
 If the first live publish fails from GitHub Actions with
 `actorNotAuthorized`, treat that as confirmation that the JSR package is not
@@ -153,8 +156,7 @@ npm view @cubid/core
 ```
 
 Also confirm JSR shows `@cubid/core` and that a Deno/Supabase Edge import can
-use `jsr:@cubid/core`. Until that package page exists, Deno consumers should
-use `npm:@cubid/core` instead.
+use `jsr:@cubid/core`.
 
 ## License
 

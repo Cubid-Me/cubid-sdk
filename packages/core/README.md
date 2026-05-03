@@ -15,12 +15,10 @@ client can run in Node, Deno, Supabase Edge Functions, workers, and tests.
 npm install @cubid/core
 ```
 
-`@cubid/core@0.1.0` is live on npm. The JSR package is prepared and validated
-locally, but `jsr:@cubid/core` should only be used after the package has been
-linked and published on JSR.
+`@cubid/core@0.1.0` is live on npm and JSR.
 
 ```ts
-// Deno / Supabase Edge, after the package is published to JSR.
+// Deno / Supabase Edge
 import { createCubidApiClient } from "jsr:@cubid/core"
 ```
 
@@ -147,8 +145,7 @@ TypeScript source directly before publish:
 pnpm --filter @cubid/core deno:check
 ```
 
-After the JSR package is linked and released, Edge Functions should import from
-`jsr:@cubid/core`.
+Edge Functions should import from `jsr:@cubid/core`.
 
 See `docs/engineering/next-supabase-edge-integration-guide.md` for Next.js and
 Supabase Edge examples.

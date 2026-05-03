@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s14-core-jsr-live-publish-success
+
+- Timestamp: 2026-05-02T00:23:00Z
+- Summary: Published `@cubid/core@0.1.0` live to JSR through the existing GitHub Actions workflow.
+- Actions:
+  - Confirmed JSR package setup now linked `@cubid/core` to `Cubid-Me/cubid-sdk`.
+  - Triggered the `Publish Packages` workflow from `main` with `publish_npm=false` and `publish_jsr=true`.
+  - Observed GitHub Actions run `25265529712`, which completed successfully and published `@cubid/core` to JSR.
+  - Verified `https://jsr.io/@cubid/core/meta.json` now returns live package metadata for version `0.1.0`.
+  - Updated the public SDK docs and publishing runbook to reflect that JSR publication is now live.
+- Validation:
+  - Confirmed the successful GitHub Actions run and the live JSR package metadata response after publication.
+
 ## session: s13-evm-package-slice
 
 - Timestamp: 2026-05-01T09:50:00Z

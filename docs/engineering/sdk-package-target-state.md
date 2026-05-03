@@ -103,6 +103,5 @@ npm-first foundation, then layers in package-ready integration surfaces:
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
   packages.
 
-Live npm publication is complete for `@cubid/core`. JSR publication remains a
-separate owner-side setup and release task. See
+Live npm and JSR publication are complete for `@cubid/core`. See
 `docs/engineering/package-migration-plan.md` for the rename and split plan.

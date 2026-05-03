@@ -73,22 +73,21 @@ SDK repo:
 
 ### S01.5 Link and publish `@cubid/core` on JSR
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-01T09:22:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-02T00:23:00Z
 - Feature branch: `dev`
 - Head: `fba54d8e` at live-publish attempt start
-- Session-log reference(s): session: s07-core-cross-registry-verification, session: s11-core-jsr-live-publish-attempt
+- Session-log reference(s): session: s07-core-cross-registry-verification, session: s11-core-jsr-live-publish-attempt, session: s14-core-jsr-live-publish-success
 
-The remaining cross-registry release task is owner-side JSR setup and first
-live publication. `https://jsr.io/@cubid/core/meta.json` still returns 404, so
-the package must be created or linked in JSR and then published through the
-repo workflow before `jsr:@cubid/core` imports become live.
+The owner-side JSR setup is complete and `@cubid/core@0.1.0` is now live at
+`https://jsr.io/@cubid/core`.
 
 The first GitHub Actions live publish attempt from `main` failed in run
 `25208963795` with JSR `actorNotAuthorized`, which confirms the remaining
-blocker is JSR-side package/repository authorization rather than repo-side build
-or packaging validation.
+setup dependency that had to be fixed on the JSR side. After linking the
+package to `Cubid-Me/cubid-sdk`, run `25265529712` succeeded and published the
+package through the existing `.github/workflows/publish.yml` OIDC flow.
 
 ### S02. Rename the browser and React package layers
 

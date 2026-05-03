@@ -29,7 +29,7 @@ export async function ensureCubidUser(email: string) {
 
 ## Supabase Edge Usage
 
-Use the JSR package after the package is linked and published there:
+Use the JSR package directly:
 
 ```ts
 import { createCubidApiClient } from "jsr:@cubid/core"
@@ -55,8 +55,8 @@ Deno.serve(async (request) => {
 ```
 
 The repo validates Deno compatibility before publish with
-`pnpm --filter @cubid/core deno:check`. Live `jsr:@cubid/core` imports are
-available after the package is linked and published through trusted publishing.
+`pnpm --filter @cubid/core deno:check`. Live `jsr:@cubid/core` imports are now
+available through trusted publishing.
 
 ## Secrets
 
