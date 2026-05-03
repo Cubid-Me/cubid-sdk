@@ -12,6 +12,7 @@ export type CubidFetch = (
 
 export type CubidApiErrorCategory =
   | "auth"
+  | "conflict"
   | "config"
   | "not_found"
   | "rate_limit"
@@ -305,6 +306,67 @@ export type CubidIdentitySnapshot = {
   userId: string
 }
 
+export type CubidIdempotentRequestOptions = {
+  /**
+   * Optional caller-owned idempotency key. When omitted on write helpers that
+   * require idempotency, `@cubid/core` will generate a random key.
+   */
+  idempotencyKey?: string
+}
+
+export type CubidSaveSecretInput = CubidIdempotentRequestOptions & {
+  secret: string
+  userId: string
+}
+
+export type CubidSaveSecretResponse = {
+  idempotencyKey: string
+  raw: Record<string, unknown>
+  success: boolean
+}
+
+export type CubidCustodyChain = "evm" | "near" | "solana" | "sui"
+
+export type CubidAccountCustodyStatus = string | null
+
+export type CubidAccountLinkStatus = string | null
+
+export type CubidCustodyAccount = {
+  accountId: string | null
+  chain: CubidCustodyChain | string
+  createdAt: string | null
+  custodyStatus: CubidAccountCustodyStatus
+  dappUserAccountId: string | null
+  label: string | null
+  linkStatus?: CubidAccountLinkStatus
+  publicAddress: string | null
+  raw: Record<string, unknown>
+  updatedAt?: string | null
+  userId: string | null
+}
+
+export type CubidGenerateAccountInput = CubidIdempotentRequestOptions & {
+  chain: CubidCustodyChain
+  label?: string
+  userId: string
+}
+
+export type CubidGenerateAccountResponse = {
+  account: CubidCustodyAccount
+  idempotencyKey: string
+  raw: Record<string, unknown>
+}
+
+export type CubidListAccountsInput = {
+  chain?: CubidCustodyChain
+  userId: string
+}
+
+export type CubidListAccountsResponse = {
+  accounts: CubidCustodyAccount[]
+  raw: Record<string, unknown>
+}
+
 export type CubidClientConfig = {
   baseUrl: string
   dappId?: number | string
@@ -345,6 +407,15 @@ export type VerifyPhoneOtpInput = CubidVerifyPhoneOtpInput
 export type VerifyPhoneOtpResponse = CubidVerifyPhoneOtpResponse
 export type IdentitySnapshotInput = CubidIdentitySnapshotInput
 export type IdentitySnapshot = CubidIdentitySnapshot
+export type IdempotentRequestOptions = CubidIdempotentRequestOptions
+export type SaveSecretInput = CubidSaveSecretInput
+export type SaveSecretResponse = CubidSaveSecretResponse
+export type CustodyChain = CubidCustodyChain
+export type CustodyAccount = CubidCustodyAccount
+export type GenerateAccountInput = CubidGenerateAccountInput
+export type GenerateAccountResponse = CubidGenerateAccountResponse
+export type ListAccountsInput = CubidListAccountsInput
+export type ListAccountsResponse = CubidListAccountsResponse
 
 export type CubidApiClient = {
   addStamp(input: CubidAddStampInput): Promise<CubidAddStampResponse>
@@ -370,6 +441,11 @@ export type CubidApiClient = {
   fetchUserData(
     input: CubidFetchIdentityInput
   ): Promise<CubidFetchUserDataResponse>
+  generateAccount(
+    input: CubidGenerateAccountInput
+  ): Promise<CubidGenerateAccountResponse>
+  listAccounts(input: CubidListAccountsInput): Promise<CubidListAccountsResponse>
+  saveSecret(input: CubidSaveSecretInput): Promise<CubidSaveSecretResponse>
   searchLocation(
     input: CubidSearchLocationInput
   ): Promise<CubidSearchLocationResponse>
@@ -480,6 +556,9 @@ const categoryForStatus = (status: number): CubidApiErrorCategory => {
   if (status === 401 || status === 403) {
     return "auth"
   }
+  if (status === 409) {
+    return "conflict"
+  }
   if (status === 404) {
     return "not_found"
   }
@@ -520,6 +599,32 @@ const asCoordinates = (value: unknown): CubidCoordinates | undefined => {
   }
 
   return { lat, lng }
+}
+
+const codeFromPayload = (payload: unknown): string | undefined => {
+  if (!payload || typeof payload !== "object") {
+    return undefined
+  }
+
+  const record = payload as Record<string, unknown>
+  const error = record.error
+
+  if (typeof error === "string" && error.trim()) {
+    return error
+  }
+
+  if (error && typeof error === "object") {
+    const nested = error as Record<string, unknown>
+    if (typeof nested.code === "string" && nested.code.trim()) {
+      return nested.code
+    }
+  }
+
+  if (typeof record.code === "string" && record.code.trim()) {
+    return record.code
+  }
+
+  return undefined
 }
 
 const assertRecord = (
@@ -596,18 +701,22 @@ const makeRequest = async <Result>(
     requestId?: string | null,
     status?: number
   ) => Result,
-  headers?: HeadersInit
+  headers?: HeadersInit,
+  requestHeaders?: HeadersInit
 ): Promise<Result> => {
   let response: Response
   try {
-    const requestHeaders = new Headers(headers)
-    if (!requestHeaders.has("content-type")) {
-      requestHeaders.set("content-type", "application/json")
+    const resolvedHeaders = new Headers(headers)
+    for (const [key, value] of new Headers(requestHeaders)) {
+      resolvedHeaders.set(key, value)
+    }
+    if (!resolvedHeaders.has("content-type")) {
+      resolvedHeaders.set("content-type", "application/json")
     }
 
     response = await fetchImpl(`${baseUrl}${path}`, {
       body: JSON.stringify(body),
-      headers: requestHeaders,
+      headers: resolvedHeaders,
       method: "POST",
     })
   } catch (error) {
@@ -626,6 +735,7 @@ const makeRequest = async <Result>(
   if (!response.ok) {
     throw new CubidApiError({
       category: categoryForStatus(response.status),
+      code: codeFromPayload(payload),
       details: payload,
       endpoint,
       message: messageFromPayload(
@@ -1014,6 +1124,144 @@ const normalizePhoneOtpVerified = (
   }
 }
 
+const normalizeCustodyChain = (value: unknown): CubidCustodyChain | string =>
+  asString(value) ?? "unknown"
+
+const normalizePublicAddress = (chain: CubidCustodyChain | string, value: unknown) => {
+  const address = asString(value)
+  if (address === null) {
+    return null
+  }
+  return chain === "sui" ? address.toLowerCase() : address
+}
+
+const normalizeCustodyAccount = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidCustodyAccount => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+  const chain = normalizeCustodyChain(record.chain)
+
+  return {
+    accountId: asString(record.accountId),
+    chain,
+    createdAt: asString(record.createdAt),
+    custodyStatus: asString(record.custodyStatus),
+    dappUserAccountId: asString(record.dappUserAccountId),
+    label: asString(record.label),
+    linkStatus: asString(record.linkStatus) ?? undefined,
+    publicAddress: normalizePublicAddress(chain, record.publicAddress),
+    raw: record,
+    updatedAt: asString(record.updatedAt) ?? undefined,
+    userId: asString(record.dappUserUuid),
+  }
+}
+
+const normalizeSaveSecret = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidSaveSecretResponse => {
+  const record = assertRecord(payload, "v3/save_secret", requestId, status)
+
+  return {
+    idempotencyKey,
+    raw: record,
+    success: Boolean(record.success),
+  }
+}
+
+const normalizeGenerateAccount = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidGenerateAccountResponse => {
+  const record = assertRecord(payload, "v3/accounts/generate", requestId, status)
+
+  return {
+    account: normalizeCustodyAccount(
+      record.data ?? record,
+      "v3/accounts/generate.data",
+      requestId,
+      status
+    ),
+    idempotencyKey,
+    raw: record,
+  }
+}
+
+const normalizeListAccounts = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidListAccountsResponse => {
+  const record = assertRecord(payload, "v3/accounts/list", requestId, status)
+  const items = Array.isArray(record.data) ? record.data : []
+
+  return {
+    accounts: items.map((item) =>
+      normalizeCustodyAccount(item, "v3/accounts/list.data", requestId, status)
+    ),
+    raw: record,
+  }
+}
+
+const resolveCrypto = (): Crypto => {
+  if (typeof globalThis.crypto === "object" && globalThis.crypto !== null) {
+    return globalThis.crypto
+  }
+
+  throw new CubidApiError({
+    category: "config",
+    message:
+      "No Web Crypto implementation is available. Pass an explicit idempotency key or run in a runtime that provides globalThis.crypto.",
+  })
+}
+
+const bytesToUuid = (bytes: Uint8Array): string => {
+  const normalized = bytes.slice(0, 16)
+  normalized[6] = ((normalized[6] ?? 0) & 0x0f) | 0x40
+  normalized[8] = ((normalized[8] ?? 0) & 0x3f) | 0x80
+  const hex = Array.from(normalized, (value) => value.toString(16).padStart(2, "0"))
+
+  return [
+    hex.slice(0, 4).join(""),
+    hex.slice(4, 6).join(""),
+    hex.slice(6, 8).join(""),
+    hex.slice(8, 10).join(""),
+    hex.slice(10, 16).join(""),
+  ].join("-")
+}
+
+const resolveIdempotencyKey = (
+  input: CubidIdempotentRequestOptions | undefined,
+  endpoint: string
+): string => {
+  if (input?.idempotencyKey !== undefined) {
+    return assertNonEmptyString(input.idempotencyKey, "idempotencyKey", endpoint)
+  }
+
+  const cryptoImpl = resolveCrypto()
+  if (typeof cryptoImpl.randomUUID === "function") {
+    return cryptoImpl.randomUUID()
+  }
+
+  if (typeof cryptoImpl.getRandomValues === "function") {
+    return bytesToUuid(cryptoImpl.getRandomValues(new Uint8Array(16)))
+  }
+
+  throw new CubidApiError({
+    category: "config",
+    endpoint,
+    message:
+      "No secure random UUID generator is available. Pass an explicit idempotency key for this request.",
+  })
+}
+
 export const createCubidApiClient = (
   options: CubidApiClientOptions
 ): CubidApiClient => {
@@ -1026,6 +1274,22 @@ export const createCubidApiClient = (
     const withApiKey = {
       ...body,
       apikey: apiKey,
+    }
+
+    if (options.dappId === undefined || "dapp_id" in withApiKey) {
+      return withApiKey
+    }
+
+    return {
+      ...withApiKey,
+      dapp_id: options.dappId,
+    }
+  }
+
+  const withV3Credentials = (body: CubidRequestBody): CubidRequestBody => {
+    const withApiKey = {
+      ...body,
+      api_key: apiKey,
     }
 
     if (options.dappId === undefined || "dapp_id" in withApiKey) {
@@ -1263,6 +1527,78 @@ export const createCubidApiClient = (
         "identity/fetch_user_data",
         normalizeUserData,
         headers
+      )
+    },
+
+    generateAccount(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/accounts/generate"
+      )
+      const chain = assertNonEmptyString(input.chain, "chain", "v3/accounts/generate")
+      const idempotencyKey = resolveIdempotencyKey(input, "v3/accounts/generate")
+
+      return makeRequest<CubidGenerateAccountResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/accounts/generate",
+        withV3Credentials({
+          chain,
+          dapp_user_uuid: userId,
+          label: input.label?.trim() ? input.label.trim() : undefined,
+        }),
+        "v3/accounts/generate",
+        (payload, requestId, status) =>
+          normalizeGenerateAccount(payload, requestId, status, idempotencyKey),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
+    listAccounts(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/accounts/list"
+      )
+
+      return makeRequest<CubidListAccountsResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/accounts/list",
+        withV3Credentials({
+          chain: input.chain,
+          dapp_user_uuid: userId,
+        }),
+        "v3/accounts/list",
+        normalizeListAccounts,
+        headers
+      )
+    },
+
+    saveSecret(input) {
+      const userId = assertNonEmptyString(input.userId, "userId", "v3/save_secret")
+      const secret = assertNonEmptyString(input.secret, "secret", "v3/save_secret")
+      const idempotencyKey = resolveIdempotencyKey(input, "v3/save_secret")
+
+      return makeRequest<CubidSaveSecretResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/save_secret",
+        withV3Credentials({
+          secret,
+          user_id: userId,
+        }),
+        "v3/save_secret",
+        (payload, requestId, status) =>
+          normalizeSaveSecret(payload, requestId, status, idempotencyKey),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
       )
     },
 

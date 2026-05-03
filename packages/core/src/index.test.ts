@@ -604,3 +604,184 @@ test("searchLocation rejects malformed successful payloads", async () => {
     }
   )
 })
+
+test("v3 saveSecret sends api_key credentials with an idempotency header", async () => {
+  const calls: Array<{
+    body: unknown
+    headers: Headers
+    input: string | URL | Request
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (input, init) => {
+      calls.push({
+        body: JSON.parse(String(init?.body)),
+        headers: new Headers(init?.headers),
+        input,
+      })
+      return createJsonResponse({ success: true })
+    },
+  })
+
+  const response = await client.saveSecret({
+    idempotencyKey: "idempotency_123",
+    secret: "super-secret",
+    userId: "dapp_user_123",
+  })
+
+  assert.equal(response.success, true)
+  assert.equal(response.idempotencyKey, "idempotency_123")
+  assert.equal(
+    String(calls[0]?.input),
+    "https://passport.cubid.me/api/v3/save_secret"
+  )
+  assert.equal(calls[0]?.headers.get("Idempotency-Key"), "idempotency_123")
+  assert.deepEqual(calls[0]?.body, {
+    api_key: "api_key",
+    dapp_id: "dapp_123",
+    secret: "super-secret",
+    user_id: "dapp_user_123",
+  })
+})
+
+test("v3 custody helpers normalize generated and listed accounts, including sui", async () => {
+  const calls: Array<{
+    body: unknown
+    headers: Headers
+    path: string
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input, init) => {
+      const path = new URL(String(input)).pathname
+      calls.push({
+        body: JSON.parse(String(init?.body)),
+        headers: new Headers(init?.headers),
+        path,
+      })
+
+      if (path.endsWith("/accounts/generate")) {
+        return createJsonResponse({
+          data: {
+            accountId: "account_123",
+            chain: "sui",
+            createdAt: "2026-05-03T22:00:00.000Z",
+            custodyStatus: "custodied",
+            dappUserAccountId: "dua_123",
+            dappUserUuid: "dapp_user_123",
+            label: "Primary wallet",
+            publicAddress: "0XABCDEF1234",
+          },
+        })
+      }
+
+      return createJsonResponse({
+        data: [
+          {
+            accountId: "account_123",
+            chain: "sui",
+            createdAt: "2026-05-03T22:00:00.000Z",
+            custodyStatus: "custodied",
+            dappUserAccountId: "dua_123",
+            dappUserUuid: "dapp_user_123",
+            label: "Primary wallet",
+            linkStatus: "linked",
+            publicAddress: "0xabcdef1234",
+            updatedAt: "2026-05-03T22:05:00.000Z",
+          },
+        ],
+      })
+    },
+  })
+
+  const generated = await client.generateAccount({
+    chain: "sui",
+    idempotencyKey: "generate_key_123",
+    label: "Primary wallet",
+    userId: "dapp_user_123",
+  })
+  const listed = await client.listAccounts({
+    chain: "sui",
+    userId: "dapp_user_123",
+  })
+
+  assert.equal(generated.idempotencyKey, "generate_key_123")
+  assert.equal(generated.account.chain, "sui")
+  assert.equal(generated.account.publicAddress, "0xabcdef1234")
+  assert.equal(generated.account.userId, "dapp_user_123")
+  assert.equal(calls[0]?.headers.get("Idempotency-Key"), "generate_key_123")
+  assert.deepEqual(calls[0]?.body, {
+    api_key: "api_key",
+    chain: "sui",
+    dapp_user_uuid: "dapp_user_123",
+    label: "Primary wallet",
+  })
+  assert.equal(listed.accounts[0]?.linkStatus, "linked")
+  assert.equal(listed.accounts[0]?.updatedAt, "2026-05-03T22:05:00.000Z")
+  assert.equal(listed.accounts[0]?.publicAddress, "0xabcdef1234")
+  assert.deepEqual(calls.map((call) => call.path), [
+    "/api/v3/accounts/generate",
+    "/api/v3/accounts/list",
+  ])
+})
+
+test("v3 write helpers auto-generate idempotency keys when callers omit them", async () => {
+  let idempotencyKey: string | null = null
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      idempotencyKey = new Headers(init?.headers).get("Idempotency-Key")
+      return createJsonResponse({ success: true })
+    },
+  })
+
+  const response = await client.saveSecret({
+    secret: "secret-value",
+    userId: "dapp_user_123",
+  })
+
+  assert.equal(response.idempotencyKey, idempotencyKey)
+  assert.match(String(idempotencyKey), /^[0-9a-f-]{36}$/)
+})
+
+test("v3 idempotency conflicts map to structured conflict errors", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () =>
+      createJsonResponse(
+        {
+          error: {
+            code: "idempotency_conflict",
+            message: "Idempotency key was reused with a different body.",
+            requestId: "passport_123",
+          },
+        },
+        { status: 409 }
+      ),
+  })
+
+  await assert.rejects(
+    () =>
+      client.generateAccount({
+        chain: "evm",
+        idempotencyKey: "idempotency_123",
+        userId: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.category, "conflict")
+      assert.equal(error.code, "idempotency_conflict")
+      assert.equal(error.status, 409)
+      assert.equal(
+        error.message,
+        "Idempotency key was reused with a different body."
+      )
+      return true
+    }
+  )
+})

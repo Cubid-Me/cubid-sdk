@@ -17,11 +17,12 @@ tests.
 - License: Apache-2.0
 - Runtime target: ESM, standards-only
 - Surface: normalized wrappers for current Passport v2 routes plus
-  server-facing identity sync helpers
+  server-facing identity sync helpers and the first API v3 write helpers
 - Identity helpers: `ensureUserByEmail`, `fetchIdentity`, `fetchScore`,
   `fetchStamps`, and `syncIdentitySnapshot`
 - Additional wrappers: `addStamp`, location fetches, user-data fetch, location
-  search, and email/phone OTP send/verify helpers
+  search, email/phone OTP send/verify helpers, `saveSecret`,
+  `generateAccount`, and `listAccounts`
 - Response model: SDK-friendly camelCase fields with the original server
   payload retained in `raw` for migration and debugging
 - Error model: `CubidApiError` includes category, optional code, optional
@@ -33,6 +34,23 @@ partial or unsafe response shapes.
 
 OTP helpers must not expose raw OTP values. They normalize only delivery and
 verification metadata even if a legacy server payload contains a code.
+
+The API v3 write helpers must treat idempotency as part of the public
+contract. `saveSecret` and `generateAccount` should accept a caller-supplied
+idempotency key but also auto-generate one safely for high-level usage.
+Structured errors should preserve backend conflict codes such as
+`idempotency_conflict` and `request_in_progress`.
+
+Legacy `POST /api/v2/save_secret` is now removed on the backend and must not be
+exposed or documented as a supported SDK path. The public SDK secret-write
+surface should point only at the v3 contract and should keep documenting that
+there is no public decrypt/read helper for stored secrets.
+
+The current custody-chain surface includes `evm`, `near`, `solana`, and `sui`.
+These helpers must return public account metadata only. They must never expose
+raw private keys, wrapped keys, ciphertext, IVs, auth tags, or Vault-backed
+custody material. Sui public addresses should stay normalized to lowercase
+`0x...` strings on the SDK surface.
 
 Identity and score helpers must also tolerate disclosure-limited success
 responses. Empty stamp arrays, omitted identity items, missing stamp helper

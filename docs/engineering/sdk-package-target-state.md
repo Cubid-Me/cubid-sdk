@@ -49,11 +49,20 @@ only and should not reappear in public SDK assumptions or examples. Typed
 `notGranted` response states should only be added where backend payloads
 reliably distinguish privacy-limited success from genuinely empty data.
 
-If public API v3 write helpers are added for routes such as `save_secret` or
-`accounts/generate`, they should treat idempotency as part of the contract:
-accept caller-provided idempotency keys, allow safe high-level defaults, and
-normalize backend conflicts like `idempotency_conflict` and
-`request_in_progress`.
+`@cubid/core` now exposes the first public API v3 write helpers for
+`save_secret`, `accounts/generate`, and `accounts/list`. They should continue
+to treat idempotency as part of the contract: accept caller-provided
+idempotency keys, allow safe high-level defaults, and preserve backend
+conflicts like `idempotency_conflict` and `request_in_progress` in structured
+errors.
+
+Legacy `POST /api/v2/save_secret` is removed and should not reappear in public
+SDK wrappers or examples. The secret-write surface should continue to document
+that there is no matching public decrypt/read helper today.
+
+The current custody-chain surface on those helpers includes `evm`, `near`,
+`solana`, and `sui`. The SDK must keep those helpers limited to public account
+metadata and must not grow private-key or custody-secret return values.
 
 `@cubid/browser` may depend on `@cubid/core`. It owns browser-safe hosted
 verification helpers, OTP/browser flow orchestration, AllowPage URL/state

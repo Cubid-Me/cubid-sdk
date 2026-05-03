@@ -83,7 +83,7 @@ client bundles.
 ## Foundation Surface
 
 The foundation client provides normalized wrappers around current Passport v2
-endpoints:
+endpoints plus the first server-facing API v3 write helpers:
 
 - `createUser`
 - `ensureUserByEmail`
@@ -101,6 +101,9 @@ endpoints:
 - `sendPhoneOtp`
 - `verifyPhoneOtp`
 - `syncIdentitySnapshot`
+- `saveSecret`
+- `generateAccount`
+- `listAccounts`
 
 Responses use SDK-friendly camelCase fields while retaining the original
 server payload in `raw` for migration/debugging. Malformed successful responses
@@ -141,6 +144,41 @@ above, the SDK exposes typed disclosure metadata directly.
 OTP helpers intentionally return delivery or verification metadata only. They
 never expose raw OTP values, even if a legacy server payload includes one.
 
+The current API v3 helpers stay server-side as well:
+
+- `saveSecret({ userId, secret, idempotencyKey? })`
+- `generateAccount({ userId, chain, label?, idempotencyKey? })`
+- `listAccounts({ userId, chain? })`
+
+Legacy `POST /api/v2/save_secret` is retired and should not be used or
+reintroduced in the public SDK surface. `saveSecret` now targets the v3 write
+contract only.
+
+`saveSecret` and `generateAccount` automatically generate an idempotency key
+when callers omit one, and they return the resolved `idempotencyKey` alongside
+the normalized response so callers can log or reconcile retries safely.
+
+Supported custody chains on the public v3 account helpers are:
+
+- `evm`
+- `near`
+- `solana`
+- `sui`
+
+The SDK surface continues to normalize app-scoped identifiers to `userId`
+while translating to Passport's current wire keys such as `user_id` and
+`dapp_user_uuid` internally.
+
+Custody helpers only return public account metadata such as chain, address,
+label, and custody status. They never return raw private keys, wrapped keys,
+ciphertext, IVs, auth tags, or Vault material. Sui public addresses are
+normalized to lowercase `0x...` strings on the SDK surface.
+
+`saveSecret` is also write-only from the public SDK point of view. Passport's
+v3 contract does not expose a public decrypt/read endpoint for these secrets,
+so do not build app flows that assume the SDK can read plaintext secret values
+back out later.
+
 Profile-completion flows and React components are intentionally deferred to
 later SDK tasks.
 
@@ -163,7 +201,7 @@ Supabase Edge examples.
 Failed requests throw `CubidApiError` with:
 
 - `category`: `config`, `auth`, `validation`, `rate_limit`, `not_found`,
-  `upstream`, or `unknown`
+  `conflict`, `upstream`, or `unknown`
 - `code`: machine-readable detail such as `NETWORK_ERROR` or
   `MALFORMED_RESPONSE` when available
 - `endpoint`: Cubid endpoint associated with the failure when available
@@ -172,6 +210,11 @@ Failed requests throw `CubidApiError` with:
 - `details`: parsed error payload when available
 
 Error messages never include API key material.
+
+For API v3 idempotent write helpers, expect Passport conflict codes such as:
+
+- `idempotency_conflict`
+- `request_in_progress`
 
 ## Publishing
 

@@ -108,6 +108,56 @@ The OTP helpers return delivery or verification metadata only; they never return
 raw OTP codes. React UI primitives, AllowPage helpers, and provider handoff
 flows belong in later `@cubid/react` work, not in `@cubid/core`.
 
+## API v3 Secrets And Custody Writes
+
+`@cubid/core` now also exposes the first server-facing API v3 write helpers.
+Keep these on trusted servers or Edge Functions only because they use the dapp
+API key and can mutate app-owned data.
+
+```ts
+await cubid.saveSecret({
+  secret: encryptedProfileBlob,
+  userId: cubidUserId,
+})
+
+const generated = await cubid.generateAccount({
+  chain: "sui",
+  label: "Primary wallet",
+  userId: cubidUserId,
+})
+
+const accounts = await cubid.listAccounts({
+  chain: "sui",
+  userId: cubidUserId,
+})
+```
+
+`saveSecret` and `generateAccount` require idempotency under Passport's v3
+contract. `@cubid/core` will generate an `Idempotency-Key` automatically when
+you do not provide one, and it returns the resolved `idempotencyKey` on the
+normalized SDK response so callers can correlate retries or replayed success.
+
+Legacy `POST /api/v2/save_secret` is retired. Treat the v3 helper as the only
+supported public SDK write path for dapp-user secrets.
+
+When your app already has its own operation or job ID, prefer passing that as
+`idempotencyKey` explicitly.
+
+Supported custody chains on the public SDK surface are currently:
+
+- `evm`
+- `near`
+- `solana`
+- `sui`
+
+The custody helpers return public metadata only. They never expose raw private
+keys or custody secrets, and Sui public addresses are normalized to lowercase
+`0x...` strings on the SDK surface.
+
+The secret-write helper is also intentionally one-way from the public SDK's
+perspective. Passport does not expose a public decrypt/read endpoint for stored
+secrets, so app code should not expect a matching `readSecret` helper.
+
 ## Post-Return Refresh
 
 After a user returns from an AllowPage or provider-stamp flow, refresh Cubid
@@ -144,6 +194,11 @@ can explain `notGranted` outcomes without implying the user record is missing.
 For score, identity, and stamp routes, current v2 payloads still do not always
 prove whether a sparse response means "no active disclosure grant" or "no
 underlying data", so consumers should present those outcomes more cautiously.
+
+For API v3 write errors, `CubidApiError` now preserves Passport conflict codes
+such as `idempotency_conflict` and `request_in_progress` so app servers can
+decide whether to retry, surface a duplicate-request message, or fetch the
+result of the original operation.
 
 ## Stability Notes
 

@@ -386,17 +386,27 @@ downstream apps.
 
 ### S06. Align future API v3 write helpers with idempotency requirements
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-03-e02-6-api-v3-idempotency.md`
+- Status: Completed
+- Timestamp started: 2026-05-03T22:25:00Z
+- Timestamp completed: 2026-05-03T22:45:00Z
+- Feature branch: `dev`
+- Head: `1551368d` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-03-e02-6-api-v3-idempotency.md`, incoming message `agent-context/messages-from-cubid-passport/2026-05-03-c05-1-1-dapp-user-secret-v2-quarantine.md`, incoming message `agent-context/messages-from-cubid-passport/2026-05-03-c05-2-1-sui-v3-custody.md`, session: s25-s06-v3-idempotent-write-helpers
 
-Before exposing SDK helpers for API v3 write routes such as `save_secret` or
-`accounts/generate`, add an idempotency-key option, prefer safe high-level key
-generation, and normalize backend `idempotency_conflict` and
-`request_in_progress` errors.
+`@cubid/core` now exposes `saveSecret`, `generateAccount`, and `listAccounts`
+as the first public API v3 write helpers. The write helpers accept optional
+caller-owned idempotency keys, auto-generate secure defaults when omitted, and
+preserve backend `idempotency_conflict` / `request_in_progress` semantics in
+structured `CubidApiError` responses.
+
+Legacy `POST /api/v2/save_secret` is now removed upstream and must stay absent
+from the public SDK surface. The public secret helper path is v3-only and
+should keep documenting that no public decrypt/read endpoint exists today.
+
+The current custody-chain surface on `generateAccount` and `listAccounts`
+includes `evm`, `near`, `solana`, and `sui`. Sui public addresses should stay
+normalized to lowercase `0x...` strings, and the helpers must continue to
+return public custody metadata only.
 
 ### S07. Align future webhook helpers and docs with the v3 delivery contract
 

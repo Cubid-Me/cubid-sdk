@@ -1,5 +1,23 @@
 # Session Log
 
+## session: s25-s06-v3-idempotent-write-helpers
+
+- Timestamp: 2026-05-03T22:45:00Z
+- Summary: Added the first public API v3 write helpers to `@cubid/core` with idempotency support and Sui-aware custody types.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-e02-6-api-v3-idempotency.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-c05-1-1-dapp-user-secret-v2-quarantine.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-c05-2-1-sui-v3-custody.md`.
+  - Added `saveSecret`, `generateAccount`, and `listAccounts` to `@cubid/core` with app-scoped `userId` inputs, internal v3 wire-key translation, and structured response types.
+  - Added optional caller-owned idempotency keys plus secure auto-generation for the two write helpers that require `Idempotency-Key`.
+  - Preserved backend `idempotency_conflict` and `request_in_progress` semantics through `CubidApiError.code` and a dedicated `conflict` error category.
+  - Added custody-account normalization, including lowercase Sui public addresses and a public-metadata-only response surface.
+  - Clarified in public docs that legacy v2 secret writes are removed and that the public SDK still does not expose a secret read or decrypt helper.
+  - Updated the core README, integration guide, package contract doc, and roadmap to describe the new v3 helper surface.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm --filter @cubid/core typecheck`
+
 ## session: s24-s05-disclosure-roadmap-followup
 
 - Timestamp: 2026-05-03T22:20:00Z
