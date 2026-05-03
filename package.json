@@ -11,7 +11,7 @@
     "deno:check:core": "pnpm --filter @cubid/core deno:check",
     "lint": "eslint .",
     "release": "changeset publish",
-    "test": "pnpm --filter @cubid/core test && vitest run",
+    "test": "pnpm --filter @cubid/core test && pnpm --filter @cubid/browser build && vitest run",
     "typecheck": "pnpm -r typecheck"
   },
   "devDependencies": {
