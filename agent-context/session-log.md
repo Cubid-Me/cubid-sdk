@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s18-evm-wagmi-publish
+
+- Timestamp: 2026-05-03T09:47:00Z
+- Summary: Published `@cubid/evm@0.1.0` and `@cubid/wagmi@0.1.0` to npm.
+- Actions:
+  - Published `@cubid/evm@0.1.0` through npm's browser approval flow using the normal Chrome session for on-device passkey support.
+  - Published `@cubid/wagmi@0.1.0` after the refreshed npm login and without any additional code changes.
+  - Confirmed with authenticated npm access checks that `@cubid/evm` and `@cubid/wagmi` are both public and read-write under the `cubid` org.
+- Validation:
+  - Observed successful npm publish completion messages for both packages.
+  - Confirmed `npm access list packages cubid --json` includes `@cubid/evm` and `@cubid/wagmi`.
+  - Confirmed `npm access get status @cubid/evm` and `npm access get status @cubid/wagmi` return `public`.
+
 ## session: s17-browser-react-publish
 
 - Timestamp: 2026-05-03T00:45:00Z

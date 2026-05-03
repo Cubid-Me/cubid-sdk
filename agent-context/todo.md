@@ -225,6 +225,18 @@ Added `packages/wagmi` as the wagmi-specific React integration layer on top of
 `@cubid/evm`, including a hook-backed adapter helper and package-level tests
 without leaking wagmi into the core, browser, or generic React packages.
 
+### S03.4 Publish `@cubid/evm` and `@cubid/wagmi`
+
+- Status: Completed
+- Timestamp started: 2026-05-03T09:40:00Z
+- Timestamp completed: 2026-05-03T09:47:00Z
+- Feature branch: `dev`
+- Head: `00770fe4` at publish start
+- Session-log reference(s): session: s18-evm-wagmi-publish
+
+Published `@cubid/evm@0.1.0` and `@cubid/wagmi@0.1.0` to npm. Authenticated
+npm access checks confirm both packages are public under the `cubid` org.
+
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 
 - Status: Not started
