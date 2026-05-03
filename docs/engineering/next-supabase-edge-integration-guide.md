@@ -29,7 +29,7 @@ export async function ensureCubidUser(email: string) {
 
 ## Supabase Edge Usage
 
-Use the JSR package after publication:
+Use the JSR package directly:
 
 ```ts
 import { createCubidApiClient } from "jsr:@cubid/core"
@@ -55,8 +55,8 @@ Deno.serve(async (request) => {
 ```
 
 The repo validates Deno compatibility before publish with
-`pnpm --filter @cubid/core deno:check`. Live `jsr:@cubid/core` imports are
-available after the package is linked and published through trusted publishing.
+`pnpm --filter @cubid/core deno:check`. Live `jsr:@cubid/core` imports are now
+available through trusted publishing.
 
 ## Secrets
 
@@ -123,10 +123,27 @@ return {
 }
 ```
 
-Treat returned stamp and identity data as disclosure-filtered. Future Passport
-slices persist selective-disclosure grants from both `allow_page` and `oidc`,
-so apps must not assume legacy `stamp_dappuser_permissions` rows are the only
-source of truth for what should be visible.
+Treat returned stamp and identity data as disclosure-filtered. Passport now
+uses selective-disclosure grants from flows such as `allow_page` and `oidc` as
+the runtime source of truth for what an app may see; legacy
+`stamp_dappuser_permissions` rows are migration input only. An empty stamp
+list, omitted identity items, redacted email helper fields, or a lower/zero
+score can be a valid privacy-limited outcome for that app-scoped user, not just
+a sync failure.
+
+The same rule now applies to profile and location helpers. Treat these claims as
+consent-gated:
+
+- profile name: `profile:name`, `profile:*`, `profile`, `cubid:profile`
+- rough location: `location:rough`, `location:approximate`, `location:exact`, `location:*`
+- approximate location: `location:approximate`, `location:exact`, `location:*`
+- exact location: `location:exact`, `location:*`
+
+`@cubid/core` now exposes disclosure metadata on those response models so apps
+can explain `notGranted` outcomes without implying the user record is missing.
+For score, identity, and stamp routes, current v2 payloads still do not always
+prove whether a sparse response means "no active disclosure grant" or "no
+underlying data", so consumers should present those outcomes more cautiously.
 
 ## Stability Notes
 

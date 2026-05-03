@@ -429,10 +429,18 @@ test("additional runtime-agnostic wrappers normalize legacy v2 responses", async
   const results = await client.searchLocation({ locationInput: "Toronto" })
 
   assert.equal(approx.placeName, "Toronto")
+  assert.equal(approx.disclosure.state, "available")
+  assert.equal(approx.granularity, "approximate")
   assert.equal(approx.postalCode, "M5H")
   assert.deepEqual(exact.place, { city: "Toronto" })
+  assert.equal(exact.disclosure.state, "available")
+  assert.equal(exact.granularity, "exact")
   assert.equal(rough.country, "Canada")
+  assert.equal(rough.disclosure.state, "available")
+  assert.equal(rough.granularity, "rough")
   assert.equal(userData.name, "Cubid User")
+  assert.equal(userData.profileNameDisclosure.state, "available")
+  assert.equal(userData.locationDisclosure.state, "available")
   assert.deepEqual(results, [{ name: "Toronto" }, { value: "fallback" }])
   assert.deepEqual(calls.map((call) => call.path), [
     "/api/v2/identity/add_stamp",
@@ -448,6 +456,72 @@ test("additional runtime-agnostic wrappers normalize legacy v2 responses", async
     stamp_type: "email",
     user_data: { uuid: "dapp_user_123" },
   })
+})
+
+test("location and profile helpers mark disclosure-limited null responses as notGranted", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input) => {
+      const path = new URL(String(input)).pathname
+
+      if (path.endsWith("/fetch_approx_location")) {
+        return createJsonResponse({ error: null })
+      }
+      if (path.endsWith("/fetch_exact_location")) {
+        return createJsonResponse({ error: null })
+      }
+      if (path.endsWith("/fetch_rough_location")) {
+        return createJsonResponse({ error: null })
+      }
+      if (path.endsWith("/fetch_user_data")) {
+        return createJsonResponse({
+          country: null,
+          error: null,
+          name: null,
+          placename: null,
+        })
+      }
+
+      throw new Error(`Unexpected path ${path}`)
+    },
+  })
+
+  const approx = await client.fetchApproxLocation({ userId: "dapp_user_123" })
+  const exact = await client.fetchExactLocation({ userId: "dapp_user_123" })
+  const rough = await client.fetchRoughLocation({ userId: "dapp_user_123" })
+  const userData = await client.fetchUserData({ userId: "dapp_user_123" })
+
+  assert.equal(approx.disclosure.state, "notGranted")
+  assert.equal(exact.disclosure.state, "notGranted")
+  assert.equal(rough.disclosure.state, "notGranted")
+  assert.equal(userData.profileNameDisclosure.state, "notGranted")
+  assert.equal(userData.locationDisclosure.state, "notGranted")
+})
+
+test("exact location treats null place values as disclosure-limited when no other data is present", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input) => {
+      const path = new URL(String(input)).pathname
+
+      if (path.endsWith("/fetch_exact_location")) {
+        return createJsonResponse({
+          country: null,
+          error: null,
+          place: null,
+        })
+      }
+
+      throw new Error(`Unexpected path ${path}`)
+    },
+  })
+
+  const exact = await client.fetchExactLocation({ userId: "dapp_user_123" })
+
+  assert.equal(exact.place, null)
+  assert.equal(exact.disclosure.state, "notGranted")
 })
 
 test("OTP wrappers normalize safe response metadata without returning OTP codes", async () => {

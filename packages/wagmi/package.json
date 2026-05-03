@@ -1,0 +1,40 @@
+{
+  "name": "@cubid/wagmi",
+  "version": "0.1.0",
+  "description": "wagmi-based React helpers that adapt wallet flows onto @cubid/evm.",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/wagmi"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@cubid/evm": "workspace:*"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0",
+    "viem": "2.x",
+    "wagmi": ">=3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-dom --external wagmi",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

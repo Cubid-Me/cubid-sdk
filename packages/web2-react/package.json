@@ -1,7 +1,8 @@
 {
   "name": "@cubid/web2-react",
   "version": "0.1.0",
-  "description": "React components for Cubid web2 flows.",
+  "description": "Deprecated compatibility wrapper around @cubid/react. New apps should use @cubid/react directly.",
+  "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -12,14 +13,22 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/web2-react"
+  },
   "sideEffects": false,
   "dependencies": {
-    "@cubid/web2": "workspace:*"
+    "@cubid/react": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-dom",

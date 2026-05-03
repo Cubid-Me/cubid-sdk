@@ -3,13 +3,27 @@ name: Publish Packages
 on:
   workflow_dispatch:
     inputs:
+      package_name:
+        description: "Workspace package to publish"
+        required: true
+        default: "@cubid/core"
+        type: choice
+        options:
+          - "@cubid/core"
+          - "@cubid/browser"
+          - "@cubid/react"
+          - "@cubid/evm"
+          - "@cubid/wagmi"
+          - "@cubid/web2"
+          - "@cubid/web2-react"
+          - "@cubid/web3"
       publish_npm:
-        description: "Publish @cubid/core to npm using Trusted Publishing"
+        description: "Publish the selected package to npm using Trusted Publishing"
         required: true
         default: false
         type: boolean
       publish_jsr:
-        description: "Publish @cubid/core to JSR using trusted publishing"
+        description: "Publish the selected package to JSR using trusted publishing"
         required: true
         default: false
         type: boolean
@@ -22,6 +36,48 @@ jobs:
   publish-core:
     runs-on: ubuntu-latest
     steps:
+      - name: Resolve package metadata
+        id: package
+        run: |
+          case "${{ inputs.package_name }}" in
+            "@cubid/core")
+              echo "package_dir=packages/core" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=true" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/browser")
+              echo "package_dir=packages/browser" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/react")
+              echo "package_dir=packages/react" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/evm")
+              echo "package_dir=packages/evm" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/wagmi")
+              echo "package_dir=packages/wagmi" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/web2")
+              echo "package_dir=packages/web2" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/web2-react")
+              echo "package_dir=packages/web2-react" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/web3")
+              echo "package_dir=packages/web3" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "Unsupported package: ${{ inputs.package_name }}"
+              exit 1
+              ;;
+          esac
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -61,6 +117,7 @@ jobs:
           deno --version
 
       - name: Validate @cubid/core
+        if: ${{ inputs.package_name == '@cubid/core' }}
         run: |
           pnpm --filter @cubid/core test
           pnpm --filter @cubid/core typecheck
@@ -69,12 +126,28 @@ jobs:
           pnpm --filter @cubid/core pack:dry-run
           pnpm --filter @cubid/core jsr:dry-run
 
-      - name: Publish @cubid/core to npm
-        if: ${{ inputs.publish_npm }}
-        working-directory: packages/core
-        run: npm publish --access public --provenance
+      - name: Validate workspace packages
+        if: ${{ inputs.package_name != '@cubid/core' }}
+        run: |
+          pnpm test
+          pnpm typecheck
+          pnpm build
+          cd "${{ steps.package.outputs.package_dir }}"
+          PACK_DIR="$(mktemp -d)"
+          pnpm pack --pack-destination "$PACK_DIR"
 
-      - name: Publish @cubid/core to JSR
+      - name: Reject unsupported JSR publish targets
+        if: ${{ inputs.publish_jsr && steps.package.outputs.jsr_supported != 'true' }}
+        run: |
+          echo "JSR publishing is currently supported only for @cubid/core."
+          exit 1
+
+      - name: Publish selected package to npm
+        if: ${{ inputs.publish_npm }}
+        working-directory: ${{ steps.package.outputs.package_dir }}
+        run: pnpm publish --access public --provenance --no-git-checks
+
+      - name: Publish selected package to JSR
         if: ${{ inputs.publish_jsr }}
-        working-directory: packages/core
+        working-directory: ${{ steps.package.outputs.package_dir }}
         run: pnpm dlx jsr publish

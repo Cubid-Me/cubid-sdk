@@ -1,35 +1,39 @@
 import { startTransition, useId, useState } from "react";
 import type { ComponentPropsWithoutRef, FormEvent } from "react";
 
-import type { CubidWeb2Client, EmailOtpVerifyResult, StampPersistenceRequest } from "@cubid/web2";
+import type {
+  CubidWeb2Client,
+  PhoneOtpVerifyResult,
+  StampPersistenceRequest
+} from "@cubid/browser";
 
 import { useOptionalCubidWeb2Client } from "./context";
 
-type EmailOtpStartResult = Awaited<ReturnType<CubidWeb2Client["email"]["startOtp"]>>;
+type PhoneOtpStartResult = Awaited<ReturnType<CubidWeb2Client["phone"]["startOtp"]>>;
 
-export interface EmailOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">, "onSubmit"> {
+export interface PhoneOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">, "onSubmit"> {
   client?: CubidWeb2Client;
-  defaultEmail?: string;
+  defaultPhone?: string;
   onError?: (error: unknown) => void;
-  onStarted?: (result: EmailOtpStartResult) => Promise<void> | void;
-  onVerified?: (result: EmailOtpVerifyResult) => Promise<void> | void;
+  onStarted?: (result: PhoneOtpStartResult) => Promise<void> | void;
+  onVerified?: (result: PhoneOtpVerifyResult) => Promise<void> | void;
   persistStamp?: StampPersistenceRequest;
 }
 
-export function EmailOtpForm({
+export function PhoneOtpForm({
   client,
-  defaultEmail = "",
+  defaultPhone = "",
   onError,
   onStarted,
   onVerified,
   persistStamp,
   ...formProps
-}: EmailOtpFormProps) {
+}: PhoneOtpFormProps) {
   const contextualClient = useOptionalCubidWeb2Client();
   const resolvedClient = client ?? contextualClient ?? undefined;
-  const emailId = useId();
+  const phoneId = useId();
   const otpId = useId();
-  const [email, setEmail] = useState(defaultEmail);
+  const [phone, setPhone] = useState(defaultPhone);
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"collect" | "verified" | "verify">("collect");
   const [isBusy, setIsBusy] = useState(false);
@@ -41,35 +45,35 @@ export function EmailOtpForm({
 
     try {
       if (!resolvedClient) {
-        throw new Error("EmailOtpForm requires a CubidWeb2Client prop or provider.");
+        throw new Error("PhoneOtpForm requires a CubidWeb2Client prop or provider.");
       }
 
       if (step === "collect") {
-        const result = await resolvedClient.email.startOtp({
-          email,
-          onStarted
+        const result = await resolvedClient.phone.startOtp({
+          onStarted,
+          phone
         });
 
         startTransition(() => {
-          setStatus(result.sent ? "Code sent. Enter the OTP to finish verification." : "Unable to send code.");
-          setStep(result.sent ? "verify" : "collect");
+          setStatus(result.status ? "Code sent. Enter the OTP to finish verification." : "Unable to send code.");
+          setStep("verify");
         });
       } else if (step === "verify") {
-        const result = await resolvedClient.email.verifyOtp({
-          email,
+        const result = await resolvedClient.phone.verifyOtp({
           onVerified,
           otp,
-          persistStamp
+          persistStamp,
+          phone
         });
 
         startTransition(() => {
-          setStatus(result.isVerified ? "Email verified." : "Verification failed. Try again.");
+          setStatus(result.isVerified ? "Phone verified." : "Verification failed. Try again.");
           setStep(result.isVerified ? "verified" : "verify");
         });
       }
     } catch (error) {
       startTransition(() => {
-        setStatus("Something went wrong while processing the email flow.");
+        setStatus("Something went wrong while processing the phone flow.");
       });
       onError?.(error);
     } finally {
@@ -79,14 +83,14 @@ export function EmailOtpForm({
 
   return (
     <form {...formProps} onSubmit={handleSubmit}>
-      <label htmlFor={emailId}>Email</label>
+      <label htmlFor={phoneId}>Phone</label>
       <input
-        autoComplete="email"
+        autoComplete="tel"
         disabled={isBusy || step === "verified"}
-        id={emailId}
-        onChange={(event) => setEmail(event.target.value)}
-        type="email"
-        value={email}
+        id={phoneId}
+        onChange={(event) => setPhone(event.target.value)}
+        type="tel"
+        value={phone}
       />
       {step !== "collect" ? (
         <>
@@ -103,7 +107,7 @@ export function EmailOtpForm({
       ) : null}
       <div>
         <button disabled={isBusy} type="submit">
-          {step === "collect" ? "Send email code" : step === "verify" ? "Verify email code" : "Email verified"}
+          {step === "collect" ? "Send phone code" : step === "verify" ? "Verify phone code" : "Phone verified"}
         </button>
         {step !== "collect" ? (
           <button

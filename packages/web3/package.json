@@ -2,6 +2,7 @@
   "name": "@cubid/web3",
   "version": "0.1.0",
   "description": "Wallet-oriented Cubid helpers built on top of @cubid/core.",
+  "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -12,10 +13,18 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/web3"
+  },
   "sideEffects": false,
   "dependencies": {
     "@cubid/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm --clean",

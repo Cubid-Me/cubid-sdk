@@ -32,9 +32,10 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 ## Current Migration Direction
 
 - `packages/core` replaces the former `packages/api` package.
-- `@cubid/web2` is an interim package and should migrate toward a clearer headless browser package, likely `@cubid/browser`.
-- `@cubid/web2-react` is an interim package and should migrate toward `@cubid/react`.
-- `@cubid/web3` is an interim package and should split over time into chain-specific packages.
+- `packages/browser` now carries the first-class headless browser layer, while `@cubid/web2` remains as a temporary compatibility package.
+- `packages/react` now carries the React layer, while `@cubid/web2-react` remains as a temporary compatibility package.
+- `packages/evm` now carries the first chain-specific split from `@cubid/web3`, and `packages/wagmi` now carries wagmi-specific React helpers on top of `@cubid/evm`.
+- `@cubid/web3` remains an interim package and should continue splitting over time into chain-specific packages.
 - When hosted OIDC login becomes public, prefer a dedicated `@cubid/auth` and optional `@cubid/auth-react` package family rather than collapsing auth concerns into existing packages.
 
 ## Repo Hygiene Note

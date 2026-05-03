@@ -1,0 +1,37 @@
+{
+  "name": "@cubid/react",
+  "version": "0.1.0",
+  "description": "React components and hooks for Cubid browser flows.",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/react"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@cubid/browser": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-dom",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

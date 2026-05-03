@@ -1,0 +1,33 @@
+{
+  "name": "@cubid/evm",
+  "version": "0.1.0",
+  "description": "EVM-oriented Cubid wallet helpers built on top of @cubid/core.",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/evm"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@cubid/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

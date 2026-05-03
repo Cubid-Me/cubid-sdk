@@ -19,7 +19,7 @@ function createApiClientStub() {
   } as const;
 }
 
-describe("@cubid/web2", () => {
+describe("@cubid/browser", () => {
   it("runs the email OTP flow and persists the verified stamp when requested", async () => {
     const apiClient = createApiClientStub();
     const client = createCubidWeb2Client(apiClient as never);

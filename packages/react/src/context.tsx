@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import type { ReactNode } from "react";
 
-import type { CubidWeb2Client } from "@cubid/web2";
+import type { CubidWeb2Client } from "@cubid/browser";
 
 export interface CubidWeb2ProviderProps {
   children: ReactNode;

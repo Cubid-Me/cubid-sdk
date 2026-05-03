@@ -1,7 +1,8 @@
 {
   "name": "@cubid/web2",
   "version": "0.1.0",
-  "description": "Headless web2 helpers for Cubid OTP and allow flows.",
+  "description": "Deprecated compatibility wrapper around @cubid/browser. New apps should use @cubid/browser directly.",
+  "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -12,10 +13,18 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/web2"
+  },
   "sideEffects": false,
   "dependencies": {
-    "@cubid/core": "workspace:*"
+    "@cubid/browser": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm --clean",

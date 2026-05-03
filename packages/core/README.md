@@ -15,8 +15,10 @@ client can run in Node, Deno, Supabase Edge Functions, workers, and tests.
 npm install @cubid/core
 ```
 
+`@cubid/core@0.1.0` is live on npm and JSR.
+
 ```ts
-// Deno / Supabase Edge, after the package is published to JSR.
+// Deno / Supabase Edge
 import { createCubidApiClient } from "jsr:@cubid/core"
 ```
 
@@ -106,9 +108,35 @@ throw `CubidApiError` with `code: "MALFORMED_RESPONSE"` instead of returning an
 unsafe partial shape.
 
 Integration code should also assume identity and stamp payloads may be filtered
-by persisted selective-disclosure grants. Future Passport slices persist those
-grants from at least `allow_page` and `oidc`, so SDK helpers must not assume
-legacy `stamp_dappuser_permissions` rows are the only disclosure source.
+by persisted selective-disclosure grants. Passport now treats those grants as
+the runtime source of truth for app-facing disclosure, with grants persisted
+from at least `allow_page` and `oidc`; legacy
+`stamp_dappuser_permissions` rows are migration input only.
+Missing stamps, omitted identity entries, redacted email helper fields, or
+lower/zero score values can be valid privacy outcomes when a user has not
+granted disclosure for a stamp to a given app. Treat those responses as
+app-scoped disclosure limits first, not automatically as transport errors or a
+missing Cubid user.
+
+Profile and location routes are now consent-gated too. `@cubid/core` exposes
+typed disclosure metadata so apps can distinguish privacy-limited success
+responses from transport failures:
+
+- `profileNameDisclosure.claims`: `profile:name`, `profile:*`, `profile`, `cubid:profile`
+- location disclosure claims:
+  - rough: `location:rough`, `location:approximate`, `location:exact`, `location:*`
+  - approximate: `location:approximate`, `location:exact`, `location:*`
+  - exact: `location:exact`, `location:*`
+
+When these helpers return `disclosure.state === "notGranted"`, treat null or
+missing profile/location fields as consent-gated for that app unless your app
+has stronger local knowledge about the user's granted claims.
+
+`@cubid/core` does not yet auto-label empty identity, stamp, or score responses
+as `notGranted` because the current v2 payloads do not reliably distinguish
+"no active disclosure grant" from "no data" for every route. Where the backend
+does provide enough signal today, such as the profile and location helpers
+above, the SDK exposes typed disclosure metadata directly.
 
 OTP helpers intentionally return delivery or verification metadata only. They
 never expose raw OTP values, even if a legacy server payload includes one.
@@ -125,8 +153,7 @@ TypeScript source directly before publish:
 pnpm --filter @cubid/core deno:check
 ```
 
-After trusted publishing is configured and the package is released, Edge
-Functions should import from `jsr:@cubid/core`.
+Edge Functions should import from `jsr:@cubid/core`.
 
 See `docs/engineering/next-supabase-edge-integration-guide.md` for Next.js and
 Supabase Edge examples.
