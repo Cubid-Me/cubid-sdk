@@ -44,12 +44,12 @@ export interface CubidWagmiAdapterOptions<
   toStampData?: (connection: TConnection, verification: CubidWagmiVerification) => Record<string, unknown>;
 }
 
-export interface UseCubidWagmiAdapterOptions<
+export type UseCubidWagmiAdapterOptions<
   TConnection extends CubidWagmiConnection = CubidWagmiConnection
-> extends Omit<
-    CubidWagmiAdapterOptions<TConnection>,
-    "connectAsync" | "connectors" | "disconnectAsync" | "signMessageAsync"
-  > {}
+> = Omit<
+  CubidWagmiAdapterOptions<TConnection>,
+  "connectAsync" | "connectors" | "disconnectAsync" | "signMessageAsync"
+>;
 
 export interface UseCubidWagmiAdapterResult<
   TConnection extends CubidWagmiConnection = CubidWagmiConnection
