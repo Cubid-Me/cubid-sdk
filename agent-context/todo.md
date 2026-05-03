@@ -174,6 +174,28 @@ Published `@cubid/browser@0.1.0` and `@cubid/react@0.1.0` to npm. Authenticated
 npm access checks confirm both packages are public under the `cubid` org, even
 though the anonymous `npm view` endpoint briefly lagged after publication.
 
+### S02.6 Republish `@cubid/browser` and `@cubid/react` with npm-resolvable dependency metadata
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): incoming message `agent-context/messages-from-chaincrew/2026-05-03-published-package-workspace-dependency-note.md`, session: s23-chaincrew-workspace-dependency-followup
+
+`@cubid/browser@0.1.0` and `@cubid/react@0.1.0` were published before the repo
+switched workspace-package releases to `pnpm publish`, so the live npm package
+metadata still exposes `workspace:*` dependency ranges. That breaks direct npm
+consumers even though the repo-side publish workflow is now fixed.
+
+Next release action:
+
+- publish corrective patch versions with npm-resolvable internal ranges
+- confirm `npm view @cubid/browser dependencies` and `npm view @cubid/react dependencies`
+  no longer contain `workspace:*`
+- notify downstream consumers such as ChainCrew that their temporary pnpm
+  overrides can be removed after the corrected versions are live
+
 ### S03. Split chain packages
 
 - Status: In progress
@@ -236,6 +258,27 @@ without leaking wagmi into the core, browser, or generic React packages.
 
 Published `@cubid/evm@0.1.0` and `@cubid/wagmi@0.1.0` to npm. Authenticated
 npm access checks confirm both packages are public under the `cubid` org.
+
+### S03.5 Republish `@cubid/evm` and `@cubid/wagmi` with npm-resolvable dependency metadata
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s23-chaincrew-workspace-dependency-followup
+
+`@cubid/evm@0.1.0` and `@cubid/wagmi@0.1.0` were also published before the
+workspace-package publish path switched to `pnpm publish`, so their live npm
+metadata still points at internal `workspace:*` dependency ranges.
+
+Next release action:
+
+- publish corrective patch versions for the chain packages too
+- verify `npm view @cubid/evm dependencies` and `npm view @cubid/wagmi dependencies`
+  no longer expose `workspace:*`
+- keep the public chain split moving only after the published install surface is
+  clean for downstream npm consumers
 
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 

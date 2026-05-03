@@ -1,5 +1,21 @@
 # Session Log
 
+## session: s23-chaincrew-workspace-dependency-followup
+
+- Timestamp: 2026-05-03T22:10:00Z
+- Summary: Ingested the ChainCrew note about broken workspace dependency metadata in the first published non-core npm packages and recorded the corrective release scope.
+- Actions:
+  - Reviewed `agent-context/messages-from-chaincrew/2026-05-03-published-package-workspace-dependency-note.md`.
+  - Verified live npm metadata still exposes `workspace:*` dependency ranges for `@cubid/browser@0.1.0`, `@cubid/react@0.1.0`, `@cubid/evm@0.1.0`, and `@cubid/wagmi@0.1.0`.
+  - Updated the SDK roadmap so corrective patch releases for the affected browser, React, EVM, and wagmi packages are tracked explicitly instead of being implied by the repo-side publish fix.
+  - Updated the public publishing runbook to distinguish the repaired `pnpm publish` workflow from the already-published `0.1.0` metadata debt.
+  - Prepared an outbound reply for ChainCrew confirming the issue, the repo-side fix, and the need for corrected package versions before downstream overrides can be removed.
+- Validation:
+  - `npm view @cubid/browser@0.1.0 dependencies --json`
+  - `npm view @cubid/react@0.1.0 dependencies --json`
+  - `npm view @cubid/evm@0.1.0 dependencies --json`
+  - `npm view @cubid/wagmi@0.1.0 dependencies --json`
+
 ## session: s22-pr4-codex-review-followup
 
 - Timestamp: 2026-05-03T21:12:00Z

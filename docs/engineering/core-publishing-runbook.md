@@ -139,6 +139,12 @@ For workspace packages beyond `@cubid/core`, keep the publish path on
 published versions in the package metadata. The release workflow should not use
 `npm publish` for packages that depend on other `@cubid/*` workspace packages.
 
+The first `0.1.0` npm releases of `@cubid/browser`, `@cubid/react`,
+`@cubid/evm`, and `@cubid/wagmi` went out before that workflow fix landed, so
+their live npm metadata still contains `workspace:*` dependency ranges. Treat
+those versions as publish-history debt that needs corrective patch releases,
+not as the steady-state example to copy.
+
 The workflow fails intentionally if a publish is dispatched from any branch
 other than `main`.
 
