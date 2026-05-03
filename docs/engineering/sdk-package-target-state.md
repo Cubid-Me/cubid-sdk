@@ -77,9 +77,9 @@ Page grant listing or revocation, should not be treated as dapp server APIs in
 `@cubid/core`. If the public SDK exposes them later, they should sit behind a
 dedicated account-management or auth boundary.
 
-Webhook verification helpers, when exposed publicly, should stay runtime-agnostic.
-They should verify Cubid's exact raw-body signature contract and preserve both
-canonical `eventType` and transition-friendly `legacyEventType` fields in
+`@cubid/core` now exposes runtime-agnostic webhook verification helpers. They
+should keep verifying Cubid's exact raw-body signature contract and preserve
+both canonical `eventType` and transition-friendly `legacyEventType` fields in
 public types and examples.
 
 Chain packages own chain-specific wallet, key, and signing behavior. Each chain

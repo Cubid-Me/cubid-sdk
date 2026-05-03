@@ -200,6 +200,48 @@ such as `idempotency_conflict` and `request_in_progress` so app servers can
 decide whether to retry, surface a duplicate-request message, or fetch the
 result of the original operation.
 
+## Webhook Receivers
+
+`@cubid/core` now exposes runtime-agnostic webhook helpers for the v3 delivery
+contract. Verify the raw body before you parse JSON:
+
+```ts
+import {
+  parseCubidWebhookEvent,
+  verifyCubidWebhookSignature,
+} from "@cubid/core"
+
+export async function POST(request: Request) {
+  const rawBody = await request.text()
+
+  await verifyCubidWebhookSignature({
+    eventId: request.headers.get("X-Cubid-Event-Id") ?? "",
+    payload: rawBody,
+    secret: process.env.CUBID_WEBHOOK_SECRET!,
+    signature: request.headers.get("X-Cubid-Signature") ?? "",
+    signatureVersion:
+      request.headers.get("X-Cubid-Signature-Version") ?? "v1",
+    timestamp: request.headers.get("X-Cubid-Timestamp") ?? "",
+  })
+
+  const event = parseCubidWebhookEvent(JSON.parse(rawBody))
+
+  return Response.json({
+    eventId: event.eventId,
+    eventType: event.eventType,
+    legacyEventType: event.legacyEventType,
+  })
+}
+```
+
+The helper verifies the exact `eventId.timestamp.rawBody` HMAC input used by
+Passport today. Keep replay protection enabled by validating the timestamp and
+by storing recently-seen `eventId` values on your side before applying the
+event's side effects.
+
+Webhook payloads are still disclosure-filtered and app-scoped. A stamp or score
+change event only represents data the target app is allowed to observe.
+
 ## Stability Notes
 
 `@cubid/core` `0.x` is the pre-1.0 SDK foundation. The package should preserve

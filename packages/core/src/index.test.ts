@@ -5,6 +5,8 @@ import {
   createCubidApiClient,
   CubidApiError,
   type CubidFetch,
+  parseCubidWebhookEvent,
+  verifyCubidWebhookSignature,
 } from "./index"
 
 const createJsonResponse = (payload: unknown, init: ResponseInit = {}) =>
@@ -16,6 +18,33 @@ const createJsonResponse = (payload: unknown, init: ResponseInit = {}) =>
     },
     status: init.status ?? 200,
   })
+
+const signWebhookPayload = async (
+  secret: string,
+  eventId: string,
+  timestamp: string,
+  payload: string
+) => {
+  const key = await globalThis.crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { hash: "SHA-256", name: "HMAC" },
+    false,
+    ["sign"]
+  )
+  const signatureInput = new TextEncoder().encode(
+    `${eventId}.${timestamp}.${payload}`
+  )
+  const signature = await globalThis.crypto.subtle.sign(
+    "HMAC",
+    key,
+    signatureInput
+  )
+
+  return Array.from(new Uint8Array(signature), (value) =>
+    value.toString(16).padStart(2, "0")
+  ).join("")
+}
 
 test("createCubidApiClient rejects invalid configuration safely", () => {
   assert.throws(
@@ -784,4 +813,90 @@ test("v3 idempotency conflicts map to structured conflict errors", async () => {
       return true
     }
   )
+})
+
+test("verifyCubidWebhookSignature accepts a valid v1 signature", async () => {
+  const payload =
+    '{"apiVersion":"v3","payloadVersion":"2026-05-03","eventId":"event_123","eventType":"stamp.created","legacyEventType":"credential_added","createdAt":"2026-05-03T22:00:00.000Z","requestId":"passport_123","dapp":{"id":"42"},"subject":{"userId":"dapp_user_123"},"data":{"stampType":"phone"}}'
+  const secret = "webhook_secret_123"
+  const eventId = "event_123"
+  const timestamp = String(Math.floor(Date.now() / 1000))
+  const signature = await signWebhookPayload(secret, eventId, timestamp, payload)
+
+  const result = await verifyCubidWebhookSignature({
+    eventId,
+    payload,
+    secret,
+    signature: `v1=${signature}`,
+    signatureVersion: "v1",
+    timestamp,
+  })
+
+  assert.equal(result.verified, true)
+  assert.equal(result.signatureVersion, "v1")
+  assert.equal(result.eventId, eventId)
+})
+
+test("verifyCubidWebhookSignature rejects invalid signatures and expired timestamps", async () => {
+  await assert.rejects(
+    () =>
+      verifyCubidWebhookSignature({
+        eventId: "event_123",
+        now: 1_800_000_000_000,
+        payload: "{}",
+        secret: "webhook_secret_123",
+        signature: "v1=deadbeef",
+        timestamp: "1700000000",
+        toleranceSeconds: 60,
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "WEBHOOK_TIMESTAMP_EXPIRED")
+      return true
+    }
+  )
+
+  const payload = "{}"
+  const secret = "webhook_secret_123"
+  const eventId = "event_123"
+  const timestamp = String(Math.floor(Date.now() / 1000))
+
+  await assert.rejects(
+    () =>
+      verifyCubidWebhookSignature({
+        eventId,
+        payload,
+        secret,
+        signature: "v1=deadbeef",
+        timestamp,
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.category, "auth")
+      assert.equal(error.code, "INVALID_WEBHOOK_SIGNATURE")
+      return true
+    }
+  )
+})
+
+test("parseCubidWebhookEvent preserves canonical and legacy event names", () => {
+  const event = parseCubidWebhookEvent<{
+    stampType: string
+  }>({
+    apiVersion: "v3",
+    payloadVersion: "2026-05-03",
+    eventId: "event_123",
+    eventType: "stamp.created",
+    legacyEventType: "credential_added",
+    createdAt: "2026-05-03T22:00:00.000Z",
+    requestId: "passport_123",
+    dapp: { id: "42" },
+    subject: { userId: "dapp_user_123" },
+    data: { stampType: "phone" },
+  })
+
+  assert.equal(event.eventType, "stamp.created")
+  assert.equal(event.legacyEventType, "credential_added")
+  assert.equal(event.data.stampType, "phone")
+  assert.deepEqual(event.subject, { userId: "dapp_user_123" })
 })

@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s26-s07-webhook-helpers
+
+- Timestamp: 2026-05-03T23:05:00Z
+- Summary: Added runtime-agnostic v3 webhook verification helpers and receiver docs to `@cubid/core`.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-e02-7-api-v3-webhooks.md`.
+  - Added `verifyCubidWebhookSignature` and `parseCubidWebhookEvent` as public `@cubid/core` exports rather than burying webhook verification inside the API client.
+  - Implemented v1 HMAC verification over the exact `eventId.timestamp.rawBody` input using Web Crypto only.
+  - Preserved canonical `eventType` and transition-friendly `legacyEventType` in normalized webhook event types.
+  - Added receiver-oriented docs showing raw-body verification before JSON parsing and replay-protection guidance around timestamp plus `eventId`.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm --filter @cubid/core typecheck`
+  - `pnpm --filter @cubid/core build`
+
 ## session: s25-s06-v3-idempotent-write-helpers
 
 - Timestamp: 2026-05-03T22:45:00Z

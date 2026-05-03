@@ -179,6 +179,38 @@ v3 contract does not expose a public decrypt/read endpoint for these secrets,
 so do not build app flows that assume the SDK can read plaintext secret values
 back out later.
 
+## Webhook Verification
+
+`@cubid/core` also exposes runtime-agnostic webhook helpers:
+
+- `verifyCubidWebhookSignature(...)`
+- `parseCubidWebhookEvent(...)`
+
+These helpers follow Passport's current v3 delivery contract:
+
+- signature version header: `X-Cubid-Signature-Version: v1`
+- signature header: `X-Cubid-Signature: v1=<hex hmac sha256>`
+- replay inputs: `X-Cubid-Event-Id`, `X-Cubid-Timestamp`
+- signed payload input: `eventId.timestamp.rawBody`
+
+Use the exact raw request body string or bytes when verifying a webhook
+signature. Do not parse and re-serialize JSON before verification.
+
+Canonical public event names currently include:
+
+- `stamp.created`
+- `stamp.removed`
+- `credential.expired`
+- `credential.blacklisted`
+- `credential.whitelisted`
+- `score.increased`
+- `score.decreased`
+
+`parseCubidWebhookEvent` also preserves `legacyEventType` so transition-period
+consumers can keep bridging from older backend names such as
+`credential_added` and `score_increase` while migrating toward the canonical
+`eventType`.
+
 Profile-completion flows and React components are intentionally deferred to
 later SDK tasks.
 

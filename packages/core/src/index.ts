@@ -367,6 +367,56 @@ export type CubidListAccountsResponse = {
   raw: Record<string, unknown>
 }
 
+export type CubidWebhookEventType =
+  | "stamp.created"
+  | "stamp.removed"
+  | "credential.expired"
+  | "credential.blacklisted"
+  | "credential.whitelisted"
+  | "score.increased"
+  | "score.decreased"
+
+export type CubidWebhookLegacyEventType =
+  | "credential_added"
+  | "credential_removed"
+  | "credential_expired"
+  | "credential_blacklisted"
+  | "credential_whitelisted"
+  | "score_increase"
+  | "score_decrease"
+
+export type CubidWebhookEvent<TData = unknown> = {
+  apiVersion: string | null
+  createdAt: string | null
+  dapp: Record<string, unknown> | null
+  data: TData
+  eventId: string | null
+  eventType: CubidWebhookEventType | string | null
+  legacyEventType: CubidWebhookLegacyEventType | string | null
+  payloadVersion: string | null
+  raw: Record<string, unknown>
+  requestId: string | null
+  subject: Record<string, unknown> | null
+}
+
+export type CubidVerifyWebhookSignatureInput = {
+  eventId: string
+  payload: string | Uint8Array
+  secret: string
+  signature: string
+  signatureVersion?: string
+  timestamp: string
+  toleranceSeconds?: number
+  now?: Date | number
+}
+
+export type CubidWebhookVerificationResult = {
+  eventId: string
+  signatureVersion: "v1"
+  timestamp: string
+  verified: true
+}
+
 export type CubidClientConfig = {
   baseUrl: string
   dappId?: number | string
@@ -416,6 +466,11 @@ export type GenerateAccountInput = CubidGenerateAccountInput
 export type GenerateAccountResponse = CubidGenerateAccountResponse
 export type ListAccountsInput = CubidListAccountsInput
 export type ListAccountsResponse = CubidListAccountsResponse
+export type WebhookEventType = CubidWebhookEventType
+export type WebhookLegacyEventType = CubidWebhookLegacyEventType
+export type WebhookEvent<TData = unknown> = CubidWebhookEvent<TData>
+export type VerifyWebhookSignatureInput = CubidVerifyWebhookSignatureInput
+export type WebhookVerificationResult = CubidWebhookVerificationResult
 
 export type CubidApiClient = {
   addStamp(input: CubidAddStampInput): Promise<CubidAddStampResponse>
@@ -1260,6 +1315,216 @@ const resolveIdempotencyKey = (
     message:
       "No secure random UUID generator is available. Pass an explicit idempotency key for this request.",
   })
+}
+
+const assertSecret = (value: string, field: string, endpoint: string): string =>
+  assertNonEmptyString(value, field, endpoint)
+
+const assertTimestampMs = (value: string, endpoint: string): number => {
+  const normalized = assertNonEmptyString(value, "timestamp", endpoint)
+  const parsed = Number(normalized)
+
+  if (!Number.isFinite(parsed)) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_WEBHOOK_TIMESTAMP",
+      endpoint,
+      message: "Webhook timestamp must be a Unix epoch string.",
+    })
+  }
+
+  return parsed * 1000
+}
+
+const normalizeNowMs = (value: Date | number | undefined): number => {
+  if (value instanceof Date) {
+    return value.getTime()
+  }
+  if (typeof value === "number") {
+    return value
+  }
+  return Date.now()
+}
+
+const textEncoder = new TextEncoder()
+const textDecoder = new TextDecoder()
+
+const toBytes = (value: string | Uint8Array): Uint8Array =>
+  typeof value === "string" ? textEncoder.encode(value) : value
+
+const concatBytes = (...chunks: Uint8Array[]): Uint8Array => {
+  const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0)
+  const result = new Uint8Array(totalLength)
+  let offset = 0
+
+  for (const chunk of chunks) {
+    result.set(chunk, offset)
+    offset += chunk.length
+  }
+
+  return result
+}
+
+const bytesToHex = (bytes: Uint8Array): string =>
+  Array.from(bytes, (value) => value.toString(16).padStart(2, "0")).join("")
+
+const hexToBytes = (value: string, endpoint: string): Uint8Array => {
+  const normalized = value.trim().toLowerCase()
+  if (!/^[0-9a-f]+$/.test(normalized) || normalized.length % 2 !== 0) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_WEBHOOK_SIGNATURE",
+      endpoint,
+      message: "Webhook signature must be a hex string.",
+    })
+  }
+
+  const bytes = new Uint8Array(normalized.length / 2)
+  for (let index = 0; index < normalized.length; index += 2) {
+    bytes[index / 2] = Number.parseInt(normalized.slice(index, index + 2), 16)
+  }
+
+  return bytes
+}
+
+const timingSafeBytesEqual = (left: Uint8Array, right: Uint8Array): boolean => {
+  if (left.length !== right.length) {
+    return false
+  }
+
+  let diff = 0
+  for (let index = 0; index < left.length; index += 1) {
+    diff |= left[index]! ^ right[index]!
+  }
+
+  return diff === 0
+}
+
+const extractSignatureValue = (signature: string, endpoint: string): string => {
+  const normalized = assertNonEmptyString(signature, "signature", endpoint)
+  const parts = normalized.split(",").map((part) => part.trim())
+
+  for (const part of parts) {
+    if (part.startsWith("v1=")) {
+      return part.slice(3)
+    }
+  }
+
+  if (normalized.startsWith("v1=")) {
+    return normalized.slice(3)
+  }
+
+  throw new CubidApiError({
+    category: "validation",
+    code: "INVALID_WEBHOOK_SIGNATURE",
+    endpoint,
+    message: "Webhook signature header must include a v1 signature.",
+  })
+}
+
+const signWebhookPayload = async (
+  secret: string,
+  eventId: string,
+  timestamp: string,
+  payload: string | Uint8Array
+): Promise<string> => {
+  const cryptoImpl = resolveCrypto()
+  const key = await cryptoImpl.subtle.importKey(
+    "raw",
+    textEncoder.encode(secret),
+    { hash: "SHA-256", name: "HMAC" },
+    false,
+    ["sign"]
+  )
+
+  const signatureInput = concatBytes(
+    textEncoder.encode(eventId),
+    textEncoder.encode("."),
+    textEncoder.encode(timestamp),
+    textEncoder.encode("."),
+    toBytes(payload)
+  )
+
+  const signature = await cryptoImpl.subtle.sign("HMAC", key, signatureInput)
+  return bytesToHex(new Uint8Array(signature))
+}
+
+export const verifyCubidWebhookSignature = async (
+  input: CubidVerifyWebhookSignatureInput
+): Promise<CubidWebhookVerificationResult> => {
+  const endpoint = "webhooks/verify_signature"
+  const secret = assertSecret(input.secret, "secret", endpoint)
+  const eventId = assertNonEmptyString(input.eventId, "eventId", endpoint)
+  const timestamp = assertNonEmptyString(input.timestamp, "timestamp", endpoint)
+  const signatureVersion = input.signatureVersion?.trim() || "v1"
+
+  if (signatureVersion !== "v1") {
+    throw new CubidApiError({
+      category: "validation",
+      code: "UNSUPPORTED_WEBHOOK_SIGNATURE_VERSION",
+      endpoint,
+      message: `Unsupported webhook signature version: ${signatureVersion}.`,
+    })
+  }
+
+  const toleranceSeconds =
+    input.toleranceSeconds === undefined ? 300 : input.toleranceSeconds
+  const timestampMs = assertTimestampMs(timestamp, endpoint)
+  const nowMs = normalizeNowMs(input.now)
+
+  if (Math.abs(nowMs - timestampMs) > toleranceSeconds * 1000) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "WEBHOOK_TIMESTAMP_EXPIRED",
+      endpoint,
+      message: "Webhook timestamp is outside the allowed tolerance window.",
+    })
+  }
+
+  const expectedHex = await signWebhookPayload(
+    secret,
+    eventId,
+    timestamp,
+    input.payload
+  )
+  const actualBytes = hexToBytes(extractSignatureValue(input.signature, endpoint), endpoint)
+  const expectedBytes = hexToBytes(expectedHex, endpoint)
+
+  if (!timingSafeBytesEqual(actualBytes, expectedBytes)) {
+    throw new CubidApiError({
+      category: "auth",
+      code: "INVALID_WEBHOOK_SIGNATURE",
+      endpoint,
+      message: "Webhook signature verification failed.",
+    })
+  }
+
+  return {
+    eventId,
+    signatureVersion: "v1",
+    timestamp,
+    verified: true,
+  }
+}
+
+export const parseCubidWebhookEvent = <TData = unknown>(
+  payload: unknown
+): CubidWebhookEvent<TData> => {
+  const record = assertRecord(payload, "webhooks/parse_event")
+
+  return {
+    apiVersion: asString(record.apiVersion),
+    createdAt: asString(record.createdAt),
+    dapp: isRecord(record.dapp) ? record.dapp : null,
+    data: (record.data as TData | undefined) ?? (null as TData),
+    eventId: asString(record.eventId),
+    eventType: asString(record.eventType),
+    legacyEventType: asString(record.legacyEventType),
+    payloadVersion: asString(record.payloadVersion),
+    raw: record,
+    requestId: asString(record.requestId),
+    subject: isRecord(record.subject) ? record.subject : null,
+  }
 }
 
 export const createCubidApiClient = (

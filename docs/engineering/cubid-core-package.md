@@ -52,6 +52,11 @@ raw private keys, wrapped keys, ciphertext, IVs, auth tags, or Vault-backed
 custody material. Sui public addresses should stay normalized to lowercase
 `0x...` strings on the SDK surface.
 
+Webhook verification helpers should stay runtime-agnostic too. They should
+verify Passport's current v1 HMAC over the exact `eventId.timestamp.rawBody`
+input, preserve canonical `eventType` names, and continue exposing
+`legacyEventType` for transition-period consumers.
+
 Identity and score helpers must also tolerate disclosure-limited success
 responses. Empty stamp arrays, omitted identity items, missing stamp helper
 fields, or lower/zero scores may reflect the absence of an active

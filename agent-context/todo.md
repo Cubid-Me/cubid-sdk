@@ -410,14 +410,14 @@ return public custody metadata only.
 
 ### S07. Align future webhook helpers and docs with the v3 delivery contract
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-03-e02-7-api-v3-webhooks.md`
+- Status: Completed
+- Timestamp started: 2026-05-03T22:50:00Z
+- Timestamp completed: 2026-05-03T23:05:00Z
+- Feature branch: `dev`
+- Head: `fc9ab735` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-03-e02-7-api-v3-webhooks.md`, session: s26-s07-webhook-helpers
 
-When the public SDK adds webhook verification helpers or receiver examples,
-verify the v1 HMAC over the exact raw body, treat `eventId` and timestamp as
-replay-protection inputs, and document canonical v3 event names alongside the
-legacy transition names.
+`@cubid/core` now exposes runtime-agnostic webhook verification helpers that
+verify the v1 HMAC over the exact `eventId.timestamp.rawBody` input, preserve
+`eventId` and timestamp as replay-protection inputs, and document canonical v3
+event names alongside legacy transition names.
