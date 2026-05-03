@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s17-browser-react-publish
+
+- Timestamp: 2026-05-03T00:45:00Z
+- Summary: Published `@cubid/browser@0.1.0` and `@cubid/react@0.1.0` to npm.
+- Actions:
+  - Published `@cubid/browser@0.1.0` through npm's browser approval flow using the normal Chrome session for on-device passkey support.
+  - Published `@cubid/react@0.1.0` through the same npm browser approval flow.
+  - Confirmed with authenticated npm access checks that `@cubid/browser` and `@cubid/react` are both public and read-write under the `cubid` org.
+  - Removed the temporary `.playwright-mcp/` browser artifact directory after the publish flow.
+- Validation:
+  - Observed successful npm publish completion messages for both packages.
+  - Confirmed `npm access list packages cubid --json` includes `@cubid/browser` and `@cubid/react`.
+  - Confirmed `npm access get status @cubid/browser` and `npm access get status @cubid/react` both return `public`.
+
 ## session: s16-wagmi-package-slice
 
 - Timestamp: 2026-05-02T00:42:00Z

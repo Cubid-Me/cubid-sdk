@@ -161,6 +161,19 @@ Added `packages/browser` and `packages/react` from the existing public surfaces,
 switched React imports to depend on `@cubid/browser`, and converted
 `@cubid/web2` and `@cubid/web2-react` into compatibility re-export packages.
 
+### S02.5 Publish `@cubid/browser` and `@cubid/react`
+
+- Status: Completed
+- Timestamp started: 2026-05-03T00:35:00Z
+- Timestamp completed: 2026-05-03T00:45:00Z
+- Feature branch: `dev`
+- Head: `16c8ae9d` at publish start
+- Session-log reference(s): session: s17-browser-react-publish
+
+Published `@cubid/browser@0.1.0` and `@cubid/react@0.1.0` to npm. Authenticated
+npm access checks confirm both packages are public under the `cubid` org, even
+though the anonymous `npm view` endpoint briefly lagged after publication.
+
 ### S03. Split chain packages
 
 - Status: In progress
