@@ -271,6 +271,25 @@ Corrective patch releases are now live:
 Verified npm metadata now resolves to normal package versions rather than
 `workspace:*`.
 
+### S03.6 Keep future custody and chain helpers capability-driven
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+
+When future account, chain, or EVM-specific helpers expand beyond the current
+generated custody-account model, keep the public SDK capability-driven rather
+than assuming every Cubid account is a smart account, has a paymaster, or
+supports session keys.
+
+Near-term defaults should remain app-scoped generated custody accounts with
+Passport-hosted approval. If smart accounts, scoped session keys, paymasters,
+or gas sponsorship land later, expose them through explicit capability fields,
+feature flags, and policy-aware helpers instead of universal assumptions.
+
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 
 - Status: Not started
@@ -414,6 +433,33 @@ return public custody metadata only.
 verify the v1 HMAC over the exact `eventId.timestamp.rawBody` input, preserve
 `eventId` and timestamp as replay-protection inputs, and document canonical v3
 event names alongside legacy transition names.
+
+### S07.1 Extend webhook types and examples for SIWC wallet events
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+
+Add the SIWC wallet and signing canonical event names to the public webhook
+types and receiver examples:
+
+- `wallet.created`
+- `wallet.signing_request.created`
+- `wallet.policy.denied`
+- `wallet.signing_request.approved`
+- `wallet.signing_request.rejected`
+- `wallet.signing_request.cancelled`
+- `wallet.signing_request.step_up_failed`
+- `wallet.signature.completed`
+- `wallet.signature.failed`
+
+Treat these as additive to the existing webhook envelope and verification
+helpers. Keep transaction webhook expectations fail-closed until Passport
+explicitly enables transaction signing and separately announces
+`wallet.transaction.submitted` or `wallet.transaction.failed`.
 
 ### S08. Add API v3 signing-request lifecycle wrappers in `@cubid/core`
 

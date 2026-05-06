@@ -117,6 +117,10 @@ Own:
 Keep chain assumptions isolated. Do not pile them back into one shared `web3`
 blob once dedicated packages exist.
 
+Future smart-account, session-key, paymaster, or gas-sponsorship helpers must
+be capability-driven and explicitly optional. Do not assume every Cubid account
+supports those features by default.
+
 ### Future `@cubid/auth` Packages
 
 Use dedicated auth packages for "Sign in with Cubid" when the hosted auth
@@ -185,6 +189,7 @@ boundaries until their public contracts are real and stable:
 - comms helpers
 - secrets helpers
 - richer multi-chain wallet packages
+- smart-account and paymaster helpers
 
 ## Mental Model
 

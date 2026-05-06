@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+
+- Timestamp: 2026-05-06T15:35:00Z
+- Summary: Ingested the SIWC wallet webhook and smart-account roadmap notes so future SDK work stays additive on webhooks and capability-driven on custody features.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`.
+  - Added a webhook follow-up so public webhook types and examples can pick up the new SIWC wallet event names without changing the existing verification contract.
+  - Recorded that transaction webhook names remain deferred because transaction signing is still disabled.
+  - Added a future chain-account planning item that keeps smart accounts, session keys, paymasters, and gas sponsorship capability-driven rather than universally assumed.
+  - Updated package-boundary docs so future agents keep wallet-event handling additive in `@cubid/core` and avoid implying that smart-account features are default or globally available.
+- Validation:
+  - Reviewed the updated roadmap and target-state guidance against the two incoming Passport notes.
+
 ## session: s29-s08-signing-request-roadmap-ingest
 
 - Timestamp: 2026-05-06T15:10:00Z

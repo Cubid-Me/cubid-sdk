@@ -109,9 +109,30 @@ should keep verifying Cubid's exact raw-body signature contract and preserve
 both canonical `eventType` and transition-friendly `legacyEventType` fields in
 public types and examples.
 
+Future webhook type updates should treat SIWC wallet events as additive to that
+same verified envelope, including:
+
+- `wallet.created`
+- `wallet.signing_request.created`
+- `wallet.policy.denied`
+- `wallet.signing_request.approved`
+- `wallet.signing_request.rejected`
+- `wallet.signing_request.cancelled`
+- `wallet.signing_request.step_up_failed`
+- `wallet.signature.completed`
+- `wallet.signature.failed`
+
+Do not add transaction webhook expectations until Passport explicitly enables
+transaction signing and publishes the corresponding wallet transaction events.
+
 Chain packages own chain-specific wallet, key, and signing behavior. Each chain
 package should avoid cross-chain assumptions. `@cubid/evm` may depend on
 `viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
+
+Future smart-account, session-key, paymaster, and gas-sponsorship APIs should
+also be capability-driven rather than universal. Keep app-scoped generated
+custody accounts as the default public model unless Passport later exposes
+explicit capability fields or feature gates for optional account modes.
 
 `@cubid/secrets`, if introduced, owns advanced encryption/custody helpers. Until
 then, `@cubid/core` may expose typed API wrappers for basic secret operations
