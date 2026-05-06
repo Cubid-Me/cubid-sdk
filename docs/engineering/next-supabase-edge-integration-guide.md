@@ -130,16 +130,47 @@ const generated = await cubid.generateAccount({
   userId: cubidUserId,
 })
 
+if (!generated.account.accountId) {
+  throw new Error("Cubid did not return a public account id")
+}
+
 const accounts = await cubid.listAccounts({
   chain: "sui",
   userId: cubidUserId,
 })
+
+const createdRequest = await cubid.createSigningRequest({
+  chain: "evm",
+  payload: { message: "Sign in to Example" },
+  payloadSummary: { kind: "message", preview: "Sign in to Example" },
+  requestType: "message",
+  userAccountId: generated.account.accountId,
+  userId: cubidUserId,
+})
+
+if (!createdRequest.signingRequest.signingRequestId) {
+  throw new Error("Cubid did not return a signing request id")
+}
+
+const fetchedRequest = await cubid.getSigningRequest({
+  signingRequestId: createdRequest.signingRequest.signingRequestId,
+})
+
+const requestList = await cubid.listSigningRequests({
+  userAccountId: generated.account.accountId,
+  userId: cubidUserId,
+})
+
+const cancelledRequest = await cubid.cancelSigningRequest({
+  signingRequestId: createdRequest.signingRequest.signingRequestId,
+})
 ```
 
-`saveSecret` and `generateAccount` require idempotency under Passport's v3
-contract. `@cubid/core` will generate an `Idempotency-Key` automatically when
-you do not provide one, and it returns the resolved `idempotencyKey` on the
-normalized SDK response so callers can correlate retries or replayed success.
+`saveSecret`, `generateAccount`, and `createSigningRequest` require idempotency
+under Passport's v3 contract. `@cubid/core` will generate an `Idempotency-Key`
+automatically when you do not provide one, and it returns the resolved
+`idempotencyKey` on the normalized SDK response so callers can correlate
+retries or replayed success.
 
 Legacy `POST /api/v2/save_secret` is retired. Treat the v3 helper as the only
 supported public SDK write path for dapp-user secrets.
@@ -157,6 +188,29 @@ Supported custody chains on the public SDK surface are currently:
 The custody helpers return public metadata only. They never expose raw private
 keys or custody secrets, and Sui public addresses are normalized to lowercase
 `0x...` strings on the SDK surface.
+
+The signing-request helpers also stay redacted by default. They normalize only
+safe summary metadata such as `signingRequestId`, `status`, `chain`,
+`requestType`, `payloadHash`, `payloadSummary`, `policyVersion`,
+`requiredAcr`, timestamps, and optional safe `result` metadata after
+completion. When Passport includes SIWC05 policy fields, the normalized
+response also preserves `riskLevel`, `riskReasons`, `policyDecision`,
+`stepUpRequired`, `transactionOperationType`, `transactionRecipient`,
+`transactionContractAddress`, and `transactionDeclaredValueUsd`.
+
+Do not build server logic that expects raw signing payloads, private keys,
+encrypted key material, or raw Cubid internal IDs to come back from these
+helpers. `@cubid/core` intentionally keeps that material out of the public
+surface.
+
+Passport-hosted approval and rejection flows remain outside `@cubid/core`.
+These server-side helpers only wrap the dapp-facing signing-request lifecycle
+routes.
+
+Transaction signing also remains fail-closed here. A transaction-oriented
+request summary or `policyDecision: "denied"` is still just policy metadata;
+it does not imply that transaction signatures are enabled for public SDK
+consumers.
 
 The secret-write helper is also intentionally one-way from the public SDK's
 perspective. Passport does not expose a public decrypt/read endpoint for stored
@@ -255,6 +309,22 @@ event's side effects.
 
 Webhook payloads are still disclosure-filtered and app-scoped. A stamp or score
 change event only represents data the target app is allowed to observe.
+
+Current canonical webhook event names now also include the SIWC wallet events:
+
+- `wallet.created`
+- `wallet.signing_request.created`
+- `wallet.policy.denied`
+- `wallet.signing_request.approved`
+- `wallet.signing_request.rejected`
+- `wallet.signing_request.cancelled`
+- `wallet.signing_request.step_up_failed`
+- `wallet.signature.completed`
+- `wallet.signature.failed`
+
+Do not add transaction webhook handling yet. `wallet.transaction.submitted`
+and `wallet.transaction.failed` remain deferred until Passport explicitly
+enables transaction signing.
 
 ## Stability Notes
 

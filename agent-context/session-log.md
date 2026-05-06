@@ -1,5 +1,22 @@
 # Session Log
 
+## session: s33-siwc-signing-surface
+
+- Timestamp: 2026-05-06T22:45:00Z
+- Summary: Implemented the first public SIWC signing-request lifecycle surface in `@cubid/core` and extended the webhook docs and event types for SIWC wallet events.
+- Actions:
+  - Added SIWC wallet event names to `CubidWebhookEventType` while keeping the existing webhook verification contract unchanged.
+  - Added `createSigningRequest`, `getSigningRequest`, `listSigningRequests`, and `cancelSigningRequest` to `@cubid/core` as runtime-agnostic API v3 helpers.
+  - Added shared public signing-request request and response types, including redacted summaries, additive SIWC05 risk fields, and create-route idempotency handling.
+  - Kept transaction-signing flows fail-closed in normalized summaries and docs so policy metadata does not imply signature enablement.
+  - Updated the public core README and Next/Supabase integration guide to document the new SIWC signing methods, redacted summary model, and additive wallet webhook event names.
+  - Bumped `@cubid/core` package and JSR manifests from `0.1.1` to `0.1.2` because this adds new public API surface.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
 ## session: s32-pr5-sharedarraybuffer-followup
 
 - Timestamp: 2026-05-06T14:05:00Z

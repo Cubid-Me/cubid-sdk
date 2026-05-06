@@ -436,12 +436,12 @@ event names alongside legacy transition names.
 
 ### S07.1 Extend webhook types and examples for SIWC wallet events
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest, session: s33-siwc-signing-surface
 
 Add the SIWC wallet and signing canonical event names to the public webhook
 types and receiver examples:
@@ -463,12 +463,12 @@ explicitly enables transaction signing and separately announces
 
 ### S08. Add API v3 signing-request lifecycle wrappers in `@cubid/core`
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`, incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`, session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`, incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`, session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Add typed runtime-agnostic API v3 wrappers in `@cubid/core` for the dapp-facing
 signing request lifecycle routes:
@@ -497,12 +497,12 @@ with the later wallet-event and smart-account notes in view.
 
 ### S08.1 Add shared request and response types for create/get/list/cancel
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Define the shared public request and response types for the API v3
 signing-request lifecycle. The create route should accept the app-scoped user
@@ -511,12 +511,12 @@ structured payload inputs Passport documents for message and typed-data signing.
 
 ### S08.2 Require idempotency handling on create
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Keep `createSigningRequest(...)` aligned with the existing API v3 write-helper
 pattern: require or safely generate `Idempotency-Key`, preserve backend
@@ -524,12 +524,12 @@ conflict semantics, and document the caller-owned retry story clearly.
 
 ### S08.3 Normalize redacted response metadata only
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Normalize only the redacted public signing-request metadata returned by
 Passport. Do not surface raw request payloads, raw user identifiers, or other
@@ -537,12 +537,12 @@ private custody material through `@cubid/core`.
 
 ### S08.4 Include additive SIWC05 risk and policy fields on summaries
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Extend the future signing-request summary types to accept the optional SIWC05
 risk and policy fields when present:
@@ -558,12 +558,12 @@ risk and policy fields when present:
 
 ### S08.5 Keep transaction-signing paths fail-closed until Passport explicitly enables them
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Even after the signing-request wrappers land, treat transaction-signing requests
 as policy-denied and deferred. SDK examples and client helpers should display
