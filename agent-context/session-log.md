@@ -1,5 +1,162 @@
 # Session Log
 
+## session: s32-pr5-sharedarraybuffer-followup
+
+- Timestamp: 2026-05-06T14:05:00Z
+- Summary: Addressed the remaining PR #5 webhook review edge case by making webhook signature verification safe for SharedArrayBuffer-backed byte views.
+- Actions:
+  - Updated the internal `toArrayBuffer` helper to avoid calling `.buffer.slice(...)` on non-ArrayBuffer-backed views and to copy through `Uint8Array#slice()` when needed.
+  - Preserved the zero-copy fast path for full ArrayBuffer-backed views.
+  - Expanded the core webhook tests so `verifyCubidWebhookSignature` now explicitly covers SharedArrayBuffer-backed payload input.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s31-pr5-review-followup
+
+- Timestamp: 2026-05-06T13:20:00Z
+- Summary: Addressed the first PR #5 review round by making the webhook helper contracts stricter and bumping `@cubid/core` for a publishable next release.
+- Actions:
+  - Bumped `packages/core/package.json` and `packages/core/jsr.json` to `0.1.1` so the newly added public core APIs can be released instead of colliding with the live `0.1.0` registry state.
+  - Hardened `verifyCubidWebhookSignature` so non-finite or invalid `toleranceSeconds`, `now`, and timestamp inputs fail closed with validation errors.
+  - Updated `CubidWebhookEvent<TData>` and `parseCubidWebhookEvent` so missing webhook `data` is modeled honestly as `null` instead of violating the exported type contract.
+  - Added test coverage for the stricter webhook validation edge cases and nullable parsed webhook data.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+
+- Timestamp: 2026-05-06T15:35:00Z
+- Summary: Ingested the SIWC wallet webhook and smart-account roadmap notes so future SDK work stays additive on webhooks and capability-driven on custody features.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`.
+  - Added a webhook follow-up so public webhook types and examples can pick up the new SIWC wallet event names without changing the existing verification contract.
+  - Recorded that transaction webhook names remain deferred because transaction signing is still disabled.
+  - Added a future chain-account planning item that keeps smart accounts, session keys, paymasters, and gas sponsorship capability-driven rather than universally assumed.
+  - Updated package-boundary docs so future agents keep wallet-event handling additive in `@cubid/core` and avoid implying that smart-account features are default or globally available.
+- Validation:
+  - Reviewed the updated roadmap and target-state guidance against the two incoming Passport notes.
+
+## session: s29-s08-signing-request-roadmap-ingest
+
+- Timestamp: 2026-05-06T15:10:00Z
+- Summary: Ingested the first Sign In With Cubid signing-request lifecycle notes into the public SDK roadmap and package-boundary docs without starting runtime wrappers early.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`.
+  - Added a new `S08` roadmap track for typed API v3 signing-request lifecycle wrappers in `@cubid/core`.
+  - Recorded the planned public wrapper names `createSigningRequest`, `getSigningRequest`, `listSigningRequests`, and `cancelSigningRequest`.
+  - Captured the redacted response metadata expectations, SIWC05 additive risk fields, the no-approval-from-dapp-keys rule, and the continued fail-closed posture for transaction signing.
+  - Updated package-boundary docs so future agents keep hosted approval and rejection UX in Passport while placing dapp-facing HTTP wrappers in `@cubid/core`.
+  - Recorded that the adjacent incoming notes `siwc06` and `siwc07` should be handled before starting the runtime `S08` implementation.
+- Validation:
+  - Reviewed the updated roadmap and package-boundary docs for consistency with the two incoming Passport notes.
+
+## session: s28-s05-app-scoped-stamp-surface
+
+- Timestamp: 2026-05-03T22:40:00Z
+- Summary: Finished the current S05 tranche by exporting the canonical stamp registry and a small app-scoped subject helper from `@cubid/core`.
+- Actions:
+  - Added `CUBID_STAMP_TYPE_IDS`, `getCubidStampTypeId`, `getCubidStampTypeName`, `getCubidStampTypeNamesById`, and `summarizeCubidDisclosedStamp` to align public SDK stamp metadata with Passport's canonical stamp registry.
+  - Added `createCubidAppScopedSubject` so downstream apps can validate and wrap app-scoped `userId` values without introducing raw cross-app identifiers.
+  - Updated stamp normalization so `fetchStamps` falls back to canonical stamp names when the backend returns only a numeric `stamptype`.
+  - Expanded public docs so the app-scoped subject model and canonical stamp helpers are part of the supported `@cubid/core` surface.
+  - Closed the current S05 roadmap tranche while keeping future `notGranted` expansion explicitly gated on stronger backend route signals.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s27-package-metadata-republish
+
+- Timestamp: 2026-05-03T22:15:00Z
+- Summary: Corrected the published npm metadata for the first non-core public packages and verified the new dependency ranges live on the registry.
+- Actions:
+  - Bumped `@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi` to `0.1.1` as metadata-only patch releases.
+  - Verified packed manifests locally before release so internal workspace dependencies rewrote to real published versions.
+  - Fixed the GitHub Actions webhook-helper typecheck issue that had blocked the first trusted-publishing retry.
+  - Added npm trusted-publisher bindings for `@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi`.
+  - Published and verified live corrective versions:
+    - `@cubid/browser@0.1.1`
+    - `@cubid/react@0.1.1`
+    - `@cubid/evm@0.1.1`
+    - `@cubid/wagmi@0.1.1`
+- Validation:
+  - `pnpm --filter @cubid/browser pack --pack-destination /tmp/cubid-browser-pack`
+  - `pnpm --filter @cubid/react pack --pack-destination /tmp/cubid-react-pack`
+  - `pnpm --filter @cubid/evm pack --pack-destination /tmp/cubid-evm-pack`
+  - `pnpm --filter @cubid/wagmi pack --pack-destination /tmp/cubid-wagmi-pack`
+  - `npm view @cubid/browser version dependencies --json`
+  - `npm view @cubid/react version dependencies --json`
+  - `npm view @cubid/evm version dependencies --json`
+  - `npm view @cubid/wagmi version dependencies --json`
+
+## session: s26-s07-webhook-helpers
+
+- Timestamp: 2026-05-03T23:05:00Z
+- Summary: Added runtime-agnostic v3 webhook verification helpers and receiver docs to `@cubid/core`.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-e02-7-api-v3-webhooks.md`.
+  - Added `verifyCubidWebhookSignature` and `parseCubidWebhookEvent` as public `@cubid/core` exports rather than burying webhook verification inside the API client.
+  - Implemented v1 HMAC verification over the exact `eventId.timestamp.rawBody` input using Web Crypto only.
+  - Preserved canonical `eventType` and transition-friendly `legacyEventType` in normalized webhook event types.
+  - Added receiver-oriented docs showing raw-body verification before JSON parsing and replay-protection guidance around timestamp plus `eventId`.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm --filter @cubid/core typecheck`
+  - `pnpm --filter @cubid/core build`
+
+## session: s25-s06-v3-idempotent-write-helpers
+
+- Timestamp: 2026-05-03T22:45:00Z
+- Summary: Added the first public API v3 write helpers to `@cubid/core` with idempotency support and Sui-aware custody types.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-e02-6-api-v3-idempotency.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-c05-1-1-dapp-user-secret-v2-quarantine.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-03-c05-2-1-sui-v3-custody.md`.
+  - Added `saveSecret`, `generateAccount`, and `listAccounts` to `@cubid/core` with app-scoped `userId` inputs, internal v3 wire-key translation, and structured response types.
+  - Added optional caller-owned idempotency keys plus secure auto-generation for the two write helpers that require `Idempotency-Key`.
+  - Preserved backend `idempotency_conflict` and `request_in_progress` semantics through `CubidApiError.code` and a dedicated `conflict` error category.
+  - Added custody-account normalization, including lowercase Sui public addresses and a public-metadata-only response surface.
+  - Clarified in public docs that legacy v2 secret writes are removed and that the public SDK still does not expose a secret read or decrypt helper.
+  - Updated the core README, integration guide, package contract doc, and roadmap to describe the new v3 helper surface.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm --filter @cubid/core typecheck`
+
+## session: s24-s05-disclosure-roadmap-followup
+
+- Timestamp: 2026-05-03T22:20:00Z
+- Summary: Turned the disclosure-helper follow-up into concrete roadmap subitems so future runtime states only land where Passport payloads actually prove privacy state.
+- Actions:
+  - Split roadmap task `S05` into completed, in-progress, and future-ready subitems instead of leaving the disclosure work as one broad bucket.
+  - Recorded that profile and location helpers already meet the evidence threshold for typed `notGranted` states.
+  - Documented the exact backend-signal requirements the SDK should demand before adding typed disclosure states to identity, stamp, or score helpers.
+- Validation:
+  - Reviewed the updated `agent-context/todo.md` entries for consistency with the current `@cubid/core` disclosure surface and existing Passport inbox notes.
+
+## session: s23-chaincrew-workspace-dependency-followup
+
+- Timestamp: 2026-05-03T22:10:00Z
+- Summary: Ingested the ChainCrew note about broken workspace dependency metadata in the first published non-core npm packages and recorded the corrective release scope.
+- Actions:
+  - Reviewed `agent-context/messages-from-chaincrew/2026-05-03-published-package-workspace-dependency-note.md`.
+  - Verified live npm metadata still exposes `workspace:*` dependency ranges for `@cubid/browser@0.1.0`, `@cubid/react@0.1.0`, `@cubid/evm@0.1.0`, and `@cubid/wagmi@0.1.0`.
+  - Updated the SDK roadmap so corrective patch releases for the affected browser, React, EVM, and wagmi packages are tracked explicitly instead of being implied by the repo-side publish fix.
+  - Updated the public publishing runbook to distinguish the repaired `pnpm publish` workflow from the already-published `0.1.0` metadata debt.
+  - Prepared an outbound reply for ChainCrew confirming the issue, the repo-side fix, and the need for corrected package versions before downstream overrides can be removed.
+- Validation:
+  - `npm view @cubid/browser@0.1.0 dependencies --json`
+  - `npm view @cubid/react@0.1.0 dependencies --json`
+  - `npm view @cubid/evm@0.1.0 dependencies --json`
+  - `npm view @cubid/wagmi@0.1.0 dependencies --json`
+
 ## session: s22-pr4-codex-review-followup
 
 - Timestamp: 2026-05-03T21:12:00Z

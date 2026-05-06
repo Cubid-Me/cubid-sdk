@@ -12,6 +12,7 @@ export type CubidFetch = (
 
 export type CubidApiErrorCategory =
   | "auth"
+  | "conflict"
   | "config"
   | "not_found"
   | "rate_limit"
@@ -157,6 +158,35 @@ export type CubidFetchStampsInput = {
   userId: string
 }
 
+export const CUBID_STAMP_TYPE_IDS = {
+  address: 70,
+  brightid: 8,
+  discord: 5,
+  email: 13,
+  evm: 14,
+  facebook: 1,
+  farcaster: 68,
+  fractal: 17,
+  github: 2,
+  gitcoin: 9,
+  gooddollar: 12,
+  google: 3,
+  iah: 7,
+  instagram: 10,
+  "lens-protocol": 66,
+  linkedin: 22,
+  near: 15,
+  "near-wallet": 15,
+  phone: 11,
+  poh: 6,
+  solana: 53,
+  telegram: 27,
+  twitter: 4,
+  worldcoin: 26,
+} as const
+
+export type CubidStampType = keyof typeof CUBID_STAMP_TYPE_IDS
+
 export type CubidRawStamp = Record<string, unknown> & {
   emailForVerification?: string | null
   permAvailable?: boolean
@@ -173,6 +203,17 @@ export type CubidStampRecord = {
   stampType?: string | null
   stampTypeId?: number
   uniqueValue?: string | null
+}
+
+export type CubidDisclosedStampSummary = {
+  stampType: CubidStampType | string
+  stampTypeId: number
+  status: "Verified" | "Unverified"
+  value: string | null
+}
+
+export type CubidAppScopedSubject = {
+  userId: string
 }
 
 export type CubidFetchStampsResponse = {
@@ -305,6 +346,117 @@ export type CubidIdentitySnapshot = {
   userId: string
 }
 
+export type CubidIdempotentRequestOptions = {
+  /**
+   * Optional caller-owned idempotency key. When omitted on write helpers that
+   * require idempotency, `@cubid/core` will generate a random key.
+   */
+  idempotencyKey?: string
+}
+
+export type CubidSaveSecretInput = CubidIdempotentRequestOptions & {
+  secret: string
+  userId: string
+}
+
+export type CubidSaveSecretResponse = {
+  idempotencyKey: string
+  raw: Record<string, unknown>
+  success: boolean
+}
+
+export type CubidCustodyChain = "evm" | "near" | "solana" | "sui"
+
+export type CubidAccountCustodyStatus = string | null
+
+export type CubidAccountLinkStatus = string | null
+
+export type CubidCustodyAccount = {
+  accountId: string | null
+  chain: CubidCustodyChain | string
+  createdAt: string | null
+  custodyStatus: CubidAccountCustodyStatus
+  dappUserAccountId: string | null
+  label: string | null
+  linkStatus?: CubidAccountLinkStatus
+  publicAddress: string | null
+  raw: Record<string, unknown>
+  updatedAt?: string | null
+  userId: string | null
+}
+
+export type CubidGenerateAccountInput = CubidIdempotentRequestOptions & {
+  chain: CubidCustodyChain
+  label?: string
+  userId: string
+}
+
+export type CubidGenerateAccountResponse = {
+  account: CubidCustodyAccount
+  idempotencyKey: string
+  raw: Record<string, unknown>
+}
+
+export type CubidListAccountsInput = {
+  chain?: CubidCustodyChain
+  userId: string
+}
+
+export type CubidListAccountsResponse = {
+  accounts: CubidCustodyAccount[]
+  raw: Record<string, unknown>
+}
+
+export type CubidWebhookEventType =
+  | "stamp.created"
+  | "stamp.removed"
+  | "credential.expired"
+  | "credential.blacklisted"
+  | "credential.whitelisted"
+  | "score.increased"
+  | "score.decreased"
+
+export type CubidWebhookLegacyEventType =
+  | "credential_added"
+  | "credential_removed"
+  | "credential_expired"
+  | "credential_blacklisted"
+  | "credential_whitelisted"
+  | "score_increase"
+  | "score_decrease"
+
+export type CubidWebhookEvent<TData = unknown> = {
+  apiVersion: string | null
+  createdAt: string | null
+  dapp: Record<string, unknown> | null
+  data: TData | null
+  eventId: string | null
+  eventType: CubidWebhookEventType | string | null
+  legacyEventType: CubidWebhookLegacyEventType | string | null
+  payloadVersion: string | null
+  raw: Record<string, unknown>
+  requestId: string | null
+  subject: Record<string, unknown> | null
+}
+
+export type CubidVerifyWebhookSignatureInput = {
+  eventId: string
+  payload: string | Uint8Array
+  secret: string
+  signature: string
+  signatureVersion?: string
+  timestamp: string
+  toleranceSeconds?: number
+  now?: Date | number
+}
+
+export type CubidWebhookVerificationResult = {
+  eventId: string
+  signatureVersion: "v1"
+  timestamp: string
+  verified: true
+}
+
 export type CubidClientConfig = {
   baseUrl: string
   dappId?: number | string
@@ -327,6 +479,9 @@ export type FetchScoreInput = CubidFetchScoreInput
 export type FetchScoreResponse = CubidFetchScoreResponse
 export type FetchStampsInput = CubidFetchStampsInput
 export type FetchStampsResponse = CubidFetchStampsResponse
+export type StampType = CubidStampType
+export type DisclosedStampSummary = CubidDisclosedStampSummary
+export type AppScopedSubject = CubidAppScopedSubject
 export type FetchApproxLocationResponse = CubidFetchApproxLocationResponse
 export type FetchExactLocationResponse = CubidFetchExactLocationResponse
 export type FetchRoughLocationResponse = CubidFetchRoughLocationResponse
@@ -345,6 +500,20 @@ export type VerifyPhoneOtpInput = CubidVerifyPhoneOtpInput
 export type VerifyPhoneOtpResponse = CubidVerifyPhoneOtpResponse
 export type IdentitySnapshotInput = CubidIdentitySnapshotInput
 export type IdentitySnapshot = CubidIdentitySnapshot
+export type IdempotentRequestOptions = CubidIdempotentRequestOptions
+export type SaveSecretInput = CubidSaveSecretInput
+export type SaveSecretResponse = CubidSaveSecretResponse
+export type CustodyChain = CubidCustodyChain
+export type CustodyAccount = CubidCustodyAccount
+export type GenerateAccountInput = CubidGenerateAccountInput
+export type GenerateAccountResponse = CubidGenerateAccountResponse
+export type ListAccountsInput = CubidListAccountsInput
+export type ListAccountsResponse = CubidListAccountsResponse
+export type WebhookEventType = CubidWebhookEventType
+export type WebhookLegacyEventType = CubidWebhookLegacyEventType
+export type WebhookEvent<TData = unknown> = CubidWebhookEvent<TData>
+export type VerifyWebhookSignatureInput = CubidVerifyWebhookSignatureInput
+export type WebhookVerificationResult = CubidWebhookVerificationResult
 
 export type CubidApiClient = {
   addStamp(input: CubidAddStampInput): Promise<CubidAddStampResponse>
@@ -370,6 +539,11 @@ export type CubidApiClient = {
   fetchUserData(
     input: CubidFetchIdentityInput
   ): Promise<CubidFetchUserDataResponse>
+  generateAccount(
+    input: CubidGenerateAccountInput
+  ): Promise<CubidGenerateAccountResponse>
+  listAccounts(input: CubidListAccountsInput): Promise<CubidListAccountsResponse>
+  saveSecret(input: CubidSaveSecretInput): Promise<CubidSaveSecretResponse>
   searchLocation(
     input: CubidSearchLocationInput
   ): Promise<CubidSearchLocationResponse>
@@ -480,6 +654,9 @@ const categoryForStatus = (status: number): CubidApiErrorCategory => {
   if (status === 401 || status === 403) {
     return "auth"
   }
+  if (status === 409) {
+    return "conflict"
+  }
   if (status === 404) {
     return "not_found"
   }
@@ -520,6 +697,32 @@ const asCoordinates = (value: unknown): CubidCoordinates | undefined => {
   }
 
   return { lat, lng }
+}
+
+const codeFromPayload = (payload: unknown): string | undefined => {
+  if (!payload || typeof payload !== "object") {
+    return undefined
+  }
+
+  const record = payload as Record<string, unknown>
+  const error = record.error
+
+  if (typeof error === "string" && error.trim()) {
+    return error
+  }
+
+  if (error && typeof error === "object") {
+    const nested = error as Record<string, unknown>
+    if (typeof nested.code === "string" && nested.code.trim()) {
+      return nested.code
+    }
+  }
+
+  if (typeof record.code === "string" && record.code.trim()) {
+    return record.code
+  }
+
+  return undefined
 }
 
 const assertRecord = (
@@ -596,18 +799,22 @@ const makeRequest = async <Result>(
     requestId?: string | null,
     status?: number
   ) => Result,
-  headers?: HeadersInit
+  headers?: HeadersInit,
+  requestHeaders?: HeadersInit
 ): Promise<Result> => {
   let response: Response
   try {
-    const requestHeaders = new Headers(headers)
-    if (!requestHeaders.has("content-type")) {
-      requestHeaders.set("content-type", "application/json")
+    const resolvedHeaders = new Headers(headers)
+    for (const [key, value] of new Headers(requestHeaders)) {
+      resolvedHeaders.set(key, value)
+    }
+    if (!resolvedHeaders.has("content-type")) {
+      resolvedHeaders.set("content-type", "application/json")
     }
 
     response = await fetchImpl(`${baseUrl}${path}`, {
       body: JSON.stringify(body),
-      headers: requestHeaders,
+      headers: resolvedHeaders,
       method: "POST",
     })
   } catch (error) {
@@ -626,6 +833,7 @@ const makeRequest = async <Result>(
   if (!response.ok) {
     throw new CubidApiError({
       category: categoryForStatus(response.status),
+      code: codeFromPayload(payload),
       details: payload,
       endpoint,
       message: messageFromPayload(
@@ -707,6 +915,70 @@ const normalizeScore = (
   }
 }
 
+const STAMP_TYPE_NAMES_BY_ID = Object.entries(CUBID_STAMP_TYPE_IDS).reduce<
+  Record<number, CubidStampType>
+>((accumulator, [stampType, stampTypeId]) => {
+  if (accumulator[stampTypeId] === undefined || stampType !== "near-wallet") {
+    accumulator[stampTypeId] = stampType as CubidStampType
+  }
+  return accumulator
+}, {})
+
+export const getCubidStampTypeId = (stampType: string): number | null => {
+  const normalized = stampType.trim() as CubidStampType
+  return CUBID_STAMP_TYPE_IDS[normalized] ?? null
+}
+
+export const getCubidStampTypeName = (stampTypeId: number): CubidStampType | string =>
+  STAMP_TYPE_NAMES_BY_ID[stampTypeId] ?? String(stampTypeId)
+
+export const getCubidStampTypeNamesById = (): Record<number, string> => ({
+  ...STAMP_TYPE_NAMES_BY_ID,
+})
+
+export const createCubidAppScopedSubject = (
+  userId: string
+): CubidAppScopedSubject => ({
+  userId: assertNonEmptyString(userId, "userId", "app_scoped_subject"),
+})
+
+export const summarizeCubidDisclosedStamp = (
+  record: Pick<
+    CubidStampRecord,
+    "identity" | "isValid" | "stampType" | "stampTypeId" | "uniqueValue"
+  >
+): CubidDisclosedStampSummary => {
+  const rawStampTypeId = record.stampTypeId
+
+  if (
+    typeof rawStampTypeId !== "number" ||
+    !Number.isInteger(rawStampTypeId) ||
+    rawStampTypeId <= 0
+  ) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_STAMP_TYPE",
+      endpoint: "stamps/summarize",
+      message: "Stamp record is missing a valid stampTypeId.",
+    })
+  }
+  const stampTypeId = rawStampTypeId
+
+  const value =
+    typeof record.identity === "string"
+      ? record.identity
+      : typeof record.uniqueValue === "string"
+        ? record.uniqueValue
+        : null
+
+  return {
+    stampType: record.stampType ?? getCubidStampTypeName(stampTypeId),
+    stampTypeId,
+    status: record.isValid ? "Verified" : "Unverified",
+    value,
+  }
+}
+
 const normalizeStampRecord = (
   raw: unknown,
   requestId?: string | null,
@@ -718,6 +990,7 @@ const normalizeStampRecord = (
     requestId,
     status
   )
+  const stampTypeId = asNumber(record.stamptype)
 
   return {
     emailForVerification: asString(record.emailForVerification),
@@ -726,8 +999,12 @@ const normalizeStampRecord = (
     isValid: asBoolean(record.is_valid),
     permAvailable: asBoolean(record.permAvailable),
     raw: record,
-    stampType: asString(record.stamptype_string),
-    stampTypeId: asNumber(record.stamptype),
+    stampType:
+      asString(record.stamptype_string) ??
+      (typeof stampTypeId === "number"
+        ? getCubidStampTypeName(stampTypeId)
+        : null),
+    stampTypeId,
     uniqueValue: asString(record.uniquevalue),
   }
 }
@@ -1014,6 +1291,394 @@ const normalizePhoneOtpVerified = (
   }
 }
 
+const normalizeCustodyChain = (value: unknown): CubidCustodyChain | string =>
+  asString(value) ?? "unknown"
+
+const normalizePublicAddress = (chain: CubidCustodyChain | string, value: unknown) => {
+  const address = asString(value)
+  if (address === null) {
+    return null
+  }
+  return chain === "sui" ? address.toLowerCase() : address
+}
+
+const normalizeCustodyAccount = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidCustodyAccount => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+  const chain = normalizeCustodyChain(record.chain)
+
+  return {
+    accountId: asString(record.accountId),
+    chain,
+    createdAt: asString(record.createdAt),
+    custodyStatus: asString(record.custodyStatus),
+    dappUserAccountId: asString(record.dappUserAccountId),
+    label: asString(record.label),
+    linkStatus: asString(record.linkStatus) ?? undefined,
+    publicAddress: normalizePublicAddress(chain, record.publicAddress),
+    raw: record,
+    updatedAt: asString(record.updatedAt) ?? undefined,
+    userId: asString(record.dappUserUuid),
+  }
+}
+
+const normalizeSaveSecret = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidSaveSecretResponse => {
+  const record = assertRecord(payload, "v3/save_secret", requestId, status)
+
+  return {
+    idempotencyKey,
+    raw: record,
+    success: Boolean(record.success),
+  }
+}
+
+const normalizeGenerateAccount = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidGenerateAccountResponse => {
+  const record = assertRecord(payload, "v3/accounts/generate", requestId, status)
+
+  return {
+    account: normalizeCustodyAccount(
+      record.data ?? record,
+      "v3/accounts/generate.data",
+      requestId,
+      status
+    ),
+    idempotencyKey,
+    raw: record,
+  }
+}
+
+const normalizeListAccounts = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidListAccountsResponse => {
+  const record = assertRecord(payload, "v3/accounts/list", requestId, status)
+  const items = Array.isArray(record.data) ? record.data : []
+
+  return {
+    accounts: items.map((item) =>
+      normalizeCustodyAccount(item, "v3/accounts/list.data", requestId, status)
+    ),
+    raw: record,
+  }
+}
+
+const resolveCrypto = (): Crypto => {
+  if (typeof globalThis.crypto === "object" && globalThis.crypto !== null) {
+    return globalThis.crypto
+  }
+
+  throw new CubidApiError({
+    category: "config",
+    message:
+      "No Web Crypto implementation is available. Pass an explicit idempotency key or run in a runtime that provides globalThis.crypto.",
+  })
+}
+
+const bytesToUuid = (bytes: Uint8Array): string => {
+  const normalized = bytes.slice(0, 16)
+  normalized[6] = ((normalized[6] ?? 0) & 0x0f) | 0x40
+  normalized[8] = ((normalized[8] ?? 0) & 0x3f) | 0x80
+  const hex = Array.from(normalized, (value) => value.toString(16).padStart(2, "0"))
+
+  return [
+    hex.slice(0, 4).join(""),
+    hex.slice(4, 6).join(""),
+    hex.slice(6, 8).join(""),
+    hex.slice(8, 10).join(""),
+    hex.slice(10, 16).join(""),
+  ].join("-")
+}
+
+const resolveIdempotencyKey = (
+  input: CubidIdempotentRequestOptions | undefined,
+  endpoint: string
+): string => {
+  if (input?.idempotencyKey !== undefined) {
+    return assertNonEmptyString(input.idempotencyKey, "idempotencyKey", endpoint)
+  }
+
+  const cryptoImpl = resolveCrypto()
+  if (typeof cryptoImpl.randomUUID === "function") {
+    return cryptoImpl.randomUUID()
+  }
+
+  if (typeof cryptoImpl.getRandomValues === "function") {
+    return bytesToUuid(cryptoImpl.getRandomValues(new Uint8Array(16)))
+  }
+
+  throw new CubidApiError({
+    category: "config",
+    endpoint,
+    message:
+      "No secure random UUID generator is available. Pass an explicit idempotency key for this request.",
+  })
+}
+
+const assertSecret = (value: string, field: string, endpoint: string): string =>
+  assertNonEmptyString(value, field, endpoint)
+
+const assertTimestampMs = (value: string, endpoint: string): number => {
+  const normalized = assertNonEmptyString(value, "timestamp", endpoint)
+  const parsed = Number(normalized)
+
+  if (
+    !/^\d+$/.test(normalized) ||
+    !Number.isFinite(parsed) ||
+    !Number.isSafeInteger(parsed)
+  ) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_WEBHOOK_TIMESTAMP",
+      endpoint,
+      message: "Webhook timestamp must be a Unix epoch string.",
+    })
+  }
+
+  return parsed * 1000
+}
+
+const assertWebhookToleranceSeconds = (value: number, endpoint: string): number => {
+  if (!Number.isFinite(value) || !Number.isInteger(value) || value < 0) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_WEBHOOK_TOLERANCE",
+      endpoint,
+      message: "Webhook toleranceSeconds must be a non-negative integer.",
+    })
+  }
+
+  return value
+}
+
+const normalizeNowMs = (value: Date | number | undefined): number => {
+  const normalized =
+    value instanceof Date ? value.getTime() : typeof value === "number" ? value : Date.now()
+
+  if (!Number.isFinite(normalized) || normalized < 0) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_WEBHOOK_NOW",
+      endpoint: "webhooks/verify_signature",
+      message: "Webhook now override must be a finite non-negative epoch in milliseconds.",
+    })
+  }
+
+  return normalized
+}
+
+const textEncoder = new TextEncoder()
+
+const toBytes = (value: string | Uint8Array): Uint8Array =>
+  typeof value === "string" ? textEncoder.encode(value) : value
+
+const concatBytes = (...chunks: Uint8Array[]): Uint8Array => {
+  const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0)
+  const result = new Uint8Array(totalLength)
+  let offset = 0
+
+  for (const chunk of chunks) {
+    result.set(chunk, offset)
+    offset += chunk.length
+  }
+
+  return result
+}
+
+const bytesToHex = (bytes: Uint8Array): string =>
+  Array.from(bytes, (value) => value.toString(16).padStart(2, "0")).join("")
+
+const toArrayBuffer = (bytes: Uint8Array): ArrayBuffer => {
+  if (
+    bytes.byteOffset === 0 &&
+    bytes.byteLength === bytes.buffer.byteLength &&
+    bytes.buffer instanceof ArrayBuffer
+  ) {
+    return bytes.buffer
+  }
+
+  return bytes.slice().buffer
+}
+
+const hexToBytes = (value: string, endpoint: string): Uint8Array => {
+  const normalized = value.trim().toLowerCase()
+  if (!/^[0-9a-f]+$/.test(normalized) || normalized.length % 2 !== 0) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_WEBHOOK_SIGNATURE",
+      endpoint,
+      message: "Webhook signature must be a hex string.",
+    })
+  }
+
+  const bytes = new Uint8Array(normalized.length / 2)
+  for (let index = 0; index < normalized.length; index += 2) {
+    bytes[index / 2] = Number.parseInt(normalized.slice(index, index + 2), 16)
+  }
+
+  return bytes
+}
+
+const timingSafeBytesEqual = (left: Uint8Array, right: Uint8Array): boolean => {
+  if (left.length !== right.length) {
+    return false
+  }
+
+  let diff = 0
+  for (let index = 0; index < left.length; index += 1) {
+    diff |= left[index]! ^ right[index]!
+  }
+
+  return diff === 0
+}
+
+const extractSignatureValue = (signature: string, endpoint: string): string => {
+  const normalized = assertNonEmptyString(signature, "signature", endpoint)
+  const parts = normalized.split(",").map((part) => part.trim())
+
+  for (const part of parts) {
+    if (part.startsWith("v1=")) {
+      return part.slice(3)
+    }
+  }
+
+  if (normalized.startsWith("v1=")) {
+    return normalized.slice(3)
+  }
+
+  throw new CubidApiError({
+    category: "validation",
+    code: "INVALID_WEBHOOK_SIGNATURE",
+    endpoint,
+    message: "Webhook signature header must include a v1 signature.",
+  })
+}
+
+const signWebhookPayload = async (
+  secret: string,
+  eventId: string,
+  timestamp: string,
+  payload: string | Uint8Array
+): Promise<string> => {
+  const cryptoImpl = resolveCrypto()
+  const key = await cryptoImpl.subtle.importKey(
+    "raw",
+    toArrayBuffer(textEncoder.encode(secret)),
+    { hash: "SHA-256", name: "HMAC" },
+    false,
+    ["sign"]
+  )
+
+  const signatureInput = concatBytes(
+    textEncoder.encode(eventId),
+    textEncoder.encode("."),
+    textEncoder.encode(timestamp),
+    textEncoder.encode("."),
+    toBytes(payload)
+  )
+
+  const signature = await cryptoImpl.subtle.sign(
+    "HMAC",
+    key,
+    toArrayBuffer(signatureInput)
+  )
+  return bytesToHex(new Uint8Array(signature))
+}
+
+export const verifyCubidWebhookSignature = async (
+  input: CubidVerifyWebhookSignatureInput
+): Promise<CubidWebhookVerificationResult> => {
+  const endpoint = "webhooks/verify_signature"
+  const secret = assertSecret(input.secret, "secret", endpoint)
+  const eventId = assertNonEmptyString(input.eventId, "eventId", endpoint)
+  const timestamp = assertNonEmptyString(input.timestamp, "timestamp", endpoint)
+  const signatureVersion = input.signatureVersion?.trim() || "v1"
+
+  if (signatureVersion !== "v1") {
+    throw new CubidApiError({
+      category: "validation",
+      code: "UNSUPPORTED_WEBHOOK_SIGNATURE_VERSION",
+      endpoint,
+      message: `Unsupported webhook signature version: ${signatureVersion}.`,
+    })
+  }
+
+  const toleranceSeconds =
+    input.toleranceSeconds === undefined
+      ? 300
+      : assertWebhookToleranceSeconds(input.toleranceSeconds, endpoint)
+  const timestampMs = assertTimestampMs(timestamp, endpoint)
+  const nowMs = normalizeNowMs(input.now)
+
+  if (Math.abs(nowMs - timestampMs) > toleranceSeconds * 1000) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "WEBHOOK_TIMESTAMP_EXPIRED",
+      endpoint,
+      message: "Webhook timestamp is outside the allowed tolerance window.",
+    })
+  }
+
+  const expectedHex = await signWebhookPayload(
+    secret,
+    eventId,
+    timestamp,
+    input.payload
+  )
+  const actualBytes = hexToBytes(extractSignatureValue(input.signature, endpoint), endpoint)
+  const expectedBytes = hexToBytes(expectedHex, endpoint)
+
+  if (!timingSafeBytesEqual(actualBytes, expectedBytes)) {
+    throw new CubidApiError({
+      category: "auth",
+      code: "INVALID_WEBHOOK_SIGNATURE",
+      endpoint,
+      message: "Webhook signature verification failed.",
+    })
+  }
+
+  return {
+    eventId,
+    signatureVersion: "v1",
+    timestamp,
+    verified: true,
+  }
+}
+
+export const parseCubidWebhookEvent = <TData = unknown>(
+  payload: unknown
+): CubidWebhookEvent<TData> => {
+  const record = assertRecord(payload, "webhooks/parse_event")
+
+  return {
+    apiVersion: asString(record.apiVersion),
+    createdAt: asString(record.createdAt),
+    dapp: isRecord(record.dapp) ? record.dapp : null,
+    data: (record.data as TData | null | undefined) ?? null,
+    eventId: asString(record.eventId),
+    eventType: asString(record.eventType),
+    legacyEventType: asString(record.legacyEventType),
+    payloadVersion: asString(record.payloadVersion),
+    raw: record,
+    requestId: asString(record.requestId),
+    subject: isRecord(record.subject) ? record.subject : null,
+  }
+}
+
 export const createCubidApiClient = (
   options: CubidApiClientOptions
 ): CubidApiClient => {
@@ -1026,6 +1691,22 @@ export const createCubidApiClient = (
     const withApiKey = {
       ...body,
       apikey: apiKey,
+    }
+
+    if (options.dappId === undefined || "dapp_id" in withApiKey) {
+      return withApiKey
+    }
+
+    return {
+      ...withApiKey,
+      dapp_id: options.dappId,
+    }
+  }
+
+  const withV3Credentials = (body: CubidRequestBody): CubidRequestBody => {
+    const withApiKey = {
+      ...body,
+      api_key: apiKey,
     }
 
     if (options.dappId === undefined || "dapp_id" in withApiKey) {
@@ -1263,6 +1944,78 @@ export const createCubidApiClient = (
         "identity/fetch_user_data",
         normalizeUserData,
         headers
+      )
+    },
+
+    generateAccount(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/accounts/generate"
+      )
+      const chain = assertNonEmptyString(input.chain, "chain", "v3/accounts/generate")
+      const idempotencyKey = resolveIdempotencyKey(input, "v3/accounts/generate")
+
+      return makeRequest<CubidGenerateAccountResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/accounts/generate",
+        withV3Credentials({
+          chain,
+          dapp_user_uuid: userId,
+          label: input.label?.trim() ? input.label.trim() : undefined,
+        }),
+        "v3/accounts/generate",
+        (payload, requestId, status) =>
+          normalizeGenerateAccount(payload, requestId, status, idempotencyKey),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
+    listAccounts(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/accounts/list"
+      )
+
+      return makeRequest<CubidListAccountsResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/accounts/list",
+        withV3Credentials({
+          chain: input.chain,
+          dapp_user_uuid: userId,
+        }),
+        "v3/accounts/list",
+        normalizeListAccounts,
+        headers
+      )
+    },
+
+    saveSecret(input) {
+      const userId = assertNonEmptyString(input.userId, "userId", "v3/save_secret")
+      const secret = assertNonEmptyString(input.secret, "secret", "v3/save_secret")
+      const idempotencyKey = resolveIdempotencyKey(input, "v3/save_secret")
+
+      return makeRequest<CubidSaveSecretResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/save_secret",
+        withV3Credentials({
+          secret,
+          user_id: userId,
+        }),
+        "v3/save_secret",
+        (payload, requestId, status) =>
+          normalizeSaveSecret(payload, requestId, status, idempotencyKey),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
       )
     },
 

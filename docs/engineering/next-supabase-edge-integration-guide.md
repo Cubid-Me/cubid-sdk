@@ -92,6 +92,10 @@ that the user actually consented to disclose. Do not replace those app-scoped
 handles with raw internal/global Cubid identifiers, dapp user UUIDs, or other
 cross-app identifiers when building public app-facing identity records.
 
+If you need a light SDK-side wrapper for that stored identity, `@cubid/core`
+now exposes `createCubidAppScopedSubject(userId)`. It validates the app-scoped
+identifier without introducing any new cross-app subject model.
+
 ## Phone OTP And Provider Handoff
 
 `@cubid/core` exposes low-level OTP wrappers for server-controlled flows:
@@ -107,6 +111,56 @@ const verified = await cubid.verifyPhoneOtp({
 The OTP helpers return delivery or verification metadata only; they never return
 raw OTP codes. React UI primitives, AllowPage helpers, and provider handoff
 flows belong in later `@cubid/react` work, not in `@cubid/core`.
+
+## API v3 Secrets And Custody Writes
+
+`@cubid/core` now also exposes the first server-facing API v3 write helpers.
+Keep these on trusted servers or Edge Functions only because they use the dapp
+API key and can mutate app-owned data.
+
+```ts
+await cubid.saveSecret({
+  secret: encryptedProfileBlob,
+  userId: cubidUserId,
+})
+
+const generated = await cubid.generateAccount({
+  chain: "sui",
+  label: "Primary wallet",
+  userId: cubidUserId,
+})
+
+const accounts = await cubid.listAccounts({
+  chain: "sui",
+  userId: cubidUserId,
+})
+```
+
+`saveSecret` and `generateAccount` require idempotency under Passport's v3
+contract. `@cubid/core` will generate an `Idempotency-Key` automatically when
+you do not provide one, and it returns the resolved `idempotencyKey` on the
+normalized SDK response so callers can correlate retries or replayed success.
+
+Legacy `POST /api/v2/save_secret` is retired. Treat the v3 helper as the only
+supported public SDK write path for dapp-user secrets.
+
+When your app already has its own operation or job ID, prefer passing that as
+`idempotencyKey` explicitly.
+
+Supported custody chains on the public SDK surface are currently:
+
+- `evm`
+- `near`
+- `solana`
+- `sui`
+
+The custody helpers return public metadata only. They never expose raw private
+keys or custody secrets, and Sui public addresses are normalized to lowercase
+`0x...` strings on the SDK surface.
+
+The secret-write helper is also intentionally one-way from the public SDK's
+perspective. Passport does not expose a public decrypt/read endpoint for stored
+secrets, so app code should not expect a matching `readSecret` helper.
 
 ## Post-Return Refresh
 
@@ -144,6 +198,63 @@ can explain `notGranted` outcomes without implying the user record is missing.
 For score, identity, and stamp routes, current v2 payloads still do not always
 prove whether a sparse response means "no active disclosure grant" or "no
 underlying data", so consumers should present those outcomes more cautiously.
+
+For canonical stamp metadata, the package also exposes:
+
+- `CUBID_STAMP_TYPE_IDS`
+- `getCubidStampTypeId`
+- `getCubidStampTypeName`
+- `summarizeCubidDisclosedStamp`
+
+That lets app code map between public stamp names and backend `stamptype` ids
+without keeping a separate local registry.
+
+For API v3 write errors, `CubidApiError` now preserves Passport conflict codes
+such as `idempotency_conflict` and `request_in_progress` so app servers can
+decide whether to retry, surface a duplicate-request message, or fetch the
+result of the original operation.
+
+## Webhook Receivers
+
+`@cubid/core` now exposes runtime-agnostic webhook helpers for the v3 delivery
+contract. Verify the raw body before you parse JSON:
+
+```ts
+import {
+  parseCubidWebhookEvent,
+  verifyCubidWebhookSignature,
+} from "@cubid/core"
+
+export async function POST(request: Request) {
+  const rawBody = await request.text()
+
+  await verifyCubidWebhookSignature({
+    eventId: request.headers.get("X-Cubid-Event-Id") ?? "",
+    payload: rawBody,
+    secret: process.env.CUBID_WEBHOOK_SECRET!,
+    signature: request.headers.get("X-Cubid-Signature") ?? "",
+    signatureVersion:
+      request.headers.get("X-Cubid-Signature-Version") ?? "v1",
+    timestamp: request.headers.get("X-Cubid-Timestamp") ?? "",
+  })
+
+  const event = parseCubidWebhookEvent(JSON.parse(rawBody))
+
+  return Response.json({
+    eventId: event.eventId,
+    eventType: event.eventType,
+    legacyEventType: event.legacyEventType,
+  })
+}
+```
+
+The helper verifies the exact `eventId.timestamp.rawBody` HMAC input used by
+Passport today. Keep replay protection enabled by validating the timestamp and
+by storing recently-seen `eventId` values on your side before applying the
+event's side effects.
+
+Webhook payloads are still disclosure-filtered and app-scoped. A stamp or score
+change event only represents data the target app is allowed to observe.
 
 ## Stability Notes
 

@@ -1,6 +1,6 @@
 {
   "name": "@cubid/wagmi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "wagmi-based React helpers that adapt wallet flows onto @cubid/evm.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",

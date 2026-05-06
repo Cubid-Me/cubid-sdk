@@ -49,11 +49,42 @@ only and should not reappear in public SDK assumptions or examples. Typed
 `notGranted` response states should only be added where backend payloads
 reliably distinguish privacy-limited success from genuinely empty data.
 
-If public API v3 write helpers are added for routes such as `save_secret` or
-`accounts/generate`, they should treat idempotency as part of the contract:
-accept caller-provided idempotency keys, allow safe high-level defaults, and
-normalize backend conflicts like `idempotency_conflict` and
-`request_in_progress`.
+`@cubid/core` now exposes the first public API v3 write helpers for
+`save_secret`, `accounts/generate`, and `accounts/list`. They should continue
+to treat idempotency as part of the contract: accept caller-provided
+idempotency keys, allow safe high-level defaults, and preserve backend
+conflicts like `idempotency_conflict` and `request_in_progress` in structured
+errors.
+
+Legacy `POST /api/v2/save_secret` is removed and should not reappear in public
+SDK wrappers or examples. The secret-write surface should continue to document
+that there is no matching public decrypt/read helper today.
+
+`@cubid/core` should also carry the canonical public stamp-id registry and
+small app-scoped subject helpers so downstream apps can stay aligned with
+Passport's disclosure-aware identity model without depending on private backend
+packages or copying stamp-id maps by hand.
+
+The current custody-chain surface on those helpers includes `evm`, `near`,
+`solana`, and `sui`. The SDK must keep those helpers limited to public account
+metadata and must not grow private-key or custody-secret return values.
+
+`@cubid/core` should also carry the future dapp-facing API v3 signing-request
+lifecycle wrappers because those routes are runtime-agnostic HTTP contracts.
+Keep Passport-hosted list, approve, and reject routes out of the public SDK
+surface unless a later account-management or auth boundary is explicitly
+introduced.
+
+When those wrappers land, expose only redacted signing-request summaries:
+`signingRequestId`, `status`, `chain`, `requestType`, `payloadHash`,
+`payloadSummary`, `policyVersion`, `requiredAcr`, timestamps, and `result` only
+after completion. Do not expose raw signing payloads, raw Cubid internal IDs,
+private keys, encrypted key material, or private custody data.
+
+SIWC05's additive transaction risk and policy fields should be modeled as
+optional summary metadata in `@cubid/core` types, not as a signal that
+transaction signing is enabled. Approval remains Passport-hosted, and dapp API
+keys must not approve signing requests.
 
 `@cubid/browser` may depend on `@cubid/core`. It owns browser-safe hosted
 verification helpers, OTP/browser flow orchestration, AllowPage URL/state
@@ -63,19 +94,45 @@ helpers, and other client helpers that do not require React.
 hooks, React components, and context/provider helpers. It must not become the
 home for protocol logic that belongs in core or the generic browser layer.
 
+If the SDK later adds UI for signing-request summaries, statuses, or risk
+labels, that presentation work may live in `@cubid/react` or
+browser-framework-specific adapters. The signing-request approval authority
+itself remains Passport-hosted and out of scope for these packages.
+
 Future user-authenticated disclosure-grant management routes, such as Allow
 Page grant listing or revocation, should not be treated as dapp server APIs in
 `@cubid/core`. If the public SDK exposes them later, they should sit behind a
 dedicated account-management or auth boundary.
 
-Webhook verification helpers, when exposed publicly, should stay runtime-agnostic.
-They should verify Cubid's exact raw-body signature contract and preserve both
-canonical `eventType` and transition-friendly `legacyEventType` fields in
+`@cubid/core` now exposes runtime-agnostic webhook verification helpers. They
+should keep verifying Cubid's exact raw-body signature contract and preserve
+both canonical `eventType` and transition-friendly `legacyEventType` fields in
 public types and examples.
+
+Future webhook type updates should treat SIWC wallet events as additive to that
+same verified envelope, including:
+
+- `wallet.created`
+- `wallet.signing_request.created`
+- `wallet.policy.denied`
+- `wallet.signing_request.approved`
+- `wallet.signing_request.rejected`
+- `wallet.signing_request.cancelled`
+- `wallet.signing_request.step_up_failed`
+- `wallet.signature.completed`
+- `wallet.signature.failed`
+
+Do not add transaction webhook expectations until Passport explicitly enables
+transaction signing and publishes the corresponding wallet transaction events.
 
 Chain packages own chain-specific wallet, key, and signing behavior. Each chain
 package should avoid cross-chain assumptions. `@cubid/evm` may depend on
 `viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
+
+Future smart-account, session-key, paymaster, and gas-sponsorship APIs should
+also be capability-driven rather than universal. Keep app-scoped generated
+custody accounts as the default public model unless Passport later exposes
+explicit capability fields or feature gates for optional account modes.
 
 `@cubid/secrets`, if introduced, owns advanced encryption/custody helpers. Until
 then, `@cubid/core` may expose typed API wrappers for basic secret operations
