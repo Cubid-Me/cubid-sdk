@@ -1,5 +1,17 @@
 # Session Log
 
+## session: s34-repo-cleanup-control-plane
+
+- Timestamp: 2026-05-06T23:20:00Z
+- Summary: Ran a safe repo-cleanup pass focused on missing control-plane files and repo-governance alignment rather than feature-code changes.
+- Actions:
+  - Added `agent-context/repo-status.md` as the durable lightweight cleanup snapshot for repo standards.
+  - Added `agent-context/future-ideas.md` with an explicit warning that it is not active roadmap work.
+  - Updated `AGENTS.md` with the `dev`/`main` branch flow and a clear note that the Supabase direct-access audit does not apply to this SDK repo.
+  - Updated `README.md` so the root docs point to the new repo-status and future-ideas control files and reflect the actual integration/release workflow.
+- Validation:
+  - Reviewed the updated docs and control-plane files against the current repo structure, workflows, and roadmap state.
+
 ## session: s33-siwc-signing-surface
 
 - Timestamp: 2026-05-06T22:45:00Z

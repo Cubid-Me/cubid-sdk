@@ -35,6 +35,17 @@ Target package direction:
 - `pnpm deno:check:core`
 - `pnpm check:core-package`
 
+## Workflow
+
+- `dev` is the main integration branch for ongoing SDK work.
+- `main` is the release branch used for trusted npm and JSR publishing.
+- Feature work should generally land on a feature branch, merge into `dev`,
+  and then move to `main` when it is ready to publish.
+
+Repo-health snapshots live in `agent-context/repo-status.md`.
+Deferred ideas that are not part of the active roadmap live in
+`agent-context/future-ideas.md`.
+
 ## Supabase Edge / Deno
 
 `@cubid/core` is the runtime-agnostic package in this workspace. It is the only
