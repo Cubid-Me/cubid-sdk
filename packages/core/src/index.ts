@@ -1459,7 +1459,6 @@ const normalizeNowMs = (value: Date | number | undefined): number => {
 }
 
 const textEncoder = new TextEncoder()
-const textDecoder = new TextDecoder()
 
 const toBytes = (value: string | Uint8Array): Uint8Array =>
   typeof value === "string" ? textEncoder.encode(value) : value
