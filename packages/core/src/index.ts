@@ -429,7 +429,7 @@ export type CubidWebhookEvent<TData = unknown> = {
   apiVersion: string | null
   createdAt: string | null
   dapp: Record<string, unknown> | null
-  data: TData
+  data: TData | null
   eventId: string | null
   eventType: CubidWebhookEventType | string | null
   legacyEventType: CubidWebhookLegacyEventType | string | null
@@ -1436,7 +1436,11 @@ const assertTimestampMs = (value: string, endpoint: string): number => {
   const normalized = assertNonEmptyString(value, "timestamp", endpoint)
   const parsed = Number(normalized)
 
-  if (!Number.isFinite(parsed)) {
+  if (
+    !/^\d+$/.test(normalized) ||
+    !Number.isFinite(parsed) ||
+    !Number.isSafeInteger(parsed)
+  ) {
     throw new CubidApiError({
       category: "validation",
       code: "INVALID_WEBHOOK_TIMESTAMP",
@@ -1448,14 +1452,33 @@ const assertTimestampMs = (value: string, endpoint: string): number => {
   return parsed * 1000
 }
 
+const assertWebhookToleranceSeconds = (value: number, endpoint: string): number => {
+  if (!Number.isFinite(value) || !Number.isInteger(value) || value < 0) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_WEBHOOK_TOLERANCE",
+      endpoint,
+      message: "Webhook toleranceSeconds must be a non-negative integer.",
+    })
+  }
+
+  return value
+}
+
 const normalizeNowMs = (value: Date | number | undefined): number => {
-  if (value instanceof Date) {
-    return value.getTime()
+  const normalized =
+    value instanceof Date ? value.getTime() : typeof value === "number" ? value : Date.now()
+
+  if (!Number.isFinite(normalized) || normalized < 0) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_WEBHOOK_NOW",
+      endpoint: "webhooks/verify_signature",
+      message: "Webhook now override must be a finite non-negative epoch in milliseconds.",
+    })
   }
-  if (typeof value === "number") {
-    return value
-  }
-  return Date.now()
+
+  return normalized
 }
 
 const textEncoder = new TextEncoder()
@@ -1586,7 +1609,9 @@ export const verifyCubidWebhookSignature = async (
   }
 
   const toleranceSeconds =
-    input.toleranceSeconds === undefined ? 300 : input.toleranceSeconds
+    input.toleranceSeconds === undefined
+      ? 300
+      : assertWebhookToleranceSeconds(input.toleranceSeconds, endpoint)
   const timestampMs = assertTimestampMs(timestamp, endpoint)
   const nowMs = normalizeNowMs(input.now)
 
@@ -1634,7 +1659,7 @@ export const parseCubidWebhookEvent = <TData = unknown>(
     apiVersion: asString(record.apiVersion),
     createdAt: asString(record.createdAt),
     dapp: isRecord(record.dapp) ? record.dapp : null,
-    data: (record.data as TData | undefined) ?? (null as TData),
+    data: (record.data as TData | null | undefined) ?? null,
     eventId: asString(record.eventId),
     eventType: asString(record.eventType),
     legacyEventType: asString(record.legacyEventType),

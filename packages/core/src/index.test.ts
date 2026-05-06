@@ -884,6 +884,58 @@ test("verifyCubidWebhookSignature rejects invalid signatures and expired timesta
   )
 })
 
+test("verifyCubidWebhookSignature rejects invalid timestamp, tolerance, and now overrides", async () => {
+  await assert.rejects(
+    () =>
+      verifyCubidWebhookSignature({
+        eventId: "event_123",
+        now: Number.NaN,
+        payload: "{}",
+        secret: "webhook_secret_123",
+        signature: "v1=deadbeef",
+        timestamp: "1700000000",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "INVALID_WEBHOOK_NOW")
+      return true
+    }
+  )
+
+  await assert.rejects(
+    () =>
+      verifyCubidWebhookSignature({
+        eventId: "event_123",
+        payload: "{}",
+        secret: "webhook_secret_123",
+        signature: "v1=deadbeef",
+        timestamp: "1700000000.5",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "INVALID_WEBHOOK_TIMESTAMP")
+      return true
+    }
+  )
+
+  await assert.rejects(
+    () =>
+      verifyCubidWebhookSignature({
+        eventId: "event_123",
+        payload: "{}",
+        secret: "webhook_secret_123",
+        signature: "v1=deadbeef",
+        timestamp: "1700000000",
+        toleranceSeconds: Number.POSITIVE_INFINITY,
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "INVALID_WEBHOOK_TOLERANCE")
+      return true
+    }
+  )
+})
+
 test("parseCubidWebhookEvent preserves canonical and legacy event names", () => {
   const event = parseCubidWebhookEvent<{
     stampType: string
@@ -902,8 +954,18 @@ test("parseCubidWebhookEvent preserves canonical and legacy event names", () => 
 
   assert.equal(event.eventType, "stamp.created")
   assert.equal(event.legacyEventType, "credential_added")
-  assert.equal(event.data.stampType, "phone")
+  assert.equal(event.data?.stampType, "phone")
   assert.deepEqual(event.subject, { userId: "dapp_user_123" })
+})
+
+test("parseCubidWebhookEvent returns null data when the payload omits data", () => {
+  const event = parseCubidWebhookEvent<{ stampType: string }>({
+    apiVersion: "v3",
+    eventId: "event_123",
+    eventType: "stamp.created",
+  })
+
+  assert.equal(event.data, null)
 })
 
 test("stamp registry helpers expose canonical names and ids", () => {

@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s31-pr5-review-followup
+
+- Timestamp: 2026-05-06T13:20:00Z
+- Summary: Addressed the first PR #5 review round by making the webhook helper contracts stricter and bumping `@cubid/core` for a publishable next release.
+- Actions:
+  - Bumped `packages/core/package.json` and `packages/core/jsr.json` to `0.1.1` so the newly added public core APIs can be released instead of colliding with the live `0.1.0` registry state.
+  - Hardened `verifyCubidWebhookSignature` so non-finite or invalid `toleranceSeconds`, `now`, and timestamp inputs fail closed with validation errors.
+  - Updated `CubidWebhookEvent<TData>` and `parseCubidWebhookEvent` so missing webhook `data` is modeled honestly as `null` instead of violating the exported type contract.
+  - Added test coverage for the stricter webhook validation edge cases and nullable parsed webhook data.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
 ## session: s30-siwc-wallet-event-and-capability-roadmap-ingest
 
 - Timestamp: 2026-05-06T15:35:00Z
