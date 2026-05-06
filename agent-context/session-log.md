@@ -1,5 +1,16 @@
 # Session Log
 
+## session: s35-testing-and-distribution-roadmap-extension
+
+- Timestamp: 2026-05-06T23:40:00Z
+- Summary: Extended the active roadmap to cover testing strategy, local acceptance validation, coverage governance, and broader developer-ingestion publishing surfaces.
+- Actions:
+  - Added `S09` to `todo.md` for an explicit SDK testing strategy, local acceptance harness, and coverage governance decision.
+  - Added `S10` to `todo.md` for broader API and SDK publication to developer-ingestion surfaces beyond the existing npm and JSR baseline.
+  - Updated `repo-status.md` so the remaining testing and distribution gaps now reference the new roadmap items directly.
+- Validation:
+  - Reviewed the updated roadmap and repo-status entries against the current package and publishing state.
+
 ## session: s34-repo-cleanup-control-plane
 
 - Timestamp: 2026-05-06T23:20:00Z
