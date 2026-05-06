@@ -414,3 +414,112 @@ return public custody metadata only.
 verify the v1 HMAC over the exact `eventId.timestamp.rawBody` input, preserve
 `eventId` and timestamp as replay-protection inputs, and document canonical v3
 event names alongside legacy transition names.
+
+### S08. Add API v3 signing-request lifecycle wrappers in `@cubid/core`
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`, incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`, session: s29-s08-signing-request-roadmap-ingest
+
+Add typed runtime-agnostic API v3 wrappers in `@cubid/core` for the dapp-facing
+signing request lifecycle routes:
+
+- `createSigningRequest(...)`
+- `getSigningRequest(...)`
+- `listSigningRequests(...)`
+- `cancelSigningRequest(...)`
+
+This surface belongs in `@cubid/core` because it wraps public HTTP contracts
+without requiring React, browser-only routing, or hosted approval UX. The SDK
+should expose only redacted request metadata such as `signingRequestId`,
+`status`, `chain`, `requestType`, `payloadHash`, `payloadSummary`,
+`policyVersion`, `requiredAcr`, timestamps, and `result` only after completion.
+
+Do not expose or expect raw signing payloads in public summaries, raw Cubid
+internal IDs, private keys, encrypted key material, or other private custody
+data. Passport-hosted approval and rejection flows remain outside this repo,
+and transaction-signing clients must stay fail-closed until Passport explicitly
+announces signature enablement.
+
+Before starting runtime implementation, handle the adjacent incoming Passport
+notes `2026-05-06-siwc06-wallet-webhook-contracts.md` and
+`2026-05-06-siwc07-smart-account-roadmap.md` so the contract surface is planned
+with the later wallet-event and smart-account notes in view.
+
+### S08.1 Add shared request and response types for create/get/list/cancel
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+
+Define the shared public request and response types for the API v3
+signing-request lifecycle. The create route should accept the app-scoped user
+and account identifiers, `requestType`, redacted `payloadSummary`, and the
+structured payload inputs Passport documents for message and typed-data signing.
+
+### S08.2 Require idempotency handling on create
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+
+Keep `createSigningRequest(...)` aligned with the existing API v3 write-helper
+pattern: require or safely generate `Idempotency-Key`, preserve backend
+conflict semantics, and document the caller-owned retry story clearly.
+
+### S08.3 Normalize redacted response metadata only
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+
+Normalize only the redacted public signing-request metadata returned by
+Passport. Do not surface raw request payloads, raw user identifiers, or other
+private custody material through `@cubid/core`.
+
+### S08.4 Include additive SIWC05 risk and policy fields on summaries
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+
+Extend the future signing-request summary types to accept the optional SIWC05
+risk and policy fields when present:
+
+- `riskLevel`
+- `riskReasons`
+- `policyDecision`
+- `stepUpRequired`
+- `transactionOperationType`
+- `transactionRecipient`
+- `transactionContractAddress`
+- `transactionDeclaredValueUsd`
+
+### S08.5 Keep transaction-signing paths fail-closed until Passport explicitly enables them
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+
+Even after the signing-request wrappers land, treat transaction-signing requests
+as policy-denied and deferred. SDK examples and client helpers should display
+risk and policy metadata when available, but must not imply that transaction
+signatures are supported until a later Passport note explicitly says they are.

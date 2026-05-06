@@ -69,6 +69,23 @@ The current custody-chain surface on those helpers includes `evm`, `near`,
 `solana`, and `sui`. The SDK must keep those helpers limited to public account
 metadata and must not grow private-key or custody-secret return values.
 
+`@cubid/core` should also carry the future dapp-facing API v3 signing-request
+lifecycle wrappers because those routes are runtime-agnostic HTTP contracts.
+Keep Passport-hosted list, approve, and reject routes out of the public SDK
+surface unless a later account-management or auth boundary is explicitly
+introduced.
+
+When those wrappers land, expose only redacted signing-request summaries:
+`signingRequestId`, `status`, `chain`, `requestType`, `payloadHash`,
+`payloadSummary`, `policyVersion`, `requiredAcr`, timestamps, and `result` only
+after completion. Do not expose raw signing payloads, raw Cubid internal IDs,
+private keys, encrypted key material, or private custody data.
+
+SIWC05's additive transaction risk and policy fields should be modeled as
+optional summary metadata in `@cubid/core` types, not as a signal that
+transaction signing is enabled. Approval remains Passport-hosted, and dapp API
+keys must not approve signing requests.
+
 `@cubid/browser` may depend on `@cubid/core`. It owns browser-safe hosted
 verification helpers, OTP/browser flow orchestration, AllowPage URL/state
 helpers, and other client helpers that do not require React.
@@ -76,6 +93,11 @@ helpers, and other client helpers that do not require React.
 `@cubid/react` may depend on `@cubid/browser` and `@cubid/core`. It owns React
 hooks, React components, and context/provider helpers. It must not become the
 home for protocol logic that belongs in core or the generic browser layer.
+
+If the SDK later adds UI for signing-request summaries, statuses, or risk
+labels, that presentation work may live in `@cubid/react` or
+browser-framework-specific adapters. The signing-request approval authority
+itself remains Passport-hosted and out of scope for these packages.
 
 Future user-authenticated disclosure-grant management routes, such as Allow
 Page grant listing or revocation, should not be treated as dapp server APIs in

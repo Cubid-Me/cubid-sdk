@@ -72,12 +72,14 @@ Own:
 - Runtime-agnostic HTTP client wrappers
 - Shared request/response and error types
 - Identity, stamps, score, location, and other stable public API helpers
+- Future dapp-facing signing-request lifecycle wrappers when the Passport API v3 contract is ready
 - Data normalization around public Passport contracts
 
 Do not add:
 
 - React
 - hosted-login UI
+- Passport-hosted signing approval/rejection UX
 - wagmi or chain SDK dependencies
 - browser-only routing/storage assumptions
 - private Passport runtime logic

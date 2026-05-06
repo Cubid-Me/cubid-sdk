@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s29-s08-signing-request-roadmap-ingest
+
+- Timestamp: 2026-05-06T15:10:00Z
+- Summary: Ingested the first Sign In With Cubid signing-request lifecycle notes into the public SDK roadmap and package-boundary docs without starting runtime wrappers early.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`.
+  - Added a new `S08` roadmap track for typed API v3 signing-request lifecycle wrappers in `@cubid/core`.
+  - Recorded the planned public wrapper names `createSigningRequest`, `getSigningRequest`, `listSigningRequests`, and `cancelSigningRequest`.
+  - Captured the redacted response metadata expectations, SIWC05 additive risk fields, the no-approval-from-dapp-keys rule, and the continued fail-closed posture for transaction signing.
+  - Updated package-boundary docs so future agents keep hosted approval and rejection UX in Passport while placing dapp-facing HTTP wrappers in `@cubid/core`.
+  - Recorded that the adjacent incoming notes `siwc06` and `siwc07` should be handled before starting the runtime `S08` implementation.
+- Validation:
+  - Reviewed the updated roadmap and package-boundary docs for consistency with the two incoming Passport notes.
+
 ## session: s28-s05-app-scoped-stamp-surface
 
 - Timestamp: 2026-05-03T22:40:00Z
