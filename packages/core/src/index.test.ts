@@ -28,7 +28,7 @@ const signWebhookPayload = async (
   secret: string,
   eventId: string,
   timestamp: string,
-  payload: string
+  payload: string | Uint8Array
 ) => {
   const key = await globalThis.crypto.subtle.importKey(
     "raw",
@@ -37,9 +37,12 @@ const signWebhookPayload = async (
     false,
     ["sign"]
   )
-  const signatureInput = new TextEncoder().encode(
-    `${eventId}.${timestamp}.${payload}`
-  )
+  const payloadBytes =
+    typeof payload === "string" ? new TextEncoder().encode(payload) : payload
+  const prefixBytes = new TextEncoder().encode(`${eventId}.${timestamp}.`)
+  const signatureInput = new Uint8Array(prefixBytes.length + payloadBytes.length)
+  signatureInput.set(prefixBytes, 0)
+  signatureInput.set(payloadBytes, prefixBytes.length)
   const signature = await globalThis.crypto.subtle.sign(
     "HMAC",
     key,
@@ -839,6 +842,29 @@ test("verifyCubidWebhookSignature accepts a valid v1 signature", async () => {
 
   assert.equal(result.verified, true)
   assert.equal(result.signatureVersion, "v1")
+  assert.equal(result.eventId, eventId)
+})
+
+test("verifyCubidWebhookSignature accepts SharedArrayBuffer-backed payloads", async () => {
+  const payloadBytes = new TextEncoder().encode("{\"event\":\"wallet.created\"}")
+  const shared = new SharedArrayBuffer(payloadBytes.length)
+  const payload = new Uint8Array(shared)
+  payload.set(payloadBytes)
+
+  const secret = "webhook_secret_123"
+  const eventId = "event_sab"
+  const timestamp = String(Math.floor(Date.now() / 1000))
+  const signature = await signWebhookPayload(secret, eventId, timestamp, payload)
+
+  const result = await verifyCubidWebhookSignature({
+    eventId,
+    payload,
+    secret,
+    signature: `v1=${signature}`,
+    timestamp,
+  })
+
+  assert.equal(result.verified, true)
   assert.equal(result.eventId, eventId)
 })
 

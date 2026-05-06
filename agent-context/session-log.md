@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s32-pr5-sharedarraybuffer-followup
+
+- Timestamp: 2026-05-06T14:05:00Z
+- Summary: Addressed the remaining PR #5 webhook review edge case by making webhook signature verification safe for SharedArrayBuffer-backed byte views.
+- Actions:
+  - Updated the internal `toArrayBuffer` helper to avoid calling `.buffer.slice(...)` on non-ArrayBuffer-backed views and to copy through `Uint8Array#slice()` when needed.
+  - Preserved the zero-copy fast path for full ArrayBuffer-backed views.
+  - Expanded the core webhook tests so `verifyCubidWebhookSignature` now explicitly covers SharedArrayBuffer-backed payload input.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
 ## session: s31-pr5-review-followup
 
 - Timestamp: 2026-05-06T13:20:00Z
