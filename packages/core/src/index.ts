@@ -1515,6 +1515,22 @@ const normalizeSigningRequestStatus = (
   value: unknown
 ): CubidSigningRequestStatus | null => asString(value)
 
+const normalizeSigningRequestRiskLevel = (
+  value: unknown
+): CubidSigningRequestRiskLevel => {
+  const normalized = asString(value)
+  return normalized === "low" || normalized === "medium" || normalized === "high"
+    ? normalized
+    : null
+}
+
+const normalizeSigningRequestPolicyDecision = (
+  value: unknown
+): CubidSigningRequestPolicyDecision => {
+  const normalized = asString(value)
+  return normalized === "allowed" || normalized === "denied" ? normalized : null
+}
+
 const normalizeSigningRequestSummary = (
   payload: unknown,
   endpoint: string,
@@ -1535,16 +1551,16 @@ const normalizeSigningRequestSummary = (
       : isRecord(record.payload_summary)
         ? record.payload_summary
         : null,
-    policyDecision:
-      (asString(record.policyDecision) ??
-        asString(record.policy_decision)) as CubidSigningRequestPolicyDecision,
+    policyDecision: normalizeSigningRequestPolicyDecision(
+      record.policyDecision ?? record.policy_decision
+    ),
     policyVersion: asString(record.policyVersion) ?? asString(record.policy_version),
     raw: record,
     requiredAcr: asString(record.requiredAcr) ?? asString(record.required_acr),
     result: isRecord(record.result) ? record.result : null,
-    riskLevel:
-      (asString(record.riskLevel) ??
-        asString(record.risk_level)) as CubidSigningRequestRiskLevel,
+    riskLevel: normalizeSigningRequestRiskLevel(
+      record.riskLevel ?? record.risk_level
+    ),
     riskReasons: asStringArray(record.riskReasons ?? record.risk_reasons),
     signingRequestId:
       asString(record.signingRequestId) ?? asString(record.signing_request_id),

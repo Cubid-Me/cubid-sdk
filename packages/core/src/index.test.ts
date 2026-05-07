@@ -1213,23 +1213,25 @@ test("verifyCubidWebhookSignature rejects invalid timestamp, tolerance, and now 
 
 test("parseCubidWebhookEvent preserves canonical and legacy event names", () => {
   const event = parseCubidWebhookEvent<{
-    stampType: string
+    result: string
+    signingRequestId: string
   }>({
     apiVersion: "v3",
     payloadVersion: "2026-05-03",
     eventId: "event_123",
     eventType: "wallet.signature.completed",
-    legacyEventType: "credential_added",
+    legacyEventType: "score_increase",
     createdAt: "2026-05-03T22:00:00.000Z",
     requestId: "passport_123",
     dapp: { id: "42" },
     subject: { userId: "dapp_user_123" },
-    data: { stampType: "phone" },
+    data: { result: "signed", signingRequestId: "sr_123" },
   })
 
   assert.equal(event.eventType, "wallet.signature.completed")
-  assert.equal(event.legacyEventType, "credential_added")
-  assert.equal(event.data?.stampType, "phone")
+  assert.equal(event.legacyEventType, "score_increase")
+  assert.equal(event.data?.result, "signed")
+  assert.equal(event.data?.signingRequestId, "sr_123")
   assert.deepEqual(event.subject, { userId: "dapp_user_123" })
 })
 

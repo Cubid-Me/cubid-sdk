@@ -155,7 +155,7 @@ The current API v3 helpers stay server-side as well:
 - `listAccounts({ userId, chain? })`
 - `createSigningRequest({ userId, userAccountId, requestType, payload, payloadSummary, chain?, idempotencyKey? })`
 - `getSigningRequest({ signingRequestId })`
-- `listSigningRequests({ userId, userAccountId?, status?, chain?, requestType? })`
+- `listSigningRequests({ userId, userAccountId? })`
 - `cancelSigningRequest({ signingRequestId })`
 
 Legacy `POST /api/v2/save_secret` is retired and should not be used or

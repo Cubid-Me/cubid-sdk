@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s36-pr6-review-followup
+
+- Timestamp: 2026-05-07T00:10:00Z
+- Summary: Addressed the first PR #6 Copilot and Codex review round on the SIWC core release follow-up branch.
+- Actions:
+  - Tightened signing-request risk and policy normalization so unsupported or omitted upstream values collapse to `null` instead of leaking `undefined` or unsound closed-union casts.
+  - Corrected the core README so `listSigningRequests` only documents the currently supported public filters.
+  - Made the wallet-signature webhook parsing test use a self-explanatory wallet-oriented payload instead of stamp-shaped data.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
 ## session: s35-testing-and-distribution-roadmap-extension
 
 - Timestamp: 2026-05-06T23:40:00Z
