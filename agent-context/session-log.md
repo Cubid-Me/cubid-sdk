@@ -1,5 +1,59 @@
 # Session Log
 
+## session: s36-pr6-review-followup
+
+- Timestamp: 2026-05-07T00:10:00Z
+- Summary: Addressed the first PR #6 Copilot and Codex review round on the SIWC core release follow-up branch.
+- Actions:
+  - Tightened signing-request risk and policy normalization so unsupported or omitted upstream values collapse to `null` instead of leaking `undefined` or unsound closed-union casts.
+  - Corrected the core README so `listSigningRequests` only documents the currently supported public filters.
+  - Made the wallet-signature webhook parsing test use a self-explanatory wallet-oriented payload instead of stamp-shaped data.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s35-testing-and-distribution-roadmap-extension
+
+- Timestamp: 2026-05-06T23:40:00Z
+- Summary: Extended the active roadmap to cover testing strategy, local acceptance validation, coverage governance, and broader developer-ingestion publishing surfaces.
+- Actions:
+  - Added `S09` to `todo.md` for an explicit SDK testing strategy, local acceptance harness, and coverage governance decision.
+  - Added `S10` to `todo.md` for broader API and SDK publication to developer-ingestion surfaces beyond the existing npm and JSR baseline.
+  - Updated `repo-status.md` so the remaining testing and distribution gaps now reference the new roadmap items directly.
+- Validation:
+  - Reviewed the updated roadmap and repo-status entries against the current package and publishing state.
+
+## session: s34-repo-cleanup-control-plane
+
+- Timestamp: 2026-05-06T23:20:00Z
+- Summary: Ran a safe repo-cleanup pass focused on missing control-plane files and repo-governance alignment rather than feature-code changes.
+- Actions:
+  - Added `agent-context/repo-status.md` as the durable lightweight cleanup snapshot for repo standards.
+  - Added `agent-context/future-ideas.md` with an explicit warning that it is not active roadmap work.
+  - Updated `AGENTS.md` with the `dev`/`main` branch flow and a clear note that the Supabase direct-access audit does not apply to this SDK repo.
+  - Updated `README.md` so the root docs point to the new repo-status and future-ideas control files and reflect the actual integration/release workflow.
+- Validation:
+  - Reviewed the updated docs and control-plane files against the current repo structure, workflows, and roadmap state.
+
+## session: s33-siwc-signing-surface
+
+- Timestamp: 2026-05-06T22:45:00Z
+- Summary: Implemented the first public SIWC signing-request lifecycle surface in `@cubid/core` and extended the webhook docs and event types for SIWC wallet events.
+- Actions:
+  - Added SIWC wallet event names to `CubidWebhookEventType` while keeping the existing webhook verification contract unchanged.
+  - Added `createSigningRequest`, `getSigningRequest`, `listSigningRequests`, and `cancelSigningRequest` to `@cubid/core` as runtime-agnostic API v3 helpers.
+  - Added shared public signing-request request and response types, including redacted summaries, additive SIWC05 risk fields, and create-route idempotency handling.
+  - Kept transaction-signing flows fail-closed in normalized summaries and docs so policy metadata does not imply signature enablement.
+  - Updated the public core README and Next/Supabase integration guide to document the new SIWC signing methods, redacted summary model, and additive wallet webhook event names.
+  - Bumped `@cubid/core` package and JSR manifests from `0.1.1` to `0.1.2` because this adds new public API surface.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
 ## session: s32-pr5-sharedarraybuffer-followup
 
 - Timestamp: 2026-05-06T14:05:00Z

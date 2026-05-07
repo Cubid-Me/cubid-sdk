@@ -1,6 +1,6 @@
 {
   "name": "@cubid/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Runtime-agnostic Cubid core client for server-side integrations.",
   "type": "module",
   "license": "Apache-2.0",

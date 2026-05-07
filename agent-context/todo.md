@@ -436,12 +436,12 @@ event names alongside legacy transition names.
 
 ### S07.1 Extend webhook types and examples for SIWC wallet events
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest, session: s33-siwc-signing-surface
 
 Add the SIWC wallet and signing canonical event names to the public webhook
 types and receiver examples:
@@ -463,12 +463,12 @@ explicitly enables transaction signing and separately announces
 
 ### S08. Add API v3 signing-request lifecycle wrappers in `@cubid/core`
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`, incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`, session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`, incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`, session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Add typed runtime-agnostic API v3 wrappers in `@cubid/core` for the dapp-facing
 signing request lifecycle routes:
@@ -497,12 +497,12 @@ with the later wallet-event and smart-account notes in view.
 
 ### S08.1 Add shared request and response types for create/get/list/cancel
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Define the shared public request and response types for the API v3
 signing-request lifecycle. The create route should accept the app-scoped user
@@ -511,12 +511,12 @@ structured payload inputs Passport documents for message and typed-data signing.
 
 ### S08.2 Require idempotency handling on create
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Keep `createSigningRequest(...)` aligned with the existing API v3 write-helper
 pattern: require or safely generate `Idempotency-Key`, preserve backend
@@ -524,12 +524,12 @@ conflict semantics, and document the caller-owned retry story clearly.
 
 ### S08.3 Normalize redacted response metadata only
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Normalize only the redacted public signing-request metadata returned by
 Passport. Do not surface raw request payloads, raw user identifiers, or other
@@ -537,12 +537,12 @@ private custody material through `@cubid/core`.
 
 ### S08.4 Include additive SIWC05 risk and policy fields on summaries
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Extend the future signing-request summary types to accept the optional SIWC05
 risk and policy fields when present:
@@ -558,14 +558,140 @@ risk and policy fields when present:
 
 ### S08.5 Keep transaction-signing paths fail-closed until Passport explicitly enables them
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
 
 Even after the signing-request wrappers land, treat transaction-signing requests
 as policy-denied and deferred. SDK examples and client helpers should display
 risk and policy metadata when available, but must not imply that transaction
 signatures are supported until a later Passport note explicitly says they are.
+
+### S09. Establish testing strategy and acceptance governance for the public SDK repo
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s34-repo-cleanup-control-plane
+
+Turn the current ad hoc package-level validation into an explicitly documented
+testing and acceptance strategy for this public SDK monorepo. The goal is to
+make it clear what each layer proves locally and in CI before publish or merge.
+
+### S09.1 Create a written testing strategy for the SDK monorepo
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s34-repo-cleanup-control-plane
+
+Document the intended test pyramid and validation responsibilities for:
+
+- `@cubid/core` contract and normalization tests
+- browser-flow helper tests in `@cubid/browser`
+- React component tests in `@cubid/react`
+- chain-package tests in `@cubid/evm`, `@cubid/wagmi`, and later chain splits
+- package publish validation versus runtime behavior validation
+
+The written strategy should explain what must pass locally, what CI enforces,
+and what remains out of scope until a stronger acceptance harness exists.
+
+### S09.2 Create a local acceptance harness for package-consumer flows
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s34-repo-cleanup-control-plane
+
+Add a small local acceptance harness that exercises the public SDK surfaces as a
+consumer would, rather than only testing packages in isolation. Focus first on:
+
+- server-only `@cubid/core` usage
+- headless browser-hosted verification helpers in `@cubid/browser`
+- React flow composition in `@cubid/react`
+
+Keep the harness lightweight and local-first so future package and publish
+changes can be validated against a realistic integration path before release.
+
+### S09.3 Decide on and document coverage governance
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s34-repo-cleanup-control-plane
+
+Decide whether this repo should enforce line, branch, or package-level coverage
+thresholds, and document the answer clearly. If coverage gates are adopted,
+define:
+
+- where coverage is generated
+- what the minimum thresholds are
+- which packages or suites they apply to
+- how coverage is reviewed in CI and release decisions
+
+If strict thresholds are deferred, document the reason plainly instead of
+leaving coverage governance implicit.
+
+### S10. Publish the API and SDK surfaces to developer-ingestion platforms
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s34-repo-cleanup-control-plane
+
+Expand the public distribution strategy beyond "packages exist on npm" so the
+Cubid API and SDKs are easier for developers and tooling to ingest, discover,
+and work with.
+
+### S10.1 Decide which packages should publish to JSR or remain npm-only
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s14-core-jsr-live-publish-success, session: s34-repo-cleanup-control-plane
+
+`@cubid/core` is already live on JSR, but the broader package family still
+needs an explicit distribution policy. Decide which packages belong on JSR,
+which should remain npm-only, and why.
+
+### S10.2 Publish machine-friendly API reference material
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s34-repo-cleanup-control-plane
+
+Add a developer-ingestion surface for the public API and SDK contracts, such as
+generated API reference docs or another machine-friendly contract artifact that
+stays aligned with the published package surfaces.
+
+### S10.3 Publish developer-facing reference and integration entrypoints
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): session: s34-repo-cleanup-control-plane
+
+Make the published SDK family easier to adopt by tightening the external
+entrypoints developers actually use: package READMEs, registry metadata,
+integration guides, and any hosted or registry-linked reference surfaces that
+improve discovery and onboarding.

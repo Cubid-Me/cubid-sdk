@@ -41,3 +41,19 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 ## Repo Hygiene Note
 
 This local folder may be missing its `.git` checkout on some machines. Restore the canonical Git checkout before branch, commit, PR, or publish work that depends on provenance.
+
+## Branch And CI Workflow
+
+- Treat `dev` as the active integration branch for ongoing SDK work.
+- Treat `main` as the release branch for npm and JSR publication.
+- Keep local implementation, PR, and review work on feature branches or `dev`
+  unless the user explicitly asks for a direct hotfix path.
+
+## Applicability Notes
+
+- The Supabase direct-read/write audit does not apply here. This repo is a
+  public SDK monorepo, not an MCP server or multi-frontend app that should move
+  runtime data access behind Supabase Edge Functions.
+- Deno and Supabase Edge support matter only for consumer compatibility of
+  `@cubid/core`, not because this repo itself owns deployed Supabase runtime
+  code.
