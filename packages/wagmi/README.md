@@ -28,3 +28,14 @@ function WalletVerifier({ apiClient }: { apiClient: Parameters<typeof createCubi
 The package also exports `createCubidWagmiAdapter` for apps that want to wire
 their own wagmi actions into the Cubid EVM adapter surface without using the
 provided hook.
+
+## Capability Metadata
+
+If a wagmi connector or custom `toConnection(...)` mapper can describe optional
+wallet features, pass them through `capabilities` on the connection metadata
+rather than assuming smart accounts, paymasters, session keys, or gas
+sponsorship are universally available.
+
+`useCubidWagmiAdapter()` now surfaces `capabilities` alongside the current
+connection so React code can branch on explicit feature support instead of
+relying on chain-wide assumptions.

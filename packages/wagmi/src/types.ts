@@ -1,6 +1,12 @@
-import type { CubidEvmAdapter, CubidEvmConnection, CubidEvmVerification } from "@cubid/evm";
+import type {
+  CubidEvmAdapter,
+  CubidEvmCapabilities,
+  CubidEvmConnection,
+  CubidEvmVerification
+} from "@cubid/evm";
 
 export interface CubidWagmiConnectorLike {
+  capabilities?: CubidEvmCapabilities;
   id: string;
   name?: string;
 }
@@ -56,6 +62,7 @@ export interface UseCubidWagmiAdapterResult<
 > {
   adapter: CubidEvmAdapter<TConnection>;
   address?: string;
+  capabilities: CubidEvmCapabilities;
   chainId?: number | string;
   connection?: TConnection;
   connectors: readonly CubidWagmiConnectorLike[];

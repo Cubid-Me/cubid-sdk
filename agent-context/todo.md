@@ -273,12 +273,12 @@ Verified npm metadata now resolves to normal package versions rather than
 
 ### S03.6 Keep future custody and chain helpers capability-driven
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-07T12:10:00Z
+- Timestamp completed: 2026-05-07T12:35:00Z
+- Feature branch: `dev`
+- Head: `9898fb0b` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest, session: s37-s03-capability-driven-chain-surface
 
 When future account, chain, or EVM-specific helpers expand beyond the current
 generated custody-account model, keep the public SDK capability-driven rather
@@ -289,6 +289,11 @@ Near-term defaults should remain app-scoped generated custody accounts with
 Passport-hosted approval. If smart accounts, scoped session keys, paymasters,
 or gas sponsorship land later, expose them through explicit capability fields,
 feature flags, and policy-aware helpers instead of universal assumptions.
+
+The current EVM, wagmi, and interim web3 packages now preserve optional
+`capabilities` metadata on connections and verification results, and they
+export small helper functions for capability checks instead of baking in smart
+account defaults.
 
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 

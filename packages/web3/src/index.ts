@@ -1,7 +1,13 @@
 export { createCubidWeb3Client } from "./client";
+export {
+  getCubidWalletCapabilities,
+  hasCubidWalletCapability
+} from "./internal";
 export type {
   ConnectWalletRequest,
   CubidWalletConnection,
+  CubidWalletCapabilities,
+  CubidWalletCapabilityDescriptor,
   CubidWalletVerification,
   CubidWeb3Adapter,
   CubidWeb3Client,

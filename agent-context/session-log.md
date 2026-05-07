@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s37-s03-capability-driven-chain-surface
+
+- Timestamp: 2026-05-07T12:35:00Z
+- Summary: Finished the current `S03.6` tranche by making the EVM, wagmi, and interim web3 package surfaces capability-driven instead of implicitly smart-account-oriented.
+- Actions:
+  - Added optional connection/result `capabilities` metadata to `@cubid/evm` and the interim `@cubid/web3` package surfaces.
+  - Exported explicit helper functions for capability checks so apps can branch on `smartAccount`, `sessionKeys`, `paymaster`, and `gasSponsorship` support without assuming those features exist everywhere.
+  - Updated the wagmi adapter and hook so connector-provided capability metadata can flow through to React consumers.
+  - Updated chain-package docs and the migration plan so future chain work keeps capability signaling explicit and opt-in.
+- Validation:
+  - `pnpm test`
+  - `pnpm typecheck`
+  - `pnpm build`
+
 ## session: s36-pr6-review-followup
 
 - Timestamp: 2026-05-07T00:10:00Z

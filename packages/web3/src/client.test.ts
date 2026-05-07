@@ -3,6 +3,10 @@ import fs from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 import { createCubidWeb3Client } from "./client";
+import {
+  getCubidWalletCapabilities,
+  hasCubidWalletCapability
+} from "./internal";
 
 describe("@cubid/web3", () => {
   it("keeps wallet adapter logic behind the adapter boundary and only persists via @cubid/core", async () => {
@@ -17,7 +21,17 @@ describe("@cubid/web3", () => {
     } as const;
 
     const adapter = {
-      connect: vi.fn(async () => ({ address: "0xabc", chainId: 1, chainType: "evm" })),
+      connect: vi.fn(async () => ({
+        address: "0xabc",
+        capabilities: {
+          paymaster: {
+            available: false,
+            metadata: { reason: "not_configured" }
+          }
+        },
+        chainId: 1,
+        chainType: "evm"
+      })),
       id: "rainbowkit",
       toStampData: vi.fn((connection) => ({
         address: connection.address,
@@ -37,9 +51,28 @@ describe("@cubid/web3", () => {
       stampType: "evm",
       userId: "user-1"
     });
+    expect(getCubidWalletCapabilities(connection)).toEqual({
+      paymaster: {
+        available: false,
+        metadata: { reason: "not_configured" }
+      }
+    });
+    expect(hasCubidWalletCapability(connection, "paymaster")).toBe(false);
+    expect(result.capabilities).toEqual({
+      paymaster: {
+        available: false,
+        metadata: { reason: "not_configured" }
+      }
+    });
 
     expect(adapter.connect).toHaveBeenCalled();
-    expect(adapter.verify).toHaveBeenCalledWith({ address: "0xabc", chainId: 1, chainType: "evm" });
+    expect(adapter.verify).toHaveBeenCalledWith(
+      expect.objectContaining({
+        address: "0xabc",
+        chainId: 1,
+        chainType: "evm"
+      })
+    );
     expect(apiClient.addStamp).toHaveBeenCalledWith({
       pageId: 4,
       stampData: {

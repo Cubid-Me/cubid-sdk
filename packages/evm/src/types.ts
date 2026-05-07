@@ -2,8 +2,22 @@ import type { CubidAddStampResponse, CubidApiClient } from "@cubid/core";
 
 export type CubidEvmStampType = "evm";
 
+export interface CubidCapabilityDescriptor {
+  available: boolean;
+  metadata?: Record<string, unknown>;
+}
+
+export interface CubidEvmCapabilities {
+  gasSponsorship?: CubidCapabilityDescriptor;
+  paymaster?: CubidCapabilityDescriptor;
+  sessionKeys?: CubidCapabilityDescriptor;
+  smartAccount?: CubidCapabilityDescriptor;
+  [capabilityName: string]: CubidCapabilityDescriptor | undefined;
+}
+
 export interface CubidEvmConnection {
   address: string;
+  capabilities?: CubidEvmCapabilities;
   chainId?: number | string;
   chainType?: string;
   [key: string]: unknown;
@@ -40,6 +54,7 @@ export interface VerifyWalletRequest<TConnection extends CubidEvmConnection = Cu
 }
 
 export interface VerifyWalletResult<TConnection extends CubidEvmConnection = CubidEvmConnection> {
+  capabilities: CubidEvmCapabilities;
   connection: TConnection;
   persistedStamp?: CubidAddStampResponse;
   stampData?: Record<string, unknown>;

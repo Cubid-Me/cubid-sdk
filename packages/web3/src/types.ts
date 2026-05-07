@@ -2,8 +2,22 @@ import type { CubidAddStampResponse, CubidApiClient } from "@cubid/core";
 
 export type CubidWeb3StampType = "evm" | "near" | "near-wallet" | "solana";
 
+export interface CubidWalletCapabilityDescriptor {
+  available: boolean;
+  metadata?: Record<string, unknown>;
+}
+
+export interface CubidWalletCapabilities {
+  gasSponsorship?: CubidWalletCapabilityDescriptor;
+  paymaster?: CubidWalletCapabilityDescriptor;
+  sessionKeys?: CubidWalletCapabilityDescriptor;
+  smartAccount?: CubidWalletCapabilityDescriptor;
+  [capabilityName: string]: CubidWalletCapabilityDescriptor | undefined;
+}
+
 export interface CubidWalletConnection {
   address: string;
+  capabilities?: CubidWalletCapabilities;
   chainId?: number | string;
   chainType?: string;
   [key: string]: unknown;
@@ -40,6 +54,7 @@ export interface VerifyWalletRequest<TConnection extends CubidWalletConnection =
 }
 
 export interface VerifyWalletResult<TConnection extends CubidWalletConnection = CubidWalletConnection> {
+  capabilities: CubidWalletCapabilities;
   connection: TConnection;
   persistedStamp?: CubidAddStampResponse;
   stampData?: Record<string, unknown>;

@@ -1,6 +1,9 @@
 import type { CubidApiClient } from "@cubid/core";
 
-import { buildDefaultWalletStampData } from "./internal";
+import {
+  buildDefaultWalletStampData,
+  getCubidWalletCapabilities
+} from "./internal";
 import type {
   ConnectWalletRequest,
   CubidWalletConnection,
@@ -56,6 +59,7 @@ export function createCubidWeb3Client(
 
       const verification = (await adapter.verify?.(connection)) ?? createDefaultVerification();
       const resolvedStampType = resolveStampType(stampType, defaultStampType);
+      const capabilities = getCubidWalletCapabilities(connection);
       const stampData =
         adapter.toStampData?.(connection, verification) ??
         buildDefaultWalletStampData(resolvedStampType, connection, verification);
@@ -79,6 +83,7 @@ export function createCubidWeb3Client(
       }
 
       return {
+        capabilities,
         connection,
         persistedStamp,
         stampData,

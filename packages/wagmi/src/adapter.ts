@@ -36,6 +36,7 @@ export function buildDefaultWagmiConnection(result: CubidWagmiConnectResult): Cu
 
   return {
     address,
+    capabilities: result.connector?.capabilities,
     chainId: result.chainId,
     chainType: "evm",
     connectorId: result.connector?.id,

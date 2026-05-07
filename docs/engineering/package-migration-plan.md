@@ -150,6 +150,8 @@ It should own:
 - EVM wallet connection types
 - EVM stamp serialization defaults
 - EVM verification adapter contracts
+- Optional capability metadata for features such as smart accounts, session
+  keys, paymasters, and gas sponsorship
 - optional lightweight `viem` integration when it adds real value
 
 ### Phase 3: create `@cubid/wagmi`
@@ -161,6 +163,10 @@ It should own:
 - connector-specific UI helpers
 
 are allowed.
+
+Keep any smart-account, session-key, paymaster, or gas-sponsorship support
+capability-driven. Those features should surface as explicit optional metadata,
+not as universal assumptions baked into every wagmi or EVM flow.
 
 It should depend on:
 

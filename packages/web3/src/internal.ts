@@ -1,4 +1,9 @@
-import type { CubidWalletConnection, CubidWalletVerification, CubidWeb3StampType } from "./types";
+import type {
+  CubidWalletCapabilities,
+  CubidWalletConnection,
+  CubidWalletVerification,
+  CubidWeb3StampType
+} from "./types";
 
 export function buildDefaultWalletStampData(
   stampType: CubidWeb3StampType,
@@ -14,4 +19,17 @@ export function buildDefaultWalletStampData(
     verification: verification.metadata,
     walletType: stampType
   };
+}
+
+export function getCubidWalletCapabilities(
+  connection: CubidWalletConnection
+): CubidWalletCapabilities {
+  return connection.capabilities ?? {};
+}
+
+export function hasCubidWalletCapability(
+  connection: CubidWalletConnection,
+  capabilityName: keyof CubidWalletCapabilities | string
+): boolean {
+  return Boolean(getCubidWalletCapabilities(connection)[capabilityName]?.available);
 }
