@@ -577,12 +577,12 @@ signatures are supported until a later Passport note explicitly says they are.
 
 ### S09. Establish testing strategy and acceptance governance for the public SDK repo
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
 
 Turn the current ad hoc package-level validation into an explicitly documented
 testing and acceptance strategy for this public SDK monorepo. The goal is to
@@ -590,12 +590,12 @@ make it clear what each layer proves locally and in CI before publish or merge.
 
 ### S09.1 Create a written testing strategy for the SDK monorepo
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
 
 Document the intended test pyramid and validation responsibilities for:
 
@@ -610,12 +610,12 @@ and what remains out of scope until a stronger acceptance harness exists.
 
 ### S09.2 Create a local acceptance harness for package-consumer flows
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
 
 Add a small local acceptance harness that exercises the public SDK surfaces as a
 consumer would, rather than only testing packages in isolation. Focus first on:
@@ -629,12 +629,12 @@ changes can be validated against a realistic integration path before release.
 
 ### S09.3 Decide on and document coverage governance
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
 
 Decide whether this repo should enforce line, branch, or package-level coverage
 thresholds, and document the answer clearly. If coverage gates are adopted,

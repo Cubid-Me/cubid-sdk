@@ -30,6 +30,9 @@ Target package direction:
 - `pnpm install`
 - `pnpm build`
 - `pnpm test`
+- `pnpm test:unit`
+- `pnpm test:acceptance`
+- `pnpm test:coverage`
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm deno:check:core`
@@ -45,6 +48,8 @@ Target package direction:
 Repo-health snapshots live in `agent-context/repo-status.md`.
 Deferred ideas that are not part of the active roadmap live in
 `agent-context/future-ideas.md`.
+The testing baseline and coverage policy live in
+`docs/engineering/testing-strategy.md`.
 
 ## Supabase Edge / Deno
 

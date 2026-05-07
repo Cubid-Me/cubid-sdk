@@ -1,5 +1,24 @@
 # Session Log
 
+## session: s38-testing-baseline-and-acceptance-harness
+
+- Timestamp: 2026-05-07T14:05:00Z
+- Summary: Finished `S09` by standardizing the repo on Vitest, adding a consumer-style acceptance harness, and documenting coverage governance.
+- Actions:
+  - Migrated `@cubid/core` onto the shared Vitest runner so the repo now has one primary package-test pipeline instead of a mixed `node:test` and Vitest split.
+  - Added `packages/acceptance` as a private workspace package that exercises the built `@cubid/core`, `@cubid/browser`, and `@cubid/react` package surfaces the way a local consumer would.
+  - Added `docs/engineering/testing-strategy.md` to define the test layers, local validation commands, CI-required validation, and the report-now/gate-later coverage policy.
+  - Updated root scripts and CI so lint, typecheck, unit tests, build, acceptance tests, coverage reporting, and core package dry-runs are distinct and intentional steps.
+- Validation:
+  - `pnpm install`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
 ## session: s37-s03-capability-driven-chain-surface
 
 - Timestamp: 2026-05-07T12:35:00Z
