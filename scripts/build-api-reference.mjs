@@ -1,0 +1,211 @@
+import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { dirname, join, relative, resolve } from "node:path"
+import process from "node:process"
+import { spawnSync } from "node:child_process"
+import { fileURLToPath } from "node:url"
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..")
+const referenceDir = join(repoRoot, "docs/reference/api")
+const checkMode = process.argv.includes("--check")
+
+const packages = [
+  {
+    slug: "core",
+    name: "@cubid/core",
+    dir: "packages/core",
+    entryPoint: "packages/core/src/index.ts",
+    tsconfig: "packages/core/tsconfig.json",
+    registry: "npm + jsr",
+  },
+  {
+    slug: "browser",
+    name: "@cubid/browser",
+    dir: "packages/browser",
+    entryPoint: "packages/browser/src/index.ts",
+    tsconfig: "packages/browser/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
+    slug: "react",
+    name: "@cubid/react",
+    dir: "packages/react",
+    entryPoint: "packages/react/src/index.ts",
+    tsconfig: "packages/react/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
+    slug: "evm",
+    name: "@cubid/evm",
+    dir: "packages/evm",
+    entryPoint: "packages/evm/src/index.ts",
+    tsconfig: "packages/evm/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
+    slug: "wagmi",
+    name: "@cubid/wagmi",
+    dir: "packages/wagmi",
+    entryPoint: "packages/wagmi/src/index.ts",
+    tsconfig: "packages/wagmi/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
+    slug: "web3",
+    name: "@cubid/web3",
+    dir: "packages/web3",
+    entryPoint: "packages/web3/src/index.ts",
+    tsconfig: "packages/web3/tsconfig.json",
+    registry: "npm-only",
+  },
+]
+
+function run(command, args, options = {}) {
+  const result = spawnSync(command, args, {
+    cwd: repoRoot,
+    encoding: "utf8",
+    stdio: "pipe",
+    ...options,
+  })
+
+  if (result.status !== 0) {
+    const output = [result.stdout, result.stderr].filter(Boolean).join("\n").trim()
+    throw new Error(output || `${command} ${args.join(" ")} failed`)
+  }
+
+  return result
+}
+
+function normalizeValue(value) {
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeValue(item))
+  }
+
+  if (value && typeof value === "object") {
+    const normalized = {}
+
+    for (const [key, child] of Object.entries(value)) {
+      if (key === "url") {
+        continue
+      }
+
+      if (key === "fileName" && typeof child === "string") {
+        const marker = "/packages/"
+        const markerIndex = child.lastIndexOf(marker)
+        normalized[key] =
+          markerIndex >= 0
+            ? child.slice(markerIndex + 1)
+            : relative(repoRoot, resolve(repoRoot, child)).replaceAll("\\", "/")
+        continue
+      }
+
+      normalized[key] = normalizeValue(child)
+    }
+
+    return normalized
+  }
+
+  return value
+}
+
+function buildPackageReference(spec, tempRoot) {
+  const packageJsonPath = join(repoRoot, spec.dir, "package.json")
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"))
+  const tempTsconfigPath = join(tempRoot, `${spec.slug}.typedoc.tsconfig.json`)
+  const rawOutputPath = join(tempRoot, `${spec.slug}.raw.json`)
+
+  writeFileSync(
+    tempTsconfigPath,
+    `${JSON.stringify(
+      {
+        extends: join(repoRoot, spec.tsconfig),
+        compilerOptions: {
+          ignoreDeprecations: "5.0",
+        },
+      },
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  )
+
+  run("pnpm", [
+    "exec",
+    "typedoc",
+    "--json",
+    rawOutputPath,
+    "--entryPoints",
+    join(repoRoot, spec.entryPoint),
+    "--tsconfig",
+    tempTsconfigPath,
+    "--name",
+    spec.name,
+    "--disableGit",
+    "--disableSources",
+  ])
+
+  const typedocJson = JSON.parse(readFileSync(rawOutputPath, "utf8"))
+  const normalizedJson = normalizeValue(typedocJson)
+  const finalJson = `${JSON.stringify(normalizedJson, null, 2)}\n`
+
+  return {
+    artifact: finalJson,
+    manifestEntry: {
+      name: packageJson.name,
+      version: packageJson.version,
+      description: packageJson.description,
+      registry: spec.registry,
+      referencePath: `${spec.slug}.json`,
+    },
+  }
+}
+
+function main() {
+  const tempRoot = mkdtempSync(join(tmpdir(), "cubid-api-reference-"))
+  const generatedArtifacts = new Map()
+  const manifestEntries = []
+
+  try {
+    for (const spec of packages) {
+      const { artifact, manifestEntry } = buildPackageReference(spec, tempRoot)
+      generatedArtifacts.set(`${spec.slug}.json`, artifact)
+      manifestEntries.push(manifestEntry)
+    }
+
+    const manifest = `${JSON.stringify({ packages: manifestEntries }, null, 2)}\n`
+    generatedArtifacts.set("manifest.json", manifest)
+
+    if (checkMode) {
+      const driftedFiles = []
+
+      for (const [fileName, expectedContent] of generatedArtifacts.entries()) {
+        const targetPath = join(referenceDir, fileName)
+        const actualContent = existsSync(targetPath) ? readFileSync(targetPath, "utf8") : null
+
+        if (actualContent !== expectedContent) {
+          driftedFiles.push(relative(repoRoot, targetPath))
+        }
+      }
+
+      if (driftedFiles.length > 0) {
+        throw new Error(
+          `API reference artifacts are out of date. Re-run pnpm docs:api:build.\n${driftedFiles
+            .map((file) => `- ${file}`)
+            .join("\n")}`,
+        )
+      }
+
+      return
+    }
+
+    mkdirSync(referenceDir, { recursive: true })
+
+    for (const [fileName, content] of generatedArtifacts.entries()) {
+      writeFileSync(join(referenceDir, fileName), content, "utf8")
+    }
+  } finally {
+    rmSync(tempRoot, { force: true, recursive: true })
+  }
+}
+
+main()

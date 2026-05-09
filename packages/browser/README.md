@@ -1,7 +1,13 @@
 # `@cubid/browser`
 
-Headless browser helpers for Cubid OTP flows, hosted verification launchers,
-Allow Page URL/state helpers, and provider stamp-sync helpers.
+Headless browser helpers for Cubid hosted verification, OTP, Allow Page, and
+provider handoff flows.
+
+## When To Choose This Package
+
+Use `@cubid/browser` when you need Cubid's browser-safe helper layer but do not
+want a React dependency. Choose `@cubid/react` only when you need React
+components or hooks on top of this package.
 
 ## Install
 
@@ -9,11 +15,17 @@ Allow Page URL/state helpers, and provider stamp-sync helpers.
 npm install @cubid/browser
 ```
 
-This package is the primary replacement for the older `@cubid/web2` name.
-During the migration window, `@cubid/web2` remains a thin compatibility
-wrapper, but new integrations should use `@cubid/browser` directly.
+## Registry Availability
 
-## Usage
+- npm: supported
+- JSR: not published by policy
+
+## API Reference
+
+- JSON reference: `../../docs/reference/api/browser.json`
+- Package matrix: `../../README.md`
+
+## Basic Usage
 
 ```ts
 import { createCubidWeb2Client } from "@cubid/browser"
@@ -21,7 +33,7 @@ import { createCubidApiClient } from "@cubid/core"
 
 const apiClient = createCubidApiClient({
   apiKey: process.env.CUBID_API_KEY!,
-  dappId: process.env.CUBID_DAPP_ID!
+  dappId: process.env.CUBID_DAPP_ID!,
 })
 
 const browserClient = createCubidWeb2Client(apiClient)

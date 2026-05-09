@@ -19,6 +19,18 @@
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
     "directory": "packages/wagmi"
   },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/wagmi",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "identity",
+    "wagmi",
+    "react",
+    "wallet",
+    "sdk"
+  ],
   "sideEffects": false,
   "dependencies": {
     "@cubid/evm": "workspace:*"

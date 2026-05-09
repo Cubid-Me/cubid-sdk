@@ -19,5 +19,5 @@ export * from "@cubid/react"
 If you are starting fresh, install and import `@cubid/react` instead.
 
 - Primary package: `@cubid/react`
-- Root package matrix: `README.md`
-- Migration notes: `docs/engineering/package-migration-plan.md`
+- Root package matrix: `../../README.md`
+- Migration notes: `../../docs/engineering/package-migration-plan.md`

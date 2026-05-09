@@ -1,0 +1,2026 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@cubid/evm",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 15,
+      "name": "ConnectWalletRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 17,
+          "name": "adapter",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 18,
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": 16,
+                "name": "TConnection",
+                "package": "@cubid/evm",
+                "qualifiedName": "ConnectWalletRequest.TConnection",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidEvmAdapter",
+            "package": "@cubid/evm"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            17
+          ]
+        }
+      ],
+      "typeParameters": [
+        {
+          "id": 16,
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 57,
+            "name": "CubidEvmConnection",
+            "package": "@cubid/evm"
+          },
+          "default": {
+            "type": "reference",
+            "target": 57,
+            "name": "CubidEvmConnection",
+            "package": "@cubid/evm"
+          }
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "CubidCapabilityDescriptor",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 13,
+          "name": "available",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 14,
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            13,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "CubidEvmAdapter",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 25,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 20,
+          "name": "connect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 21,
+              "name": "connect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 19,
+                    "name": "TConnection",
+                    "package": "@cubid/evm",
+                    "qualifiedName": "CubidEvmAdapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "name": "disconnect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "id": 23,
+              "name": "disconnect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 24,
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 19,
+                    "name": "TConnection",
+                    "package": "@cubid/evm",
+                    "qualifiedName": "CubidEvmAdapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  },
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "name": "toStampData",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "id": 27,
+              "name": "toStampData",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 28,
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 19,
+                    "name": "TConnection",
+                    "package": "@cubid/evm",
+                    "qualifiedName": "CubidEvmAdapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                },
+                {
+                  "id": 29,
+                  "name": "verification",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 65,
+                    "name": "CubidEvmVerification",
+                    "package": "@cubid/evm"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "unknown"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "name": "verify",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "id": 31,
+              "name": "verify",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "id": 32,
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 19,
+                    "name": "TConnection",
+                    "package": "@cubid/evm",
+                    "qualifiedName": "CubidEvmAdapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "reference",
+                    "target": 65,
+                    "name": "CubidEvmVerification",
+                    "package": "@cubid/evm"
+                  },
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": 65,
+                        "name": "CubidEvmVerification",
+                        "package": "@cubid/evm"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            25
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            20,
+            22,
+            26,
+            30
+          ]
+        }
+      ],
+      "typeParameters": [
+        {
+          "id": 19,
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 57,
+            "name": "CubidEvmConnection",
+            "package": "@cubid/evm"
+          },
+          "default": {
+            "type": "reference",
+            "target": 57,
+            "name": "CubidEvmConnection",
+            "package": "@cubid/evm"
+          }
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "name": "CubidEvmCapabilities",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 34,
+          "name": "gasSponsorship",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 12,
+            "name": "CubidCapabilityDescriptor",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "id": 35,
+          "name": "paymaster",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 12,
+            "name": "CubidCapabilityDescriptor",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "id": 36,
+          "name": "sessionKeys",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 12,
+            "name": "CubidCapabilityDescriptor",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "id": 37,
+          "name": "smartAccount",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 12,
+            "name": "CubidCapabilityDescriptor",
+            "package": "@cubid/evm"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            34,
+            35,
+            36,
+            37
+          ]
+        }
+      ],
+      "indexSignatures": [
+        {
+          "id": 38,
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "id": 39,
+              "name": "capabilityName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": 12,
+                "name": "CubidCapabilityDescriptor",
+                "package": "@cubid/evm"
+              },
+              {
+                "type": "intrinsic",
+                "name": "undefined"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "name": "CubidEvmClient",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 41,
+          "name": "apiClient",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/core",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidApiClient"
+            },
+            "name": "CubidApiClient",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "id": 42,
+          "name": "connectWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 43,
+              "name": "connectWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "id": 44,
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 57,
+                    "name": "CubidEvmConnection",
+                    "package": "@cubid/evm"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 45,
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 15,
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": 44,
+                        "name": "TConnection",
+                        "package": "@cubid/evm",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "ConnectWalletRequest",
+                    "package": "@cubid/evm"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 44,
+                    "name": "TConnection",
+                    "package": "@cubid/evm",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "name": "disconnectWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 47,
+              "name": "disconnectWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "id": 48,
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 57,
+                    "name": "CubidEvmConnection",
+                    "package": "@cubid/evm"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 49,
+                  "name": "adapter",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 18,
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": 48,
+                        "name": "TConnection",
+                        "package": "@cubid/evm",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "CubidEvmAdapter",
+                    "package": "@cubid/evm"
+                  }
+                },
+                {
+                  "id": 50,
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 48,
+                    "name": "TConnection",
+                    "package": "@cubid/evm",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 51,
+          "name": "verifyWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "id": 52,
+              "name": "verifyWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "id": 53,
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 57,
+                    "name": "CubidEvmConnection",
+                    "package": "@cubid/evm"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 54,
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 68,
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": 53,
+                        "name": "TConnection",
+                        "package": "@cubid/evm",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "VerifyWalletRequest",
+                    "package": "@cubid/evm"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": 76,
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": 53,
+                        "name": "TConnection",
+                        "package": "@cubid/evm",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "VerifyWalletResult",
+                    "package": "@cubid/evm"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            41
+          ]
+        },
+        {
+          "title": "Methods",
+          "children": [
+            42,
+            46,
+            51
+          ]
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "name": "CubidEvmClientOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 56,
+          "name": "defaultStampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "literal",
+            "value": "evm"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            56
+          ]
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "name": "CubidEvmConnection",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 58,
+          "name": "address",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 59,
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 33,
+            "name": "CubidEvmCapabilities",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "id": 60,
+          "name": "chainId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 61,
+          "name": "chainType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            58,
+            59,
+            60,
+            61
+          ]
+        }
+      ],
+      "indexSignatures": [
+        {
+          "id": 62,
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "id": 63,
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "name": "CubidEvmVerification",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 66,
+          "name": "isVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 67,
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            66,
+            67
+          ]
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "name": "VerifyWalletRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 70,
+          "name": "adapter",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 18,
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": 69,
+                "name": "TConnection",
+                "package": "@cubid/evm",
+                "qualifiedName": "VerifyWalletRequest.TConnection",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidEvmAdapter",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "id": 71,
+          "name": "connection",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 69,
+            "name": "TConnection",
+            "package": "@cubid/evm",
+            "qualifiedName": "VerifyWalletRequest.TConnection",
+            "refersToTypeParameter": true
+          }
+        },
+        {
+          "id": 72,
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 73,
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 74,
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "literal",
+            "value": "evm"
+          }
+        },
+        {
+          "id": 75,
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            70,
+            71,
+            72,
+            73,
+            74,
+            75
+          ]
+        }
+      ],
+      "typeParameters": [
+        {
+          "id": 69,
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 57,
+            "name": "CubidEvmConnection",
+            "package": "@cubid/evm"
+          },
+          "default": {
+            "type": "reference",
+            "target": 57,
+            "name": "CubidEvmConnection",
+            "package": "@cubid/evm"
+          }
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "name": "VerifyWalletResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 78,
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 33,
+            "name": "CubidEvmCapabilities",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "id": 79,
+          "name": "connection",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 77,
+            "name": "TConnection",
+            "package": "@cubid/evm",
+            "qualifiedName": "VerifyWalletResult.TConnection",
+            "refersToTypeParameter": true
+          }
+        },
+        {
+          "id": 80,
+          "name": "persistedStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/core",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidAddStampResponse"
+            },
+            "name": "CubidAddStampResponse",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "id": 81,
+          "name": "stampData",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 82,
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "literal",
+            "value": "evm"
+          }
+        },
+        {
+          "id": 83,
+          "name": "verification",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 65,
+            "name": "CubidEvmVerification",
+            "package": "@cubid/evm"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            78,
+            79,
+            80,
+            81,
+            82,
+            83
+          ]
+        }
+      ],
+      "typeParameters": [
+        {
+          "id": 77,
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 57,
+            "name": "CubidEvmConnection",
+            "package": "@cubid/evm"
+          },
+          "default": {
+            "type": "reference",
+            "target": 57,
+            "name": "CubidEvmConnection",
+            "package": "@cubid/evm"
+          }
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "name": "CubidEvmStampType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "literal",
+        "value": "evm"
+      }
+    },
+    {
+      "id": 1,
+      "name": "createCubidEvmClient",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "id": 2,
+          "name": "createCubidEvmClient",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "id": 3,
+              "name": "apiClient",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/core",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidApiClient"
+                },
+                "name": "CubidApiClient",
+                "package": "@cubid/core"
+              }
+            },
+            {
+              "id": 4,
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 55,
+                "name": "CubidEvmClientOptions",
+                "package": "@cubid/evm"
+              },
+              "defaultValue": "{}"
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 40,
+            "name": "CubidEvmClient",
+            "package": "@cubid/evm"
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "getCubidEvmCapabilities",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "id": 6,
+          "name": "getCubidEvmCapabilities",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "id": 7,
+              "name": "connection",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 57,
+                "name": "CubidEvmConnection",
+                "package": "@cubid/evm"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 33,
+            "name": "CubidEvmCapabilities",
+            "package": "@cubid/evm"
+          }
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "hasCubidEvmCapability",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "id": 9,
+          "name": "hasCubidEvmCapability",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "id": 10,
+              "name": "connection",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 57,
+                "name": "CubidEvmConnection",
+                "package": "@cubid/evm"
+              }
+            },
+            {
+              "id": 11,
+              "name": "capabilityName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "typeOperator",
+                "operator": "keyof",
+                "target": {
+                  "type": "reference",
+                  "target": 33,
+                  "name": "CubidEvmCapabilities",
+                  "package": "@cubid/evm"
+                }
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Interfaces",
+      "children": [
+        15,
+        12,
+        18,
+        33,
+        40,
+        55,
+        57,
+        65,
+        68,
+        76
+      ]
+    },
+    {
+      "title": "Type Aliases",
+      "children": [
+        64
+      ]
+    },
+    {
+      "title": "Functions",
+      "children": [
+        1,
+        5,
+        8
+      ]
+    }
+  ],
+  "packageName": "@cubid/evm",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/evm`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nEVM-oriented Cubid wallet helpers built on top of "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n## When To Choose This Package\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/evm`"
+    },
+    {
+      "kind": "text",
+      "text": " when you need Cubid's EVM-specific custody, connection, and\nverification helpers. Choose "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/wagmi`"
+    },
+    {
+      "kind": "text",
+      "text": " only when your host app already\nuses wagmi and needs React-friendly adapters on top of this package.\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\nnpm install @cubid/evm @cubid/core\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## API Reference\n\n- JSON reference: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/reference/api/evm.json`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- Package matrix: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Capability Metadata\n\nEVM connections may expose optional "
+    },
+    {
+      "kind": "code",
+      "text": "`capabilities`"
+    },
+    {
+      "kind": "text",
+      "text": " metadata for features that\nare not universal across Cubid custody accounts, such as:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`smartAccount`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`sessionKeys`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`paymaster`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`gasSponsorship`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThese descriptors are intentionally opt-in and capability-driven. Do not assume\nevery EVM account supports those features by default.\n\nThe package exports "
+    },
+    {
+      "kind": "code",
+      "text": "`getCubidEvmCapabilities(...)`"
+    },
+    {
+      "kind": "text",
+      "text": " and\n"
+    },
+    {
+      "kind": "code",
+      "text": "`hasCubidEvmCapability(...)`"
+    },
+    {
+      "kind": "text",
+      "text": " so host apps can read that metadata without\nhard-coding smart-account assumptions into the integration path."
+    }
+  ],
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/client.ts",
+      "qualifiedName": "createCubidEvmClient"
+    },
+    "2": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/client.ts",
+      "qualifiedName": "createCubidEvmClient"
+    },
+    "3": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/client.ts",
+      "qualifiedName": "apiClient"
+    },
+    "4": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/client.ts",
+      "qualifiedName": "options"
+    },
+    "5": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/internal.ts",
+      "qualifiedName": "getCubidEvmCapabilities"
+    },
+    "6": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/internal.ts",
+      "qualifiedName": "getCubidEvmCapabilities"
+    },
+    "7": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/internal.ts",
+      "qualifiedName": "connection"
+    },
+    "8": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/internal.ts",
+      "qualifiedName": "hasCubidEvmCapability"
+    },
+    "9": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/internal.ts",
+      "qualifiedName": "hasCubidEvmCapability"
+    },
+    "10": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/internal.ts",
+      "qualifiedName": "connection"
+    },
+    "11": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/internal.ts",
+      "qualifiedName": "capabilityName"
+    },
+    "12": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidCapabilityDescriptor"
+    },
+    "13": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidCapabilityDescriptor.available"
+    },
+    "14": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidCapabilityDescriptor.metadata"
+    },
+    "15": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ConnectWalletRequest"
+    },
+    "16": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ConnectWalletRequest.TConnection"
+    },
+    "17": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ConnectWalletRequest.adapter"
+    },
+    "18": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter"
+    },
+    "19": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.TConnection"
+    },
+    "20": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.connect"
+    },
+    "21": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.connect"
+    },
+    "22": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.disconnect"
+    },
+    "23": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.disconnect"
+    },
+    "24": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "connection"
+    },
+    "25": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.id"
+    },
+    "26": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.toStampData"
+    },
+    "27": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.toStampData"
+    },
+    "28": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "connection"
+    },
+    "29": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "verification"
+    },
+    "30": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.verify"
+    },
+    "31": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmAdapter.verify"
+    },
+    "32": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "connection"
+    },
+    "33": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmCapabilities"
+    },
+    "34": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmCapabilities.gasSponsorship"
+    },
+    "35": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmCapabilities.paymaster"
+    },
+    "36": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmCapabilities.sessionKeys"
+    },
+    "37": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmCapabilities.smartAccount"
+    },
+    "38": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmCapabilities.__index"
+    },
+    "40": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClient"
+    },
+    "41": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClient.apiClient"
+    },
+    "42": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClient.connectWallet"
+    },
+    "43": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClient.connectWallet"
+    },
+    "44": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "TConnection"
+    },
+    "45": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "request"
+    },
+    "46": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClient.disconnectWallet"
+    },
+    "47": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClient.disconnectWallet"
+    },
+    "48": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "TConnection"
+    },
+    "49": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "adapter"
+    },
+    "50": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "connection"
+    },
+    "51": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClient.verifyWallet"
+    },
+    "52": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClient.verifyWallet"
+    },
+    "53": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "TConnection"
+    },
+    "54": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "request"
+    },
+    "55": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClientOptions"
+    },
+    "56": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmClientOptions.defaultStampType"
+    },
+    "57": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmConnection"
+    },
+    "58": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmConnection.address"
+    },
+    "59": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmConnection.capabilities"
+    },
+    "60": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmConnection.chainId"
+    },
+    "61": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmConnection.chainType"
+    },
+    "62": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmConnection.__index"
+    },
+    "64": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmStampType"
+    },
+    "65": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmVerification"
+    },
+    "66": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmVerification.isVerified"
+    },
+    "67": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidEvmVerification.metadata"
+    },
+    "68": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletRequest"
+    },
+    "69": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletRequest.TConnection"
+    },
+    "70": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletRequest.adapter"
+    },
+    "71": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletRequest.connection"
+    },
+    "72": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletRequest.pageId"
+    },
+    "73": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletRequest.persistStamp"
+    },
+    "74": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletRequest.stampType"
+    },
+    "75": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletRequest.userId"
+    },
+    "76": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletResult"
+    },
+    "77": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletResult.TConnection"
+    },
+    "78": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletResult.capabilities"
+    },
+    "79": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletResult.connection"
+    },
+    "80": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletResult.persistedStamp"
+    },
+    "81": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletResult.stampData"
+    },
+    "82": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletResult.stampType"
+    },
+    "83": {
+      "packageName": "@cubid/evm",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "VerifyWalletResult.verification"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "packages/evm/src/index.ts",
+      "2": "packages/evm/README.md",
+      "3": "packages/evm"
+    },
+    "reflections": {
+      "1": 0,
+      "2": 0,
+      "3": 0
+    }
+  }
+}

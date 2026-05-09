@@ -15,5 +15,5 @@
 | Publishing workflow | `Pass` `.github/workflows/publish.yml` supports trusted npm publication for the live package set and JSR publication for `@cubid/core` from `main`. |
 | Supabase direct-access rule | `Not applicable` This repo ships SDK packages and examples; it does not own deployed Supabase runtime code. |
 | Environment and script conventions | `Pass` Root scripts cover install/build/test/lint/typecheck/core Deno checks, and `.gitignore` excludes local env files and build outputs. |
-| Developer-ingestion publishing | `Partial` npm and JSR publication exist, but broader developer-ingestion distribution work is still open as `S10` in `agent-context/todo.md`. |
-| Active roadmap closeout | `Partial` Remaining non-closed roadmap items are `S03`, `S04`, and `S10` in `agent-context/todo.md`. |
+| Developer-ingestion publishing | `Pass` Registry policy, machine-readable API reference artifacts, package metadata, and public entrypoint docs now align with the primary published SDK package surfaces. |
+| Active roadmap closeout | `Partial` Remaining non-closed roadmap items are `S03`, `S04`, and `S11` in `agent-context/todo.md`. |

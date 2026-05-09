@@ -1,5 +1,26 @@
 # Session Log
 
+## session: s40-s10-developer-ingestion-publishing
+
+- Timestamp: 2026-05-09T13:30:00Z
+- Summary: Finished `S10` by locking the package registry policy, adding machine-readable API reference artifacts, and tightening the public developer entrypoints across the SDK package family.
+- Actions:
+  - Reviewed the incoming Passport note `agent-context/messages-from-cubid-passport/2026-05-09-clearpass-verify-stamp.md` and turned it into a new tracked SDK follow-up instead of leaving it as an unstructured inbox file.
+  - Updated the root README, package READMEs, package metadata, and Supabase Edge integration guide so new consumers can see the supported package names, registry availability, and the right package to choose first.
+  - Expanded the publishing runbook into a package-family policy document and made the GitHub publish workflow describe JSR support for `@cubid/core` as an explicit policy choice rather than an accidental limitation.
+  - Added a committed machine-readable reference surface under `docs/reference/api/` plus `docs/reference/README.md`, with a deterministic `typedoc`-based generator and a drift check command for CI.
+  - Updated CI so API reference generation and drift checks are part of the normal validation baseline.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
 ## session: s39-s02-compatibility-retirement
 
 - Timestamp: 2026-05-09T11:20:00Z

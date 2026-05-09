@@ -1,0 +1,4319 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@cubid/browser",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 9,
+      "name": "CubidAllowFlowParams",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 10,
+          "name": "colorMode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 11,
+          "name": "extras",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "boolean"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "undefined"
+                  }
+                ]
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 12,
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 13,
+          "name": "path",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "/allow"
+              },
+              {
+                "type": "literal",
+                "value": "/widget-allow"
+              }
+            ]
+          }
+        },
+        {
+          "id": 14,
+          "name": "socialProvider",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "discord"
+              },
+              {
+                "type": "literal",
+                "value": "github"
+              },
+              {
+                "type": "literal",
+                "value": "google"
+              },
+              {
+                "type": "literal",
+                "value": "instagram"
+              },
+              {
+                "type": "literal",
+                "value": "linkedin"
+              },
+              {
+                "type": "literal",
+                "value": "twitter"
+              },
+              {
+                "type": "literal",
+                "value": "worldcoin"
+              }
+            ]
+          }
+        },
+        {
+          "id": 15,
+          "name": "success",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 16,
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "CubidOAuthCallbackState",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 19,
+          "name": "colorMode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 20,
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 21,
+          "name": "nonce",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 22,
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 23,
+          "name": "provider",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "discord"
+              },
+              {
+                "type": "literal",
+                "value": "github"
+              },
+              {
+                "type": "literal",
+                "value": "google"
+              },
+              {
+                "type": "literal",
+                "value": "instagram"
+              },
+              {
+                "type": "literal",
+                "value": "linkedin"
+              },
+              {
+                "type": "literal",
+                "value": "twitter"
+              },
+              {
+                "type": "literal",
+                "value": "worldcoin"
+              }
+            ]
+          }
+        },
+        {
+          "id": 24,
+          "name": "returnTo",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 25,
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ]
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "CubidWeb2Client",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 28,
+          "name": "apiClient",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/core",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidApiClient"
+            },
+            "name": "CubidApiClient",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "id": 48,
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 49,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "id": 50,
+                  "name": "startOtp",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 51,
+                      "name": "startOtp",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 52,
+                          "name": "request",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 78,
+                            "name": "EmailOtpStartRequest",
+                            "package": "@cubid/browser"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "@cubid/core",
+                              "packagePath": "src/index.ts",
+                              "qualifiedName": "CubidSendEmailOtpResponse"
+                            },
+                            "name": "CubidSendEmailOtpResponse",
+                            "package": "@cubid/core"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 53,
+                  "name": "verifyOtp",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 54,
+                      "name": "verifyOtp",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 55,
+                          "name": "request",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 84,
+                            "name": "EmailOtpVerifyRequest",
+                            "package": "@cubid/browser"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": 96,
+                            "name": "EmailOtpVerifyResult",
+                            "package": "@cubid/browser"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "groups": [
+                {
+                  "title": "Methods",
+                  "children": [
+                    50,
+                    53
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 30,
+          "name": "oauth",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 31,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "id": 47,
+                  "name": "providers",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "typeOperator",
+                    "operator": "readonly",
+                    "target": {
+                      "type": "array",
+                      "elementType": {
+                        "type": "union",
+                        "types": [
+                          {
+                            "type": "literal",
+                            "value": "discord"
+                          },
+                          {
+                            "type": "literal",
+                            "value": "github"
+                          },
+                          {
+                            "type": "literal",
+                            "value": "google"
+                          },
+                          {
+                            "type": "literal",
+                            "value": "instagram"
+                          },
+                          {
+                            "type": "literal",
+                            "value": "linkedin"
+                          },
+                          {
+                            "type": "literal",
+                            "value": "twitter"
+                          },
+                          {
+                            "type": "literal",
+                            "value": "worldcoin"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": 32,
+                  "name": "buildAllowFlowUrl",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 33,
+                      "name": "buildAllowFlowUrl",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 34,
+                          "name": "params",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 9,
+                            "name": "CubidAllowFlowParams",
+                            "package": "@cubid/browser"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 35,
+                  "name": "buildAuthorizationUrl",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 36,
+                      "name": "buildAuthorizationUrl",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 37,
+                          "name": "request",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 108,
+                            "name": "OAuthAuthorizationUrlRequest",
+                            "package": "@cubid/browser"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 38,
+                  "name": "createCallbackState",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 39,
+                      "name": "createCallbackState",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 40,
+                          "name": "state",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 18,
+                            "name": "CubidOAuthCallbackState",
+                            "package": "@cubid/browser"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 41,
+                  "name": "parseAllowFlowUrl",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 42,
+                      "name": "parseAllowFlowUrl",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 43,
+                          "name": "input",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "union",
+                            "types": [
+                              {
+                                "type": "intrinsic",
+                                "name": "string"
+                              },
+                              {
+                                "type": "reference",
+                                "target": {
+                                  "packageName": "typescript",
+                                  "packagePath": "lib/lib.dom.d.ts",
+                                  "qualifiedName": "URL"
+                                },
+                                "name": "URL",
+                                "package": "typescript"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": 116,
+                        "name": "ParsedCubidAllowFlowParams",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 44,
+                  "name": "parseCallbackState",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 45,
+                      "name": "parseCallbackState",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 46,
+                          "name": "encodedState",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "intrinsic",
+                            "name": "string"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": 18,
+                        "name": "CubidOAuthCallbackState",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "groups": [
+                {
+                  "title": "Properties",
+                  "children": [
+                    47
+                  ]
+                },
+                {
+                  "title": "Methods",
+                  "children": [
+                    32,
+                    35,
+                    38,
+                    41,
+                    44
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 29,
+          "name": "options",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Readonly"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": 161,
+                "name": "ResolvedCubidWeb2ClientOptions",
+                "package": "@cubid/browser"
+              }
+            ],
+            "name": "Readonly",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 56,
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 57,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "id": 58,
+                  "name": "startOtp",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 59,
+                      "name": "startOtp",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 60,
+                          "name": "request",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 124,
+                            "name": "PhoneOtpStartRequest",
+                            "package": "@cubid/browser"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "@cubid/core",
+                              "packagePath": "src/index.ts",
+                              "qualifiedName": "CubidSendPhoneOtpResponse"
+                            },
+                            "name": "CubidSendPhoneOtpResponse",
+                            "package": "@cubid/core"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 61,
+                  "name": "verifyOtp",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 62,
+                      "name": "verifyOtp",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 63,
+                          "name": "request",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 130,
+                            "name": "PhoneOtpVerifyRequest",
+                            "package": "@cubid/browser"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": 142,
+                            "name": "PhoneOtpVerifyResult",
+                            "package": "@cubid/browser"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "groups": [
+                {
+                  "title": "Methods",
+                  "children": [
+                    58,
+                    61
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 64,
+          "name": "sync",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 65,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "id": 66,
+                  "name": "createProviderStampData",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 67,
+                      "name": "createProviderStampData",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 68,
+                          "name": "stampType",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 77,
+                            "name": "CubidWeb2StampType",
+                            "package": "@cubid/browser"
+                          }
+                        },
+                        {
+                          "id": 69,
+                          "name": "verifiedData",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 147,
+                            "name": "ProviderIdentityInput",
+                            "package": "@cubid/browser"
+                          }
+                        },
+                        {
+                          "id": 70,
+                          "name": "overrides",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {
+                            "isOptional": true
+                          },
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "typescript",
+                              "packagePath": "lib/lib.es5.d.ts",
+                              "qualifiedName": "Record"
+                            },
+                            "typeArguments": [
+                              {
+                                "type": "intrinsic",
+                                "name": "string"
+                              },
+                              {
+                                "type": "intrinsic",
+                                "name": "unknown"
+                              }
+                            ],
+                            "name": "Record",
+                            "package": "typescript"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Record"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "string"
+                          },
+                          {
+                            "type": "intrinsic",
+                            "name": "unknown"
+                          }
+                        ],
+                        "name": "Record",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 71,
+                  "name": "verifiedStamp",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 72,
+                      "name": "verifiedStamp",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 73,
+                          "name": "request",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": 168,
+                            "name": "SyncVerifiedStampRequest",
+                            "package": "@cubid/browser"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": 174,
+                            "name": "SyncVerifiedStampResult",
+                            "package": "@cubid/browser"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "groups": [
+                {
+                  "title": "Methods",
+                  "children": [
+                    66,
+                    71
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            28,
+            48,
+            30,
+            29,
+            56,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "name": "CubidWeb2ClientOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 75,
+          "name": "allowPath",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "/allow"
+              },
+              {
+                "type": "literal",
+                "value": "/widget-allow"
+              }
+            ]
+          }
+        },
+        {
+          "id": 76,
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            75,
+            76
+          ]
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "name": "EmailOtpStartRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 79,
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 80,
+          "name": "onStarted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 81,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 82,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "id": 83,
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/core",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidSendEmailOtpResponse"
+                        },
+                        "name": "CubidSendEmailOtpResponse",
+                        "package": "@cubid/core"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            79,
+            80
+          ]
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "name": "EmailOtpVerifyRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 85,
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 86,
+          "name": "onPersisted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 87,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 88,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "id": 89,
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": 174,
+                        "name": "SyncVerifiedStampResult",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 90,
+          "name": "onVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 91,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 92,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "id": 93,
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": 96,
+                        "name": "EmailOtpVerifyResult",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 94,
+          "name": "otp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 95,
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 164,
+            "name": "StampPersistenceRequest",
+            "package": "@cubid/browser"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            85,
+            86,
+            90,
+            94,
+            95
+          ]
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "name": "EmailOtpVerifyResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 98,
+          "name": "dappId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidVerifyEmailOtpResponse.dappId"
+          }
+        },
+        {
+          "id": 99,
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidVerifyEmailOtpResponse.email"
+          }
+        },
+        {
+          "id": 100,
+          "name": "isVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidVerifyEmailOtpResponse.isVerified"
+          }
+        },
+        {
+          "id": 97,
+          "name": "persistedStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 174,
+            "name": "SyncVerifiedStampResult",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "id": 101,
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidVerifyEmailOtpResponse.raw"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            98,
+            99,
+            100,
+            97,
+            101
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@cubid/core",
+            "packagePath": "src/index.ts",
+            "qualifiedName": "CubidVerifyEmailOtpResponse"
+          },
+          "name": "CubidVerifyEmailOtpResponse",
+          "package": "@cubid/core"
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "name": "HostedVerificationUrlRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 103,
+          "name": "dappId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 104,
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 105,
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 106,
+          "name": "stampToRender",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "address"
+              },
+              {
+                "type": "literal",
+                "value": "phone"
+              }
+            ]
+          }
+        },
+        {
+          "id": 107,
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            103,
+            104,
+            105,
+            106,
+            107
+          ]
+        }
+      ]
+    },
+    {
+      "id": 108,
+      "name": "OAuthAuthorizationUrlRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 109,
+          "name": "authorizationUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 110,
+          "name": "clientId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 111,
+          "name": "extraParams",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "boolean"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "undefined"
+                  }
+                ]
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 112,
+          "name": "redirectUri",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 113,
+          "name": "responseType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 114,
+          "name": "scope",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "array",
+                "elementType": {
+                  "type": "intrinsic",
+                  "name": "string"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": 115,
+          "name": "state",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "reference",
+                "target": 18,
+                "name": "CubidOAuthCallbackState",
+                "package": "@cubid/browser"
+              }
+            ]
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115
+          ]
+        }
+      ]
+    },
+    {
+      "id": 116,
+      "name": "ParsedCubidAllowFlowParams",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 117,
+          "name": "colorMode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 118,
+          "name": "extras",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 119,
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 120,
+          "name": "path",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 121,
+          "name": "socialProvider",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 122,
+          "name": "success",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 123,
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123
+          ]
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "name": "PhoneOtpStartRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 125,
+          "name": "onStarted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 126,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 127,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "id": 128,
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/core",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidSendPhoneOtpResponse"
+                        },
+                        "name": "CubidSendPhoneOtpResponse",
+                        "package": "@cubid/core"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 129,
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            125,
+            129
+          ]
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "name": "PhoneOtpVerifyRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 131,
+          "name": "onPersisted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 132,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 133,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "id": 134,
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": 174,
+                        "name": "SyncVerifiedStampResult",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 135,
+          "name": "onVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "id": 136,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "id": 137,
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "id": 138,
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": 142,
+                        "name": "PhoneOtpVerifyResult",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 139,
+          "name": "otp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 140,
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 164,
+            "name": "StampPersistenceRequest",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "id": 141,
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            131,
+            135,
+            139,
+            140,
+            141
+          ]
+        }
+      ]
+    },
+    {
+      "id": 142,
+      "name": "PhoneOtpVerifyResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 144,
+          "name": "isVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidVerifyPhoneOtpResponse.isVerified"
+          }
+        },
+        {
+          "id": 143,
+          "name": "persistedStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": 174,
+            "name": "SyncVerifiedStampResult",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "id": 145,
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidVerifyPhoneOtpResponse.raw"
+          }
+        },
+        {
+          "id": 146,
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidVerifyPhoneOtpResponse.status"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            144,
+            143,
+            145,
+            146
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@cubid/core",
+            "packagePath": "src/index.ts",
+            "qualifiedName": "CubidVerifyPhoneOtpResponse"
+          },
+          "name": "CubidVerifyPhoneOtpResponse",
+          "package": "@cubid/core"
+        }
+      ]
+    },
+    {
+      "id": 147,
+      "name": "ProviderIdentityInput",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 148,
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 149,
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 150,
+          "name": "identity",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 151,
+          "name": "login",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 152,
+          "name": "name",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 153,
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 154,
+          "name": "sub",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 155,
+          "name": "uniquevalue",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 156,
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 158,
+          "name": "username",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 157,
+          "name": "userName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            158,
+            157
+          ]
+        }
+      ],
+      "indexSignatures": [
+        {
+          "id": 159,
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "id": 160,
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "id": 161,
+      "name": "ResolvedCubidWeb2ClientOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 162,
+          "name": "allowPath",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "/allow"
+              },
+              {
+                "type": "literal",
+                "value": "/widget-allow"
+              }
+            ]
+          }
+        },
+        {
+          "id": 163,
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            162,
+            163
+          ]
+        }
+      ]
+    },
+    {
+      "id": 164,
+      "name": "StampPersistenceRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 165,
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": 166,
+          "name": "stampData",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 167,
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            165,
+            166,
+            167
+          ]
+        }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "target": 168,
+          "name": "SyncVerifiedStampRequest"
+        }
+      ]
+    },
+    {
+      "id": 168,
+      "name": "SyncVerifiedStampRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 171,
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": 165,
+            "name": "StampPersistenceRequest.pageId"
+          }
+        },
+        {
+          "id": 172,
+          "name": "stampData",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": 166,
+            "name": "StampPersistenceRequest.stampData"
+          }
+        },
+        {
+          "id": 169,
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 77,
+            "name": "CubidWeb2StampType",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "id": 173,
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": 167,
+            "name": "StampPersistenceRequest.userId"
+          }
+        },
+        {
+          "id": 170,
+          "name": "verifiedData",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 147,
+            "name": "ProviderIdentityInput",
+            "package": "@cubid/browser"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            171,
+            172,
+            169,
+            173,
+            170
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": 164,
+          "name": "StampPersistenceRequest",
+          "package": "@cubid/browser"
+        }
+      ]
+    },
+    {
+      "id": 174,
+      "name": "SyncVerifiedStampResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 177,
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidAddStampResponse.raw"
+          }
+        },
+        {
+          "id": 175,
+          "name": "stampData",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "id": 176,
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": 77,
+            "name": "CubidWeb2StampType",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "id": 178,
+          "name": "success",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "CubidAddStampResponse.success"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            177,
+            175,
+            176,
+            178
+          ]
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@cubid/core",
+            "packagePath": "src/index.ts",
+            "qualifiedName": "CubidAddStampResponse"
+          },
+          "name": "CubidAddStampResponse",
+          "package": "@cubid/core"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "CubidHostedVerificationStampType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "indexedAccess",
+        "indexType": {
+          "type": "intrinsic",
+          "name": "number"
+        },
+        "objectType": {
+          "type": "query",
+          "queryType": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "HOSTED_VERIFICATION_STAMP_TYPES"
+            },
+            "name": "HOSTED_VERIFICATION_STAMP_TYPES",
+            "package": "@cubid/browser",
+            "preferValues": true
+          }
+        }
+      }
+    },
+    {
+      "id": 26,
+      "name": "CubidOAuthProvider",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "indexedAccess",
+        "indexType": {
+          "type": "intrinsic",
+          "name": "number"
+        },
+        "objectType": {
+          "type": "query",
+          "queryType": {
+            "type": "reference",
+            "target": 8,
+            "name": "WEB2_OAUTH_PROVIDERS",
+            "package": "@cubid/browser"
+          }
+        }
+      }
+    },
+    {
+      "id": 77,
+      "name": "CubidWeb2StampType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "reference",
+            "target": 26,
+            "name": "CubidOAuthProvider",
+            "package": "@cubid/browser"
+          },
+          {
+            "type": "literal",
+            "value": "email"
+          },
+          {
+            "type": "literal",
+            "value": "phone"
+          }
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "name": "WEB2_OAUTH_PROVIDERS",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "discord"
+            },
+            {
+              "type": "literal",
+              "value": "github"
+            },
+            {
+              "type": "literal",
+              "value": "google"
+            },
+            {
+              "type": "literal",
+              "value": "instagram"
+            },
+            {
+              "type": "literal",
+              "value": "linkedin"
+            },
+            {
+              "type": "literal",
+              "value": "twitter"
+            },
+            {
+              "type": "literal",
+              "value": "worldcoin"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
+      "id": 5,
+      "name": "buildHostedVerificationUrl",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "id": 6,
+          "name": "buildHostedVerificationUrl",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "id": 7,
+              "name": "request",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 102,
+                "name": "HostedVerificationUrlRequest",
+                "package": "@cubid/browser"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "createCubidWeb2Client",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "id": 2,
+          "name": "createCubidWeb2Client",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "id": 3,
+              "name": "apiClient",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/core",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidApiClient"
+                },
+                "name": "CubidApiClient",
+                "package": "@cubid/core"
+              }
+            },
+            {
+              "id": 4,
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 74,
+                "name": "CubidWeb2ClientOptions",
+                "package": "@cubid/browser"
+              },
+              "defaultValue": "{}"
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 27,
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Interfaces",
+      "children": [
+        9,
+        18,
+        27,
+        74,
+        78,
+        84,
+        96,
+        102,
+        108,
+        116,
+        124,
+        130,
+        142,
+        147,
+        161,
+        164,
+        168,
+        174
+      ]
+    },
+    {
+      "title": "Type Aliases",
+      "children": [
+        17,
+        26,
+        77
+      ]
+    },
+    {
+      "title": "Variables",
+      "children": [
+        8
+      ]
+    },
+    {
+      "title": "Functions",
+      "children": [
+        5,
+        1
+      ]
+    }
+  ],
+  "packageName": "@cubid/browser",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nHeadless browser helpers for Cubid hosted verification, OTP, Allow Page, and\nprovider handoff flows.\n\n## When To Choose This Package\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": " when you need Cubid's browser-safe helper layer but do not\nwant a React dependency. Choose "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/react`"
+    },
+    {
+      "kind": "text",
+      "text": " only when you need React\ncomponents or hooks on top of this package.\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\nnpm install @cubid/browser\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## API Reference\n\n- JSON reference: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/reference/api/browser.json`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- Package matrix: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Basic Usage\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```ts\nimport { createCubidWeb2Client } from \"@cubid/browser\"\nimport { createCubidApiClient } from \"@cubid/core\"\n\nconst apiClient = createCubidApiClient({\n  apiKey: process.env.CUBID_API_KEY!,\n  dappId: process.env.CUBID_DAPP_ID!,\n})\n\nconst browserClient = createCubidWeb2Client(apiClient)\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThis package is headless by design. It does not ship React components and does\nnot require a root provider."
+    }
+  ],
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/client.ts",
+      "qualifiedName": "createCubidWeb2Client"
+    },
+    "2": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/client.ts",
+      "qualifiedName": "createCubidWeb2Client"
+    },
+    "3": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/client.ts",
+      "qualifiedName": "apiClient"
+    },
+    "4": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/client.ts",
+      "qualifiedName": "options"
+    },
+    "5": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/hosted.ts",
+      "qualifiedName": "buildHostedVerificationUrl"
+    },
+    "6": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/hosted.ts",
+      "qualifiedName": "buildHostedVerificationUrl"
+    },
+    "7": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/hosted.ts",
+      "qualifiedName": "request"
+    },
+    "8": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "WEB2_OAUTH_PROVIDERS"
+    },
+    "9": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidAllowFlowParams"
+    },
+    "10": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidAllowFlowParams.colorMode"
+    },
+    "11": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidAllowFlowParams.extras"
+    },
+    "12": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidAllowFlowParams.pageId"
+    },
+    "13": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidAllowFlowParams.path"
+    },
+    "14": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidAllowFlowParams.socialProvider"
+    },
+    "15": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidAllowFlowParams.success"
+    },
+    "16": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidAllowFlowParams.userId"
+    },
+    "17": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidHostedVerificationStampType"
+    },
+    "18": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthCallbackState"
+    },
+    "19": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthCallbackState.colorMode"
+    },
+    "20": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthCallbackState.metadata"
+    },
+    "21": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthCallbackState.nonce"
+    },
+    "22": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthCallbackState.pageId"
+    },
+    "23": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthCallbackState.provider"
+    },
+    "24": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthCallbackState.returnTo"
+    },
+    "25": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthCallbackState.userId"
+    },
+    "26": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidOAuthProvider"
+    },
+    "27": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2Client"
+    },
+    "28": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2Client.apiClient"
+    },
+    "29": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2Client.options"
+    },
+    "30": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2Client.oauth"
+    },
+    "31": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "32": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.buildAllowFlowUrl"
+    },
+    "33": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.buildAllowFlowUrl"
+    },
+    "34": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "params"
+    },
+    "35": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.buildAuthorizationUrl"
+    },
+    "36": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.buildAuthorizationUrl"
+    },
+    "37": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "request"
+    },
+    "38": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.createCallbackState"
+    },
+    "39": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.createCallbackState"
+    },
+    "40": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "state"
+    },
+    "41": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.parseAllowFlowUrl"
+    },
+    "42": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.parseAllowFlowUrl"
+    },
+    "43": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "input"
+    },
+    "44": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.parseCallbackState"
+    },
+    "45": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.parseCallbackState"
+    },
+    "46": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "encodedState"
+    },
+    "47": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.providers"
+    },
+    "48": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2Client.email"
+    },
+    "49": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "50": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.startOtp"
+    },
+    "51": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.startOtp"
+    },
+    "52": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "request"
+    },
+    "53": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.verifyOtp"
+    },
+    "54": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.verifyOtp"
+    },
+    "55": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "request"
+    },
+    "56": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2Client.phone"
+    },
+    "57": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "58": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.startOtp"
+    },
+    "59": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.startOtp"
+    },
+    "60": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "request"
+    },
+    "61": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.verifyOtp"
+    },
+    "62": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.verifyOtp"
+    },
+    "63": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "request"
+    },
+    "64": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2Client.sync"
+    },
+    "65": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "66": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.createProviderStampData"
+    },
+    "67": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.createProviderStampData"
+    },
+    "68": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "stampType"
+    },
+    "69": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "verifiedData"
+    },
+    "70": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "overrides"
+    },
+    "71": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.verifiedStamp"
+    },
+    "72": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type.verifiedStamp"
+    },
+    "73": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "request"
+    },
+    "74": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2ClientOptions"
+    },
+    "75": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2ClientOptions.allowPath"
+    },
+    "76": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2ClientOptions.passportOrigin"
+    },
+    "77": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "CubidWeb2StampType"
+    },
+    "78": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpStartRequest"
+    },
+    "79": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpStartRequest.email"
+    },
+    "80": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpStartRequest.onStarted"
+    },
+    "81": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "82": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "83": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "result"
+    },
+    "84": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpVerifyRequest"
+    },
+    "85": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpVerifyRequest.email"
+    },
+    "86": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpVerifyRequest.onPersisted"
+    },
+    "87": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "88": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "89": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "result"
+    },
+    "90": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpVerifyRequest.onVerified"
+    },
+    "91": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "92": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "93": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "result"
+    },
+    "94": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpVerifyRequest.otp"
+    },
+    "95": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpVerifyRequest.persistStamp"
+    },
+    "96": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpVerifyResult"
+    },
+    "97": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "EmailOtpVerifyResult.persistedStamp"
+    },
+    "98": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.dappId"
+    },
+    "99": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.email"
+    },
+    "100": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.isVerified"
+    },
+    "101": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.raw"
+    },
+    "102": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "HostedVerificationUrlRequest"
+    },
+    "103": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "HostedVerificationUrlRequest.dappId"
+    },
+    "104": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "HostedVerificationUrlRequest.pageId"
+    },
+    "105": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "HostedVerificationUrlRequest.passportOrigin"
+    },
+    "106": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "HostedVerificationUrlRequest.stampToRender"
+    },
+    "107": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "HostedVerificationUrlRequest.userId"
+    },
+    "108": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "OAuthAuthorizationUrlRequest"
+    },
+    "109": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "OAuthAuthorizationUrlRequest.authorizationUrl"
+    },
+    "110": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "OAuthAuthorizationUrlRequest.clientId"
+    },
+    "111": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "OAuthAuthorizationUrlRequest.extraParams"
+    },
+    "112": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "OAuthAuthorizationUrlRequest.redirectUri"
+    },
+    "113": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "OAuthAuthorizationUrlRequest.responseType"
+    },
+    "114": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "OAuthAuthorizationUrlRequest.scope"
+    },
+    "115": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "OAuthAuthorizationUrlRequest.state"
+    },
+    "116": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ParsedCubidAllowFlowParams"
+    },
+    "117": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ParsedCubidAllowFlowParams.colorMode"
+    },
+    "118": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ParsedCubidAllowFlowParams.extras"
+    },
+    "119": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ParsedCubidAllowFlowParams.pageId"
+    },
+    "120": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ParsedCubidAllowFlowParams.path"
+    },
+    "121": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ParsedCubidAllowFlowParams.socialProvider"
+    },
+    "122": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ParsedCubidAllowFlowParams.success"
+    },
+    "123": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ParsedCubidAllowFlowParams.userId"
+    },
+    "124": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpStartRequest"
+    },
+    "125": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpStartRequest.onStarted"
+    },
+    "126": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "127": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "128": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "result"
+    },
+    "129": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpStartRequest.phone"
+    },
+    "130": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpVerifyRequest"
+    },
+    "131": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpVerifyRequest.onPersisted"
+    },
+    "132": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "133": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "134": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "result"
+    },
+    "135": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpVerifyRequest.onVerified"
+    },
+    "136": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "137": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "__type"
+    },
+    "138": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "result"
+    },
+    "139": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpVerifyRequest.otp"
+    },
+    "140": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpVerifyRequest.persistStamp"
+    },
+    "141": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpVerifyRequest.phone"
+    },
+    "142": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpVerifyResult"
+    },
+    "143": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "PhoneOtpVerifyResult.persistedStamp"
+    },
+    "144": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.isVerified"
+    },
+    "145": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.raw"
+    },
+    "146": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.status"
+    },
+    "147": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput"
+    },
+    "148": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.email"
+    },
+    "149": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.id"
+    },
+    "150": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.identity"
+    },
+    "151": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.login"
+    },
+    "152": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.name"
+    },
+    "153": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.phone"
+    },
+    "154": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.sub"
+    },
+    "155": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.uniquevalue"
+    },
+    "156": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.userId"
+    },
+    "157": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.userName"
+    },
+    "158": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.username"
+    },
+    "159": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ProviderIdentityInput.__index"
+    },
+    "161": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ResolvedCubidWeb2ClientOptions"
+    },
+    "162": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ResolvedCubidWeb2ClientOptions.allowPath"
+    },
+    "163": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ResolvedCubidWeb2ClientOptions.passportOrigin"
+    },
+    "164": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "StampPersistenceRequest"
+    },
+    "165": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "StampPersistenceRequest.pageId"
+    },
+    "166": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "StampPersistenceRequest.stampData"
+    },
+    "167": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "StampPersistenceRequest.userId"
+    },
+    "168": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "SyncVerifiedStampRequest"
+    },
+    "169": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "SyncVerifiedStampRequest.stampType"
+    },
+    "170": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "SyncVerifiedStampRequest.verifiedData"
+    },
+    "171": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "StampPersistenceRequest.pageId"
+    },
+    "172": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "StampPersistenceRequest.stampData"
+    },
+    "173": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "StampPersistenceRequest.userId"
+    },
+    "174": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "SyncVerifiedStampResult"
+    },
+    "175": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "SyncVerifiedStampResult.stampData"
+    },
+    "176": {
+      "packageName": "@cubid/browser",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "SyncVerifiedStampResult.stampType"
+    },
+    "177": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.raw"
+    },
+    "178": {
+      "packageName": "@cubid/core",
+      "packagePath": "src/index.ts",
+      "qualifiedName": "__type.success"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "packages/browser/src/index.ts",
+      "2": "packages/browser/README.md",
+      "3": "packages/browser"
+    },
+    "reflections": {
+      "1": 0,
+      "2": 0,
+      "3": 0
+    }
+  }
+}

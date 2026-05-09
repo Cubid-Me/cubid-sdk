@@ -19,6 +19,18 @@
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
     "directory": "packages/browser"
   },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/browser",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "identity",
+    "browser",
+    "verification",
+    "otp",
+    "sdk"
+  ],
   "sideEffects": false,
   "dependencies": {
     "@cubid/core": "workspace:*"

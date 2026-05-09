@@ -8,6 +8,11 @@ ship Cubid dapp API keys to browser bundles.
 This guide belongs to the public SDK repo, `Cubid-Me/cubid-sdk`. Do not treat
 `cubid-passport` as the package publication source.
 
+For machine-readable package reference material, use `docs/reference/README.md`
+and the JSON artifacts under `docs/reference/api/`. `@cubid/core` is the only
+package in this repo that is intentionally published to both npm and JSR; the
+higher-level browser, React, and chain packages remain npm-only by policy.
+
 ## Server-Side Next.js Usage
 
 Use `@cubid/core` from route handlers, server actions, or backend-only modules.

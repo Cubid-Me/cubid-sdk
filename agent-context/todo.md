@@ -650,12 +650,12 @@ leaving coverage governance implicit.
 
 ### S10. Publish the API and SDK surfaces to developer-ingestion platforms
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-09T12:00:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
 
 Expand the public distribution strategy beyond "packages exist on npm" so the
 Cubid API and SDKs are easier for developers and tooling to ingest, discover,
@@ -663,12 +663,12 @@ and work with.
 
 ### S10.1 Decide which packages should publish to JSR or remain npm-only
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s14-core-jsr-live-publish-success, session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-09T12:00:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s14-core-jsr-live-publish-success, session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
 
 `@cubid/core` is already live on JSR, but the broader package family still
 needs an explicit distribution policy. Decide which packages belong on JSR,
@@ -676,12 +676,12 @@ which should remain npm-only, and why.
 
 ### S10.2 Publish machine-friendly API reference material
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-09T12:10:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
 
 Add a developer-ingestion surface for the public API and SDK contracts, such as
 generated API reference docs or another machine-friendly contract artifact that
@@ -689,14 +689,29 @@ stays aligned with the published package surfaces.
 
 ### S10.3 Publish developer-facing reference and integration entrypoints
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-09T12:15:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
 
 Make the published SDK family easier to adopt by tightening the external
 entrypoints developers actually use: package READMEs, registry metadata,
 integration guides, and any hosted or registry-linked reference surfaces that
 improve discovery and onboarding.
+
+### S11. Add a ClearPass Verify helper surface without leaking provider internals
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-09-clearpass-verify-stamp.md`, session: s40-s10-developer-ingestion-publishing
+
+Add a browser or React helper surface for the new `clearpass_verify` stamp that
+launches the Cubid-hosted ClearPass Verify flow, keeps ClearPass branded as a
+third-party provider, refreshes disclosed stamps after return, and continues to
+exclude raw ClearPass document, face, OCR, or biometric payloads from the SDK
+surface.

@@ -19,5 +19,5 @@ export * from "@cubid/browser"
 If you are starting fresh, install and import `@cubid/browser` instead.
 
 - Primary package: `@cubid/browser`
-- Root package matrix: `README.md`
-- Migration notes: `docs/engineering/package-migration-plan.md`
+- Root package matrix: `../../README.md`
+- Migration notes: `../../docs/engineering/package-migration-plan.md`
