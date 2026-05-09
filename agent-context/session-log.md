@@ -1,5 +1,23 @@
 # Session Log
 
+## session: s39-s02-compatibility-retirement
+
+- Timestamp: 2026-05-09T11:20:00Z
+- Summary: Closed out `S02` by retiring `@cubid/web2` and `@cubid/web2-react` as frozen compatibility shims and removing them from the normal release path.
+- Actions:
+  - Updated `@cubid/web2` and `@cubid/web2-react` metadata and READMEs so they now present themselves as frozen deprecated wrappers instead of temporary first-class migration packages.
+  - Updated the root README, agent guidance, target-state docs, and migration plan so `@cubid/browser` and `@cubid/react` are the only supported long-term package names.
+  - Removed `@cubid/web2` and `@cubid/web2-react` from the normal `Publish Packages` workflow options while keeping the packages in the workspace as installable re-export shims.
+  - Recorded the exact post-merge npm deprecation commands and messages for the retired package names in the publishing runbook instead of unpublishing them.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
 ## session: s38-testing-baseline-and-acceptance-harness
 
 - Timestamp: 2026-05-07T14:05:00Z

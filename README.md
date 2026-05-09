@@ -6,22 +6,25 @@ Private backend concerns stay in `cubid-passport`: hosted login, Passport UI,
 Admin, OIDC issuer runtime, signing keys, provider secrets, passkey
 verification, migrations, and service-role access.
 
-Workspace packages:
+Supported package surfaces:
 
 - `@cubid/core`: runtime-agnostic Cubid foundation client
 - `@cubid/browser`: headless browser helpers for OTP, hosted verification, allow-flow, and OAuth stamp sync
 - `@cubid/react`: React provider and focused browser-flow components built on `@cubid/browser`
 - `@cubid/evm`: first chain-specific wallet helper package built on top of `@cubid/core`
 - `@cubid/wagmi`: wagmi-based React integration helpers built on top of `@cubid/evm`
-- `@cubid/web2`: compatibility wrapper around `@cubid/browser`
-- `@cubid/web2-react`: compatibility wrapper around `@cubid/react`
 - `@cubid/web3`: interim wallet-oriented helper package pending further chain-package splits
+
+Retired compatibility package names:
+
+- `@cubid/web2`: frozen compatibility wrapper around `@cubid/browser`
+- `@cubid/web2-react`: frozen compatibility wrapper around `@cubid/react`
 
 Target package direction:
 
 - `@cubid/core`: stable runtime-agnostic API foundation
-- `@cubid/browser`: the headless browser integration layer, with `@cubid/web2` retained temporarily as a compatibility package
-- `@cubid/react`: the React layer, with `@cubid/web2-react` retained temporarily as a compatibility package
+- `@cubid/browser`: the supported headless browser integration layer
+- `@cubid/react`: the supported React layer
 - chain-specific packages such as `@cubid/evm`, `@cubid/wagmi`, `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`, and `@cubid/near` as the long-term replacement for the interim `@cubid/web3`
 - dedicated auth packages such as `@cubid/auth` and `@cubid/auth-react` when the hosted OIDC surface is ready for public SDK support
 
@@ -79,6 +82,6 @@ import { createCubidApiClient } from "@cubid/core"
 `@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi` remain
 higher-level helpers built on top of `@cubid/core`; they are not required for
 Supabase Edge usage.
-`@cubid/web2` and `@cubid/web2-react` remain available as compatibility package
-names during the rename window, and `@cubid/web3` remains the interim umbrella
-package while the chain-specific split continues.
+`@cubid/web2` and `@cubid/web2-react` remain installable only as frozen
+compatibility shims for older imports, and `@cubid/web3` remains the interim
+umbrella package while the chain-specific split continues.

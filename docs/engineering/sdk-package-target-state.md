@@ -171,8 +171,8 @@ npm-first foundation, then layers in package-ready integration surfaces:
   stamp sync.
 - `@cubid/react` now exists as the primary React surface for OTP forms, hosted
   verification widgets, provider connect buttons, and optional React context.
-- `@cubid/web2` and `@cubid/web2-react` now remain as compatibility wrappers
-  around those renamed packages during the migration window.
+- `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
+  compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific

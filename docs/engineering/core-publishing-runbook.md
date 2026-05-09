@@ -148,6 +148,24 @@ not as the steady-state example to copy.
 The workflow fails intentionally if a publish is dispatched from any branch
 other than `main`.
 
+## Retired Compatibility Packages
+
+`@cubid/web2` and `@cubid/web2-react` are now frozen deprecated compatibility
+wrappers, not active package surfaces. Keep them installable for older imports,
+but do not treat them as normal publish targets in `.github/workflows/publish.yml`.
+
+If the old names still need an operator-side retirement signal on npm, deprecate
+the entire packages instead of unpublishing them:
+
+```sh
+npm deprecate @cubid/web2 "Deprecated: use @cubid/browser instead. @cubid/web2 is a frozen compatibility wrapper and will not receive new releases."
+npm deprecate @cubid/web2-react "Deprecated: use @cubid/react instead. @cubid/web2-react is a frozen compatibility wrapper and will not receive new releases."
+```
+
+Because those actions require npm owner auth and may require browser or passkey
+approval, treat them as a post-merge operator step rather than as part of the
+trusted-publishing workflow.
+
 ## Verification Commands
 
 Run these before a release PR:

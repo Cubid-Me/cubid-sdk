@@ -14,8 +14,9 @@ The first rename and split slices now exist in the workspace:
 - `@cubid/wagmi` now exists as the wagmi-specific React integration layer on top of `@cubid/evm`
 - `@cubid/web3` still remains in place while later chain splits continue
 
-The remaining work is publication, deprecation messaging, API cleanup where
-justified, and additional chain-package extraction.
+The browser/React rename wave is now complete. The remaining work is frozen
+compatibility-package retirement, additional chain-package extraction, and
+later package-family expansion such as auth.
 
 ## Target Package Map
 
@@ -64,9 +65,9 @@ That is the right responsibility set for a headless browser package.
    internal import paths.
 3. Publish `@cubid/browser` first.
 4. Convert `@cubid/web2` into a compatibility package that re-exports
-   `@cubid/browser` for at least one release window.
-5. Deprecate `@cubid/web2` in docs and package metadata after consumers have a
-   clear upgrade path.
+   `@cubid/browser`.
+5. Freeze `@cubid/web2` as a deprecated compatibility wrapper once
+   `@cubid/browser` is live and documented.
 
 ### Compatibility rules
 
@@ -103,8 +104,8 @@ headless browser package rather than on `@cubid/web2`.
 2. Change package imports from `@cubid/web2` to `@cubid/browser`.
 3. Preserve existing component names during the first rename release.
 4. Publish `@cubid/react`.
-5. Convert `@cubid/web2-react` into a compatibility re-export package for at
-   least one release window.
+5. Freeze `@cubid/web2-react` as a deprecated compatibility wrapper once
+   `@cubid/react` is live and documented.
 
 ### Compatibility rules
 
@@ -194,7 +195,7 @@ Avoid publishing empty placeholders.
 1. Finish `@cubid/core` JSR setup and publication.
 2. Publish `@cubid/browser`.
 3. Publish `@cubid/react`.
-4. Convert `@cubid/web2` and `@cubid/web2-react` into compatibility packages.
+4. Freeze `@cubid/web2` and `@cubid/web2-react` as deprecated compatibility packages.
 5. Publish `@cubid/evm`.
 6. Publish `@cubid/wagmi`.
 7. Decide whether `@cubid/web3` remains as a temporary compatibility wrapper or
@@ -208,4 +209,4 @@ The migration can be considered complete when:
   long-term package names
 - `@cubid/browser` and `@cubid/react` are published and documented
 - the first chain-specific packages, including `@cubid/evm` and `@cubid/wagmi`, are published with tests
-- compatibility packages clearly signal deprecation status
+- compatibility packages are clearly frozen and no longer treated as active release targets

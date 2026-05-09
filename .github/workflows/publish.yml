@@ -14,8 +14,6 @@ on:
           - "@cubid/react"
           - "@cubid/evm"
           - "@cubid/wagmi"
-          - "@cubid/web2"
-          - "@cubid/web2-react"
           - "@cubid/web3"
       publish_npm:
         description: "Publish the selected package to npm using Trusted Publishing"
@@ -58,14 +56,6 @@ jobs:
               ;;
             "@cubid/wagmi")
               echo "package_dir=packages/wagmi" >> "$GITHUB_OUTPUT"
-              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
-              ;;
-            "@cubid/web2")
-              echo "package_dir=packages/web2" >> "$GITHUB_OUTPUT"
-              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
-              ;;
-            "@cubid/web2-react")
-              echo "package_dir=packages/web2-react" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/web3")

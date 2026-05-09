@@ -91,22 +91,22 @@ package through the existing `.github/workflows/publish.yml` OIDC flow.
 
 ### S02. Rename the browser and React package layers
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-01T08:40:00Z
-- Timestamp completed: TBD
-- Feature branch: `dev`
+- Timestamp completed: 2026-05-09T11:20:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
 - Head: `f46c24dc` at planning start
-- Session-log reference(s): session: s08-package-migration-planning, session: s12-browser-react-package-slices
+- Session-log reference(s): session: s08-package-migration-planning, session: s12-browser-react-package-slices, session: s39-s02-compatibility-retirement
 
-Continue the migration from the interim `web2` package family toward clearer
-public names:
+The rename from the interim `web2` package family toward clearer public names is
+now complete:
 
 - `@cubid/web2` -> `@cubid/browser`
 - `@cubid/web2-react` -> `@cubid/react`
 
-Preserve the useful hosted-verification, provider-connect, OTP, callback, and
-profile-completion primitives while keeping browser-specific logic out of core
-and React-specific logic out of the headless browser layer.
+The old package names now remain only as frozen deprecated compatibility shims.
+They stay installable to preserve existing imports, but the supported package
+surfaces and normal release targets are now `@cubid/browser` and `@cubid/react`.
 
 ### S02.4 Add explicit compatibility and deprecation messaging to the interim package names
 
