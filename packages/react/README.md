@@ -30,7 +30,7 @@ npm install @cubid/react @cubid/browser
 ## Basic Usage
 
 ```tsx
-import { CubidHostedVerificationWidget, EmailOtpForm } from "@cubid/react"
+import { ClearPassVerifyButton, CubidHostedVerificationWidget, EmailOtpForm } from "@cubid/react"
 ```
 
 This package keeps the no-root-provider story intact for hosted verification

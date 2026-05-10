@@ -703,12 +703,12 @@ improve discovery and onboarding.
 
 ### S11. Add a ClearPass Verify helper surface without leaking provider internals
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-09-clearpass-verify-stamp.md`, session: s40-s10-developer-ingestion-publishing
+- Status: Completed
+- Timestamp started: 2026-05-10T00:45:00Z
+- Timestamp completed: 2026-05-10T01:20:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `a6b8ea0d` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-09-clearpass-verify-stamp.md`, session: s40-s10-developer-ingestion-publishing, session: s41-ci-fix-and-clearpass-verify-helper
 
 Add a browser or React helper surface for the new `clearpass_verify` stamp that
 launches the Cubid-hosted ClearPass Verify flow, keeps ClearPass branded as a

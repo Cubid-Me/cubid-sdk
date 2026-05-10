@@ -1,5 +1,26 @@
 # Session Log
 
+## session: s41-ci-fix-and-clearpass-verify-helper
+
+- Timestamp: 2026-05-10T01:20:00Z
+- Summary: Fixed the PR #7 clean-run CI failure and turned the ClearPass Verify inbox note into a real browser and React helper surface.
+- Actions:
+  - Diagnosed the failing PR CI run and confirmed `pnpm test:unit` was depending on leftover built package entrypoints for `@cubid/browser` and `@cubid/evm` that do not exist on a fresh runner.
+  - Updated `pnpm test:unit` and the testing strategy so the unit test command now prepares the minimal built entrypoints it needs before running Vitest, keeping the CI order intact while removing the clean-run dependency on local artifacts.
+  - Added `buildClearPassVerifyUrl(...)` and extended the hosted verification helper surface so `clearpass_verify` now launches the Cubid-hosted ClearPass URL instead of exposing any direct ClearPass integration path.
+  - Added `ClearPassVerifyButton` to `@cubid/react`, kept the copy branded as a third-party ClearPass flow, and reused the existing post-popup stamp refresh behavior.
+  - Expanded browser and React tests plus package READMEs, and closed `S11` in the roadmap.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
 ## session: s40-s10-developer-ingestion-publishing
 
 - Timestamp: 2026-05-09T13:30:00Z

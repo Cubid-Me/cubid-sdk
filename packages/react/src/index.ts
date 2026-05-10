@@ -1,10 +1,12 @@
 export { CubidHostedVerificationWidget, CubidWidget, Provider } from "./CubidWidget";
+export { ClearPassVerifyButton } from "./ClearPassVerifyButton";
 export { EmailOtpForm } from "./EmailOtpForm";
 export { PhoneOtpForm } from "./PhoneOtpForm";
 export { ProviderConnectButton } from "./ProviderConnectButton";
 export { Web2ConnectPanel } from "./Web2ConnectPanel";
 export { CubidWeb2Provider, useCubidWeb2Client, useOptionalCubidWeb2Client } from "./context";
 export type { CubidHostedVerificationWidgetProps, CubidWidgetProps, ProviderProps } from "./CubidWidget";
+export type { ClearPassVerifyButtonProps } from "./ClearPassVerifyButton";
 export type { EmailOtpFormProps } from "./EmailOtpForm";
 export type { PhoneOtpFormProps } from "./PhoneOtpForm";
 export type { ProviderConnectButtonProps } from "./ProviderConnectButton";

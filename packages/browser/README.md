@@ -1,7 +1,7 @@
 # `@cubid/browser`
 
-Headless browser helpers for Cubid hosted verification, OTP, Allow Page, and
-provider handoff flows.
+Headless browser helpers for Cubid hosted verification, OTP, Allow Page,
+ClearPass Verify, and provider handoff flows.
 
 ## When To Choose This Package
 

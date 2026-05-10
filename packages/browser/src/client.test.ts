@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { buildHostedVerificationUrl } from "./hosted";
+import { buildClearPassVerifyUrl, buildHostedVerificationUrl } from "./hosted";
 import { createCubidWeb2Client } from "./client";
 
 function createApiClientStub() {
@@ -191,5 +191,20 @@ describe("@cubid/browser", () => {
         userId: "user-42"
       })
     ).toBe("https://passport.cubid.me/allow?uid=user-42&page_id=20&stamp_type=phone");
+
+    expect(
+      buildHostedVerificationUrl({
+        pageId: "44",
+        stampToRender: "clearpass_verify",
+        userId: "user-42"
+      })
+    ).toBe("https://passport.cubid.me/verify/clearpass?uid=user-42&page_id=44");
+
+    expect(
+      buildClearPassVerifyUrl({
+        pageId: "44",
+        userId: "user-42"
+      })
+    ).toBe("https://passport.cubid.me/verify/clearpass?uid=user-42&page_id=44");
   });
 });

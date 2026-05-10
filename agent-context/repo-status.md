@@ -16,4 +16,4 @@
 | Supabase direct-access rule | `Not applicable` This repo ships SDK packages and examples; it does not own deployed Supabase runtime code. |
 | Environment and script conventions | `Pass` Root scripts cover install/build/test/lint/typecheck/core Deno checks, and `.gitignore` excludes local env files and build outputs. |
 | Developer-ingestion publishing | `Pass` Registry policy, machine-readable API reference artifacts, package metadata, and public entrypoint docs now align with the primary published SDK package surfaces. |
-| Active roadmap closeout | `Partial` Remaining non-closed roadmap items are `S03`, `S04`, and `S11` in `agent-context/todo.md`. |
+| Active roadmap closeout | `Partial` Remaining non-closed roadmap items are `S03` and `S04` in `agent-context/todo.md`. |
