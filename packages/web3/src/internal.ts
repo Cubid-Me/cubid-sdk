@@ -29,7 +29,7 @@ export function getCubidWalletCapabilities(
 
 export function hasCubidWalletCapability(
   connection: CubidWalletConnection,
-  capabilityName: keyof CubidWalletCapabilities | string
+  capabilityName: keyof CubidWalletCapabilities
 ): boolean {
   return Boolean(getCubidWalletCapabilities(connection)[capabilityName]?.available);
 }

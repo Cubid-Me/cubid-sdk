@@ -1,5 +1,24 @@
 # Session Log
 
+## session: s42-pr7-review-followup
+
+- Timestamp: 2026-05-10T21:15:00Z
+- Summary: Addressed the open review threads on PR #7 by restoring real API-reference drift protection in CI and tightening a few public helper type surfaces.
+- Actions:
+  - Removed the pre-check `docs:api:build` step from CI so `docs:api:check` once again validates the committed reference artifacts instead of overwriting them first.
+  - Hardened the API reference drift checker so it now also fails on unexpected stale files under `docs/reference/api/`, not just changed expected files.
+  - Simplified the capability helper signatures in `@cubid/evm` and `@cubid/web3` by dropping redundant `| string` unions from index-signature-backed capability names.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
 ## session: s41-ci-fix-and-clearpass-verify-helper
 
 - Timestamp: 2026-05-10T01:20:00Z

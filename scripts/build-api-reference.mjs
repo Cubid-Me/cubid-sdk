@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync } from "node:fs"
+import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { dirname, join, relative, resolve } from "node:path"
 import process from "node:process"
@@ -177,6 +177,7 @@ function main() {
 
     if (checkMode) {
       const driftedFiles = []
+      const expectedFiles = new Set(generatedArtifacts.keys())
 
       for (const [fileName, expectedContent] of generatedArtifacts.entries()) {
         const targetPath = join(referenceDir, fileName)
@@ -184,6 +185,14 @@ function main() {
 
         if (actualContent !== expectedContent) {
           driftedFiles.push(relative(repoRoot, targetPath))
+        }
+      }
+
+      if (existsSync(referenceDir)) {
+        for (const fileName of readdirSync(referenceDir)) {
+          if (!expectedFiles.has(fileName)) {
+            driftedFiles.push(relative(repoRoot, join(referenceDir, fileName)))
+          }
         }
       }
 
