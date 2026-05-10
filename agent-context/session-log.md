@@ -1,5 +1,25 @@
 # Session Log
 
+## session: s43-pr7-api-reference-determinism-fix
+
+- Timestamp: 2026-05-10T22:10:00Z
+- Summary: Fixed the remaining PR #7 CI failure by making the machine-readable API reference artifacts stable across clean environments.
+- Actions:
+  - Reproduced the failing `pnpm docs:api:check` step from PR #7 in a clean checkout and confirmed the drift was isolated to `docs/reference/api/core.json`.
+  - Traced the drift to environment-specific `typedoc` graph bookkeeping such as numeric reflection IDs and derived lookup maps rather than a real SDK API surface change.
+  - Updated `scripts/build-api-reference.mjs` so the committed JSON artifacts now strip unstable internal `typedoc` fields while preserving the useful package API structure for tooling ingestion.
+  - Regenerated the checked-in API reference artifacts after the normalization fix so CI and clean clones compare against the new deterministic baseline.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
 ## session: s42-pr7-review-followup
 
 - Timestamp: 2026-05-10T21:15:00Z

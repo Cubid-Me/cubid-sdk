@@ -1,31 +1,26 @@
 {
   "schemaVersion": "2.0",
-  "id": 0,
   "name": "@cubid/web3",
   "variant": "project",
   "kind": 1,
   "flags": {},
   "children": [
     {
-      "id": 12,
       "name": "ConnectWalletRequest",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 14,
           "name": "adapter",
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 35,
             "typeArguments": [
               {
                 "type": "reference",
-                "target": 13,
                 "name": "TConnection",
                 "package": "@cubid/web3",
                 "qualifiedName": "ConnectWalletRequest.TConnection",
@@ -37,30 +32,19 @@
           }
         }
       ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            14
-          ]
-        }
-      ],
       "typeParameters": [
         {
-          "id": 13,
           "name": "TConnection",
           "variant": "typeParam",
           "kind": 131072,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 15,
             "name": "CubidWalletConnection",
             "package": "@cubid/web3"
           },
           "default": {
             "type": "reference",
-            "target": 15,
             "name": "CubidWalletConnection",
             "package": "@cubid/web3"
           }
@@ -68,14 +52,12 @@
       ]
     },
     {
-      "id": 22,
       "name": "CubidWalletCapabilities",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 23,
           "name": "gasSponsorship",
           "variant": "declaration",
           "kind": 1024,
@@ -84,13 +66,11 @@
           },
           "type": {
             "type": "reference",
-            "target": 29,
             "name": "CubidWalletCapabilityDescriptor",
             "package": "@cubid/web3"
           }
         },
         {
-          "id": 24,
           "name": "paymaster",
           "variant": "declaration",
           "kind": 1024,
@@ -99,13 +79,11 @@
           },
           "type": {
             "type": "reference",
-            "target": 29,
             "name": "CubidWalletCapabilityDescriptor",
             "package": "@cubid/web3"
           }
         },
         {
-          "id": 25,
           "name": "sessionKeys",
           "variant": "declaration",
           "kind": 1024,
@@ -114,13 +92,11 @@
           },
           "type": {
             "type": "reference",
-            "target": 29,
             "name": "CubidWalletCapabilityDescriptor",
             "package": "@cubid/web3"
           }
         },
         {
-          "id": 26,
           "name": "smartAccount",
           "variant": "declaration",
           "kind": 1024,
@@ -129,33 +105,19 @@
           },
           "type": {
             "type": "reference",
-            "target": 29,
             "name": "CubidWalletCapabilityDescriptor",
             "package": "@cubid/web3"
           }
         }
       ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            23,
-            24,
-            25,
-            26
-          ]
-        }
-      ],
       "indexSignatures": [
         {
-          "id": 27,
           "name": "__index",
           "variant": "signature",
           "kind": 8192,
           "flags": {},
           "parameters": [
             {
-              "id": 28,
               "name": "capabilityName",
               "variant": "param",
               "kind": 32768,
@@ -171,7 +133,6 @@
             "types": [
               {
                 "type": "reference",
-                "target": 29,
                 "name": "CubidWalletCapabilityDescriptor",
                 "package": "@cubid/web3"
               },
@@ -185,14 +146,12 @@
       ]
     },
     {
-      "id": 29,
       "name": "CubidWalletCapabilityDescriptor",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 30,
           "name": "available",
           "variant": "declaration",
           "kind": 1024,
@@ -203,7 +162,6 @@
           }
         },
         {
-          "id": 31,
           "name": "metadata",
           "variant": "declaration",
           "kind": 1024,
@@ -231,26 +189,15 @@
             "package": "typescript"
           }
         }
-      ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            30,
-            31
-          ]
-        }
       ]
     },
     {
-      "id": 15,
       "name": "CubidWalletConnection",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 16,
           "name": "address",
           "variant": "declaration",
           "kind": 1024,
@@ -261,7 +208,6 @@
           }
         },
         {
-          "id": 17,
           "name": "capabilities",
           "variant": "declaration",
           "kind": 1024,
@@ -270,13 +216,11 @@
           },
           "type": {
             "type": "reference",
-            "target": 22,
             "name": "CubidWalletCapabilities",
             "package": "@cubid/web3"
           }
         },
         {
-          "id": 18,
           "name": "chainId",
           "variant": "declaration",
           "kind": 1024,
@@ -298,7 +242,6 @@
           }
         },
         {
-          "id": 19,
           "name": "chainType",
           "variant": "declaration",
           "kind": 1024,
@@ -311,27 +254,14 @@
           }
         }
       ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            16,
-            17,
-            18,
-            19
-          ]
-        }
-      ],
       "indexSignatures": [
         {
-          "id": 20,
           "name": "__index",
           "variant": "signature",
           "kind": 8192,
           "flags": {},
           "parameters": [
             {
-              "id": 21,
               "name": "key",
               "variant": "param",
               "kind": 32768,
@@ -350,14 +280,12 @@
       ]
     },
     {
-      "id": 32,
       "name": "CubidWalletVerification",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 33,
           "name": "isVerified",
           "variant": "declaration",
           "kind": 1024,
@@ -368,7 +296,6 @@
           }
         },
         {
-          "id": 34,
           "name": "metadata",
           "variant": "declaration",
           "kind": 1024,
@@ -396,26 +323,15 @@
             "package": "typescript"
           }
         }
-      ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            33,
-            34
-          ]
-        }
       ]
     },
     {
-      "id": 35,
       "name": "CubidWeb3Adapter",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 42,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -426,14 +342,12 @@
           }
         },
         {
-          "id": 37,
           "name": "connect",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "id": 38,
               "name": "connect",
               "variant": "signature",
               "kind": 4096,
@@ -448,7 +362,6 @@
                 "typeArguments": [
                   {
                     "type": "reference",
-                    "target": 36,
                     "name": "TConnection",
                     "package": "@cubid/web3",
                     "qualifiedName": "CubidWeb3Adapter.TConnection",
@@ -462,7 +375,6 @@
           ]
         },
         {
-          "id": 39,
           "name": "disconnect",
           "variant": "declaration",
           "kind": 2048,
@@ -471,21 +383,18 @@
           },
           "signatures": [
             {
-              "id": 40,
               "name": "disconnect",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
               "parameters": [
                 {
-                  "id": 41,
                   "name": "connection",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 36,
                     "name": "TConnection",
                     "package": "@cubid/web3",
                     "qualifiedName": "CubidWeb3Adapter.TConnection",
@@ -522,7 +431,6 @@
           ]
         },
         {
-          "id": 43,
           "name": "toStampData",
           "variant": "declaration",
           "kind": 2048,
@@ -531,21 +439,18 @@
           },
           "signatures": [
             {
-              "id": 44,
               "name": "toStampData",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
               "parameters": [
                 {
-                  "id": 45,
                   "name": "connection",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 36,
                     "name": "TConnection",
                     "package": "@cubid/web3",
                     "qualifiedName": "CubidWeb3Adapter.TConnection",
@@ -553,14 +458,12 @@
                   }
                 },
                 {
-                  "id": 46,
                   "name": "verification",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 32,
                     "name": "CubidWalletVerification",
                     "package": "@cubid/web3"
                   }
@@ -590,7 +493,6 @@
           ]
         },
         {
-          "id": 47,
           "name": "verify",
           "variant": "declaration",
           "kind": 2048,
@@ -599,21 +501,18 @@
           },
           "signatures": [
             {
-              "id": 48,
               "name": "verify",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
               "parameters": [
                 {
-                  "id": 49,
                   "name": "connection",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 36,
                     "name": "TConnection",
                     "package": "@cubid/web3",
                     "qualifiedName": "CubidWeb3Adapter.TConnection",
@@ -626,7 +525,6 @@
                 "types": [
                   {
                     "type": "reference",
-                    "target": 32,
                     "name": "CubidWalletVerification",
                     "package": "@cubid/web3"
                   },
@@ -640,7 +538,6 @@
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 32,
                         "name": "CubidWalletVerification",
                         "package": "@cubid/web3"
                       }
@@ -654,39 +551,19 @@
           ]
         }
       ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            42
-          ]
-        },
-        {
-          "title": "Methods",
-          "children": [
-            37,
-            39,
-            43,
-            47
-          ]
-        }
-      ],
       "typeParameters": [
         {
-          "id": 36,
           "name": "TConnection",
           "variant": "typeParam",
           "kind": 131072,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 15,
             "name": "CubidWalletConnection",
             "package": "@cubid/web3"
           },
           "default": {
             "type": "reference",
-            "target": 15,
             "name": "CubidWalletConnection",
             "package": "@cubid/web3"
           }
@@ -694,14 +571,12 @@
       ]
     },
     {
-      "id": 50,
       "name": "CubidWeb3Client",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 51,
           "name": "apiClient",
           "variant": "declaration",
           "kind": 1024,
@@ -720,28 +595,24 @@
           }
         },
         {
-          "id": 52,
           "name": "connectWallet",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "id": 53,
               "name": "connectWallet",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
               "typeParameters": [
                 {
-                  "id": 54,
                   "name": "TConnection",
                   "variant": "typeParam",
                   "kind": 131072,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 15,
                     "name": "CubidWalletConnection",
                     "package": "@cubid/web3"
                   }
@@ -749,18 +620,15 @@
               ],
               "parameters": [
                 {
-                  "id": 55,
                   "name": "request",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 12,
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 54,
                         "name": "TConnection",
                         "package": "@cubid/web3",
                         "refersToTypeParameter": true
@@ -781,7 +649,6 @@
                 "typeArguments": [
                   {
                     "type": "reference",
-                    "target": 54,
                     "name": "TConnection",
                     "package": "@cubid/web3",
                     "refersToTypeParameter": true
@@ -794,28 +661,24 @@
           ]
         },
         {
-          "id": 56,
           "name": "disconnectWallet",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "id": 57,
               "name": "disconnectWallet",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
               "typeParameters": [
                 {
-                  "id": 58,
                   "name": "TConnection",
                   "variant": "typeParam",
                   "kind": 131072,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 15,
                     "name": "CubidWalletConnection",
                     "package": "@cubid/web3"
                   }
@@ -823,18 +686,15 @@
               ],
               "parameters": [
                 {
-                  "id": 59,
                   "name": "adapter",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 35,
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 58,
                         "name": "TConnection",
                         "package": "@cubid/web3",
                         "refersToTypeParameter": true
@@ -845,14 +705,12 @@
                   }
                 },
                 {
-                  "id": 60,
                   "name": "connection",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 58,
                     "name": "TConnection",
                     "package": "@cubid/web3",
                     "refersToTypeParameter": true
@@ -879,28 +737,24 @@
           ]
         },
         {
-          "id": 61,
           "name": "verifyWallet",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "id": 62,
               "name": "verifyWallet",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
               "typeParameters": [
                 {
-                  "id": 63,
                   "name": "TConnection",
                   "variant": "typeParam",
                   "kind": 131072,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 15,
                     "name": "CubidWalletConnection",
                     "package": "@cubid/web3"
                   }
@@ -908,18 +762,15 @@
               ],
               "parameters": [
                 {
-                  "id": 64,
                   "name": "request",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 68,
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 63,
                         "name": "TConnection",
                         "package": "@cubid/web3",
                         "refersToTypeParameter": true
@@ -940,11 +791,9 @@
                 "typeArguments": [
                   {
                     "type": "reference",
-                    "target": 76,
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 63,
                         "name": "TConnection",
                         "package": "@cubid/web3",
                         "refersToTypeParameter": true
@@ -960,33 +809,15 @@
             }
           ]
         }
-      ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            51
-          ]
-        },
-        {
-          "title": "Methods",
-          "children": [
-            52,
-            56,
-            61
-          ]
-        }
       ]
     },
     {
-      "id": 65,
       "name": "CubidWeb3ClientOptions",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 66,
           "name": "defaultStampType",
           "variant": "declaration",
           "kind": 1024,
@@ -995,41 +826,28 @@
           },
           "type": {
             "type": "reference",
-            "target": 67,
             "name": "CubidWeb3StampType",
             "package": "@cubid/web3"
           }
         }
-      ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            66
-          ]
-        }
       ]
     },
     {
-      "id": 68,
       "name": "VerifyWalletRequest",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 70,
           "name": "adapter",
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 35,
             "typeArguments": [
               {
                 "type": "reference",
-                "target": 69,
                 "name": "TConnection",
                 "package": "@cubid/web3",
                 "qualifiedName": "VerifyWalletRequest.TConnection",
@@ -1041,14 +859,12 @@
           }
         },
         {
-          "id": 71,
           "name": "connection",
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 69,
             "name": "TConnection",
             "package": "@cubid/web3",
             "qualifiedName": "VerifyWalletRequest.TConnection",
@@ -1056,7 +872,6 @@
           }
         },
         {
-          "id": 72,
           "name": "pageId",
           "variant": "declaration",
           "kind": 1024,
@@ -1078,7 +893,6 @@
           }
         },
         {
-          "id": 73,
           "name": "persistStamp",
           "variant": "declaration",
           "kind": 1024,
@@ -1091,7 +905,6 @@
           }
         },
         {
-          "id": 74,
           "name": "stampType",
           "variant": "declaration",
           "kind": 1024,
@@ -1100,13 +913,11 @@
           },
           "type": {
             "type": "reference",
-            "target": 67,
             "name": "CubidWeb3StampType",
             "package": "@cubid/web3"
           }
         },
         {
-          "id": 75,
           "name": "userId",
           "variant": "declaration",
           "kind": 1024,
@@ -1119,35 +930,19 @@
           }
         }
       ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            70,
-            71,
-            72,
-            73,
-            74,
-            75
-          ]
-        }
-      ],
       "typeParameters": [
         {
-          "id": 69,
           "name": "TConnection",
           "variant": "typeParam",
           "kind": 131072,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 15,
             "name": "CubidWalletConnection",
             "package": "@cubid/web3"
           },
           "default": {
             "type": "reference",
-            "target": 15,
             "name": "CubidWalletConnection",
             "package": "@cubid/web3"
           }
@@ -1155,34 +950,29 @@
       ]
     },
     {
-      "id": 76,
       "name": "VerifyWalletResult",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 78,
           "name": "capabilities",
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 22,
             "name": "CubidWalletCapabilities",
             "package": "@cubid/web3"
           }
         },
         {
-          "id": 79,
           "name": "connection",
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 77,
             "name": "TConnection",
             "package": "@cubid/web3",
             "qualifiedName": "VerifyWalletResult.TConnection",
@@ -1190,7 +980,6 @@
           }
         },
         {
-          "id": 80,
           "name": "persistedStamp",
           "variant": "declaration",
           "kind": 1024,
@@ -1209,7 +998,6 @@
           }
         },
         {
-          "id": 81,
           "name": "stampData",
           "variant": "declaration",
           "kind": 1024,
@@ -1238,61 +1026,41 @@
           }
         },
         {
-          "id": 82,
           "name": "stampType",
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 67,
             "name": "CubidWeb3StampType",
             "package": "@cubid/web3"
           }
         },
         {
-          "id": 83,
           "name": "verification",
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 32,
             "name": "CubidWalletVerification",
             "package": "@cubid/web3"
           }
         }
       ],
-      "groups": [
-        {
-          "title": "Properties",
-          "children": [
-            78,
-            79,
-            80,
-            81,
-            82,
-            83
-          ]
-        }
-      ],
       "typeParameters": [
         {
-          "id": 77,
           "name": "TConnection",
           "variant": "typeParam",
           "kind": 131072,
           "flags": {},
           "type": {
             "type": "reference",
-            "target": 15,
             "name": "CubidWalletConnection",
             "package": "@cubid/web3"
           },
           "default": {
             "type": "reference",
-            "target": 15,
             "name": "CubidWalletConnection",
             "package": "@cubid/web3"
           }
@@ -1300,7 +1068,6 @@
       ]
     },
     {
-      "id": 67,
       "name": "CubidWeb3StampType",
       "variant": "declaration",
       "kind": 2097152,
@@ -1328,21 +1095,18 @@
       }
     },
     {
-      "id": 1,
       "name": "createCubidWeb3Client",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "id": 2,
           "name": "createCubidWeb3Client",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
           "parameters": [
             {
-              "id": 3,
               "name": "apiClient",
               "variant": "param",
               "kind": 32768,
@@ -1359,14 +1123,12 @@
               }
             },
             {
-              "id": 4,
               "name": "options",
               "variant": "param",
               "kind": 32768,
               "flags": {},
               "type": {
                 "type": "reference",
-                "target": 65,
                 "name": "CubidWeb3ClientOptions",
                 "package": "@cubid/web3"
               },
@@ -1375,7 +1137,6 @@
           ],
           "type": {
             "type": "reference",
-            "target": 50,
             "name": "CubidWeb3Client",
             "package": "@cubid/web3"
           }
@@ -1383,28 +1144,24 @@
       ]
     },
     {
-      "id": 5,
       "name": "getCubidWalletCapabilities",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "id": 6,
           "name": "getCubidWalletCapabilities",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
           "parameters": [
             {
-              "id": 7,
               "name": "connection",
               "variant": "param",
               "kind": 32768,
               "flags": {},
               "type": {
                 "type": "reference",
-                "target": 15,
                 "name": "CubidWalletConnection",
                 "package": "@cubid/web3"
               }
@@ -1412,7 +1169,6 @@
           ],
           "type": {
             "type": "reference",
-            "target": 22,
             "name": "CubidWalletCapabilities",
             "package": "@cubid/web3"
           }
@@ -1420,34 +1176,29 @@
       ]
     },
     {
-      "id": 8,
       "name": "hasCubidWalletCapability",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "id": 9,
           "name": "hasCubidWalletCapability",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
           "parameters": [
             {
-              "id": 10,
               "name": "connection",
               "variant": "param",
               "kind": 32768,
               "flags": {},
               "type": {
                 "type": "reference",
-                "target": 15,
                 "name": "CubidWalletConnection",
                 "package": "@cubid/web3"
               }
             },
             {
-              "id": 11,
               "name": "capabilityName",
               "variant": "param",
               "kind": 32768,
@@ -1457,7 +1208,6 @@
                 "operator": "keyof",
                 "target": {
                   "type": "reference",
-                  "target": 22,
                   "name": "CubidWalletCapabilities",
                   "package": "@cubid/web3"
                 }
@@ -1469,37 +1219,6 @@
             "name": "boolean"
           }
         }
-      ]
-    }
-  ],
-  "groups": [
-    {
-      "title": "Interfaces",
-      "children": [
-        12,
-        22,
-        29,
-        15,
-        32,
-        35,
-        50,
-        65,
-        68,
-        76
-      ]
-    },
-    {
-      "title": "Type Aliases",
-      "children": [
-        67
-      ]
-    },
-    {
-      "title": "Functions",
-      "children": [
-        1,
-        5,
-        8
       ]
     }
   ],
@@ -1589,429 +1308,5 @@
       "kind": "text",
       "text": " to keep those checks explicit while the chain\nsplit continues."
     }
-  ],
-  "symbolIdMap": {
-    "0": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/index.ts",
-      "qualifiedName": ""
-    },
-    "1": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/client.ts",
-      "qualifiedName": "createCubidWeb3Client"
-    },
-    "2": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/client.ts",
-      "qualifiedName": "createCubidWeb3Client"
-    },
-    "3": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/client.ts",
-      "qualifiedName": "apiClient"
-    },
-    "4": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/client.ts",
-      "qualifiedName": "options"
-    },
-    "5": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/internal.ts",
-      "qualifiedName": "getCubidWalletCapabilities"
-    },
-    "6": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/internal.ts",
-      "qualifiedName": "getCubidWalletCapabilities"
-    },
-    "7": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/internal.ts",
-      "qualifiedName": "connection"
-    },
-    "8": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/internal.ts",
-      "qualifiedName": "hasCubidWalletCapability"
-    },
-    "9": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/internal.ts",
-      "qualifiedName": "hasCubidWalletCapability"
-    },
-    "10": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/internal.ts",
-      "qualifiedName": "connection"
-    },
-    "11": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/internal.ts",
-      "qualifiedName": "capabilityName"
-    },
-    "12": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "ConnectWalletRequest"
-    },
-    "13": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "ConnectWalletRequest.TConnection"
-    },
-    "14": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "ConnectWalletRequest.adapter"
-    },
-    "15": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletConnection"
-    },
-    "16": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletConnection.address"
-    },
-    "17": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletConnection.capabilities"
-    },
-    "18": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletConnection.chainId"
-    },
-    "19": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletConnection.chainType"
-    },
-    "20": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletConnection.__index"
-    },
-    "22": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilities"
-    },
-    "23": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilities.gasSponsorship"
-    },
-    "24": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilities.paymaster"
-    },
-    "25": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilities.sessionKeys"
-    },
-    "26": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilities.smartAccount"
-    },
-    "27": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilities.__index"
-    },
-    "29": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilityDescriptor"
-    },
-    "30": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilityDescriptor.available"
-    },
-    "31": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletCapabilityDescriptor.metadata"
-    },
-    "32": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletVerification"
-    },
-    "33": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletVerification.isVerified"
-    },
-    "34": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWalletVerification.metadata"
-    },
-    "35": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter"
-    },
-    "36": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.TConnection"
-    },
-    "37": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.connect"
-    },
-    "38": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.connect"
-    },
-    "39": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.disconnect"
-    },
-    "40": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.disconnect"
-    },
-    "41": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "connection"
-    },
-    "42": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.id"
-    },
-    "43": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.toStampData"
-    },
-    "44": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.toStampData"
-    },
-    "45": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "connection"
-    },
-    "46": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "verification"
-    },
-    "47": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.verify"
-    },
-    "48": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Adapter.verify"
-    },
-    "49": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "connection"
-    },
-    "50": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Client"
-    },
-    "51": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Client.apiClient"
-    },
-    "52": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Client.connectWallet"
-    },
-    "53": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Client.connectWallet"
-    },
-    "54": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "TConnection"
-    },
-    "55": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "request"
-    },
-    "56": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Client.disconnectWallet"
-    },
-    "57": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Client.disconnectWallet"
-    },
-    "58": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "TConnection"
-    },
-    "59": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "adapter"
-    },
-    "60": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "connection"
-    },
-    "61": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Client.verifyWallet"
-    },
-    "62": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3Client.verifyWallet"
-    },
-    "63": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "TConnection"
-    },
-    "64": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "request"
-    },
-    "65": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3ClientOptions"
-    },
-    "66": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3ClientOptions.defaultStampType"
-    },
-    "67": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "CubidWeb3StampType"
-    },
-    "68": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletRequest"
-    },
-    "69": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletRequest.TConnection"
-    },
-    "70": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletRequest.adapter"
-    },
-    "71": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletRequest.connection"
-    },
-    "72": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletRequest.pageId"
-    },
-    "73": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletRequest.persistStamp"
-    },
-    "74": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletRequest.stampType"
-    },
-    "75": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletRequest.userId"
-    },
-    "76": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletResult"
-    },
-    "77": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletResult.TConnection"
-    },
-    "78": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletResult.capabilities"
-    },
-    "79": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletResult.connection"
-    },
-    "80": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletResult.persistedStamp"
-    },
-    "81": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletResult.stampData"
-    },
-    "82": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletResult.stampType"
-    },
-    "83": {
-      "packageName": "@cubid/web3",
-      "packagePath": "src/types.ts",
-      "qualifiedName": "VerifyWalletResult.verification"
-    }
-  },
-  "files": {
-    "entries": {
-      "1": "packages/web3/src/index.ts",
-      "2": "packages/web3/README.md",
-      "3": "packages/web3"
-    },
-    "reflections": {
-      "1": 0,
-      "2": 0,
-      "3": 0
-    }
-  }
+  ]
 }

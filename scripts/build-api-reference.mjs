@@ -76,16 +76,38 @@ function run(command, args, options = {}) {
   return result
 }
 
+function shouldDropNode(value) {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      value.flags &&
+      typeof value.flags === "object" &&
+      value.flags.isExternal &&
+      value.flags.isInherited,
+  )
+}
+
 function normalizeValue(value) {
   if (Array.isArray(value)) {
-    return value.map((item) => normalizeValue(item))
+    return value.filter((item) => !shouldDropNode(item)).map((item) => normalizeValue(item))
   }
 
   if (value && typeof value === "object") {
     const normalized = {}
 
     for (const [key, child] of Object.entries(value)) {
-      if (key === "url") {
+      if (
+        key === "url" ||
+        key === "id" ||
+        key === "symbolIdMap" ||
+        key === "files" ||
+        key === "groups"
+      ) {
+        continue
+      }
+
+      if (key === "target" && typeof child === "number") {
         continue
       }
 
