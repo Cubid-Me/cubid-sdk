@@ -1,0 +1,1290 @@
+{
+  "schemaVersion": "2.0",
+  "name": "@cubid/wagmi",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "name": "CubidWagmiAdapterOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "adapterId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "chainId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "connectAsync",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "request",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reflection",
+                        "declaration": {
+                          "name": "__type",
+                          "variant": "declaration",
+                          "kind": 65536,
+                          "flags": {},
+                          "children": [
+                            {
+                              "name": "chainId",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {
+                                "isOptional": true
+                              },
+                              "type": {
+                                "type": "intrinsic",
+                                "name": "number"
+                              }
+                            },
+                            {
+                              "name": "connector",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {},
+                              "type": {
+                                "type": "reference",
+                                "name": "CubidWagmiConnectorLike",
+                                "package": "@cubid/wagmi"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "CubidWagmiConnectResult",
+                        "package": "@cubid/wagmi"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "connectorId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "connectors",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "name": "CubidWagmiConnectorLike",
+                "package": "@cubid/wagmi"
+              }
+            }
+          }
+        },
+        {
+          "name": "disconnectAsync",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "getMessage",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "connection",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/wagmi",
+                        "qualifiedName": "CubidWagmiAdapterOptions.TConnection",
+                        "refersToTypeParameter": true
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "signMessageAsync",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "request",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reflection",
+                        "declaration": {
+                          "name": "__type",
+                          "variant": "declaration",
+                          "kind": 65536,
+                          "flags": {},
+                          "children": [
+                            {
+                              "name": "message",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {},
+                              "type": {
+                                "type": "intrinsic",
+                                "name": "string"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "toConnection",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "name": "CubidWagmiConnectResult",
+                        "package": "@cubid/wagmi"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/wagmi",
+                    "qualifiedName": "CubidWagmiAdapterOptions.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "toStampData",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "connection",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/wagmi",
+                        "qualifiedName": "CubidWagmiAdapterOptions.TConnection",
+                        "refersToTypeParameter": true
+                      }
+                    },
+                    {
+                      "name": "verification",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "name": "CubidWagmiVerification",
+                        "package": "@cubid/wagmi"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWagmiConnection",
+            "package": "@cubid/wagmi"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidWagmiConnection",
+            "package": "@cubid/wagmi"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWagmiConnection",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "address",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidEvmConnection.address"
+          }
+        },
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/evm",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidEvmCapabilities"
+            },
+            "name": "CubidEvmCapabilities",
+            "package": "@cubid/evm"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidEvmConnection.capabilities"
+          }
+        },
+        {
+          "name": "chainId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidEvmConnection.chainId"
+          }
+        },
+        {
+          "name": "chainType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "literal",
+            "value": "evm"
+          },
+          "overwrites": {
+            "type": "reference",
+            "name": "CubidEvmConnection.chainType"
+          }
+        },
+        {
+          "name": "connectorId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "connectorName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@cubid/evm",
+            "packagePath": "src/types.ts",
+            "qualifiedName": "CubidEvmConnection"
+          },
+          "name": "CubidEvmConnection",
+          "package": "@cubid/evm"
+        }
+      ]
+    },
+    {
+      "name": "CubidWagmiConnectorLike",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/evm",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidEvmCapabilities"
+            },
+            "name": "CubidEvmCapabilities",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "name",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWagmiConnectResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "accounts",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "name": "chainId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "connector",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidWagmiConnectorLike",
+                "package": "@cubid/wagmi"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWagmiVerification",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "isVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidEvmVerification.isVerified"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intersection",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "unknown"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              },
+              {
+                "type": "reflection",
+                "declaration": {
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "children": [
+                    {
+                      "name": "connectorId",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    },
+                    {
+                      "name": "connectorName",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    },
+                    {
+                      "name": "message",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    },
+                    {
+                      "name": "signature",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "overwrites": {
+            "type": "reference",
+            "name": "CubidEvmVerification.metadata"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@cubid/evm",
+            "packagePath": "src/types.ts",
+            "qualifiedName": "CubidEvmVerification"
+          },
+          "name": "CubidEvmVerification",
+          "package": "@cubid/evm"
+        }
+      ]
+    },
+    {
+      "name": "UseCubidWagmiAdapterResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "adapter",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/evm",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidEvmAdapter"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "TConnection",
+                "package": "@cubid/wagmi",
+                "qualifiedName": "UseCubidWagmiAdapterResult.TConnection",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidEvmAdapter",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "name": "address",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/evm",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidEvmCapabilities"
+            },
+            "name": "CubidEvmCapabilities",
+            "package": "@cubid/evm"
+          }
+        },
+        {
+          "name": "chainId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "connection",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "TConnection",
+            "package": "@cubid/wagmi",
+            "qualifiedName": "UseCubidWagmiAdapterResult.TConnection",
+            "refersToTypeParameter": true
+          }
+        },
+        {
+          "name": "connectors",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "name": "CubidWagmiConnectorLike",
+                "package": "@cubid/wagmi"
+              }
+            }
+          }
+        },
+        {
+          "name": "currentConnector",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidWagmiConnectorLike",
+            "package": "@cubid/wagmi"
+          }
+        },
+        {
+          "name": "isConnected",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWagmiConnection",
+            "package": "@cubid/wagmi"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidWagmiConnection",
+            "package": "@cubid/wagmi"
+          }
+        }
+      ]
+    },
+    {
+      "name": "UseCubidWagmiAdapterOptions",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWagmiConnection",
+            "package": "@cubid/wagmi"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidWagmiConnection",
+            "package": "@cubid/wagmi"
+          }
+        }
+      ],
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "typescript",
+          "packagePath": "lib/lib.es5.d.ts",
+          "qualifiedName": "Omit"
+        },
+        "typeArguments": [
+          {
+            "type": "reference",
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "TConnection",
+                "package": "@cubid/wagmi",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidWagmiAdapterOptions",
+            "package": "@cubid/wagmi"
+          },
+          {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "connectAsync"
+              },
+              {
+                "type": "literal",
+                "value": "connectors"
+              },
+              {
+                "type": "literal",
+                "value": "disconnectAsync"
+              },
+              {
+                "type": "literal",
+                "value": "signMessageAsync"
+              }
+            ]
+          }
+        ],
+        "name": "Omit",
+        "package": "typescript"
+      }
+    },
+    {
+      "name": "createCubidWagmiAdapter",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "createCubidWagmiAdapter",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "typeParameters": [
+            {
+              "name": "TConnection",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidWagmiConnection",
+                "package": "@cubid/wagmi"
+              },
+              "default": {
+                "type": "reference",
+                "name": "CubidWagmiConnection",
+                "package": "@cubid/wagmi"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/wagmi",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "CubidWagmiAdapterOptions",
+                "package": "@cubid/wagmi"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/evm",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidEvmAdapter"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "TConnection",
+                "package": "@cubid/wagmi",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidEvmAdapter",
+            "package": "@cubid/evm"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useCubidWagmiAdapter",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useCubidWagmiAdapter",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "typeParameters": [
+            {
+              "name": "TConnection",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidWagmiConnection",
+                "package": "@cubid/wagmi"
+              },
+              "default": {
+                "type": "reference",
+                "name": "CubidWagmiConnection",
+                "package": "@cubid/wagmi"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/wagmi",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "UseCubidWagmiAdapterOptions",
+                "package": "@cubid/wagmi"
+              },
+              "defaultValue": "{}"
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "TConnection",
+                "package": "@cubid/wagmi",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "UseCubidWagmiAdapterResult",
+            "package": "@cubid/wagmi"
+          }
+        }
+      ]
+    }
+  ],
+  "packageName": "@cubid/wagmi",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/wagmi`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nwagmi-based React helpers that adapt wallet flows onto "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/evm`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n## When To Choose This Package\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/wagmi`"
+    },
+    {
+      "kind": "text",
+      "text": " when your app already uses wagmi and you want Cubid's\nReact-friendly wallet adapters on top of the EVM package. Choose "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/evm`"
+    },
+    {
+      "kind": "text",
+      "text": "\ninstead for non-wagmi or framework-neutral EVM flows.\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\nnpm install @cubid/wagmi @cubid/evm wagmi viem @tanstack/react-query\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThis package expects the host app to already provide its normal wagmi setup,\nincluding "
+    },
+    {
+      "kind": "code",
+      "text": "`WagmiProvider`"
+    },
+    {
+      "kind": "text",
+      "text": " and the TanStack Query client.\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## API Reference\n\n- JSON reference: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/reference/api/wagmi.json`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- Package matrix: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Basic Usage\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\nimport { createCubidEvmClient } from \"@cubid/evm\"\nimport { useCubidWagmiAdapter } from \"@cubid/wagmi\"\n\nfunction WalletVerifier({\n  apiClient,\n}: {\n  apiClient: Parameters<typeof createCubidEvmClient>[0]\n}) {\n  const evmClient = createCubidEvmClient(apiClient)\n  const { adapter, isConnected } = useCubidWagmiAdapter()\n\n  return (\n    <button disabled={!isConnected} onClick={() => evmClient.connectWallet({ adapter })}>\n      Verify\n    </button>\n  )\n}\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThe package also exports "
+    },
+    {
+      "kind": "code",
+      "text": "`createCubidWagmiAdapter`"
+    },
+    {
+      "kind": "text",
+      "text": " for apps that want to wire\ntheir own wagmi actions into the Cubid EVM adapter surface without using the\nprovided hook."
+    }
+  ]
+}

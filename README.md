@@ -6,30 +6,53 @@ Private backend concerns stay in `cubid-passport`: hosted login, Passport UI,
 Admin, OIDC issuer runtime, signing keys, provider secrets, passkey
 verification, migrations, and service-role access.
 
-Workspace packages:
+## Package Matrix
 
-- `@cubid/core`: runtime-agnostic Cubid foundation client
-- `@cubid/browser`: headless browser helpers for OTP, hosted verification, allow-flow, and OAuth stamp sync
-- `@cubid/react`: React provider and focused browser-flow components built on `@cubid/browser`
-- `@cubid/evm`: first chain-specific wallet helper package built on top of `@cubid/core`
-- `@cubid/wagmi`: wagmi-based React integration helpers built on top of `@cubid/evm`
-- `@cubid/web2`: compatibility wrapper around `@cubid/browser`
-- `@cubid/web2-react`: compatibility wrapper around `@cubid/react`
-- `@cubid/web3`: interim wallet-oriented helper package pending further chain-package splits
+| Package | Purpose | Registry availability |
+| --- | --- | --- |
+| `@cubid/core` | Runtime-agnostic Cubid foundation client for servers, workers, Deno, and Supabase Edge Functions. | npm + JSR |
+| `@cubid/browser` | Headless browser helpers for hosted verification, OTP, Allow Page, and provider handoff flows. | npm-only |
+| `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
+| `@cubid/evm` | EVM-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/wagmi` | wagmi-specific React integration helpers built on `@cubid/evm`. | npm-only |
+| `@cubid/web3` | Interim wallet-oriented package while the chain-specific split continues. | npm-only |
+| `@cubid/web2` | Frozen compatibility wrapper around `@cubid/browser`. | npm-only, deprecated |
+| `@cubid/web2-react` | Frozen compatibility wrapper around `@cubid/react`. | npm-only, deprecated |
+| `@cubid/acceptance` | Private local consumer-style acceptance harness. | Private, never published |
 
-Target package direction:
+`@cubid/core` is the only JSR package today because it is the only package with
+an explicit runtime-agnostic Deno and Supabase Edge contract. The higher-level
+browser, React, wagmi, and interim compatibility packages remain npm-only by
+design.
 
-- `@cubid/core`: stable runtime-agnostic API foundation
-- `@cubid/browser`: the headless browser integration layer, with `@cubid/web2` retained temporarily as a compatibility package
-- `@cubid/react`: the React layer, with `@cubid/web2-react` retained temporarily as a compatibility package
-- chain-specific packages such as `@cubid/evm`, `@cubid/wagmi`, `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`, and `@cubid/near` as the long-term replacement for the interim `@cubid/web3`
-- dedicated auth packages such as `@cubid/auth` and `@cubid/auth-react` when the hosted OIDC surface is ready for public SDK support
+`@cubid/web2` and `@cubid/web2-react` remain installable for older imports, but
+they are compatibility names only. New integrations should use
+`@cubid/browser` and `@cubid/react`.
+
+## API Reference
+
+Machine-readable package reference artifacts live in `docs/reference/`.
+
+- Human index: `docs/reference/README.md`
+- JSON manifest: `docs/reference/api/manifest.json`
+- Package JSON references:
+  - `docs/reference/api/core.json`
+  - `docs/reference/api/browser.json`
+  - `docs/reference/api/react.json`
+  - `docs/reference/api/evm.json`
+  - `docs/reference/api/wagmi.json`
+  - `docs/reference/api/web3.json`
 
 ## Commands
 
 - `pnpm install`
 - `pnpm build`
 - `pnpm test`
+- `pnpm test:unit`
+- `pnpm test:acceptance`
+- `pnpm test:coverage`
+- `pnpm docs:api:build`
+- `pnpm docs:api:check`
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm deno:check:core`
@@ -45,14 +68,15 @@ Target package direction:
 Repo-health snapshots live in `agent-context/repo-status.md`.
 Deferred ideas that are not part of the active roadmap live in
 `agent-context/future-ideas.md`.
+The testing baseline and coverage policy live in
+`docs/engineering/testing-strategy.md`.
 
 ## Supabase Edge / Deno
 
 `@cubid/core` is the runtime-agnostic package in this workspace. It is the only
 Cubid package intended for direct use inside Deno and Supabase Edge Functions.
 
-`@cubid/core@0.1.0` is now live on JSR. Use that package for a first-class
-Deno import:
+Use that package for first-class Deno imports:
 
 ```ts
 import { createCubidApiClient } from "jsr:@cubid/core"
@@ -65,15 +89,13 @@ consume the same package through npm specifiers:
 import { createCubidApiClient } from "npm:@cubid/core"
 ```
 
-Node, Next.js, and other standard JS runtimes should continue to import the npm package directly:
+Node, Next.js, and other standard JS runtimes should continue to import the npm
+package directly:
 
 ```ts
 import { createCubidApiClient } from "@cubid/core"
 ```
 
-`@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi` remain
-higher-level helpers built on top of `@cubid/core`; they are not required for
-Supabase Edge usage.
-`@cubid/web2` and `@cubid/web2-react` remain available as compatibility package
-names during the rename window, and `@cubid/web3` remains the interim umbrella
-package while the chain-specific split continues.
+`@cubid/browser`, `@cubid/react`, `@cubid/evm`, `@cubid/wagmi`, and
+`@cubid/web3` remain higher-level npm packages built on top of `@cubid/core`;
+they are not part of the JSR publication policy.

@@ -1,0 +1,1312 @@
+{
+  "schemaVersion": "2.0",
+  "name": "@cubid/web3",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "name": "ConnectWalletRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "adapter",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "TConnection",
+                "package": "@cubid/web3",
+                "qualifiedName": "ConnectWalletRequest.TConnection",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidWeb3Adapter",
+            "package": "@cubid/web3"
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletConnection",
+            "package": "@cubid/web3"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidWalletConnection",
+            "package": "@cubid/web3"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletCapabilities",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "gasSponsorship",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletCapabilityDescriptor",
+            "package": "@cubid/web3"
+          }
+        },
+        {
+          "name": "paymaster",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletCapabilityDescriptor",
+            "package": "@cubid/web3"
+          }
+        },
+        {
+          "name": "sessionKeys",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletCapabilityDescriptor",
+            "package": "@cubid/web3"
+          }
+        },
+        {
+          "name": "smartAccount",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletCapabilityDescriptor",
+            "package": "@cubid/web3"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "capabilityName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidWalletCapabilityDescriptor",
+                "package": "@cubid/web3"
+              },
+              {
+                "type": "intrinsic",
+                "name": "undefined"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletCapabilityDescriptor",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "available",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletConnection",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "address",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletCapabilities",
+            "package": "@cubid/web3"
+          }
+        },
+        {
+          "name": "chainId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "chainType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletVerification",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "isVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWeb3Adapter",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "connect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "connect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/web3",
+                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "disconnect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "name": "disconnect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/web3",
+                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  },
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "toStampData",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "name": "toStampData",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/web3",
+                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                },
+                {
+                  "name": "verification",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidWalletVerification",
+                    "package": "@cubid/web3"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "unknown"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "verify",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "name": "verify",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/web3",
+                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "reference",
+                    "name": "CubidWalletVerification",
+                    "package": "@cubid/web3"
+                  },
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "CubidWalletVerification",
+                        "package": "@cubid/web3"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletConnection",
+            "package": "@cubid/web3"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidWalletConnection",
+            "package": "@cubid/web3"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWeb3Client",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "apiClient",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/core",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidApiClient"
+            },
+            "name": "CubidApiClient",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "connectWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "connectWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidWalletConnection",
+                    "package": "@cubid/web3"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/web3",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "ConnectWalletRequest",
+                    "package": "@cubid/web3"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/web3",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "disconnectWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "disconnectWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidWalletConnection",
+                    "package": "@cubid/web3"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "adapter",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/web3",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "CubidWeb3Adapter",
+                    "package": "@cubid/web3"
+                  }
+                },
+                {
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/web3",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "verifyWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "verifyWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidWalletConnection",
+                    "package": "@cubid/web3"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/web3",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "VerifyWalletRequest",
+                    "package": "@cubid/web3"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/web3",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "VerifyWalletResult",
+                    "package": "@cubid/web3"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CubidWeb3ClientOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "defaultStampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidWeb3StampType",
+            "package": "@cubid/web3"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VerifyWalletRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "adapter",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "TConnection",
+                "package": "@cubid/web3",
+                "qualifiedName": "VerifyWalletRequest.TConnection",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidWeb3Adapter",
+            "package": "@cubid/web3"
+          }
+        },
+        {
+          "name": "connection",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "TConnection",
+            "package": "@cubid/web3",
+            "qualifiedName": "VerifyWalletRequest.TConnection",
+            "refersToTypeParameter": true
+          }
+        },
+        {
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidWeb3StampType",
+            "package": "@cubid/web3"
+          }
+        },
+        {
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletConnection",
+            "package": "@cubid/web3"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidWalletConnection",
+            "package": "@cubid/web3"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VerifyWalletResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletCapabilities",
+            "package": "@cubid/web3"
+          }
+        },
+        {
+          "name": "connection",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "TConnection",
+            "package": "@cubid/web3",
+            "qualifiedName": "VerifyWalletResult.TConnection",
+            "refersToTypeParameter": true
+          }
+        },
+        {
+          "name": "persistedStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/core",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidAddStampResponse"
+            },
+            "name": "CubidAddStampResponse",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "stampData",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWeb3StampType",
+            "package": "@cubid/web3"
+          }
+        },
+        {
+          "name": "verification",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletVerification",
+            "package": "@cubid/web3"
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletConnection",
+            "package": "@cubid/web3"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidWalletConnection",
+            "package": "@cubid/web3"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWeb3StampType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "evm"
+          },
+          {
+            "type": "literal",
+            "value": "near"
+          },
+          {
+            "type": "literal",
+            "value": "near-wallet"
+          },
+          {
+            "type": "literal",
+            "value": "solana"
+          }
+        ]
+      }
+    },
+    {
+      "name": "createCubidWeb3Client",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "createCubidWeb3Client",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "apiClient",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/core",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidApiClient"
+                },
+                "name": "CubidApiClient",
+                "package": "@cubid/core"
+              }
+            },
+            {
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidWeb3ClientOptions",
+                "package": "@cubid/web3"
+              },
+              "defaultValue": "{}"
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "CubidWeb3Client",
+            "package": "@cubid/web3"
+          }
+        }
+      ]
+    },
+    {
+      "name": "getCubidWalletCapabilities",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "getCubidWalletCapabilities",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "connection",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidWalletConnection",
+                "package": "@cubid/web3"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletCapabilities",
+            "package": "@cubid/web3"
+          }
+        }
+      ]
+    },
+    {
+      "name": "hasCubidWalletCapability",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "hasCubidWalletCapability",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "connection",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidWalletConnection",
+                "package": "@cubid/web3"
+              }
+            },
+            {
+              "name": "capabilityName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "typeOperator",
+                "operator": "keyof",
+                "target": {
+                  "type": "reference",
+                  "name": "CubidWalletCapabilities",
+                  "package": "@cubid/web3"
+                }
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ]
+    }
+  ],
+  "packageName": "@cubid/web3",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/web3`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nInterim wallet-oriented Cubid package while the chain-specific split continues.\n\n## When To Choose This Package\n\nPrefer "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/evm`"
+    },
+    {
+      "kind": "text",
+      "text": " for new EVM integrations and "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/wagmi`"
+    },
+    {
+      "kind": "text",
+      "text": " for\nwagmi-specific React integrations. Use "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/web3`"
+    },
+    {
+      "kind": "text",
+      "text": " only when you still depend\non the older shared wallet surface while the split remains in progress.\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\nnpm install @cubid/web3 @cubid/core\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## API Reference\n\n- JSON reference: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/reference/api/web3.json`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- Package matrix: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Capability Metadata\n\nThe interim wallet surface preserves optional "
+    },
+    {
+      "kind": "code",
+      "text": "`capabilities`"
+    },
+    {
+      "kind": "text",
+      "text": " metadata on\nconnections and verification results. Use that metadata for features such as\nsmart accounts, session keys, paymasters, or gas sponsorship instead of\nassuming every wallet connection supports them.\n\nThe package exports "
+    },
+    {
+      "kind": "code",
+      "text": "`getCubidWalletCapabilities(...)`"
+    },
+    {
+      "kind": "text",
+      "text": " and\n"
+    },
+    {
+      "kind": "code",
+      "text": "`hasCubidWalletCapability(...)`"
+    },
+    {
+      "kind": "text",
+      "text": " to keep those checks explicit while the chain\nsplit continues."
+    }
+  ]
+}

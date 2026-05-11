@@ -1,5 +1,137 @@
 # Session Log
 
+## session: s43-pr7-api-reference-determinism-fix
+
+- Timestamp: 2026-05-10T22:10:00Z
+- Summary: Fixed the remaining PR #7 CI failure by making the machine-readable API reference artifacts stable across clean environments.
+- Actions:
+  - Reproduced the failing `pnpm docs:api:check` step from PR #7 in a clean checkout and confirmed the drift was isolated to `docs/reference/api/core.json`.
+  - Traced the drift to environment-specific `typedoc` graph bookkeeping such as numeric reflection IDs and derived lookup maps rather than a real SDK API surface change.
+  - Updated `scripts/build-api-reference.mjs` so the committed JSON artifacts now strip unstable internal `typedoc` fields while preserving the useful package API structure for tooling ingestion.
+  - Regenerated the checked-in API reference artifacts after the normalization fix so CI and clean clones compare against the new deterministic baseline.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
+## session: s42-pr7-review-followup
+
+- Timestamp: 2026-05-10T21:15:00Z
+- Summary: Addressed the open review threads on PR #7 by restoring real API-reference drift protection in CI and tightening a few public helper type surfaces.
+- Actions:
+  - Removed the pre-check `docs:api:build` step from CI so `docs:api:check` once again validates the committed reference artifacts instead of overwriting them first.
+  - Hardened the API reference drift checker so it now also fails on unexpected stale files under `docs/reference/api/`, not just changed expected files.
+  - Simplified the capability helper signatures in `@cubid/evm` and `@cubid/web3` by dropping redundant `| string` unions from index-signature-backed capability names.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
+## session: s41-ci-fix-and-clearpass-verify-helper
+
+- Timestamp: 2026-05-10T01:20:00Z
+- Summary: Fixed the PR #7 clean-run CI failure and turned the ClearPass Verify inbox note into a real browser and React helper surface.
+- Actions:
+  - Diagnosed the failing PR CI run and confirmed `pnpm test:unit` was depending on leftover built package entrypoints for `@cubid/browser` and `@cubid/evm` that do not exist on a fresh runner.
+  - Updated `pnpm test:unit` and the testing strategy so the unit test command now prepares the minimal built entrypoints it needs before running Vitest, keeping the CI order intact while removing the clean-run dependency on local artifacts.
+  - Added `buildClearPassVerifyUrl(...)` and extended the hosted verification helper surface so `clearpass_verify` now launches the Cubid-hosted ClearPass URL instead of exposing any direct ClearPass integration path.
+  - Added `ClearPassVerifyButton` to `@cubid/react`, kept the copy branded as a third-party ClearPass flow, and reused the existing post-popup stamp refresh behavior.
+  - Expanded browser and React tests plus package READMEs, and closed `S11` in the roadmap.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
+## session: s40-s10-developer-ingestion-publishing
+
+- Timestamp: 2026-05-09T13:30:00Z
+- Summary: Finished `S10` by locking the package registry policy, adding machine-readable API reference artifacts, and tightening the public developer entrypoints across the SDK package family.
+- Actions:
+  - Reviewed the incoming Passport note `agent-context/messages-from-cubid-passport/2026-05-09-clearpass-verify-stamp.md` and turned it into a new tracked SDK follow-up instead of leaving it as an unstructured inbox file.
+  - Updated the root README, package READMEs, package metadata, and Supabase Edge integration guide so new consumers can see the supported package names, registry availability, and the right package to choose first.
+  - Expanded the publishing runbook into a package-family policy document and made the GitHub publish workflow describe JSR support for `@cubid/core` as an explicit policy choice rather than an accidental limitation.
+  - Added a committed machine-readable reference surface under `docs/reference/api/` plus `docs/reference/README.md`, with a deterministic `typedoc`-based generator and a drift check command for CI.
+  - Updated CI so API reference generation and drift checks are part of the normal validation baseline.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
+## session: s39-s02-compatibility-retirement
+
+- Timestamp: 2026-05-09T11:20:00Z
+- Summary: Closed out `S02` by retiring `@cubid/web2` and `@cubid/web2-react` as frozen compatibility shims and removing them from the normal release path.
+- Actions:
+  - Updated `@cubid/web2` and `@cubid/web2-react` metadata and READMEs so they now present themselves as frozen deprecated wrappers instead of temporary first-class migration packages.
+  - Updated the root README, agent guidance, target-state docs, and migration plan so `@cubid/browser` and `@cubid/react` are the only supported long-term package names.
+  - Removed `@cubid/web2` and `@cubid/web2-react` from the normal `Publish Packages` workflow options while keeping the packages in the workspace as installable re-export shims.
+  - Recorded the exact post-merge npm deprecation commands and messages for the retired package names in the publishing runbook instead of unpublishing them.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
+## session: s38-testing-baseline-and-acceptance-harness
+
+- Timestamp: 2026-05-07T14:05:00Z
+- Summary: Finished `S09` by standardizing the repo on Vitest, adding a consumer-style acceptance harness, and documenting coverage governance.
+- Actions:
+  - Migrated `@cubid/core` onto the shared Vitest runner so the repo now has one primary package-test pipeline instead of a mixed `node:test` and Vitest split.
+  - Added `packages/acceptance` as a private workspace package that exercises the built `@cubid/core`, `@cubid/browser`, and `@cubid/react` package surfaces the way a local consumer would.
+  - Added `docs/engineering/testing-strategy.md` to define the test layers, local validation commands, CI-required validation, and the report-now/gate-later coverage policy.
+  - Updated root scripts and CI so lint, typecheck, unit tests, build, acceptance tests, coverage reporting, and core package dry-runs are distinct and intentional steps.
+- Validation:
+  - `pnpm install`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
+## session: s37-s03-capability-driven-chain-surface
+
+- Timestamp: 2026-05-07T12:35:00Z
+- Summary: Finished the current `S03.6` tranche by making the EVM, wagmi, and interim web3 package surfaces capability-driven instead of implicitly smart-account-oriented.
+- Actions:
+  - Added optional connection/result `capabilities` metadata to `@cubid/evm` and the interim `@cubid/web3` package surfaces.
+  - Exported explicit helper functions for capability checks so apps can branch on `smartAccount`, `sessionKeys`, `paymaster`, and `gasSponsorship` support without assuming those features exist everywhere.
+  - Updated the wagmi adapter and hook so connector-provided capability metadata can flow through to React consumers.
+  - Updated chain-package docs and the migration plan so future chain work keeps capability signaling explicit and opt-in.
+- Validation:
+  - `pnpm test`
+  - `pnpm typecheck`
+  - `pnpm build`
+
 ## session: s36-pr6-review-followup
 
 - Timestamp: 2026-05-07T00:10:00Z

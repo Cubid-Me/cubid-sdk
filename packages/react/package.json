@@ -19,6 +19,18 @@
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
     "directory": "packages/react"
   },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/react",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "identity",
+    "react",
+    "verification",
+    "otp",
+    "sdk"
+  ],
   "sideEffects": false,
   "dependencies": {
     "@cubid/browser": "workspace:*"

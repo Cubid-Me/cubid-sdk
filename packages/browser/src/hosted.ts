@@ -1,4 +1,4 @@
-import type { HostedVerificationUrlRequest } from "./types";
+import type { ClearPassVerifyUrlRequest, HostedVerificationUrlRequest } from "./types";
 
 const DEFAULT_PASSPORT_ORIGIN = "https://passport.cubid.me";
 
@@ -30,6 +30,16 @@ export function buildHostedVerificationUrl(request: HostedVerificationUrlRequest
   }
 
   const pageId = assertNonEmpty(request.pageId, "pageId");
+
+  if (request.stampToRender === "clearpass_verify") {
+    const url = new URL("/verify/clearpass", passportOrigin);
+
+    url.searchParams.set("uid", userId);
+    url.searchParams.set("page_id", pageId);
+
+    return url.toString();
+  }
+
   const url = new URL("/allow", passportOrigin);
 
   url.searchParams.set("uid", userId);
@@ -37,4 +47,13 @@ export function buildHostedVerificationUrl(request: HostedVerificationUrlRequest
   url.searchParams.set("stamp_type", "phone");
 
   return url.toString();
+}
+
+export function buildClearPassVerifyUrl(request: ClearPassVerifyUrlRequest): string {
+  return buildHostedVerificationUrl({
+    pageId: request.pageId,
+    passportOrigin: request.passportOrigin,
+    stampToRender: "clearpass_verify",
+    userId: request.userId
+  });
 }

@@ -46,7 +46,7 @@ function encodeBase64Url(value: string): string {
   }
 
   if (typeof Buffer !== "undefined") {
-    return Buffer.from(value, "utf8").toString("base64url");
+    return Buffer.from(value, "utf8").toString("base64url" as BufferEncoding);
   }
 
   throw new Error("No base64 encoder is available in this environment.");
@@ -63,7 +63,7 @@ function decodeBase64Url(value: string): string {
   }
 
   if (typeof Buffer !== "undefined") {
-    return Buffer.from(value, "base64url").toString("utf8");
+    return Buffer.from(value, "base64url" as BufferEncoding).toString("utf8");
   }
 
   throw new Error("No base64 decoder is available in this environment.");

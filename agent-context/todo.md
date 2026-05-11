@@ -91,22 +91,22 @@ package through the existing `.github/workflows/publish.yml` OIDC flow.
 
 ### S02. Rename the browser and React package layers
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-01T08:40:00Z
-- Timestamp completed: TBD
-- Feature branch: `dev`
+- Timestamp completed: 2026-05-09T11:20:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
 - Head: `f46c24dc` at planning start
-- Session-log reference(s): session: s08-package-migration-planning, session: s12-browser-react-package-slices
+- Session-log reference(s): session: s08-package-migration-planning, session: s12-browser-react-package-slices, session: s39-s02-compatibility-retirement
 
-Continue the migration from the interim `web2` package family toward clearer
-public names:
+The rename from the interim `web2` package family toward clearer public names is
+now complete:
 
 - `@cubid/web2` -> `@cubid/browser`
 - `@cubid/web2-react` -> `@cubid/react`
 
-Preserve the useful hosted-verification, provider-connect, OTP, callback, and
-profile-completion primitives while keeping browser-specific logic out of core
-and React-specific logic out of the headless browser layer.
+The old package names now remain only as frozen deprecated compatibility shims.
+They stay installable to preserve existing imports, but the supported package
+surfaces and normal release targets are now `@cubid/browser` and `@cubid/react`.
 
 ### S02.4 Add explicit compatibility and deprecation messaging to the interim package names
 
@@ -273,12 +273,12 @@ Verified npm metadata now resolves to normal package versions rather than
 
 ### S03.6 Keep future custody and chain helpers capability-driven
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+- Status: Completed
+- Timestamp started: 2026-05-07T12:10:00Z
+- Timestamp completed: 2026-05-07T12:35:00Z
+- Feature branch: `dev`
+- Head: `9898fb0b` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest, session: s37-s03-capability-driven-chain-surface
 
 When future account, chain, or EVM-specific helpers expand beyond the current
 generated custody-account model, keep the public SDK capability-driven rather
@@ -289,6 +289,11 @@ Near-term defaults should remain app-scoped generated custody accounts with
 Passport-hosted approval. If smart accounts, scoped session keys, paymasters,
 or gas sponsorship land later, expose them through explicit capability fields,
 feature flags, and policy-aware helpers instead of universal assumptions.
+
+The current EVM, wagmi, and interim web3 packages now preserve optional
+`capabilities` metadata on connections and verification results, and they
+export small helper functions for capability checks instead of baking in smart
+account defaults.
 
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 
@@ -572,12 +577,12 @@ signatures are supported until a later Passport note explicitly says they are.
 
 ### S09. Establish testing strategy and acceptance governance for the public SDK repo
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
 
 Turn the current ad hoc package-level validation into an explicitly documented
 testing and acceptance strategy for this public SDK monorepo. The goal is to
@@ -585,12 +590,12 @@ make it clear what each layer proves locally and in CI before publish or merge.
 
 ### S09.1 Create a written testing strategy for the SDK monorepo
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
 
 Document the intended test pyramid and validation responsibilities for:
 
@@ -605,12 +610,12 @@ and what remains out of scope until a stronger acceptance harness exists.
 
 ### S09.2 Create a local acceptance harness for package-consumer flows
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
 
 Add a small local acceptance harness that exercises the public SDK surfaces as a
 consumer would, rather than only testing packages in isolation. Focus first on:
@@ -624,12 +629,12 @@ changes can be validated against a realistic integration path before release.
 
 ### S09.3 Decide on and document coverage governance
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
 
 Decide whether this repo should enforce line, branch, or package-level coverage
 thresholds, and document the answer clearly. If coverage gates are adopted,
@@ -645,12 +650,12 @@ leaving coverage governance implicit.
 
 ### S10. Publish the API and SDK surfaces to developer-ingestion platforms
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-09T12:00:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
 
 Expand the public distribution strategy beyond "packages exist on npm" so the
 Cubid API and SDKs are easier for developers and tooling to ingest, discover,
@@ -658,12 +663,12 @@ and work with.
 
 ### S10.1 Decide which packages should publish to JSR or remain npm-only
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s14-core-jsr-live-publish-success, session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-09T12:00:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s14-core-jsr-live-publish-success, session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
 
 `@cubid/core` is already live on JSR, but the broader package family still
 needs an explicit distribution policy. Decide which packages belong on JSR,
@@ -671,12 +676,12 @@ which should remain npm-only, and why.
 
 ### S10.2 Publish machine-friendly API reference material
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-09T12:10:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
 
 Add a developer-ingestion surface for the public API and SDK contracts, such as
 generated API reference docs or another machine-friendly contract artifact that
@@ -684,14 +689,29 @@ stays aligned with the published package surfaces.
 
 ### S10.3 Publish developer-facing reference and integration entrypoints
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s34-repo-cleanup-control-plane
+- Status: Completed
+- Timestamp started: 2026-05-09T12:15:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
 
 Make the published SDK family easier to adopt by tightening the external
 entrypoints developers actually use: package READMEs, registry metadata,
 integration guides, and any hosted or registry-linked reference surfaces that
 improve discovery and onboarding.
+
+### S11. Add a ClearPass Verify helper surface without leaking provider internals
+
+- Status: Completed
+- Timestamp started: 2026-05-10T00:45:00Z
+- Timestamp completed: 2026-05-10T01:20:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `a6b8ea0d` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-09-clearpass-verify-stamp.md`, session: s40-s10-developer-ingestion-publishing, session: s41-ci-fix-and-clearpass-verify-helper
+
+Add a browser or React helper surface for the new `clearpass_verify` stamp that
+launches the Cubid-hosted ClearPass Verify flow, keeps ClearPass branded as a
+third-party provider, refreshes disclosed stamps after return, and continues to
+exclude raw ClearPass document, face, OCR, or biometric payloads from the SDK
+surface.

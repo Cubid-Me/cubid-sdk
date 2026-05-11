@@ -9,13 +9,30 @@ React, Next.js, Firebase, Supabase, Node built-ins, or browser-only helpers.
 All requests use `fetch`, `RequestInit`, `Headers`, and plain JSON so the same
 client can run in Node, Deno, Supabase Edge Functions, workers, and tests.
 
+## When To Choose This Package
+
+Use `@cubid/core` when you need Cubid's runtime-agnostic foundation client for
+servers, workers, Deno, or Supabase Edge Functions. Choose `@cubid/browser`,
+`@cubid/react`, `@cubid/evm`, or `@cubid/wagmi` only when you specifically need
+their higher-level integration surfaces.
+
 ## Install
 
 ```sh
 npm install @cubid/core
 ```
 
-`@cubid/core@0.1.0` is live on npm and JSR.
+## Registry Availability
+
+- npm: supported
+- JSR: supported
+
+## API Reference
+
+- JSON reference: `../../docs/reference/api/core.json`
+- Package matrix: `../../README.md`
+
+`@cubid/core` is live on npm and JSR.
 
 ```ts
 // Deno / Supabase Edge

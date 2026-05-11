@@ -1,21 +1,39 @@
-# `@cubid/core` Publishing Runbook
+# Cubid SDK Package Publishing Policy
 
-This runbook is the operator checklist for publishing `@cubid/core` to npm and
-JSR. The repo is already wired for tokenless publishing from GitHub Actions.
-npm bootstrap publication, npm trusted publishing, and the first live JSR
-publication are complete.
+This document is the operator runbook for publishing the public Cubid SDK
+package family from `Cubid-Me/cubid-sdk`.
 
-The canonical public SDK home is `Cubid-Me/cubid-sdk`. Do not publish
-`@cubid/core` from `cubid-passport`.
+The repo is already wired for tokenless publishing from GitHub Actions. npm
+bootstrap publication, npm trusted publishing, and the first live JSR
+publication are complete. Do not publish public SDK packages from
+`cubid-passport`.
+
+## Package Distribution Matrix
+
+| Package | Registries | Notes |
+| --- | --- | --- |
+| `@cubid/core` | npm + JSR | The only package with an explicit Deno and Supabase Edge contract. |
+| `@cubid/browser` | npm-only | Browser-oriented helper layer; not marketed as a Deno or JSR surface. |
+| `@cubid/react` | npm-only | React package with peer dependency assumptions. |
+| `@cubid/evm` | npm-only | Chain-specific package built for the npm ecosystem. |
+| `@cubid/wagmi` | npm-only | wagmi-specific React integration package. |
+| `@cubid/web3` | npm-only | Transitional umbrella package while the chain split continues. |
+| `@cubid/web2` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
+| `@cubid/web2-react` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
+| `@cubid/acceptance` | Private | Local-only workspace for acceptance tests. Never publish. |
+
+This policy is deliberate, not an incidental workflow limitation. JSR is for
+runtime-agnostic packages with a real Deno or Edge value proposition, which
+currently means `@cubid/core` only.
 
 ## Release Contract
 
-- npm package: `@cubid/core`
-- JSR package: `@cubid/core`
 - GitHub repository: `Cubid-Me/cubid-sdk`
 - Workflow: `.github/workflows/publish.yml`
 - Release branch: `main`
 - Release workflow trigger: manual `workflow_dispatch`
+- npm organization: `cubid`
+- Normal package release path: trusted publishing from GitHub Actions
 
 Before a release, verify the current registry and local-auth state instead of
 relying on old notes:
@@ -28,34 +46,35 @@ npm whoami
 If `npm view` returns a 404, the package has not been published yet. If
 `npm whoami` fails, the local machine is not authenticated to npm.
 
-Current verified state as of 2026-05-02:
+## Current Verified Registry State
 
-- npm: `@cubid/core@0.1.0` is live
+Current verified state as of 2026-05-09:
+
+- npm:
+  - `@cubid/core@0.1.2`
+  - `@cubid/browser@0.1.1`
+  - `@cubid/react@0.1.1`
+  - `@cubid/evm@0.1.1`
+  - `@cubid/wagmi@0.1.1`
 - npm trusted publishing: configured for `Cubid-Me/cubid-sdk`
-- JSR dry-run: passes locally from `packages/core`
-- JSR package page: live at `https://jsr.io/@cubid/core`
-- Earlier GitHub Actions JSR publish attempt from `main` failed in run `25208963795`
-  with `actorNotAuthorized`, which points to missing JSR-side package/repo
-  authorization rather than a repo-side build failure
-- JSR publish succeeded from GitHub Actions run `25265529712` after the package
-  was linked to `Cubid-Me/cubid-sdk`
-
-Do not publish from a personal npm account as a routine release path. Official
-Cubid packages should be owned by the npm `cubid` organization and released
-through trusted publishing from GitHub Actions.
+- JSR:
+  - `@cubid/core` is live at `https://jsr.io/@cubid/core`
+  - no other Cubid SDK packages are JSR targets by policy
 
 ## Repo-Side Tasks
 
-- Keep the package runtime-agnostic and publishable.
-- Run npm pack and JSR dry-runs to validate release artifacts.
-- Keep the GitHub Actions workflow ready for trusted publishing.
-- Open PRs that update package code, docs, and release automation.
-- Run the publish workflow from GitHub Actions for future releases.
+- Keep public packages publishable from the canonical SDK repo.
+- Run package validation before release.
+- Keep the GitHub Actions workflow aligned with the package matrix above.
+- Keep public package metadata, READMEs, and machine-readable reference
+  artifacts current.
+- Use `pnpm publish` for workspace packages so internal dependency ranges are
+  rewritten to real published versions in packed metadata.
 
 ## What Needs A Human Account Owner
 
-You or another npm/JSR owner must handle registry ownership and repo-link setup
-because those depend on account permissions. This should be done with the
+You or another npm or JSR owner must handle registry ownership and repo-link
+setup because those depend on account permissions. This should be done with the
 official Cubid org accounts, not an agent-owned or personal workaround.
 
 ## npm Setup
@@ -63,43 +82,14 @@ official Cubid org accounts, not an agent-owned or personal workaround.
 1. Sign in at `https://www.npmjs.com/`.
 2. Confirm the npm organization `cubid` exists.
 3. Confirm your account is a member of the `cubid` organization.
-4. Confirm the `developers` team exists and has package publish/admin access for
-   Cubid SDK packages.
-5. Search for `@cubid/core`.
-6. If `@cubid/core` exists, open package settings and configure Trusted
-   Publishing:
-   - Provider: `GitHub Actions`
-   - Organization or user: `Cubid-Me`
-   - Repository: `cubid-sdk`
-   - Workflow filename: `publish.yml`
-   - Environment name: leave blank
-7. In the package settings, set publishing access to require 2FA and disallow
-   tokens after trusted publishing is confirmed working.
+4. Confirm the `developers` team exists and has package publish and admin access
+   for Cubid SDK packages.
+5. Configure trusted publishing per package where needed.
+6. Set package publishing access to require 2FA and disallow tokens after
+   trusted publishing is confirmed working.
 
-### If npm Says The Package Does Not Exist
-
-npm's trusted-publisher UI is package-settings based. If npm does not let you
-configure Trusted Publishing before the first package version exists, use this
-bootstrap path:
-
-1. Make sure this publishing setup PR has merged to `main`.
-2. Use the official npm org owner account, not an agent or personal automation
-   token.
-3. Publish version `0.1.0` once from the clean `main` release commit with:
-
-   ```sh
-   pnpm --filter @cubid/core build
-   cd packages/core
-   pnpm publish --access public --no-git-checks
-   ```
-
-4. Immediately configure Trusted Publishing with the fields above.
-5. Immediately restrict publishing access to require 2FA and disallow tokens.
-6. Future releases must use the GitHub Actions workflow, not local publish.
-
-This one-time bootstrap is only acceptable if npm does not support creating the
-trusted-publisher binding for an unpublished package. Do not store a long-lived
-npm automation token in this repository.
+Trusted publishing should be attached to the public package family in this repo,
+not to a private runtime repo.
 
 ## JSR Setup
 
@@ -114,43 +104,64 @@ JSR's current linked-repository UI may not expose a separate workflow-file
 field. That is fine. The successful publish from run `25265529712` confirms the
 repo link plus GitHub Actions OIDC permissions were sufficient for this repo's
 `.github/workflows/publish.yml`.
-JSR supports tokenless publishing from GitHub Actions after the package is
-linked to the repository.
 
-If the first live publish fails from GitHub Actions with
-`actorNotAuthorized`, treat that as confirmation that the JSR package is not
-yet authorized for `Cubid-Me/cubid-sdk`. Fix the JSR package/repository
-binding first, then re-run the publish workflow from `main`.
+If a future JSR publish fails from GitHub Actions with `actorNotAuthorized`,
+treat that as a JSR package or repository authorization problem first, not as a
+reason to widen JSR support to the rest of the package family.
 
-## Release Steps After Setup
+## Release Steps
 
 1. Ensure the release commit is merged to `main`.
 2. Open GitHub Actions for `Cubid-Me/cubid-sdk`.
 3. Select workflow `Publish Packages`.
 4. Click `Run workflow`.
 5. Select branch `main`.
-6. Set `package_name` to `@cubid/core`.
-7. Set `publish_npm` and/or `publish_jsr` to `true`.
+6. Set `package_name` to the package you are releasing.
+7. Set `publish_npm` and, for `@cubid/core` only, `publish_jsr` to `true` as
+   needed.
 8. Run the workflow.
-9. Confirm the workflow passes and the package pages show the new version.
+9. Confirm the workflow passes and the registry page shows the new version.
 
-For workspace packages beyond `@cubid/core`, keep the publish path on
-`pnpm publish` so internal workspace dependencies are rewritten to real
-published versions in the package metadata. The release workflow should not use
-`npm publish` for packages that depend on other `@cubid/*` workspace packages.
+The workflow intentionally rejects any JSR publish request for non-core package
+names. That is the expected steady state.
 
-The first `0.1.0` npm releases of `@cubid/browser`, `@cubid/react`,
-`@cubid/evm`, and `@cubid/wagmi` went out before that workflow fix landed, so
-their live npm metadata still contains `workspace:*` dependency ranges. Treat
-those versions as publish-history debt that needs corrective patch releases,
-not as the steady-state example to copy.
+The workflow also fails intentionally if a publish is dispatched from any
+branch other than `main`.
 
-The workflow fails intentionally if a publish is dispatched from any branch
-other than `main`.
+## Compatibility Package Retirement
+
+`@cubid/web2` and `@cubid/web2-react` are frozen deprecated compatibility
+wrappers, not active package surfaces. Keep them installable for older imports,
+but do not treat them as normal publish targets in `.github/workflows/publish.yml`.
+
+If the old names still need an operator-side retirement signal on npm, deprecate
+the entire packages instead of unpublishing them:
+
+```sh
+npm deprecate @cubid/web2 "Deprecated: use @cubid/browser instead. @cubid/web2 is a frozen compatibility wrapper and will not receive new releases."
+npm deprecate @cubid/web2-react "Deprecated: use @cubid/react instead. @cubid/web2-react is a frozen compatibility wrapper and will not receive new releases."
+```
+
+Treat those commands as manual operator actions rather than a normal workflow
+path. If an emergency metadata correction is ever needed later, handle it as a
+manual exception, not as a supported steady-state release target.
 
 ## Verification Commands
 
 Run these before a release PR:
+
+```sh
+pnpm lint
+pnpm typecheck
+pnpm test:unit
+pnpm build
+pnpm test:acceptance
+pnpm test:coverage
+pnpm docs:api:check
+pnpm check:core-package
+```
+
+For a direct `@cubid/core` release check, the core-specific dry-runs remain:
 
 ```sh
 pnpm --filter @cubid/core test
@@ -161,14 +172,13 @@ pnpm --filter @cubid/core pack:dry-run
 pnpm --filter @cubid/core jsr:dry-run
 ```
 
-After publication:
+After publication, confirm the registry page shows the expected version:
 
 ```sh
 npm view @cubid/core
 ```
 
-Also confirm JSR shows `@cubid/core` and that a Deno/Supabase Edge import can
-use `jsr:@cubid/core`.
+Also confirm JSR shows `@cubid/core` when that package is part of the release.
 
 ## License
 

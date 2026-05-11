@@ -5,6 +5,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
+import { ClearPassVerifyButton } from "./ClearPassVerifyButton";
 import { CubidWidget } from "./CubidWidget";
 import { CubidWeb2Provider } from "./context";
 import { EmailOtpForm } from "./EmailOtpForm";
@@ -198,5 +199,33 @@ describe("@cubid/react", () => {
 
     expect(screen.getByText("Cubid phone verification is not configured for this environment.")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Verify phone with Cubid" }).getAttribute("disabled")).not.toBeNull();
+  });
+
+  it("opens the hosted ClearPass verification flow and refreshes stamps after the popup closes", async () => {
+    const user = userEvent.setup();
+    const onStampChange = vi.fn();
+    const popup = {
+      closed: false,
+      close: vi.fn(),
+      focus: vi.fn()
+    };
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(popup as unknown as Window);
+
+    render(<ClearPassVerifyButton onStampChange={onStampChange} pageId="77" userId="user-42" />);
+
+    await user.click(screen.getByRole("button", { name: "Verify with ClearPass" }));
+
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://passport.cubid.me/verify/clearpass?uid=user-42&page_id=77",
+      "cubid-verification",
+      "width=600,height=800"
+    );
+
+    popup.closed = true;
+    await vi.waitFor(() => {
+      expect(onStampChange).toHaveBeenCalledTimes(1);
+    });
+
+    openSpy.mockRestore();
   });
 });

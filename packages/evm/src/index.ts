@@ -1,7 +1,10 @@
 export { createCubidEvmClient } from "./client";
+export { getCubidEvmCapabilities, hasCubidEvmCapability } from "./internal";
 export type {
+  CubidCapabilityDescriptor,
   ConnectWalletRequest,
   CubidEvmAdapter,
+  CubidEvmCapabilities,
   CubidEvmClient,
   CubidEvmClientOptions,
   CubidEvmConnection,

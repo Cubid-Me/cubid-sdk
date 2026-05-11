@@ -1,4 +1,8 @@
-import { createCubidWagmiAdapter, buildDefaultWagmiConnection } from "./adapter";
+import {
+  createCubidWagmiAdapter,
+  buildDefaultWagmiConnection
+} from "./adapter";
+import { getCubidEvmCapabilities } from "@cubid/evm";
 import type {
   CubidWagmiConnectResult,
   CubidWagmiConnection,
@@ -8,12 +12,18 @@ import type {
 } from "./types";
 import { useConnect, useConnectors, useConnection, useDisconnect, useSignMessage } from "wagmi";
 
-function toConnectorLike(connector: { id: string; name?: string } | null | undefined): CubidWagmiConnectorLike | undefined {
+function toConnectorLike(
+  connector:
+    | { capabilities?: CubidWagmiConnectorLike["capabilities"]; id: string; name?: string }
+    | null
+    | undefined
+): CubidWagmiConnectorLike | undefined {
   if (!connector) {
     return undefined;
   }
 
   return {
+    capabilities: connector.capabilities,
     id: connector.id,
     name: connector.name
   };
@@ -22,7 +32,11 @@ function toConnectorLike(connector: { id: string; name?: string } | null | undef
 function toConnectResult(connection: {
   accounts?: readonly string[];
   chainId?: number;
-  connector?: { id: string; name?: string } | null;
+  connector?: {
+    capabilities?: CubidWagmiConnectorLike["capabilities"];
+    id: string;
+    name?: string;
+  } | null;
 }): CubidWagmiConnectResult {
   return {
     accounts: connection.accounts ? [...connection.accounts] : undefined,
@@ -79,7 +93,15 @@ export function useCubidWagmiAdapter<
     accounts: currentAccounts,
     chainId: typeof connectionState.chainId === "number" ? connectionState.chainId : undefined,
     connector: connectionState.connector
-      ? { id: connectionState.connector.id, name: connectionState.connector.name }
+      ? connectors.find((candidate) => candidate.id === connectionState.connector?.id) ?? {
+          capabilities: "capabilities" in connectionState.connector
+            ? (connectionState.connector.capabilities as
+                | CubidWagmiConnectorLike["capabilities"]
+                | undefined)
+            : undefined,
+          id: connectionState.connector.id,
+          name: connectionState.connector.name
+        }
       : undefined
   });
 
@@ -91,12 +113,12 @@ export function useCubidWagmiAdapter<
   return {
     adapter,
     address: connection?.address,
+    capabilities: connection ? getCubidEvmCapabilities(connection) : {},
     chainId: connection?.chainId,
     connection,
-    connectors: connectors.map((connector) => ({
-      id: connector.id,
-      name: connector.name
-    })),
+    connectors: connectors
+      .map((connector) => toConnectorLike(connector))
+      .filter((connector): connector is CubidWagmiConnectorLike => Boolean(connector)),
     currentConnector,
     isConnected: Boolean(connection)
   };

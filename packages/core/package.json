@@ -24,6 +24,18 @@
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
     "directory": "packages/core"
   },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/core",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "identity",
+    "proof-of-personhood",
+    "sdk",
+    "supabase-edge",
+    "deno"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -31,7 +43,7 @@
     "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && pnpm exec tsc -p tsconfig.build.json",
     "lint": "pnpm exec tsc --noEmit -p tsconfig.json",
     "typecheck": "pnpm exec tsc --noEmit -p tsconfig.json",
-    "test": "pnpm exec tsx --test src/*.test.ts",
+    "test": "pnpm --dir ../.. exec vitest run --config vitest.config.ts packages/core/src/index.test.ts",
     "deno:check": "deno check --no-lock deno/supabase-edge-smoke.ts",
     "pack:dry-run": "npm pack --dry-run",
     "jsr:dry-run": "pnpm dlx jsr publish --dry-run --allow-dirty",
@@ -40,7 +52,6 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
-    "tsx": "^4.20.6",
     "typescript": "5.2.2"
   }
 }

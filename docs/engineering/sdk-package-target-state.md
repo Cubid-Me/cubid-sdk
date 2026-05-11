@@ -14,6 +14,11 @@ Official packages are published under the npm org `@cubid/*`, owned by the
 uses trusted publishing from GitHub Actions; do not publish official packages
 from personal npm accounts or long-lived local tokens.
 
+JSR should remain intentionally narrow. Use JSR only for runtime-agnostic
+packages with a real Deno or Supabase Edge value proposition. Under the current
+public package policy, that means `@cubid/core` only; the browser, React, wagmi,
+and transitional compatibility packages remain npm-only by design.
+
 Public SDK packages should use explicit package-level licenses. `@cubid/core`
 is Apache-2.0; app and service workspaces in this monorepo are not automatically
 covered by that SDK package license.
@@ -171,8 +176,8 @@ npm-first foundation, then layers in package-ready integration surfaces:
   stamp sync.
 - `@cubid/react` now exists as the primary React surface for OTP forms, hosted
   verification widgets, provider connect buttons, and optional React context.
-- `@cubid/web2` and `@cubid/web2-react` now remain as compatibility wrappers
-  around those renamed packages during the migration window.
+- `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
+  compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
@@ -180,3 +185,6 @@ npm-first foundation, then layers in package-ready integration surfaces:
 
 Live npm and JSR publication are complete for `@cubid/core`. See
 `docs/engineering/package-migration-plan.md` for the rename and split plan.
+Machine-readable API reference artifacts live under `docs/reference/api/` for
+the primary public packages and should stay aligned with the package export
+surfaces.

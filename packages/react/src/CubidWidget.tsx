@@ -8,12 +8,24 @@ import type {
 } from "@cubid/browser";
 
 function toFriendlyStampName(stampToRender: CubidHostedVerificationStampType): string {
-  return stampToRender === "address" ? "address" : "phone";
+  if (stampToRender === "address") {
+    return "address";
+  }
+
+  if (stampToRender === "phone") {
+    return "phone";
+  }
+
+  return "ClearPass";
 }
 
 function getDefaultDescription(stampToRender: CubidHostedVerificationStampType): string {
   if (stampToRender === "address") {
     return "Continue in Cubid to complete address verification.";
+  }
+
+  if (stampToRender === "clearpass_verify") {
+    return "Continue in Cubid to verify with ClearPass, our third-party identity provider.";
   }
 
   return "Continue in Cubid to complete phone verification.";
@@ -22,6 +34,10 @@ function getDefaultDescription(stampToRender: CubidHostedVerificationStampType):
 function getDefaultButtonLabel(stampToRender: CubidHostedVerificationStampType): string {
   if (stampToRender === "address") {
     return "Verify address with Cubid";
+  }
+
+  if (stampToRender === "clearpass_verify") {
+    return "Verify with ClearPass";
   }
 
   return "Verify phone with Cubid";
@@ -38,6 +54,13 @@ function getConfigurationErrorMessage(props: HostedVerificationUrlRequest): stri
 
   if (props.stampToRender === "phone" && (props.pageId === undefined || String(props.pageId).trim().length === 0)) {
     return "Cubid phone verification is not configured for this environment.";
+  }
+
+  if (
+    props.stampToRender === "clearpass_verify" &&
+    (props.pageId === undefined || String(props.pageId).trim().length === 0)
+  ) {
+    return "ClearPass verification is not configured for this environment.";
   }
 
   return undefined;
@@ -184,7 +207,7 @@ export function CubidHostedVerificationWidget({
       data-cubid-widget="hosted-verification"
     >
       <div>
-        <p>{title ?? `Cubid ${toFriendlyStampName(stampToRender)} verification`}</p>
+        <p>{title ?? `${toFriendlyStampName(stampToRender)} verification`}</p>
         <p>{description ?? getDefaultDescription(stampToRender)}</p>
       </div>
       {configurationError ? <p aria-live="polite">{configurationError}</p> : null}

@@ -4,6 +4,12 @@ import { describe, expect, it, vi } from "vitest";
 import { useCubidWagmiAdapter } from "./hook";
 
 const rawConnector = {
+  capabilities: {
+    smartAccount: {
+      available: true,
+      metadata: { accountType: "safe" }
+    }
+  },
   id: "injected",
   name: "Injected",
   transport: "browser-wallet"
@@ -35,8 +41,25 @@ describe("@cubid/wagmi hook", () => {
 
     expect(result.current.isConnected).toBe(true);
     expect(result.current.address).toBe("0xabc");
+    expect(result.current.capabilities).toEqual({
+      smartAccount: {
+        available: true,
+        metadata: { accountType: "safe" }
+      }
+    });
     expect(result.current.currentConnector).toEqual({ id: "injected", name: "Injected" });
-    expect(result.current.connectors).toEqual([{ id: "injected", name: "Injected" }]);
+    expect(result.current.connectors).toEqual([
+      {
+        capabilities: {
+          smartAccount: {
+            available: true,
+            metadata: { accountType: "safe" }
+          }
+        },
+        id: "injected",
+        name: "Injected"
+      }
+    ]);
 
     const connection = await result.current.adapter.connect();
     const verification = await result.current.adapter.verify?.(connection);
@@ -46,6 +69,12 @@ describe("@cubid/wagmi hook", () => {
 
     expect(connection).toMatchObject({
       address: "0xabc",
+      capabilities: {
+        smartAccount: {
+          available: true,
+          metadata: { accountType: "safe" }
+        }
+      },
       chainType: "evm",
       connectorId: "injected"
     });
