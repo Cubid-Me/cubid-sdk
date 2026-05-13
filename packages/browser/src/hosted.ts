@@ -50,8 +50,10 @@ export function buildHostedVerificationUrl(request: HostedVerificationUrlRequest
 }
 
 export function buildClearPassVerifyUrl(request: ClearPassVerifyUrlRequest): string {
+  const pageId = assertNonEmpty(request.pageId, "pageId");
+
   return buildHostedVerificationUrl({
-    pageId: request.pageId,
+    pageId,
     passportOrigin: request.passportOrigin,
     stampToRender: "clearpass_verify",
     userId: request.userId

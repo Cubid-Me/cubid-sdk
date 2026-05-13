@@ -1,5 +1,23 @@
 # Session Log
 
+## session: s44-pr8-release-review-followup
+
+- Timestamp: 2026-05-13T13:10:00Z
+- Summary: Addressed the open PR #8 release-review comments by tightening the ClearPass helper contract and bumping the newly changed browser and React package versions for publication.
+- Actions:
+  - Bumped `@cubid/browser` and `@cubid/react` from `0.1.1` to `0.1.2` so the new public ClearPass helper exports are publishable from the release branch.
+  - Made `ClearPassVerifyUrlRequest.pageId` required and added an explicit ClearPass-side `pageId` assertion before delegating to the shared hosted URL builder.
+  - Narrowed the public capability helper parameters in `@cubid/evm` and `@cubid/web3` to string keys only, avoiding accidental numeric capability names from index-signature widening.
+  - Regenerated the machine-readable API reference artifacts so the manifest and package snapshots reflect the release-candidate package versions.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+
 ## session: s43-pr7-api-reference-determinism-fix
 
 - Timestamp: 2026-05-10T22:10:00Z

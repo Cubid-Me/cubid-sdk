@@ -29,7 +29,7 @@ export function getCubidEvmCapabilities(
 
 export function hasCubidEvmCapability(
   connection: CubidEvmConnection,
-  capabilityName: keyof CubidEvmCapabilities
+  capabilityName: keyof CubidEvmCapabilities & string
 ): boolean {
   return Boolean(getCubidEvmCapabilities(connection)[capabilityName]?.available);
 }

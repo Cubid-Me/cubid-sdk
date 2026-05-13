@@ -27,7 +27,7 @@ export interface HostedVerificationUrlRequest {
 }
 
 export interface ClearPassVerifyUrlRequest {
-  pageId?: number | string;
+  pageId: number | string;
   passportOrigin?: string;
   userId: string;
 }
