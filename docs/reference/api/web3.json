@@ -1229,7 +1229,7 @@
     },
     {
       "kind": "text",
-      "text": "\n\nLegacy wallet-oriented Cubid compatibility package while the chain-specific\nsplit continues to close out.\n\n## When To Choose This Package\n\nPrefer "
+      "text": "\n\nLegacy shared-wallet Cubid compatibility package for older installs that still\ndepend on the pre-split wallet surface.\n\n## When To Choose This Package\n\nPrefer "
     },
     {
       "kind": "code",
@@ -1341,7 +1341,7 @@
     },
     {
       "kind": "text",
-      "text": " only when you still depend on the older shared\nwallet surface while the split remains in progress. New chain-specific work\nshould prefer the dedicated chain packages instead of expanding this shared\nsurface.\n\n## Install\n\n"
+      "text": " only when you still depend on the older shared\nwallet surface. New chain-specific work should prefer the dedicated chain\npackages instead of expanding this shared surface.\n\n## Install\n\n"
     },
     {
       "kind": "code",
@@ -1349,7 +1349,55 @@
     },
     {
       "kind": "text",
-      "text": "\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## API Reference\n\n- JSON reference: "
+      "text": "\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## Maintenance Status\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/web3`"
+    },
+    {
+      "kind": "text",
+      "text": " is now a frozen compatibility package.\n\n- The supported shared-wallet surface is intentionally limited to the existing\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`evm`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`near`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`near-wallet`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`solana`"
+    },
+    {
+      "kind": "text",
+      "text": " stamp families.\n- New chain-specific helpers and new chain families should land only in their\n  dedicated packages.\n- If "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/web3`"
+    },
+    {
+      "kind": "text",
+      "text": " ever needs another release, treat it as a manual\n  compatibility exception rather than a normal forward-looking package update.\n\n## API Reference\n\n- JSON reference: "
     },
     {
       "kind": "code",
@@ -1365,7 +1413,7 @@
     },
     {
       "kind": "text",
-      "text": "\n\n## Capability Metadata\n\nThe interim wallet surface preserves optional "
+      "text": "\n\n## Capability Metadata\n\nThe legacy wallet surface preserves optional "
     },
     {
       "kind": "code",

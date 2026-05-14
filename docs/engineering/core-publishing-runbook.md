@@ -30,7 +30,7 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/sui` | npm-only | Chain-specific Sui package built for the npm ecosystem. |
 | `@cubid/tezos` | npm-only | Chain-specific Tezos package built for the npm ecosystem. |
 | `@cubid/wagmi` | npm-only | wagmi-specific React integration package. |
-| `@cubid/web3` | npm-only | Transitional umbrella package while the chain split continues. |
+| `@cubid/web3` | npm-only | Frozen compatibility package with manual-only maintenance. |
 | `@cubid/web2` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
 | `@cubid/web2-react` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
 | `@cubid/acceptance` | Private | Local-only workspace for acceptance tests. Never publish. |
@@ -157,8 +157,8 @@ branch other than `main`.
 
 ## Compatibility Package Retirement
 
-`@cubid/web2` and `@cubid/web2-react` are frozen deprecated compatibility
-wrappers, not active package surfaces. Keep them installable for older imports,
+`@cubid/web2`, `@cubid/web2-react`, and `@cubid/web3` are compatibility
+packages, not active growth surfaces. Keep them installable for older imports,
 but do not treat them as normal publish targets in `.github/workflows/publish.yml`.
 
 If the old names still need an operator-side retirement signal on npm, deprecate
@@ -172,6 +172,10 @@ npm deprecate @cubid/web2-react "Deprecated: use @cubid/react instead. @cubid/we
 Treat those commands as manual operator actions rather than a normal workflow
 path. If an emergency metadata correction is ever needed later, handle it as a
 manual exception, not as a supported steady-state release target.
+
+`@cubid/web3` follows the same manual-exception rule. If the frozen
+compatibility package ever needs another release, treat it as a deliberate
+operator action outside the normal publish workflow.
 
 ## Verification Commands
 

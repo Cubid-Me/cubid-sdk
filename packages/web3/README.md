@@ -1,7 +1,7 @@
 # `@cubid/web3`
 
-Legacy wallet-oriented Cubid compatibility package while the chain-specific
-split continues to close out.
+Legacy shared-wallet Cubid compatibility package for older installs that still
+depend on the pre-split wallet surface.
 
 ## When To Choose This Package
 
@@ -14,9 +14,8 @@ for new Sui integrations, `@cubid/cardano` for new Cardano integrations,
 Starknet integrations, `@cubid/stellar` for new Stellar integrations,
 `@cubid/tezos` for new Tezos integrations, and `@cubid/cosmos` for new Cosmos
 integrations. Use `@cubid/web3` only when you still depend on the older shared
-wallet surface while the split remains in progress. New chain-specific work
-should prefer the dedicated chain packages instead of expanding this shared
-surface.
+wallet surface. New chain-specific work should prefer the dedicated chain
+packages instead of expanding this shared surface.
 
 ## Install
 
@@ -29,6 +28,17 @@ npm install @cubid/web3 @cubid/core
 - npm: supported
 - JSR: not published by policy
 
+## Maintenance Status
+
+`@cubid/web3` is now a frozen compatibility package.
+
+- The supported shared-wallet surface is intentionally limited to the existing
+  `evm`, `near`, `near-wallet`, and `solana` stamp families.
+- New chain-specific helpers and new chain families should land only in their
+  dedicated packages.
+- If `@cubid/web3` ever needs another release, treat it as a manual
+  compatibility exception rather than a normal forward-looking package update.
+
 ## API Reference
 
 - JSON reference: `../../docs/reference/api/web3.json`
@@ -36,7 +46,7 @@ npm install @cubid/web3 @cubid/core
 
 ## Capability Metadata
 
-The interim wallet surface preserves optional `capabilities` metadata on
+The legacy wallet surface preserves optional `capabilities` metadata on
 connections and verification results. Use that metadata for features such as
 smart accounts, session keys, paymasters, or gas sponsorship instead of
 assuming every wallet connection supports them.

@@ -193,12 +193,12 @@ Verified npm metadata now resolves to normal package versions rather than
 
 ### S03. Split chain packages
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-01T08:40:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-15T00:05:00Z
 - Feature branch: `dev`
 - Head: `f46c24dc` at planning start
-- Session-log reference(s): session: s08-package-migration-planning, session: s13-evm-package-slice
+- Session-log reference(s): session: s08-package-migration-planning, session: s13-evm-package-slice, session: s66-web3-compatibility-closeout
 
 Plan the migration from `@cubid/web3` into chain-specific packages such as `@cubid/evm`, `@cubid/wagmi`, `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`, and `@cubid/near`, starting with lightweight contract boundaries before adding heavier SDK dependencies.
 
@@ -456,7 +456,12 @@ deprecation, and release-policy steps.
 
 ### S03.19 Freeze `@cubid/web3` to the legacy shared wallet surface
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
 
 Keep `@cubid/web3` limited to the already-supported legacy shared wallet
 surface instead of expanding it for newly extracted chains. New chain-specific
@@ -464,7 +469,12 @@ helpers should land only in their dedicated packages.
 
 ### S03.20 Add explicit `@cubid/web3` migration and deprecation messaging
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
 
 Update package metadata, README messaging, and developer docs so downstream
 consumers are clearly pointed toward dedicated chain packages while preserving
@@ -472,7 +482,12 @@ the current compatibility surface for existing installs.
 
 ### S03.21 Move `@cubid/web3` out of the normal active-package path
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
 
 Once the migration messaging is live, treat `@cubid/web3` like a controlled
 compatibility package rather than a primary forward-looking SDK surface. That
@@ -481,7 +496,12 @@ package-selection guidance.
 
 ### S03.22 Write a downstream `@cubid/web3` migration guide
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
 
 Document how existing `@cubid/web3` consumers should move to the dedicated
 chain packages, including the preserved adapter concepts, capability helpers,
@@ -489,11 +509,16 @@ and the right package choice by chain and framework.
 
 ### S03.23 Decide the final long-term `@cubid/web3` end state
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
 
 After the compatibility package is frozen and downstream migrations are in
-motion, decide whether `@cubid/web3` remains as a long-lived frozen wrapper or
-shifts to a formal deprecated release path with manual-only maintenance.
+motion, keep `@cubid/web3` as a long-lived frozen wrapper with manual-only
+maintenance unless a later deliberate deprecation decision is made.
 
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 

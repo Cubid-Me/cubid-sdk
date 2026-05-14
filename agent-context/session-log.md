@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s66-web3-compatibility-closeout
+
+- Timestamp: 2026-05-15T00:05:00Z
+- Summary: Closed out the remaining `@cubid/web3` roadmap items by freezing the shared wallet surface, publishing downstream migration guidance, and moving the package out of the normal release path.
+- Actions:
+  - Marked `@cubid/web3` as a frozen legacy compatibility package in package metadata, public docs, and package-boundary guidance, and made the supported legacy stamp families explicit in the shared type surface.
+  - Removed `@cubid/web3` from the normal publish workflow choices so future releases are treated as manual compatibility exceptions rather than active package work.
+  - Added `docs/engineering/web3-migration-guide.md` and updated the package matrix, publishing policy, migration plan, roadmap files, and agent guidance so dedicated chain packages are the only forward-looking wallet targets.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - The current public SDK roadmap is now closed through the planned chain-package split and `@cubid/web3` compatibility freeze.
+
 ## session: s65-stellar-package-slice
 
 - Timestamp: 2026-05-14T23:45:00Z

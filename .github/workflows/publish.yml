@@ -27,7 +27,6 @@ on:
           - "@cubid/sui"
           - "@cubid/tezos"
           - "@cubid/wagmi"
-          - "@cubid/web3"
       publish_npm:
         description: "Publish the selected package to npm using Trusted Publishing"
         required: true
@@ -121,10 +120,6 @@ jobs:
               ;;
             "@cubid/wagmi")
               echo "package_dir=packages/wagmi" >> "$GITHUB_OUTPUT"
-              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
-              ;;
-            "@cubid/web3")
-              echo "package_dir=packages/web3" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             *)

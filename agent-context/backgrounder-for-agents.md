@@ -57,7 +57,7 @@ Build toward this package ecosystem:
 ```
 
 The current workspace now contains the target package names for the first
-browser/React/EVM slices, while frozen compatibility and interim packages remain:
+browser/React/EVM slices, while frozen compatibility packages remain:
 
 ```txt
 @cubid/auth
@@ -80,7 +80,7 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 
 @cubid/web2       -> frozen compatibility wrapper around @cubid/browser
 @cubid/web2-react -> frozen compatibility wrapper around @cubid/react
-@cubid/web3       -> interim shared wallet package pending further chain splits
+@cubid/web3       -> frozen shared-wallet compatibility package
 ```
 
 ## Package Responsibilities

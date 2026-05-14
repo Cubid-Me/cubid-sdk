@@ -6,7 +6,7 @@ NEAR-oriented Cubid wallet helpers built on top of `@cubid/core`.
 
 Use `@cubid/near` when you need Cubid's NEAR-specific custody, connection, and
 verification helpers. Choose `@cubid/web3` only when you still depend on the
-older interim shared wallet surface while the chain split continues.
+older shared wallet surface.
 
 ## Install
 

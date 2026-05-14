@@ -129,7 +129,7 @@
     {
       "name": "@cubid/web3",
       "version": "0.1.1",
-      "description": "Wallet-oriented Cubid helpers built on top of @cubid/core.",
+      "description": "Legacy shared-wallet Cubid compatibility helpers built on top of @cubid/core.",
       "registry": "npm-only",
       "referencePath": "web3.json"
     }

@@ -28,7 +28,7 @@ verification, migrations, and service-role access.
 | `@cubid/sui` | Sui-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/tezos` | Tezos-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/wagmi` | wagmi-specific React integration helpers built on `@cubid/evm`. | npm-only |
-| `@cubid/web3` | Interim wallet-oriented package while the chain-specific split continues. | npm-only |
+| `@cubid/web3` | Frozen legacy shared-wallet compatibility package for older installs. | npm-only, compatibility-only |
 | `@cubid/web2` | Frozen compatibility wrapper around `@cubid/browser`. | npm-only, deprecated |
 | `@cubid/web2-react` | Frozen compatibility wrapper around `@cubid/react`. | npm-only, deprecated |
 | `@cubid/acceptance` | Private local consumer-style acceptance harness. | Private, never published |
@@ -41,6 +41,10 @@ npm-only by design.
 `@cubid/web2` and `@cubid/web2-react` remain installable for older imports, but
 they are compatibility names only. New integrations should use
 `@cubid/browser` and `@cubid/react`.
+
+`@cubid/web3` also remains installable, but it is now a frozen compatibility
+package. New wallet integrations should use the dedicated chain packages
+instead.
 
 ## API Reference
 
@@ -68,6 +72,9 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/tezos.json`
   - `docs/reference/api/wagmi.json`
   - `docs/reference/api/web3.json`
+
+Shared-wallet migrations now have a dedicated guide:
+- `docs/engineering/web3-migration-guide.md`
 
 ## Examples
 
