@@ -710,3 +710,14 @@
   - Added SDK-local `AGENTS.md`, `agent-context/todo.md`, and this `session-log.md`.
   - Updated `cubid-passport` docs and E02 todos to mark SDK publication work as ingested into `cubid-sdk-v2`.
 - Repo hygiene note: `/Users/botmaster/src/cubid/cubid-sdk-v2` is missing a `.git` checkout locally, so branch/head metadata and commit provenance were unavailable during this session.
+
+## session: s04-auth-pr9-ci-followup
+
+- Timestamp: 2026-05-13T20:35:00Z
+- Summary: Fixed PR #9 CI so the shared unit-test pass works on a clean runner after adding the new auth packages.
+- Actions:
+  - Inspected the failed `validate` run for PR #9 and isolated the break to `packages/auth-react/src/index.test.tsx` failing to resolve `@cubid/auth`.
+  - Updated the root `test:unit` script to build `@cubid/auth` before running the shared Vitest suite, alongside the existing minimal package prebuilds.
+  - Updated the testing strategy doc so the clean-runner requirement now explicitly covers auth package consumers as well as React and wagmi suites.
+- Validation:
+  - Reproduced the relevant check locally with `pnpm test:unit`.

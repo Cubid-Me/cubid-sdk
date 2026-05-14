@@ -35,10 +35,10 @@ pnpm --filter @cubid/core test
 pnpm test:unit
 ```
 
-`pnpm test:unit` now prepares the minimal built entrypoints that the React and
-wagmi suites import through public package names, so the unit test command stays
-reliable on a clean CI runner instead of depending on leftover local build
-artifacts.
+`pnpm test:unit` now prepares the minimal built entrypoints that the auth,
+React, and wagmi suites import through public package names, so the unit test
+command stays reliable on a clean CI runner instead of depending on leftover
+local build artifacts.
 
 ### 2. Package integration tests
 
