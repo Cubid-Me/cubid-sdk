@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s55-sui-package-slice
+
+- Timestamp: 2026-05-14T17:15:00Z
+- Summary: Continued `S03` by extracting `@cubid/sui` as the next concrete chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/sui` with a Sui-specific client, types, capability helpers, package metadata, and focused tests.
+  - Normalized Sui wallet addresses to canonical lowercase `0x...` strings on the package surface before verification and default stamp serialization.
+  - Wired `@cubid/sui` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+  - Refreshed the publishing runbook's current verified registry state so the operator notes match the packages that are already live on npm today.
+- Validation:
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with later chain-specific slices or the eventual `@cubid/web3` compatibility closeout once the next bounded package step is chosen.
+
 ## session: s54-s03-persistence-guard-followup
 
 - Timestamp: 2026-05-14T16:20:00Z

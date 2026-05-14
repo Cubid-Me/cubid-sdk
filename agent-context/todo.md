@@ -321,6 +321,19 @@ Added `packages/solana` as the next chain-specific package on top of
 `@cubid/core`, with Solana-specific connection and stamp types, capability
 metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
 
+### S03.9 Create the first `@cubid/sui` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T16:30:00Z
+- Timestamp completed: 2026-05-14T17:15:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `a8ded0e0` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-03-c05-2-1-sui-v3-custody.md`, session: s55-sui-package-slice
+
+Added `packages/sui` as the next chain-specific package on top of
+`@cubid/core`, with canonical lowercase address normalization, capability
+metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
+
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
 - Status: Completed

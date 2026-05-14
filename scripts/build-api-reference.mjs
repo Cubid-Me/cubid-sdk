@@ -75,6 +75,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "sui",
+    name: "@cubid/sui",
+    dir: "packages/sui",
+    entryPoint: "packages/sui/src/index.ts",
+    tsconfig: "packages/sui/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "wagmi",
     name: "@cubid/wagmi",
     dir: "packages/wagmi",

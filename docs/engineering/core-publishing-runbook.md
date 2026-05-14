@@ -20,6 +20,7 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/evm` | npm-only | Chain-specific package built for the npm ecosystem. |
 | `@cubid/near` | npm-only | Chain-specific NEAR package built for the npm ecosystem. |
 | `@cubid/solana` | npm-only | Chain-specific Solana package built for the npm ecosystem. |
+| `@cubid/sui` | npm-only | Chain-specific Sui package built for the npm ecosystem. |
 | `@cubid/wagmi` | npm-only | wagmi-specific React integration package. |
 | `@cubid/web3` | npm-only | Transitional umbrella package while the chain split continues. |
 | `@cubid/web2` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
@@ -52,18 +53,20 @@ If `npm view` returns a 404, the package has not been published yet. If
 
 ## Current Verified Registry State
 
-Current verified state as of 2026-05-09:
+Current verified state as of 2026-05-14:
 
 - npm:
-  - `@cubid/core@0.1.2`
-  - `@cubid/auth` is not published yet
-  - `@cubid/auth-react` is not published yet
-  - `@cubid/browser@0.1.1`
-  - `@cubid/react@0.1.1`
-  - `@cubid/evm@0.1.1`
-  - `@cubid/near` is not published yet
-  - `@cubid/solana` is not published yet
-  - `@cubid/wagmi@0.1.1`
+  - `@cubid/core@0.1.3`
+  - `@cubid/auth@0.1.0`
+  - `@cubid/auth-react@0.1.0`
+  - `@cubid/browser@0.1.3`
+  - `@cubid/react@0.1.2`
+  - `@cubid/evm@0.1.2`
+  - `@cubid/near@0.1.0`
+  - `@cubid/solana@0.1.0`
+  - `@cubid/sui` is not published yet
+  - `@cubid/wagmi@0.1.2`
+  - `@cubid/web3@0.1.1`
 - npm trusted publishing: configured for `Cubid-Me/cubid-sdk`
 - JSR:
   - `@cubid/core` is live at `https://jsr.io/@cubid/core`

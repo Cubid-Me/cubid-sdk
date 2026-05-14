@@ -17,6 +17,7 @@ on:
           - "@cubid/evm"
           - "@cubid/near"
           - "@cubid/solana"
+          - "@cubid/sui"
           - "@cubid/wagmi"
           - "@cubid/web3"
       publish_npm:
@@ -72,6 +73,10 @@ jobs:
               ;;
             "@cubid/solana")
               echo "package_dir=packages/solana" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/sui")
+              echo "package_dir=packages/sui" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/wagmi")

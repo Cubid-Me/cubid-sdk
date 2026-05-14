@@ -12,6 +12,7 @@ export default defineConfig({
       "@cubid/near": path.resolve(__dirname, "packages/near/src/index.ts"),
       "@cubid/react": path.resolve(__dirname, "packages/react/src/index.ts"),
       "@cubid/solana": path.resolve(__dirname, "packages/solana/src/index.ts"),
+      "@cubid/sui": path.resolve(__dirname, "packages/sui/src/index.ts"),
       "@cubid/wagmi": path.resolve(__dirname, "packages/wagmi/src/index.ts"),
       "@cubid/web2": path.resolve(__dirname, "packages/web2/src/index.ts"),
       "@cubid/web2-react": path.resolve(__dirname, "packages/web2-react/src/index.ts"),
@@ -36,6 +37,7 @@ export default defineConfig({
         "packages/evm/src/**/*.{ts,tsx}",
         "packages/near/src/**/*.{ts,tsx}",
         "packages/solana/src/**/*.{ts,tsx}",
+        "packages/sui/src/**/*.{ts,tsx}",
         "packages/wagmi/src/**/*.{ts,tsx}",
         "packages/web3/src/**/*.{ts,tsx}"
       ],
@@ -54,6 +56,7 @@ export default defineConfig({
             "packages/evm/src/**/*.test.ts",
             "packages/near/src/**/*.test.ts",
             "packages/solana/src/**/*.test.ts",
+            "packages/sui/src/**/*.test.ts",
             "packages/wagmi/src/**/*.test.ts",
             "packages/web3/src/**/*.test.ts"
           ],

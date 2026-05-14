@@ -59,6 +59,9 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 @cubid/react
 @cubid/evm
 @cubid/wagmi
+@cubid/near
+@cubid/solana
+@cubid/sui
 
 @cubid/web2       -> frozen compatibility wrapper around @cubid/browser
 @cubid/web2-react -> frozen compatibility wrapper around @cubid/react

@@ -13,6 +13,7 @@ public Cubid SDK packages.
 - `@cubid/evm`
 - `@cubid/near`
 - `@cubid/solana`
+- `@cubid/sui`
 - `@cubid/wagmi`
 - `@cubid/web3`
 
