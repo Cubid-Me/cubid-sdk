@@ -11,6 +11,8 @@ public Cubid SDK packages.
 - `@cubid/browser`
 - `@cubid/react`
 - `@cubid/evm`
+- `@cubid/near`
+- `@cubid/solana`
 - `@cubid/wagmi`
 - `@cubid/web3`
 

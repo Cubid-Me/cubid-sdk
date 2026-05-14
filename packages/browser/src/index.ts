@@ -1,5 +1,10 @@
 export { createCubidWeb2Client } from "./client";
-export { buildClearPassVerifyUrl, buildHostedVerificationUrl } from "./hosted";
+export {
+  buildClearPassVerifyUrl,
+  buildHostedSiwcAccountRequestAction,
+  buildHostedSiwcSigningRequestAction,
+  buildHostedVerificationUrl
+} from "./hosted";
 export { WEB2_OAUTH_PROVIDERS } from "./types";
 export type {
   ClearPassVerifyUrlRequest,
@@ -13,6 +18,10 @@ export type {
   EmailOtpStartRequest,
   EmailOtpVerifyRequest,
   EmailOtpVerifyResult,
+  HostedSiwcAccountRequestActionRequest,
+  HostedSiwcDecision,
+  HostedSiwcRequestDescriptor,
+  HostedSiwcSigningRequestActionRequest,
   HostedVerificationUrlRequest,
   OAuthAuthorizationUrlRequest,
   ParsedCubidAllowFlowParams,

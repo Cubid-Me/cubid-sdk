@@ -1457,6 +1457,174 @@
       ]
     },
     {
+      "name": "HostedSiwcAccountRequestActionRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "accountRequestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "decision",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "HostedSiwcDecision",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "HostedSiwcRequestDescriptor",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "body",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "credentials",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "literal",
+            "value": "include"
+          }
+        },
+        {
+          "name": "headers",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Readonly"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              }
+            ],
+            "name": "Readonly",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "method",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "literal",
+            "value": "POST"
+          }
+        },
+        {
+          "name": "url",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "HostedSiwcSigningRequestActionRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "decision",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "HostedSiwcDecision",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "signingRequestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
       "name": "HostedVerificationUrlRequest",
       "variant": "declaration",
       "kind": 256,
@@ -2744,6 +2912,25 @@
       }
     },
     {
+      "name": "HostedSiwcDecision",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "approve"
+          },
+          {
+            "type": "literal",
+            "value": "reject"
+          }
+        ]
+      }
+    },
+    {
       "name": "WEB2_OAUTH_PROVIDERS",
       "variant": "declaration",
       "kind": 32,
@@ -2816,6 +3003,70 @@
           "type": {
             "type": "intrinsic",
             "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "buildHostedSiwcAccountRequestAction",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "buildHostedSiwcAccountRequestAction",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "request",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "HostedSiwcAccountRequestActionRequest",
+                "package": "@cubid/browser"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "HostedSiwcRequestDescriptor",
+            "package": "@cubid/browser"
+          }
+        }
+      ]
+    },
+    {
+      "name": "buildHostedSiwcSigningRequestAction",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "buildHostedSiwcSigningRequestAction",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "request",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "HostedSiwcSigningRequestActionRequest",
+                "package": "@cubid/browser"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "HostedSiwcRequestDescriptor",
+            "package": "@cubid/browser"
           }
         }
       ]
@@ -2961,7 +3212,95 @@
     },
     {
       "kind": "text",
-      "text": "\n\nThis package is headless by design. It does not ship React components and does\nnot require a root provider."
+      "text": "\n\nThis package is headless by design. It does not ship React components and does\nnot require a root provider.\n\n## Hosted Flow Helpers\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": " keeps browser-safe hosted helpers out of "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": " and\nout of React-specific packages. Today that includes:\n\n- Allow Page URL helpers\n- OTP flow orchestration\n- hosted verification URL builders\n- ClearPass Verify URL builders\n- hosted SIWC approval/rejection request descriptors\n\nUse this package when your app needs browser-facing Cubid flow helpers but\nshould not embed Cubid API keys, server credentials, or private approval logic\nin the browser bundle.\n\n## Hosted SIWC Approval Descriptors\n\nPasskey-approved wallet creation and signing approval remain Passport-hosted.\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": " now exposes descriptor builders for those hosted approval and\nrejection routes:\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```ts\nimport {\n  buildHostedSiwcAccountRequestAction,\n  buildHostedSiwcSigningRequestAction,\n} from \"@cubid/browser\"\n\nconst approveAccount = buildHostedSiwcAccountRequestAction({\n  accountRequestId: \"siwc_acct_req_123\",\n  decision: \"approve\",\n})\n\nconst rejectSigning = buildHostedSiwcSigningRequestAction({\n  decision: \"reject\",\n  signingRequestId: \"siwc_req_456\",\n})\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nEach helper returns a launcher-ready descriptor with:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`url`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`method`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`credentials`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`headers`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`body`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThe descriptor currently sets "
+    },
+    {
+      "kind": "code",
+      "text": "`credentials: \"include\"`"
+    },
+    {
+      "kind": "text",
+      "text": " so a browser "
+    },
+    {
+      "kind": "code",
+      "text": "`fetch`"
+    },
+    {
+      "kind": "text",
+      "text": "\ncall will send the authenticated Passport session cookie during the hosted\napproval or rejection step.\n\nThese helpers are intentionally thin. They prepare the browser-safe request\nshape for Passport-hosted approval flows, but they do not bypass Passport user\nauthentication, fresh passkey step-up, or app policy checks.\n\nUse them only in environments where the authenticated Passport user session is\nalready expected to perform the approval or rejection step."
     }
   ]
 }

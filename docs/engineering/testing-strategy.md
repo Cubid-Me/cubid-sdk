@@ -11,6 +11,16 @@ coverage pipeline:
 The goal is to keep merge and publish decisions grounded in the public package
 surfaces that consumers actually install.
 
+Local build and smoke-style validation should start with:
+
+```sh
+pnpm install --frozen-lockfile
+```
+
+That keeps local dependency resolution aligned with CI and Vercel. If the
+command fails, fix the lockfile drift before treating any later local result as
+authoritative.
+
 ## Test Layers
 
 ### 1. Package unit and contract tests
@@ -31,6 +41,7 @@ These tests cover:
 Run with:
 
 ```sh
+pnpm install --frozen-lockfile
 pnpm --filter @cubid/core test
 pnpm test:unit
 ```
@@ -48,6 +59,8 @@ Scope:
 - `@cubid/auth-react`
 - `@cubid/browser`
 - `@cubid/evm`
+- `@cubid/near`
+- `@cubid/solana`
 - `@cubid/wagmi`
 - `@cubid/web3`
 
@@ -57,6 +70,7 @@ still running against source code in a controlled environment.
 Run with:
 
 ```sh
+pnpm install --frozen-lockfile
 pnpm test:unit
 ```
 
@@ -73,6 +87,7 @@ constraints like avoiding wallet dependencies.
 Run with:
 
 ```sh
+pnpm install --frozen-lockfile
 pnpm test:unit
 ```
 
@@ -102,6 +117,7 @@ integration. They are intentionally mocked and local-first.
 Run with:
 
 ```sh
+pnpm install --frozen-lockfile
 pnpm build
 pnpm test:acceptance
 ```
@@ -113,6 +129,7 @@ pnpm test:acceptance
 Use this while iterating on code:
 
 ```sh
+pnpm install --frozen-lockfile
 pnpm lint
 pnpm typecheck
 pnpm test:unit
@@ -123,12 +140,20 @@ pnpm test:unit
 Use this before a release or review handoff:
 
 ```sh
+pnpm validate:yeet
+```
+
+Expanded steps:
+
+```sh
+pnpm install --frozen-lockfile
 pnpm lint
 pnpm typecheck
 pnpm test:unit
 pnpm build
 pnpm test:acceptance
 pnpm test:coverage
+pnpm docs:api:check
 pnpm check:core-package
 ```
 
@@ -137,6 +162,7 @@ pnpm check:core-package
 The main CI workflow should enforce:
 
 ```sh
+pnpm install --frozen-lockfile
 pnpm lint
 pnpm typecheck
 pnpm test:unit
@@ -165,6 +191,8 @@ Coverage target scope:
 - include `@cubid/browser`
 - include `@cubid/react`
 - include `@cubid/evm`
+- include `@cubid/near`
+- include `@cubid/solana`
 - include `@cubid/wagmi`
 - include `@cubid/web3`
 

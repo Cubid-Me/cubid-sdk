@@ -1,7 +1,7 @@
 {
-  "name": "@cubid/browser",
-  "version": "0.1.3",
-  "description": "Headless browser helpers for Cubid OTP, hosted verification, approval, and allow flows.",
+  "name": "@cubid/solana",
+  "version": "0.1.0",
+  "description": "Solana-oriented Cubid wallet helpers built on top of @cubid/core.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -17,18 +17,18 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
-    "directory": "packages/browser"
+    "directory": "packages/solana"
   },
-  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/browser",
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/solana",
   "bugs": {
     "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
   },
   "keywords": [
     "cubid",
     "identity",
-    "browser",
-    "verification",
-    "otp",
+    "solana",
+    "wallet",
+    "custody",
     "sdk"
   ],
   "sideEffects": false,

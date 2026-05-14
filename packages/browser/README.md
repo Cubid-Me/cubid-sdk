@@ -41,3 +41,60 @@ const browserClient = createCubidWeb2Client(apiClient)
 
 This package is headless by design. It does not ship React components and does
 not require a root provider.
+
+## Hosted Flow Helpers
+
+`@cubid/browser` keeps browser-safe hosted helpers out of `@cubid/core` and
+out of React-specific packages. Today that includes:
+
+- Allow Page URL helpers
+- OTP flow orchestration
+- hosted verification URL builders
+- ClearPass Verify URL builders
+- hosted SIWC approval/rejection request descriptors
+
+Use this package when your app needs browser-facing Cubid flow helpers but
+should not embed Cubid API keys, server credentials, or private approval logic
+in the browser bundle.
+
+## Hosted SIWC Approval Descriptors
+
+Passkey-approved wallet creation and signing approval remain Passport-hosted.
+`@cubid/browser` now exposes descriptor builders for those hosted approval and
+rejection routes:
+
+```ts
+import {
+  buildHostedSiwcAccountRequestAction,
+  buildHostedSiwcSigningRequestAction,
+} from "@cubid/browser"
+
+const approveAccount = buildHostedSiwcAccountRequestAction({
+  accountRequestId: "siwc_acct_req_123",
+  decision: "approve",
+})
+
+const rejectSigning = buildHostedSiwcSigningRequestAction({
+  decision: "reject",
+  signingRequestId: "siwc_req_456",
+})
+```
+
+Each helper returns a launcher-ready descriptor with:
+
+- `url`
+- `method`
+- `credentials`
+- `headers`
+- `body`
+
+The descriptor currently sets `credentials: "include"` so a browser `fetch`
+call will send the authenticated Passport session cookie during the hosted
+approval or rejection step.
+
+These helpers are intentionally thin. They prepare the browser-safe request
+shape for Passport-hosted approval flows, but they do not bypass Passport user
+authentication, fresh passkey step-up, or app policy checks.
+
+Use them only in environments where the authenticated Passport user session is
+already expected to perform the approval or rejection step.

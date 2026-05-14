@@ -152,7 +152,270 @@
           "name": "Error",
           "package": "typescript"
         }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "name": "CubidSiwcError"
+        }
       ]
+    },
+    {
+      "name": "CubidSiwcError",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {},
+      "children": [
+        {
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "CubidSiwcError",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidSiwcErrorInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "CubidSiwcError",
+                "package": "@cubid/core"
+              },
+              "overwrites": {
+                "type": "reference",
+                "name": "CubidApiError.constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "name": "CubidApiError.constructor"
+          }
+        },
+        {
+          "name": "category",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidApiErrorCategory",
+            "package": "@cubid/core"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.category"
+          }
+        },
+        {
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.code"
+          }
+        },
+        {
+          "name": "details",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.details"
+          }
+        },
+        {
+          "name": "endpoint",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.endpoint"
+          }
+        },
+        {
+          "name": "requestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.requestId"
+          }
+        },
+        {
+          "name": "retryable",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "boolean"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "siwcCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.status"
+          }
+        },
+        {
+          "name": "userAction",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidApiError",
+          "package": "@cubid/core"
+        }
+      ]
+    },
+    {
+      "name": "AccountRequestStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidAccountRequestStatus",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "AccountRequestSummary",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidAccountRequestSummary",
+        "package": "@cubid/core"
+      }
     },
     {
       "name": "AddStampInput",
@@ -256,6 +519,28 @@
       }
     },
     {
+      "name": "CreateAccountRequestInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidCreateAccountRequestInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CreateAccountRequestResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidCreateAccountRequestResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "CreateSigningRequestInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -336,6 +621,427 @@
           }
         ]
       }
+    },
+    {
+      "name": "CubidAccountRequestStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "approved"
+          },
+          {
+            "type": "literal",
+            "value": "expired"
+          },
+          {
+            "type": "literal",
+            "value": "failed"
+          },
+          {
+            "type": "literal",
+            "value": "pending_user_approval"
+          },
+          {
+            "type": "literal",
+            "value": "policy_denied"
+          },
+          {
+            "type": "literal",
+            "value": "rejected"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidAccountRequestSummary",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "accountId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "accountRequestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "approvedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "chain",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidCustodyChain",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "createdAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "dappId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "dappUserAccountId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "errorCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "errorMessage",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "expiresAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "label",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "policyVersion",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "number"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "publicAddress",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "rejectedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "requiredAcr",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidAccountRequestStatus",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "updatedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "CubidAddStampInput",
@@ -562,6 +1268,50 @@
                   {
                     "type": "reference",
                     "name": "CubidCancelSigningRequestResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "createAccountRequest",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "createAccountRequest",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidCreateAccountRequestInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidCreateAccountRequestResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -1012,6 +1762,52 @@
           ]
         },
         {
+          "name": "fetchWalletCapabilities",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "fetchWalletCapabilities",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidFetchWalletCapabilitiesInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidFetchWalletCapabilitiesResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
           "name": "generateAccount",
           "variant": "declaration",
           "kind": 2048,
@@ -1046,6 +1842,50 @@
                   {
                     "type": "reference",
                     "name": "CubidGenerateAccountResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "getAccountRequest",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "getAccountRequest",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidGetAccountRequestInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidGetAccountRequestResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -1943,6 +2783,121 @@
           "type": {
             "type": "intrinsic",
             "name": "number"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidCreateAccountRequestInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidIdempotentRequestOptions",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "chain",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidCustodyChain",
+                    "package": "@cubid/core"
+                  }
+                },
+                {
+                  "name": "label",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "userId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidCreateAccountRequestResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "accountRequest",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidAccountRequestSummary",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "idempotencyKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
           }
         }
       ]
@@ -3768,6 +4723,71 @@
       ]
     },
     {
+      "name": "CubidFetchWalletCapabilitiesInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidFetchWalletCapabilitiesResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletCapabilities",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
       "name": "CubidGenerateAccountInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -3852,6 +4872,69 @@
           "type": {
             "type": "intrinsic",
             "name": "string"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidGetAccountRequestInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "accountRequestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidGetAccountRequestResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "accountRequest",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidAccountRequestSummary",
+            "package": "@cubid/core"
           }
         },
         {
@@ -4145,6 +5228,18 @@
       "kind": 2097152,
       "flags": {},
       "children": [
+        {
+          "name": "limit",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
         {
           "name": "userAccountId",
           "variant": "declaration",
@@ -4707,6 +5802,136 @@
       ]
     },
     {
+      "name": "CubidSignedTransactionResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "algorithm",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "chainId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "number"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "publicAddress",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "signedTransaction",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "transactionHash",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "type",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "literal",
+            "value": "signed_transaction"
+          }
+        }
+      ]
+    },
+    {
       "name": "CubidSigningRequestPolicyDecision",
       "variant": "declaration",
       "kind": 2097152,
@@ -4725,6 +5950,32 @@
           {
             "type": "literal",
             "value": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidSigningRequestResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidSigningSignatureResult",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reference",
+            "name": "CubidSignedTransactionResult",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reference",
+            "name": "CubidUnknownSigningResult",
+            "package": "@cubid/core"
           }
         ]
       }
@@ -4766,6 +6017,10 @@
         "types": [
           {
             "type": "literal",
+            "value": "pending_user_approval"
+          },
+          {
+            "type": "literal",
             "value": "pending"
           },
           {
@@ -4783,6 +6038,10 @@
           {
             "type": "literal",
             "value": "completed"
+          },
+          {
+            "type": "literal",
+            "value": "expired"
           },
           {
             "type": "literal",
@@ -4821,6 +6080,27 @@
         ]
       },
       "children": [
+        {
+          "name": "approvedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
         {
           "name": "cancelledAt",
           "variant": "declaration",
@@ -4892,6 +6172,65 @@
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "errorCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "errorMessage",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "expiresAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
           "type": {
             "type": "union",
             "types": [
@@ -4981,7 +6320,7 @@
             "types": [
               {
                 "type": "intrinsic",
-                "name": "string"
+                "name": "number"
               },
               {
                 "type": "literal",
@@ -5014,6 +6353,27 @@
             ],
             "name": "Record",
             "package": "typescript"
+          }
+        },
+        {
+          "name": "rejectedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
           }
         },
         {
@@ -5065,23 +6425,8 @@
             "types": [
               {
                 "type": "reference",
-                "target": {
-                  "packageName": "typescript",
-                  "packagePath": "lib/lib.es5.d.ts",
-                  "qualifiedName": "Record"
-                },
-                "typeArguments": [
-                  {
-                    "type": "intrinsic",
-                    "name": "string"
-                  },
-                  {
-                    "type": "intrinsic",
-                    "name": "unknown"
-                  }
-                ],
-                "name": "Record",
-                "package": "typescript"
+                "name": "CubidSigningRequestResult",
+                "package": "@cubid/core"
               },
               {
                 "type": "literal",
@@ -5279,6 +6624,244 @@
           {
             "type": "literal",
             "value": "transaction"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidSigningSignatureResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "algorithm",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "publicAddress",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "signature",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "type",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "literal",
+            "value": "signature"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSiwcErrorCode",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "indexedAccess",
+            "indexType": {
+              "type": "intrinsic",
+              "name": "number"
+            },
+            "objectType": {
+              "type": "query",
+              "queryType": {
+                "type": "reference",
+                "name": "CUBID_SIWC_ERROR_CODES",
+                "package": "@cubid/core"
+              }
+            }
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidSiwcErrorInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidApiErrorInput",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "retryable",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "boolean"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "siwcCode",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "name": "CubidSiwcErrorCode",
+                        "package": "@cubid/core"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "userAction",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "name": "CubidSiwcUserAction",
+                        "package": "@cubid/core"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidSiwcUserAction",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "indexedAccess",
+            "indexType": {
+              "type": "intrinsic",
+              "name": "number"
+            },
+            "objectType": {
+              "type": "query",
+              "queryType": {
+                "type": "reference",
+                "name": "CUBID_SIWC_USER_ACTIONS",
+                "package": "@cubid/core"
+              }
+            }
           },
           {
             "type": "intrinsic",
@@ -5560,6 +7143,59 @@
           }
         }
       }
+    },
+    {
+      "name": "CubidUnknownSigningResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "type",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "CubidVerifyEmailOtpInput",
@@ -5909,6 +7545,491 @@
           }
         }
       ]
+    },
+    {
+      "name": "CubidWalletAccountCreationModes",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "directGenerateEnabled",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "passkeyApprovedRequestEnabled",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletCapabilities",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "accountCreationModes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletAccountCreationModes",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "accounts",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidCustodyAccount",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "dappId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "policy",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletPolicy",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "supportedChains",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "union",
+              "types": [
+                {
+                  "type": "reference",
+                  "name": "CubidCustodyChain",
+                  "package": "@cubid/core"
+                },
+                {
+                  "type": "intrinsic",
+                  "name": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "walletActionsByChain",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "reference",
+                "name": "CubidWalletChainActions",
+                "package": "@cubid/core"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletChainActions",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "accountLookup",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "directGeneration",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "messageSigning",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "passkeyApprovedCreation",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "transactionSigning",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "transactionSigningStatus",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "typedDataSigning",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletPolicy",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "allowedChains",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "union",
+              "types": [
+                {
+                  "type": "reference",
+                  "name": "CubidCustodyChain",
+                  "package": "@cubid/core"
+                },
+                {
+                  "type": "intrinsic",
+                  "name": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "allowedRequestTypes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidSigningRequestType",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "custodyEnabled",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "policyStatus",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidWalletPolicyStatus",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "policyVersion",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "unknown"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "requiredAcr",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "sandboxMode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "signingEnabled",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletPolicyStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "enabled"
+          },
+          {
+            "type": "literal",
+            "value": "disabled"
+          },
+          {
+            "type": "literal",
+            "value": "missing"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
     },
     {
       "name": "CubidWebhookEvent",
@@ -6518,6 +8639,28 @@
       }
     },
     {
+      "name": "FetchWalletCapabilitiesInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidFetchWalletCapabilitiesInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "FetchWalletCapabilitiesResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidFetchWalletCapabilitiesResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "GenerateAccountInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -6536,6 +8679,28 @@
       "type": {
         "type": "reference",
         "name": "CubidGenerateAccountResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "GetAccountRequestInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidGetAccountRequestInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "GetAccountRequestResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidGetAccountRequestResponse",
         "package": "@cubid/core"
       }
     },
@@ -6727,6 +8892,28 @@
       }
     },
     {
+      "name": "SignedTransactionResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSignedTransactionResult",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "SigningRequestResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSigningRequestResult",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "SigningRequestStatus",
       "variant": "declaration",
       "kind": 2097152,
@@ -6760,6 +8947,50 @@
       }
     },
     {
+      "name": "SigningSignatureResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSigningSignatureResult",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "SiwcErrorCode",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSiwcErrorCode",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "SiwcErrorInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSiwcErrorInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "SiwcUserAction",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSiwcUserAction",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "StampType",
       "variant": "declaration",
       "kind": 2097152,
@@ -6767,6 +8998,17 @@
       "type": {
         "type": "reference",
         "name": "CubidStampType",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "UnknownSigningResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidUnknownSigningResult",
         "package": "@cubid/core"
       }
     },
@@ -6822,6 +9064,61 @@
       "type": {
         "type": "reference",
         "name": "CubidVerifyWebhookSignatureInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "WalletAccountCreationModes",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidWalletAccountCreationModes",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "WalletCapabilities",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidWalletCapabilities",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "WalletChainActions",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidWalletChainActions",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "WalletPolicy",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidWalletPolicy",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "WalletPolicyStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidWalletPolicyStatus",
         "package": "@cubid/core"
       }
     },
@@ -6888,6 +9185,154 @@
         "name": "CubidWebhookVerificationResult",
         "package": "@cubid/core"
       }
+    },
+    {
+      "name": "CUBID_SIWC_ERROR_CODES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "contract_allowlist_missing"
+            },
+            {
+              "type": "literal",
+              "value": "contract_not_allowlisted"
+            },
+            {
+              "type": "literal",
+              "value": "invalid_state"
+            },
+            {
+              "type": "literal",
+              "value": "not_found"
+            },
+            {
+              "type": "literal",
+              "value": "passkey_unavailable"
+            },
+            {
+              "type": "literal",
+              "value": "policy_denied"
+            },
+            {
+              "type": "literal",
+              "value": "provider_unavailable"
+            },
+            {
+              "type": "literal",
+              "value": "rate_limit_exceeded"
+            },
+            {
+              "type": "literal",
+              "value": "request_expired"
+            },
+            {
+              "type": "literal",
+              "value": "step_up_required"
+            },
+            {
+              "type": "literal",
+              "value": "step_up_stale"
+            },
+            {
+              "type": "literal",
+              "value": "transaction_chain_risk_unsupported"
+            },
+            {
+              "type": "literal",
+              "value": "transaction_contract_call_required"
+            },
+            {
+              "type": "literal",
+              "value": "transaction_evm_chain_id_missing"
+            },
+            {
+              "type": "literal",
+              "value": "transaction_evm_chain_id_not_pilot_enabled"
+            },
+            {
+              "type": "literal",
+              "value": "transaction_signing_disabled"
+            },
+            {
+              "type": "literal",
+              "value": "transaction_value_limit_exceeded"
+            },
+            {
+              "type": "literal",
+              "value": "transaction_value_usd_not_declared"
+            },
+            {
+              "type": "literal",
+              "value": "unsupported_action"
+            },
+            {
+              "type": "literal",
+              "value": "unsupported_chain"
+            },
+            {
+              "type": "literal",
+              "value": "user_cancelled"
+            },
+            {
+              "type": "literal",
+              "value": "wrong_user"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "CUBID_SIWC_USER_ACTIONS",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "contact_support"
+            },
+            {
+              "type": "literal",
+              "value": "none"
+            },
+            {
+              "type": "literal",
+              "value": "refresh"
+            },
+            {
+              "type": "literal",
+              "value": "retry"
+            },
+            {
+              "type": "literal",
+              "value": "switch_user"
+            },
+            {
+              "type": "literal",
+              "value": "use_passkey"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
     },
     {
       "name": "CUBID_STAMP_TYPE_IDS",
@@ -7383,6 +9828,142 @@
             ],
             "name": "Record",
             "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "isCubidSignedTransactionResult",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "isCubidSignedTransactionResult",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "value",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "reference",
+                    "name": "CubidSigningRequestResult",
+                    "package": "@cubid/core"
+                  },
+                  {
+                    "type": "literal",
+                    "value": null
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "undefined"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "type": "predicate",
+            "name": "value",
+            "asserts": false,
+            "targetType": {
+              "type": "reference",
+              "name": "CubidSignedTransactionResult",
+              "package": "@cubid/core"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "isCubidSigningSignatureResult",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "isCubidSigningSignatureResult",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "value",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "reference",
+                    "name": "CubidSigningRequestResult",
+                    "package": "@cubid/core"
+                  },
+                  {
+                    "type": "literal",
+                    "value": null
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "undefined"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "type": "predicate",
+            "name": "value",
+            "asserts": false,
+            "targetType": {
+              "type": "reference",
+              "name": "CubidSigningSignatureResult",
+              "package": "@cubid/core"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "isCubidSiwcError",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "isCubidSiwcError",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "error",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "predicate",
+            "name": "error",
+            "asserts": false,
+            "targetType": {
+              "type": "reference",
+              "name": "CubidSiwcError",
+              "package": "@cubid/core"
+            }
           }
         }
       ]
@@ -7888,6 +10469,30 @@
     },
     {
       "kind": "code",
+      "text": "`fetchWalletCapabilities`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`createAccountRequest`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`getAccountRequest`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`createSigningRequest`"
     },
     {
@@ -8136,6 +10741,30 @@
     },
     {
       "kind": "code",
+      "text": "`fetchWalletCapabilities({ userId? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`createAccountRequest({ userId, chain, label?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`getAccountRequest({ accountRequestId })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`createSigningRequest({ userId, userAccountId, requestType, payload, payloadSummary, chain?, idempotencyKey? })`"
     },
     {
@@ -8152,7 +10781,7 @@
     },
     {
       "kind": "code",
-      "text": "`listSigningRequests({ userId, userAccountId? })`"
+      "text": "`listSigningRequests({ userId, userAccountId?, limit? })`"
     },
     {
       "kind": "text",
@@ -8196,7 +10825,15 @@
     },
     {
       "kind": "text",
-      "text": ", and "
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`createAccountRequest`"
+    },
+    {
+      "kind": "text",
+      "text": ", and\n"
     },
     {
       "kind": "code",
@@ -8204,7 +10841,7 @@
     },
     {
       "kind": "text",
-      "text": " automatically\ngenerate an idempotency key when callers omit one, and they return the\nresolved "
+      "text": " automatically generate an idempotency key when callers\nomit one, and they return the resolved "
     },
     {
       "kind": "code",
@@ -8212,7 +10849,7 @@
     },
     {
       "kind": "text",
-      "text": " alongside the normalized response so callers can log\nor reconcile retries safely.\n\nSupported custody chains on the public v3 account helpers are:\n\n- "
+      "text": " alongside the\nnormalized response so callers can log or reconcile retries safely.\n\nSupported custody chains on the public v3 account helpers are:\n\n- "
     },
     {
       "kind": "code",
@@ -8244,7 +10881,135 @@
     },
     {
       "kind": "text",
-      "text": "\n\nThe SDK surface continues to normalize app-scoped identifiers to "
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`fetchWalletCapabilities`"
+    },
+    {
+      "kind": "text",
+      "text": " is the public fail-closed discovery surface for SIWC\nwallet UX. It can return:\n\n- dapp-scoped policy state\n- per-chain capability flags such as "
+    },
+    {
+      "kind": "code",
+      "text": "`passkeyApprovedCreation`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`messageSigning`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`typedDataSigning`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`transactionSigning`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- optional account lookup for one app-scoped "
+    },
+    {
+      "kind": "code",
+      "text": "`userId`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThis route is app-scoped only. Do not build flows that expect lookup by raw\nCubid identity, global wallet inventory, or cross-app account visibility.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`createAccountRequest`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`getAccountRequest`"
+    },
+    {
+      "kind": "text",
+      "text": " are the public helpers for\npasskey-approved wallet creation. They expose stable public statuses such as:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`pending_user_approval`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`policy_denied`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`approved`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`rejected`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`expired`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`failed`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`policyVersion`"
+    },
+    {
+      "kind": "text",
+      "text": " on the normalized account-request and signing-request summaries\nnow reflects Passport's numeric policy contract and is exposed as\n"
+    },
+    {
+      "kind": "code",
+      "text": "`number | null`"
+    },
+    {
+      "kind": "text",
+      "text": " on the SDK surface rather than the older string-shaped fixture\nexamples from earlier drafts.\n\nThese helpers return public account metadata only after approval. They never\nreturn private keys, wrapped keys, ciphertext, seed phrases, Vault material,\nor raw Cubid internal identifiers.\n\nThe SDK surface continues to normalize app-scoped identifiers to "
     },
     {
       "kind": "code",
@@ -8476,6 +11241,110 @@
     },
     {
       "kind": "text",
+      "text": "\n\nCompleted signing requests now normalize typed public result shapes when\nPassport returns them:\n\n- message and typed-data signatures return "
+    },
+    {
+      "kind": "code",
+      "text": "`type: \"signature\"`"
+    },
+    {
+      "kind": "text",
+      "text": " with\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`algorithm`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`publicAddress`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`signature`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- the limited EVM Admin-policy pilot returns\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`type: \"signed_transaction\"`"
+    },
+    {
+      "kind": "text",
+      "text": " with "
+    },
+    {
+      "kind": "code",
+      "text": "`algorithm`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`chainId`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`publicAddress`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`signedTransaction`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`transactionHash`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nUnknown future result types stay redacted and surface as an "
+    },
+    {
+      "kind": "code",
+      "text": "`unknown`"
+    },
+    {
+      "kind": "text",
+      "text": "-style\nresult object with the raw safe metadata preserved.\n\nUse the exported guards when you need result-type-specific handling:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`isCubidSigningSignatureResult(result)`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`isCubidSignedTransactionResult(result)`"
+    },
+    {
+      "kind": "text",
       "text": "\n\nThe SDK intentionally does not expose raw signing payloads, raw Cubid internal\nuser ids, private keys, encrypted key material, or other private custody\ndetails through those normalized responses.\n\nPassport-hosted approval and rejection flows are out of scope for\n"
     },
     {
@@ -8484,7 +11353,103 @@
     },
     {
       "kind": "text",
-      "text": ". The public core client only wraps the dapp-facing API v3\nsigning-request routes.\n\nTransaction-signing flows remain fail-closed on the SDK surface. If Passport\nreturns transaction-oriented request summaries or policy metadata, treat them\nas denied, deferred, or reviewable metadata only. Do not infer that transaction\nsignatures are enabled.\n\n## Webhook Verification\n\n"
+      "text": ". The public core client only wraps the dapp-facing API v3\nsigning-request and wallet-request routes.\n\nTransaction-signing flows remain capability-gated and conservative on the SDK\nsurface. The current public stance is:\n\n- EVM transaction signing is a limited Admin-policy pilot, not arbitrary wallet\n  signing\n- Cubid does not broadcast signed EVM pilot transactions\n- Solana transaction signing remains disabled even if readiness summaries are\n  present\n\nIf Passport returns transaction-oriented request summaries or policy metadata,\ndo not render them as a blanket \"transaction signing is enabled\" signal\nwithout first checking "
+    },
+    {
+      "kind": "code",
+      "text": "`fetchWalletCapabilities`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n## SIWC Errors\n\nWallet and signing routes may promote Passport's browser-safe SIWC error\nmetadata into "
+    },
+    {
+      "kind": "code",
+      "text": "`CubidSiwcError`"
+    },
+    {
+      "kind": "text",
+      "text": ", which extends "
+    },
+    {
+      "kind": "code",
+      "text": "`CubidApiError`"
+    },
+    {
+      "kind": "text",
+      "text": " with:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`siwcCode`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`retryable`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`userAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`isCubidSiwcError(error)`"
+    },
+    {
+      "kind": "text",
+      "text": " when you need UI or retry behavior keyed to\nstable SIWC error semantics such as "
+    },
+    {
+      "kind": "code",
+      "text": "`step_up_required`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`wrong_user`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`user_cancelled`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`policy_denied`"
+    },
+    {
+      "kind": "text",
+      "text": ", or "
+    },
+    {
+      "kind": "code",
+      "text": "`transaction_chain_risk_unsupported`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n## Webhook Verification\n\n"
     },
     {
       "kind": "code",

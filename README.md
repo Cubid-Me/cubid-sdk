@@ -16,6 +16,8 @@ verification, migrations, and service-role access.
 | `@cubid/browser` | Headless browser helpers for hosted verification, OTP, Allow Page, and provider handoff flows. | npm-only |
 | `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
 | `@cubid/evm` | EVM-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/near` | NEAR-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/solana` | Solana-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/wagmi` | wagmi-specific React integration helpers built on `@cubid/evm`. | npm-only |
 | `@cubid/web3` | Interim wallet-oriented package while the chain-specific split continues. | npm-only |
 | `@cubid/web2` | Frozen compatibility wrapper around `@cubid/browser`. | npm-only, deprecated |
@@ -44,6 +46,8 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/browser.json`
   - `docs/reference/api/react.json`
   - `docs/reference/api/evm.json`
+  - `docs/reference/api/near.json`
+  - `docs/reference/api/solana.json`
   - `docs/reference/api/wagmi.json`
   - `docs/reference/api/web3.json`
 
@@ -54,7 +58,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
 
 ## Commands
 
-- `pnpm install`
+- `pnpm install --frozen-lockfile`
 - `pnpm build`
 - `pnpm test`
 - `pnpm test:unit`
@@ -66,6 +70,17 @@ Machine-readable package reference artifacts live in `docs/reference/`.
 - `pnpm typecheck`
 - `pnpm deno:check:core`
 - `pnpm check:core-package`
+- `pnpm validate:yeet`
+
+For local build, validation, and smoke-style package checks, use
+`pnpm install --frozen-lockfile` so your dependency graph matches CI and
+Vercel instead of silently refreshing the lockfile.
+
+For the full pre-PR and pre-yeet gate, run:
+
+```sh
+pnpm validate:yeet
+```
 
 ## Workflow
 
@@ -105,6 +120,6 @@ package directly:
 import { createCubidApiClient } from "@cubid/core"
 ```
 
-`@cubid/auth`, `@cubid/auth-react`, `@cubid/browser`, `@cubid/react`, `@cubid/evm`,
-`@cubid/wagmi`, and `@cubid/web3` remain npm packages; they are not part of
-the JSR publication policy.
+`@cubid/auth`, `@cubid/auth-react`, `@cubid/browser`, `@cubid/react`,
+`@cubid/evm`, `@cubid/near`, `@cubid/solana`, `@cubid/wagmi`, and `@cubid/web3`
+remain npm packages; they are not part of the JSR publication policy.

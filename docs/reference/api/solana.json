@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "name": "@cubid/web3",
+  "name": "@cubid/solana",
   "variant": "project",
   "kind": 1,
   "flags": {},
@@ -22,13 +22,13 @@
               {
                 "type": "reference",
                 "name": "TConnection",
-                "package": "@cubid/web3",
+                "package": "@cubid/solana",
                 "qualifiedName": "ConnectWalletRequest.TConnection",
                 "refersToTypeParameter": true
               }
             ],
-            "name": "CubidWeb3Adapter",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaAdapter",
+            "package": "@cubid/solana"
           }
         }
       ],
@@ -40,293 +40,19 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaConnection",
+            "package": "@cubid/solana"
           },
           "default": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaConnection",
+            "package": "@cubid/solana"
           }
         }
       ]
     },
     {
-      "name": "CubidWalletCapabilities",
-      "variant": "declaration",
-      "kind": 256,
-      "flags": {},
-      "children": [
-        {
-          "name": "gasSponsorship",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilityDescriptor",
-            "package": "@cubid/web3"
-          }
-        },
-        {
-          "name": "paymaster",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilityDescriptor",
-            "package": "@cubid/web3"
-          }
-        },
-        {
-          "name": "sessionKeys",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilityDescriptor",
-            "package": "@cubid/web3"
-          }
-        },
-        {
-          "name": "smartAccount",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilityDescriptor",
-            "package": "@cubid/web3"
-          }
-        }
-      ],
-      "indexSignatures": [
-        {
-          "name": "__index",
-          "variant": "signature",
-          "kind": 8192,
-          "flags": {},
-          "parameters": [
-            {
-              "name": "capabilityName",
-              "variant": "param",
-              "kind": 32768,
-              "flags": {},
-              "type": {
-                "type": "intrinsic",
-                "name": "string"
-              }
-            }
-          ],
-          "type": {
-            "type": "union",
-            "types": [
-              {
-                "type": "reference",
-                "name": "CubidWalletCapabilityDescriptor",
-                "package": "@cubid/web3"
-              },
-              {
-                "type": "intrinsic",
-                "name": "undefined"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidWalletCapabilityDescriptor",
-      "variant": "declaration",
-      "kind": 256,
-      "flags": {},
-      "children": [
-        {
-          "name": "available",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "intrinsic",
-            "name": "boolean"
-          }
-        },
-        {
-          "name": "metadata",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "target": {
-              "packageName": "typescript",
-              "packagePath": "lib/lib.es5.d.ts",
-              "qualifiedName": "Record"
-            },
-            "typeArguments": [
-              {
-                "type": "intrinsic",
-                "name": "string"
-              },
-              {
-                "type": "intrinsic",
-                "name": "unknown"
-              }
-            ],
-            "name": "Record",
-            "package": "typescript"
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidWalletConnection",
-      "variant": "declaration",
-      "kind": 256,
-      "flags": {},
-      "children": [
-        {
-          "name": "address",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "intrinsic",
-            "name": "string"
-          }
-        },
-        {
-          "name": "capabilities",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilities",
-            "package": "@cubid/web3"
-          }
-        },
-        {
-          "name": "chainId",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "union",
-            "types": [
-              {
-                "type": "intrinsic",
-                "name": "string"
-              },
-              {
-                "type": "intrinsic",
-                "name": "number"
-              }
-            ]
-          }
-        },
-        {
-          "name": "chainType",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "intrinsic",
-            "name": "string"
-          }
-        }
-      ],
-      "indexSignatures": [
-        {
-          "name": "__index",
-          "variant": "signature",
-          "kind": 8192,
-          "flags": {},
-          "parameters": [
-            {
-              "name": "key",
-              "variant": "param",
-              "kind": 32768,
-              "flags": {},
-              "type": {
-                "type": "intrinsic",
-                "name": "string"
-              }
-            }
-          ],
-          "type": {
-            "type": "intrinsic",
-            "name": "unknown"
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidWalletVerification",
-      "variant": "declaration",
-      "kind": 256,
-      "flags": {},
-      "children": [
-        {
-          "name": "isVerified",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "intrinsic",
-            "name": "boolean"
-          }
-        },
-        {
-          "name": "metadata",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "target": {
-              "packageName": "typescript",
-              "packagePath": "lib/lib.es5.d.ts",
-              "qualifiedName": "Record"
-            },
-            "typeArguments": [
-              {
-                "type": "intrinsic",
-                "name": "string"
-              },
-              {
-                "type": "intrinsic",
-                "name": "unknown"
-              }
-            ],
-            "name": "Record",
-            "package": "typescript"
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidWeb3Adapter",
+      "name": "CubidSolanaAdapter",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
@@ -363,8 +89,8 @@
                   {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
-                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "package": "@cubid/solana",
+                    "qualifiedName": "CubidSolanaAdapter.TConnection",
                     "refersToTypeParameter": true
                   }
                 ],
@@ -396,8 +122,8 @@
                   "type": {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
-                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "package": "@cubid/solana",
+                    "qualifiedName": "CubidSolanaAdapter.TConnection",
                     "refersToTypeParameter": true
                   }
                 }
@@ -452,8 +178,8 @@
                   "type": {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
-                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "package": "@cubid/solana",
+                    "qualifiedName": "CubidSolanaAdapter.TConnection",
                     "refersToTypeParameter": true
                   }
                 },
@@ -464,8 +190,8 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidWalletVerification",
-                    "package": "@cubid/web3"
+                    "name": "CubidSolanaVerification",
+                    "package": "@cubid/solana"
                   }
                 }
               ],
@@ -514,8 +240,8 @@
                   "type": {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
-                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "package": "@cubid/solana",
+                    "qualifiedName": "CubidSolanaAdapter.TConnection",
                     "refersToTypeParameter": true
                   }
                 }
@@ -525,8 +251,8 @@
                 "types": [
                   {
                     "type": "reference",
-                    "name": "CubidWalletVerification",
-                    "package": "@cubid/web3"
+                    "name": "CubidSolanaVerification",
+                    "package": "@cubid/solana"
                   },
                   {
                     "type": "reference",
@@ -538,8 +264,8 @@
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "name": "CubidWalletVerification",
-                        "package": "@cubid/web3"
+                        "name": "CubidSolanaVerification",
+                        "package": "@cubid/solana"
                       }
                     ],
                     "name": "Promise",
@@ -559,19 +285,159 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaConnection",
+            "package": "@cubid/solana"
           },
           "default": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaConnection",
+            "package": "@cubid/solana"
           }
         }
       ]
     },
     {
-      "name": "CubidWeb3Client",
+      "name": "CubidSolanaCapabilities",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "gasSponsorship",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidSolanaCapabilityDescriptor",
+            "package": "@cubid/solana"
+          }
+        },
+        {
+          "name": "paymaster",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidSolanaCapabilityDescriptor",
+            "package": "@cubid/solana"
+          }
+        },
+        {
+          "name": "sessionKeys",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidSolanaCapabilityDescriptor",
+            "package": "@cubid/solana"
+          }
+        },
+        {
+          "name": "smartAccount",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidSolanaCapabilityDescriptor",
+            "package": "@cubid/solana"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "capabilityName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidSolanaCapabilityDescriptor",
+                "package": "@cubid/solana"
+              },
+              {
+                "type": "intrinsic",
+                "name": "undefined"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSolanaCapabilityDescriptor",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "available",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSolanaClient",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
@@ -613,8 +479,8 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidWalletConnection",
-                    "package": "@cubid/web3"
+                    "name": "CubidSolanaConnection",
+                    "package": "@cubid/solana"
                   }
                 }
               ],
@@ -630,12 +496,12 @@
                       {
                         "type": "reference",
                         "name": "TConnection",
-                        "package": "@cubid/web3",
+                        "package": "@cubid/solana",
                         "refersToTypeParameter": true
                       }
                     ],
                     "name": "ConnectWalletRequest",
-                    "package": "@cubid/web3"
+                    "package": "@cubid/solana"
                   }
                 }
               ],
@@ -650,7 +516,7 @@
                   {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
+                    "package": "@cubid/solana",
                     "refersToTypeParameter": true
                   }
                 ],
@@ -679,8 +545,8 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidWalletConnection",
-                    "package": "@cubid/web3"
+                    "name": "CubidSolanaConnection",
+                    "package": "@cubid/solana"
                   }
                 }
               ],
@@ -696,12 +562,12 @@
                       {
                         "type": "reference",
                         "name": "TConnection",
-                        "package": "@cubid/web3",
+                        "package": "@cubid/solana",
                         "refersToTypeParameter": true
                       }
                     ],
-                    "name": "CubidWeb3Adapter",
-                    "package": "@cubid/web3"
+                    "name": "CubidSolanaAdapter",
+                    "package": "@cubid/solana"
                   }
                 },
                 {
@@ -712,7 +578,7 @@
                   "type": {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
+                    "package": "@cubid/solana",
                     "refersToTypeParameter": true
                   }
                 }
@@ -755,8 +621,8 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidWalletConnection",
-                    "package": "@cubid/web3"
+                    "name": "CubidSolanaConnection",
+                    "package": "@cubid/solana"
                   }
                 }
               ],
@@ -772,12 +638,12 @@
                       {
                         "type": "reference",
                         "name": "TConnection",
-                        "package": "@cubid/web3",
+                        "package": "@cubid/solana",
                         "refersToTypeParameter": true
                       }
                     ],
                     "name": "VerifyWalletRequest",
-                    "package": "@cubid/web3"
+                    "package": "@cubid/solana"
                   }
                 }
               ],
@@ -795,12 +661,12 @@
                       {
                         "type": "reference",
                         "name": "TConnection",
-                        "package": "@cubid/web3",
+                        "package": "@cubid/solana",
                         "refersToTypeParameter": true
                       }
                     ],
                     "name": "VerifyWalletResult",
-                    "package": "@cubid/web3"
+                    "package": "@cubid/solana"
                   }
                 ],
                 "name": "Promise",
@@ -812,7 +678,7 @@
       ]
     },
     {
-      "name": "CubidWeb3ClientOptions",
+      "name": "CubidSolanaClientOptions",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
@@ -825,9 +691,145 @@
             "isOptional": true
           },
           "type": {
+            "type": "literal",
+            "value": "solana"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSolanaConnection",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "address",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
             "type": "reference",
-            "name": "CubidWeb3StampType",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaCapabilities",
+            "package": "@cubid/solana"
+          }
+        },
+        {
+          "name": "chainType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "cluster",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "publicKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSolanaVerification",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "isVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
           }
         }
       ]
@@ -849,13 +851,13 @@
               {
                 "type": "reference",
                 "name": "TConnection",
-                "package": "@cubid/web3",
+                "package": "@cubid/solana",
                 "qualifiedName": "VerifyWalletRequest.TConnection",
                 "refersToTypeParameter": true
               }
             ],
-            "name": "CubidWeb3Adapter",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaAdapter",
+            "package": "@cubid/solana"
           }
         },
         {
@@ -866,7 +868,7 @@
           "type": {
             "type": "reference",
             "name": "TConnection",
-            "package": "@cubid/web3",
+            "package": "@cubid/solana",
             "qualifiedName": "VerifyWalletRequest.TConnection",
             "refersToTypeParameter": true
           }
@@ -912,9 +914,8 @@
             "isOptional": true
           },
           "type": {
-            "type": "reference",
-            "name": "CubidWeb3StampType",
-            "package": "@cubid/web3"
+            "type": "literal",
+            "value": "solana"
           }
         },
         {
@@ -938,13 +939,13 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaConnection",
+            "package": "@cubid/solana"
           },
           "default": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaConnection",
+            "package": "@cubid/solana"
           }
         }
       ]
@@ -962,8 +963,8 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletCapabilities",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaCapabilities",
+            "package": "@cubid/solana"
           }
         },
         {
@@ -974,7 +975,7 @@
           "type": {
             "type": "reference",
             "name": "TConnection",
-            "package": "@cubid/web3",
+            "package": "@cubid/solana",
             "qualifiedName": "VerifyWalletResult.TConnection",
             "refersToTypeParameter": true
           }
@@ -1031,9 +1032,8 @@
           "kind": 1024,
           "flags": {},
           "type": {
-            "type": "reference",
-            "name": "CubidWeb3StampType",
-            "package": "@cubid/web3"
+            "type": "literal",
+            "value": "solana"
           }
         },
         {
@@ -1043,8 +1043,8 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletVerification",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaVerification",
+            "package": "@cubid/solana"
           }
         }
       ],
@@ -1056,52 +1056,35 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaConnection",
+            "package": "@cubid/solana"
           },
           "default": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaConnection",
+            "package": "@cubid/solana"
           }
         }
       ]
     },
     {
-      "name": "CubidWeb3StampType",
+      "name": "CubidSolanaStampType",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
-        "type": "union",
-        "types": [
-          {
-            "type": "literal",
-            "value": "evm"
-          },
-          {
-            "type": "literal",
-            "value": "near"
-          },
-          {
-            "type": "literal",
-            "value": "near-wallet"
-          },
-          {
-            "type": "literal",
-            "value": "solana"
-          }
-        ]
+        "type": "literal",
+        "value": "solana"
       }
     },
     {
-      "name": "createCubidWeb3Client",
+      "name": "createCubidSolanaClient",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "name": "createCubidWeb3Client",
+          "name": "createCubidSolanaClient",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
@@ -1129,28 +1112,28 @@
               "flags": {},
               "type": {
                 "type": "reference",
-                "name": "CubidWeb3ClientOptions",
-                "package": "@cubid/web3"
+                "name": "CubidSolanaClientOptions",
+                "package": "@cubid/solana"
               },
               "defaultValue": "{}"
             }
           ],
           "type": {
             "type": "reference",
-            "name": "CubidWeb3Client",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaClient",
+            "package": "@cubid/solana"
           }
         }
       ]
     },
     {
-      "name": "getCubidWalletCapabilities",
+      "name": "getCubidSolanaCapabilities",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "name": "getCubidWalletCapabilities",
+          "name": "getCubidSolanaCapabilities",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
@@ -1162,27 +1145,27 @@
               "flags": {},
               "type": {
                 "type": "reference",
-                "name": "CubidWalletConnection",
-                "package": "@cubid/web3"
+                "name": "CubidSolanaConnection",
+                "package": "@cubid/solana"
               }
             }
           ],
           "type": {
             "type": "reference",
-            "name": "CubidWalletCapabilities",
-            "package": "@cubid/web3"
+            "name": "CubidSolanaCapabilities",
+            "package": "@cubid/solana"
           }
         }
       ]
     },
     {
-      "name": "hasCubidWalletCapability",
+      "name": "hasCubidSolanaCapability",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "name": "hasCubidWalletCapability",
+          "name": "hasCubidSolanaCapability",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
@@ -1194,8 +1177,8 @@
               "flags": {},
               "type": {
                 "type": "reference",
-                "name": "CubidWalletConnection",
-                "package": "@cubid/web3"
+                "name": "CubidSolanaConnection",
+                "package": "@cubid/solana"
               }
             },
             {
@@ -1217,7 +1200,7 @@
       ]
     }
   ],
-  "packageName": "@cubid/web3",
+  "packageName": "@cubid/solana",
   "readme": [
     {
       "kind": "text",
@@ -1225,35 +1208,19 @@
     },
     {
       "kind": "code",
-      "text": "`@cubid/web3`"
+      "text": "`@cubid/solana`"
     },
     {
       "kind": "text",
-      "text": "\n\nInterim wallet-oriented Cubid package while the chain-specific split continues.\n\n## When To Choose This Package\n\nPrefer "
+      "text": "\n\nSolana-oriented Cubid wallet helpers built on top of "
     },
     {
       "kind": "code",
-      "text": "`@cubid/evm`"
+      "text": "`@cubid/core`"
     },
     {
       "kind": "text",
-      "text": " for new EVM integrations, "
-    },
-    {
-      "kind": "code",
-      "text": "`@cubid/wagmi`"
-    },
-    {
-      "kind": "text",
-      "text": " for\nwagmi-specific React integrations, and "
-    },
-    {
-      "kind": "code",
-      "text": "`@cubid/near`"
-    },
-    {
-      "kind": "text",
-      "text": " for new NEAR\nintegrations, and "
+      "text": ".\n\n## When To Choose This Package\n\nUse "
     },
     {
       "kind": "code",
@@ -1261,7 +1228,7 @@
     },
     {
       "kind": "text",
-      "text": " for new Solana integrations. Use\n"
+      "text": " when you need Cubid's Solana-specific custody, connection,\nand verification helpers. Choose "
     },
     {
       "kind": "code",
@@ -1269,11 +1236,11 @@
     },
     {
       "kind": "text",
-      "text": " only when you still depend on the older shared wallet surface\nwhile the split remains in progress.\n\n## Install\n\n"
+      "text": " only when you still depend on\nthe older interim shared wallet surface while the chain split continues.\n\n## Install\n\n"
     },
     {
       "kind": "code",
-      "text": "```sh\nnpm install @cubid/web3 @cubid/core\n```"
+      "text": "```sh\nnpm install @cubid/solana @cubid/core\n```"
     },
     {
       "kind": "text",
@@ -1281,7 +1248,7 @@
     },
     {
       "kind": "code",
-      "text": "`../../docs/reference/api/web3.json`"
+      "text": "`../../docs/reference/api/solana.json`"
     },
     {
       "kind": "text",
@@ -1293,7 +1260,47 @@
     },
     {
       "kind": "text",
-      "text": "\n\n## Capability Metadata\n\nThe interim wallet surface preserves optional "
+      "text": "\n\n## Connection Model\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/solana`"
+    },
+    {
+      "kind": "text",
+      "text": " treats "
+    },
+    {
+      "kind": "code",
+      "text": "`publicKey`"
+    },
+    {
+      "kind": "text",
+      "text": " as the primary identity for default stamp\nserialization. Optional "
+    },
+    {
+      "kind": "code",
+      "text": "`address`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`cluster`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`chainType`"
+    },
+    {
+      "kind": "text",
+      "text": " metadata may be\npreserved on the connection when a host wallet exposes them.\n\n## Capability Metadata\n\nSolana connections may expose optional "
     },
     {
       "kind": "code",
@@ -1301,11 +1308,43 @@
     },
     {
       "kind": "text",
-      "text": " metadata on\nconnections and verification results. Use that metadata for features such as\nsmart accounts, session keys, paymasters, or gas sponsorship instead of\nassuming every wallet connection supports them.\n\nThe package exports "
+      "text": " metadata for features\nthat are not universal across Cubid custody accounts or wallet adapters, such\nas:\n\n- "
     },
     {
       "kind": "code",
-      "text": "`getCubidWalletCapabilities(...)`"
+      "text": "`smartAccount`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`sessionKeys`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`paymaster`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`gasSponsorship`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThese descriptors are intentionally opt-in and capability-driven.\n\nThe package exports "
+    },
+    {
+      "kind": "code",
+      "text": "`getCubidSolanaCapabilities(...)`"
     },
     {
       "kind": "text",
@@ -1313,11 +1352,11 @@
     },
     {
       "kind": "code",
-      "text": "`hasCubidWalletCapability(...)`"
+      "text": "`hasCubidSolanaCapability(...)`"
     },
     {
       "kind": "text",
-      "text": " to keep those checks explicit while the chain\nsplit continues."
+      "text": " so host apps can read that metadata without\nassuming any advanced custody feature is universally available."
     }
   ]
 }
