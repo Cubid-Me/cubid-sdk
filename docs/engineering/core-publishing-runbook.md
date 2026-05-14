@@ -159,6 +159,7 @@ manual exception, not as a supported steady-state release target.
 Run these before a release PR:
 
 ```sh
+pnpm install --frozen-lockfile
 pnpm lint
 pnpm typecheck
 pnpm test:unit
@@ -172,6 +173,7 @@ pnpm check:core-package
 For a direct `@cubid/core` release check, the core-specific dry-runs remain:
 
 ```sh
+pnpm install --frozen-lockfile
 pnpm --filter @cubid/core test
 pnpm --filter @cubid/core typecheck
 pnpm --filter @cubid/core deno:check

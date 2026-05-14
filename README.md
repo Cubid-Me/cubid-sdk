@@ -58,7 +58,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
 
 ## Commands
 
-- `pnpm install`
+- `pnpm install --frozen-lockfile`
 - `pnpm build`
 - `pnpm test`
 - `pnpm test:unit`
@@ -70,6 +70,10 @@ Machine-readable package reference artifacts live in `docs/reference/`.
 - `pnpm typecheck`
 - `pnpm deno:check:core`
 - `pnpm check:core-package`
+
+For local build, validation, and smoke-style package checks, use
+`pnpm install --frozen-lockfile` so your dependency graph matches CI and
+Vercel instead of silently refreshing the lockfile.
 
 ## Workflow
 

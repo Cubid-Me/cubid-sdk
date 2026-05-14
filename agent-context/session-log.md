@@ -820,3 +820,13 @@
 - Validation:
   - `pnpm install --frozen-lockfile`
   - `pnpm test:unit`
+
+## session: s56-local-install-instructions-frozen-lockfile
+
+- Timestamp: 2026-05-14T15:00:00Z
+- Summary: Updated local build and smoke instructions to use `pnpm install --frozen-lockfile` so developer validation matches CI and Vercel dependency behavior.
+- Actions:
+  - Updated the root README command guidance to recommend `pnpm install --frozen-lockfile` for local build, validation, and smoke-style package checks.
+  - Updated the testing strategy and publishing runbook so local validation, acceptance, and release verification all start from the same frozen-lockfile install step used in automated environments.
+- Validation:
+  - Reviewed the updated docs against `.github/workflows/ci.yml` and `.github/workflows/publish.yml`, both of which already use `pnpm install --frozen-lockfile`.
