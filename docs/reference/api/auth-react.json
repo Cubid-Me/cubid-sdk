@@ -1918,6 +1918,22 @@
     },
     {
       "kind": "text",
+      "text": ")\n- ClearPass-oriented Vite example:\n  ["
+    },
+    {
+      "kind": "code",
+      "text": "`docs/examples/clearpass-dashboard-auth-vite.md`"
+    },
+    {
+      "kind": "text",
+      "text": "]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../docs/examples/clearpass-dashboard-auth-vite.md"
+    },
+    {
+      "kind": "text",
       "text": ")\n\n## Basic usage\n\n"
     },
     {

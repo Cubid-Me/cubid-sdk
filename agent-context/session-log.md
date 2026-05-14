@@ -721,3 +721,15 @@
   - Updated the testing strategy doc so the clean-runner requirement now explicitly covers auth package consumers as well as React and wagmi suites.
 - Validation:
   - Reproduced the relevant check locally with `pnpm test:unit`.
+
+## session: s04-auth-pr9-api-reference-followup
+
+- Timestamp: 2026-05-13T21:20:00Z
+- Summary: Refreshed the checked-in API reference artifact for `@cubid/auth-react` after PR #9 exposed a docs-reference drift in CI.
+- Actions:
+  - Inspected the failed PR #9 `validate` rerun and isolated the remaining break to `pnpm docs:api:check`.
+  - Regenerated the machine-readable API reference artifacts and confirmed the only drift was `docs/reference/api/auth-react.json`.
+  - Kept the refreshed artifact so the generated `@cubid/auth-react` reference now matches the new ClearPass example link in the package docs.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
