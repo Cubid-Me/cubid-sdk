@@ -1,0 +1,1956 @@
+{
+  "schemaVersion": "2.0",
+  "name": "@cubid/auth-react",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "name": "CubidAuthCallbackProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "autoUserInfo",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidAuthHandleCallbackOptions.autoUserInfo"
+          }
+        },
+        {
+          "name": "callbackUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.dom.d.ts",
+                  "qualifiedName": "URL"
+                },
+                "name": "URL",
+                "package": "typescript"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidAuthHandleCallbackOptions.callbackUrl"
+          }
+        },
+        {
+          "name": "errorFallback",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@types/react",
+                  "packagePath": "index.d.ts",
+                  "qualifiedName": "React.ReactNode"
+                },
+                "name": "ReactNode",
+                "package": "@types/react",
+                "qualifiedName": "React.ReactNode"
+              },
+              {
+                "type": "reflection",
+                "declaration": {
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "name": "__type",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "name": "error",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "union",
+                            "types": [
+                              {
+                                "type": "reference",
+                                "target": {
+                                  "packageName": "typescript",
+                                  "packagePath": "lib/lib.es5.d.ts",
+                                  "qualifiedName": "Error"
+                                },
+                                "name": "Error",
+                                "package": "typescript"
+                              },
+                              {
+                                "type": "literal",
+                                "value": null
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@types/react",
+                          "packagePath": "index.d.ts",
+                          "qualifiedName": "React.ReactNode"
+                        },
+                        "name": "ReactNode",
+                        "package": "@types/react",
+                        "qualifiedName": "React.ReactNode"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "loadingFallback",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Error"
+                        },
+                        "name": "Error",
+                        "package": "typescript"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onResolved",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "session",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/auth",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidAuthSession"
+                        },
+                        "name": "CubidAuthSession",
+                        "package": "@cubid/auth"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "successFallback",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidAuthHandleCallbackOptions",
+          "package": "@cubid/auth-react"
+        }
+      ]
+    },
+    {
+      "name": "CubidAuthContextValue",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "clearError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "clearSession",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "discovery",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/auth",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidOidcDiscoveryDocument"
+                },
+                "name": "CubidOidcDiscoveryDocument",
+                "package": "@cubid/auth"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "error",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Error"
+                },
+                "name": "Error",
+                "package": "typescript"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "handleCallback",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "options",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "reference",
+                        "name": "CubidAuthHandleCallbackOptions",
+                        "package": "@cubid/auth-react"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/auth",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidAuthSession"
+                        },
+                        "name": "CubidAuthSession",
+                        "package": "@cubid/auth"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "isAuthenticated",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "logout",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "options",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "reference",
+                        "name": "CubidAuthLogoutOptions",
+                        "package": "@cubid/auth-react"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "union",
+                        "types": [
+                          {
+                            "type": "intrinsic",
+                            "name": "string"
+                          },
+                          {
+                            "type": "literal",
+                            "value": null
+                          }
+                        ]
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "refreshUserInfo",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "union",
+                        "types": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "@cubid/auth",
+                              "packagePath": "src/index.ts",
+                              "qualifiedName": "CubidUserInfo"
+                            },
+                            "name": "CubidUserInfo",
+                            "package": "@cubid/auth"
+                          },
+                          {
+                            "type": "literal",
+                            "value": null
+                          }
+                        ]
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "session",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/auth",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidAuthSession"
+                },
+                "name": "CubidAuthSession",
+                "package": "@cubid/auth"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "signIn",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "options",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "reference",
+                        "name": "CubidAuthSignInOptions",
+                        "package": "@cubid/auth-react"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidAuthStatus",
+            "package": "@cubid/auth-react"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidAuthHandleCallbackOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "autoUserInfo",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "callbackUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.dom.d.ts",
+                  "qualifiedName": "URL"
+                },
+                "name": "URL",
+                "package": "typescript"
+              }
+            ]
+          }
+        }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "name": "CubidAuthCallbackProps"
+        }
+      ]
+    },
+    {
+      "name": "CubidAuthLogoutOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "extraParams",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "boolean"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "undefined"
+                  }
+                ]
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "navigate",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "url",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "performRedirect",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "postLogoutRedirectUri",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "state",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidAuthProviderProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "autoUserInfo",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "children",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        },
+        {
+          "name": "clientId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "discoveryDocument",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/auth",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidOidcDiscoveryDocument"
+                },
+                "name": "CubidOidcDiscoveryDocument",
+                "package": "@cubid/auth"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "fetch",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/auth",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidAuthFetch"
+            },
+            "name": "CubidAuthFetch",
+            "package": "@cubid/auth"
+          }
+        },
+        {
+          "name": "issuer",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "postLogoutRedirectUri",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "redirectUri",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "scope",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "storage",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/auth",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidAuthStorageLike"
+                },
+                "name": "CubidAuthStorageLike",
+                "package": "@cubid/auth"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidAuthSignInOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "extraParams",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "boolean"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "undefined"
+                  }
+                ]
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "loginHint",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "maxAge",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "navigate",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "url",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "nonce",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "nonceByteLength",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "performRedirect",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "prompt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "scope",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "stateByteLength",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "verifierByteLength",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSignInButtonProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "children",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Error"
+                        },
+                        "name": "Error",
+                        "package": "typescript"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onLaunched",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "url",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "signInOptions",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidAuthSignInOptions",
+            "package": "@cubid/auth-react"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "@types/react",
+                "packagePath": "index.d.ts",
+                "qualifiedName": "React.ButtonHTMLAttributes"
+              },
+              "typeArguments": [
+                {
+                  "type": "reference",
+                  "target": {
+                    "packageName": "typescript",
+                    "packagePath": "lib/lib.dom.d.ts",
+                    "qualifiedName": "HTMLButtonElement"
+                  },
+                  "name": "HTMLButtonElement",
+                  "package": "typescript"
+                }
+              ],
+              "name": "ButtonHTMLAttributes",
+              "package": "@types/react",
+              "qualifiedName": "React.ButtonHTMLAttributes"
+            },
+            {
+              "type": "union",
+              "types": [
+                {
+                  "type": "literal",
+                  "value": "children"
+                },
+                {
+                  "type": "literal",
+                  "value": "onClick"
+                },
+                {
+                  "type": "literal",
+                  "value": "onError"
+                }
+              ]
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "CubidSignOutButtonProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "children",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        },
+        {
+          "name": "logoutOptions",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidAuthLogoutOptions",
+            "package": "@cubid/auth-react"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Error"
+                        },
+                        "name": "Error",
+                        "package": "typescript"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onLoggedOut",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "logoutUrl",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "union",
+                        "types": [
+                          {
+                            "type": "intrinsic",
+                            "name": "string"
+                          },
+                          {
+                            "type": "literal",
+                            "value": null
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "@types/react",
+                "packagePath": "index.d.ts",
+                "qualifiedName": "React.ButtonHTMLAttributes"
+              },
+              "typeArguments": [
+                {
+                  "type": "reference",
+                  "target": {
+                    "packageName": "typescript",
+                    "packagePath": "lib/lib.dom.d.ts",
+                    "qualifiedName": "HTMLButtonElement"
+                  },
+                  "name": "HTMLButtonElement",
+                  "package": "typescript"
+                }
+              ],
+              "name": "ButtonHTMLAttributes",
+              "package": "@types/react",
+              "qualifiedName": "React.ButtonHTMLAttributes"
+            },
+            {
+              "type": "union",
+              "types": [
+                {
+                  "type": "literal",
+                  "value": "children"
+                },
+                {
+                  "type": "literal",
+                  "value": "onClick"
+                },
+                {
+                  "type": "literal",
+                  "value": "onError"
+                }
+              ]
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "CubidAuthStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "authenticated"
+          },
+          {
+            "type": "literal",
+            "value": "error"
+          },
+          {
+            "type": "literal",
+            "value": "idle"
+          },
+          {
+            "type": "literal",
+            "value": "loading"
+          },
+          {
+            "type": "literal",
+            "value": "signed_out"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CUBID_AUTH_TRANSACTION_STORAGE_KEY",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "literal",
+        "value": "cubid.auth.transaction"
+      },
+      "defaultValue": "\"cubid.auth.transaction\""
+    },
+    {
+      "name": "CubidAuthCallback",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidAuthCallback",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidAuthCallbackProps",
+                "package": "@cubid/auth-react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidAuthProvider",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidAuthProvider",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidAuthProviderProps",
+                "package": "@cubid/auth-react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSignInButton",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidSignInButton",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidSignInButtonProps",
+                "package": "@cubid/auth-react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSignOutButton",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidSignOutButton",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidSignOutButtonProps",
+                "package": "@cubid/auth-react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useCubidAuth",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useCubidAuth",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidAuthContextValue",
+            "package": "@cubid/auth-react"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useOptionalCubidAuth",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useOptionalCubidAuth",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidAuthContextValue",
+                "package": "@cubid/auth-react"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "packageName": "@cubid/auth-react",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# @cubid/auth-react\n\nReact bindings for Sign in with Cubid on top of "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/auth`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\nUse this package when a browser app wants provider-managed sign-in launch,\ncallback handling, session state, and logout helpers without placing privileged\ncredentials in the browser.\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\nnpm install @cubid/auth-react @cubid/auth\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Registry availability\n\n- npm: planned public package\n- JSR: not published by policy\n\n## API reference\n\n- Machine-readable API JSON:\n  ["
+    },
+    {
+      "kind": "code",
+      "text": "`docs/reference/api/auth-react.json`"
+    },
+    {
+      "kind": "text",
+      "text": "]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../docs/reference/api/auth-react.json"
+    },
+    {
+      "kind": "text",
+      "text": ")\n- Root package matrix: ["
+    },
+    {
+      "kind": "code",
+      "text": "`README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../README.md"
+    },
+    {
+      "kind": "text",
+      "text": ")\n- ClearPass-oriented Vite example:\n  ["
+    },
+    {
+      "kind": "code",
+      "text": "`docs/examples/clearpass-dashboard-auth-vite.md`"
+    },
+    {
+      "kind": "text",
+      "text": "]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../docs/examples/clearpass-dashboard-auth-vite.md"
+    },
+    {
+      "kind": "text",
+      "text": ")\n\n## Basic usage\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return <p>Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}</p>;\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://staging-id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n  );\n}\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/auth-react`"
+    },
+    {
+      "kind": "text",
+      "text": " helps with the browser session experience only. Apps still\nneed to enforce protected dashboard access and server-side authorization using\nthe authenticated session on their own backend or edge routes."
+    }
+  ]
+}

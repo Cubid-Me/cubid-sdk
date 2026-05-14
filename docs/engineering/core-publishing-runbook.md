@@ -13,6 +13,8 @@ publication are complete. Do not publish public SDK packages from
 | Package | Registries | Notes |
 | --- | --- | --- |
 | `@cubid/core` | npm + JSR | The only package with an explicit Deno and Supabase Edge contract. |
+| `@cubid/auth` | npm-only | Browser-safe OIDC and PKCE helper layer for public clients. |
+| `@cubid/auth-react` | npm-only | React auth/session bindings on top of `@cubid/auth`. |
 | `@cubid/browser` | npm-only | Browser-oriented helper layer; not marketed as a Deno or JSR surface. |
 | `@cubid/react` | npm-only | React package with peer dependency assumptions. |
 | `@cubid/evm` | npm-only | Chain-specific package built for the npm ecosystem. |
@@ -52,6 +54,8 @@ Current verified state as of 2026-05-09:
 
 - npm:
   - `@cubid/core@0.1.2`
+  - `@cubid/auth` is not published yet
+  - `@cubid/auth-react` is not published yet
   - `@cubid/browser@0.1.1`
   - `@cubid/react@0.1.1`
   - `@cubid/evm@0.1.1`
