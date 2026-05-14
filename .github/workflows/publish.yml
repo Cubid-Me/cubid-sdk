@@ -19,6 +19,7 @@ on:
           - "@cubid/react"
           - "@cubid/evm"
           - "@cubid/near"
+          - "@cubid/polkadot"
           - "@cubid/solana"
           - "@cubid/starknet"
           - "@cubid/sui"
@@ -85,6 +86,10 @@ jobs:
               ;;
             "@cubid/near")
               echo "package_dir=packages/near" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/polkadot")
+              echo "package_dir=packages/polkadot" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/solana")

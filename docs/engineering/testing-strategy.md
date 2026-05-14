@@ -63,6 +63,7 @@ Scope:
 - `@cubid/cosmos`
 - `@cubid/evm`
 - `@cubid/near`
+- `@cubid/polkadot`
 - `@cubid/solana`
 - `@cubid/starknet`
 - `@cubid/sui`
@@ -200,6 +201,7 @@ Coverage target scope:
 - include `@cubid/react`
 - include `@cubid/evm`
 - include `@cubid/near`
+- include `@cubid/polkadot`
 - include `@cubid/solana`
 - include `@cubid/starknet`
 - include `@cubid/sui`

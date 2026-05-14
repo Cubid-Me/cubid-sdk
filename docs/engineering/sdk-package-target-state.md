@@ -35,6 +35,7 @@ Target packages:
 - `@cubid/bitcoin`: Bitcoin wallet and signing logic
 - `@cubid/cosmos`: Cosmos wallet and signing logic
 - `@cubid/near`: NEAR wallet and signing logic
+- `@cubid/polkadot`: Polkadot wallet and signing logic
 - `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/starknet`: Starknet wallet and signing logic
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
@@ -220,6 +221,12 @@ identity for default Starknet stamp serialization while preserving optional
 wallet metadata such as `publicKey`, `chainId`, `classHash`, and explicit
 capability descriptors.
 
+`@cubid/polkadot` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Polkadot stamp serialization while preserving optional
+wallet metadata such as `genesisHash`, `publicKey`, `ss58Format`, and explicit
+capability descriptors.
+
 Future SIWC transaction work should keep chain behavior explicit and
 capability-driven: the EVM Admin-policy transaction pilot may surface typed
 result metadata when policy enables it, while Solana transaction signing stays
@@ -269,7 +276,7 @@ npm-first foundation, then layers in package-ready integration surfaces:
 - `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
   compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
-- `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/solana`, `@cubid/starknet`, and `@cubid/sui` now exist
+- `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, and `@cubid/sui` now exist
   as additional chain-specific packages layered on top of `@cubid/core`.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific

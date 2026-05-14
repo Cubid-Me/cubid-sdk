@@ -71,6 +71,13 @@
       "referencePath": "near.json"
     },
     {
+      "name": "@cubid/polkadot",
+      "version": "0.1.0",
+      "description": "Polkadot-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "polkadot.json"
+    },
+    {
       "name": "@cubid/solana",
       "version": "0.1.0",
       "description": "Solana-oriented Cubid wallet helpers built on top of @cubid/core.",

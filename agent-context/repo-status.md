@@ -2,7 +2,7 @@
 | --- | --- |
 | README quality | `Pass` Root README reflects the current package map, command set, and branch/release workflow. |
 | License | `Pass` Apache-2.0 is present at the repo root and in published package manifests. |
-| Session log hygiene | `Pass` `agent-context/session-log.md` is current through `s61-web3-compatibility-closeout-planning`. |
+| Session log hygiene | `Pass` `agent-context/session-log.md` is current through the latest `S03` package-slice work. |
 | AGENTS guidance | `Pass` `AGENTS.md` covers repo boundaries, cross-repo coordination, migration direction, branch flow, and Supabase applicability. |
 | Repo status snapshot | `Pass` This file now provides the lightweight repo-health snapshot for cleanup work. |
 | Deferred ideas file | `Pass` `agent-context/future-ideas.md` exists and is explicitly not active roadmap work. |
@@ -16,4 +16,4 @@
 | Supabase direct-access rule | `Not applicable` This repo ships SDK packages and examples; it does not own deployed Supabase runtime code. |
 | Environment and script conventions | `Pass` Root scripts cover install/build/test/lint/typecheck/core Deno checks, and `.gitignore` excludes local env files and build outputs. |
 | Developer-ingestion publishing | `Pass` Registry policy, machine-readable API reference artifacts, package metadata, and public entrypoint docs now align with the primary published SDK package surfaces. |
-| Active roadmap closeout | `Partial` Remaining non-closed roadmap item is still `S03` in `agent-context/todo.md`; `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/solana`, `@cubid/starknet`, and `@cubid/sui` are extracted, and the `@cubid/web3` compatibility-closeout path is now broken into explicit freeze, migration, and release-policy follow-ups. |
+| Active roadmap closeout | `Partial` Remaining non-closed roadmap item is still `S03` in `agent-context/todo.md`; `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, and `@cubid/sui` are extracted, and the `@cubid/web3` compatibility-closeout path is now broken into explicit freeze, migration, and release-policy follow-ups. |

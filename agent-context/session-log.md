@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s62-polkadot-package-slice
+
+- Timestamp: 2026-05-14T21:45:00Z
+- Summary: Continued `S03` by extracting `@cubid/polkadot` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/polkadot` with Polkadot-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Polkadot identity for default stamp serialization while preserving optional `genesisHash`, `publicKey`, and `ss58Format` metadata.
+  - Wired `@cubid/polkadot` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/polkadot/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Aptos, Tezos, and Stellar.
+
 ## session: s61-web3-compatibility-closeout-planning
 
 - Timestamp: 2026-05-14T21:00:00Z

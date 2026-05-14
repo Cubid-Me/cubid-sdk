@@ -22,6 +22,7 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/react` | npm-only | React package with peer dependency assumptions. |
 | `@cubid/evm` | npm-only | Chain-specific package built for the npm ecosystem. |
 | `@cubid/near` | npm-only | Chain-specific NEAR package built for the npm ecosystem. |
+| `@cubid/polkadot` | npm-only | Chain-specific Polkadot package built for the npm ecosystem. |
 | `@cubid/solana` | npm-only | Chain-specific Solana package built for the npm ecosystem. |
 | `@cubid/starknet` | npm-only | Chain-specific Starknet package built for the npm ecosystem. |
 | `@cubid/sui` | npm-only | Chain-specific Sui package built for the npm ecosystem. |
@@ -70,6 +71,7 @@ Current verified state as of 2026-05-14:
   - `@cubid/react@0.1.2`
   - `@cubid/evm@0.1.2`
   - `@cubid/near@0.1.0`
+  - `@cubid/polkadot` is not published yet
   - `@cubid/solana@0.1.0`
   - `@cubid/starknet` is not published yet
   - `@cubid/sui` is not published yet

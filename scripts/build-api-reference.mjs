@@ -91,6 +91,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "polkadot",
+    name: "@cubid/polkadot",
+    dir: "packages/polkadot",
+    entryPoint: "packages/polkadot/src/index.ts",
+    tsconfig: "packages/polkadot/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "solana",
     name: "@cubid/solana",
     dir: "packages/solana",

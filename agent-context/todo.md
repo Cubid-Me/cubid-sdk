@@ -388,11 +388,16 @@ tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.14 Create the first `@cubid/polkadot` package slice
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T21:15:00Z
+- Timestamp completed: 2026-05-14T21:45:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `e8b7cd77` at implementation start
+- Session-log reference(s): session: s62-polkadot-package-slice
 
-Queue a bounded Polkadot-specific chain package on top of `@cubid/core`,
-following the same real-package, tests, docs, and workflow wiring pattern as
-the earlier `S03` slices.
+Added `packages/polkadot` as the next bounded chain-specific package on top of
+`@cubid/core`, with Polkadot-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.15 Create the first `@cubid/aptos` package slice
 

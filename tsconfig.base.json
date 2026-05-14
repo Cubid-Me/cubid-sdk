@@ -24,6 +24,7 @@
       "@cubid/cosmos": ["packages/cosmos/src/index.ts"],
       "@cubid/evm": ["packages/evm/src/index.ts"],
       "@cubid/near": ["packages/near/src/index.ts"],
+      "@cubid/polkadot": ["packages/polkadot/src/index.ts"],
       "@cubid/react": ["packages/react/src/index.ts"],
       "@cubid/solana": ["packages/solana/src/index.ts"],
       "@cubid/starknet": ["packages/starknet/src/index.ts"],

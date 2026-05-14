@@ -15,6 +15,7 @@ The first rename and split slices now exist in the workspace:
 - `@cubid/web2` and `@cubid/web2-react` now act as compatibility re-export packages
 - `@cubid/evm` has been created as the first chain-specific package
 - `@cubid/near` now exists as the second chain-specific package on top of `@cubid/core`
+- `@cubid/polkadot` now exists as another chain-specific package on top of `@cubid/core`
 - `@cubid/solana` now exists as the third chain-specific package on top of `@cubid/core`
 - `@cubid/starknet` now exists as another chain-specific package on top of `@cubid/core`
 - `@cubid/sui` now exists as the fourth chain-specific package on top of `@cubid/core`
@@ -44,6 +45,7 @@ Target:
 - `@cubid/react`
 - `@cubid/evm`
 - `@cubid/near`
+- `@cubid/polkadot`
 - `@cubid/wagmi`
 - `@cubid/solana`
 - `@cubid/starknet`
@@ -230,15 +232,16 @@ Use this staged closeout path:
 5. Publish `@cubid/evm`.
 6. Publish `@cubid/near`.
 7. Publish `@cubid/solana`.
-8. Publish `@cubid/bitcoin`.
-9. Publish `@cubid/cardano`.
-10. Publish `@cubid/cosmos`.
-11. Publish `@cubid/starknet`.
-12. Publish `@cubid/sui`.
-13. Publish `@cubid/wagmi`.
-14. Freeze `@cubid/web3` to the legacy shared wallet surface.
-15. Publish explicit `@cubid/web3` migration and deprecation guidance.
-16. Decide whether `@cubid/web3` remains as a long-lived frozen compatibility
+8. Publish `@cubid/polkadot`.
+9. Publish `@cubid/bitcoin`.
+10. Publish `@cubid/cardano`.
+11. Publish `@cubid/cosmos`.
+12. Publish `@cubid/starknet`.
+13. Publish `@cubid/sui`.
+14. Publish `@cubid/wagmi`.
+15. Freeze `@cubid/web3` to the legacy shared wallet surface.
+16. Publish explicit `@cubid/web3` migration and deprecation guidance.
+17. Decide whether `@cubid/web3` remains as a long-lived frozen compatibility
    wrapper or moves to a more formal deprecated release path.
 
 ## Exit Criteria
@@ -248,6 +251,6 @@ The migration can be considered complete when:
 - public docs no longer describe `web2`, `web2-react`, or `web3` as the target
   long-term package names
 - `@cubid/browser` and `@cubid/react` are published and documented
-- the first chain-specific packages, including `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`, `@cubid/solana`, `@cubid/starknet`, `@cubid/sui`, and `@cubid/wagmi`, are published with tests
+- the first chain-specific packages, including `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, `@cubid/sui`, and `@cubid/wagmi`, are published with tests
 - compatibility packages are clearly frozen and no longer treated as active release targets
 - `@cubid/web3` is either frozen with downstream migration guidance or formally deprecated with an explicit maintenance policy

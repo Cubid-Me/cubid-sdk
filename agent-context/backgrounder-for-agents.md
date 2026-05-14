@@ -46,6 +46,7 @@ Build toward this package ecosystem:
 @cubid/cardano
 @cubid/sui
 @cubid/near
+@cubid/polkadot
 
 (later, if backend contracts justify them)
 @cubid/comms
@@ -66,6 +67,7 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 @cubid/evm
 @cubid/wagmi
 @cubid/near
+@cubid/polkadot
 @cubid/solana
 @cubid/starknet
 @cubid/sui

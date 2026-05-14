@@ -20,6 +20,7 @@ verification, migrations, and service-role access.
 | `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
 | `@cubid/evm` | EVM-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/near` | NEAR-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/polkadot` | Polkadot-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/solana` | Solana-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/starknet` | Starknet-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/sui` | Sui-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
@@ -55,6 +56,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/react.json`
   - `docs/reference/api/evm.json`
   - `docs/reference/api/near.json`
+  - `docs/reference/api/polkadot.json`
   - `docs/reference/api/solana.json`
   - `docs/reference/api/starknet.json`
   - `docs/reference/api/sui.json`
@@ -132,6 +134,6 @@ import { createCubidApiClient } from "@cubid/core"
 
 `@cubid/auth`, `@cubid/auth-react`, `@cubid/browser`, `@cubid/react`,
 `@cubid/bitcoin`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`,
-`@cubid/solana`, `@cubid/sui`, `@cubid/starknet`, `@cubid/wagmi`, and
+`@cubid/polkadot`, `@cubid/solana`, `@cubid/sui`, `@cubid/starknet`, `@cubid/wagmi`, and
 `@cubid/web3` remain npm packages; they are not part of the JSR
 publication policy.

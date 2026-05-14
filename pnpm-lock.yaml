@@ -177,6 +177,12 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/polkadot:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/react:
     dependencies:
       '@cubid/browser':

@@ -15,6 +15,7 @@ public Cubid SDK packages.
 - `@cubid/react`
 - `@cubid/evm`
 - `@cubid/near`
+- `@cubid/polkadot`
 - `@cubid/solana`
 - `@cubid/starknet`
 - `@cubid/sui`
