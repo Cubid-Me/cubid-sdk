@@ -32,6 +32,7 @@ Target packages:
 - `@cubid/browser`: headless browser integration helpers
 - `@cubid/react`: React hooks and components built on `@cubid/browser`
 - `@cubid/evm`: EVM wallet and signing logic, using `viem` only when needed
+- `@cubid/near`: NEAR wallet and signing logic
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
 - `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/cardano`: Cardano wallet and signing logic
@@ -152,6 +153,11 @@ Future smart-account, session-key, paymaster, and gas-sponsorship APIs should
 also be capability-driven rather than universal. Keep app-scoped generated
 custody accounts as the default public model unless Passport later exposes
 explicit capability fields or feature gates for optional account modes.
+
+`@cubid/near` now exists as a second chain-specific package on top of
+`@cubid/core`. It should keep treating `accountId` as the primary public
+identity for default NEAR stamp serialization while preserving optional wallet
+metadata such as `address`, `networkId`, and explicit capability descriptors.
 
 `@cubid/secrets`, if introduced, owns advanced encryption/custody helpers. Until
 then, `@cubid/core` may expose typed API wrappers for basic secret operations

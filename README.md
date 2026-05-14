@@ -16,6 +16,7 @@ verification, migrations, and service-role access.
 | `@cubid/browser` | Headless browser helpers for hosted verification, OTP, Allow Page, and provider handoff flows. | npm-only |
 | `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
 | `@cubid/evm` | EVM-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/near` | NEAR-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/wagmi` | wagmi-specific React integration helpers built on `@cubid/evm`. | npm-only |
 | `@cubid/web3` | Interim wallet-oriented package while the chain-specific split continues. | npm-only |
 | `@cubid/web2` | Frozen compatibility wrapper around `@cubid/browser`. | npm-only, deprecated |
@@ -44,6 +45,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/browser.json`
   - `docs/reference/api/react.json`
   - `docs/reference/api/evm.json`
+  - `docs/reference/api/near.json`
   - `docs/reference/api/wagmi.json`
   - `docs/reference/api/web3.json`
 
@@ -105,6 +107,6 @@ package directly:
 import { createCubidApiClient } from "@cubid/core"
 ```
 
-`@cubid/auth`, `@cubid/auth-react`, `@cubid/browser`, `@cubid/react`, `@cubid/evm`,
-`@cubid/wagmi`, and `@cubid/web3` remain npm packages; they are not part of
-the JSR publication policy.
+`@cubid/auth`, `@cubid/auth-react`, `@cubid/browser`, `@cubid/react`,
+`@cubid/evm`, `@cubid/near`, `@cubid/wagmi`, and `@cubid/web3` remain npm
+packages; they are not part of the JSR publication policy.

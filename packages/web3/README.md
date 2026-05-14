@@ -4,9 +4,10 @@ Interim wallet-oriented Cubid package while the chain-specific split continues.
 
 ## When To Choose This Package
 
-Prefer `@cubid/evm` for new EVM integrations and `@cubid/wagmi` for
-wagmi-specific React integrations. Use `@cubid/web3` only when you still depend
-on the older shared wallet surface while the split remains in progress.
+Prefer `@cubid/evm` for new EVM integrations, `@cubid/wagmi` for
+wagmi-specific React integrations, and `@cubid/near` for new NEAR
+integrations. Use `@cubid/web3` only when you still depend on the older shared
+wallet surface while the split remains in progress.
 
 ## Install
 

@@ -48,6 +48,7 @@ Scope:
 - `@cubid/auth-react`
 - `@cubid/browser`
 - `@cubid/evm`
+- `@cubid/near`
 - `@cubid/wagmi`
 - `@cubid/web3`
 
@@ -165,6 +166,7 @@ Coverage target scope:
 - include `@cubid/browser`
 - include `@cubid/react`
 - include `@cubid/evm`
+- include `@cubid/near`
 - include `@cubid/wagmi`
 - include `@cubid/web3`
 

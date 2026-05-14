@@ -16,7 +16,7 @@
     "test": "pnpm test:unit && pnpm build && pnpm test:acceptance",
     "test:acceptance": "pnpm --filter @cubid/acceptance test",
     "test:coverage": "vitest run --config vitest.config.ts --coverage",
-    "test:unit": "pnpm --filter @cubid/core build && pnpm --filter @cubid/auth build && pnpm --filter @cubid/browser build && pnpm --filter @cubid/evm build && vitest run --config vitest.config.ts",
+    "test:unit": "pnpm --filter @cubid/core build && pnpm --filter @cubid/auth build && pnpm --filter @cubid/browser build && pnpm --filter @cubid/evm build && pnpm --filter @cubid/near build && vitest run --config vitest.config.ts",
     "typecheck": "pnpm -r typecheck"
   },
   "devDependencies": {

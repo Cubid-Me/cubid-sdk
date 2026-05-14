@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "name": "@cubid/web3",
+  "name": "@cubid/near",
   "variant": "project",
   "kind": 1,
   "flags": {},
@@ -22,13 +22,13 @@
               {
                 "type": "reference",
                 "name": "TConnection",
-                "package": "@cubid/web3",
+                "package": "@cubid/near",
                 "qualifiedName": "ConnectWalletRequest.TConnection",
                 "refersToTypeParameter": true
               }
             ],
-            "name": "CubidWeb3Adapter",
-            "package": "@cubid/web3"
+            "name": "CubidNearAdapter",
+            "package": "@cubid/near"
           }
         }
       ],
@@ -40,293 +40,19 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidNearConnection",
+            "package": "@cubid/near"
           },
           "default": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidNearConnection",
+            "package": "@cubid/near"
           }
         }
       ]
     },
     {
-      "name": "CubidWalletCapabilities",
-      "variant": "declaration",
-      "kind": 256,
-      "flags": {},
-      "children": [
-        {
-          "name": "gasSponsorship",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilityDescriptor",
-            "package": "@cubid/web3"
-          }
-        },
-        {
-          "name": "paymaster",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilityDescriptor",
-            "package": "@cubid/web3"
-          }
-        },
-        {
-          "name": "sessionKeys",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilityDescriptor",
-            "package": "@cubid/web3"
-          }
-        },
-        {
-          "name": "smartAccount",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilityDescriptor",
-            "package": "@cubid/web3"
-          }
-        }
-      ],
-      "indexSignatures": [
-        {
-          "name": "__index",
-          "variant": "signature",
-          "kind": 8192,
-          "flags": {},
-          "parameters": [
-            {
-              "name": "capabilityName",
-              "variant": "param",
-              "kind": 32768,
-              "flags": {},
-              "type": {
-                "type": "intrinsic",
-                "name": "string"
-              }
-            }
-          ],
-          "type": {
-            "type": "union",
-            "types": [
-              {
-                "type": "reference",
-                "name": "CubidWalletCapabilityDescriptor",
-                "package": "@cubid/web3"
-              },
-              {
-                "type": "intrinsic",
-                "name": "undefined"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidWalletCapabilityDescriptor",
-      "variant": "declaration",
-      "kind": 256,
-      "flags": {},
-      "children": [
-        {
-          "name": "available",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "intrinsic",
-            "name": "boolean"
-          }
-        },
-        {
-          "name": "metadata",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "target": {
-              "packageName": "typescript",
-              "packagePath": "lib/lib.es5.d.ts",
-              "qualifiedName": "Record"
-            },
-            "typeArguments": [
-              {
-                "type": "intrinsic",
-                "name": "string"
-              },
-              {
-                "type": "intrinsic",
-                "name": "unknown"
-              }
-            ],
-            "name": "Record",
-            "package": "typescript"
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidWalletConnection",
-      "variant": "declaration",
-      "kind": 256,
-      "flags": {},
-      "children": [
-        {
-          "name": "address",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "intrinsic",
-            "name": "string"
-          }
-        },
-        {
-          "name": "capabilities",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "name": "CubidWalletCapabilities",
-            "package": "@cubid/web3"
-          }
-        },
-        {
-          "name": "chainId",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "union",
-            "types": [
-              {
-                "type": "intrinsic",
-                "name": "string"
-              },
-              {
-                "type": "intrinsic",
-                "name": "number"
-              }
-            ]
-          }
-        },
-        {
-          "name": "chainType",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "intrinsic",
-            "name": "string"
-          }
-        }
-      ],
-      "indexSignatures": [
-        {
-          "name": "__index",
-          "variant": "signature",
-          "kind": 8192,
-          "flags": {},
-          "parameters": [
-            {
-              "name": "key",
-              "variant": "param",
-              "kind": 32768,
-              "flags": {},
-              "type": {
-                "type": "intrinsic",
-                "name": "string"
-              }
-            }
-          ],
-          "type": {
-            "type": "intrinsic",
-            "name": "unknown"
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidWalletVerification",
-      "variant": "declaration",
-      "kind": 256,
-      "flags": {},
-      "children": [
-        {
-          "name": "isVerified",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "intrinsic",
-            "name": "boolean"
-          }
-        },
-        {
-          "name": "metadata",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "reference",
-            "target": {
-              "packageName": "typescript",
-              "packagePath": "lib/lib.es5.d.ts",
-              "qualifiedName": "Record"
-            },
-            "typeArguments": [
-              {
-                "type": "intrinsic",
-                "name": "string"
-              },
-              {
-                "type": "intrinsic",
-                "name": "unknown"
-              }
-            ],
-            "name": "Record",
-            "package": "typescript"
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidWeb3Adapter",
+      "name": "CubidNearAdapter",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
@@ -363,8 +89,8 @@
                   {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
-                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "package": "@cubid/near",
+                    "qualifiedName": "CubidNearAdapter.TConnection",
                     "refersToTypeParameter": true
                   }
                 ],
@@ -396,8 +122,8 @@
                   "type": {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
-                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "package": "@cubid/near",
+                    "qualifiedName": "CubidNearAdapter.TConnection",
                     "refersToTypeParameter": true
                   }
                 }
@@ -452,8 +178,8 @@
                   "type": {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
-                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "package": "@cubid/near",
+                    "qualifiedName": "CubidNearAdapter.TConnection",
                     "refersToTypeParameter": true
                   }
                 },
@@ -464,8 +190,8 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidWalletVerification",
-                    "package": "@cubid/web3"
+                    "name": "CubidNearVerification",
+                    "package": "@cubid/near"
                   }
                 }
               ],
@@ -514,8 +240,8 @@
                   "type": {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
-                    "qualifiedName": "CubidWeb3Adapter.TConnection",
+                    "package": "@cubid/near",
+                    "qualifiedName": "CubidNearAdapter.TConnection",
                     "refersToTypeParameter": true
                   }
                 }
@@ -525,8 +251,8 @@
                 "types": [
                   {
                     "type": "reference",
-                    "name": "CubidWalletVerification",
-                    "package": "@cubid/web3"
+                    "name": "CubidNearVerification",
+                    "package": "@cubid/near"
                   },
                   {
                     "type": "reference",
@@ -538,8 +264,8 @@
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "name": "CubidWalletVerification",
-                        "package": "@cubid/web3"
+                        "name": "CubidNearVerification",
+                        "package": "@cubid/near"
                       }
                     ],
                     "name": "Promise",
@@ -559,19 +285,159 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidNearConnection",
+            "package": "@cubid/near"
           },
           "default": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidNearConnection",
+            "package": "@cubid/near"
           }
         }
       ]
     },
     {
-      "name": "CubidWeb3Client",
+      "name": "CubidNearCapabilities",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "gasSponsorship",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidNearCapabilityDescriptor",
+            "package": "@cubid/near"
+          }
+        },
+        {
+          "name": "paymaster",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidNearCapabilityDescriptor",
+            "package": "@cubid/near"
+          }
+        },
+        {
+          "name": "sessionKeys",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidNearCapabilityDescriptor",
+            "package": "@cubid/near"
+          }
+        },
+        {
+          "name": "smartAccount",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidNearCapabilityDescriptor",
+            "package": "@cubid/near"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "capabilityName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidNearCapabilityDescriptor",
+                "package": "@cubid/near"
+              },
+              {
+                "type": "intrinsic",
+                "name": "undefined"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidNearCapabilityDescriptor",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "available",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidNearClient",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
@@ -613,8 +479,8 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidWalletConnection",
-                    "package": "@cubid/web3"
+                    "name": "CubidNearConnection",
+                    "package": "@cubid/near"
                   }
                 }
               ],
@@ -630,12 +496,12 @@
                       {
                         "type": "reference",
                         "name": "TConnection",
-                        "package": "@cubid/web3",
+                        "package": "@cubid/near",
                         "refersToTypeParameter": true
                       }
                     ],
                     "name": "ConnectWalletRequest",
-                    "package": "@cubid/web3"
+                    "package": "@cubid/near"
                   }
                 }
               ],
@@ -650,7 +516,7 @@
                   {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
+                    "package": "@cubid/near",
                     "refersToTypeParameter": true
                   }
                 ],
@@ -679,8 +545,8 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidWalletConnection",
-                    "package": "@cubid/web3"
+                    "name": "CubidNearConnection",
+                    "package": "@cubid/near"
                   }
                 }
               ],
@@ -696,12 +562,12 @@
                       {
                         "type": "reference",
                         "name": "TConnection",
-                        "package": "@cubid/web3",
+                        "package": "@cubid/near",
                         "refersToTypeParameter": true
                       }
                     ],
-                    "name": "CubidWeb3Adapter",
-                    "package": "@cubid/web3"
+                    "name": "CubidNearAdapter",
+                    "package": "@cubid/near"
                   }
                 },
                 {
@@ -712,7 +578,7 @@
                   "type": {
                     "type": "reference",
                     "name": "TConnection",
-                    "package": "@cubid/web3",
+                    "package": "@cubid/near",
                     "refersToTypeParameter": true
                   }
                 }
@@ -755,8 +621,8 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidWalletConnection",
-                    "package": "@cubid/web3"
+                    "name": "CubidNearConnection",
+                    "package": "@cubid/near"
                   }
                 }
               ],
@@ -772,12 +638,12 @@
                       {
                         "type": "reference",
                         "name": "TConnection",
-                        "package": "@cubid/web3",
+                        "package": "@cubid/near",
                         "refersToTypeParameter": true
                       }
                     ],
                     "name": "VerifyWalletRequest",
-                    "package": "@cubid/web3"
+                    "package": "@cubid/near"
                   }
                 }
               ],
@@ -795,12 +661,12 @@
                       {
                         "type": "reference",
                         "name": "TConnection",
-                        "package": "@cubid/web3",
+                        "package": "@cubid/near",
                         "refersToTypeParameter": true
                       }
                     ],
                     "name": "VerifyWalletResult",
-                    "package": "@cubid/web3"
+                    "package": "@cubid/near"
                   }
                 ],
                 "name": "Promise",
@@ -812,7 +678,7 @@
       ]
     },
     {
-      "name": "CubidWeb3ClientOptions",
+      "name": "CubidNearClientOptions",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
@@ -826,8 +692,145 @@
           },
           "type": {
             "type": "reference",
-            "name": "CubidWeb3StampType",
-            "package": "@cubid/web3"
+            "name": "CubidNearStampType",
+            "package": "@cubid/near"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidNearConnection",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "accountId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "address",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidNearCapabilities",
+            "package": "@cubid/near"
+          }
+        },
+        {
+          "name": "chainType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "networkId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidNearVerification",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "isVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
           }
         }
       ]
@@ -849,13 +852,13 @@
               {
                 "type": "reference",
                 "name": "TConnection",
-                "package": "@cubid/web3",
+                "package": "@cubid/near",
                 "qualifiedName": "VerifyWalletRequest.TConnection",
                 "refersToTypeParameter": true
               }
             ],
-            "name": "CubidWeb3Adapter",
-            "package": "@cubid/web3"
+            "name": "CubidNearAdapter",
+            "package": "@cubid/near"
           }
         },
         {
@@ -866,7 +869,7 @@
           "type": {
             "type": "reference",
             "name": "TConnection",
-            "package": "@cubid/web3",
+            "package": "@cubid/near",
             "qualifiedName": "VerifyWalletRequest.TConnection",
             "refersToTypeParameter": true
           }
@@ -913,8 +916,8 @@
           },
           "type": {
             "type": "reference",
-            "name": "CubidWeb3StampType",
-            "package": "@cubid/web3"
+            "name": "CubidNearStampType",
+            "package": "@cubid/near"
           }
         },
         {
@@ -938,13 +941,13 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidNearConnection",
+            "package": "@cubid/near"
           },
           "default": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidNearConnection",
+            "package": "@cubid/near"
           }
         }
       ]
@@ -962,8 +965,8 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletCapabilities",
-            "package": "@cubid/web3"
+            "name": "CubidNearCapabilities",
+            "package": "@cubid/near"
           }
         },
         {
@@ -974,7 +977,7 @@
           "type": {
             "type": "reference",
             "name": "TConnection",
-            "package": "@cubid/web3",
+            "package": "@cubid/near",
             "qualifiedName": "VerifyWalletResult.TConnection",
             "refersToTypeParameter": true
           }
@@ -1032,8 +1035,8 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWeb3StampType",
-            "package": "@cubid/web3"
+            "name": "CubidNearStampType",
+            "package": "@cubid/near"
           }
         },
         {
@@ -1043,8 +1046,8 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletVerification",
-            "package": "@cubid/web3"
+            "name": "CubidNearVerification",
+            "package": "@cubid/near"
           }
         }
       ],
@@ -1056,19 +1059,19 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidNearConnection",
+            "package": "@cubid/near"
           },
           "default": {
             "type": "reference",
-            "name": "CubidWalletConnection",
-            "package": "@cubid/web3"
+            "name": "CubidNearConnection",
+            "package": "@cubid/near"
           }
         }
       ]
     },
     {
-      "name": "CubidWeb3StampType",
+      "name": "CubidNearStampType",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -1077,31 +1080,23 @@
         "types": [
           {
             "type": "literal",
-            "value": "evm"
-          },
-          {
-            "type": "literal",
             "value": "near"
           },
           {
             "type": "literal",
             "value": "near-wallet"
-          },
-          {
-            "type": "literal",
-            "value": "solana"
           }
         ]
       }
     },
     {
-      "name": "createCubidWeb3Client",
+      "name": "createCubidNearClient",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "name": "createCubidWeb3Client",
+          "name": "createCubidNearClient",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
@@ -1129,28 +1124,28 @@
               "flags": {},
               "type": {
                 "type": "reference",
-                "name": "CubidWeb3ClientOptions",
-                "package": "@cubid/web3"
+                "name": "CubidNearClientOptions",
+                "package": "@cubid/near"
               },
               "defaultValue": "{}"
             }
           ],
           "type": {
             "type": "reference",
-            "name": "CubidWeb3Client",
-            "package": "@cubid/web3"
+            "name": "CubidNearClient",
+            "package": "@cubid/near"
           }
         }
       ]
     },
     {
-      "name": "getCubidWalletCapabilities",
+      "name": "getCubidNearCapabilities",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "name": "getCubidWalletCapabilities",
+          "name": "getCubidNearCapabilities",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
@@ -1162,27 +1157,27 @@
               "flags": {},
               "type": {
                 "type": "reference",
-                "name": "CubidWalletConnection",
-                "package": "@cubid/web3"
+                "name": "CubidNearConnection",
+                "package": "@cubid/near"
               }
             }
           ],
           "type": {
             "type": "reference",
-            "name": "CubidWalletCapabilities",
-            "package": "@cubid/web3"
+            "name": "CubidNearCapabilities",
+            "package": "@cubid/near"
           }
         }
       ]
     },
     {
-      "name": "hasCubidWalletCapability",
+      "name": "hasCubidNearCapability",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "name": "hasCubidWalletCapability",
+          "name": "hasCubidNearCapability",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
@@ -1194,8 +1189,8 @@
               "flags": {},
               "type": {
                 "type": "reference",
-                "name": "CubidWalletConnection",
-                "package": "@cubid/web3"
+                "name": "CubidNearConnection",
+                "package": "@cubid/near"
               }
             },
             {
@@ -1217,7 +1212,7 @@
       ]
     }
   ],
-  "packageName": "@cubid/web3",
+  "packageName": "@cubid/near",
   "readme": [
     {
       "kind": "text",
@@ -1225,27 +1220,19 @@
     },
     {
       "kind": "code",
-      "text": "`@cubid/web3`"
+      "text": "`@cubid/near`"
     },
     {
       "kind": "text",
-      "text": "\n\nInterim wallet-oriented Cubid package while the chain-specific split continues.\n\n## When To Choose This Package\n\nPrefer "
+      "text": "\n\nNEAR-oriented Cubid wallet helpers built on top of "
     },
     {
       "kind": "code",
-      "text": "`@cubid/evm`"
+      "text": "`@cubid/core`"
     },
     {
       "kind": "text",
-      "text": " for new EVM integrations, "
-    },
-    {
-      "kind": "code",
-      "text": "`@cubid/wagmi`"
-    },
-    {
-      "kind": "text",
-      "text": " for\nwagmi-specific React integrations, and "
+      "text": ".\n\n## When To Choose This Package\n\nUse "
     },
     {
       "kind": "code",
@@ -1253,7 +1240,7 @@
     },
     {
       "kind": "text",
-      "text": " for new NEAR\nintegrations. Use "
+      "text": " when you need Cubid's NEAR-specific custody, connection, and\nverification helpers. Choose "
     },
     {
       "kind": "code",
@@ -1261,11 +1248,11 @@
     },
     {
       "kind": "text",
-      "text": " only when you still depend on the older shared\nwallet surface while the split remains in progress.\n\n## Install\n\n"
+      "text": " only when you still depend on the\nolder interim shared wallet surface while the chain split continues.\n\n## Install\n\n"
     },
     {
       "kind": "code",
-      "text": "```sh\nnpm install @cubid/web3 @cubid/core\n```"
+      "text": "```sh\nnpm install @cubid/near @cubid/core\n```"
     },
     {
       "kind": "text",
@@ -1273,7 +1260,7 @@
     },
     {
       "kind": "code",
-      "text": "`../../docs/reference/api/web3.json`"
+      "text": "`../../docs/reference/api/near.json`"
     },
     {
       "kind": "text",
@@ -1285,7 +1272,63 @@
     },
     {
       "kind": "text",
-      "text": "\n\n## Capability Metadata\n\nThe interim wallet surface preserves optional "
+      "text": "\n\n## Connection Model\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/near`"
+    },
+    {
+      "kind": "text",
+      "text": " treats "
+    },
+    {
+      "kind": "code",
+      "text": "`accountId`"
+    },
+    {
+      "kind": "text",
+      "text": " as the primary identity for default stamp\nserialization. Optional "
+    },
+    {
+      "kind": "code",
+      "text": "`address`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`networkId`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`chainType`"
+    },
+    {
+      "kind": "text",
+      "text": " metadata may\nbe preserved on the connection when a host wallet exposes them.\n\nThe package supports both "
+    },
+    {
+      "kind": "code",
+      "text": "`near`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`near-wallet`"
+    },
+    {
+      "kind": "text",
+      "text": " stamp types without forcing\nhost apps to choose a heavier chain SDK up front.\n\n## Capability Metadata\n\nNEAR connections may expose optional "
     },
     {
       "kind": "code",
@@ -1293,11 +1336,43 @@
     },
     {
       "kind": "text",
-      "text": " metadata on\nconnections and verification results. Use that metadata for features such as\nsmart accounts, session keys, paymasters, or gas sponsorship instead of\nassuming every wallet connection supports them.\n\nThe package exports "
+      "text": " metadata for features that\nare not universal across Cubid custody accounts or wallet adapters, such as:\n\n- "
     },
     {
       "kind": "code",
-      "text": "`getCubidWalletCapabilities(...)`"
+      "text": "`smartAccount`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`sessionKeys`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`paymaster`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`gasSponsorship`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThese descriptors are intentionally opt-in and capability-driven.\n\nThe package exports "
+    },
+    {
+      "kind": "code",
+      "text": "`getCubidNearCapabilities(...)`"
     },
     {
       "kind": "text",
@@ -1305,11 +1380,11 @@
     },
     {
       "kind": "code",
-      "text": "`hasCubidWalletCapability(...)`"
+      "text": "`hasCubidNearCapability(...)`"
     },
     {
       "kind": "text",
-      "text": " to keep those checks explicit while the chain\nsplit continues."
+      "text": " so host apps can read that metadata without\nassuming any advanced custody feature is universally available."
     }
   ]
 }

@@ -18,6 +18,7 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/browser` | npm-only | Browser-oriented helper layer; not marketed as a Deno or JSR surface. |
 | `@cubid/react` | npm-only | React package with peer dependency assumptions. |
 | `@cubid/evm` | npm-only | Chain-specific package built for the npm ecosystem. |
+| `@cubid/near` | npm-only | Chain-specific NEAR package built for the npm ecosystem. |
 | `@cubid/wagmi` | npm-only | wagmi-specific React integration package. |
 | `@cubid/web3` | npm-only | Transitional umbrella package while the chain split continues. |
 | `@cubid/web2` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
@@ -59,6 +60,7 @@ Current verified state as of 2026-05-09:
   - `@cubid/browser@0.1.1`
   - `@cubid/react@0.1.1`
   - `@cubid/evm@0.1.1`
+  - `@cubid/near` is not published yet
   - `@cubid/wagmi@0.1.1`
 - npm trusted publishing: configured for `Cubid-Me/cubid-sdk`
 - JSR:

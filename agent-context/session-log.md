@@ -748,3 +748,19 @@
   - `pnpm lint`
   - `pnpm typecheck`
   - `pnpm test:unit`
+
+## session: s51-near-package-slice
+
+- Timestamp: 2026-05-14T04:10:00Z
+- Summary: Continued `S03` by extracting `@cubid/near` as the next real chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/near` with NEAR-specific client, types, capability helpers, tests, package metadata, and README.
+  - Kept `accountId` as the primary public identity for default NEAR stamp serialization while preserving optional `address`, `networkId`, and `chainType` metadata.
+  - Wired the new package into path aliases, Vitest coverage and unit suites, the publish workflow, the package matrix, the API reference generator, and the chain-split roadmap docs.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`

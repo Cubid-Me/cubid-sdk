@@ -20,6 +20,7 @@
       "@cubid/browser": ["packages/browser/src/index.ts"],
       "@cubid/core": ["packages/core/src/index.ts"],
       "@cubid/evm": ["packages/evm/src/index.ts"],
+      "@cubid/near": ["packages/near/src/index.ts"],
       "@cubid/react": ["packages/react/src/index.ts"],
       "@cubid/wagmi": ["packages/wagmi/src/index.ts"],
       "@cubid/web2": ["packages/web2/src/index.ts"],

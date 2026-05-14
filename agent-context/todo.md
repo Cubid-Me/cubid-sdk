@@ -295,6 +295,19 @@ The current EVM, wagmi, and interim web3 packages now preserve optional
 export small helper functions for capability checks instead of baking in smart
 account defaults.
 
+### S03.7 Create the first `@cubid/near` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T03:35:00Z
+- Timestamp completed: 2026-05-14T04:10:00Z
+- Feature branch: `codex/s03-chain-split-followup`
+- Head: `8a846527` at implementation start
+- Session-log reference(s): session: s51-near-package-slice
+
+Added `packages/near` as the next chain-specific package on top of
+`@cubid/core`, with NEAR-specific connection and stamp types, capability
+metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
+
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
 - Status: Completed
