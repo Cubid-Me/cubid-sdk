@@ -221,6 +221,7 @@ describe("@cubid/browser", () => {
       })
     ).toEqual({
       body: JSON.stringify({ accountRequestId: "siwc_acct_req_123" }),
+      credentials: "include",
       headers: { "content-type": "application/json" },
       method: "POST",
       url: "https://passport.cubid.me/api/siwc/accounts/requests/approve"
@@ -233,9 +234,26 @@ describe("@cubid/browser", () => {
       })
     ).toEqual({
       body: JSON.stringify({ signingRequestId: "siwc_req_456" }),
+      credentials: "include",
       headers: { "content-type": "application/json" },
       method: "POST",
       url: "https://passport.cubid.me/api/siwc/signing/requests/reject"
     });
+  });
+
+  it("rejects invalid hosted SIWC decisions at runtime", () => {
+    expect(() =>
+      buildHostedSiwcAccountRequestAction({
+        accountRequestId: "siwc_acct_req_123",
+        decision: "launch" as never
+      })
+    ).toThrow('Hosted SIWC actions require decision to be "approve" or "reject".');
+
+    expect(() =>
+      buildHostedSiwcSigningRequestAction({
+        decision: "../approve" as never,
+        signingRequestId: "siwc_req_456"
+      })
+    ).toThrow('Hosted SIWC actions require decision to be "approve" or "reject".');
   });
 });

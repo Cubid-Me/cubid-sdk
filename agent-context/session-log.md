@@ -852,3 +852,14 @@
   - Updated the root README and testing strategy so human guidance now points to the single script first, while still documenting the expanded step-by-step sequence underneath it.
 - Validation:
   - `pnpm validate:yeet`
+
+## session: s59-pr11-review-followup
+
+- Timestamp: 2026-05-14T17:55:00Z
+- Summary: Addressed the open PR #11 Copilot and Codex review threads by hardening hosted SIWC descriptors, removing redundant verified-persistence guards, and documenting the numeric `policyVersion` contract explicitly.
+- Actions:
+  - Added runtime `decision` validation and `credentials: "include"` to the hosted SIWC browser descriptors, plus tests covering both the new descriptor shape and invalid decisions.
+  - Removed the duplicated precondition guards from the NEAR and Solana clients so persistence context is only required when a verified result is actually being written, and added tests for the unverified path.
+  - Updated the browser and core docs to call out the credentialed hosted SIWC fetch requirement and the now-explicit numeric `policyVersion` normalization contract, then regenerated the machine-readable API reference artifacts.
+- Validation:
+  - `pnpm validate:yeet`

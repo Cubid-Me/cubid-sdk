@@ -84,8 +84,13 @@ Each helper returns a launcher-ready descriptor with:
 
 - `url`
 - `method`
+- `credentials`
 - `headers`
 - `body`
+
+The descriptor currently sets `credentials: "include"` so a browser `fetch`
+call will send the authenticated Passport session cookie during the hosted
+approval or rejection step.
 
 These helpers are intentionally thin. They prepare the browser-safe request
 shape for Passport-hosted approval flows, but they do not bypass Passport user

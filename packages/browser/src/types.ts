@@ -36,6 +36,7 @@ export type HostedSiwcDecision = "approve" | "reject";
 
 export interface HostedSiwcRequestDescriptor {
   body: string;
+  credentials: "include";
   headers: Readonly<Record<string, string>>;
   method: "POST";
   url: string;

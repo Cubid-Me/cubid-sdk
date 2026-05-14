@@ -1514,6 +1514,16 @@
           }
         },
         {
+          "name": "credentials",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "literal",
+            "value": "include"
+          }
+        },
+        {
           "name": "headers",
           "variant": "declaration",
           "kind": 1024,
@@ -3254,6 +3264,14 @@
     },
     {
       "kind": "code",
+      "text": "`credentials`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`headers`"
     },
     {
@@ -3266,7 +3284,23 @@
     },
     {
       "kind": "text",
-      "text": "\n\nThese helpers are intentionally thin. They prepare the browser-safe request\nshape for Passport-hosted approval flows, but they do not bypass Passport user\nauthentication, fresh passkey step-up, or app policy checks.\n\nUse them only in environments where the authenticated Passport user session is\nalready expected to perform the approval or rejection step."
+      "text": "\n\nThe descriptor currently sets "
+    },
+    {
+      "kind": "code",
+      "text": "`credentials: \"include\"`"
+    },
+    {
+      "kind": "text",
+      "text": " so a browser "
+    },
+    {
+      "kind": "code",
+      "text": "`fetch`"
+    },
+    {
+      "kind": "text",
+      "text": "\ncall will send the authenticated Passport session cookie during the hosted\napproval or rejection step.\n\nThese helpers are intentionally thin. They prepare the browser-safe request\nshape for Passport-hosted approval flows, but they do not bypass Passport user\nauthentication, fresh passkey step-up, or app policy checks.\n\nUse them only in environments where the authenticated Passport user session is\nalready expected to perform the approval or rejection step."
     }
   ]
 }

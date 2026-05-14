@@ -7,6 +7,7 @@ import type {
 } from "./types";
 
 const DEFAULT_PASSPORT_ORIGIN = "https://passport.cubid.me";
+const HOSTED_SIWC_DECISIONS = new Set(["approve", "reject"]);
 
 function normalizePassportOrigin(passportOrigin?: string): string {
   return (passportOrigin ?? DEFAULT_PASSPORT_ORIGIN).replace(/\/+$/, "");
@@ -18,6 +19,14 @@ function assertNonEmpty(value: number | string | undefined, fieldName: string): 
   }
 
   return String(value);
+}
+
+function assertHostedSiwcDecision(value: string): "approve" | "reject" {
+  if (!HOSTED_SIWC_DECISIONS.has(value)) {
+    throw new Error('Hosted SIWC actions require decision to be "approve" or "reject".');
+  }
+
+  return value as "approve" | "reject";
 }
 
 export function buildHostedVerificationUrl(request: HostedVerificationUrlRequest): string {
@@ -73,6 +82,7 @@ function buildHostedSiwcRequestDescriptor(
 ): HostedSiwcRequestDescriptor {
   return {
     body: JSON.stringify(body),
+    credentials: "include",
     headers: {
       "content-type": "application/json"
     },
@@ -86,10 +96,11 @@ export function buildHostedSiwcAccountRequestAction(
 ): HostedSiwcRequestDescriptor {
   const passportOrigin = normalizePassportOrigin(request.passportOrigin);
   const accountRequestId = assertNonEmpty(request.accountRequestId, "accountRequestId");
+  const decision = assertHostedSiwcDecision(request.decision);
 
   return buildHostedSiwcRequestDescriptor(
     passportOrigin,
-    `/api/siwc/accounts/requests/${request.decision}`,
+    `/api/siwc/accounts/requests/${decision}`,
     { accountRequestId }
   );
 }
@@ -99,10 +110,11 @@ export function buildHostedSiwcSigningRequestAction(
 ): HostedSiwcRequestDescriptor {
   const passportOrigin = normalizePassportOrigin(request.passportOrigin);
   const signingRequestId = assertNonEmpty(request.signingRequestId, "signingRequestId");
+  const decision = assertHostedSiwcDecision(request.decision);
 
   return buildHostedSiwcRequestDescriptor(
     passportOrigin,
-    `/api/siwc/signing/requests/${request.decision}`,
+    `/api/siwc/signing/requests/${decision}`,
     { signingRequestId }
   );
 }

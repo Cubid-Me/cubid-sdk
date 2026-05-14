@@ -10993,7 +10993,23 @@
     },
     {
       "kind": "text",
-      "text": "\n\nThese helpers return public account metadata only after approval. They never\nreturn private keys, wrapped keys, ciphertext, seed phrases, Vault material,\nor raw Cubid internal identifiers.\n\nThe SDK surface continues to normalize app-scoped identifiers to "
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`policyVersion`"
+    },
+    {
+      "kind": "text",
+      "text": " on the normalized account-request and signing-request summaries\nnow reflects Passport's numeric policy contract and is exposed as\n"
+    },
+    {
+      "kind": "code",
+      "text": "`number | null`"
+    },
+    {
+      "kind": "text",
+      "text": " on the SDK surface rather than the older string-shaped fixture\nexamples from earlier drafts.\n\nThese helpers return public account metadata only after approval. They never\nreturn private keys, wrapped keys, ciphertext, seed phrases, Vault material,\nor raw Cubid internal identifiers.\n\nThe SDK surface continues to normalize app-scoped identifiers to "
     },
     {
       "kind": "code",

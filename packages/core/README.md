@@ -218,6 +218,11 @@ passkey-approved wallet creation. They expose stable public statuses such as:
 - `expired`
 - `failed`
 
+`policyVersion` on the normalized account-request and signing-request summaries
+now reflects Passport's numeric policy contract and is exposed as
+`number | null` on the SDK surface rather than the older string-shaped fixture
+examples from earlier drafts.
+
 These helpers return public account metadata only after approval. They never
 return private keys, wrapped keys, ciphertext, seed phrases, Vault material,
 or raw Cubid internal identifiers.

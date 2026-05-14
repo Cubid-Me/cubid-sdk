@@ -211,6 +211,11 @@ passkey-approved wallet creation. They expose stable statuses like
 and `failed`, but they never expose private keys, key shares, ciphertext, or
 raw Cubid identity.
 
+`policyVersion` on the normalized account-request and signing-request helpers
+now follows Passport's numeric policy contract, so the public SDK surface
+exposes it as `number | null` instead of the older string-shaped fixture
+examples from early planning notes.
+
 The signing-request helpers also stay redacted by default. They normalize only
 safe summary metadata such as `signingRequestId`, `status`, `chain`,
 `requestType`, `payloadHash`, `payloadSummary`, `policyVersion`,

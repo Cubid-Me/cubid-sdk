@@ -148,7 +148,8 @@ describe("@cubid/solana", () => {
           connect: async () => ({
             publicKey: "So1anaPubkey1111111111111111111111111111111111"
           }),
-          id: "adapter"
+          id: "adapter",
+          verify: async () => ({ isVerified: true })
         },
         connection: {
           publicKey: "So1anaPubkey1111111111111111111111111111111111"
@@ -156,6 +157,38 @@ describe("@cubid/solana", () => {
         persistStamp: true
       })
     ).rejects.toThrow("Persisting a wallet stamp requires both userId and pageId.");
+  });
+
+  it("does not require persistence context when verification stays unverified", async () => {
+    const apiClient = {
+      addStamp: vi.fn(async () => ({ success: true })),
+      config: {
+        apiKey: "api-key",
+        baseUrl: "https://passport.cubid.me/api/v2",
+        dappId: "dapp-id",
+        fetch
+      }
+    } as const;
+
+    const client = createCubidSolanaClient(apiClient as never);
+
+    const result = await client.verifyWallet({
+      adapter: {
+        connect: async () => ({
+          publicKey: "So1anaPubkey1111111111111111111111111111111111"
+        }),
+        id: "adapter",
+        verify: async () => ({ isVerified: false })
+      },
+      connection: {
+        publicKey: "So1anaPubkey1111111111111111111111111111111111"
+      },
+      persistStamp: true
+    });
+
+    expect(apiClient.addStamp).not.toHaveBeenCalled();
+    expect(result.persistedStamp).toBeUndefined();
+    expect(result.verification.isVerified).toBe(false);
   });
 
   it("throws when stamp persistence is requested without adapter verification", async () => {

@@ -139,12 +139,41 @@ describe("@cubid/near", () => {
       client.verifyWallet({
         adapter: {
           connect: async () => ({ accountId: "wallet.near" }),
-          id: "adapter"
+          id: "adapter",
+          verify: async () => ({ isVerified: true })
         },
         connection: { accountId: "wallet.near" },
         persistStamp: true
       })
     ).rejects.toThrow("Persisting a wallet stamp requires both userId and pageId.");
+  });
+
+  it("does not require persistence context when verification stays unverified", async () => {
+    const apiClient = {
+      addStamp: vi.fn(async () => ({ success: true })),
+      config: {
+        apiKey: "api-key",
+        baseUrl: "https://passport.cubid.me/api/v2",
+        dappId: "dapp-id",
+        fetch
+      }
+    } as const;
+
+    const client = createCubidNearClient(apiClient as never);
+
+    const result = await client.verifyWallet({
+      adapter: {
+        connect: async () => ({ accountId: "wallet.near" }),
+        id: "adapter",
+        verify: async () => ({ isVerified: false })
+      },
+      connection: { accountId: "wallet.near" },
+      persistStamp: true
+    });
+
+    expect(apiClient.addStamp).not.toHaveBeenCalled();
+    expect(result.persistedStamp).toBeUndefined();
+    expect(result.verification.isVerified).toBe(false);
   });
 
   it("throws when stamp persistence is requested without adapter verification", async () => {
