@@ -809,3 +809,14 @@
   - `pnpm docs:api:build`
   - `pnpm docs:api:check`
   - `pnpm check:core-package`
+
+## session: s55-pr11-lockfile-ci-followup
+
+- Timestamp: 2026-05-14T14:44:00Z
+- Summary: Fixed the first PR #11 CI failure by refreshing the workspace lockfile for the new chain packages before rerunning the matching local gate.
+- Actions:
+  - Reproduced the failing `validate` check from GitHub Actions and confirmed the blocker was `ERR_PNPM_OUTDATED_LOCKFILE` rather than a runtime or test regression.
+  - Refreshed `pnpm-lock.yaml` so the new `packages/near` and `packages/solana` workspace dependencies on `@cubid/core` are recorded in the committed lockfile.
+- Validation:
+  - `pnpm install --frozen-lockfile`
+  - `pnpm test:unit`
