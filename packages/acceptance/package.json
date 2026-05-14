@@ -7,6 +7,7 @@
     "test": "pnpm exec vitest run --config vitest.config.ts"
   },
   "dependencies": {
+    "@cubid/auth": "workspace:*",
     "@cubid/browser": "workspace:*",
     "@cubid/core": "workspace:*",
     "@cubid/react": "workspace:*",

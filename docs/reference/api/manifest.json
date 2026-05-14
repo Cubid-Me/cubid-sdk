@@ -8,6 +8,13 @@
       "referencePath": "core.json"
     },
     {
+      "name": "@cubid/auth",
+      "version": "0.1.0",
+      "description": "Runtime-agnostic OIDC and PKCE helpers for Sign in with Cubid.",
+      "registry": "npm-only",
+      "referencePath": "auth.json"
+    },
+    {
       "name": "@cubid/browser",
       "version": "0.1.2",
       "description": "Headless browser helpers for Cubid OTP, hosted verification, and allow flows.",

@@ -324,12 +324,12 @@ model them as account-management APIs rather than dapp server APIs.
 
 ### S04.1 Add `@cubid/auth` OIDC and PKCE foundation
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`
+- Status: Completed
+- Timestamp started: 2026-05-14T00:12:00Z
+- Timestamp completed: 2026-05-14T00:36:04Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `e0f07271` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`; session: `s46-auth-foundation-package`
 
 Create the runtime-agnostic Sign in with Cubid auth package for public OIDC clients. The package should use web-standard primitives only and expose helpers for PKCE verifier and challenge generation, state and nonce generation, authorization URL creation, callback parsing, token exchange request construction or execution with injected `fetch`, userinfo request helpers, logout/session-clear helpers, and structured auth errors. It must support browser-delivered public clients using Authorization Code + PKCE with token endpoint auth method `none`. It must not require a Cubid dapp API key, include private Passport/OIDC runtime code, depend on React, assume Node-only APIs, or expose any privileged credential path. ClearPass Dashboard should be treated as the first acceptance target.
 

@@ -1,5 +1,23 @@
 # Session Log
 
+## session: s46-auth-foundation-package
+
+- Timestamp: 2026-05-14T00:36:04Z
+- Summary: Implemented `S04.1` by adding the public `@cubid/auth` package as the runtime-agnostic Sign in with Cubid OIDC and PKCE foundation.
+- Actions:
+  - Added `packages/auth` with browser-safe OIDC discovery, PKCE, state and nonce generation, authorization URL building, callback parsing, token exchange helpers, userinfo helpers, logout helpers, ID token claim decoding, and storage-agnostic session helpers.
+  - Extended the consumer acceptance harness with an `@cubid/auth` scenario and wired the new package into root TypeScript, Vitest, publishing, README, target-state, testing-strategy, and API-reference generation surfaces.
+  - Generated the new machine-readable API reference artifact for `@cubid/auth` and updated the public package matrix so the auth foundation is documented as npm-only and outside the current JSR policy.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+- Follow-up:
+  - Implement `S04.2` next by adding the React session bindings on top of `@cubid/auth`.
+
 ## session: s45-clearpass-dashboard-auth-roadmap
 
 - Timestamp: 2026-05-14T00:09:05Z

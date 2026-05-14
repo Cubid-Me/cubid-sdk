@@ -44,6 +44,7 @@ artifacts.
 
 Scope:
 
+- `@cubid/auth`
 - `@cubid/browser`
 - `@cubid/evm`
 - `@cubid/wagmi`
@@ -89,6 +90,7 @@ These tests behave like a local consumer:
 Current acceptance scenarios:
 
 - server-oriented `@cubid/core` usage with injected `fetch`
+- browser-safe OIDC helper usage from `@cubid/auth`
 - hosted/browser helper usage from `@cubid/browser`
 - React composition through `@cubid/react`
 
@@ -156,6 +158,7 @@ Current policy:
 Coverage target scope:
 
 - include `@cubid/core`
+- include `@cubid/auth`
 - include `@cubid/browser`
 - include `@cubid/react`
 - include `@cubid/evm`

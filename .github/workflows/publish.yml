@@ -10,6 +10,7 @@ on:
         type: choice
         options:
           - "@cubid/core"
+          - "@cubid/auth"
           - "@cubid/browser"
           - "@cubid/react"
           - "@cubid/evm"
@@ -41,6 +42,10 @@ jobs:
             "@cubid/core")
               echo "package_dir=packages/core" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=true" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/auth")
+              echo "package_dir=packages/auth" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/browser")
               echo "package_dir=packages/browser" >> "$GITHUB_OUTPUT"

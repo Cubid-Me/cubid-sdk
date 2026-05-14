@@ -15,7 +15,7 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - Browser-safe hosted-flow and verification helpers belong in a headless browser package layer, not directly in React and not in core.
 - React-specific logic belongs in a React package, not in core.
 - Chain-specific logic should move toward dedicated chain packages rather than accumulate in shared packages.
-- Future "Sign in with Cubid" OAuth/OIDC helpers should live in dedicated auth packages rather than being forced into `@cubid/core` or the generic React package.
+- "Sign in with Cubid" OAuth/OIDC helpers should live in dedicated auth packages rather than being forced into `@cubid/core` or the generic React package.
 - Any SDK change that could affect underlying data models, API contracts,
   response shapes, auth flows, or other interface structure must first be
   evaluated for impact on `cubid-passport` before implementation.
@@ -32,11 +32,12 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 ## Current Migration Direction
 
 - `packages/core` replaces the former `packages/api` package.
+- `packages/auth` now carries the first browser-safe OIDC and PKCE foundation for Sign in with Cubid.
 - `packages/browser` now carries the first-class headless browser layer, while `@cubid/web2` remains only as a frozen deprecated compatibility package.
 - `packages/react` now carries the React layer, while `@cubid/web2-react` remains only as a frozen deprecated compatibility package.
 - `packages/evm` now carries the first chain-specific split from `@cubid/web3`, and `packages/wagmi` now carries wagmi-specific React helpers on top of `@cubid/evm`.
 - `@cubid/web3` remains an interim package and should continue splitting over time into chain-specific packages.
-- When hosted OIDC login becomes public, prefer a dedicated `@cubid/auth` and optional `@cubid/auth-react` package family rather than collapsing auth concerns into existing packages.
+- Prefer the dedicated `@cubid/auth` package and optional future `@cubid/auth-react` package family for hosted OIDC login rather than collapsing auth concerns into existing packages.
 
 ## Repo Hygiene Note
 

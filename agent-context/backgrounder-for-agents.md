@@ -22,7 +22,7 @@ integration layers:
 - Headless browser integration helpers
 - React bindings and components
 - Chain-specific wallet packages
-- Future auth/OIDC client packages when the hosted auth surface is ready
+- Dedicated auth/OIDC client packages for Sign in with Cubid
 
 Avoid treating Cubid as a pile of unrelated helpers.
 
@@ -32,6 +32,7 @@ Build toward this package ecosystem:
 
 ```txt
 @cubid/core
+@cubid/auth
 @cubid/browser
 @cubid/react
 
@@ -43,7 +44,6 @@ Build toward this package ecosystem:
 @cubid/near
 
 (later, if backend contracts justify them)
-@cubid/auth
 @cubid/auth-react
 @cubid/comms
 @cubid/secrets
@@ -53,6 +53,7 @@ The current workspace now contains the target package names for the first
 browser/React/EVM slices, while frozen compatibility and interim packages remain:
 
 ```txt
+@cubid/auth
 @cubid/browser
 @cubid/react
 @cubid/evm
@@ -106,6 +107,19 @@ Own:
 
 Do not duplicate flow logic that belongs in the headless browser layer.
 
+### `@cubid/auth`
+
+Own:
+
+- Browser-safe OIDC and PKCE helpers for Sign in with Cubid
+- Authorization URL builders and callback parsing
+- Token exchange, userinfo, logout, and session-clear helpers
+- Structured auth errors without React or private runtime dependencies
+
+Do not put Cubid dapp API keys, client secrets, signing keys, service-role
+credentials, or Passport internal tokens into this package's browser usage
+model.
+
 ### Chain Packages
 
 Own:
@@ -121,13 +135,11 @@ Future smart-account, session-key, paymaster, or gas-sponsorship helpers must
 be capability-driven and explicitly optional. Do not assume every Cubid account
 supports those features by default.
 
-### Future `@cubid/auth` Packages
+### Future `@cubid/auth-react`
 
-Use dedicated auth packages for "Sign in with Cubid" when the hosted auth
-surface is ready.
+Use a dedicated React auth package for Sign in with Cubid on top of
+`@cubid/auth`.
 
-- `@cubid/auth`: PKCE, state, callback parsing, token exchange, userinfo, and
-  browser-safe auth helpers
 - `@cubid/auth-react`: React session/provider/hooks for that auth surface
 
 Do not force OIDC/client-auth responsibilities into `@cubid/core` or
@@ -144,8 +156,9 @@ When adding a feature:
 3. Put it in `@cubid/react` if it is React-only.
 4. Put it in a chain package if it depends on chain-specific tooling or wallet
    assumptions.
-5. Create a dedicated auth package if the feature belongs to OAuth/OIDC login
-   rather than identity/stamp API access.
+5. Use `@cubid/auth` if the feature belongs to OAuth/OIDC login rather than
+   identity/stamp API access, and use `@cubid/auth-react` only for React
+   session bindings on top of it.
 
 Avoid:
 
@@ -175,6 +188,7 @@ These capabilities are public-SDK-ready today or are already emerging in this
 repo:
 
 - Create users
+- OIDC sign-in helpers
 - Fetch identity and stamps
 - Fetch humanity score
 - Fetch location data
@@ -184,7 +198,6 @@ repo:
 These are likely future areas, but should not be over-promised in package
 boundaries until their public contracts are real and stable:
 
-- OIDC sign-in helpers
 - passkey/WebAuthn client helpers
 - comms helpers
 - secrets helpers
