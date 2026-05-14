@@ -297,12 +297,12 @@ account defaults.
 
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
-- Status: Started
+- Status: Completed
 - Timestamp started: 2026-05-14T00:09:05Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-14T00:55:02Z
 - Feature branch: `codex/clearpass-dashboard-auth-roadmap`
 - Head: `73f7ec18` at start
-- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`, incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`, session: s45-clearpass-dashboard-auth-roadmap
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`, incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`, session: s45-clearpass-dashboard-auth-roadmap, session: s46-auth-foundation-package, session: s47-auth-react-session-bindings, session: s48-clearpass-vite-auth-example, session: s49-clearpass-auth-handoff
 
 When "Sign in with Cubid" becomes a public SDK surface, prefer a dedicated auth
 package family such as `@cubid/auth` and `@cubid/auth-react` for PKCE/state
@@ -357,12 +357,12 @@ Add a minimal Vite/React example showing how ClearPass Dashboard should use brow
 
 ### S04.4 Reply to ClearPass with package names and usage
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`
+- Status: Completed
+- Timestamp started: 2026-05-14T00:54:00Z
+- Timestamp completed: 2026-05-14T00:55:02Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `c8d649a0` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`; session: `s49-clearpass-auth-handoff`
 
 After `@cubid/auth`, `@cubid/auth-react`, and the ClearPass-oriented example are available, write a response note for ClearPass with package names, version or commit references, install commands, usage snippets, required environment variables, callback URL setup, staging and production issuer URLs, supported scopes, and what must remain server-side. The reply should explicitly say that ClearPass browser code must not contain Cubid dapp API keys, service-role credentials, OIDC signing keys, Passport internal tokens, or any other privileged material. Include validation evidence and any remaining hosted OIDC client setup or smoke-test blockers so ClearPass agents can resume dashboard auth implementation without guessing.
 

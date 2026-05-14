@@ -16,4 +16,4 @@
 | Supabase direct-access rule | `Not applicable` This repo ships SDK packages and examples; it does not own deployed Supabase runtime code. |
 | Environment and script conventions | `Pass` Root scripts cover install/build/test/lint/typecheck/core Deno checks, and `.gitignore` excludes local env files and build outputs. |
 | Developer-ingestion publishing | `Pass` Registry policy, machine-readable API reference artifacts, package metadata, and public entrypoint docs now align with the primary published SDK package surfaces. |
-| Active roadmap closeout | `Partial` Remaining non-closed roadmap items are `S03` and `S04` in `agent-context/todo.md`; `S04.1`, `S04.2`, and `S04.3` are now complete and the next auth follow-up is `S04.4`. |
+| Active roadmap closeout | `Partial` Remaining non-closed roadmap item is `S03` in `agent-context/todo.md`; the `S04` ClearPass auth package track is now complete. |
