@@ -26,6 +26,7 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/polkadot` | npm-only | Chain-specific Polkadot package built for the npm ecosystem. |
 | `@cubid/solana` | npm-only | Chain-specific Solana package built for the npm ecosystem. |
 | `@cubid/starknet` | npm-only | Chain-specific Starknet package built for the npm ecosystem. |
+| `@cubid/stellar` | npm-only | Chain-specific Stellar package built for the npm ecosystem. |
 | `@cubid/sui` | npm-only | Chain-specific Sui package built for the npm ecosystem. |
 | `@cubid/tezos` | npm-only | Chain-specific Tezos package built for the npm ecosystem. |
 | `@cubid/wagmi` | npm-only | wagmi-specific React integration package. |
@@ -77,6 +78,7 @@ Current verified state as of 2026-05-14:
   - `@cubid/polkadot` is not published yet
   - `@cubid/solana@0.1.0`
   - `@cubid/starknet` is not published yet
+  - `@cubid/stellar` is not published yet
   - `@cubid/sui` is not published yet
   - `@cubid/tezos` is not published yet
   - `@cubid/wagmi@0.1.2`

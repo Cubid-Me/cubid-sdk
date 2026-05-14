@@ -44,6 +44,7 @@ Build toward this package ecosystem:
 @cubid/cosmos
 @cubid/solana
 @cubid/starknet
+@cubid/stellar
 @cubid/cardano
 @cubid/sui
 @cubid/near
@@ -73,6 +74,7 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 @cubid/polkadot
 @cubid/solana
 @cubid/starknet
+@cubid/stellar
 @cubid/sui
 @cubid/tezos
 

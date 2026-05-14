@@ -123,6 +123,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "stellar",
+    name: "@cubid/stellar",
+    dir: "packages/stellar",
+    entryPoint: "packages/stellar/src/index.ts",
+    tsconfig: "packages/stellar/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "sui",
     name: "@cubid/sui",
     dir: "packages/sui",

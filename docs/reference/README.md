@@ -19,6 +19,7 @@ public Cubid SDK packages.
 - `@cubid/polkadot`
 - `@cubid/solana`
 - `@cubid/starknet`
+- `@cubid/stellar`
 - `@cubid/sui`
 - `@cubid/tezos`
 - `@cubid/wagmi`

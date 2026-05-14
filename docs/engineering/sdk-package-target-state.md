@@ -39,6 +39,7 @@ Target packages:
 - `@cubid/polkadot`: Polkadot wallet and signing logic
 - `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/starknet`: Starknet wallet and signing logic
+- `@cubid/stellar`: Stellar wallet and signing logic
 - `@cubid/tezos`: Tezos wallet and signing logic
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
 - `@cubid/cardano`: Cardano wallet and signing logic
@@ -241,6 +242,12 @@ identity for default Tezos stamp serialization while preserving optional
 wallet metadata such as `curve`, `networkId`, `publicKey`, and explicit
 capability descriptors.
 
+`@cubid/stellar` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Stellar stamp serialization while preserving optional
+wallet metadata such as `federationAddress`, `networkPassphrase`, `publicKey`,
+and explicit capability descriptors.
+
 Future SIWC transaction work should keep chain behavior explicit and
 capability-driven: the EVM Admin-policy transaction pilot may surface typed
 result metadata when policy enables it, while Solana transaction signing stays
@@ -290,7 +297,7 @@ npm-first foundation, then layers in package-ready integration surfaces:
 - `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
   compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
-- `@cubid/aptos`, `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, `@cubid/sui`, and `@cubid/tezos` now exist
+- `@cubid/aptos`, `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, `@cubid/stellar`, `@cubid/sui`, and `@cubid/tezos` now exist
   as additional chain-specific packages layered on top of `@cubid/core`.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific

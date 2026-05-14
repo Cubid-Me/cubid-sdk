@@ -427,11 +427,17 @@ tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.17 Create the first `@cubid/stellar` package slice
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T23:15:00Z
+- Timestamp completed: 2026-05-14T23:45:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `1feeede7` at implementation start
+- Session-log reference(s): session: s65-stellar-package-slice
 
-Queue a bounded Stellar-specific chain package on top of `@cubid/core`, using
-the same first-class package expectations as the other extracted chain
-surfaces.
+Added `packages/stellar` as the final currently planned bounded chain-specific
+package on top of `@cubid/core`, with Stellar-specific connection metadata,
+capability helpers, tests, publish-workflow wiring, and developer-ingestion
+docs.
 
 ### S03.18 Start the `@cubid/web3` compatibility-closeout plan
 

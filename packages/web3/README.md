@@ -11,11 +11,12 @@ wagmi-specific React integrations, `@cubid/near` for new NEAR integrations,
 Aptos integrations, `@cubid/solana` for new Solana integrations, `@cubid/sui`
 for new Sui integrations, `@cubid/cardano` for new Cardano integrations,
 `@cubid/bitcoin` for new Bitcoin integrations, `@cubid/starknet` for new
-Starknet integrations, `@cubid/tezos` for new Tezos integrations, and
-`@cubid/cosmos` for new Cosmos integrations. Use `@cubid/web3` only when you
-still depend on the older shared wallet surface while the split remains in
-progress. New chain-specific work should prefer the dedicated chain packages
-instead of expanding this shared surface.
+Starknet integrations, `@cubid/stellar` for new Stellar integrations,
+`@cubid/tezos` for new Tezos integrations, and `@cubid/cosmos` for new Cosmos
+integrations. Use `@cubid/web3` only when you still depend on the older shared
+wallet surface while the split remains in progress. New chain-specific work
+should prefer the dedicated chain packages instead of expanding this shared
+surface.
 
 ## Install
 

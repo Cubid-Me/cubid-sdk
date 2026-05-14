@@ -67,6 +67,7 @@ Scope:
 - `@cubid/polkadot`
 - `@cubid/solana`
 - `@cubid/starknet`
+- `@cubid/stellar`
 - `@cubid/sui`
 - `@cubid/tezos`
 - `@cubid/wagmi`
@@ -207,6 +208,7 @@ Coverage target scope:
 - include `@cubid/polkadot`
 - include `@cubid/solana`
 - include `@cubid/starknet`
+- include `@cubid/stellar`
 - include `@cubid/sui`
 - include `@cubid/tezos`
 - include `@cubid/wagmi`

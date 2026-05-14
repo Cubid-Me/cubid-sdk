@@ -29,6 +29,7 @@
       "@cubid/react": ["packages/react/src/index.ts"],
       "@cubid/solana": ["packages/solana/src/index.ts"],
       "@cubid/starknet": ["packages/starknet/src/index.ts"],
+      "@cubid/stellar": ["packages/stellar/src/index.ts"],
       "@cubid/sui": ["packages/sui/src/index.ts"],
       "@cubid/tezos": ["packages/tezos/src/index.ts"],
       "@cubid/wagmi": ["packages/wagmi/src/index.ts"],

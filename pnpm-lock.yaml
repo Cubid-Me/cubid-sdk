@@ -213,6 +213,12 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/stellar:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/sui:
     dependencies:
       '@cubid/core':

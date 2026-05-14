@@ -99,6 +99,13 @@
       "referencePath": "starknet.json"
     },
     {
+      "name": "@cubid/stellar",
+      "version": "0.1.0",
+      "description": "Stellar-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "stellar.json"
+    },
+    {
       "name": "@cubid/sui",
       "version": "0.1.0",
       "description": "Sui-oriented Cubid wallet helpers built on top of @cubid/core.",

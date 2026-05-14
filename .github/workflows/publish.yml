@@ -23,6 +23,7 @@ on:
           - "@cubid/polkadot"
           - "@cubid/solana"
           - "@cubid/starknet"
+          - "@cubid/stellar"
           - "@cubid/sui"
           - "@cubid/tezos"
           - "@cubid/wagmi"
@@ -104,6 +105,10 @@ jobs:
               ;;
             "@cubid/starknet")
               echo "package_dir=packages/starknet" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/stellar")
+              echo "package_dir=packages/stellar" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/sui")

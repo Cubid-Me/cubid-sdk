@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s65-stellar-package-slice
+
+- Timestamp: 2026-05-14T23:45:00Z
+- Summary: Continued `S03` by extracting `@cubid/stellar` as the final currently planned bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/stellar` with Stellar-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Stellar identity for default stamp serialization while preserving optional `federationAddress`, `networkPassphrase`, and `publicKey` metadata.
+  - Wired `@cubid/stellar` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/stellar/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Move from chain extraction into the remaining `@cubid/web3` compatibility-closeout tasks.
+
 ## session: s64-tezos-package-slice
 
 - Timestamp: 2026-05-14T23:05:00Z
