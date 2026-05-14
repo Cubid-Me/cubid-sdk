@@ -18,6 +18,7 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/browser` | npm-only | Browser-oriented helper layer; not marketed as a Deno or JSR surface. |
 | `@cubid/bitcoin` | npm-only | Chain-specific Bitcoin package built for the npm ecosystem. |
 | `@cubid/cardano` | npm-only | Chain-specific Cardano package built for the npm ecosystem. |
+| `@cubid/cosmos` | npm-only | Chain-specific Cosmos package built for the npm ecosystem. |
 | `@cubid/react` | npm-only | React package with peer dependency assumptions. |
 | `@cubid/evm` | npm-only | Chain-specific package built for the npm ecosystem. |
 | `@cubid/near` | npm-only | Chain-specific NEAR package built for the npm ecosystem. |
@@ -65,6 +66,7 @@ Current verified state as of 2026-05-14:
   - `@cubid/browser@0.1.3`
   - `@cubid/bitcoin` is not published yet
   - `@cubid/cardano` is not published yet
+  - `@cubid/cosmos` is not published yet
   - `@cubid/react@0.1.2`
   - `@cubid/evm@0.1.2`
   - `@cubid/near@0.1.0`

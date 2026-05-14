@@ -375,10 +375,16 @@ tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.13 Create the first `@cubid/cosmos` package slice
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T19:40:00Z
+- Timestamp completed: 2026-05-14T20:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `14e84812` at implementation start
+- Session-log reference(s): session: s59-cosmos-package-slice
 
-Queue a bounded Cosmos-specific chain package on top of `@cubid/core`,
-preserving chain-specific connection metadata and capability-driven helpers.
+Added `packages/cosmos` as the next bounded chain-specific package on top of
+`@cubid/core`, with Cosmos-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.14 Create the first `@cubid/polkadot` package slice
 

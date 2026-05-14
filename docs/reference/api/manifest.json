@@ -43,6 +43,13 @@
       "referencePath": "cardano.json"
     },
     {
+      "name": "@cubid/cosmos",
+      "version": "0.1.0",
+      "description": "Cosmos-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "cosmos.json"
+    },
+    {
       "name": "@cubid/react",
       "version": "0.1.2",
       "description": "React components and hooks for Cubid browser flows.",

@@ -40,6 +40,7 @@ Build toward this package ecosystem:
 @cubid/evm
 @cubid/wagmi
 @cubid/bitcoin
+@cubid/cosmos
 @cubid/solana
 @cubid/starknet
 @cubid/cardano
@@ -61,6 +62,7 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 @cubid/react
 @cubid/bitcoin
 @cubid/cardano
+@cubid/cosmos
 @cubid/evm
 @cubid/wagmi
 @cubid/near

@@ -60,6 +60,7 @@ Scope:
 - `@cubid/browser`
 - `@cubid/bitcoin`
 - `@cubid/cardano`
+- `@cubid/cosmos`
 - `@cubid/evm`
 - `@cubid/near`
 - `@cubid/solana`
@@ -195,6 +196,7 @@ Coverage target scope:
 - include `@cubid/browser`
 - include `@cubid/bitcoin`
 - include `@cubid/cardano`
+- include `@cubid/cosmos`
 - include `@cubid/react`
 - include `@cubid/evm`
 - include `@cubid/near`

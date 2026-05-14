@@ -159,6 +159,12 @@ importers:
         specifier: 5.2.2
         version: 5.2.2
 
+  packages/cosmos:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/evm:
     dependencies:
       '@cubid/core':

@@ -59,6 +59,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "cosmos",
+    name: "@cubid/cosmos",
+    dir: "packages/cosmos",
+    entryPoint: "packages/cosmos/src/index.ts",
+    tsconfig: "packages/cosmos/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "react",
     name: "@cubid/react",
     dir: "packages/react",

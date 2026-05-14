@@ -10,6 +10,7 @@ The first rename and split slices now exist in the workspace:
 - `@cubid/browser` has been created from the former `@cubid/web2` surface
 - `@cubid/bitcoin` now exists as another chain-specific package on top of `@cubid/core`
 - `@cubid/cardano` now exists as another chain-specific package on top of `@cubid/core`
+- `@cubid/cosmos` now exists as another chain-specific package on top of `@cubid/core`
 - `@cubid/react` has been created from the former `@cubid/web2-react` surface
 - `@cubid/web2` and `@cubid/web2-react` now act as compatibility re-export packages
 - `@cubid/evm` has been created as the first chain-specific package
@@ -39,6 +40,7 @@ Target:
 - `@cubid/browser`
 - `@cubid/bitcoin`
 - `@cubid/cardano`
+- `@cubid/cosmos`
 - `@cubid/react`
 - `@cubid/evm`
 - `@cubid/near`
@@ -211,10 +213,11 @@ Avoid publishing empty placeholders.
 7. Publish `@cubid/solana`.
 8. Publish `@cubid/bitcoin`.
 9. Publish `@cubid/cardano`.
-10. Publish `@cubid/starknet`.
-11. Publish `@cubid/sui`.
-12. Publish `@cubid/wagmi`.
-13. Decide whether `@cubid/web3` remains as a temporary compatibility wrapper or
+10. Publish `@cubid/cosmos`.
+11. Publish `@cubid/starknet`.
+12. Publish `@cubid/sui`.
+13. Publish `@cubid/wagmi`.
+14. Decide whether `@cubid/web3` remains as a temporary compatibility wrapper or
    is deprecated immediately after the first chain-specific release wave.
 
 ## Exit Criteria
@@ -224,5 +227,5 @@ The migration can be considered complete when:
 - public docs no longer describe `web2`, `web2-react`, or `web3` as the target
   long-term package names
 - `@cubid/browser` and `@cubid/react` are published and documented
-- the first chain-specific packages, including `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/evm`, `@cubid/near`, `@cubid/solana`, `@cubid/starknet`, `@cubid/sui`, and `@cubid/wagmi`, are published with tests
+- the first chain-specific packages, including `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`, `@cubid/solana`, `@cubid/starknet`, `@cubid/sui`, and `@cubid/wagmi`, are published with tests
 - compatibility packages are clearly frozen and no longer treated as active release targets

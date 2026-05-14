@@ -21,6 +21,7 @@
       "@cubid/bitcoin": ["packages/bitcoin/src/index.ts"],
       "@cubid/cardano": ["packages/cardano/src/index.ts"],
       "@cubid/core": ["packages/core/src/index.ts"],
+      "@cubid/cosmos": ["packages/cosmos/src/index.ts"],
       "@cubid/evm": ["packages/evm/src/index.ts"],
       "@cubid/near": ["packages/near/src/index.ts"],
       "@cubid/react": ["packages/react/src/index.ts"],

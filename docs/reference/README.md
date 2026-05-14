@@ -11,6 +11,7 @@ public Cubid SDK packages.
 - `@cubid/browser`
 - `@cubid/bitcoin`
 - `@cubid/cardano`
+- `@cubid/cosmos`
 - `@cubid/react`
 - `@cubid/evm`
 - `@cubid/near`

@@ -16,6 +16,7 @@ verification, migrations, and service-role access.
 | `@cubid/browser` | Headless browser helpers for hosted verification, OTP, Allow Page, and provider handoff flows. | npm-only |
 | `@cubid/bitcoin` | Bitcoin-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/cardano` | Cardano-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/cosmos` | Cosmos-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
 | `@cubid/evm` | EVM-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/near` | NEAR-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
@@ -50,6 +51,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/browser.json`
   - `docs/reference/api/bitcoin.json`
   - `docs/reference/api/cardano.json`
+  - `docs/reference/api/cosmos.json`
   - `docs/reference/api/react.json`
   - `docs/reference/api/evm.json`
   - `docs/reference/api/near.json`
@@ -129,6 +131,7 @@ import { createCubidApiClient } from "@cubid/core"
 ```
 
 `@cubid/auth`, `@cubid/auth-react`, `@cubid/browser`, `@cubid/react`,
-`@cubid/bitcoin`, `@cubid/evm`, `@cubid/near`, `@cubid/solana`, `@cubid/sui`,
-`@cubid/starknet`, `@cubid/wagmi`, and `@cubid/web3` remain npm packages; they are not part of the JSR
+`@cubid/bitcoin`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`,
+`@cubid/solana`, `@cubid/sui`, `@cubid/starknet`, `@cubid/wagmi`, and
+`@cubid/web3` remain npm packages; they are not part of the JSR
 publication policy.

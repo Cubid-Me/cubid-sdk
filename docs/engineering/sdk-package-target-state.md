@@ -33,6 +33,7 @@ Target packages:
 - `@cubid/react`: React hooks and components built on `@cubid/browser`
 - `@cubid/evm`: EVM wallet and signing logic, using `viem` only when needed
 - `@cubid/bitcoin`: Bitcoin wallet and signing logic
+- `@cubid/cosmos`: Cosmos wallet and signing logic
 - `@cubid/near`: NEAR wallet and signing logic
 - `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/starknet`: Starknet wallet and signing logic
@@ -202,6 +203,12 @@ identity for default Bitcoin stamp serialization while preserving optional
 wallet metadata such as `publicKey`, `networkId`, `scriptType`, and explicit
 capability descriptors.
 
+`@cubid/cosmos` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Cosmos stamp serialization while preserving optional
+wallet metadata such as `publicKey`, `chainId`, `bech32Prefix`, and explicit
+capability descriptors.
+
 `@cubid/starknet` now exists as another chain-specific package on top of
 `@cubid/core`. It should keep treating wallet `address` as the primary public
 identity for default Starknet stamp serialization while preserving optional
@@ -257,7 +264,7 @@ npm-first foundation, then layers in package-ready integration surfaces:
 - `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
   compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
-- `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/near`, `@cubid/solana`, `@cubid/starknet`, and `@cubid/sui` now exist
+- `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/solana`, `@cubid/starknet`, and `@cubid/sui` now exist
   as additional chain-specific packages layered on top of `@cubid/core`.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
