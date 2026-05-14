@@ -13,6 +13,7 @@ verification, migrations, and service-role access.
 | `@cubid/core` | Runtime-agnostic Cubid foundation client for servers, workers, Deno, and Supabase Edge Functions. | npm + JSR |
 | `@cubid/auth` | Runtime-agnostic OIDC and PKCE helpers for browser-safe Sign in with Cubid. | npm-only |
 | `@cubid/auth-react` | React provider, hooks, callback helpers, and session controls for Sign in with Cubid. | npm-only |
+| `@cubid/aptos` | Aptos-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/browser` | Headless browser helpers for hosted verification, OTP, Allow Page, and provider handoff flows. | npm-only |
 | `@cubid/bitcoin` | Bitcoin-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/cardano` | Cardano-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
@@ -49,6 +50,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/core.json`
   - `docs/reference/api/auth.json`
   - `docs/reference/api/auth-react.json`
+  - `docs/reference/api/aptos.json`
   - `docs/reference/api/browser.json`
   - `docs/reference/api/bitcoin.json`
   - `docs/reference/api/cardano.json`
@@ -132,7 +134,7 @@ package directly:
 import { createCubidApiClient } from "@cubid/core"
 ```
 
-`@cubid/auth`, `@cubid/auth-react`, `@cubid/browser`, `@cubid/react`,
+`@cubid/auth`, `@cubid/auth-react`, `@cubid/aptos`, `@cubid/browser`, `@cubid/react`,
 `@cubid/bitcoin`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`,
 `@cubid/polkadot`, `@cubid/solana`, `@cubid/sui`, `@cubid/starknet`, `@cubid/wagmi`, and
 `@cubid/web3` remain npm packages; they are not part of the JSR

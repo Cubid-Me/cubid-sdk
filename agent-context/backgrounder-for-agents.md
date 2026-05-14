@@ -34,6 +34,7 @@ Build toward this package ecosystem:
 @cubid/core
 @cubid/auth
 @cubid/auth-react
+@cubid/aptos
 @cubid/browser
 @cubid/react
 
@@ -59,6 +60,7 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 ```txt
 @cubid/auth
 @cubid/auth-react
+@cubid/aptos
 @cubid/browser
 @cubid/react
 @cubid/bitcoin

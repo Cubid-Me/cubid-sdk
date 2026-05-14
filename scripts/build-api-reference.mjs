@@ -35,6 +35,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "aptos",
+    name: "@cubid/aptos",
+    dir: "packages/aptos",
+    entryPoint: "packages/aptos/src/index.ts",
+    tsconfig: "packages/aptos/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "browser",
     name: "@cubid/browser",
     dir: "packages/browser",

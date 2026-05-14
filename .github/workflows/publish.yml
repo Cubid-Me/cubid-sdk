@@ -12,6 +12,7 @@ on:
           - "@cubid/core"
           - "@cubid/auth"
           - "@cubid/auth-react"
+          - "@cubid/aptos"
           - "@cubid/browser"
           - "@cubid/bitcoin"
           - "@cubid/cardano"
@@ -58,6 +59,10 @@ jobs:
               ;;
             "@cubid/auth-react")
               echo "package_dir=packages/auth-react" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/aptos")
+              echo "package_dir=packages/aptos" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/browser")

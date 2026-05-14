@@ -401,11 +401,16 @@ tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.15 Create the first `@cubid/aptos` package slice
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T21:55:00Z
+- Timestamp completed: 2026-05-14T22:25:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `2e5bc0aa` at implementation start
+- Session-log reference(s): session: s63-aptos-package-slice
 
-Queue a bounded Aptos-specific chain package on top of `@cubid/core`, keeping
-the public surface capability-driven and free of unnecessary cross-chain
-assumptions.
+Added `packages/aptos` as the next bounded chain-specific package on top of
+`@cubid/core`, with Aptos-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.16 Create the first `@cubid/tezos` package slice
 

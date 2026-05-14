@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s63-aptos-package-slice
+
+- Timestamp: 2026-05-14T22:25:00Z
+- Summary: Continued `S03` by extracting `@cubid/aptos` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/aptos` with Aptos-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Aptos identity for default stamp serialization while preserving optional `authenticationKey`, `chainId`, `networkId`, and `publicKey` metadata.
+  - Wired `@cubid/aptos` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/aptos/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Tezos and Stellar.
+
 ## session: s62-polkadot-package-slice
 
 - Timestamp: 2026-05-14T21:45:00Z

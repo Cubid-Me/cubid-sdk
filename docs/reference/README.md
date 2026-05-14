@@ -8,6 +8,7 @@ public Cubid SDK packages.
 - `@cubid/core`
 - `@cubid/auth`
 - `@cubid/auth-react`
+- `@cubid/aptos`
 - `@cubid/browser`
 - `@cubid/bitcoin`
 - `@cubid/cardano`

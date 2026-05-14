@@ -6,6 +6,7 @@ export default defineConfig({
     alias: {
       "@cubid/auth": path.resolve(__dirname, "packages/auth/src/index.ts"),
       "@cubid/auth-react": path.resolve(__dirname, "packages/auth-react/src/index.ts"),
+      "@cubid/aptos": path.resolve(__dirname, "packages/aptos/src/index.ts"),
       "@cubid/browser": path.resolve(__dirname, "packages/browser/src/index.ts"),
       "@cubid/bitcoin": path.resolve(__dirname, "packages/bitcoin/src/index.ts"),
       "@cubid/cardano": path.resolve(__dirname, "packages/cardano/src/index.ts"),
@@ -37,6 +38,7 @@ export default defineConfig({
         "packages/core/src/**/*.{ts,tsx}",
         "packages/auth/src/**/*.{ts,tsx}",
         "packages/auth-react/src/**/*.{ts,tsx}",
+        "packages/aptos/src/**/*.{ts,tsx}",
         "packages/browser/src/**/*.{ts,tsx}",
         "packages/bitcoin/src/**/*.{ts,tsx}",
         "packages/cardano/src/**/*.{ts,tsx}",
@@ -62,6 +64,7 @@ export default defineConfig({
           include: [
             "packages/core/src/**/*.test.ts",
             "packages/auth/src/**/*.test.ts",
+            "packages/aptos/src/**/*.test.ts",
             "packages/browser/src/**/*.test.ts",
             "packages/bitcoin/src/**/*.test.ts",
             "packages/cardano/src/**/*.test.ts",

@@ -15,6 +15,7 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/core` | npm + JSR | The only package with an explicit Deno and Supabase Edge contract. |
 | `@cubid/auth` | npm-only | Browser-safe OIDC and PKCE helper layer for public clients. |
 | `@cubid/auth-react` | npm-only | React auth/session bindings on top of `@cubid/auth`. |
+| `@cubid/aptos` | npm-only | Chain-specific Aptos package built for the npm ecosystem. |
 | `@cubid/browser` | npm-only | Browser-oriented helper layer; not marketed as a Deno or JSR surface. |
 | `@cubid/bitcoin` | npm-only | Chain-specific Bitcoin package built for the npm ecosystem. |
 | `@cubid/cardano` | npm-only | Chain-specific Cardano package built for the npm ecosystem. |
@@ -64,6 +65,7 @@ Current verified state as of 2026-05-14:
   - `@cubid/core@0.1.3`
   - `@cubid/auth@0.1.0`
   - `@cubid/auth-react@0.1.0`
+  - `@cubid/aptos` is not published yet
   - `@cubid/browser@0.1.3`
   - `@cubid/bitcoin` is not published yet
   - `@cubid/cardano` is not published yet

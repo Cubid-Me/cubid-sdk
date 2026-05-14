@@ -29,6 +29,7 @@ Target packages:
 - `@cubid/core`: required runtime-agnostic foundation
 - `@cubid/auth`: runtime-agnostic OIDC and PKCE helpers
 - `@cubid/auth-react`: React auth/session bindings
+- `@cubid/aptos`: Aptos wallet and signing logic
 - `@cubid/browser`: headless browser integration helpers
 - `@cubid/react`: React hooks and components built on `@cubid/browser`
 - `@cubid/evm`: EVM wallet and signing logic, using `viem` only when needed
@@ -221,6 +222,12 @@ identity for default Starknet stamp serialization while preserving optional
 wallet metadata such as `publicKey`, `chainId`, `classHash`, and explicit
 capability descriptors.
 
+`@cubid/aptos` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Aptos stamp serialization while preserving optional
+wallet metadata such as `authenticationKey`, `chainId`, `networkId`, and
+explicit capability descriptors.
+
 `@cubid/polkadot` now exists as another chain-specific package on top of
 `@cubid/core`. It should keep treating wallet `address` as the primary public
 identity for default Polkadot stamp serialization while preserving optional
@@ -276,7 +283,7 @@ npm-first foundation, then layers in package-ready integration surfaces:
 - `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
   compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
-- `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, and `@cubid/sui` now exist
+- `@cubid/aptos`, `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, and `@cubid/sui` now exist
   as additional chain-specific packages layered on top of `@cubid/core`.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
