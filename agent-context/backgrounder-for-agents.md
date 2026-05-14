@@ -48,6 +48,7 @@ Build toward this package ecosystem:
 @cubid/sui
 @cubid/near
 @cubid/polkadot
+@cubid/tezos
 
 (later, if backend contracts justify them)
 @cubid/comms
@@ -73,6 +74,7 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 @cubid/solana
 @cubid/starknet
 @cubid/sui
+@cubid/tezos
 
 @cubid/web2       -> frozen compatibility wrapper around @cubid/browser
 @cubid/web2-react -> frozen compatibility wrapper around @cubid/react

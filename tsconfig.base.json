@@ -30,6 +30,7 @@
       "@cubid/solana": ["packages/solana/src/index.ts"],
       "@cubid/starknet": ["packages/starknet/src/index.ts"],
       "@cubid/sui": ["packages/sui/src/index.ts"],
+      "@cubid/tezos": ["packages/tezos/src/index.ts"],
       "@cubid/wagmi": ["packages/wagmi/src/index.ts"],
       "@cubid/web2": ["packages/web2/src/index.ts"],
       "@cubid/web2-react": ["packages/web2-react/src/index.ts"],

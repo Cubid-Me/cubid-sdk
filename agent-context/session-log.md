@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s64-tezos-package-slice
+
+- Timestamp: 2026-05-14T23:05:00Z
+- Summary: Continued `S03` by extracting `@cubid/tezos` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/tezos` with Tezos-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Tezos identity for default stamp serialization while preserving optional `curve`, `networkId`, and `publicKey` metadata.
+  - Wired `@cubid/tezos` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/tezos/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slice for Stellar.
+
 ## session: s63-aptos-package-slice
 
 - Timestamp: 2026-05-14T22:25:00Z

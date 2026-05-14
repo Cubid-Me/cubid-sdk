@@ -106,6 +106,13 @@
       "referencePath": "sui.json"
     },
     {
+      "name": "@cubid/tezos",
+      "version": "0.1.0",
+      "description": "Tezos-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "tezos.json"
+    },
+    {
       "name": "@cubid/wagmi",
       "version": "0.1.2",
       "description": "wagmi-based React helpers that adapt wallet flows onto @cubid/evm.",

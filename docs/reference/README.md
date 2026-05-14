@@ -20,6 +20,7 @@ public Cubid SDK packages.
 - `@cubid/solana`
 - `@cubid/starknet`
 - `@cubid/sui`
+- `@cubid/tezos`
 - `@cubid/wagmi`
 - `@cubid/web3`
 

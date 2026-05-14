@@ -25,6 +25,7 @@ verification, migrations, and service-role access.
 | `@cubid/solana` | Solana-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/starknet` | Starknet-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/sui` | Sui-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/tezos` | Tezos-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/wagmi` | wagmi-specific React integration helpers built on `@cubid/evm`. | npm-only |
 | `@cubid/web3` | Interim wallet-oriented package while the chain-specific split continues. | npm-only |
 | `@cubid/web2` | Frozen compatibility wrapper around `@cubid/browser`. | npm-only, deprecated |
@@ -62,6 +63,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/solana.json`
   - `docs/reference/api/starknet.json`
   - `docs/reference/api/sui.json`
+  - `docs/reference/api/tezos.json`
   - `docs/reference/api/wagmi.json`
   - `docs/reference/api/web3.json`
 
@@ -136,6 +138,6 @@ import { createCubidApiClient } from "@cubid/core"
 
 `@cubid/auth`, `@cubid/auth-react`, `@cubid/aptos`, `@cubid/browser`, `@cubid/react`,
 `@cubid/bitcoin`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`,
-`@cubid/polkadot`, `@cubid/solana`, `@cubid/sui`, `@cubid/starknet`, `@cubid/wagmi`, and
+`@cubid/polkadot`, `@cubid/solana`, `@cubid/sui`, `@cubid/starknet`, `@cubid/tezos`, `@cubid/wagmi`, and
 `@cubid/web3` remain npm packages; they are not part of the JSR
 publication policy.

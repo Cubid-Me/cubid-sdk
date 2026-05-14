@@ -414,11 +414,16 @@ tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.16 Create the first `@cubid/tezos` package slice
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T22:35:00Z
+- Timestamp completed: 2026-05-14T23:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `5bde7b75` at implementation start
+- Session-log reference(s): session: s64-tezos-package-slice
 
-Queue a bounded Tezos-specific chain package on top of `@cubid/core`, with
-chain-specific verification, serialization, and publish wiring treated as part
-of the same slice.
+Added `packages/tezos` as the next bounded chain-specific package on top of
+`@cubid/core`, with Tezos-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.17 Create the first `@cubid/stellar` package slice
 

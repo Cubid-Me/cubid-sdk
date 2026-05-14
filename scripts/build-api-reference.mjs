@@ -131,6 +131,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "tezos",
+    name: "@cubid/tezos",
+    dir: "packages/tezos",
+    entryPoint: "packages/tezos/src/index.ts",
+    tsconfig: "packages/tezos/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "wagmi",
     name: "@cubid/wagmi",
     dir: "packages/wagmi",

@@ -19,6 +19,7 @@ export default defineConfig({
       "@cubid/solana": path.resolve(__dirname, "packages/solana/src/index.ts"),
       "@cubid/starknet": path.resolve(__dirname, "packages/starknet/src/index.ts"),
       "@cubid/sui": path.resolve(__dirname, "packages/sui/src/index.ts"),
+      "@cubid/tezos": path.resolve(__dirname, "packages/tezos/src/index.ts"),
       "@cubid/wagmi": path.resolve(__dirname, "packages/wagmi/src/index.ts"),
       "@cubid/web2": path.resolve(__dirname, "packages/web2/src/index.ts"),
       "@cubid/web2-react": path.resolve(__dirname, "packages/web2-react/src/index.ts"),
@@ -50,6 +51,7 @@ export default defineConfig({
         "packages/solana/src/**/*.{ts,tsx}",
         "packages/starknet/src/**/*.{ts,tsx}",
         "packages/sui/src/**/*.{ts,tsx}",
+        "packages/tezos/src/**/*.{ts,tsx}",
         "packages/wagmi/src/**/*.{ts,tsx}",
         "packages/web3/src/**/*.{ts,tsx}"
       ],
@@ -75,6 +77,7 @@ export default defineConfig({
             "packages/solana/src/**/*.test.ts",
             "packages/starknet/src/**/*.test.ts",
             "packages/sui/src/**/*.test.ts",
+            "packages/tezos/src/**/*.test.ts",
             "packages/wagmi/src/**/*.test.ts",
             "packages/web3/src/**/*.test.ts"
           ],

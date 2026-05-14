@@ -24,6 +24,7 @@ on:
           - "@cubid/solana"
           - "@cubid/starknet"
           - "@cubid/sui"
+          - "@cubid/tezos"
           - "@cubid/wagmi"
           - "@cubid/web3"
       publish_npm:
@@ -107,6 +108,10 @@ jobs:
               ;;
             "@cubid/sui")
               echo "package_dir=packages/sui" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/tezos")
+              echo "package_dir=packages/tezos" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/wagmi")

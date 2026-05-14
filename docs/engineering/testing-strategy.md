@@ -68,6 +68,7 @@ Scope:
 - `@cubid/solana`
 - `@cubid/starknet`
 - `@cubid/sui`
+- `@cubid/tezos`
 - `@cubid/wagmi`
 - `@cubid/web3`
 
@@ -207,6 +208,7 @@ Coverage target scope:
 - include `@cubid/solana`
 - include `@cubid/starknet`
 - include `@cubid/sui`
+- include `@cubid/tezos`
 - include `@cubid/wagmi`
 - include `@cubid/web3`
 

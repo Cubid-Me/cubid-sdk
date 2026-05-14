@@ -219,6 +219,12 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/tezos:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/wagmi:
     dependencies:
       '@cubid/evm':
