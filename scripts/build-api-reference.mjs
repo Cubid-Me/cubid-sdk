@@ -19,6 +19,22 @@ const packages = [
     registry: "npm + jsr",
   },
   {
+    slug: "auth",
+    name: "@cubid/auth",
+    dir: "packages/auth",
+    entryPoint: "packages/auth/src/index.ts",
+    tsconfig: "packages/auth/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
+    slug: "auth-react",
+    name: "@cubid/auth-react",
+    dir: "packages/auth-react",
+    entryPoint: "packages/auth-react/src/index.ts",
+    tsconfig: "packages/auth-react/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "browser",
     name: "@cubid/browser",
     dir: "packages/browser",

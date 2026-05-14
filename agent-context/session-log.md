@@ -1,5 +1,81 @@
 # Session Log
 
+## session: s49-clearpass-auth-handoff
+
+- Timestamp: 2026-05-14T00:55:02Z
+- Summary: Implemented `S04.4` by writing the package, environment, and usage handoff note back to ClearPass now that the auth packages and example are in place.
+- Actions:
+  - Wrote the outbound ClearPass coordination note at `/Users/botmaster/src/clearpass/agent-context/messages-from-cubid/2026-05-14-dashboard-sign-in-with-cubid-sdk-handoff.md`.
+  - Included package names, current implementation commit refs, install shape, public env vars, issuer URLs, supported scopes, callback setup, minimal React usage, validation evidence, and the remaining Passport-side relying-party blocker.
+  - Closed out the parent `S04` auth-package roadmap now that `S04.1` through `S04.4` are complete.
+- Validation:
+  - Reviewed the handoff note against the implemented `@cubid/auth`, `@cubid/auth-react`, and ClearPass Vite example surfaces.
+- Follow-up:
+  - Continue with the remaining non-closed SDK roadmap items outside the ClearPass auth track.
+
+## session: s48-clearpass-vite-auth-example
+
+- Timestamp: 2026-05-14T00:53:30Z
+- Summary: Implemented `S04.3` by adding a ClearPass-oriented Vite/React auth example that shows how to consume `@cubid/auth` and `@cubid/auth-react`.
+- Actions:
+  - Added `docs/examples/clearpass-dashboard-auth-vite.md` with public env vars, provider wiring, callback handling, sign-in and sign-out usage, and server-side authorization notes for ClearPass.
+  - Linked the new example from the root README and the `@cubid/auth-react` package README so consumers can find the example from the main public entrypoints.
+- Validation:
+  - `git diff --check`
+  - Reviewed the example against the staged `@cubid/auth` and `@cubid/auth-react` public APIs.
+- Follow-up:
+  - Implement `S04.4` next by writing the explicit package/env handoff note back to ClearPass.
+
+## session: s47-auth-react-session-bindings
+
+- Timestamp: 2026-05-14T00:50:59Z
+- Summary: Implemented `S04.2` by adding `@cubid/auth-react` as the React session layer on top of the new Sign in with Cubid auth foundation.
+- Actions:
+  - Added `packages/auth-react` with a client-safe auth provider, sign-in/sign-out buttons, callback handling helper, session restore and clear behavior, and React hooks around `@cubid/auth`.
+  - Extended acceptance coverage with a built-package `@cubid/auth-react` consumer scenario and wired the new package into root TypeScript paths, Vitest, publishing choices, API-reference generation, and package-boundary docs.
+  - Updated public repo guidance so `@cubid/auth-react` is now treated as the supported React session layer instead of a future package idea.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+- Follow-up:
+  - Implement `S04.3` next by adding the ClearPass-oriented Vite auth example that consumes `@cubid/auth` and `@cubid/auth-react`.
+
+## session: s46-auth-foundation-package
+
+- Timestamp: 2026-05-14T00:36:04Z
+- Summary: Implemented `S04.1` by adding the public `@cubid/auth` package as the runtime-agnostic Sign in with Cubid OIDC and PKCE foundation.
+- Actions:
+  - Added `packages/auth` with browser-safe OIDC discovery, PKCE, state and nonce generation, authorization URL building, callback parsing, token exchange helpers, userinfo helpers, logout helpers, ID token claim decoding, and storage-agnostic session helpers.
+  - Extended the consumer acceptance harness with an `@cubid/auth` scenario and wired the new package into root TypeScript, Vitest, publishing, README, target-state, testing-strategy, and API-reference generation surfaces.
+  - Generated the new machine-readable API reference artifact for `@cubid/auth` and updated the public package matrix so the auth foundation is documented as npm-only and outside the current JSR policy.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+- Follow-up:
+  - Implement `S04.2` next by adding the React session bindings on top of `@cubid/auth`.
+
+## session: s45-clearpass-dashboard-auth-roadmap
+
+- Timestamp: 2026-05-14T00:09:05Z
+- Summary: Ingested the ClearPass Dashboard Sign in with Cubid blocker and split the existing auth-package roadmap into concrete public SDK follow-ups.
+- Actions:
+  - Reviewed the incoming ClearPass note requesting browser-safe Dashboard authentication through Sign in with Cubid without privileged browser credentials.
+  - Added the Passport handoff note describing the OIDC public-web PKCE contract, issuer endpoints, expected callback/token behavior, and ClearPass as the first consumer.
+  - Marked `S04` started on `codex/clearpass-dashboard-auth-roadmap`.
+  - Split `S04` into `S04.1` for `@cubid/auth`, `S04.2` for `@cubid/auth-react`, `S04.3` for the Vite ClearPass Dashboard auth example, and `S04.4` for the reply note back to ClearPass.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Implement `S04.1` first, then continue through the React bindings, Vite example, and ClearPass reply note.
+
 ## session: s44-pr8-release-review-followup
 
 - Timestamp: 2026-05-13T13:10:00Z
@@ -634,3 +710,41 @@
   - Added SDK-local `AGENTS.md`, `agent-context/todo.md`, and this `session-log.md`.
   - Updated `cubid-passport` docs and E02 todos to mark SDK publication work as ingested into `cubid-sdk-v2`.
 - Repo hygiene note: `/Users/botmaster/src/cubid/cubid-sdk-v2` is missing a `.git` checkout locally, so branch/head metadata and commit provenance were unavailable during this session.
+
+## session: s04-auth-pr9-ci-followup
+
+- Timestamp: 2026-05-13T20:35:00Z
+- Summary: Fixed PR #9 CI so the shared unit-test pass works on a clean runner after adding the new auth packages.
+- Actions:
+  - Inspected the failed `validate` run for PR #9 and isolated the break to `packages/auth-react/src/index.test.tsx` failing to resolve `@cubid/auth`.
+  - Updated the root `test:unit` script to build `@cubid/auth` before running the shared Vitest suite, alongside the existing minimal package prebuilds.
+  - Updated the testing strategy doc so the clean-runner requirement now explicitly covers auth package consumers as well as React and wagmi suites.
+- Validation:
+  - Reproduced the relevant check locally with `pnpm test:unit`.
+
+## session: s04-auth-pr9-api-reference-followup
+
+- Timestamp: 2026-05-13T21:20:00Z
+- Summary: Refreshed the checked-in API reference artifact for `@cubid/auth-react` after PR #9 exposed a docs-reference drift in CI.
+- Actions:
+  - Inspected the failed PR #9 `validate` rerun and isolated the remaining break to `pnpm docs:api:check`.
+  - Regenerated the machine-readable API reference artifacts and confirmed the only drift was `docs/reference/api/auth-react.json`.
+  - Kept the refreshed artifact so the generated `@cubid/auth-react` reference now matches the new ClearPass example link in the package docs.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+
+## session: s04-auth-pr9-review-followup
+
+- Timestamp: 2026-05-13T23:25:00Z
+- Summary: Addressed the open PR #9 review threads around React 18 compatibility, callback replay safety, stricter OIDC validation, and auth docs hygiene.
+- Actions:
+  - Replaced the React 19-only `useEffectEvent` usage in `CubidAuthCallback` with a React 18-compatible ref-based pattern.
+  - Added a per-request guard so the callback component only performs one code exchange for the same callback input under `React.StrictMode`.
+  - Tightened callback validation to require the expected ID token and matching nonce for `openid` flows.
+  - Hardened `decodeCubidIdTokenClaims` to require exactly three JWT segments and added a `Buffer` fallback for base64url helpers when `atob` or `btoa` are unavailable.
+  - Removed the duplicated `@cubid/auth-react` target-state bullet and expanded auth/auth-react tests to cover the new behavior.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`

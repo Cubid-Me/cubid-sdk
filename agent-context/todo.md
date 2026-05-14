@@ -295,14 +295,14 @@ The current EVM, wagmi, and interim web3 packages now preserve optional
 export small helper functions for capability checks instead of baking in smart
 account defaults.
 
-### S04. Create dedicated auth package boundaries when OIDC is ready
+### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-05-14T00:09:05Z
+- Timestamp completed: 2026-05-14T00:55:02Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `73f7ec18` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`, incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`, session: s45-clearpass-dashboard-auth-roadmap, session: s46-auth-foundation-package, session: s47-auth-react-session-bindings, session: s48-clearpass-vite-auth-example, session: s49-clearpass-auth-handoff
 
 When "Sign in with Cubid" becomes a public SDK surface, prefer a dedicated auth
 package family such as `@cubid/auth` and `@cubid/auth-react` for PKCE/state
@@ -311,10 +311,60 @@ session bindings. Do not force those responsibilities into `@cubid/core`,
 `@cubid/browser`, or `@cubid/react` unless a narrower shared helper is clearly
 justified by real duplication.
 
+ClearPass Dashboard is now the first concrete consumer. It is a browser-delivered
+Vite/React app that needs Login with Cubid without a Cubid API key, dapp secret,
+service-role credential, or OIDC signing material in browser code. This parent
+todo stays open until the dedicated auth package surface, React bindings,
+example, and ClearPass reply are complete.
+
 Future user-authenticated disclosure-grant management routes such as
 `/api/disclosures/app-grants/list` and `/api/disclosures/app-grants/revoke`
 should be evaluated under this same boundary. If the SDK exposes them later,
 model them as account-management APIs rather than dapp server APIs.
+
+### S04.1 Add `@cubid/auth` OIDC and PKCE foundation
+
+- Status: Completed
+- Timestamp started: 2026-05-14T00:12:00Z
+- Timestamp completed: 2026-05-14T00:36:04Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `e0f07271` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`; session: `s46-auth-foundation-package`
+
+Create the runtime-agnostic Sign in with Cubid auth package for public OIDC clients. The package should use web-standard primitives only and expose helpers for PKCE verifier and challenge generation, state and nonce generation, authorization URL creation, callback parsing, token exchange request construction or execution with injected `fetch`, userinfo request helpers, logout/session-clear helpers, and structured auth errors. It must support browser-delivered public clients using Authorization Code + PKCE with token endpoint auth method `none`. It must not require a Cubid dapp API key, include private Passport/OIDC runtime code, depend on React, assume Node-only APIs, or expose any privileged credential path. ClearPass Dashboard should be treated as the first acceptance target.
+
+### S04.2 Add `@cubid/auth-react` session bindings
+
+- Status: Completed
+- Timestamp started: 2026-05-14T00:37:00Z
+- Timestamp completed: 2026-05-14T00:50:59Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `651f9404` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`; session: `s47-auth-react-session-bindings`
+
+Add React bindings on top of `@cubid/auth` for browser apps that want a clean Login with Cubid experience. The package should provide a provider or hook surface for configured issuer/client metadata, sign-in launch, callback handling, session state, loading/error states, userinfo display metadata, and logout/session clearing. It should be usable from Vite/React and Next without privileged credentials in the browser. The React layer should not invent backend authorization; it should make the hosted Cubid OIDC flow ergonomic while documenting that protected dashboard data and app-specific server routes must still enforce the same authenticated session server-side.
+
+### S04.3 Add a Vite ClearPass Dashboard auth example
+
+- Status: Completed
+- Timestamp started: 2026-05-14T00:51:00Z
+- Timestamp completed: 2026-05-14T00:53:30Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `08724d5b` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`; session: `s48-clearpass-vite-auth-example`
+
+Add a minimal Vite/React example showing how ClearPass Dashboard should use browser-safe Sign in with Cubid. The example should show public relying-party configuration, sign-in button or route guard, redirect/callback handling, session establishment, granted email/name display, logout, and failure states. It should clearly separate browser-safe values from server or edge responsibilities, and it should avoid local-storage-only security theater. If token exchange is demonstrated through a backend or edge route, document which values are public, which values are server-only, and how ClearPass should enforce authenticated developer/app scope on protected dashboard routes after the UI gate succeeds.
+
+### S04.4 Reply to ClearPass with package names and usage
+
+- Status: Completed
+- Timestamp started: 2026-05-14T00:54:00Z
+- Timestamp completed: 2026-05-14T00:55:02Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `c8d649a0` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`; session: `s49-clearpass-auth-handoff`
+
+After `@cubid/auth`, `@cubid/auth-react`, and the ClearPass-oriented example are available, write a response note for ClearPass with package names, version or commit references, install commands, usage snippets, required environment variables, callback URL setup, staging and production issuer URLs, supported scopes, and what must remain server-side. The reply should explicitly say that ClearPass browser code must not contain Cubid dapp API keys, service-role credentials, OIDC signing keys, Passport internal tokens, or any other privileged material. Include validation evidence and any remaining hosted OIDC client setup or smoke-test blockers so ClearPass agents can resume dashboard auth implementation without guessing.
 
 ### S05. Align future identity and stamp helpers with app-scoped disclosure contracts
 
