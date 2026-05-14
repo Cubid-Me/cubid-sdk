@@ -1,6 +1,7 @@
 # `@cubid/web3`
 
-Interim wallet-oriented Cubid package while the chain-specific split continues.
+Legacy wallet-oriented Cubid compatibility package while the chain-specific
+split continues to close out.
 
 ## When To Choose This Package
 
@@ -11,7 +12,8 @@ integrations, `@cubid/cardano` for new Cardano integrations, and
 `@cubid/bitcoin` for new Bitcoin integrations, and `@cubid/starknet` for new
 Starknet integrations, and `@cubid/cosmos` for new Cosmos integrations. Use
 `@cubid/web3` only when you still depend on the older shared wallet surface
-while the split remains in progress.
+while the split remains in progress. New chain-specific work should prefer the
+dedicated chain packages instead of expanding this shared surface.
 
 ## Install
 

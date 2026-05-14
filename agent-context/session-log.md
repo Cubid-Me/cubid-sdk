@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s61-web3-compatibility-closeout-planning
+
+- Timestamp: 2026-05-14T21:00:00Z
+- Summary: Started the `@cubid/web3` compatibility-closeout path by turning it into a concrete tracked migration and deprecation plan.
+- Actions:
+  - Audited the remaining public `@cubid/web3` surface and confirmed it is now a small legacy shared-wallet package with its own adapter boundary, capability helpers, and a still-published npm package.
+  - Expanded `S03` with explicit `@cubid/web3` closeout follow-ups covering surface freeze, migration messaging, release-policy narrowing, downstream migration guidance, and the final long-term compatibility decision.
+  - Updated the package-migration and target-state docs so future work treats `@cubid/web3` as a legacy compatibility surface that should stop absorbing new chain-specific behavior.
+- Validation:
+  - Reviewed the live `packages/web3` surface, README, and repo-wide references before updating the roadmap and engineering docs.
+- Follow-up:
+  - Continue with the next dedicated chain-package slices in parallel with the `@cubid/web3` closeout steps, but do not add new chain-specific helpers to `@cubid/web3`.
+
 ## session: s59-cosmos-package-slice
 
 - Timestamp: 2026-05-14T20:05:00Z

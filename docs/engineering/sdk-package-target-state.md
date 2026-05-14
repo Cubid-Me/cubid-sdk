@@ -169,6 +169,11 @@ Chain packages own chain-specific wallet, key, and signing behavior. Each chain
 package should avoid cross-chain assumptions. `@cubid/evm` may depend on
 `viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
 
+`@cubid/web3` should now be treated as a legacy compatibility surface, not as a
+growth package. It may preserve the old shared wallet adapter boundary for
+existing consumers, but new chain-specific helpers, new stamp shapes, and new
+chain families should land only in their dedicated packages.
+
 Future smart-account, session-key, paymaster, and gas-sponsorship APIs should
 also be capability-driven rather than universal. Keep app-scoped generated
 custody accounts as the default public model unless Passport later exposes
@@ -268,7 +273,8 @@ npm-first foundation, then layers in package-ready integration surfaces:
   as additional chain-specific packages layered on top of `@cubid/core`.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
-  packages.
+  packages, but its closeout path is now active and it should stop absorbing
+  new chain-specific behavior.
 
 Live npm and JSR publication are complete for `@cubid/core`. See
 `docs/engineering/package-migration-plan.md` for the rename and split plan.

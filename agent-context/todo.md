@@ -418,6 +418,62 @@ Queue a bounded Stellar-specific chain package on top of `@cubid/core`, using
 the same first-class package expectations as the other extracted chain
 surfaces.
 
+### S03.18 Start the `@cubid/web3` compatibility-closeout plan
+
+- Status: Completed
+- Timestamp started: 2026-05-14T20:40:00Z
+- Timestamp completed: 2026-05-14T21:00:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `2a5312af` at implementation start
+- Session-log reference(s): session: s61-web3-compatibility-closeout-planning
+
+Turn the eventual `@cubid/web3` retirement into a concrete compatibility-closeout
+plan now that multiple chain-specific packages exist. The plan should freeze
+`@cubid/web3` as a legacy shared wallet surface, keep new chain-specific work
+out of it, and break the remaining closeout into explicit migration,
+deprecation, and release-policy steps.
+
+### S03.19 Freeze `@cubid/web3` to the legacy shared wallet surface
+
+- Status: Not started
+
+Keep `@cubid/web3` limited to the already-supported legacy shared wallet
+surface instead of expanding it for newly extracted chains. New chain-specific
+helpers should land only in their dedicated packages.
+
+### S03.20 Add explicit `@cubid/web3` migration and deprecation messaging
+
+- Status: Not started
+
+Update package metadata, README messaging, and developer docs so downstream
+consumers are clearly pointed toward dedicated chain packages while preserving
+the current compatibility surface for existing installs.
+
+### S03.21 Move `@cubid/web3` out of the normal active-package path
+
+- Status: Not started
+
+Once the migration messaging is live, treat `@cubid/web3` like a controlled
+compatibility package rather than a primary forward-looking SDK surface. That
+includes narrowing when it appears in release planning, roadmap summaries, and
+package-selection guidance.
+
+### S03.22 Write a downstream `@cubid/web3` migration guide
+
+- Status: Not started
+
+Document how existing `@cubid/web3` consumers should move to the dedicated
+chain packages, including the preserved adapter concepts, capability helpers,
+and the right package choice by chain and framework.
+
+### S03.23 Decide the final long-term `@cubid/web3` end state
+
+- Status: Not started
+
+After the compatibility package is frozen and downstream migrations are in
+motion, decide whether `@cubid/web3` remains as a long-lived frozen wrapper or
+shifts to a formal deprecated release path with manual-only maintenance.
+
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
 - Status: Completed

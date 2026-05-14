@@ -194,9 +194,28 @@ Follow the same bounded pattern for later chain packages: real adapter
 behavior, focused tests, publish wiring, and documentation in the same change.
 Avoid publishing empty placeholders.
 
+### Phase 5: close out `@cubid/web3` as a compatibility surface
+
+Now that multiple dedicated chain packages exist, stop treating `@cubid/web3`
+as an open-ended future surface.
+
+Use this staged closeout path:
+
+1. Freeze `@cubid/web3` to the already-supported legacy shared wallet surface.
+2. Do not add newly extracted chain-specific helpers or stamp types to
+   `@cubid/web3`.
+3. Keep new docs and examples pointed at dedicated chain packages first.
+4. Add explicit migration guidance for downstream `@cubid/web3` consumers.
+5. Narrow release planning so `@cubid/web3` is treated as a compatibility
+   package rather than an active growth surface.
+6. Decide later whether the end state is a long-lived frozen wrapper or a more
+   formal deprecation path.
+
 ### Compatibility rules
 
 - Keep `@cubid/web3` as a compatibility package during the first split wave.
+- Keep new chain-package extraction work out of `@cubid/web3` once a dedicated
+  package exists for that chain family.
 - Do not let `@cubid/wagmi` or any React-specific wallet helper leak into
   `@cubid/react`.
 - Keep chain packages isolated from browser OTP and non-wallet verification
@@ -217,8 +236,10 @@ Avoid publishing empty placeholders.
 11. Publish `@cubid/starknet`.
 12. Publish `@cubid/sui`.
 13. Publish `@cubid/wagmi`.
-14. Decide whether `@cubid/web3` remains as a temporary compatibility wrapper or
-   is deprecated immediately after the first chain-specific release wave.
+14. Freeze `@cubid/web3` to the legacy shared wallet surface.
+15. Publish explicit `@cubid/web3` migration and deprecation guidance.
+16. Decide whether `@cubid/web3` remains as a long-lived frozen compatibility
+   wrapper or moves to a more formal deprecated release path.
 
 ## Exit Criteria
 
@@ -229,3 +250,4 @@ The migration can be considered complete when:
 - `@cubid/browser` and `@cubid/react` are published and documented
 - the first chain-specific packages, including `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`, `@cubid/solana`, `@cubid/starknet`, `@cubid/sui`, and `@cubid/wagmi`, are published with tests
 - compatibility packages are clearly frozen and no longer treated as active release targets
+- `@cubid/web3` is either frozen with downstream migration guidance or formally deprecated with an explicit maintenance policy

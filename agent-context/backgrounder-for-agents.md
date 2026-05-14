@@ -142,6 +142,10 @@ Own:
 Keep chain assumptions isolated. Do not pile them back into one shared `web3`
 blob once dedicated packages exist.
 
+Treat `@cubid/web3` as a legacy shared-wallet compatibility surface now that
+multiple dedicated chain packages exist. New chain-specific helpers should land
+only in the dedicated package for that chain family.
+
 Future smart-account, session-key, paymaster, or gas-sponsorship helpers must
 be capability-driven and explicitly optional. Do not assume every Cubid account
 supports those features by default.
