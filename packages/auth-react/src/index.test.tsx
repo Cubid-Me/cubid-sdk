@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import { render, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -164,6 +165,7 @@ describe("@cubid/auth-react", () => {
               email: "developer@clearpass.app",
               exp: Math.floor(Date.now() / 1000) + 3600,
               name: "ClearPass Dev",
+              nonce: "nonce-123",
               sub: "pairwise-user-123",
             }),
             scope: "openid email profile",
@@ -215,6 +217,158 @@ describe("@cubid/auth-react", () => {
     expect(within(view.container).getByTestId("email").textContent).toBe("developer@clearpass.app");
     expect(storage.getItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY)).toBeNull();
     expect(storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY)).toBeTruthy();
+  });
+
+  it("handles the authorization callback only once under React StrictMode", async () => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      CUBID_AUTH_TRANSACTION_STORAGE_KEY,
+      JSON.stringify({
+        clientId: "clearpass-dashboard",
+        codeVerifier: "verifier-123",
+        issuer: "https://staging-id.cubid.me",
+        nonce: "nonce-123",
+        redirectUri: "https://dashboard.clearpass.app/auth/callback",
+        scope: ["openid", "email", "profile"],
+        state: "state-123",
+      })
+    );
+
+    const fetchImpl = vi.fn(async (input: string | URL | Request) => {
+      if (String(input).endsWith("/.well-known/openid-configuration")) {
+        return new Response(
+          JSON.stringify({
+            authorization_endpoint: "https://staging-id.cubid.me/oauth2/authorize",
+            issuer: "https://staging-id.cubid.me",
+            token_endpoint: "https://staging-id.cubid.me/oauth2/token",
+            token_endpoint_auth_methods_supported: ["none"],
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          access_token: "access-token-123",
+          expires_in: 3600,
+          id_token: createIdToken({
+            exp: Math.floor(Date.now() / 1000) + 3600,
+            nonce: "nonce-123",
+            sub: "pairwise-user-123",
+          }),
+          scope: "openid email profile",
+          token_type: "Bearer",
+        }),
+        {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        }
+      );
+    });
+
+    render(
+      <StrictMode>
+        <CubidAuthProvider
+          clientId="clearpass-dashboard"
+          fetch={fetchImpl}
+          issuer="https://staging-id.cubid.me"
+          redirectUri="https://dashboard.clearpass.app/auth/callback"
+          storage={storage}
+        >
+          <CubidAuthCallback callbackUrl="https://dashboard.clearpass.app/auth/callback?code=oidc-code&state=state-123" />
+          <SessionViewer />
+        </CubidAuthProvider>
+      </StrictMode>
+    );
+
+    await waitFor(() => {
+      expect(fetchImpl).toHaveBeenCalledWith(
+        "https://staging-id.cubid.me/oauth2/token",
+        expect.any(Object)
+      );
+    });
+
+    const tokenCalls = fetchImpl.mock.calls.filter(([input]) =>
+      String(input).endsWith("/oauth2/token")
+    );
+
+    expect(tokenCalls).toHaveLength(1);
+  });
+
+  it("rejects callback token responses that omit the nonce claim", async () => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      CUBID_AUTH_TRANSACTION_STORAGE_KEY,
+      JSON.stringify({
+        clientId: "clearpass-dashboard",
+        codeVerifier: "verifier-123",
+        issuer: "https://staging-id.cubid.me",
+        nonce: "nonce-123",
+        redirectUri: "https://dashboard.clearpass.app/auth/callback",
+        scope: ["openid", "email", "profile"],
+        state: "state-123",
+      })
+    );
+
+    const onError = vi.fn();
+
+    render(
+      <CubidAuthProvider
+        clientId="clearpass-dashboard"
+        fetch={vi.fn(async (input: string | URL | Request) => {
+          if (String(input).endsWith("/.well-known/openid-configuration")) {
+            return new Response(
+              JSON.stringify({
+                authorization_endpoint: "https://staging-id.cubid.me/oauth2/authorize",
+                issuer: "https://staging-id.cubid.me",
+                token_endpoint: "https://staging-id.cubid.me/oauth2/token",
+                token_endpoint_auth_methods_supported: ["none"],
+              }),
+              {
+                headers: { "content-type": "application/json" },
+                status: 200,
+              }
+            );
+          }
+
+          return new Response(
+            JSON.stringify({
+              access_token: "access-token-123",
+              expires_in: 3600,
+              id_token: createIdToken({
+                exp: Math.floor(Date.now() / 1000) + 3600,
+                sub: "pairwise-user-123",
+              }),
+              scope: "openid email profile",
+              token_type: "Bearer",
+            }),
+            {
+              headers: { "content-type": "application/json" },
+              status: 200,
+            }
+          );
+        })}
+        issuer="https://staging-id.cubid.me"
+        redirectUri="https://dashboard.clearpass.app/auth/callback"
+        storage={storage}
+      >
+        <CubidAuthCallback
+          callbackUrl="https://dashboard.clearpass.app/auth/callback?code=oidc-code&state=state-123"
+          onError={onError}
+        />
+      </CubidAuthProvider>
+    );
+
+    await waitFor(() => {
+      expect(onError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code: "missing_nonce",
+        })
+      );
+    });
   });
 
   it("restores persisted sessions and clears them through the sign-out button", async () => {

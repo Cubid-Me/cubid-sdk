@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useEffectEvent, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 import type { CubidAuthSession } from "@cubid/auth";
@@ -26,44 +26,64 @@ export function CubidAuthCallback({
 }: CubidAuthCallbackProps) {
   const auth = useCubidAuth();
   const [phase, setPhase] = useState<"error" | "loading" | "success">("loading");
-  const cancelledRef = useRef(false);
+  const authRef = useRef(auth);
+  const isMountedRef = useRef(true);
+  const lastRequestKeyRef = useRef<string | null>(null);
+  const onErrorRef = useRef(onError);
+  const onResolvedRef = useRef(onResolved);
 
-  const resolveCallback = useEffectEvent(async () => {
-    try {
-      const session = await auth.handleCallback({
-        autoUserInfo,
-        callbackUrl,
-      });
-
-      if (cancelledRef.current) {
-        return;
-      }
-
-      setPhase("success");
-      onResolved?.(session);
-    } catch (error) {
-      const normalizedError =
-        error instanceof Error ? error : new Error("Cubid auth callback failed.");
-
-      if (cancelledRef.current) {
-        return;
-      }
-
-      setPhase("error");
-      onError?.(normalizedError);
-    }
-  });
+  authRef.current = auth;
+  onErrorRef.current = onError;
+  onResolvedRef.current = onResolved;
 
   useEffect(() => {
-    cancelledRef.current = false;
+    isMountedRef.current = true;
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const requestKey = JSON.stringify({
+      autoUserInfo: autoUserInfo ?? null,
+      callbackUrl:
+        callbackUrl instanceof URL ? callbackUrl.toString() : callbackUrl ?? null,
+    });
+
+    if (lastRequestKeyRef.current === requestKey) {
+      return;
+    }
+
+    lastRequestKeyRef.current = requestKey;
 
     setPhase("loading");
 
-    void resolveCallback();
+    void (async () => {
+      try {
+        const session = await authRef.current.handleCallback({
+          autoUserInfo,
+          callbackUrl,
+        });
 
-    return () => {
-      cancelledRef.current = true;
-    };
+        if (!isMountedRef.current || lastRequestKeyRef.current !== requestKey) {
+          return;
+        }
+
+        setPhase("success");
+        onResolvedRef.current?.(session);
+      } catch (error) {
+        const normalizedError =
+          error instanceof Error ? error : new Error("Cubid auth callback failed.");
+
+        if (!isMountedRef.current || lastRequestKeyRef.current !== requestKey) {
+          return;
+        }
+
+        setPhase("error");
+        onErrorRef.current?.(normalizedError);
+      }
+    })();
   }, [autoUserInfo, callbackUrl]);
 
   if (phase === "loading") {

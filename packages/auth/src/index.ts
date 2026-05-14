@@ -348,6 +348,36 @@ function getCrypto(): Crypto {
   return globalThis.crypto;
 }
 
+function encodeBinaryToBase64(binary: string): string {
+  if (typeof globalThis.btoa === "function") {
+    return globalThis.btoa(binary);
+  }
+
+  if (typeof Buffer !== "undefined") {
+    return Buffer.from(binary, "binary").toString("base64");
+  }
+
+  throw new CubidAuthError("Cubid auth requires base64 encoding support in this runtime.", {
+    category: "config",
+    code: "missing_base64",
+  });
+}
+
+function decodeBase64ToBinary(base64: string): string {
+  if (typeof globalThis.atob === "function") {
+    return globalThis.atob(base64);
+  }
+
+  if (typeof Buffer !== "undefined") {
+    return Buffer.from(base64, "base64").toString("binary");
+  }
+
+  throw new CubidAuthError("Cubid auth requires base64 decoding support in this runtime.", {
+    category: "config",
+    code: "missing_base64",
+  });
+}
+
 function bytesToBase64Url(bytes: Uint8Array): string {
   let binary = "";
 
@@ -355,8 +385,7 @@ function bytesToBase64Url(bytes: Uint8Array): string {
     binary += String.fromCharCode(value);
   }
 
-  return globalThis
-    .btoa(binary)
+  return encodeBinaryToBase64(binary)
     .replaceAll("+", "-")
     .replaceAll("/", "_")
     .replace(/=+$/u, "");
@@ -365,7 +394,7 @@ function bytesToBase64Url(bytes: Uint8Array): string {
 function base64UrlToBytes(input: string): Uint8Array {
   const normalized = input.replaceAll("-", "+").replaceAll("_", "/");
   const padding = normalized.length % 4 === 0 ? "" : "=".repeat(4 - (normalized.length % 4));
-  const binary = globalThis.atob(`${normalized}${padding}`);
+  const binary = decodeBase64ToBinary(`${normalized}${padding}`);
   const bytes = new Uint8Array(binary.length);
 
   for (let index = 0; index < binary.length; index += 1) {
@@ -827,9 +856,9 @@ export async function fetchCubidUserInfo(
 
 export function decodeCubidIdTokenClaims(idToken: string): CubidIdTokenClaims {
   const token = assertNonEmptyString(idToken, "idToken");
-  const [, payloadSegment] = token.split(".");
+  const segments = token.split(".");
 
-  if (!payloadSegment) {
+  if (segments.length !== 3 || segments.some((segment) => segment.length === 0)) {
     throw new CubidAuthError("Cubid auth expected an ID token with three JWT segments.", {
       category: "parse",
       code: "invalid_id_token",
@@ -837,6 +866,15 @@ export function decodeCubidIdTokenClaims(idToken: string): CubidIdTokenClaims {
   }
 
   try {
+    const payloadSegment = segments[1];
+
+    if (typeof payloadSegment !== "string") {
+      throw new CubidAuthError("Cubid auth expected an ID token with three JWT segments.", {
+        category: "parse",
+        code: "invalid_id_token",
+      });
+    }
+
     const decoded = textDecoder.decode(base64UrlToBytes(payloadSegment));
     return toRecord(JSON.parse(decoded), "id token claims") as CubidIdTokenClaims;
   } catch (cause) {

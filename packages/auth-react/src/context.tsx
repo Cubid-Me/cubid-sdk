@@ -441,6 +441,19 @@ export function CubidAuthProvider({
         tokenEndpoint: nextDiscovery.token_endpoint,
       });
 
+      const expectsIdToken = transaction.scope.includes("openid");
+
+      if (expectsIdToken && !tokenResponse.idToken) {
+        throw new CubidAuthError(
+          "The Cubid token response did not include the expected ID token.",
+          {
+            category: "validation",
+            code: "missing_id_token",
+            raw: tokenResponse.raw,
+          }
+        );
+      }
+
       let userInfo: CubidUserInfo | null = null;
 
       if ((options.autoUserInfo ?? autoUserInfo) && nextDiscovery.userinfo_endpoint) {
@@ -455,15 +468,28 @@ export function CubidAuthProvider({
         ? decodeCubidIdTokenClaims(tokenResponse.idToken)
         : null;
 
-      if (
-        typeof idTokenClaims?.nonce === "string" &&
-        idTokenClaims.nonce !== transaction.nonce
-      ) {
-        throw new CubidAuthError("The Cubid ID token nonce did not match the stored transaction.", {
-          category: "validation",
-          code: "invalid_nonce",
-          raw: idTokenClaims,
-        });
+      if (tokenResponse.idToken) {
+        if (typeof idTokenClaims?.nonce !== "string") {
+          throw new CubidAuthError(
+            "The Cubid ID token nonce was missing from the token response.",
+            {
+              category: "validation",
+              code: "missing_nonce",
+              raw: idTokenClaims,
+            }
+          );
+        }
+
+        if (idTokenClaims.nonce !== transaction.nonce) {
+          throw new CubidAuthError(
+            "The Cubid ID token nonce did not match the stored transaction.",
+            {
+              category: "validation",
+              code: "invalid_nonce",
+              raw: idTokenClaims,
+            }
+          );
+        }
       }
 
       const nextSession = createCubidAuthSession({

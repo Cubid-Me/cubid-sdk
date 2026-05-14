@@ -733,3 +733,18 @@
 - Validation:
   - `pnpm docs:api:build`
   - `pnpm docs:api:check`
+
+## session: s04-auth-pr9-review-followup
+
+- Timestamp: 2026-05-13T23:25:00Z
+- Summary: Addressed the open PR #9 review threads around React 18 compatibility, callback replay safety, stricter OIDC validation, and auth docs hygiene.
+- Actions:
+  - Replaced the React 19-only `useEffectEvent` usage in `CubidAuthCallback` with a React 18-compatible ref-based pattern.
+  - Added a per-request guard so the callback component only performs one code exchange for the same callback input under `React.StrictMode`.
+  - Tightened callback validation to require the expected ID token and matching nonce for `openid` flows.
+  - Hardened `decodeCubidIdTokenClaims` to require exactly three JWT segments and added a `Buffer` fallback for base64url helpers when `atob` or `btoa` are unavailable.
+  - Removed the duplicated `@cubid/auth-react` target-state bullet and expanded auth/auth-react tests to cover the new behavior.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`

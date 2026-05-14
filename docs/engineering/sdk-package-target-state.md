@@ -37,7 +37,6 @@ Target packages:
 - `@cubid/cardano`: Cardano wallet and signing logic
 - `@cubid/sui`: Sui wallet and signing logic
 - `@cubid/near`: NEAR wallet and signing logic
-- `@cubid/auth-react`: React auth/session helpers
 - `@cubid/comms`: optional later communications helpers
 - `@cubid/secrets`: optional later encryption and custody helpers
 

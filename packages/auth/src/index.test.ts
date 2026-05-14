@@ -314,6 +314,39 @@ describe("@cubid/auth", () => {
     expect(isCubidIdTokenExpired(idToken)).toBe(false);
   });
 
+  it("requires exactly three JWT segments when decoding ID token claims", () => {
+    expect(() => decodeCubidIdTokenClaims("header.payload")).toThrow(CubidAuthError);
+    expect(() => decodeCubidIdTokenClaims("header.payload.signature.extra")).toThrow(
+      CubidAuthError
+    );
+    expect(() => decodeCubidIdTokenClaims("header..signature")).toThrow(CubidAuthError);
+  });
+
+  it("falls back to Buffer when base64 globals are unavailable", async () => {
+    vi.stubGlobal("atob", undefined);
+    vi.stubGlobal("btoa", undefined);
+
+    try {
+      const nonce = createCubidAuthNonce(32);
+      const idToken = createIdToken({
+        exp: Math.floor(Date.now() / 1000) + 120,
+        nonce,
+        sub: "pairwise-user-123",
+      });
+
+      expect(nonce).toMatch(/^[A-Za-z0-9_-]+$/u);
+      expect(decodeCubidIdTokenClaims(idToken)).toMatchObject({
+        nonce,
+        sub: "pairwise-user-123",
+      });
+      await expect(
+        createCubidPkceCodeChallenge("dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk")
+      ).resolves.toBe("E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM");
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   it("builds logout URLs and persists browser session snapshots", () => {
     const logoutUrl = buildCubidLogoutUrl({
       endSessionEndpoint: "https://id.cubid.me/logout",
