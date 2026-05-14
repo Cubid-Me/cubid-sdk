@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s58-starknet-package-slice
+
+- Timestamp: 2026-05-14T19:35:00Z
+- Summary: Continued `S03` by extracting `@cubid/starknet` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/starknet` with a Starknet-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Starknet identity for default stamp serialization while preserving optional `publicKey`, `chainId`, and `classHash` metadata.
+  - Wired `@cubid/starknet` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Cosmos, Polkadot, Aptos, Tezos, and Stellar.
+
 ## session: s57-bitcoin-package-slice
 
 - Timestamp: 2026-05-14T19:05:00Z

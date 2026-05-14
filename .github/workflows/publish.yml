@@ -19,6 +19,7 @@ on:
           - "@cubid/evm"
           - "@cubid/near"
           - "@cubid/solana"
+          - "@cubid/starknet"
           - "@cubid/sui"
           - "@cubid/wagmi"
           - "@cubid/web3"
@@ -83,6 +84,10 @@ jobs:
               ;;
             "@cubid/solana")
               echo "package_dir=packages/solana" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/starknet")
+              echo "package_dir=packages/starknet" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/sui")

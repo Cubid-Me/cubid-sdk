@@ -362,11 +362,16 @@ tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.12 Create the first `@cubid/starknet` package slice
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-14T19:10:00Z
+- Timestamp completed: 2026-05-14T19:35:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `f2f2d9cb` at implementation start
+- Session-log reference(s): session: s58-starknet-package-slice
 
-Queue a bounded Starknet-specific chain package on top of `@cubid/core`, with
-the same package-slice expectations as the existing EVM, NEAR, Solana, Sui,
-and Cardano packages.
+Added `packages/starknet` as the next bounded chain-specific package on top of
+`@cubid/core`, with Starknet-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
 
 ### S03.13 Create the first `@cubid/cosmos` package slice
 

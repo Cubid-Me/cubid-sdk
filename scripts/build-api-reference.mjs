@@ -91,6 +91,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "starknet",
+    name: "@cubid/starknet",
+    dir: "packages/starknet",
+    entryPoint: "packages/starknet/src/index.ts",
+    tsconfig: "packages/starknet/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "sui",
     name: "@cubid/sui",
     dir: "packages/sui",

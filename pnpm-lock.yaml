@@ -189,6 +189,12 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/starknet:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/sui:
     dependencies:
       '@cubid/core':

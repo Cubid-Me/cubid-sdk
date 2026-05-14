@@ -25,6 +25,7 @@
       "@cubid/near": ["packages/near/src/index.ts"],
       "@cubid/react": ["packages/react/src/index.ts"],
       "@cubid/solana": ["packages/solana/src/index.ts"],
+      "@cubid/starknet": ["packages/starknet/src/index.ts"],
       "@cubid/sui": ["packages/sui/src/index.ts"],
       "@cubid/wagmi": ["packages/wagmi/src/index.ts"],
       "@cubid/web2": ["packages/web2/src/index.ts"],
