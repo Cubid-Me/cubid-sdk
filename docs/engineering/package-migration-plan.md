@@ -12,6 +12,7 @@ The first rename and split slices now exist in the workspace:
 - `@cubid/web2` and `@cubid/web2-react` now act as compatibility re-export packages
 - `@cubid/evm` has been created as the first chain-specific package
 - `@cubid/near` now exists as the second chain-specific package on top of `@cubid/core`
+- `@cubid/solana` now exists as the third chain-specific package on top of `@cubid/core`
 - `@cubid/wagmi` now exists as the wagmi-specific React integration layer on top of `@cubid/evm`
 - `@cubid/web3` still remains in place while later chain splits continue
 
@@ -36,7 +37,8 @@ Target:
 - `@cubid/evm`
 - `@cubid/near`
 - `@cubid/wagmi`
-- later: `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`
+- `@cubid/solana`
+- later: `@cubid/cardano`, `@cubid/sui`
 - later: `@cubid/auth`, `@cubid/auth-react`
 
 ## Principles
@@ -179,7 +181,7 @@ It should depend on:
 
 ### Phase 4: add other chain packages only when real demand exists
 
-Create `@cubid/solana`, `@cubid/cardano`, and `@cubid/sui`
+Create `@cubid/cardano` and `@cubid/sui`
 only when the package can be backed by real adapter behavior and tests.
 
 Avoid publishing empty placeholders.
@@ -200,8 +202,9 @@ Avoid publishing empty placeholders.
 4. Freeze `@cubid/web2` and `@cubid/web2-react` as deprecated compatibility packages.
 5. Publish `@cubid/evm`.
 6. Publish `@cubid/near`.
-7. Publish `@cubid/wagmi`.
-8. Decide whether `@cubid/web3` remains as a temporary compatibility wrapper or
+7. Publish `@cubid/solana`.
+8. Publish `@cubid/wagmi`.
+9. Decide whether `@cubid/web3` remains as a temporary compatibility wrapper or
    is deprecated immediately after the first chain-specific release wave.
 
 ## Exit Criteria
@@ -211,5 +214,5 @@ The migration can be considered complete when:
 - public docs no longer describe `web2`, `web2-react`, or `web3` as the target
   long-term package names
 - `@cubid/browser` and `@cubid/react` are published and documented
-- the first chain-specific packages, including `@cubid/evm`, `@cubid/near`, and `@cubid/wagmi`, are published with tests
+- the first chain-specific packages, including `@cubid/evm`, `@cubid/near`, `@cubid/solana`, and `@cubid/wagmi`, are published with tests
 - compatibility packages are clearly frozen and no longer treated as active release targets

@@ -49,6 +49,7 @@ Scope:
 - `@cubid/browser`
 - `@cubid/evm`
 - `@cubid/near`
+- `@cubid/solana`
 - `@cubid/wagmi`
 - `@cubid/web3`
 
@@ -167,6 +168,7 @@ Coverage target scope:
 - include `@cubid/react`
 - include `@cubid/evm`
 - include `@cubid/near`
+- include `@cubid/solana`
 - include `@cubid/wagmi`
 - include `@cubid/web3`
 

@@ -16,6 +16,7 @@ on:
           - "@cubid/react"
           - "@cubid/evm"
           - "@cubid/near"
+          - "@cubid/solana"
           - "@cubid/wagmi"
           - "@cubid/web3"
       publish_npm:
@@ -67,6 +68,10 @@ jobs:
               ;;
             "@cubid/near")
               echo "package_dir=packages/near" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/solana")
+              echo "package_dir=packages/solana" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/wagmi")

@@ -33,6 +33,7 @@ Target packages:
 - `@cubid/react`: React hooks and components built on `@cubid/browser`
 - `@cubid/evm`: EVM wallet and signing logic, using `viem` only when needed
 - `@cubid/near`: NEAR wallet and signing logic
+- `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
 - `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/cardano`: Cardano wallet and signing logic
@@ -158,6 +159,12 @@ explicit capability fields or feature gates for optional account modes.
 `@cubid/core`. It should keep treating `accountId` as the primary public
 identity for default NEAR stamp serialization while preserving optional wallet
 metadata such as `address`, `networkId`, and explicit capability descriptors.
+
+`@cubid/solana` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating `publicKey` as the primary public
+identity for default Solana stamp serialization while preserving optional
+wallet metadata such as `address`, `cluster`, and explicit capability
+descriptors.
 
 `@cubid/secrets`, if introduced, owns advanced encryption/custody helpers. Until
 then, `@cubid/core` may expose typed API wrappers for basic secret operations

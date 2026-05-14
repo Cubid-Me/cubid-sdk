@@ -67,6 +67,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "solana",
+    name: "@cubid/solana",
+    dir: "packages/solana",
+    entryPoint: "packages/solana/src/index.ts",
+    tsconfig: "packages/solana/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "wagmi",
     name: "@cubid/wagmi",
     dir: "packages/wagmi",

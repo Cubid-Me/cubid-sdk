@@ -308,6 +308,19 @@ Added `packages/near` as the next chain-specific package on top of
 `@cubid/core`, with NEAR-specific connection and stamp types, capability
 metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
 
+### S03.8 Create the first `@cubid/solana` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T04:20:00Z
+- Timestamp completed: 2026-05-14T04:50:00Z
+- Feature branch: `codex/s03-chain-split-followup`
+- Head: `ced815f3` at implementation start
+- Session-log reference(s): session: s52-solana-package-slice
+
+Added `packages/solana` as the next chain-specific package on top of
+`@cubid/core`, with Solana-specific connection and stamp types, capability
+metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
+
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
 - Status: Completed

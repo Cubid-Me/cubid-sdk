@@ -764,3 +764,19 @@
   - `pnpm build`
   - `pnpm docs:api:build`
   - `pnpm docs:api:check`
+
+## session: s52-solana-package-slice
+
+- Timestamp: 2026-05-14T04:50:00Z
+- Summary: Continued `S03` again by extracting `@cubid/solana` as the next real chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/solana` with Solana-specific client, types, capability helpers, tests, package metadata, and README.
+  - Kept `publicKey` as the primary public identity for default Solana stamp serialization while preserving optional `address`, `cluster`, and `chainType` metadata.
+  - Wired the new package into path aliases, Vitest coverage and unit suites, the publish workflow, the package matrix, the API reference generator, and the chain-split roadmap docs.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
