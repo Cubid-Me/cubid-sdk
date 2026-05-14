@@ -347,6 +347,66 @@ Added `packages/cardano` as the next bounded chain-specific package on top of
 `@cubid/core`, with Cardano-specific connection metadata, capability helpers,
 tests, publish-workflow wiring, and developer-ingestion docs.
 
+### S03.11 Create the first `@cubid/bitcoin` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T18:40:00Z
+- Timestamp completed: 2026-05-14T19:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `b7b3919a` at implementation start
+- Session-log reference(s): session: s57-bitcoin-package-slice
+
+Added `packages/bitcoin` as the next bounded chain-specific package on top of
+`@cubid/core`, with Bitcoin-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.12 Create the first `@cubid/starknet` package slice
+
+- Status: Not started
+
+Queue a bounded Starknet-specific chain package on top of `@cubid/core`, with
+the same package-slice expectations as the existing EVM, NEAR, Solana, Sui,
+and Cardano packages.
+
+### S03.13 Create the first `@cubid/cosmos` package slice
+
+- Status: Not started
+
+Queue a bounded Cosmos-specific chain package on top of `@cubid/core`,
+preserving chain-specific connection metadata and capability-driven helpers.
+
+### S03.14 Create the first `@cubid/polkadot` package slice
+
+- Status: Not started
+
+Queue a bounded Polkadot-specific chain package on top of `@cubid/core`,
+following the same real-package, tests, docs, and workflow wiring pattern as
+the earlier `S03` slices.
+
+### S03.15 Create the first `@cubid/aptos` package slice
+
+- Status: Not started
+
+Queue a bounded Aptos-specific chain package on top of `@cubid/core`, keeping
+the public surface capability-driven and free of unnecessary cross-chain
+assumptions.
+
+### S03.16 Create the first `@cubid/tezos` package slice
+
+- Status: Not started
+
+Queue a bounded Tezos-specific chain package on top of `@cubid/core`, with
+chain-specific verification, serialization, and publish wiring treated as part
+of the same slice.
+
+### S03.17 Create the first `@cubid/stellar` package slice
+
+- Status: Not started
+
+Queue a bounded Stellar-specific chain package on top of `@cubid/core`, using
+the same first-class package expectations as the other extracted chain
+surfaces.
+
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
 - Status: Completed

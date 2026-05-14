@@ -29,6 +29,13 @@
       "referencePath": "browser.json"
     },
     {
+      "name": "@cubid/bitcoin",
+      "version": "0.1.0",
+      "description": "Bitcoin-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "bitcoin.json"
+    },
+    {
       "name": "@cubid/cardano",
       "version": "0.1.0",
       "description": "Cardano-oriented Cubid wallet helpers built on top of @cubid/core.",

@@ -132,6 +132,12 @@ importers:
         specifier: '>=18.2.0'
         version: 19.2.5(react@19.2.5)
 
+  packages/bitcoin:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/browser:
     dependencies:
       '@cubid/core':

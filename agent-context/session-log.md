@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s57-bitcoin-package-slice
+
+- Timestamp: 2026-05-14T19:05:00Z
+- Summary: Continued `S03` by extracting `@cubid/bitcoin` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/bitcoin` with a Bitcoin-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Bitcoin identity for default stamp serialization while preserving optional `publicKey`, `networkId`, and `scriptType` metadata.
+  - Wired `@cubid/bitcoin` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/bitcoin/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Starknet, Cosmos, Polkadot, Aptos, Tezos, and Stellar.
+
 ## session: s56-cardano-package-slice
 
 - Timestamp: 2026-05-14T18:15:00Z

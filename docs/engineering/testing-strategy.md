@@ -58,6 +58,7 @@ Scope:
 - `@cubid/auth`
 - `@cubid/auth-react`
 - `@cubid/browser`
+- `@cubid/bitcoin`
 - `@cubid/cardano`
 - `@cubid/evm`
 - `@cubid/near`
@@ -191,6 +192,7 @@ Coverage target scope:
 - include `@cubid/auth`
 - include `@cubid/auth-react`
 - include `@cubid/browser`
+- include `@cubid/bitcoin`
 - include `@cubid/cardano`
 - include `@cubid/react`
 - include `@cubid/evm`

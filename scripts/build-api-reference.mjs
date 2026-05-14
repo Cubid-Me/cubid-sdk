@@ -43,6 +43,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "bitcoin",
+    name: "@cubid/bitcoin",
+    dir: "packages/bitcoin",
+    entryPoint: "packages/bitcoin/src/index.ts",
+    tsconfig: "packages/bitcoin/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "cardano",
     name: "@cubid/cardano",
     dir: "packages/cardano",

@@ -7,7 +7,8 @@ Interim wallet-oriented Cubid package while the chain-specific split continues.
 Prefer `@cubid/evm` for new EVM integrations, `@cubid/wagmi` for
 wagmi-specific React integrations, `@cubid/near` for new NEAR integrations,
 `@cubid/solana` for new Solana integrations, `@cubid/sui` for new Sui
-integrations, and `@cubid/cardano` for new Cardano integrations. Use
+integrations, `@cubid/cardano` for new Cardano integrations, and
+`@cubid/bitcoin` for new Bitcoin integrations. Use
 `@cubid/web3` only when you still depend on the older shared wallet surface
 while the split remains in progress.
 

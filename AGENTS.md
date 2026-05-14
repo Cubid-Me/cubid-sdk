@@ -37,7 +37,7 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - `packages/browser` now carries the first-class headless browser layer, while `@cubid/web2` remains only as a frozen deprecated compatibility package.
 - `packages/react` now carries the React layer, while `@cubid/web2-react` remains only as a frozen deprecated compatibility package.
 - `packages/evm` now carries the first chain-specific split from `@cubid/web3`, and `packages/wagmi` now carries wagmi-specific React helpers on top of `@cubid/evm`.
-- `packages/near`, `packages/solana`, and `packages/sui` now carry additional chain-specific wallet layers on top of `@cubid/core`.
+- `packages/bitcoin`, `packages/near`, `packages/solana`, and `packages/sui` now carry additional chain-specific wallet layers on top of `@cubid/core`.
 - `@cubid/web3` remains an interim package and should continue splitting over time into chain-specific packages.
 - Prefer the dedicated `@cubid/auth` and `@cubid/auth-react` package family for hosted OIDC login rather than collapsing auth concerns into existing packages.
 
