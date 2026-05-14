@@ -1204,13 +1204,8 @@
               "kind": 32768,
               "flags": {},
               "type": {
-                "type": "typeOperator",
-                "operator": "keyof",
-                "target": {
-                  "type": "reference",
-                  "name": "CubidWalletCapabilities",
-                  "package": "@cubid/web3"
-                }
+                "type": "intrinsic",
+                "name": "string"
               }
             }
           ],

@@ -15,9 +15,7 @@
           "name": "pageId",
           "variant": "declaration",
           "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
+          "flags": {},
           "type": {
             "type": "union",
             "types": [
