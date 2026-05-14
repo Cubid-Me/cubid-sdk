@@ -59,6 +59,22 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "near",
+    name: "@cubid/near",
+    dir: "packages/near",
+    entryPoint: "packages/near/src/index.ts",
+    tsconfig: "packages/near/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
+    slug: "solana",
+    name: "@cubid/solana",
+    dir: "packages/solana",
+    entryPoint: "packages/solana/src/index.ts",
+    tsconfig: "packages/solana/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "wagmi",
     name: "@cubid/wagmi",
     dir: "packages/wagmi",

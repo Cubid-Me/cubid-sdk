@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { buildClearPassVerifyUrl, buildHostedVerificationUrl } from "./hosted";
+import {
+  buildClearPassVerifyUrl,
+  buildHostedSiwcAccountRequestAction,
+  buildHostedSiwcSigningRequestAction,
+  buildHostedVerificationUrl
+} from "./hosted";
 import { createCubidWeb2Client } from "./client";
 
 function createApiClientStub() {
@@ -206,5 +211,49 @@ describe("@cubid/browser", () => {
         userId: "user-42"
       })
     ).toBe("https://passport.cubid.me/verify/clearpass?uid=user-42&page_id=44");
+  });
+
+  it("builds hosted SIWC approval and rejection request descriptors", () => {
+    expect(
+      buildHostedSiwcAccountRequestAction({
+        accountRequestId: "siwc_acct_req_123",
+        decision: "approve"
+      })
+    ).toEqual({
+      body: JSON.stringify({ accountRequestId: "siwc_acct_req_123" }),
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      method: "POST",
+      url: "https://passport.cubid.me/api/siwc/accounts/requests/approve"
+    });
+
+    expect(
+      buildHostedSiwcSigningRequestAction({
+        decision: "reject",
+        signingRequestId: "siwc_req_456"
+      })
+    ).toEqual({
+      body: JSON.stringify({ signingRequestId: "siwc_req_456" }),
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      method: "POST",
+      url: "https://passport.cubid.me/api/siwc/signing/requests/reject"
+    });
+  });
+
+  it("rejects invalid hosted SIWC decisions at runtime", () => {
+    expect(() =>
+      buildHostedSiwcAccountRequestAction({
+        accountRequestId: "siwc_acct_req_123",
+        decision: "launch" as never
+      })
+    ).toThrow('Hosted SIWC actions require decision to be "approve" or "reject".');
+
+    expect(() =>
+      buildHostedSiwcSigningRequestAction({
+        decision: "../approve" as never,
+        signingRequestId: "siwc_req_456"
+      })
+    ).toThrow('Hosted SIWC actions require decision to be "approve" or "reject".');
   });
 });

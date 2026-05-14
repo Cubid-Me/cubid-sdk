@@ -5,10 +5,14 @@ import {
   createCubidAppScopedSubject,
   createCubidApiClient,
   CubidApiError,
+  CubidSiwcError,
   getCubidStampTypeId,
   getCubidStampTypeName,
   getCubidStampTypeNamesById,
+  isCubidSignedTransactionResult,
+  isCubidSigningSignatureResult,
   type CubidFetch,
+  isCubidSiwcError,
   parseCubidWebhookEvent,
   summarizeCubidDisclosedStamp,
   verifyCubidWebhookSignature,
@@ -765,6 +769,169 @@ test("v3 custody helpers normalize generated and listed accounts, including sui"
   ])
 })
 
+test("v3 wallet capability and account-request helpers normalize passkey-approved custody flows", async () => {
+  const calls: Array<{
+    body: unknown
+    headers: Headers
+    path: string
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (input, init) => {
+      const path = new URL(String(input)).pathname
+      calls.push({
+        body: JSON.parse(String(init?.body)),
+        headers: new Headers(init?.headers),
+        path,
+      })
+
+      if (path.endsWith("/accounts/capabilities")) {
+        return createJsonResponse({
+          data: {
+            accountCreationModes: {
+              directGenerateEnabled: true,
+              passkeyApprovedRequestEnabled: true,
+            },
+            accounts: [
+              {
+                accountId: "account_123",
+                chain: "solana",
+                createdAt: "2026-05-14T05:00:00.000Z",
+                custodyStatus: "cubid_custodied",
+                dappUserAccountId: "dua_123",
+                dappUserUuid: "dapp_user_123",
+                label: "Treasury wallet",
+                linkStatus: "active",
+                publicAddress: "So1ana111",
+                updatedAt: "2026-05-14T05:01:00.000Z",
+              },
+            ],
+            dappId: "dapp_123",
+            dappUserUuid: "dapp_user_123",
+            policy: {
+              allowedChains: ["evm", "solana"],
+              allowedRequestTypes: ["message", "transaction"],
+              custodyEnabled: true,
+              policyStatus: "enabled",
+              policyVersion: 4,
+              requiredAcr: "urn:cubid:acr:passkey",
+              sandboxMode: true,
+              signingEnabled: true,
+            },
+            supportedChains: ["evm", "near", "solana", "sui"],
+            walletActionsByChain: {
+              evm: {
+                accountLookup: true,
+                directGeneration: true,
+                messageSigning: true,
+                passkeyApprovedCreation: true,
+                transactionSigning: true,
+                transactionSigningStatus: "evm_pilot_policy_enabled",
+                typedDataSigning: false,
+              },
+              solana: {
+                accountLookup: true,
+                directGeneration: false,
+                messageSigning: true,
+                passkeyApprovedCreation: true,
+                transactionSigning: false,
+                typedDataSigning: false,
+              },
+            },
+          },
+        })
+      }
+
+      if (path.endsWith("/accounts/requests/create")) {
+        return createJsonResponse({
+          data: {
+            accountId: null,
+            accountRequestId: "siwc_acct_req_123",
+            chain: "solana",
+            createdAt: "2026-05-14T05:10:00.000Z",
+            dappId: "dapp_123",
+            dappUserUuid: "dapp_user_123",
+            expiresAt: "2026-05-14T05:20:00.000Z",
+            label: "Treasury wallet",
+            policyVersion: 4,
+            requiredAcr: "urn:cubid:acr:passkey",
+            status: "pending_user_approval",
+            updatedAt: "2026-05-14T05:10:00.000Z",
+          },
+        })
+      }
+
+      return createJsonResponse({
+        data: {
+          accountId: "account_123",
+          accountRequestId: "siwc_acct_req_123",
+          approvedAt: "2026-05-14T05:12:00.000Z",
+          chain: "solana",
+          createdAt: "2026-05-14T05:10:00.000Z",
+          dappId: "dapp_123",
+          dappUserAccountId: "dua_123",
+          dappUserUuid: "dapp_user_123",
+          expiresAt: "2026-05-14T05:20:00.000Z",
+          label: "Treasury wallet",
+          policyVersion: 4,
+          publicAddress: "So1ana111",
+          requiredAcr: "urn:cubid:acr:passkey",
+          status: "approved",
+          updatedAt: "2026-05-14T05:12:00.000Z",
+        },
+      })
+    },
+  })
+
+  const capabilities = await client.fetchWalletCapabilities({
+    userId: "dapp_user_123",
+  })
+  const created = await client.createAccountRequest({
+    chain: "solana",
+    idempotencyKey: "acct_req_key_123",
+    label: "Treasury wallet",
+    userId: "dapp_user_123",
+  })
+  const fetched = await client.getAccountRequest({
+    accountRequestId: "siwc_acct_req_123",
+  })
+
+  assert.equal(capabilities.capabilities.dappId, "dapp_123")
+  assert.equal(capabilities.capabilities.policy.policyVersion, 4)
+  assert.equal(
+    capabilities.capabilities.walletActionsByChain.evm?.transactionSigningStatus,
+    "evm_pilot_policy_enabled"
+  )
+  assert.equal(capabilities.capabilities.accounts[0]?.chain, "solana")
+  assert.deepEqual(calls[0]?.body, {
+    api_key: "api_key",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+  })
+
+  assert.equal(created.idempotencyKey, "acct_req_key_123")
+  assert.equal(created.accountRequest.status, "pending_user_approval")
+  assert.equal(calls[1]?.headers.get("Idempotency-Key"), "acct_req_key_123")
+  assert.deepEqual(calls[1]?.body, {
+    api_key: "api_key",
+    chain: "solana",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    label: "Treasury wallet",
+  })
+
+  assert.equal(fetched.accountRequest.status, "approved")
+  assert.equal(fetched.accountRequest.accountId, "account_123")
+  assert.equal(fetched.accountRequest.publicAddress, "So1ana111")
+  assert.deepEqual(calls.map((call) => call.path), [
+    "/api/v3/accounts/capabilities",
+    "/api/v3/accounts/requests/create",
+    "/api/v3/accounts/requests/get",
+  ])
+})
+
 test("v3 signing request helpers normalize redacted summaries and risk fields", async () => {
   const calls: Array<{
     body: unknown
@@ -788,16 +955,17 @@ test("v3 signing request helpers normalize redacted summaries and risk fields", 
           data: {
             chain: "evm",
             createdAt: "2026-05-06T12:00:00.000Z",
+            expiresAt: "2026-05-06T12:10:00.000Z",
             payloadHash: "hash_123",
             payloadSummary: { kind: "message", preview: "Sign in to Example" },
-            policyVersion: "siwc-policy-v1",
+            policyVersion: 2,
             requestType: "message",
             requiredAcr: "phrh",
             result: null,
             riskLevel: null,
             riskReasons: [],
             signingRequestId: "sr_123",
-            status: "pending",
+            status: "pending_user_approval",
             stepUpRequired: false,
             updatedAt: "2026-05-06T12:00:00.000Z",
           },
@@ -811,15 +979,20 @@ test("v3 signing request helpers normalize redacted summaries and risk fields", 
             chain: "evm",
             completedAt: "2026-05-06T12:03:00.000Z",
             createdAt: "2026-05-06T12:00:00.000Z",
+            errorCode: null,
+            errorMessage: null,
+            expiresAt: "2026-05-06T12:10:00.000Z",
             payloadHash: "hash_123",
             payloadSummary: { kind: "message", preview: "Sign in to Example" },
             policyDecision: "allowed",
-            policyVersion: "siwc-policy-v1",
+            policyVersion: 2,
             requestType: "message",
             requiredAcr: "phrh",
             result: {
               algorithm: "secp256k1",
               publicAddress: "0xabc123",
+              signature: "0xsigned",
+              type: "signature",
             },
             riskLevel: "low",
             riskReasons: ["known_app"],
@@ -840,7 +1013,7 @@ test("v3 signing request helpers normalize redacted summaries and risk fields", 
               payloadHash: "hash_123",
               payloadSummary: { kind: "message", preview: "Sign in to Example" },
               policyDecision: "denied",
-              policyVersion: "siwc-policy-v1",
+              policyVersion: 2,
               requestType: "transaction",
               requiredAcr: "phrh",
               riskLevel: "high",
@@ -867,10 +1040,12 @@ test("v3 signing request helpers normalize redacted summaries and risk fields", 
           cancelledAt: "2026-05-06T12:04:00.000Z",
           chain: "evm",
           createdAt: "2026-05-06T12:00:00.000Z",
+          errorCode: "user_cancelled",
+          errorMessage: "The user cancelled this request.",
           payloadHash: "hash_123",
           payloadSummary: { kind: "message", preview: "Sign in to Example" },
           policyDecision: "denied",
-          policyVersion: "siwc-policy-v1",
+          policyVersion: 2,
           requestType: "transaction",
           requiredAcr: "phrh",
           result: null,
@@ -908,6 +1083,7 @@ test("v3 signing request helpers normalize redacted summaries and risk fields", 
 
   assert.equal(created.idempotencyKey, "signing_key_123")
   assert.equal(created.signingRequest.signingRequestId, "sr_123")
+  assert.equal(created.signingRequest.status, "pending_user_approval")
   assert.equal(created.signingRequest.result, null)
   assert.equal(calls[0]?.headers.get("Idempotency-Key"), "signing_key_123")
   assert.deepEqual(calls[0]?.body, {
@@ -922,8 +1098,14 @@ test("v3 signing request helpers normalize redacted summaries and risk fields", 
   })
 
   assert.equal(fetched.signingRequest.status, "completed")
-  assert.equal(fetched.signingRequest.result?.algorithm, "secp256k1")
+  const fetchedResult = fetched.signingRequest.result
+  assert.equal(fetchedResult?.type, "signature")
+  assert.equal(
+    isCubidSigningSignatureResult(fetchedResult) ? fetchedResult.algorithm : null,
+    "secp256k1"
+  )
   assert.equal(fetched.signingRequest.policyDecision, "allowed")
+  assert.equal(fetched.signingRequest.policyVersion, 2)
 
   assert.equal(listed.signingRequests[0]?.status, "policy_denied")
   assert.equal(listed.signingRequests[0]?.policyDecision, "denied")
@@ -934,6 +1116,7 @@ test("v3 signing request helpers normalize redacted summaries and risk fields", 
 
   assert.equal(cancelled.signingRequest.status, "cancelled")
   assert.equal(cancelled.signingRequest.policyDecision, "denied")
+  assert.equal(cancelled.signingRequest.errorCode, "user_cancelled")
   assert.equal(cancelled.signingRequest.result, null)
 
   assert.deepEqual(calls.map((call) => call.path), [
@@ -970,6 +1153,67 @@ test("v3 signing request create auto-generates idempotency keys when omitted", a
 
   assert.equal(response.idempotencyKey, idempotencyKey)
   assert.match(String(idempotencyKey), /^[0-9a-f-]{36}$/)
+})
+
+test("v3 signing request helpers normalize EVM pilot signed transaction results", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () =>
+      createJsonResponse({
+        data: {
+          chain: "evm",
+          completedAt: "2026-05-14T05:25:00.000Z",
+          createdAt: "2026-05-14T05:20:00.000Z",
+          payloadHash: "hash_txn",
+          payloadSummary: {
+            chain: "evm",
+            operation: "contract_call",
+          },
+          policyDecision: "allowed",
+          policyVersion: 4,
+          requestType: "transaction",
+          requiredAcr: "urn:cubid:acr:passkey",
+          result: {
+            algorithm: "evm_transaction",
+            chainId: 8453,
+            publicAddress: "0xabc123",
+            signedTransaction: "0xdeadbeef",
+            transactionHash: "0xhash123",
+            type: "signed_transaction",
+          },
+          riskLevel: "medium",
+          riskReasons: ["contract_allowlisted"],
+          signingRequestId: "sr_tx_123",
+          status: "completed",
+          stepUpRequired: true,
+          transactionContractAddress: "0xcontract",
+          transactionDeclaredValueUsd: 19.25,
+          transactionOperationType: "contract_call",
+          transactionRecipient: "0xrecipient",
+          updatedAt: "2026-05-14T05:25:00.000Z",
+        },
+      }),
+  })
+
+  const response = await client.getSigningRequest({
+    signingRequestId: "sr_tx_123",
+  })
+
+  const transactionResult = response.signingRequest.result
+  assert.equal(transactionResult?.type, "signed_transaction")
+  assert.equal(
+    isCubidSignedTransactionResult(transactionResult)
+      ? transactionResult.algorithm
+      : null,
+    "evm_transaction"
+  )
+  assert.equal(
+    isCubidSignedTransactionResult(transactionResult)
+      ? transactionResult.signedTransaction
+      : null,
+    "0xdeadbeef"
+  )
 })
 
 test("v3 signing request helpers reject malformed successful payloads", async () => {
@@ -1009,6 +1253,47 @@ test("v3 signing request helpers reject malformed successful payloads", async ()
       assert.ok(error instanceof CubidApiError)
       assert.equal(error.code, "MALFORMED_RESPONSE")
       assert.equal(error.endpoint, "v3/signing/requests/list.data")
+      return true
+    }
+  )
+})
+
+test("SIWC routes promote browser-safe SIWC error metadata into structured SDK errors", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () =>
+      createJsonResponse(
+        {
+          error: {
+            code: "step_up_required",
+            details: {
+              retryable: true,
+              siwcCode: "step_up_required",
+              userAction: "use_passkey",
+            },
+            message: "Passkey step-up is required before approving this signing request.",
+            requestId: "passport_123",
+          },
+        },
+        { status: 409 }
+      ),
+  })
+
+  await assert.rejects(
+    () =>
+      client.createAccountRequest({
+        chain: "evm",
+        idempotencyKey: "acct_req_step_up",
+        userId: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidSiwcError)
+      assert.ok(isCubidSiwcError(error))
+      assert.equal(error.category, "conflict")
+      assert.equal(error.siwcCode, "step_up_required")
+      assert.equal(error.retryable, true)
+      assert.equal(error.userAction, "use_passkey")
       return true
     }
   )

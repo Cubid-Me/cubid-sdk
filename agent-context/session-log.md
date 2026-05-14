@@ -748,3 +748,118 @@
   - `pnpm lint`
   - `pnpm typecheck`
   - `pnpm test:unit`
+
+## session: s51-near-package-slice
+
+- Timestamp: 2026-05-14T04:10:00Z
+- Summary: Continued `S03` by extracting `@cubid/near` as the next real chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/near` with NEAR-specific client, types, capability helpers, tests, package metadata, and README.
+  - Kept `accountId` as the primary public identity for default NEAR stamp serialization while preserving optional `address`, `networkId`, and `chainType` metadata.
+  - Wired the new package into path aliases, Vitest coverage and unit suites, the publish workflow, the package matrix, the API reference generator, and the chain-split roadmap docs.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+
+## session: s52-solana-package-slice
+
+- Timestamp: 2026-05-14T04:50:00Z
+- Summary: Continued `S03` again by extracting `@cubid/solana` as the next real chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/solana` with Solana-specific client, types, capability helpers, tests, package metadata, and README.
+  - Kept `publicKey` as the primary public identity for default Solana stamp serialization while preserving optional `address`, `cluster`, and `chainType` metadata.
+  - Wired the new package into path aliases, Vitest coverage and unit suites, the publish workflow, the package matrix, the API reference generator, and the chain-split roadmap docs.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+
+## session: s53-siwc-wallet-handoff-ingest
+
+- Timestamp: 2026-05-14T05:20:00Z
+- Summary: Ingested the new Passport SIWC wallet handoff notes and opened a dedicated SDK track for capability discovery, passkey-approved account requests, browser-safe approval helpers, and typed SIWC result/error handling.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-14-siwc09-passkey-account-creation.md`, `2026-05-14-siwc10-wallet-capabilities.md`, `2026-05-14-siwc12-evm-transaction-pilot.md`, `2026-05-14-siwc13-solana-transaction-readiness.md`, and `2026-05-14-siwc14-sdk-wallet-release-handoff.md`.
+  - Added `S12` and its implementation subitems to `agent-context/todo.md` so the account-request lifecycle, capability discovery, hosted approval helpers, typed SIWC errors, and transaction pilot guardrails are tracked as one coherent release surface.
+  - Updated package-boundary guidance so future agents keep runtime-agnostic request and capability wrappers in `@cubid/core`, keep user-approval helpers in `@cubid/browser`, and preserve the fail-closed stance for unsupported or policy-disabled transaction flows.
+- Validation:
+  - Reviewed the existing `@cubid/core` signing helpers, the current browser hosted-flow helpers, and the Passport API v3 contract docs before recording the new roadmap slice.
+
+## session: s54-siwc-wallet-helper-release-surface
+
+- Timestamp: 2026-05-14T08:40:00Z
+- Summary: Implemented the public SIWC wallet helper release surface in `@cubid/core` and `@cubid/browser`, including capability discovery, passkey-approved account requests, typed SIWC errors, typed signing results, and hosted approval descriptors.
+- Actions:
+  - Added runtime-agnostic `@cubid/core` helpers for `accounts/capabilities`, `accounts/requests/create`, and `accounts/requests/get`, along with typed public capability, policy, chain-action, and account-request response models.
+  - Added `CubidSiwcError`, `isCubidSiwcError`, typed signing-result guards, and typed normalization for signature and EVM pilot `signed_transaction` results while keeping Solana transaction signing fail-closed.
+  - Added browser-safe SIWC hosted approval and rejection request descriptors in `@cubid/browser` for account and signing requests.
+  - Updated the core and browser READMEs, the Next/Supabase integration guide, generated API reference artifacts, and package release metadata for `@cubid/core@0.1.3` and `@cubid/browser@0.1.3`.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
+## session: s55-pr11-lockfile-ci-followup
+
+- Timestamp: 2026-05-14T14:44:00Z
+- Summary: Fixed the first PR #11 CI failure by refreshing the workspace lockfile for the new chain packages before rerunning the matching local gate.
+- Actions:
+  - Reproduced the failing `validate` check from GitHub Actions and confirmed the blocker was `ERR_PNPM_OUTDATED_LOCKFILE` rather than a runtime or test regression.
+  - Refreshed `pnpm-lock.yaml` so the new `packages/near` and `packages/solana` workspace dependencies on `@cubid/core` are recorded in the committed lockfile.
+- Validation:
+  - `pnpm install --frozen-lockfile`
+  - `pnpm test:unit`
+
+## session: s56-local-install-instructions-frozen-lockfile
+
+- Timestamp: 2026-05-14T15:00:00Z
+- Summary: Updated local build and smoke instructions to use `pnpm install --frozen-lockfile` so developer validation matches CI and Vercel dependency behavior.
+- Actions:
+  - Updated the root README command guidance to recommend `pnpm install --frozen-lockfile` for local build, validation, and smoke-style package checks.
+  - Updated the testing strategy and publishing runbook so local validation, acceptance, and release verification all start from the same frozen-lockfile install step used in automated environments.
+- Validation:
+  - Reviewed the updated docs against `.github/workflows/ci.yml` and `.github/workflows/publish.yml`, both of which already use `pnpm install --frozen-lockfile`.
+
+## session: s57-pr11-api-reference-drift-followup
+
+- Timestamp: 2026-05-14T15:12:00Z
+- Summary: Fixed the next PR #11 CI failure by regenerating the drifted API reference artifact for `@cubid/core`.
+- Actions:
+  - Reproduced the failing `pnpm docs:api:check` gate from GitHub Actions and confirmed the only drifted file was `docs/reference/api/core.json`.
+  - Regenerated the committed API reference artifact so the published `@cubid/core` helper docs now include the new typed signing-result guard references in the machine-readable output.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `git diff --check`
+
+## session: s58-pre-yeet-validation-script
+
+- Timestamp: 2026-05-14T15:25:00Z
+- Summary: Added a single repo-level pre-yeet validation command so the full CI-like gate is easier to run locally before publishing a PR.
+- Actions:
+  - Added `pnpm validate:yeet` at the repo root to run the full release-handoff sequence: frozen-lockfile install, lint, typecheck, unit tests, build, acceptance tests, coverage, API-reference drift check, and core package dry-runs.
+  - Updated the root README and testing strategy so human guidance now points to the single script first, while still documenting the expanded step-by-step sequence underneath it.
+- Validation:
+  - `pnpm validate:yeet`
+
+## session: s59-pr11-review-followup
+
+- Timestamp: 2026-05-14T17:55:00Z
+- Summary: Addressed the open PR #11 Copilot and Codex review threads by hardening hosted SIWC descriptors, removing redundant verified-persistence guards, and documenting the numeric `policyVersion` contract explicitly.
+- Actions:
+  - Added runtime `decision` validation and `credentials: "include"` to the hosted SIWC browser descriptors, plus tests covering both the new descriptor shape and invalid decisions.
+  - Removed the duplicated precondition guards from the NEAR and Solana clients so persistence context is only required when a verified result is actually being written, and added tests for the unverified path.
+  - Updated the browser and core docs to call out the credentialed hosted SIWC fetch requirement and the now-explicit numeric `policyVersion` normalization contract, then regenerated the machine-readable API reference artifacts.
+- Validation:
+  - `pnpm validate:yeet`
