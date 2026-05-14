@@ -363,6 +363,28 @@ function getOptionalNumber(
   return value;
 }
 
+function getOptionalRecord(
+  record: Record<string, unknown>,
+  fieldName: string,
+  context: string
+): Record<string, unknown> | null {
+  const value = record[fieldName];
+
+  if (typeof value === "undefined" || value === null) {
+    return null;
+  }
+
+  if (typeof value !== "object" || Array.isArray(value)) {
+    throw new CubidAuthError(`Cubid auth expected ${context}.${fieldName} to be an object.`, {
+      category: "parse",
+      code: "invalid_field",
+      raw: record,
+    });
+  }
+
+  return value as Record<string, unknown>;
+}
+
 function getFetch(fetchImpl?: CubidAuthFetch): CubidAuthFetch {
   if (fetchImpl) {
     return fetchImpl;
@@ -1235,9 +1257,11 @@ export function parseCubidAuthSession(serialized: string): CubidAuthSession {
       clientId: getRequiredString(payload, "clientId", "stored auth session"),
       expiresAt: getOptionalNumber(payload, "expiresAt", "stored auth session"),
       idToken: getOptionalString(payload, "idToken"),
-      idTokenClaims: payload.idTokenClaims && typeof payload.idTokenClaims === "object"
-        ? (payload.idTokenClaims as CubidIdTokenClaims)
-        : null,
+      idTokenClaims: getOptionalRecord(
+        payload,
+        "idTokenClaims",
+        "stored auth session"
+      ) as CubidIdTokenClaims | null,
       issuedAt:
         getOptionalNumber(payload, "issuedAt", "stored auth session") ?? Date.now(),
       issuer: getRequiredString(payload, "issuer", "stored auth session"),
@@ -1249,10 +1273,11 @@ export function parseCubidAuthSession(serialized: string): CubidAuthSession {
       ),
       subject: getOptionalString(payload, "subject"),
       tokenType: getRequiredString(payload, "tokenType", "stored auth session"),
-      userInfo:
-        payload.userInfo && typeof payload.userInfo === "object"
-          ? (payload.userInfo as CubidUserInfo)
-          : null,
+      userInfo: getOptionalRecord(
+        payload,
+        "userInfo",
+        "stored auth session"
+      ) as CubidUserInfo | null,
     };
   } catch (cause) {
     if (cause instanceof CubidAuthError) {

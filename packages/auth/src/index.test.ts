@@ -438,6 +438,16 @@ describe("@cubid/auth", () => {
     expect(() => parseCubidAuthSession(serialized)).toThrow(CubidAuthError);
   });
 
+  it("rejects stored sessions with array-shaped nested objects", () => {
+    const serialized =
+      '{"accessToken":"access-token-123","clientId":"clearpass-dashboard",' +
+      '"expiresAt":null,"idTokenClaims":[],"issuedAt":123,' +
+      '"issuer":"https://id.cubid.me","scope":["openid","email","profile"],' +
+      '"tokenType":"Bearer","userInfo":[]}';
+
+    expect(() => parseCubidAuthSession(serialized)).toThrow(CubidAuthError);
+  });
+
   it("falls back to Buffer when base64 globals are unavailable", async () => {
     vi.stubGlobal("atob", undefined);
     vi.stubGlobal("btoa", undefined);
