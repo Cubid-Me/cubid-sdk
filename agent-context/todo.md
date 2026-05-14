@@ -794,12 +794,12 @@ surface.
 
 ### S12. Add SIWC wallet request, capability, and approval helper surfaces
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-14T05:20:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-14T08:40:00Z
 - Feature branch: `codex/s03-chain-split-followup`
 - Head: `e1585a28` at implementation start
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc09-passkey-account-creation.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc10-wallet-capabilities.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc12-evm-transaction-pilot.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc13-solana-transaction-readiness.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md`
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc09-passkey-account-creation.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc10-wallet-capabilities.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc12-evm-transaction-pilot.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc13-solana-transaction-readiness.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md`, session: s53-siwc-wallet-handoff-ingest, session: s54-siwc-wallet-helper-release-surface
 
 Wrap the new SIWC wallet helper contract in the public SDK so SmarTrust and
 other dapps can stay fail-closed while using passkey-approved custody and
@@ -810,12 +810,12 @@ browser-side privileged approval material from the public SDK.
 
 ### S12.1 Add wallet capability discovery helpers in `@cubid/core`
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
+- Status: Completed
+- Timestamp started: 2026-05-14T05:35:00Z
+- Timestamp completed: 2026-05-14T08:40:00Z
 - Feature branch: `codex/s03-chain-split-followup`
-- Head: `e1585a28` at roadmap intake
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc10-wallet-capabilities.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc12-evm-transaction-pilot.md`
+- Head: `c11a2cbe` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc10-wallet-capabilities.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc12-evm-transaction-pilot.md`, session: s54-siwc-wallet-helper-release-surface
 
 Add runtime-agnostic helpers for `POST /api/v3/accounts/capabilities`,
 including optional app-scoped account lookup by `dapp_user_uuid`, per-chain
@@ -824,12 +824,12 @@ fields when SIWC policy is missing or disabled.
 
 ### S12.2 Add passkey-approved account-request helpers in `@cubid/core`
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
+- Status: Completed
+- Timestamp started: 2026-05-14T05:35:00Z
+- Timestamp completed: 2026-05-14T08:40:00Z
 - Feature branch: `codex/s03-chain-split-followup`
-- Head: `e1585a28` at roadmap intake
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc09-passkey-account-creation.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md`
+- Head: `c11a2cbe` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc09-passkey-account-creation.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md`, session: s54-siwc-wallet-helper-release-surface
 
 Add `POST /api/v3/accounts/requests/create` and
 `POST /api/v3/accounts/requests/get` wrappers with required idempotency on
@@ -839,12 +839,12 @@ account metadata only after approval.
 
 ### S12.3 Add browser-safe Passport approval helpers in `@cubid/browser`
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
+- Status: Completed
+- Timestamp started: 2026-05-14T05:35:00Z
+- Timestamp completed: 2026-05-14T08:40:00Z
 - Feature branch: `codex/s03-chain-split-followup`
-- Head: `e1585a28` at roadmap intake
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc09-passkey-account-creation.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md`
+- Head: `c11a2cbe` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc09-passkey-account-creation.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md`, session: s54-siwc-wallet-helper-release-surface
 
 Add browser-safe hosted approval and rejection helpers for Passport SIWC
 account and signing requests. These helpers should stay in the headless browser
@@ -854,12 +854,12 @@ passkey step-up.
 
 ### S12.4 Normalize SIWC error metadata and typed signing results
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
+- Status: Completed
+- Timestamp started: 2026-05-14T05:35:00Z
+- Timestamp completed: 2026-05-14T08:40:00Z
 - Feature branch: `codex/s03-chain-split-followup`
-- Head: `e1585a28` at roadmap intake
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc12-evm-transaction-pilot.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc13-solana-transaction-readiness.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md`
+- Head: `c11a2cbe` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc12-evm-transaction-pilot.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc13-solana-transaction-readiness.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md`, session: s54-siwc-wallet-helper-release-surface
 
 When Passport returns browser-safe SIWC error metadata, expose it through
 structured SDK errors using `details.siwcCode`, `details.retryable`, and
@@ -869,12 +869,12 @@ pilot result shape.
 
 ### S12.5 Keep transaction signing capability-gated and chain-specific
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
+- Status: Completed
+- Timestamp started: 2026-05-14T05:35:00Z
+- Timestamp completed: 2026-05-14T08:40:00Z
 - Feature branch: `codex/s03-chain-split-followup`
-- Head: `e1585a28` at roadmap intake
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc12-evm-transaction-pilot.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc13-solana-transaction-readiness.md`
+- Head: `c11a2cbe` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-siwc12-evm-transaction-pilot.md`, `agent-context/messages-from-cubid-passport/2026-05-14-siwc13-solana-transaction-readiness.md`, session: s54-siwc-wallet-helper-release-surface
 
 Keep transaction signing explicitly fail-closed unless capability discovery and
 policy metadata say otherwise. The SDK may expose the limited EVM Admin-policy

@@ -791,3 +791,21 @@
   - Updated package-boundary guidance so future agents keep runtime-agnostic request and capability wrappers in `@cubid/core`, keep user-approval helpers in `@cubid/browser`, and preserve the fail-closed stance for unsupported or policy-disabled transaction flows.
 - Validation:
   - Reviewed the existing `@cubid/core` signing helpers, the current browser hosted-flow helpers, and the Passport API v3 contract docs before recording the new roadmap slice.
+
+## session: s54-siwc-wallet-helper-release-surface
+
+- Timestamp: 2026-05-14T08:40:00Z
+- Summary: Implemented the public SIWC wallet helper release surface in `@cubid/core` and `@cubid/browser`, including capability discovery, passkey-approved account requests, typed SIWC errors, typed signing results, and hosted approval descriptors.
+- Actions:
+  - Added runtime-agnostic `@cubid/core` helpers for `accounts/capabilities`, `accounts/requests/create`, and `accounts/requests/get`, along with typed public capability, policy, chain-action, and account-request response models.
+  - Added `CubidSiwcError`, `isCubidSiwcError`, typed signing-result guards, and typed normalization for signature and EVM pilot `signed_transaction` results while keeping Solana transaction signing fail-closed.
+  - Added browser-safe SIWC hosted approval and rejection request descriptors in `@cubid/browser` for account and signing requests.
+  - Updated the core and browser READMEs, the Next/Supabase integration guide, generated API reference artifacts, and package release metadata for `@cubid/core@0.1.3` and `@cubid/browser@0.1.3`.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`

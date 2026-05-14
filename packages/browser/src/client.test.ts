@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { buildClearPassVerifyUrl, buildHostedVerificationUrl } from "./hosted";
+import {
+  buildClearPassVerifyUrl,
+  buildHostedSiwcAccountRequestAction,
+  buildHostedSiwcSigningRequestAction,
+  buildHostedVerificationUrl
+} from "./hosted";
 import { createCubidWeb2Client } from "./client";
 
 function createApiClientStub() {
@@ -206,5 +211,31 @@ describe("@cubid/browser", () => {
         userId: "user-42"
       })
     ).toBe("https://passport.cubid.me/verify/clearpass?uid=user-42&page_id=44");
+  });
+
+  it("builds hosted SIWC approval and rejection request descriptors", () => {
+    expect(
+      buildHostedSiwcAccountRequestAction({
+        accountRequestId: "siwc_acct_req_123",
+        decision: "approve"
+      })
+    ).toEqual({
+      body: JSON.stringify({ accountRequestId: "siwc_acct_req_123" }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+      url: "https://passport.cubid.me/api/siwc/accounts/requests/approve"
+    });
+
+    expect(
+      buildHostedSiwcSigningRequestAction({
+        decision: "reject",
+        signingRequestId: "siwc_req_456"
+      })
+    ).toEqual({
+      body: JSON.stringify({ signingRequestId: "siwc_req_456" }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+      url: "https://passport.cubid.me/api/siwc/signing/requests/reject"
+    });
   });
 });

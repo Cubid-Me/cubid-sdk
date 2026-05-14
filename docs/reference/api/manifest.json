@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "@cubid/core",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "description": "Runtime-agnostic Cubid core client for server-side integrations.",
       "registry": "npm + jsr",
       "referencePath": "core.json"
@@ -23,8 +23,8 @@
     },
     {
       "name": "@cubid/browser",
-      "version": "0.1.2",
-      "description": "Headless browser helpers for Cubid OTP, hosted verification, and allow flows.",
+      "version": "0.1.3",
+      "description": "Headless browser helpers for Cubid OTP, hosted verification, approval, and allow flows.",
       "registry": "npm-only",
       "referencePath": "browser.json"
     },

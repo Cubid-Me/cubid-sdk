@@ -1,7 +1,7 @@
 {
   "name": "@cubid/browser",
-  "version": "0.1.2",
-  "description": "Headless browser helpers for Cubid OTP, hosted verification, and allow flows.",
+  "version": "0.1.3",
+  "description": "Headless browser helpers for Cubid OTP, hosted verification, approval, and allow flows.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

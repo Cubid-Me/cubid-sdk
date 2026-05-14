@@ -32,6 +32,27 @@ export interface ClearPassVerifyUrlRequest {
   userId: string;
 }
 
+export type HostedSiwcDecision = "approve" | "reject";
+
+export interface HostedSiwcRequestDescriptor {
+  body: string;
+  headers: Readonly<Record<string, string>>;
+  method: "POST";
+  url: string;
+}
+
+export interface HostedSiwcAccountRequestActionRequest {
+  accountRequestId: string;
+  decision: HostedSiwcDecision;
+  passportOrigin?: string;
+}
+
+export interface HostedSiwcSigningRequestActionRequest {
+  decision: HostedSiwcDecision;
+  passportOrigin?: string;
+  signingRequestId: string;
+}
+
 export interface ResolvedCubidWeb2ClientOptions {
   allowPath: "/allow" | "/widget-allow";
   passportOrigin: string;

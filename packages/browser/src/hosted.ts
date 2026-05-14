@@ -1,4 +1,10 @@
-import type { ClearPassVerifyUrlRequest, HostedVerificationUrlRequest } from "./types";
+import type {
+  ClearPassVerifyUrlRequest,
+  HostedSiwcAccountRequestActionRequest,
+  HostedSiwcRequestDescriptor,
+  HostedSiwcSigningRequestActionRequest,
+  HostedVerificationUrlRequest
+} from "./types";
 
 const DEFAULT_PASSPORT_ORIGIN = "https://passport.cubid.me";
 
@@ -58,4 +64,45 @@ export function buildClearPassVerifyUrl(request: ClearPassVerifyUrlRequest): str
     stampToRender: "clearpass_verify",
     userId: request.userId
   });
+}
+
+function buildHostedSiwcRequestDescriptor(
+  passportOrigin: string,
+  pathname: string,
+  body: Record<string, string>
+): HostedSiwcRequestDescriptor {
+  return {
+    body: JSON.stringify(body),
+    headers: {
+      "content-type": "application/json"
+    },
+    method: "POST",
+    url: new URL(pathname, passportOrigin).toString()
+  };
+}
+
+export function buildHostedSiwcAccountRequestAction(
+  request: HostedSiwcAccountRequestActionRequest
+): HostedSiwcRequestDescriptor {
+  const passportOrigin = normalizePassportOrigin(request.passportOrigin);
+  const accountRequestId = assertNonEmpty(request.accountRequestId, "accountRequestId");
+
+  return buildHostedSiwcRequestDescriptor(
+    passportOrigin,
+    `/api/siwc/accounts/requests/${request.decision}`,
+    { accountRequestId }
+  );
+}
+
+export function buildHostedSiwcSigningRequestAction(
+  request: HostedSiwcSigningRequestActionRequest
+): HostedSiwcRequestDescriptor {
+  const passportOrigin = normalizePassportOrigin(request.passportOrigin);
+  const signingRequestId = assertNonEmpty(request.signingRequestId, "signingRequestId");
+
+  return buildHostedSiwcRequestDescriptor(
+    passportOrigin,
+    `/api/siwc/signing/requests/${request.decision}`,
+    { signingRequestId }
+  );
 }

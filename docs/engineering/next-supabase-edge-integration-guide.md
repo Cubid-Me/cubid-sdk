@@ -194,6 +194,23 @@ The custody helpers return public metadata only. They never expose raw private
 keys or custody secrets, and Sui public addresses are normalized to lowercase
 `0x...` strings on the SDK surface.
 
+The wallet helper surface now also includes:
+
+- `fetchWalletCapabilities({ userId? })`
+- `createAccountRequest({ userId, chain, label?, idempotencyKey? })`
+- `getAccountRequest({ accountRequestId })`
+
+Use `fetchWalletCapabilities` before rendering passkey-approved creation,
+message signing, typed-data signing, or transaction actions. The response is
+app-scoped and fail-closed: missing or disabled SIWC policy keeps custody and
+signing features off by default.
+
+`createAccountRequest` and `getAccountRequest` are the public helpers for
+passkey-approved wallet creation. They expose stable statuses like
+`pending_user_approval`, `policy_denied`, `approved`, `rejected`, `expired`,
+and `failed`, but they never expose private keys, key shares, ciphertext, or
+raw Cubid identity.
+
 The signing-request helpers also stay redacted by default. They normalize only
 safe summary metadata such as `signingRequestId`, `status`, `chain`,
 `requestType`, `payloadHash`, `payloadSummary`, `policyVersion`,
@@ -212,10 +229,27 @@ Passport-hosted approval and rejection flows remain outside `@cubid/core`.
 These server-side helpers only wrap the dapp-facing signing-request lifecycle
 routes.
 
-Transaction signing also remains fail-closed here. A transaction-oriented
-request summary or `policyDecision: "denied"` is still just policy metadata;
-it does not imply that transaction signatures are enabled for public SDK
-consumers.
+Completed signing requests now normalize typed safe result shapes for message
+signatures, EVM typed-data signatures, and the limited EVM pilot
+`signed_transaction` result contract. That result still does not imply browser
+private-key handling or Cubid-side broadcast.
+
+Transaction signing remains capability-gated and conservative here. The
+current public stance is:
+
+- EVM transaction signing is a limited Admin-policy pilot
+- Cubid does not broadcast the signed EVM pilot transaction
+- Solana transaction signing remains disabled, even if readiness summaries are
+  present
+
+A transaction-oriented request summary or `policyDecision: "denied"` is still
+just policy metadata unless `fetchWalletCapabilities` explicitly reports the
+relevant action as enabled.
+
+Wallet and signing routes may also surface Passport's browser-safe SIWC error
+metadata through `CubidSiwcError`. When present, use `siwcCode`, `retryable`,
+and `userAction` before falling back to generic API error codes for UI
+messaging or retry behavior.
 
 The secret-write helper is also intentionally one-way from the public SDK's
 perspective. Passport does not expose a public decrypt/read endpoint for stored

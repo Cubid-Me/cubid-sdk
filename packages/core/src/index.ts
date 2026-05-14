@@ -50,6 +50,67 @@ export class CubidApiError extends Error {
   }
 }
 
+export const CUBID_SIWC_USER_ACTIONS = [
+  "contact_support",
+  "none",
+  "refresh",
+  "retry",
+  "switch_user",
+  "use_passkey",
+] as const
+
+export const CUBID_SIWC_ERROR_CODES = [
+  "contract_allowlist_missing",
+  "contract_not_allowlisted",
+  "invalid_state",
+  "not_found",
+  "passkey_unavailable",
+  "policy_denied",
+  "provider_unavailable",
+  "rate_limit_exceeded",
+  "request_expired",
+  "step_up_required",
+  "step_up_stale",
+  "transaction_chain_risk_unsupported",
+  "transaction_contract_call_required",
+  "transaction_evm_chain_id_missing",
+  "transaction_evm_chain_id_not_pilot_enabled",
+  "transaction_signing_disabled",
+  "transaction_value_limit_exceeded",
+  "transaction_value_usd_not_declared",
+  "unsupported_action",
+  "unsupported_chain",
+  "user_cancelled",
+  "wrong_user",
+] as const
+
+export type CubidSiwcUserAction = (typeof CUBID_SIWC_USER_ACTIONS)[number] | string
+
+export type CubidSiwcErrorCode = (typeof CUBID_SIWC_ERROR_CODES)[number] | string
+
+export type CubidSiwcErrorInput = CubidApiErrorInput & {
+  retryable: boolean | null
+  siwcCode: CubidSiwcErrorCode | null
+  userAction: CubidSiwcUserAction | null
+}
+
+export class CubidSiwcError extends CubidApiError {
+  readonly retryable: boolean | null
+  readonly siwcCode: CubidSiwcErrorCode | null
+  readonly userAction: CubidSiwcUserAction | null
+
+  constructor(input: CubidSiwcErrorInput) {
+    super(input)
+    this.name = "CubidSiwcError"
+    this.retryable = input.retryable
+    this.siwcCode = input.siwcCode
+    this.userAction = input.userAction
+  }
+}
+
+export const isCubidSiwcError = (error: unknown): error is CubidSiwcError =>
+  error instanceof CubidSiwcError
+
 export type CubidApiClientOptions = {
   /**
    * Passport/Cubid API origin, for example `https://passport.cubid.me`.
@@ -407,6 +468,108 @@ export type CubidListAccountsResponse = {
   raw: Record<string, unknown>
 }
 
+export type CubidWalletPolicyStatus = "enabled" | "disabled" | "missing" | string
+
+export type CubidWalletAccountCreationModes = {
+  directGenerateEnabled: boolean
+  passkeyApprovedRequestEnabled: boolean
+}
+
+export type CubidWalletPolicy = {
+  allowedChains: Array<CubidCustodyChain | string>
+  allowedRequestTypes: CubidSigningRequestType[]
+  custodyEnabled: boolean
+  policyStatus: CubidWalletPolicyStatus | null
+  policyVersion: number
+  raw: Record<string, unknown> | null
+  requiredAcr: string | null
+  sandboxMode: boolean
+  signingEnabled: boolean
+}
+
+export type CubidWalletChainActions = {
+  accountLookup: boolean
+  directGeneration: boolean
+  messageSigning: boolean
+  passkeyApprovedCreation: boolean
+  raw: Record<string, unknown>
+  transactionSigning: boolean
+  transactionSigningStatus: string | null
+  typedDataSigning: boolean
+}
+
+export type CubidWalletCapabilities = {
+  accountCreationModes: CubidWalletAccountCreationModes
+  accounts: CubidCustodyAccount[]
+  dappId: string | null
+  dappUserUuid: string | null
+  policy: CubidWalletPolicy
+  raw: Record<string, unknown>
+  supportedChains: Array<CubidCustodyChain | string>
+  walletActionsByChain: Record<string, CubidWalletChainActions>
+}
+
+export type CubidFetchWalletCapabilitiesInput = {
+  userId?: string
+}
+
+export type CubidFetchWalletCapabilitiesResponse = {
+  capabilities: CubidWalletCapabilities
+  raw: Record<string, unknown>
+}
+
+export type CubidAccountRequestStatus =
+  | "approved"
+  | "expired"
+  | "failed"
+  | "pending_user_approval"
+  | "policy_denied"
+  | "rejected"
+  | string
+
+export type CubidAccountRequestSummary = {
+  accountId: string | null
+  accountRequestId: string | null
+  approvedAt: string | null
+  chain: CubidCustodyChain | string | null
+  createdAt: string | null
+  dappId: string | null
+  dappUserAccountId: string | null
+  dappUserUuid: string | null
+  errorCode: string | null
+  errorMessage: string | null
+  expiresAt: string | null
+  label: string | null
+  policyVersion: number | null
+  publicAddress: string | null
+  raw: Record<string, unknown>
+  rejectedAt: string | null
+  requiredAcr: string | null
+  status: CubidAccountRequestStatus | null
+  updatedAt: string | null
+}
+
+export type CubidCreateAccountRequestInput = CubidIdempotentRequestOptions & {
+  chain: CubidCustodyChain
+  label?: string
+  userId: string
+}
+
+export type CubidCreateAccountRequestResponse = {
+  accountRequest: CubidAccountRequestSummary
+  idempotencyKey: string
+  raw: Record<string, unknown>
+}
+
+export type CubidGetAccountRequestInput = {
+  accountRequestId: string
+}
+
+export type CubidGetAccountRequestResponse = {
+  accountRequest: CubidAccountRequestSummary
+  raw: Record<string, unknown>
+}
+
 export type CubidSigningRequestType =
   | "message"
   | "typed_data"
@@ -414,11 +577,13 @@ export type CubidSigningRequestType =
   | string
 
 export type CubidSigningRequestStatus =
+  | "pending_user_approval"
   | "pending"
   | "approved"
   | "rejected"
   | "cancelled"
   | "completed"
+  | "expired"
   | "failed"
   | "policy_denied"
   | "step_up_failed"
@@ -429,23 +594,72 @@ export type CubidSigningRequestRiskLevel = "low" | "medium" | "high" | null
 
 export type CubidSigningRequestPolicyDecision = "allowed" | "denied" | null
 
+export type CubidSigningSignatureResult = {
+  algorithm: string | null
+  publicAddress: string | null
+  raw: Record<string, unknown>
+  signature: string
+  type: "signature"
+}
+
+export type CubidSignedTransactionResult = {
+  algorithm: string | null
+  chainId: number | null
+  publicAddress: string | null
+  raw: Record<string, unknown>
+  signedTransaction: string
+  transactionHash: string | null
+  type: "signed_transaction"
+}
+
+export type CubidUnknownSigningResult = {
+  raw: Record<string, unknown>
+  type: string | null
+}
+
+export type CubidSigningRequestResult =
+  | CubidSigningSignatureResult
+  | CubidSignedTransactionResult
+  | CubidUnknownSigningResult
+
+export const isCubidSigningSignatureResult = (
+  value: CubidSigningRequestResult | null | undefined
+): value is CubidSigningSignatureResult =>
+  value !== null &&
+  value !== undefined &&
+  value.type === "signature" &&
+  "signature" in value
+
+export const isCubidSignedTransactionResult = (
+  value: CubidSigningRequestResult | null | undefined
+): value is CubidSignedTransactionResult =>
+  value !== null &&
+  value !== undefined &&
+  value.type === "signed_transaction" &&
+  "signedTransaction" in value
+
 /**
  * Public signing-request summaries stay redacted by design. They must not
  * expose raw payloads, raw Cubid internal user ids, private keys, encrypted
  * key material, or any transaction-signing enablement signal.
  */
 export type CubidSigningRequestSummary = {
+  approvedAt?: string | null
   cancelledAt?: string | null
   chain: CubidCustodyChain | string | null
   completedAt?: string | null
   createdAt: string | null
+  errorCode: string | null
+  errorMessage: string | null
+  expiresAt?: string | null
   payloadHash: string | null
   payloadSummary: Record<string, unknown> | null
   policyDecision: CubidSigningRequestPolicyDecision
-  policyVersion: string | null
+  policyVersion: number | null
   raw: Record<string, unknown>
+  rejectedAt?: string | null
   requiredAcr: string | null
-  result: Record<string, unknown> | null
+  result: CubidSigningRequestResult | null
   riskLevel: CubidSigningRequestRiskLevel
   riskReasons: string[]
   signingRequestId: string | null
@@ -484,6 +698,7 @@ export type CubidGetSigningRequestResponse = {
 }
 
 export type CubidListSigningRequestsInput = {
+  limit?: number
   userAccountId?: string
   userId: string
 }
@@ -613,8 +828,25 @@ export type GenerateAccountInput = CubidGenerateAccountInput
 export type GenerateAccountResponse = CubidGenerateAccountResponse
 export type ListAccountsInput = CubidListAccountsInput
 export type ListAccountsResponse = CubidListAccountsResponse
+export type WalletPolicyStatus = CubidWalletPolicyStatus
+export type WalletAccountCreationModes = CubidWalletAccountCreationModes
+export type WalletPolicy = CubidWalletPolicy
+export type WalletChainActions = CubidWalletChainActions
+export type WalletCapabilities = CubidWalletCapabilities
+export type FetchWalletCapabilitiesInput = CubidFetchWalletCapabilitiesInput
+export type FetchWalletCapabilitiesResponse = CubidFetchWalletCapabilitiesResponse
+export type AccountRequestStatus = CubidAccountRequestStatus
+export type AccountRequestSummary = CubidAccountRequestSummary
+export type CreateAccountRequestInput = CubidCreateAccountRequestInput
+export type CreateAccountRequestResponse = CubidCreateAccountRequestResponse
+export type GetAccountRequestInput = CubidGetAccountRequestInput
+export type GetAccountRequestResponse = CubidGetAccountRequestResponse
 export type SigningRequestType = CubidSigningRequestType
 export type SigningRequestStatus = CubidSigningRequestStatus
+export type SigningSignatureResult = CubidSigningSignatureResult
+export type SignedTransactionResult = CubidSignedTransactionResult
+export type UnknownSigningResult = CubidUnknownSigningResult
+export type SigningRequestResult = CubidSigningRequestResult
 export type SigningRequestSummary = CubidSigningRequestSummary
 export type CreateSigningRequestInput = CubidCreateSigningRequestInput
 export type CreateSigningRequestResponse = CubidCreateSigningRequestResponse
@@ -629,14 +861,23 @@ export type WebhookLegacyEventType = CubidWebhookLegacyEventType
 export type WebhookEvent<TData = unknown> = CubidWebhookEvent<TData>
 export type VerifyWebhookSignatureInput = CubidVerifyWebhookSignatureInput
 export type WebhookVerificationResult = CubidWebhookVerificationResult
+export type SiwcUserAction = CubidSiwcUserAction
+export type SiwcErrorCode = CubidSiwcErrorCode
+export type SiwcErrorInput = CubidSiwcErrorInput
 
 export type CubidApiClient = {
   addStamp(input: CubidAddStampInput): Promise<CubidAddStampResponse>
   config: Readonly<CubidClientConfig>
   createUser(input: CubidCreateUserInput): Promise<CubidCreateUserResponse>
+  createAccountRequest(
+    input: CubidCreateAccountRequestInput
+  ): Promise<CubidCreateAccountRequestResponse>
   ensureUserByEmail(
     input: CubidEnsureUserByEmailInput
   ): Promise<CubidEnsureUserByEmailResponse>
+  fetchWalletCapabilities(
+    input?: CubidFetchWalletCapabilitiesInput
+  ): Promise<CubidFetchWalletCapabilitiesResponse>
   fetchApproxLocation(
     input: CubidFetchIdentityInput
   ): Promise<CubidFetchApproxLocationResponse>
@@ -657,6 +898,9 @@ export type CubidApiClient = {
   createSigningRequest(
     input: CubidCreateSigningRequestInput
   ): Promise<CubidCreateSigningRequestResponse>
+  getAccountRequest(
+    input: CubidGetAccountRequestInput
+  ): Promise<CubidGetAccountRequestResponse>
   getSigningRequest(
     input: CubidGetSigningRequestInput
   ): Promise<CubidGetSigningRequestResponse>
@@ -777,6 +1021,23 @@ const assertNonEmptyString = (
   return normalized
 }
 
+const assertPositiveInteger = (
+  value: number,
+  field: string,
+  endpoint: string
+): number => {
+  if (!Number.isInteger(value) || value <= 0) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_INPUT",
+      endpoint,
+      message: `${field} must be a positive integer.`,
+    })
+  }
+
+  return value
+}
+
 const categoryForStatus = (status: number): CubidApiErrorCategory => {
   if (status === 401 || status === 403) {
     return "auth"
@@ -807,6 +1068,19 @@ const asString = (value: unknown): string | null =>
 
 const asNumber = (value: unknown): number | undefined =>
   typeof value === "number" ? value : undefined
+
+const asNumberLike = (value: unknown): number | null => {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : null
+  }
+
+  return null
+}
 
 const asBoolean = (value: unknown): boolean | undefined =>
   typeof value === "boolean" ? value : undefined
@@ -905,6 +1179,66 @@ const messageFromPayload = (payload: unknown, fallback: string): string => {
   return fallback
 }
 
+const asSiwcUserAction = (value: unknown): CubidSiwcUserAction | null =>
+  typeof value === "string" && value.trim().length > 0 ? value : null
+
+const asSiwcCode = (value: unknown): CubidSiwcErrorCode | null =>
+  typeof value === "string" && value.trim().length > 0 ? value : null
+
+const extractSiwcErrorMetadata = (
+  payload: unknown
+):
+  | {
+      retryable: boolean | null
+      siwcCode: CubidSiwcErrorCode | null
+      userAction: CubidSiwcUserAction | null
+    }
+  | null => {
+  if (!isRecord(payload)) {
+    return null
+  }
+
+  const error = isRecord(payload.error) ? payload.error : null
+  const details = error && isRecord(error.details)
+    ? error.details
+    : isRecord(payload.details)
+      ? payload.details
+      : null
+
+  if (!details) {
+    return null
+  }
+
+  const siwcCode = asSiwcCode(details.siwcCode)
+  const retryable = asBoolean(details.retryable) ?? null
+  const userAction = asSiwcUserAction(details.userAction)
+
+  if (siwcCode === null && retryable === null && userAction === null) {
+    return null
+  }
+
+  return {
+    retryable,
+    siwcCode,
+    userAction,
+  }
+}
+
+const createApiError = (input: CubidApiErrorInput): CubidApiError => {
+  const siwc = extractSiwcErrorMetadata(input.details)
+
+  if (siwc) {
+    return new CubidSiwcError({
+      ...input,
+      retryable: siwc.retryable,
+      siwcCode: siwc.siwcCode,
+      userAction: siwc.userAction,
+    })
+  }
+
+  return new CubidApiError(input)
+}
+
 const safeJson = async (response: Response): Promise<unknown> => {
   const text = await response.text()
   if (!text) {
@@ -948,7 +1282,7 @@ const makeRequest = async <Result>(
       method: "POST",
     })
   } catch (error) {
-    throw new CubidApiError({
+    throw createApiError({
       category: "upstream",
       code: "NETWORK_ERROR",
       details: error,
@@ -961,7 +1295,7 @@ const makeRequest = async <Result>(
   const payload = await safeJson(response)
 
   if (!response.ok) {
-    throw new CubidApiError({
+    throw createApiError({
       category: categoryForStatus(response.status),
       code: codeFromPayload(payload),
       details: payload,
@@ -1507,6 +1841,206 @@ const normalizeListAccounts = (
   }
 }
 
+const normalizeWalletChainActions = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidWalletChainActions => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+
+  return {
+    accountLookup: asBoolean(record.accountLookup) ?? false,
+    directGeneration: asBoolean(record.directGeneration) ?? false,
+    messageSigning: asBoolean(record.messageSigning) ?? false,
+    passkeyApprovedCreation: asBoolean(record.passkeyApprovedCreation) ?? false,
+    raw: record,
+    transactionSigning: asBoolean(record.transactionSigning) ?? false,
+    transactionSigningStatus:
+      asString(record.transactionSigningStatus) ??
+      asString(record.transaction_signing_status),
+    typedDataSigning: asBoolean(record.typedDataSigning) ?? false,
+  }
+}
+
+const normalizeWalletPolicy = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidWalletPolicy => {
+  if (!isRecord(payload)) {
+    return {
+      allowedChains: [],
+      allowedRequestTypes: [],
+      custodyEnabled: false,
+      policyStatus: "missing",
+      policyVersion: 0,
+      raw: null,
+      requiredAcr: null,
+      sandboxMode: true,
+      signingEnabled: false,
+    }
+  }
+
+  const record = assertRecord(payload, endpoint, requestId, status)
+
+  return {
+    allowedChains: asStringArray(record.allowedChains ?? record.allowed_chains),
+    allowedRequestTypes: asStringArray(
+      record.allowedRequestTypes ?? record.allowed_request_types
+    ),
+    custodyEnabled: asBoolean(record.custodyEnabled ?? record.custody_enabled) ?? false,
+    policyStatus:
+      asString(record.policyStatus ?? record.policy_status) ?? "missing",
+    policyVersion:
+      asNumberLike(record.policyVersion ?? record.policy_version) ?? 0,
+    raw: record,
+    requiredAcr: asString(record.requiredAcr ?? record.required_acr),
+    sandboxMode: asBoolean(record.sandboxMode ?? record.sandbox_mode) ?? true,
+    signingEnabled: asBoolean(record.signingEnabled ?? record.signing_enabled) ?? false,
+  }
+}
+
+const normalizeWalletCapabilities = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidFetchWalletCapabilitiesResponse => {
+  const record = assertRecord(payload, "v3/accounts/capabilities", requestId, status)
+  const data = assertRecord(
+    record.data ?? record,
+    "v3/accounts/capabilities.data",
+    requestId,
+    status
+  )
+  const walletActionsByChainRecord =
+    isRecord(data.walletActionsByChain) ? data.walletActionsByChain : {}
+  const accounts = Array.isArray(data.accounts) ? data.accounts : []
+
+  return {
+    capabilities: {
+      accountCreationModes: {
+        directGenerateEnabled:
+          asBoolean(
+            isRecord(data.accountCreationModes)
+              ? data.accountCreationModes.directGenerateEnabled
+              : undefined
+          ) ?? false,
+        passkeyApprovedRequestEnabled:
+          asBoolean(
+            isRecord(data.accountCreationModes)
+              ? data.accountCreationModes.passkeyApprovedRequestEnabled
+              : undefined
+          ) ?? false,
+      },
+      accounts: accounts.map((item) =>
+        normalizeCustodyAccount(item, "v3/accounts/capabilities.data.accounts", requestId, status)
+      ),
+      dappId: asString(data.dappId) ?? asString(data.dapp_id),
+      dappUserUuid: asString(data.dappUserUuid) ?? asString(data.dapp_user_uuid),
+      policy: normalizeWalletPolicy(
+        data.policy,
+        "v3/accounts/capabilities.data.policy",
+        requestId,
+        status
+      ),
+      raw: data,
+      supportedChains: asStringArray(data.supportedChains ?? data.supported_chains),
+      walletActionsByChain: Object.fromEntries(
+        Object.entries(walletActionsByChainRecord).map(([chainKey, chainValue]) => [
+          chainKey,
+          normalizeWalletChainActions(
+            chainValue,
+            `v3/accounts/capabilities.data.walletActionsByChain.${chainKey}`,
+            requestId,
+            status
+          ),
+        ])
+      ),
+    },
+    raw: record,
+  }
+}
+
+const normalizeAccountRequestStatus = (
+  value: unknown
+): CubidAccountRequestStatus | null => asString(value)
+
+const normalizeAccountRequestSummary = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidAccountRequestSummary => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+
+  return {
+    accountId: asString(record.accountId) ?? asString(record.account_id),
+    accountRequestId:
+      asString(record.accountRequestId) ?? asString(record.account_request_id),
+    approvedAt: asString(record.approvedAt) ?? asString(record.approved_at),
+    chain: asString(record.chain) ?? asString(record.chain_key),
+    createdAt: asString(record.createdAt) ?? asString(record.created_at),
+    dappId: asString(record.dappId) ?? asString(record.dapp_id),
+    dappUserAccountId:
+      asString(record.dappUserAccountId) ?? asString(record.dapp_user_account_id),
+    dappUserUuid:
+      asString(record.dappUserUuid) ?? asString(record.dapp_user_uuid),
+    errorCode: asString(record.errorCode) ?? asString(record.error_code),
+    errorMessage: asString(record.errorMessage) ?? asString(record.error_message),
+    expiresAt: asString(record.expiresAt) ?? asString(record.expires_at),
+    label: asString(record.label),
+    policyVersion:
+      asNumberLike(record.policyVersion ?? record.policy_version) ?? null,
+    publicAddress:
+      asString(record.publicAddress) ?? asString(record.public_address),
+    raw: record,
+    rejectedAt: asString(record.rejectedAt) ?? asString(record.rejected_at),
+    requiredAcr: asString(record.requiredAcr) ?? asString(record.required_acr),
+    status: normalizeAccountRequestStatus(record.status),
+    updatedAt: asString(record.updatedAt) ?? asString(record.updated_at),
+  }
+}
+
+const normalizeCreateAccountRequest = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidCreateAccountRequestResponse => {
+  const record = assertRecord(payload, "v3/accounts/requests/create", requestId, status)
+
+  return {
+    accountRequest: normalizeAccountRequestSummary(
+      record.data ?? record,
+      "v3/accounts/requests/create.data",
+      requestId,
+      status
+    ),
+    idempotencyKey,
+    raw: record,
+  }
+}
+
+const normalizeGetAccountRequest = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidGetAccountRequestResponse => {
+  const record = assertRecord(payload, "v3/accounts/requests/get", requestId, status)
+
+  return {
+    accountRequest: normalizeAccountRequestSummary(
+      record.data ?? record,
+      "v3/accounts/requests/get.data",
+      requestId,
+      status
+    ),
+    raw: record,
+  }
+}
+
 const normalizeSigningRequestType = (
   value: unknown
 ): CubidSigningRequestType | null => asString(value)
@@ -1531,6 +2065,53 @@ const normalizeSigningRequestPolicyDecision = (
   return normalized === "allowed" || normalized === "denied" ? normalized : null
 }
 
+const normalizeSigningRequestResult = (
+  value: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidSigningRequestResult | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const record = assertRecord(value, endpoint, requestId, status)
+  const type = asString(record.type)
+
+  if (type === "signature" && typeof record.signature === "string") {
+    return {
+      algorithm: asString(record.algorithm),
+      publicAddress:
+        asString(record.publicAddress) ?? asString(record.public_address),
+      raw: record,
+      signature: record.signature,
+      type,
+    }
+  }
+
+  if (
+    type === "signed_transaction" &&
+    typeof record.signedTransaction === "string"
+  ) {
+    return {
+      algorithm: asString(record.algorithm),
+      chainId: asNumberLike(record.chainId ?? record.chain_id),
+      publicAddress:
+        asString(record.publicAddress) ?? asString(record.public_address),
+      raw: record,
+      signedTransaction: record.signedTransaction,
+      transactionHash:
+        asString(record.transactionHash) ?? asString(record.transaction_hash),
+      type,
+    }
+  }
+
+  return {
+    raw: record,
+    type,
+  }
+}
+
 const normalizeSigningRequestSummary = (
   payload: unknown,
   endpoint: string,
@@ -1541,10 +2122,14 @@ const normalizeSigningRequestSummary = (
   const chain = asString(record.chain)
 
   return {
+    approvedAt: asString(record.approvedAt) ?? asString(record.approved_at) ?? undefined,
     cancelledAt: asString(record.cancelledAt) ?? asString(record.cancelled_at) ?? undefined,
     chain: chain ?? null,
     completedAt: asString(record.completedAt) ?? asString(record.completed_at) ?? undefined,
     createdAt: asString(record.createdAt) ?? asString(record.created_at),
+    errorCode: asString(record.errorCode) ?? asString(record.error_code),
+    errorMessage: asString(record.errorMessage) ?? asString(record.error_message),
+    expiresAt: asString(record.expiresAt) ?? asString(record.expires_at) ?? undefined,
     payloadHash: asString(record.payloadHash) ?? asString(record.payload_hash),
     payloadSummary: isRecord(record.payloadSummary)
       ? record.payloadSummary
@@ -1554,10 +2139,17 @@ const normalizeSigningRequestSummary = (
     policyDecision: normalizeSigningRequestPolicyDecision(
       record.policyDecision ?? record.policy_decision
     ),
-    policyVersion: asString(record.policyVersion) ?? asString(record.policy_version),
+    policyVersion:
+      asNumberLike(record.policyVersion ?? record.policy_version) ?? null,
     raw: record,
+    rejectedAt: asString(record.rejectedAt) ?? asString(record.rejected_at) ?? undefined,
     requiredAcr: asString(record.requiredAcr) ?? asString(record.required_acr),
-    result: isRecord(record.result) ? record.result : null,
+    result: normalizeSigningRequestResult(
+      record.result,
+      `${endpoint}.result`,
+      requestId,
+      status
+    ),
     riskLevel: normalizeSigningRequestRiskLevel(
       record.riskLevel ?? record.risk_level
     ),
@@ -2121,6 +2713,29 @@ export const createCubidApiClient = (
       }
     },
 
+    fetchWalletCapabilities(input = {}) {
+      const userId =
+        input.userId === undefined
+          ? undefined
+          : assertNonEmptyString(
+              input.userId,
+              "userId",
+              "v3/accounts/capabilities"
+            )
+
+      return makeRequest<CubidFetchWalletCapabilitiesResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/accounts/capabilities",
+        withV3Credentials({
+          dapp_user_uuid: userId,
+        }),
+        "v3/accounts/capabilities",
+        normalizeWalletCapabilities,
+        headers
+      )
+    },
+
     fetchApproxLocation(input) {
       const userId = assertNonEmptyString(
         input.userId,
@@ -2253,6 +2868,46 @@ export const createCubidApiClient = (
       )
     },
 
+    createAccountRequest(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/accounts/requests/create"
+      )
+      const chain = assertNonEmptyString(
+        input.chain,
+        "chain",
+        "v3/accounts/requests/create"
+      )
+      const idempotencyKey = resolveIdempotencyKey(
+        input,
+        "v3/accounts/requests/create"
+      )
+
+      return makeRequest<CubidCreateAccountRequestResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/accounts/requests/create",
+        withV3Credentials({
+          chain,
+          dapp_user_uuid: userId,
+          label: input.label?.trim() ? input.label.trim() : undefined,
+        }),
+        "v3/accounts/requests/create",
+        (payload, requestId, responseStatus) =>
+          normalizeCreateAccountRequest(
+            payload,
+            requestId,
+            responseStatus,
+            idempotencyKey
+          ),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
     createSigningRequest(input) {
       const userId = assertNonEmptyString(
         input.userId,
@@ -2306,6 +2961,26 @@ export const createCubidApiClient = (
         {
           "Idempotency-Key": idempotencyKey,
         }
+      )
+    },
+
+    getAccountRequest(input) {
+      const accountRequestId = assertNonEmptyString(
+        input.accountRequestId,
+        "accountRequestId",
+        "v3/accounts/requests/get"
+      )
+
+      return makeRequest<CubidGetAccountRequestResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/accounts/requests/get",
+        withV3Credentials({
+          account_request_id: accountRequestId,
+        }),
+        "v3/accounts/requests/get",
+        normalizeGetAccountRequest,
+        headers
       )
     },
 
@@ -2384,6 +3059,10 @@ export const createCubidApiClient = (
         "userId",
         "v3/signing/requests/list"
       )
+      const limit =
+        input.limit === undefined
+          ? undefined
+          : assertPositiveInteger(input.limit, "limit", "v3/signing/requests/list")
 
       return makeRequest<CubidListSigningRequestsResponse>(
         fetchImpl,
@@ -2391,6 +3070,7 @@ export const createCubidApiClient = (
         "/api/v3/signing/requests/list",
         withV3Credentials({
           dapp_user_uuid: userId,
+          limit,
           user_account_id: input.userAccountId,
         }),
         "v3/signing/requests/list",

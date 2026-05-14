@@ -121,6 +121,9 @@ endpoints plus the first server-facing API v3 write helpers:
 - `saveSecret`
 - `generateAccount`
 - `listAccounts`
+- `fetchWalletCapabilities`
+- `createAccountRequest`
+- `getAccountRequest`
 - `createSigningRequest`
 - `getSigningRequest`
 - `listSigningRequests`
@@ -170,19 +173,22 @@ The current API v3 helpers stay server-side as well:
 - `saveSecret({ userId, secret, idempotencyKey? })`
 - `generateAccount({ userId, chain, label?, idempotencyKey? })`
 - `listAccounts({ userId, chain? })`
+- `fetchWalletCapabilities({ userId? })`
+- `createAccountRequest({ userId, chain, label?, idempotencyKey? })`
+- `getAccountRequest({ accountRequestId })`
 - `createSigningRequest({ userId, userAccountId, requestType, payload, payloadSummary, chain?, idempotencyKey? })`
 - `getSigningRequest({ signingRequestId })`
-- `listSigningRequests({ userId, userAccountId? })`
+- `listSigningRequests({ userId, userAccountId?, limit? })`
 - `cancelSigningRequest({ signingRequestId })`
 
 Legacy `POST /api/v2/save_secret` is retired and should not be used or
 reintroduced in the public SDK surface. `saveSecret` now targets the v3 write
 contract only.
 
-`saveSecret`, `generateAccount`, and `createSigningRequest` automatically
-generate an idempotency key when callers omit one, and they return the
-resolved `idempotencyKey` alongside the normalized response so callers can log
-or reconcile retries safely.
+`saveSecret`, `generateAccount`, `createAccountRequest`, and
+`createSigningRequest` automatically generate an idempotency key when callers
+omit one, and they return the resolved `idempotencyKey` alongside the
+normalized response so callers can log or reconcile retries safely.
 
 Supported custody chains on the public v3 account helpers are:
 
@@ -190,6 +196,31 @@ Supported custody chains on the public v3 account helpers are:
 - `near`
 - `solana`
 - `sui`
+
+`fetchWalletCapabilities` is the public fail-closed discovery surface for SIWC
+wallet UX. It can return:
+
+- dapp-scoped policy state
+- per-chain capability flags such as `passkeyApprovedCreation`,
+  `messageSigning`, `typedDataSigning`, and `transactionSigning`
+- optional account lookup for one app-scoped `userId`
+
+This route is app-scoped only. Do not build flows that expect lookup by raw
+Cubid identity, global wallet inventory, or cross-app account visibility.
+
+`createAccountRequest` and `getAccountRequest` are the public helpers for
+passkey-approved wallet creation. They expose stable public statuses such as:
+
+- `pending_user_approval`
+- `policy_denied`
+- `approved`
+- `rejected`
+- `expired`
+- `failed`
+
+These helpers return public account metadata only after approval. They never
+return private keys, wrapped keys, ciphertext, seed phrases, Vault material,
+or raw Cubid internal identifiers.
 
 The SDK surface continues to normalize app-scoped identifiers to `userId`
 while translating to Passport's current wire keys such as `user_id` and
@@ -239,18 +270,56 @@ They also preserve additive SIWC05 policy and risk metadata when present:
 - `transactionContractAddress`
 - `transactionDeclaredValueUsd`
 
+Completed signing requests now normalize typed public result shapes when
+Passport returns them:
+
+- message and typed-data signatures return `type: "signature"` with
+  `algorithm`, `publicAddress`, and `signature`
+- the limited EVM Admin-policy pilot returns
+  `type: "signed_transaction"` with `algorithm`, `chainId`, `publicAddress`,
+  `signedTransaction`, and `transactionHash`
+
+Unknown future result types stay redacted and surface as an `unknown`-style
+result object with the raw safe metadata preserved.
+
+Use the exported guards when you need result-type-specific handling:
+
+- `isCubidSigningSignatureResult(result)`
+- `isCubidSignedTransactionResult(result)`
+
 The SDK intentionally does not expose raw signing payloads, raw Cubid internal
 user ids, private keys, encrypted key material, or other private custody
 details through those normalized responses.
 
 Passport-hosted approval and rejection flows are out of scope for
 `@cubid/core`. The public core client only wraps the dapp-facing API v3
-signing-request routes.
+signing-request and wallet-request routes.
 
-Transaction-signing flows remain fail-closed on the SDK surface. If Passport
-returns transaction-oriented request summaries or policy metadata, treat them
-as denied, deferred, or reviewable metadata only. Do not infer that transaction
-signatures are enabled.
+Transaction-signing flows remain capability-gated and conservative on the SDK
+surface. The current public stance is:
+
+- EVM transaction signing is a limited Admin-policy pilot, not arbitrary wallet
+  signing
+- Cubid does not broadcast signed EVM pilot transactions
+- Solana transaction signing remains disabled even if readiness summaries are
+  present
+
+If Passport returns transaction-oriented request summaries or policy metadata,
+do not render them as a blanket "transaction signing is enabled" signal
+without first checking `fetchWalletCapabilities`.
+
+## SIWC Errors
+
+Wallet and signing routes may promote Passport's browser-safe SIWC error
+metadata into `CubidSiwcError`, which extends `CubidApiError` with:
+
+- `siwcCode`
+- `retryable`
+- `userAction`
+
+Use `isCubidSiwcError(error)` when you need UI or retry behavior keyed to
+stable SIWC error semantics such as `step_up_required`, `wrong_user`,
+`user_cancelled`, `policy_denied`, or `transaction_chain_risk_unsupported`.
 
 ## Webhook Verification
 
