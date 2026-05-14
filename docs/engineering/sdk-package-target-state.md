@@ -83,6 +83,13 @@ Keep Passport-hosted list, approve, and reject routes out of the public SDK
 surface unless a later account-management or auth boundary is explicitly
 introduced.
 
+The same boundary now applies to SIWC wallet capability discovery and
+passkey-approved account-request lifecycle helpers. Runtime-agnostic wrappers
+for `accounts/capabilities`, `accounts/requests/create`, and
+`accounts/requests/get` belong in `@cubid/core`, while any browser-safe
+Passport user-approval launcher or submission helper belongs in
+`@cubid/browser`.
+
 When those wrappers land, expose only redacted signing-request summaries:
 `signingRequestId`, `status`, `chain`, `requestType`, `payloadHash`,
 `payloadSummary`, `policyVersion`, `requiredAcr`, timestamps, and `result` only
@@ -94,9 +101,20 @@ optional summary metadata in `@cubid/core` types, not as a signal that
 transaction signing is enabled. Approval remains Passport-hosted, and dapp API
 keys must not approve signing requests.
 
+When Passport returns browser-safe SIWC error metadata, `@cubid/core` should
+preserve it through structured SDK errors keyed by `details.siwcCode`,
+`details.retryable`, and `details.userAction`. Wallet helpers should use that
+stable SIWC metadata first and fall back to generic error codes only when the
+extra details are absent.
+
 `@cubid/browser` may depend on `@cubid/core`. It owns browser-safe hosted
 verification helpers, OTP/browser flow orchestration, AllowPage URL/state
 helpers, and other client helpers that do not require React.
+
+That browser layer is also the right home for Passport-hosted SIWC account and
+signing approval helpers. Those helpers may build browser-safe submission
+inputs or other launcher-friendly request descriptors, but they must not imply
+that dapp API keys or app server credentials can approve wallet actions.
 
 `@cubid/react` may depend on `@cubid/browser` and `@cubid/core`. It owns React
 hooks, React components, and context/provider helpers. It must not become the
@@ -165,6 +183,12 @@ metadata such as `address`, `networkId`, and explicit capability descriptors.
 identity for default Solana stamp serialization while preserving optional
 wallet metadata such as `address`, `cluster`, and explicit capability
 descriptors.
+
+Future SIWC transaction work should keep chain behavior explicit and
+capability-driven: the EVM Admin-policy transaction pilot may surface typed
+result metadata when policy enables it, while Solana transaction signing stays
+disabled until Passport explicitly reports support through capabilities and
+public route contracts.
 
 `@cubid/secrets`, if introduced, owns advanced encryption/custody helpers. Until
 then, `@cubid/core` may expose typed API wrappers for basic secret operations

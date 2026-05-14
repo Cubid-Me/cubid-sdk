@@ -780,3 +780,14 @@
   - `pnpm build`
   - `pnpm docs:api:build`
   - `pnpm docs:api:check`
+
+## session: s53-siwc-wallet-handoff-ingest
+
+- Timestamp: 2026-05-14T05:20:00Z
+- Summary: Ingested the new Passport SIWC wallet handoff notes and opened a dedicated SDK track for capability discovery, passkey-approved account requests, browser-safe approval helpers, and typed SIWC result/error handling.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-14-siwc09-passkey-account-creation.md`, `2026-05-14-siwc10-wallet-capabilities.md`, `2026-05-14-siwc12-evm-transaction-pilot.md`, `2026-05-14-siwc13-solana-transaction-readiness.md`, and `2026-05-14-siwc14-sdk-wallet-release-handoff.md`.
+  - Added `S12` and its implementation subitems to `agent-context/todo.md` so the account-request lifecycle, capability discovery, hosted approval helpers, typed SIWC errors, and transaction pilot guardrails are tracked as one coherent release surface.
+  - Updated package-boundary guidance so future agents keep runtime-agnostic request and capability wrappers in `@cubid/core`, keep user-approval helpers in `@cubid/browser`, and preserve the fail-closed stance for unsupported or policy-disabled transaction flows.
+- Validation:
+  - Reviewed the existing `@cubid/core` signing helpers, the current browser hosted-flow helpers, and the Passport API v3 contract docs before recording the new roadmap slice.
