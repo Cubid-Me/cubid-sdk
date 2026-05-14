@@ -35,10 +35,8 @@ Target packages:
 - `@cubid/near`: NEAR wallet and signing logic
 - `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
-- `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/cardano`: Cardano wallet and signing logic
 - `@cubid/sui`: Sui wallet and signing logic
-- `@cubid/near`: NEAR wallet and signing logic
 - `@cubid/comms`: optional later communications helpers
 - `@cubid/secrets`: optional later encryption and custody helpers
 

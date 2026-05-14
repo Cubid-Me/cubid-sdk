@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s54-s03-persistence-guard-followup
+
+- Timestamp: 2026-05-14T16:20:00Z
+- Summary: Tightened the NEAR and Solana verification helpers so stamp persistence fails before any wallet verification prompt when the required persistence context is missing.
+- Actions:
+  - Updated `@cubid/near` to validate `userId` and `pageId` before calling `adapter.verify(...)` when `persistStamp` is enabled.
+  - Mirrored the same guard ordering in `@cubid/solana` so the chain-specific helpers stay behaviorally aligned with the EVM package.
+  - Added focused test coverage that asserts both packages now throw before verification is invoked, and cleaned up duplicate package bullets plus a small `@cubid/web3` README wording issue while touching the chain-split docs.
+- Validation:
+  - `pnpm exec vitest run packages/near/src/client.test.ts packages/solana/src/client.test.ts`
+  - `git diff --check`
+- Follow-up:
+  - Continue `S03` with the next real chain package slice rather than broad `@cubid/web3` refactoring.
+
 ## session: s49-clearpass-auth-handoff
 
 - Timestamp: 2026-05-14T00:55:02Z

@@ -135,20 +135,23 @@ describe("@cubid/near", () => {
 
     const client = createCubidNearClient(apiClient as never);
 
+    const verify = vi.fn(async () => ({ isVerified: true }));
+
     await expect(
       client.verifyWallet({
         adapter: {
           connect: async () => ({ accountId: "wallet.near" }),
           id: "adapter",
-          verify: async () => ({ isVerified: true })
+          verify
         },
         connection: { accountId: "wallet.near" },
         persistStamp: true
       })
     ).rejects.toThrow("Persisting a wallet stamp requires both userId and pageId.");
+    expect(verify).not.toHaveBeenCalled();
   });
 
-  it("does not require persistence context when verification stays unverified", async () => {
+  it("fails before verification when persistence context is missing", async () => {
     const apiClient = {
       addStamp: vi.fn(async () => ({ success: true })),
       config: {
@@ -161,19 +164,21 @@ describe("@cubid/near", () => {
 
     const client = createCubidNearClient(apiClient as never);
 
-    const result = await client.verifyWallet({
-      adapter: {
-        connect: async () => ({ accountId: "wallet.near" }),
-        id: "adapter",
-        verify: async () => ({ isVerified: false })
-      },
-      connection: { accountId: "wallet.near" },
-      persistStamp: true
-    });
+    const verify = vi.fn(async () => ({ isVerified: false }));
 
+    await expect(
+      client.verifyWallet({
+        adapter: {
+          connect: async () => ({ accountId: "wallet.near" }),
+          id: "adapter",
+          verify
+        },
+        connection: { accountId: "wallet.near" },
+        persistStamp: true
+      })
+    ).rejects.toThrow("Persisting a wallet stamp requires both userId and pageId.");
+    expect(verify).not.toHaveBeenCalled();
     expect(apiClient.addStamp).not.toHaveBeenCalled();
-    expect(result.persistedStamp).toBeUndefined();
-    expect(result.verification.isVerified).toBe(false);
   });
 
   it("throws when stamp persistence is requested without adapter verification", async () => {
