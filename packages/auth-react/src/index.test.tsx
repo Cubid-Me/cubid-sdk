@@ -34,14 +34,44 @@ class MemoryStorage implements CubidAuthStorageLike {
   }
 }
 
-function createIdToken(payload: Record<string, unknown>) {
-  return [
-    "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0",
-    Buffer.from(JSON.stringify(payload), "utf8")
-      .toString("base64url")
-      .replaceAll("=", ""),
-    "signature",
-  ].join(".");
+async function createSignedIdToken(payload: Record<string, unknown>) {
+  const keyPair = await crypto.subtle.generateKey(
+    {
+      hash: "SHA-256",
+      modulusLength: 2048,
+      name: "RSASSA-PKCS1-v1_5",
+      publicExponent: new Uint8Array([1, 0, 1]),
+    },
+    true,
+    ["sign", "verify"]
+  );
+  const publicKey = await crypto.subtle.exportKey("jwk", keyPair.publicKey);
+  const header = {
+    alg: "RS256",
+    kid: "cubid-test-key",
+    typ: "JWT",
+  };
+  const encodedHeader = Buffer.from(JSON.stringify(header), "utf8").toString("base64url");
+  const encodedPayload = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
+  const signature = await crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    keyPair.privateKey,
+    new TextEncoder().encode(`${encodedHeader}.${encodedPayload}`)
+  );
+
+  return {
+    idToken: `${encodedHeader}.${encodedPayload}.${Buffer.from(signature).toString("base64url")}`,
+    jwks: {
+      keys: [
+        {
+          ...publicKey,
+          alg: "RS256",
+          kid: "cubid-test-key",
+          use: "sig",
+        },
+      ],
+    },
+  };
 }
 
 function SessionViewer() {
@@ -121,6 +151,15 @@ describe("@cubid/auth-react", () => {
 
   it("handles an authorization callback and creates an authenticated session", async () => {
     const storage = new MemoryStorage();
+    const { idToken, jwks } = await createSignedIdToken({
+      aud: "clearpass-dashboard",
+      email: "developer@clearpass.app",
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iss: "https://staging-id.cubid.me",
+      name: "ClearPass Dev",
+      nonce: "nonce-123",
+      sub: "pairwise-user-123",
+    });
     storage.setItem(
       CUBID_AUTH_TRANSACTION_STORAGE_KEY,
       JSON.stringify({
@@ -141,6 +180,7 @@ describe("@cubid/auth-react", () => {
             authorization_endpoint: "https://staging-id.cubid.me/oauth2/authorize",
             end_session_endpoint: "https://staging-id.cubid.me/logout",
             issuer: "https://staging-id.cubid.me",
+            jwks_uri: "https://staging-id.cubid.me/.well-known/jwks.json",
             token_endpoint: "https://staging-id.cubid.me/oauth2/token",
             token_endpoint_auth_methods_supported: ["none"],
             userinfo_endpoint: "https://staging-id.cubid.me/oauth2/userinfo",
@@ -161,13 +201,7 @@ describe("@cubid/auth-react", () => {
           JSON.stringify({
             access_token: "access-token-123",
             expires_in: 3600,
-            id_token: createIdToken({
-              email: "developer@clearpass.app",
-              exp: Math.floor(Date.now() / 1000) + 3600,
-              name: "ClearPass Dev",
-              nonce: "nonce-123",
-              sub: "pairwise-user-123",
-            }),
+            id_token: idToken,
             scope: "openid email profile",
             token_type: "Bearer",
           }),
@@ -178,6 +212,13 @@ describe("@cubid/auth-react", () => {
             status: 200,
           }
         );
+      }
+
+      if (String(input).endsWith("/.well-known/jwks.json")) {
+        return new Response(JSON.stringify(jwks), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        });
       }
 
       return new Response(
@@ -221,6 +262,13 @@ describe("@cubid/auth-react", () => {
 
   it("handles the authorization callback only once under React StrictMode", async () => {
     const storage = new MemoryStorage();
+    const { idToken, jwks } = await createSignedIdToken({
+      aud: "clearpass-dashboard",
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iss: "https://staging-id.cubid.me",
+      nonce: "nonce-123",
+      sub: "pairwise-user-123",
+    });
     storage.setItem(
       CUBID_AUTH_TRANSACTION_STORAGE_KEY,
       JSON.stringify({
@@ -240,6 +288,7 @@ describe("@cubid/auth-react", () => {
           JSON.stringify({
             authorization_endpoint: "https://staging-id.cubid.me/oauth2/authorize",
             issuer: "https://staging-id.cubid.me",
+            jwks_uri: "https://staging-id.cubid.me/.well-known/jwks.json",
             token_endpoint: "https://staging-id.cubid.me/oauth2/token",
             token_endpoint_auth_methods_supported: ["none"],
           }),
@@ -250,15 +299,18 @@ describe("@cubid/auth-react", () => {
         );
       }
 
+      if (String(input).endsWith("/.well-known/jwks.json")) {
+        return new Response(JSON.stringify(jwks), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        });
+      }
+
       return new Response(
         JSON.stringify({
           access_token: "access-token-123",
           expires_in: 3600,
-          id_token: createIdToken({
-            exp: Math.floor(Date.now() / 1000) + 3600,
-            nonce: "nonce-123",
-            sub: "pairwise-user-123",
-          }),
+          id_token: idToken,
           scope: "openid email profile",
           token_type: "Bearer",
         }),
@@ -300,6 +352,12 @@ describe("@cubid/auth-react", () => {
 
   it("rejects callback token responses that omit the nonce claim", async () => {
     const storage = new MemoryStorage();
+    const { idToken, jwks } = await createSignedIdToken({
+      aud: "clearpass-dashboard",
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iss: "https://staging-id.cubid.me",
+      sub: "pairwise-user-123",
+    });
     storage.setItem(
       CUBID_AUTH_TRANSACTION_STORAGE_KEY,
       JSON.stringify({
@@ -324,6 +382,7 @@ describe("@cubid/auth-react", () => {
               JSON.stringify({
                 authorization_endpoint: "https://staging-id.cubid.me/oauth2/authorize",
                 issuer: "https://staging-id.cubid.me",
+                jwks_uri: "https://staging-id.cubid.me/.well-known/jwks.json",
                 token_endpoint: "https://staging-id.cubid.me/oauth2/token",
                 token_endpoint_auth_methods_supported: ["none"],
               }),
@@ -334,14 +393,18 @@ describe("@cubid/auth-react", () => {
             );
           }
 
+          if (String(input).endsWith("/.well-known/jwks.json")) {
+            return new Response(JSON.stringify(jwks), {
+              headers: { "content-type": "application/json" },
+              status: 200,
+            });
+          }
+
           return new Response(
             JSON.stringify({
               access_token: "access-token-123",
               expires_in: 3600,
-              id_token: createIdToken({
-                exp: Math.floor(Date.now() / 1000) + 3600,
-                sub: "pairwise-user-123",
-              }),
+              id_token: idToken,
               scope: "openid email profile",
               token_type: "Bearer",
             }),
@@ -432,6 +495,59 @@ describe("@cubid/auth-react", () => {
       "https://staging-id.cubid.me/logout?id_token_hint=id-token-123&post_logout_redirect_uri=https%3A%2F%2Fdashboard.clearpass.app%2F"
     );
     expect(within(view.container).getByTestId("status").textContent).toBe("signed_out");
+    expect(storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY)).toBeNull();
+  });
+
+  it("sets an error state when logout discovery fails", async () => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      CUBID_AUTH_SESSION_STORAGE_KEY,
+      serializeCubidAuthSession({
+        accessToken: "access-token-123",
+        clientId: "clearpass-dashboard",
+        expiresAt: Date.now() + 60_000,
+        idToken: "id-token-123",
+        idTokenClaims: {
+          exp: Math.floor(Date.now() / 1000) + 60,
+          sub: "pairwise-user-123",
+        },
+        issuedAt: Date.now(),
+        issuer: "https://staging-id.cubid.me",
+        refreshToken: null,
+        scope: ["openid", "email", "profile"],
+        subject: "pairwise-user-123",
+        tokenType: "Bearer",
+        userInfo: null,
+      })
+    );
+    const onError = vi.fn();
+    const user = userEvent.setup();
+
+    const view = render(
+      <CubidAuthProvider
+        clientId="clearpass-dashboard"
+        fetch={vi.fn(async () => {
+          throw new Error("discovery unavailable");
+        })}
+        issuer="https://staging-id.cubid.me"
+        redirectUri="https://dashboard.clearpass.app/auth/callback"
+        storage={storage}
+      >
+        <SessionViewer />
+        <CubidSignOutButton onError={onError} />
+      </CubidAuthProvider>
+    );
+
+    await waitFor(() => {
+      expect(within(view.container).getByTestId("status").textContent).toBe("authenticated");
+    });
+
+    await user.click(within(view.container).getByRole("button", { name: "Sign out" }));
+
+    await waitFor(() => {
+      expect(onError).toHaveBeenCalledWith(expect.any(Error));
+      expect(within(view.container).getByTestId("status").textContent).toBe("error");
+    });
     expect(storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY)).toBeNull();
   });
 });

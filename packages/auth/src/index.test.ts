@@ -25,6 +25,7 @@ import {
   parseCubidAuthSession,
   parseCubidAuthorizationCallback,
   persistCubidAuthSession,
+  validateCubidIdToken,
 } from "./index";
 
 function createIdToken(payload: Record<string, unknown>) {
@@ -35,6 +36,46 @@ function createIdToken(payload: Record<string, unknown>) {
       .replaceAll("=", ""),
     "signature",
   ].join(".");
+}
+
+async function createSignedIdToken(payload: Record<string, unknown>) {
+  const keyPair = await crypto.subtle.generateKey(
+    {
+      hash: "SHA-256",
+      modulusLength: 2048,
+      name: "RSASSA-PKCS1-v1_5",
+      publicExponent: new Uint8Array([1, 0, 1]),
+    },
+    true,
+    ["sign", "verify"]
+  );
+  const publicKey = await crypto.subtle.exportKey("jwk", keyPair.publicKey);
+  const header = {
+    alg: "RS256",
+    kid: "cubid-test-key",
+    typ: "JWT",
+  };
+  const encodedHeader = Buffer.from(JSON.stringify(header), "utf8").toString("base64url");
+  const encodedPayload = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
+  const signature = await crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    keyPair.privateKey,
+    new TextEncoder().encode(`${encodedHeader}.${encodedPayload}`)
+  );
+
+  return {
+    idToken: `${encodedHeader}.${encodedPayload}.${Buffer.from(signature).toString("base64url")}`,
+    jwks: {
+      keys: [
+        {
+          ...publicKey,
+          alg: "RS256",
+          kid: "cubid-test-key",
+          use: "sig",
+        },
+      ],
+    },
+  };
 }
 
 describe("@cubid/auth", () => {
@@ -320,6 +361,81 @@ describe("@cubid/auth", () => {
       CubidAuthError
     );
     expect(() => decodeCubidIdTokenClaims("header..signature")).toThrow(CubidAuthError);
+  });
+
+  it("validates ID token issuer, audience, expiration, and signature", async () => {
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const { idToken, jwks } = await createSignedIdToken({
+      aud: "clearpass-dashboard",
+      email: "developer@clearpass.app",
+      exp: nowSeconds + 3600,
+      iss: "https://staging-id.cubid.me",
+      nonce: "nonce-123",
+      sub: "pairwise-user-123",
+    });
+    const fetchImpl = vi.fn(async () =>
+      new Response(JSON.stringify(jwks), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      })
+    );
+
+    await expect(
+      validateCubidIdToken({
+        clientId: "clearpass-dashboard",
+        discoveryDocument: {
+          authorization_endpoint: "https://staging-id.cubid.me/oauth2/authorize",
+          issuer: "https://staging-id.cubid.me",
+          jwks_uri: "https://staging-id.cubid.me/.well-known/jwks.json",
+          token_endpoint: "https://staging-id.cubid.me/oauth2/token",
+        },
+        fetch: fetchImpl,
+        idToken,
+        nowSeconds,
+      })
+    ).resolves.toMatchObject({
+      aud: "clearpass-dashboard",
+      iss: "https://staging-id.cubid.me",
+      sub: "pairwise-user-123",
+    });
+    expect(fetchImpl).toHaveBeenCalledWith(
+      "https://staging-id.cubid.me/.well-known/jwks.json",
+      expect.objectContaining({
+        method: "GET",
+      })
+    );
+  });
+
+  it("rejects unsigned ID tokens during validation", async () => {
+    await expect(
+      validateCubidIdToken({
+        clientId: "clearpass-dashboard",
+        discoveryDocument: {
+          authorization_endpoint: "https://staging-id.cubid.me/oauth2/authorize",
+          issuer: "https://staging-id.cubid.me",
+          jwks_uri: "https://staging-id.cubid.me/.well-known/jwks.json",
+          token_endpoint: "https://staging-id.cubid.me/oauth2/token",
+        },
+        fetch: vi.fn(),
+        idToken: createIdToken({
+          aud: "clearpass-dashboard",
+          exp: Math.floor(Date.now() / 1000) + 3600,
+          iss: "https://staging-id.cubid.me",
+          sub: "pairwise-user-123",
+        }),
+      })
+    ).rejects.toMatchObject({
+      code: "unsupported_id_token_alg",
+    });
+  });
+
+  it("rejects stored sessions with non-finite timestamps", () => {
+    const serialized =
+      '{"accessToken":"access-token-123","clientId":"clearpass-dashboard",' +
+      '"expiresAt":1e999,"issuedAt":1e999,"issuer":"https://id.cubid.me",' +
+      '"scope":["openid","email","profile"],"tokenType":"Bearer"}';
+
+    expect(() => parseCubidAuthSession(serialized)).toThrow(CubidAuthError);
   });
 
   it("falls back to Buffer when base64 globals are unavailable", async () => {

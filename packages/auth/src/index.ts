@@ -59,6 +59,17 @@ export interface CubidOidcDiscoveryDocument {
   [key: string]: unknown;
 }
 
+export interface CubidJwksDocument {
+  keys: CubidJsonWebKey[];
+}
+
+export interface CubidJsonWebKey extends JsonWebKey {
+  alg?: string;
+  kid?: string;
+  kty?: string;
+  use?: string;
+}
+
 export interface FetchCubidOidcDiscoveryDocumentInput {
   fetch?: CubidAuthFetch;
   issuer: string | URL;
@@ -176,6 +187,14 @@ export interface CubidIdTokenClaims extends Record<string, unknown> {
   nonce?: string;
   preferred_username?: string;
   sub?: string;
+}
+
+export interface ValidateCubidIdTokenInput {
+  clientId: string;
+  discoveryDocument: CubidOidcDiscoveryDocument;
+  fetch?: CubidAuthFetch;
+  idToken: string;
+  nowSeconds?: number;
 }
 
 export interface BuildCubidLogoutUrlInput {
@@ -322,6 +341,28 @@ function getOptionalStringArray(
   return value;
 }
 
+function getOptionalNumber(
+  record: Record<string, unknown>,
+  fieldName: string,
+  context: string
+): number | null {
+  const value = record[fieldName];
+
+  if (typeof value === "undefined" || value === null) {
+    return null;
+  }
+
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    throw new CubidAuthError(`Cubid auth expected ${context}.${fieldName} to be finite.`, {
+      category: "parse",
+      code: "invalid_field",
+      raw: record,
+    });
+  }
+
+  return value;
+}
+
 function getFetch(fetchImpl?: CubidAuthFetch): CubidAuthFetch {
   if (fetchImpl) {
     return fetchImpl;
@@ -402,6 +443,46 @@ function base64UrlToBytes(input: string): Uint8Array {
   }
 
   return bytes;
+}
+
+function decodeBase64UrlJson(input: string, context: string): Record<string, unknown> {
+  try {
+    const decoded = textDecoder.decode(base64UrlToBytes(input));
+    return toRecord(JSON.parse(decoded), context);
+  } catch (cause) {
+    if (cause instanceof CubidAuthError) {
+      throw cause;
+    }
+
+    throw new CubidAuthError(`Cubid auth could not decode ${context}.`, {
+      category: "parse",
+      code: "invalid_jwt",
+      cause,
+    });
+  }
+}
+
+function decodeCompactJwt(idToken: string) {
+  const token = assertNonEmptyString(idToken, "idToken");
+  const segments = token.split(".");
+
+  if (segments.length !== 3 || segments.some((segment) => segment.length === 0)) {
+    throw new CubidAuthError("Cubid auth expected an ID token with three JWT segments.", {
+      category: "parse",
+      code: "invalid_id_token",
+    });
+  }
+
+  const [encodedHeader, encodedPayload, encodedSignature] = segments as [string, string, string];
+
+  return {
+    encodedHeader,
+    encodedPayload,
+    encodedSignature,
+    header: decodeBase64UrlJson(encodedHeader, "id token header"),
+    payload: decodeBase64UrlJson(encodedPayload, "id token claims") as CubidIdTokenClaims,
+    signedData: textEncoder.encode(`${encodedHeader}.${encodedPayload}`),
+  };
 }
 
 function createRandomString(byteLength: number): string {
@@ -539,6 +620,168 @@ async function readJsonResponse(response: Response, context: string): Promise<Re
   }
 
   return toRecord(payload, context);
+}
+
+async function fetchCubidJwks(
+  jwksUri: string | URL,
+  fetchImpl?: CubidAuthFetch
+): Promise<CubidJwksDocument> {
+  const fetcher = getFetch(fetchImpl);
+  let response: Response;
+
+  try {
+    response = await fetcher(asUrlString(jwksUri, "jwksUri"), {
+      headers: {
+        accept: "application/json",
+      },
+      method: "GET",
+    });
+  } catch (cause) {
+    throw new CubidAuthError("Cubid auth could not fetch OIDC signing keys.", {
+      category: "network",
+      code: "jwks_fetch_failed",
+      cause,
+    });
+  }
+
+  const payload = await readJsonResponse(response, "JWKS document");
+
+  if (!response.ok) {
+    throw new CubidAuthError("Cubid auth JWKS request failed.", {
+      category: "protocol",
+      code: "jwks_request_failed",
+      raw: payload,
+      status: response.status,
+    });
+  }
+
+  if (!Array.isArray(payload.keys)) {
+    throw new CubidAuthError("Cubid auth expected JWKS document.keys to be an array.", {
+      category: "parse",
+      code: "invalid_jwks",
+      raw: payload,
+    });
+  }
+
+  return {
+    keys: payload.keys.filter((key): key is CubidJsonWebKey => {
+      return Boolean(key) && typeof key === "object" && !Array.isArray(key);
+    }),
+  };
+}
+
+interface CubidIdTokenCryptoAlgorithm {
+  importAlgorithm: EcKeyImportParams | RsaHashedImportParams;
+  verifyAlgorithm: AlgorithmIdentifier | EcdsaParams;
+}
+
+function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
+  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+}
+
+function resolveIdTokenCryptoAlgorithm(alg: string): CubidIdTokenCryptoAlgorithm | null {
+  if (alg === "RS256") {
+    return {
+      importAlgorithm: {
+        hash: "SHA-256",
+        name: "RSASSA-PKCS1-v1_5",
+      },
+      verifyAlgorithm: "RSASSA-PKCS1-v1_5",
+    };
+  }
+
+  if (alg === "ES256") {
+    return {
+      importAlgorithm: {
+        name: "ECDSA",
+        namedCurve: "P-256",
+      },
+      verifyAlgorithm: {
+        hash: "SHA-256",
+        name: "ECDSA",
+      },
+    };
+  }
+
+  return null;
+}
+
+function findJwksKey(
+  keys: CubidJsonWebKey[],
+  header: Record<string, unknown>
+): CubidJsonWebKey | null {
+  const alg = typeof header.alg === "string" ? header.alg : null;
+  const kid = typeof header.kid === "string" ? header.kid : null;
+
+  return keys.find((key) => {
+    if (key.use && key.use !== "sig") {
+      return false;
+    }
+
+    if (alg && key.alg && key.alg !== alg) {
+      return false;
+    }
+
+    if (kid && key.kid && key.kid !== kid) {
+      return false;
+    }
+
+    if (kid && !key.kid) {
+      return false;
+    }
+
+    return true;
+  }) ?? null;
+}
+
+function assertIdTokenClaims(
+  claims: CubidIdTokenClaims,
+  input: ValidateCubidIdTokenInput
+): void {
+  const nowSeconds = input.nowSeconds ?? Math.floor(Date.now() / 1000);
+  const expectedIssuer = normalizeIssuer(input.discoveryDocument.issuer);
+
+  if (typeof claims.iss !== "string" || normalizeIssuer(claims.iss) !== expectedIssuer) {
+    throw new CubidAuthError("The Cubid ID token issuer did not match discovery metadata.", {
+      category: "validation",
+      code: "invalid_issuer",
+      raw: claims,
+    });
+  }
+
+  const audience = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
+
+  if (!audience.includes(input.clientId)) {
+    throw new CubidAuthError("The Cubid ID token audience did not include the client ID.", {
+      category: "validation",
+      code: "invalid_audience",
+      raw: claims,
+    });
+  }
+
+  if (typeof claims.exp !== "number" || !Number.isFinite(claims.exp)) {
+    throw new CubidAuthError("The Cubid ID token expiration claim was missing or invalid.", {
+      category: "validation",
+      code: "invalid_expiration",
+      raw: claims,
+    });
+  }
+
+  if (claims.exp <= nowSeconds) {
+    throw new CubidAuthError("The Cubid ID token has expired.", {
+      category: "validation",
+      code: "expired_id_token",
+      raw: claims,
+    });
+  }
+
+  if (typeof claims.iat !== "undefined" && !Number.isFinite(claims.iat)) {
+    throw new CubidAuthError("The Cubid ID token issued-at claim was invalid.", {
+      category: "validation",
+      code: "invalid_issued_at",
+      raw: claims,
+    });
+  }
 }
 
 export function createCubidPkceCodeVerifier(byteLength = 64): string {
@@ -855,35 +1098,68 @@ export async function fetchCubidUserInfo(
 }
 
 export function decodeCubidIdTokenClaims(idToken: string): CubidIdTokenClaims {
-  const token = assertNonEmptyString(idToken, "idToken");
-  const segments = token.split(".");
+  return decodeCompactJwt(idToken).payload;
+}
 
-  if (segments.length !== 3 || segments.some((segment) => segment.length === 0)) {
-    throw new CubidAuthError("Cubid auth expected an ID token with three JWT segments.", {
-      category: "parse",
-      code: "invalid_id_token",
+export async function validateCubidIdToken(
+  input: ValidateCubidIdTokenInput
+): Promise<CubidIdTokenClaims> {
+  const decoded = decodeCompactJwt(input.idToken);
+  const alg = typeof decoded.header.alg === "string" ? decoded.header.alg : null;
+  const cryptoAlgorithm = alg ? resolveIdTokenCryptoAlgorithm(alg) : null;
+
+  if (!alg || !cryptoAlgorithm) {
+    throw new CubidAuthError("Cubid auth does not support this ID token signing algorithm.", {
+      category: "validation",
+      code: "unsupported_id_token_alg",
+      raw: decoded.header,
     });
   }
 
-  try {
-    const payloadSegment = segments[1];
-
-    if (typeof payloadSegment !== "string") {
-      throw new CubidAuthError("Cubid auth expected an ID token with three JWT segments.", {
-        category: "parse",
-        code: "invalid_id_token",
-      });
-    }
-
-    const decoded = textDecoder.decode(base64UrlToBytes(payloadSegment));
-    return toRecord(JSON.parse(decoded), "id token claims") as CubidIdTokenClaims;
-  } catch (cause) {
-    throw new CubidAuthError("Cubid auth could not decode ID token claims.", {
-      category: "parse",
-      code: "invalid_id_token",
-      cause,
+  if (!input.discoveryDocument.jwks_uri) {
+    throw new CubidAuthError("Cubid auth discovery metadata did not include a JWKS URI.", {
+      category: "validation",
+      code: "missing_jwks_uri",
+      raw: input.discoveryDocument,
     });
   }
+
+  assertIdTokenClaims(decoded.payload, input);
+
+  const jwks = await fetchCubidJwks(input.discoveryDocument.jwks_uri, input.fetch);
+  const jwk = findJwksKey(jwks.keys, decoded.header);
+
+  if (!jwk) {
+    throw new CubidAuthError("Cubid auth could not find a matching ID token signing key.", {
+      category: "validation",
+      code: "missing_signing_key",
+      raw: decoded.header,
+    });
+  }
+
+  const key = await getCrypto().subtle.importKey(
+    "jwk",
+    jwk,
+    cryptoAlgorithm.importAlgorithm,
+    false,
+    ["verify"]
+  );
+  const verified = await getCrypto().subtle.verify(
+    cryptoAlgorithm.verifyAlgorithm,
+    key,
+    toArrayBuffer(base64UrlToBytes(decoded.encodedSignature)),
+    toArrayBuffer(decoded.signedData)
+  );
+
+  if (!verified) {
+    throw new CubidAuthError("Cubid auth could not verify the ID token signature.", {
+      category: "validation",
+      code: "invalid_id_token_signature",
+      raw: decoded.header,
+    });
+  }
+
+  return decoded.payload;
 }
 
 export function isCubidIdTokenExpired(
@@ -957,12 +1233,13 @@ export function parseCubidAuthSession(serialized: string): CubidAuthSession {
     return {
       accessToken: getRequiredString(payload, "accessToken", "stored auth session"),
       clientId: getRequiredString(payload, "clientId", "stored auth session"),
-      expiresAt: typeof payload.expiresAt === "number" ? payload.expiresAt : null,
+      expiresAt: getOptionalNumber(payload, "expiresAt", "stored auth session"),
       idToken: getOptionalString(payload, "idToken"),
       idTokenClaims: payload.idTokenClaims && typeof payload.idTokenClaims === "object"
         ? (payload.idTokenClaims as CubidIdTokenClaims)
         : null,
-      issuedAt: typeof payload.issuedAt === "number" ? payload.issuedAt : Date.now(),
+      issuedAt:
+        getOptionalNumber(payload, "issuedAt", "stored auth session") ?? Date.now(),
       issuer: getRequiredString(payload, "issuer", "stored auth session"),
       refreshToken: getOptionalString(payload, "refreshToken"),
       scope: normalizeScopes(

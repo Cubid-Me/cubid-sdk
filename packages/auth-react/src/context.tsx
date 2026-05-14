@@ -19,6 +19,7 @@ import {
   persistCubidAuthSession,
   parseCubidAuthorizationCallback,
   CubidAuthError,
+  validateCubidIdToken,
   type BuildCubidAuthorizationUrlInput,
   type CubidAuthFetch,
   type CubidAuthSession,
@@ -465,7 +466,12 @@ export function CubidAuthProvider({
       }
 
       const idTokenClaims = tokenResponse.idToken
-        ? decodeCubidIdTokenClaims(tokenResponse.idToken)
+        ? await validateCubidIdToken({
+            clientId: transaction.clientId,
+            discoveryDocument: nextDiscovery,
+            fetch,
+            idToken: tokenResponse.idToken,
+          })
         : null;
 
       if (tokenResponse.idToken) {
@@ -566,25 +572,32 @@ export function CubidAuthProvider({
       return null;
     }
 
-    const nextDiscovery = await ensureDiscoveryDocument();
+    try {
+      const nextDiscovery = await ensureDiscoveryDocument();
 
-    if (!nextDiscovery.end_session_endpoint) {
-      return null;
+      if (!nextDiscovery.end_session_endpoint) {
+        return null;
+      }
+
+      const logoutUrl = buildCubidLogoutUrl({
+        endSessionEndpoint: nextDiscovery.end_session_endpoint,
+        extraParams: options.extraParams,
+        idTokenHint: activeSession.idToken ?? undefined,
+        postLogoutRedirectUri: options.postLogoutRedirectUri ?? postLogoutRedirectUri,
+        state: options.state,
+      });
+
+      if (options.performRedirect !== false) {
+        navigateTo(logoutUrl, options.navigate);
+      }
+
+      return logoutUrl;
+    } catch (nextError) {
+      const normalizedError = normalizeError(nextError);
+      setError(normalizedError);
+      setStatus("error");
+      throw normalizedError;
     }
-
-    const logoutUrl = buildCubidLogoutUrl({
-      endSessionEndpoint: nextDiscovery.end_session_endpoint,
-      extraParams: options.extraParams,
-      idTokenHint: activeSession.idToken ?? undefined,
-      postLogoutRedirectUri: options.postLogoutRedirectUri ?? postLogoutRedirectUri,
-      state: options.state,
-    });
-
-    if (options.performRedirect !== false) {
-      navigateTo(logoutUrl, options.navigate);
-    }
-
-    return logoutUrl;
   }
 
   const value: CubidAuthContextValue = {

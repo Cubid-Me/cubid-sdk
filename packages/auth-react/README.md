@@ -46,14 +46,15 @@ function DashboardGate() {
 }
 
 export function App() {
+  const isCallbackRoute = window.location.pathname === "/auth/callback";
+
   return (
     <CubidAuthProvider
       clientId="clearpass-dashboard"
       issuer="https://staging-id.cubid.me"
       redirectUri="https://dashboard.clearpass.app/auth/callback"
     >
-      <DashboardGate />
-      <CubidAuthCallback />
+      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}
     </CubidAuthProvider>
   );
 }
