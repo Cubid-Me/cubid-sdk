@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s48-clearpass-vite-auth-example
+
+- Timestamp: 2026-05-14T00:53:30Z
+- Summary: Implemented `S04.3` by adding a ClearPass-oriented Vite/React auth example that shows how to consume `@cubid/auth` and `@cubid/auth-react`.
+- Actions:
+  - Added `docs/examples/clearpass-dashboard-auth-vite.md` with public env vars, provider wiring, callback handling, sign-in and sign-out usage, and server-side authorization notes for ClearPass.
+  - Linked the new example from the root README and the `@cubid/auth-react` package README so consumers can find the example from the main public entrypoints.
+- Validation:
+  - `git diff --check`
+  - Reviewed the example against the staged `@cubid/auth` and `@cubid/auth-react` public APIs.
+- Follow-up:
+  - Implement `S04.4` next by writing the explicit package/env handoff note back to ClearPass.
+
 ## session: s47-auth-react-session-bindings
 
 - Timestamp: 2026-05-14T00:50:59Z

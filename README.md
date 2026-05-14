@@ -47,6 +47,11 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/wagmi.json`
   - `docs/reference/api/web3.json`
 
+## Examples
+
+- ClearPass Dashboard Vite auth example:
+  `docs/examples/clearpass-dashboard-auth-vite.md`
+
 ## Commands
 
 - `pnpm install`

@@ -346,12 +346,12 @@ Add React bindings on top of `@cubid/auth` for browser apps that want a clean Lo
 
 ### S04.3 Add a Vite ClearPass Dashboard auth example
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`
+- Status: Completed
+- Timestamp started: 2026-05-14T00:51:00Z
+- Timestamp completed: 2026-05-14T00:53:30Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `08724d5b` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`; session: `s48-clearpass-vite-auth-example`
 
 Add a minimal Vite/React example showing how ClearPass Dashboard should use browser-safe Sign in with Cubid. The example should show public relying-party configuration, sign-in button or route guard, redirect/callback handling, session establishment, granted email/name display, logout, and failure states. It should clearly separate browser-safe values from server or edge responsibilities, and it should avoid local-storage-only security theater. If token exchange is demonstrated through a backend or edge route, document which values are public, which values are server-only, and how ClearPass should enforce authenticated developer/app scope on protected dashboard routes after the UI gate succeeds.
 

@@ -22,6 +22,8 @@ npm install @cubid/auth-react @cubid/auth
 - Machine-readable API JSON:
   [`docs/reference/api/auth-react.json`](../../docs/reference/api/auth-react.json)
 - Root package matrix: [`README.md`](../../README.md)
+- ClearPass-oriented Vite example:
+  [`docs/examples/clearpass-dashboard-auth-vite.md`](../../docs/examples/clearpass-dashboard-auth-vite.md)
 
 ## Basic usage
 
