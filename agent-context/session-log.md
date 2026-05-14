@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s45-clearpass-dashboard-auth-roadmap
+
+- Timestamp: 2026-05-14T00:09:05Z
+- Summary: Ingested the ClearPass Dashboard Sign in with Cubid blocker and split the existing auth-package roadmap into concrete public SDK follow-ups.
+- Actions:
+  - Reviewed the incoming ClearPass note requesting browser-safe Dashboard authentication through Sign in with Cubid without privileged browser credentials.
+  - Added the Passport handoff note describing the OIDC public-web PKCE contract, issuer endpoints, expected callback/token behavior, and ClearPass as the first consumer.
+  - Marked `S04` started on `codex/clearpass-dashboard-auth-roadmap`.
+  - Split `S04` into `S04.1` for `@cubid/auth`, `S04.2` for `@cubid/auth-react`, `S04.3` for the Vite ClearPass Dashboard auth example, and `S04.4` for the reply note back to ClearPass.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Implement `S04.1` first, then continue through the React bindings, Vite example, and ClearPass reply note.
+
 ## session: s44-pr8-release-review-followup
 
 - Timestamp: 2026-05-13T13:10:00Z
