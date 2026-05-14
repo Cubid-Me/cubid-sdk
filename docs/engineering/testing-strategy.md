@@ -140,6 +140,12 @@ pnpm test:unit
 Use this before a release or review handoff:
 
 ```sh
+pnpm validate:yeet
+```
+
+Expanded steps:
+
+```sh
 pnpm install --frozen-lockfile
 pnpm lint
 pnpm typecheck
@@ -147,6 +153,7 @@ pnpm test:unit
 pnpm build
 pnpm test:acceptance
 pnpm test:coverage
+pnpm docs:api:check
 pnpm check:core-package
 ```
 

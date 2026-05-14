@@ -842,3 +842,13 @@
   - `pnpm docs:api:build`
   - `pnpm docs:api:check`
   - `git diff --check`
+
+## session: s58-pre-yeet-validation-script
+
+- Timestamp: 2026-05-14T15:25:00Z
+- Summary: Added a single repo-level pre-yeet validation command so the full CI-like gate is easier to run locally before publishing a PR.
+- Actions:
+  - Added `pnpm validate:yeet` at the repo root to run the full release-handoff sequence: frozen-lockfile install, lint, typecheck, unit tests, build, acceptance tests, coverage, API-reference drift check, and core package dry-runs.
+  - Updated the root README and testing strategy so human guidance now points to the single script first, while still documenting the expanded step-by-step sequence underneath it.
+- Validation:
+  - `pnpm validate:yeet`

@@ -70,10 +70,17 @@ Machine-readable package reference artifacts live in `docs/reference/`.
 - `pnpm typecheck`
 - `pnpm deno:check:core`
 - `pnpm check:core-package`
+- `pnpm validate:yeet`
 
 For local build, validation, and smoke-style package checks, use
 `pnpm install --frozen-lockfile` so your dependency graph matches CI and
 Vercel instead of silently refreshing the lockfile.
+
+For the full pre-PR and pre-yeet gate, run:
+
+```sh
+pnpm validate:yeet
+```
 
 ## Workflow
 
