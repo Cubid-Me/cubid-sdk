@@ -335,12 +335,12 @@ Create the runtime-agnostic Sign in with Cubid auth package for public OIDC clie
 
 ### S04.2 Add `@cubid/auth-react` session bindings
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`
+- Status: Completed
+- Timestamp started: 2026-05-14T00:37:00Z
+- Timestamp completed: 2026-05-14T00:50:59Z
+- Feature branch: `codex/clearpass-dashboard-auth-roadmap`
+- Head: `651f9404` at start
+- Session-log reference(s): incoming ClearPass note `agent-context/messages-from-clearpass/2026-05-13-dashboard-sign-in-with-cubid-blocker.md`; incoming Passport handoff `agent-context/messages-from-cubid-passport/2026-05-14-clearpass-dashboard-oidc-contract.md`; session: `s47-auth-react-session-bindings`
 
 Add React bindings on top of `@cubid/auth` for browser apps that want a clean Login with Cubid experience. The package should provide a provider or hook surface for configured issuer/client metadata, sign-in launch, callback handling, session state, loading/error states, userinfo display metadata, and logout/session clearing. It should be usable from Vite/React and Next without privileged credentials in the browser. The React layer should not invent backend authorization; it should make the hosted Cubid OIDC flow ergonomic while documenting that protected dashboard data and app-specific server routes must still enforce the same authenticated session server-side.
 

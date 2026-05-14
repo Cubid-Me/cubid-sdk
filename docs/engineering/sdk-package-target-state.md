@@ -16,8 +16,9 @@ from personal npm accounts or long-lived local tokens.
 
 JSR should remain intentionally narrow. Use JSR only for runtime-agnostic
 packages with a real Deno or Supabase Edge value proposition. Under the current
-public package policy, that means `@cubid/core` only; the auth, browser, React,
-wagmi, and transitional compatibility packages remain npm-only by design.
+public package policy, that means `@cubid/core` only; the auth, auth-react,
+browser, React, wagmi, and transitional compatibility packages remain npm-only
+by design.
 
 Public SDK packages should use explicit package-level licenses. `@cubid/core`
 is Apache-2.0; app and service workspaces in this monorepo are not automatically
@@ -27,6 +28,7 @@ Target packages:
 
 - `@cubid/core`: required runtime-agnostic foundation
 - `@cubid/auth`: runtime-agnostic OIDC and PKCE helpers
+- `@cubid/auth-react`: React auth/session bindings
 - `@cubid/browser`: headless browser integration helpers
 - `@cubid/react`: React hooks and components built on `@cubid/browser`
 - `@cubid/evm`: EVM wallet and signing logic, using `viem` only when needed
@@ -35,8 +37,7 @@ Target packages:
 - `@cubid/cardano`: Cardano wallet and signing logic
 - `@cubid/sui`: Sui wallet and signing logic
 - `@cubid/near`: NEAR wallet and signing logic
-- `@cubid/auth`: OAuth/OIDC client helpers
-- `@cubid/auth-react`: later React auth/session helpers
+- `@cubid/auth-react`: React auth/session helpers
 - `@cubid/comms`: optional later communications helpers
 - `@cubid/secrets`: optional later encryption and custody helpers
 
@@ -123,6 +124,11 @@ and structured auth errors. It must not require a Cubid dapp API key, client
 secret, service-role credential, Passport internal token, or any other
 privileged material in browser code.
 
+`@cubid/auth-react` now owns the React layer for Sign in with Cubid. It should
+provide provider, hook, callback, sign-in, and logout ergonomics for browser
+apps while keeping protected-route authorization and server-side scope
+enforcement outside the SDK package itself.
+
 Future webhook type updates should treat SIWC wallet events as additive to that
 same verified envelope, including:
 
@@ -184,6 +190,8 @@ npm-first foundation, then layers in package-ready integration surfaces:
   stamp sync.
 - `@cubid/auth` now exists as the primary browser-safe OIDC and PKCE surface
   for Sign in with Cubid relying-party clients.
+- `@cubid/auth-react` now exists as the React session and callback layer for
+  Sign in with Cubid relying-party clients.
 - `@cubid/react` now exists as the primary React surface for OTP forms, hosted
   verification widgets, provider connect buttons, and optional React context.
 - `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated

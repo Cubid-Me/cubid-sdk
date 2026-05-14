@@ -77,6 +77,9 @@ importers:
       '@cubid/auth':
         specifier: workspace:*
         version: link:../auth
+      '@cubid/auth-react':
+        specifier: workspace:*
+        version: link:../auth-react
       '@cubid/browser':
         specifier: workspace:*
         version: link:../browser
@@ -116,6 +119,18 @@ importers:
         version: 3.2.4(@types/node@24.12.2)(jsdom@26.1.0)(tsx@4.21.0)(yaml@2.8.4)
 
   packages/auth: {}
+
+  packages/auth-react:
+    dependencies:
+      '@cubid/auth':
+        specifier: workspace:*
+        version: link:../auth
+      react:
+        specifier: '>=18.2.0'
+        version: 19.2.5
+      react-dom:
+        specifier: '>=18.2.0'
+        version: 19.2.5(react@19.2.5)
 
   packages/browser:
     dependencies:

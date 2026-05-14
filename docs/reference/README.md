@@ -7,6 +7,7 @@ public Cubid SDK packages.
 
 - `@cubid/core`
 - `@cubid/auth`
+- `@cubid/auth-react`
 - `@cubid/browser`
 - `@cubid/react`
 - `@cubid/evm`

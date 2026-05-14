@@ -16,6 +16,7 @@
     "noUncheckedIndexedAccess": true,
     "paths": {
       "@cubid/auth": ["packages/auth/src/index.ts"],
+      "@cubid/auth-react": ["packages/auth-react/src/index.ts"],
       "@cubid/browser": ["packages/browser/src/index.ts"],
       "@cubid/core": ["packages/core/src/index.ts"],
       "@cubid/evm": ["packages/evm/src/index.ts"],

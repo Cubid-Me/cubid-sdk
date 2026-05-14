@@ -12,6 +12,7 @@ verification, migrations, and service-role access.
 | --- | --- | --- |
 | `@cubid/core` | Runtime-agnostic Cubid foundation client for servers, workers, Deno, and Supabase Edge Functions. | npm + JSR |
 | `@cubid/auth` | Runtime-agnostic OIDC and PKCE helpers for browser-safe Sign in with Cubid. | npm-only |
+| `@cubid/auth-react` | React provider, hooks, callback helpers, and session controls for Sign in with Cubid. | npm-only |
 | `@cubid/browser` | Headless browser helpers for hosted verification, OTP, Allow Page, and provider handoff flows. | npm-only |
 | `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
 | `@cubid/evm` | EVM-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
@@ -23,8 +24,8 @@ verification, migrations, and service-role access.
 
 `@cubid/core` is the only JSR package today because it is the only package with
 an explicit runtime-agnostic Deno and Supabase Edge contract. The auth,
-browser, React, wagmi, and interim compatibility packages remain npm-only by
-design.
+auth-react, browser, React, wagmi, and interim compatibility packages remain
+npm-only by design.
 
 `@cubid/web2` and `@cubid/web2-react` remain installable for older imports, but
 they are compatibility names only. New integrations should use
@@ -39,6 +40,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
 - Package JSON references:
   - `docs/reference/api/core.json`
   - `docs/reference/api/auth.json`
+  - `docs/reference/api/auth-react.json`
   - `docs/reference/api/browser.json`
   - `docs/reference/api/react.json`
   - `docs/reference/api/evm.json`
@@ -98,6 +100,6 @@ package directly:
 import { createCubidApiClient } from "@cubid/core"
 ```
 
-`@cubid/auth`, `@cubid/browser`, `@cubid/react`, `@cubid/evm`,
+`@cubid/auth`, `@cubid/auth-react`, `@cubid/browser`, `@cubid/react`, `@cubid/evm`,
 `@cubid/wagmi`, and `@cubid/web3` remain npm packages; they are not part of
 the JSR publication policy.

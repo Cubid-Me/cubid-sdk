@@ -11,6 +11,7 @@ on:
         options:
           - "@cubid/core"
           - "@cubid/auth"
+          - "@cubid/auth-react"
           - "@cubid/browser"
           - "@cubid/react"
           - "@cubid/evm"
@@ -45,6 +46,10 @@ jobs:
               ;;
             "@cubid/auth")
               echo "package_dir=packages/auth" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/auth-react")
+              echo "package_dir=packages/auth-react" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/browser")

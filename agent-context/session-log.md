@@ -1,5 +1,23 @@
 # Session Log
 
+## session: s47-auth-react-session-bindings
+
+- Timestamp: 2026-05-14T00:50:59Z
+- Summary: Implemented `S04.2` by adding `@cubid/auth-react` as the React session layer on top of the new Sign in with Cubid auth foundation.
+- Actions:
+  - Added `packages/auth-react` with a client-safe auth provider, sign-in/sign-out buttons, callback handling helper, session restore and clear behavior, and React hooks around `@cubid/auth`.
+  - Extended acceptance coverage with a built-package `@cubid/auth-react` consumer scenario and wired the new package into root TypeScript paths, Vitest, publishing choices, API-reference generation, and package-boundary docs.
+  - Updated public repo guidance so `@cubid/auth-react` is now treated as the supported React session layer instead of a future package idea.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+- Follow-up:
+  - Implement `S04.3` next by adding the ClearPass-oriented Vite auth example that consumes `@cubid/auth` and `@cubid/auth-react`.
+
 ## session: s46-auth-foundation-package
 
 - Timestamp: 2026-05-14T00:36:04Z

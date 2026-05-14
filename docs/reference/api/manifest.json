@@ -15,6 +15,13 @@
       "referencePath": "auth.json"
     },
     {
+      "name": "@cubid/auth-react",
+      "version": "0.1.0",
+      "description": "React session bindings and components for Sign in with Cubid.",
+      "registry": "npm-only",
+      "referencePath": "auth-react.json"
+    },
+    {
       "name": "@cubid/browser",
       "version": "0.1.2",
       "description": "Headless browser helpers for Cubid OTP, hosted verification, and allow flows.",

@@ -45,6 +45,7 @@ artifacts.
 Scope:
 
 - `@cubid/auth`
+- `@cubid/auth-react`
 - `@cubid/browser`
 - `@cubid/evm`
 - `@cubid/wagmi`
@@ -91,6 +92,7 @@ Current acceptance scenarios:
 
 - server-oriented `@cubid/core` usage with injected `fetch`
 - browser-safe OIDC helper usage from `@cubid/auth`
+- provider-managed sign-in launch from `@cubid/auth-react`
 - hosted/browser helper usage from `@cubid/browser`
 - React composition through `@cubid/react`
 
@@ -159,6 +161,7 @@ Coverage target scope:
 
 - include `@cubid/core`
 - include `@cubid/auth`
+- include `@cubid/auth-react`
 - include `@cubid/browser`
 - include `@cubid/react`
 - include `@cubid/evm`

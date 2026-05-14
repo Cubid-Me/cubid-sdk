@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@cubid/auth": "workspace:*",
+    "@cubid/auth-react": "workspace:*",
     "@cubid/browser": "workspace:*",
     "@cubid/core": "workspace:*",
     "@cubid/react": "workspace:*",

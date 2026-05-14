@@ -33,6 +33,7 @@ Build toward this package ecosystem:
 ```txt
 @cubid/core
 @cubid/auth
+@cubid/auth-react
 @cubid/browser
 @cubid/react
 
@@ -44,7 +45,6 @@ Build toward this package ecosystem:
 @cubid/near
 
 (later, if backend contracts justify them)
-@cubid/auth-react
 @cubid/comms
 @cubid/secrets
 ```
@@ -54,6 +54,7 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 
 ```txt
 @cubid/auth
+@cubid/auth-react
 @cubid/browser
 @cubid/react
 @cubid/evm
@@ -135,12 +136,14 @@ Future smart-account, session-key, paymaster, or gas-sponsorship helpers must
 be capability-driven and explicitly optional. Do not assume every Cubid account
 supports those features by default.
 
-### Future `@cubid/auth-react`
+### `@cubid/auth-react`
 
-Use a dedicated React auth package for Sign in with Cubid on top of
+Use the dedicated React auth package for Sign in with Cubid on top of
 `@cubid/auth`.
 
 - `@cubid/auth-react`: React session/provider/hooks for that auth surface
+- sign-in launch and callback helpers
+- logout/session-clear ergonomics and user-safe error states
 
 Do not force OIDC/client-auth responsibilities into `@cubid/core` or
 `@cubid/react`.
