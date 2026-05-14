@@ -11313,7 +11313,23 @@
     },
     {
       "kind": "text",
-      "text": "-style\nresult object with the raw safe metadata preserved.\n\nThe SDK intentionally does not expose raw signing payloads, raw Cubid internal\nuser ids, private keys, encrypted key material, or other private custody\ndetails through those normalized responses.\n\nPassport-hosted approval and rejection flows are out of scope for\n"
+      "text": "-style\nresult object with the raw safe metadata preserved.\n\nUse the exported guards when you need result-type-specific handling:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`isCubidSigningSignatureResult(result)`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`isCubidSignedTransactionResult(result)`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThe SDK intentionally does not expose raw signing payloads, raw Cubid internal\nuser ids, private keys, encrypted key material, or other private custody\ndetails through those normalized responses.\n\nPassport-hosted approval and rejection flows are out of scope for\n"
     },
     {
       "kind": "code",

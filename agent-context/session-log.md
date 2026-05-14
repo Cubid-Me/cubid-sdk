@@ -830,3 +830,15 @@
   - Updated the testing strategy and publishing runbook so local validation, acceptance, and release verification all start from the same frozen-lockfile install step used in automated environments.
 - Validation:
   - Reviewed the updated docs against `.github/workflows/ci.yml` and `.github/workflows/publish.yml`, both of which already use `pnpm install --frozen-lockfile`.
+
+## session: s57-pr11-api-reference-drift-followup
+
+- Timestamp: 2026-05-14T15:12:00Z
+- Summary: Fixed the next PR #11 CI failure by regenerating the drifted API reference artifact for `@cubid/core`.
+- Actions:
+  - Reproduced the failing `pnpm docs:api:check` gate from GitHub Actions and confirmed the only drifted file was `docs/reference/api/core.json`.
+  - Regenerated the committed API reference artifact so the published `@cubid/core` helper docs now include the new typed signing-result guard references in the machine-readable output.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `git diff --check`
