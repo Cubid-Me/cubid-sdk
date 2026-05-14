@@ -13,6 +13,7 @@ on:
           - "@cubid/auth"
           - "@cubid/auth-react"
           - "@cubid/browser"
+          - "@cubid/cardano"
           - "@cubid/react"
           - "@cubid/evm"
           - "@cubid/near"
@@ -57,6 +58,10 @@ jobs:
               ;;
             "@cubid/browser")
               echo "package_dir=packages/browser" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/cardano")
+              echo "package_dir=packages/cardano" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/react")

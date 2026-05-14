@@ -57,6 +57,7 @@ browser/React/EVM slices, while frozen compatibility and interim packages remain
 @cubid/auth-react
 @cubid/browser
 @cubid/react
+@cubid/cardano
 @cubid/evm
 @cubid/wagmi
 @cubid/near

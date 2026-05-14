@@ -43,6 +43,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "cardano",
+    name: "@cubid/cardano",
+    dir: "packages/cardano",
+    entryPoint: "packages/cardano/src/index.ts",
+    tsconfig: "packages/cardano/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "react",
     name: "@cubid/react",
     dir: "packages/react",

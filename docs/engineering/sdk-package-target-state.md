@@ -188,6 +188,12 @@ values as the primary public identity for default Sui stamp serialization while
 preserving optional wallet metadata such as `publicKey`, `networkId`, and
 explicit capability descriptors.
 
+`@cubid/cardano` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Cardano stamp serialization while preserving optional
+wallet metadata such as `stakeAddress`, `networkId`, and explicit capability
+descriptors.
+
 Future SIWC transaction work should keep chain behavior explicit and
 capability-driven: the EVM Admin-policy transaction pilot may surface typed
 result metadata when policy enables it, while Solana transaction signing stays
@@ -237,8 +243,8 @@ npm-first foundation, then layers in package-ready integration surfaces:
 - `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
   compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
-- `@cubid/near`, `@cubid/solana`, and `@cubid/sui` now exist as additional
-  chain-specific packages layered on top of `@cubid/core`.
+- `@cubid/cardano`, `@cubid/near`, `@cubid/solana`, and `@cubid/sui` now exist
+  as additional chain-specific packages layered on top of `@cubid/core`.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
   packages.

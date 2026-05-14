@@ -9,6 +9,7 @@ public Cubid SDK packages.
 - `@cubid/auth`
 - `@cubid/auth-react`
 - `@cubid/browser`
+- `@cubid/cardano`
 - `@cubid/react`
 - `@cubid/evm`
 - `@cubid/near`

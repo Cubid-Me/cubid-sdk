@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s56-cardano-package-slice
+
+- Timestamp: 2026-05-14T18:15:00Z
+- Summary: Continued `S03` by extracting `@cubid/cardano` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/cardano` with a Cardano-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept `address` as the primary Cardano identity for default stamp serialization while preserving optional `stakeAddress`, `networkId`, and `chainType` metadata.
+  - Wired `@cubid/cardano` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the eventual `@cubid/web3` compatibility closeout or any remaining release work for the newly extracted chain packages.
+
 ## session: s55-sui-package-slice
 
 - Timestamp: 2026-05-14T17:15:00Z

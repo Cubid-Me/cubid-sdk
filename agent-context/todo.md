@@ -334,6 +334,19 @@ Added `packages/sui` as the next chain-specific package on top of
 `@cubid/core`, with canonical lowercase address normalization, capability
 metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
 
+### S03.10 Create the first `@cubid/cardano` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T17:30:00Z
+- Timestamp completed: 2026-05-14T18:15:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `50f8038a` at implementation start
+- Session-log reference(s): session: s56-cardano-package-slice
+
+Added `packages/cardano` as the next bounded chain-specific package on top of
+`@cubid/core`, with Cardano-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
 - Status: Completed

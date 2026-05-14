@@ -29,6 +29,13 @@
       "referencePath": "browser.json"
     },
     {
+      "name": "@cubid/cardano",
+      "version": "0.1.0",
+      "description": "Cardano-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "cardano.json"
+    },
+    {
       "name": "@cubid/react",
       "version": "0.1.2",
       "description": "React components and hooks for Cubid browser flows.",

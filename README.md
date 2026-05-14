@@ -14,6 +14,7 @@ verification, migrations, and service-role access.
 | `@cubid/auth` | Runtime-agnostic OIDC and PKCE helpers for browser-safe Sign in with Cubid. | npm-only |
 | `@cubid/auth-react` | React provider, hooks, callback helpers, and session controls for Sign in with Cubid. | npm-only |
 | `@cubid/browser` | Headless browser helpers for hosted verification, OTP, Allow Page, and provider handoff flows. | npm-only |
+| `@cubid/cardano` | Cardano-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
 | `@cubid/evm` | EVM-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
 | `@cubid/near` | NEAR-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
@@ -45,6 +46,7 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/auth.json`
   - `docs/reference/api/auth-react.json`
   - `docs/reference/api/browser.json`
+  - `docs/reference/api/cardano.json`
   - `docs/reference/api/react.json`
   - `docs/reference/api/evm.json`
   - `docs/reference/api/near.json`
