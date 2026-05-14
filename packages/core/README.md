@@ -9,13 +9,30 @@ React, Next.js, Firebase, Supabase, Node built-ins, or browser-only helpers.
 All requests use `fetch`, `RequestInit`, `Headers`, and plain JSON so the same
 client can run in Node, Deno, Supabase Edge Functions, workers, and tests.
 
+## When To Choose This Package
+
+Use `@cubid/core` when you need Cubid's runtime-agnostic foundation client for
+servers, workers, Deno, or Supabase Edge Functions. Choose `@cubid/browser`,
+`@cubid/react`, `@cubid/evm`, or `@cubid/wagmi` only when you specifically need
+their higher-level integration surfaces.
+
 ## Install
 
 ```sh
 npm install @cubid/core
 ```
 
-`@cubid/core@0.1.0` is live on npm and JSR.
+## Registry Availability
+
+- npm: supported
+- JSR: supported
+
+## API Reference
+
+- JSON reference: `../../docs/reference/api/core.json`
+- Package matrix: `../../README.md`
+
+`@cubid/core` is live on npm and JSR.
 
 ```ts
 // Deno / Supabase Edge
@@ -104,6 +121,10 @@ endpoints plus the first server-facing API v3 write helpers:
 - `saveSecret`
 - `generateAccount`
 - `listAccounts`
+- `createSigningRequest`
+- `getSigningRequest`
+- `listSigningRequests`
+- `cancelSigningRequest`
 
 Responses use SDK-friendly camelCase fields while retaining the original
 server payload in `raw` for migration/debugging. Malformed successful responses
@@ -149,14 +170,19 @@ The current API v3 helpers stay server-side as well:
 - `saveSecret({ userId, secret, idempotencyKey? })`
 - `generateAccount({ userId, chain, label?, idempotencyKey? })`
 - `listAccounts({ userId, chain? })`
+- `createSigningRequest({ userId, userAccountId, requestType, payload, payloadSummary, chain?, idempotencyKey? })`
+- `getSigningRequest({ signingRequestId })`
+- `listSigningRequests({ userId, userAccountId? })`
+- `cancelSigningRequest({ signingRequestId })`
 
 Legacy `POST /api/v2/save_secret` is retired and should not be used or
 reintroduced in the public SDK surface. `saveSecret` now targets the v3 write
 contract only.
 
-`saveSecret` and `generateAccount` automatically generate an idempotency key
-when callers omit one, and they return the resolved `idempotencyKey` alongside
-the normalized response so callers can log or reconcile retries safely.
+`saveSecret`, `generateAccount`, and `createSigningRequest` automatically
+generate an idempotency key when callers omit one, and they return the
+resolved `idempotencyKey` alongside the normalized response so callers can log
+or reconcile retries safely.
 
 Supported custody chains on the public v3 account helpers are:
 
@@ -169,6 +195,15 @@ The SDK surface continues to normalize app-scoped identifiers to `userId`
 while translating to Passport's current wire keys such as `user_id` and
 `dapp_user_uuid` internally.
 
+`@cubid/core` now also exports small helpers for this model directly:
+
+- `createCubidAppScopedSubject(userId)`
+- `CUBID_STAMP_TYPE_IDS`
+- `getCubidStampTypeId(stampType)`
+- `getCubidStampTypeName(stampTypeId)`
+- `getCubidStampTypeNamesById()`
+- `summarizeCubidDisclosedStamp(record)`
+
 Custody helpers only return public account metadata such as chain, address,
 label, and custody status. They never return raw private keys, wrapped keys,
 ciphertext, IVs, auth tags, or Vault material. Sui public addresses are
@@ -178,6 +213,44 @@ normalized to lowercase `0x...` strings on the SDK surface.
 v3 contract does not expose a public decrypt/read endpoint for these secrets,
 so do not build app flows that assume the SDK can read plaintext secret values
 back out later.
+
+The signing-request helpers also stay redacted by default. They normalize only
+safe summary metadata such as:
+
+- `signingRequestId`
+- `status`
+- `chain`
+- `requestType`
+- `payloadHash`
+- `payloadSummary`
+- `policyVersion`
+- `requiredAcr`
+- timestamps
+- optional `result` metadata only after completion
+
+They also preserve additive SIWC05 policy and risk metadata when present:
+
+- `riskLevel`
+- `riskReasons`
+- `policyDecision`
+- `stepUpRequired`
+- `transactionOperationType`
+- `transactionRecipient`
+- `transactionContractAddress`
+- `transactionDeclaredValueUsd`
+
+The SDK intentionally does not expose raw signing payloads, raw Cubid internal
+user ids, private keys, encrypted key material, or other private custody
+details through those normalized responses.
+
+Passport-hosted approval and rejection flows are out of scope for
+`@cubid/core`. The public core client only wraps the dapp-facing API v3
+signing-request routes.
+
+Transaction-signing flows remain fail-closed on the SDK surface. If Passport
+returns transaction-oriented request summaries or policy metadata, treat them
+as denied, deferred, or reviewable metadata only. Do not infer that transaction
+signatures are enabled.
 
 ## Webhook Verification
 
@@ -205,11 +278,36 @@ Canonical public event names currently include:
 - `credential.whitelisted`
 - `score.increased`
 - `score.decreased`
+- `wallet.created`
+- `wallet.signing_request.created`
+- `wallet.policy.denied`
+- `wallet.signing_request.approved`
+- `wallet.signing_request.rejected`
+- `wallet.signing_request.cancelled`
+- `wallet.signing_request.step_up_failed`
+- `wallet.signature.completed`
+- `wallet.signature.failed`
 
 `parseCubidWebhookEvent` also preserves `legacyEventType` so transition-period
 consumers can keep bridging from older backend names such as
 `credential_added` and `score_increase` while migrating toward the canonical
 `eventType`.
+
+Transaction webhook events are still intentionally excluded here. Do not build
+against transaction-submission or transaction-failure webhook names until
+Passport explicitly enables transaction signing and publishes those events as
+live public contract.
+
+## App-Scoped Identity And Stamp Metadata
+
+The public SDK now ships the canonical stamp-id map currently shared with
+Passport's internal stamp registry, including aliases such as
+`"near-wallet" -> 15`. Use those helpers when apps need a stable mapping
+between app-visible stamp names and backend `stamptype` ids.
+
+`createCubidAppScopedSubject` is intentionally small: it validates and wraps the
+app-scoped `userId` that your integration stores locally. It does not expose or
+derive raw cross-app identifiers.
 
 Profile-completion flows and React components are intentionally deferred to
 later SDK tasks.

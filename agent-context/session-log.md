@@ -1,5 +1,306 @@
 # Session Log
 
+## session: s44-pr8-release-review-followup
+
+- Timestamp: 2026-05-13T13:10:00Z
+- Summary: Addressed the open PR #8 release-review comments by tightening the ClearPass helper contract and bumping the newly changed browser and React package versions for publication.
+- Actions:
+  - Bumped `@cubid/browser` and `@cubid/react` from `0.1.1` to `0.1.2` so the new public ClearPass helper exports are publishable from the release branch.
+  - Made `ClearPassVerifyUrlRequest.pageId` required and added an explicit ClearPass-side `pageId` assertion before delegating to the shared hosted URL builder.
+  - Narrowed the public capability helper parameters in `@cubid/evm` and `@cubid/web3` to string keys only, avoiding accidental numeric capability names from index-signature widening.
+  - Regenerated the machine-readable API reference artifacts so the manifest and package snapshots reflect the release-candidate package versions.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+
+## session: s43-pr7-api-reference-determinism-fix
+
+- Timestamp: 2026-05-10T22:10:00Z
+- Summary: Fixed the remaining PR #7 CI failure by making the machine-readable API reference artifacts stable across clean environments.
+- Actions:
+  - Reproduced the failing `pnpm docs:api:check` step from PR #7 in a clean checkout and confirmed the drift was isolated to `docs/reference/api/core.json`.
+  - Traced the drift to environment-specific `typedoc` graph bookkeeping such as numeric reflection IDs and derived lookup maps rather than a real SDK API surface change.
+  - Updated `scripts/build-api-reference.mjs` so the committed JSON artifacts now strip unstable internal `typedoc` fields while preserving the useful package API structure for tooling ingestion.
+  - Regenerated the checked-in API reference artifacts after the normalization fix so CI and clean clones compare against the new deterministic baseline.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
+## session: s42-pr7-review-followup
+
+- Timestamp: 2026-05-10T21:15:00Z
+- Summary: Addressed the open review threads on PR #7 by restoring real API-reference drift protection in CI and tightening a few public helper type surfaces.
+- Actions:
+  - Removed the pre-check `docs:api:build` step from CI so `docs:api:check` once again validates the committed reference artifacts instead of overwriting them first.
+  - Hardened the API reference drift checker so it now also fails on unexpected stale files under `docs/reference/api/`, not just changed expected files.
+  - Simplified the capability helper signatures in `@cubid/evm` and `@cubid/web3` by dropping redundant `| string` unions from index-signature-backed capability names.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
+## session: s41-ci-fix-and-clearpass-verify-helper
+
+- Timestamp: 2026-05-10T01:20:00Z
+- Summary: Fixed the PR #7 clean-run CI failure and turned the ClearPass Verify inbox note into a real browser and React helper surface.
+- Actions:
+  - Diagnosed the failing PR CI run and confirmed `pnpm test:unit` was depending on leftover built package entrypoints for `@cubid/browser` and `@cubid/evm` that do not exist on a fresh runner.
+  - Updated `pnpm test:unit` and the testing strategy so the unit test command now prepares the minimal built entrypoints it needs before running Vitest, keeping the CI order intact while removing the clean-run dependency on local artifacts.
+  - Added `buildClearPassVerifyUrl(...)` and extended the hosted verification helper surface so `clearpass_verify` now launches the Cubid-hosted ClearPass URL instead of exposing any direct ClearPass integration path.
+  - Added `ClearPassVerifyButton` to `@cubid/react`, kept the copy branded as a third-party ClearPass flow, and reused the existing post-popup stamp refresh behavior.
+  - Expanded browser and React tests plus package READMEs, and closed `S11` in the roadmap.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
+## session: s40-s10-developer-ingestion-publishing
+
+- Timestamp: 2026-05-09T13:30:00Z
+- Summary: Finished `S10` by locking the package registry policy, adding machine-readable API reference artifacts, and tightening the public developer entrypoints across the SDK package family.
+- Actions:
+  - Reviewed the incoming Passport note `agent-context/messages-from-cubid-passport/2026-05-09-clearpass-verify-stamp.md` and turned it into a new tracked SDK follow-up instead of leaving it as an unstructured inbox file.
+  - Updated the root README, package READMEs, package metadata, and Supabase Edge integration guide so new consumers can see the supported package names, registry availability, and the right package to choose first.
+  - Expanded the publishing runbook into a package-family policy document and made the GitHub publish workflow describe JSR support for `@cubid/core` as an explicit policy choice rather than an accidental limitation.
+  - Added a committed machine-readable reference surface under `docs/reference/api/` plus `docs/reference/README.md`, with a deterministic `typedoc`-based generator and a drift check command for CI.
+  - Updated CI so API reference generation and drift checks are part of the normal validation baseline.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm check:core-package`
+
+## session: s39-s02-compatibility-retirement
+
+- Timestamp: 2026-05-09T11:20:00Z
+- Summary: Closed out `S02` by retiring `@cubid/web2` and `@cubid/web2-react` as frozen compatibility shims and removing them from the normal release path.
+- Actions:
+  - Updated `@cubid/web2` and `@cubid/web2-react` metadata and READMEs so they now present themselves as frozen deprecated wrappers instead of temporary first-class migration packages.
+  - Updated the root README, agent guidance, target-state docs, and migration plan so `@cubid/browser` and `@cubid/react` are the only supported long-term package names.
+  - Removed `@cubid/web2` and `@cubid/web2-react` from the normal `Publish Packages` workflow options while keeping the packages in the workspace as installable re-export shims.
+  - Recorded the exact post-merge npm deprecation commands and messages for the retired package names in the publishing runbook instead of unpublishing them.
+- Validation:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
+## session: s38-testing-baseline-and-acceptance-harness
+
+- Timestamp: 2026-05-07T14:05:00Z
+- Summary: Finished `S09` by standardizing the repo on Vitest, adding a consumer-style acceptance harness, and documenting coverage governance.
+- Actions:
+  - Migrated `@cubid/core` onto the shared Vitest runner so the repo now has one primary package-test pipeline instead of a mixed `node:test` and Vitest split.
+  - Added `packages/acceptance` as a private workspace package that exercises the built `@cubid/core`, `@cubid/browser`, and `@cubid/react` package surfaces the way a local consumer would.
+  - Added `docs/engineering/testing-strategy.md` to define the test layers, local validation commands, CI-required validation, and the report-now/gate-later coverage policy.
+  - Updated root scripts and CI so lint, typecheck, unit tests, build, acceptance tests, coverage reporting, and core package dry-runs are distinct and intentional steps.
+- Validation:
+  - `pnpm install`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm test:unit`
+  - `pnpm build`
+  - `pnpm test:acceptance`
+  - `pnpm test:coverage`
+  - `pnpm check:core-package`
+
+## session: s37-s03-capability-driven-chain-surface
+
+- Timestamp: 2026-05-07T12:35:00Z
+- Summary: Finished the current `S03.6` tranche by making the EVM, wagmi, and interim web3 package surfaces capability-driven instead of implicitly smart-account-oriented.
+- Actions:
+  - Added optional connection/result `capabilities` metadata to `@cubid/evm` and the interim `@cubid/web3` package surfaces.
+  - Exported explicit helper functions for capability checks so apps can branch on `smartAccount`, `sessionKeys`, `paymaster`, and `gasSponsorship` support without assuming those features exist everywhere.
+  - Updated the wagmi adapter and hook so connector-provided capability metadata can flow through to React consumers.
+  - Updated chain-package docs and the migration plan so future chain work keeps capability signaling explicit and opt-in.
+- Validation:
+  - `pnpm test`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s36-pr6-review-followup
+
+- Timestamp: 2026-05-07T00:10:00Z
+- Summary: Addressed the first PR #6 Copilot and Codex review round on the SIWC core release follow-up branch.
+- Actions:
+  - Tightened signing-request risk and policy normalization so unsupported or omitted upstream values collapse to `null` instead of leaking `undefined` or unsound closed-union casts.
+  - Corrected the core README so `listSigningRequests` only documents the currently supported public filters.
+  - Made the wallet-signature webhook parsing test use a self-explanatory wallet-oriented payload instead of stamp-shaped data.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s35-testing-and-distribution-roadmap-extension
+
+- Timestamp: 2026-05-06T23:40:00Z
+- Summary: Extended the active roadmap to cover testing strategy, local acceptance validation, coverage governance, and broader developer-ingestion publishing surfaces.
+- Actions:
+  - Added `S09` to `todo.md` for an explicit SDK testing strategy, local acceptance harness, and coverage governance decision.
+  - Added `S10` to `todo.md` for broader API and SDK publication to developer-ingestion surfaces beyond the existing npm and JSR baseline.
+  - Updated `repo-status.md` so the remaining testing and distribution gaps now reference the new roadmap items directly.
+- Validation:
+  - Reviewed the updated roadmap and repo-status entries against the current package and publishing state.
+
+## session: s34-repo-cleanup-control-plane
+
+- Timestamp: 2026-05-06T23:20:00Z
+- Summary: Ran a safe repo-cleanup pass focused on missing control-plane files and repo-governance alignment rather than feature-code changes.
+- Actions:
+  - Added `agent-context/repo-status.md` as the durable lightweight cleanup snapshot for repo standards.
+  - Added `agent-context/future-ideas.md` with an explicit warning that it is not active roadmap work.
+  - Updated `AGENTS.md` with the `dev`/`main` branch flow and a clear note that the Supabase direct-access audit does not apply to this SDK repo.
+  - Updated `README.md` so the root docs point to the new repo-status and future-ideas control files and reflect the actual integration/release workflow.
+- Validation:
+  - Reviewed the updated docs and control-plane files against the current repo structure, workflows, and roadmap state.
+
+## session: s33-siwc-signing-surface
+
+- Timestamp: 2026-05-06T22:45:00Z
+- Summary: Implemented the first public SIWC signing-request lifecycle surface in `@cubid/core` and extended the webhook docs and event types for SIWC wallet events.
+- Actions:
+  - Added SIWC wallet event names to `CubidWebhookEventType` while keeping the existing webhook verification contract unchanged.
+  - Added `createSigningRequest`, `getSigningRequest`, `listSigningRequests`, and `cancelSigningRequest` to `@cubid/core` as runtime-agnostic API v3 helpers.
+  - Added shared public signing-request request and response types, including redacted summaries, additive SIWC05 risk fields, and create-route idempotency handling.
+  - Kept transaction-signing flows fail-closed in normalized summaries and docs so policy metadata does not imply signature enablement.
+  - Updated the public core README and Next/Supabase integration guide to document the new SIWC signing methods, redacted summary model, and additive wallet webhook event names.
+  - Bumped `@cubid/core` package and JSR manifests from `0.1.1` to `0.1.2` because this adds new public API surface.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s32-pr5-sharedarraybuffer-followup
+
+- Timestamp: 2026-05-06T14:05:00Z
+- Summary: Addressed the remaining PR #5 webhook review edge case by making webhook signature verification safe for SharedArrayBuffer-backed byte views.
+- Actions:
+  - Updated the internal `toArrayBuffer` helper to avoid calling `.buffer.slice(...)` on non-ArrayBuffer-backed views and to copy through `Uint8Array#slice()` when needed.
+  - Preserved the zero-copy fast path for full ArrayBuffer-backed views.
+  - Expanded the core webhook tests so `verifyCubidWebhookSignature` now explicitly covers SharedArrayBuffer-backed payload input.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s31-pr5-review-followup
+
+- Timestamp: 2026-05-06T13:20:00Z
+- Summary: Addressed the first PR #5 review round by making the webhook helper contracts stricter and bumping `@cubid/core` for a publishable next release.
+- Actions:
+  - Bumped `packages/core/package.json` and `packages/core/jsr.json` to `0.1.1` so the newly added public core APIs can be released instead of colliding with the live `0.1.0` registry state.
+  - Hardened `verifyCubidWebhookSignature` so non-finite or invalid `toleranceSeconds`, `now`, and timestamp inputs fail closed with validation errors.
+  - Updated `CubidWebhookEvent<TData>` and `parseCubidWebhookEvent` so missing webhook `data` is modeled honestly as `null` instead of violating the exported type contract.
+  - Added test coverage for the stricter webhook validation edge cases and nullable parsed webhook data.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s30-siwc-wallet-event-and-capability-roadmap-ingest
+
+- Timestamp: 2026-05-06T15:35:00Z
+- Summary: Ingested the SIWC wallet webhook and smart-account roadmap notes so future SDK work stays additive on webhooks and capability-driven on custody features.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`.
+  - Added a webhook follow-up so public webhook types and examples can pick up the new SIWC wallet event names without changing the existing verification contract.
+  - Recorded that transaction webhook names remain deferred because transaction signing is still disabled.
+  - Added a future chain-account planning item that keeps smart accounts, session keys, paymasters, and gas sponsorship capability-driven rather than universally assumed.
+  - Updated package-boundary docs so future agents keep wallet-event handling additive in `@cubid/core` and avoid implying that smart-account features are default or globally available.
+- Validation:
+  - Reviewed the updated roadmap and target-state guidance against the two incoming Passport notes.
+
+## session: s29-s08-signing-request-roadmap-ingest
+
+- Timestamp: 2026-05-06T15:10:00Z
+- Summary: Ingested the first Sign In With Cubid signing-request lifecycle notes into the public SDK roadmap and package-boundary docs without starting runtime wrappers early.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`.
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`.
+  - Added a new `S08` roadmap track for typed API v3 signing-request lifecycle wrappers in `@cubid/core`.
+  - Recorded the planned public wrapper names `createSigningRequest`, `getSigningRequest`, `listSigningRequests`, and `cancelSigningRequest`.
+  - Captured the redacted response metadata expectations, SIWC05 additive risk fields, the no-approval-from-dapp-keys rule, and the continued fail-closed posture for transaction signing.
+  - Updated package-boundary docs so future agents keep hosted approval and rejection UX in Passport while placing dapp-facing HTTP wrappers in `@cubid/core`.
+  - Recorded that the adjacent incoming notes `siwc06` and `siwc07` should be handled before starting the runtime `S08` implementation.
+- Validation:
+  - Reviewed the updated roadmap and package-boundary docs for consistency with the two incoming Passport notes.
+
+## session: s28-s05-app-scoped-stamp-surface
+
+- Timestamp: 2026-05-03T22:40:00Z
+- Summary: Finished the current S05 tranche by exporting the canonical stamp registry and a small app-scoped subject helper from `@cubid/core`.
+- Actions:
+  - Added `CUBID_STAMP_TYPE_IDS`, `getCubidStampTypeId`, `getCubidStampTypeName`, `getCubidStampTypeNamesById`, and `summarizeCubidDisclosedStamp` to align public SDK stamp metadata with Passport's canonical stamp registry.
+  - Added `createCubidAppScopedSubject` so downstream apps can validate and wrap app-scoped `userId` values without introducing raw cross-app identifiers.
+  - Updated stamp normalization so `fetchStamps` falls back to canonical stamp names when the backend returns only a numeric `stamptype`.
+  - Expanded public docs so the app-scoped subject model and canonical stamp helpers are part of the supported `@cubid/core` surface.
+  - Closed the current S05 roadmap tranche while keeping future `notGranted` expansion explicitly gated on stronger backend route signals.
+- Validation:
+  - `pnpm --filter @cubid/core test`
+  - `pnpm typecheck`
+  - `pnpm build`
+
+## session: s27-package-metadata-republish
+
+- Timestamp: 2026-05-03T22:15:00Z
+- Summary: Corrected the published npm metadata for the first non-core public packages and verified the new dependency ranges live on the registry.
+- Actions:
+  - Bumped `@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi` to `0.1.1` as metadata-only patch releases.
+  - Verified packed manifests locally before release so internal workspace dependencies rewrote to real published versions.
+  - Fixed the GitHub Actions webhook-helper typecheck issue that had blocked the first trusted-publishing retry.
+  - Added npm trusted-publisher bindings for `@cubid/browser`, `@cubid/react`, `@cubid/evm`, and `@cubid/wagmi`.
+  - Published and verified live corrective versions:
+    - `@cubid/browser@0.1.1`
+    - `@cubid/react@0.1.1`
+    - `@cubid/evm@0.1.1`
+    - `@cubid/wagmi@0.1.1`
+- Validation:
+  - `pnpm --filter @cubid/browser pack --pack-destination /tmp/cubid-browser-pack`
+  - `pnpm --filter @cubid/react pack --pack-destination /tmp/cubid-react-pack`
+  - `pnpm --filter @cubid/evm pack --pack-destination /tmp/cubid-evm-pack`
+  - `pnpm --filter @cubid/wagmi pack --pack-destination /tmp/cubid-wagmi-pack`
+  - `npm view @cubid/browser version dependencies --json`
+  - `npm view @cubid/react version dependencies --json`
+  - `npm view @cubid/evm version dependencies --json`
+  - `npm view @cubid/wagmi version dependencies --json`
+
 ## session: s26-s07-webhook-helpers
 
 - Timestamp: 2026-05-03T23:05:00Z

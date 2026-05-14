@@ -1,6 +1,6 @@
 import type { CubidApiClient } from "@cubid/core";
 
-import { buildDefaultEvmStampData } from "./internal";
+import { buildDefaultEvmStampData, getCubidEvmCapabilities } from "./internal";
 import type {
   ConnectWalletRequest,
   CubidEvmAdapter,
@@ -59,6 +59,7 @@ export function createCubidEvmClient(
 
       const verification = (await adapter.verify?.(connection)) ?? createDefaultVerification();
       const resolvedStampType = resolveStampType(stampType, defaultStampType);
+      const capabilities = getCubidEvmCapabilities(connection);
       const stampData =
         adapter.toStampData?.(connection, verification) ??
         buildDefaultEvmStampData(resolvedStampType, connection, verification);
@@ -82,6 +83,7 @@ export function createCubidEvmClient(
       }
 
       return {
+        capabilities,
         connection,
         persistedStamp,
         stampData,

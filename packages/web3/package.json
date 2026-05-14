@@ -1,6 +1,6 @@
 {
   "name": "@cubid/web3",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wallet-oriented Cubid helpers built on top of @cubid/core.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
@@ -19,6 +19,18 @@
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
     "directory": "packages/web3"
   },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/web3",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "identity",
+    "web3",
+    "wallet",
+    "sdk",
+    "compatibility"
+  ],
   "sideEffects": false,
   "dependencies": {
     "@cubid/core": "workspace:*"

@@ -1,4 +1,5 @@
 import type {
+  CubidEvmCapabilities,
   CubidEvmConnection,
   CubidEvmStampType,
   CubidEvmVerification
@@ -18,4 +19,17 @@ export function buildDefaultEvmStampData(
     verification: verification.metadata,
     walletType: stampType
   };
+}
+
+export function getCubidEvmCapabilities(
+  connection: CubidEvmConnection
+): CubidEvmCapabilities {
+  return connection.capabilities ?? {};
+}
+
+export function hasCubidEvmCapability(
+  connection: CubidEvmConnection,
+  capabilityName: keyof CubidEvmCapabilities & string
+): boolean {
+  return Boolean(getCubidEvmCapabilities(connection)[capabilityName]?.available);
 }

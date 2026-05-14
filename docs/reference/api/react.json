@@ -1,0 +1,2574 @@
+{
+  "schemaVersion": "2.0",
+  "name": "@cubid/react",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "name": "ClearPassVerifyButtonProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "buttonLabel",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "dappId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.dappId",
+            "package": "@cubid/react"
+          }
+        },
+        {
+          "name": "description",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.onError",
+            "package": "@cubid/react"
+          }
+        },
+        {
+          "name": "onStampChange",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.onStampChange",
+            "package": "@cubid/react"
+          }
+        },
+        {
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.pageId",
+            "package": "@cubid/react"
+          }
+        },
+        {
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.passportOrigin",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.passportOrigin"
+          }
+        },
+        {
+          "name": "popupFeatures",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.popupFeatures",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.popupFeatures"
+          }
+        },
+        {
+          "name": "popupName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.popupName",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.popupName"
+          }
+        },
+        {
+          "name": "title",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.userId",
+            "package": "@cubid/react"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "@types/react",
+                "packagePath": "index.d.ts",
+                "qualifiedName": "React.ComponentPropsWithoutRef"
+              },
+              "typeArguments": [
+                {
+                  "type": "query",
+                  "queryType": {
+                    "type": "reference",
+                    "name": "CubidHostedVerificationWidget",
+                    "package": "@cubid/react"
+                  }
+                }
+              ],
+              "name": "ComponentPropsWithoutRef",
+              "package": "@types/react",
+              "qualifiedName": "React.ComponentPropsWithoutRef"
+            },
+            {
+              "type": "union",
+              "types": [
+                {
+                  "type": "literal",
+                  "value": "buttonLabel"
+                },
+                {
+                  "type": "literal",
+                  "value": "description"
+                },
+                {
+                  "type": "literal",
+                  "value": "stampToRender"
+                },
+                {
+                  "type": "literal",
+                  "value": "title"
+                }
+              ]
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "CubidHostedVerificationWidgetProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "buttonLabel",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "dappId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "description",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          },
+          "overwrites": {
+            "type": "reference",
+            "name": "Omit.onError",
+            "package": "@types/react"
+          }
+        },
+        {
+          "name": "onStampChange",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "popupFeatures",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "popupName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "stampToRender",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "address"
+              },
+              {
+                "type": "literal",
+                "value": "phone"
+              },
+              {
+                "type": "literal",
+                "value": "clearpass_verify"
+              }
+            ]
+          }
+        },
+        {
+          "name": "title",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "overwrites": {
+            "type": "reference",
+            "name": "Omit.title",
+            "package": "@types/react"
+          }
+        },
+        {
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "@types/react",
+                "packagePath": "index.d.ts",
+                "qualifiedName": "React.ComponentPropsWithoutRef"
+              },
+              "typeArguments": [
+                {
+                  "type": "literal",
+                  "value": "section"
+                }
+              ],
+              "name": "ComponentPropsWithoutRef",
+              "package": "@types/react",
+              "qualifiedName": "React.ComponentPropsWithoutRef"
+            },
+            {
+              "type": "literal",
+              "value": "children"
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "CubidWeb2ProviderProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "children",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        },
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWidgetProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "api_key",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "buttonLabel",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.buttonLabel",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.buttonLabel"
+          }
+        },
+        {
+          "name": "dapp_id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "description",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.description",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.description"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.onError",
+            "package": "@cubid/react"
+          }
+        },
+        {
+          "name": "onStampChange",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.onStampChange",
+            "package": "@cubid/react"
+          }
+        },
+        {
+          "name": "page_id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.passportOrigin",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.passportOrigin"
+          }
+        },
+        {
+          "name": "popupFeatures",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.popupFeatures",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.popupFeatures"
+          }
+        },
+        {
+          "name": "popupName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.popupName",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.popupName"
+          }
+        },
+        {
+          "name": "stampToRender",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "address"
+              },
+              {
+                "type": "literal",
+                "value": "phone"
+              },
+              {
+                "type": "literal",
+                "value": "clearpass_verify"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.stampToRender",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.stampToRender"
+          }
+        },
+        {
+          "name": "title",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "Omit.title",
+            "package": "@cubid/react",
+            "qualifiedName": "CubidHostedVerificationWidgetProps.title"
+          }
+        },
+        {
+          "name": "uuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "name": "CubidHostedVerificationWidgetProps",
+              "package": "@cubid/react"
+            },
+            {
+              "type": "union",
+              "types": [
+                {
+                  "type": "literal",
+                  "value": "dappId"
+                },
+                {
+                  "type": "literal",
+                  "value": "pageId"
+                },
+                {
+                  "type": "literal",
+                  "value": "userId"
+                }
+              ]
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "EmailOtpFormProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "defaultEmail",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          },
+          "overwrites": {
+            "type": "reference",
+            "name": "Omit.onError",
+            "package": "@types/react"
+          }
+        },
+        {
+          "name": "onStarted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/core",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidSendEmailOtpResponse"
+                        },
+                        "name": "CubidSendEmailOtpResponse",
+                        "package": "@cubid/core"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/browser",
+                          "packagePath": "src/types.ts",
+                          "qualifiedName": "EmailOtpVerifyResult"
+                        },
+                        "name": "EmailOtpVerifyResult",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "StampPersistenceRequest"
+            },
+            "name": "StampPersistenceRequest",
+            "package": "@cubid/browser"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "@types/react",
+                "packagePath": "index.d.ts",
+                "qualifiedName": "React.ComponentPropsWithoutRef"
+              },
+              "typeArguments": [
+                {
+                  "type": "literal",
+                  "value": "form"
+                }
+              ],
+              "name": "ComponentPropsWithoutRef",
+              "package": "@types/react",
+              "qualifiedName": "React.ComponentPropsWithoutRef"
+            },
+            {
+              "type": "literal",
+              "value": "onSubmit"
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "PhoneOtpFormProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "defaultPhone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          },
+          "overwrites": {
+            "type": "reference",
+            "name": "Omit.onError",
+            "package": "@types/react"
+          }
+        },
+        {
+          "name": "onStarted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/core",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidSendPhoneOtpResponse"
+                        },
+                        "name": "CubidSendPhoneOtpResponse",
+                        "package": "@cubid/core"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/browser",
+                          "packagePath": "src/types.ts",
+                          "qualifiedName": "PhoneOtpVerifyResult"
+                        },
+                        "name": "PhoneOtpVerifyResult",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "StampPersistenceRequest"
+            },
+            "name": "StampPersistenceRequest",
+            "package": "@cubid/browser"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "@types/react",
+                "packagePath": "index.d.ts",
+                "qualifiedName": "React.ComponentPropsWithoutRef"
+              },
+              "typeArguments": [
+                {
+                  "type": "literal",
+                  "value": "form"
+                }
+              ],
+              "name": "ComponentPropsWithoutRef",
+              "package": "@types/react",
+              "qualifiedName": "React.ComponentPropsWithoutRef"
+            },
+            {
+              "type": "literal",
+              "value": "onSubmit"
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "ProviderConnectButtonProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "authorizationRequest",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "OAuthAuthorizationUrlRequest"
+            },
+            "name": "OAuthAuthorizationUrlRequest",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "authorizationUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "navigate",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "onConnect",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "details",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reflection",
+                        "declaration": {
+                          "name": "__type",
+                          "variant": "declaration",
+                          "kind": 65536,
+                          "flags": {},
+                          "children": [
+                            {
+                              "name": "provider",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {},
+                              "type": {
+                                "type": "union",
+                                "types": [
+                                  {
+                                    "type": "literal",
+                                    "value": "discord"
+                                  },
+                                  {
+                                    "type": "literal",
+                                    "value": "github"
+                                  },
+                                  {
+                                    "type": "literal",
+                                    "value": "google"
+                                  },
+                                  {
+                                    "type": "literal",
+                                    "value": "instagram"
+                                  },
+                                  {
+                                    "type": "literal",
+                                    "value": "linkedin"
+                                  },
+                                  {
+                                    "type": "literal",
+                                    "value": "twitter"
+                                  },
+                                  {
+                                    "type": "literal",
+                                    "value": "worldcoin"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "name": "state",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {
+                                "isOptional": true
+                              },
+                              "type": {
+                                "type": "union",
+                                "types": [
+                                  {
+                                    "type": "intrinsic",
+                                    "name": "string"
+                                  },
+                                  {
+                                    "type": "reference",
+                                    "target": {
+                                      "packageName": "@cubid/browser",
+                                      "packagePath": "src/types.ts",
+                                      "qualifiedName": "CubidOAuthCallbackState"
+                                    },
+                                    "name": "CubidOAuthCallbackState",
+                                    "package": "@cubid/browser"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "name": "url",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {
+                                "isOptional": true
+                              },
+                              "type": {
+                                "type": "intrinsic",
+                                "name": "string"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          },
+          "overwrites": {
+            "type": "reference",
+            "name": "Omit.onError",
+            "package": "@types/react"
+          }
+        },
+        {
+          "name": "provider",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "discord"
+              },
+              {
+                "type": "literal",
+                "value": "github"
+              },
+              {
+                "type": "literal",
+                "value": "google"
+              },
+              {
+                "type": "literal",
+                "value": "instagram"
+              },
+              {
+                "type": "literal",
+                "value": "linkedin"
+              },
+              {
+                "type": "literal",
+                "value": "twitter"
+              },
+              {
+                "type": "literal",
+                "value": "worldcoin"
+              }
+            ]
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "@types/react",
+                "packagePath": "index.d.ts",
+                "qualifiedName": "React.ComponentPropsWithoutRef"
+              },
+              "typeArguments": [
+                {
+                  "type": "literal",
+                  "value": "button"
+                }
+              ],
+              "name": "ComponentPropsWithoutRef",
+              "package": "@types/react",
+              "qualifiedName": "React.ComponentPropsWithoutRef"
+            },
+            {
+              "type": "literal",
+              "value": "onClick"
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "ProviderProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "children",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Web2ConnectPanelProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": false
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/react",
+                  "packagePath": "src/Web2ConnectPanel.tsx",
+                  "qualifiedName": "Web2ConnectPanelEmailConfig"
+                },
+                "name": "Web2ConnectPanelEmailConfig",
+                "package": "@cubid/react"
+              }
+            ]
+          }
+        },
+        {
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": false
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/react",
+                  "packagePath": "src/Web2ConnectPanel.tsx",
+                  "qualifiedName": "Web2ConnectPanelPhoneConfig"
+                },
+                "name": "Web2ConnectPanelPhoneConfig",
+                "package": "@cubid/react"
+              }
+            ]
+          }
+        },
+        {
+          "name": "providers",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "target": {
+                "packageName": "@cubid/react",
+                "packagePath": "src/Web2ConnectPanel.tsx",
+                "qualifiedName": "Web2ConnectPanelProviderConfig"
+              },
+              "name": "Web2ConnectPanelProviderConfig",
+              "package": "@cubid/react"
+            }
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@types/react",
+            "packagePath": "index.d.ts",
+            "qualifiedName": "React.ComponentPropsWithoutRef"
+          },
+          "typeArguments": [
+            {
+              "type": "literal",
+              "value": "section"
+            }
+          ],
+          "name": "ComponentPropsWithoutRef",
+          "package": "@types/react",
+          "qualifiedName": "React.ComponentPropsWithoutRef"
+        }
+      ]
+    },
+    {
+      "name": "ClearPassVerifyButton",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "ClearPassVerifyButton",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "ClearPassVerifyButtonProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidHostedVerificationWidget",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidHostedVerificationWidget",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidHostedVerificationWidgetProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWeb2Provider",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidWeb2Provider",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidWeb2ProviderProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWidget",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidWidget",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidWidgetProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "EmailOtpForm",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "EmailOtpForm",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "EmailOtpFormProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "PhoneOtpForm",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "PhoneOtpForm",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "PhoneOtpFormProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Provider",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "Provider",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "ProviderProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ProviderConnectButton",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "ProviderConnectButton",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "ProviderConnectButtonProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useCubidWeb2Client",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useCubidWeb2Client",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useOptionalCubidWeb2Client",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useOptionalCubidWeb2Client",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/browser",
+                  "packagePath": "src/types.ts",
+                  "qualifiedName": "CubidWeb2Client"
+                },
+                "name": "CubidWeb2Client",
+                "package": "@cubid/browser"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Web2ConnectPanel",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "Web2ConnectPanel",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "Web2ConnectPanelProps",
+                "package": "@cubid/react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    }
+  ],
+  "packageName": "@cubid/react",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/react`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nReact components and hooks for Cubid browser flows, built on top of\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n## When To Choose This Package\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/react`"
+    },
+    {
+      "kind": "text",
+      "text": " when you want ready-made React components or hooks for Cubid\nflows. Choose "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": " instead when you need the same hosted-flow logic\nwithout a React dependency.\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\nnpm install @cubid/react @cubid/browser\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`react`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`react-dom`"
+    },
+    {
+      "kind": "text",
+      "text": " are peer dependencies.\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## API Reference\n\n- JSON reference: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/reference/api/react.json`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- Package matrix: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Basic Usage\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\nimport { ClearPassVerifyButton, CubidHostedVerificationWidget, EmailOtpForm } from \"@cubid/react\"\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThis package keeps the no-root-provider story intact for hosted verification\nwidgets and focused OTP components."
+    }
+  ]
+}

@@ -50,7 +50,7 @@ Build toward this package ecosystem:
 ```
 
 The current workspace now contains the target package names for the first
-browser/React/EVM slices, while compatibility and interim packages remain:
+browser/React/EVM slices, while frozen compatibility and interim packages remain:
 
 ```txt
 @cubid/browser
@@ -58,8 +58,8 @@ browser/React/EVM slices, while compatibility and interim packages remain:
 @cubid/evm
 @cubid/wagmi
 
-@cubid/web2       -> compatibility wrapper around @cubid/browser
-@cubid/web2-react -> compatibility wrapper around @cubid/react
+@cubid/web2       -> frozen compatibility wrapper around @cubid/browser
+@cubid/web2-react -> frozen compatibility wrapper around @cubid/react
 @cubid/web3       -> interim shared wallet package pending further chain splits
 ```
 
@@ -72,12 +72,14 @@ Own:
 - Runtime-agnostic HTTP client wrappers
 - Shared request/response and error types
 - Identity, stamps, score, location, and other stable public API helpers
+- Future dapp-facing signing-request lifecycle wrappers when the Passport API v3 contract is ready
 - Data normalization around public Passport contracts
 
 Do not add:
 
 - React
 - hosted-login UI
+- Passport-hosted signing approval/rejection UX
 - wagmi or chain SDK dependencies
 - browser-only routing/storage assumptions
 - private Passport runtime logic
@@ -114,6 +116,10 @@ Own:
 
 Keep chain assumptions isolated. Do not pile them back into one shared `web3`
 blob once dedicated packages exist.
+
+Future smart-account, session-key, paymaster, or gas-sponsorship helpers must
+be capability-driven and explicitly optional. Do not assume every Cubid account
+supports those features by default.
 
 ### Future `@cubid/auth` Packages
 
@@ -183,6 +189,7 @@ boundaries until their public contracts are real and stable:
 - comms helpers
 - secrets helpers
 - richer multi-chain wallet packages
+- smart-account and paymaster helpers
 
 ## Mental Model
 

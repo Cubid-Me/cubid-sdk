@@ -14,8 +14,6 @@ on:
           - "@cubid/react"
           - "@cubid/evm"
           - "@cubid/wagmi"
-          - "@cubid/web2"
-          - "@cubid/web2-react"
           - "@cubid/web3"
       publish_npm:
         description: "Publish the selected package to npm using Trusted Publishing"
@@ -23,7 +21,7 @@ on:
         default: false
         type: boolean
       publish_jsr:
-        description: "Publish the selected package to JSR using trusted publishing"
+        description: "Publish to JSR when the selected package is intentionally JSR-supported (currently @cubid/core only)"
         required: true
         default: false
         type: boolean
@@ -58,14 +56,6 @@ jobs:
               ;;
             "@cubid/wagmi")
               echo "package_dir=packages/wagmi" >> "$GITHUB_OUTPUT"
-              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
-              ;;
-            "@cubid/web2")
-              echo "package_dir=packages/web2" >> "$GITHUB_OUTPUT"
-              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
-              ;;
-            "@cubid/web2-react")
-              echo "package_dir=packages/web2-react" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/web3")
@@ -136,10 +126,10 @@ jobs:
           PACK_DIR="$(mktemp -d)"
           pnpm pack --pack-destination "$PACK_DIR"
 
-      - name: Reject unsupported JSR publish targets
+      - name: Enforce JSR package policy
         if: ${{ inputs.publish_jsr && steps.package.outputs.jsr_supported != 'true' }}
         run: |
-          echo "JSR publishing is currently supported only for @cubid/core."
+          echo "JSR publishing is intentionally supported only for @cubid/core in this repo's package policy."
           exit 1
 
       - name: Publish selected package to npm

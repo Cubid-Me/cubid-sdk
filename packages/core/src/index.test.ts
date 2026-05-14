@@ -1,11 +1,16 @@
 import assert from "node:assert/strict"
-import { test } from "node:test"
+import { test } from "vitest"
 
 import {
+  createCubidAppScopedSubject,
   createCubidApiClient,
   CubidApiError,
+  getCubidStampTypeId,
+  getCubidStampTypeName,
+  getCubidStampTypeNamesById,
   type CubidFetch,
   parseCubidWebhookEvent,
+  summarizeCubidDisclosedStamp,
   verifyCubidWebhookSignature,
 } from "./index"
 
@@ -23,7 +28,7 @@ const signWebhookPayload = async (
   secret: string,
   eventId: string,
   timestamp: string,
-  payload: string
+  payload: string | Uint8Array
 ) => {
   const key = await globalThis.crypto.subtle.importKey(
     "raw",
@@ -32,9 +37,12 @@ const signWebhookPayload = async (
     false,
     ["sign"]
   )
-  const signatureInput = new TextEncoder().encode(
-    `${eventId}.${timestamp}.${payload}`
-  )
+  const payloadBytes =
+    typeof payload === "string" ? new TextEncoder().encode(payload) : payload
+  const prefixBytes = new TextEncoder().encode(`${eventId}.${timestamp}.`)
+  const signatureInput = new Uint8Array(prefixBytes.length + payloadBytes.length)
+  signatureInput.set(prefixBytes, 0)
+  signatureInput.set(payloadBytes, prefixBytes.length)
   const signature = await globalThis.crypto.subtle.sign(
     "HMAC",
     key,
@@ -757,6 +765,255 @@ test("v3 custody helpers normalize generated and listed accounts, including sui"
   ])
 })
 
+test("v3 signing request helpers normalize redacted summaries and risk fields", async () => {
+  const calls: Array<{
+    body: unknown
+    headers: Headers
+    path: string
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (input, init) => {
+      const path = new URL(String(input)).pathname
+      calls.push({
+        body: JSON.parse(String(init?.body)),
+        headers: new Headers(init?.headers),
+        path,
+      })
+
+      if (path.endsWith("/signing/requests/create")) {
+        return createJsonResponse({
+          data: {
+            chain: "evm",
+            createdAt: "2026-05-06T12:00:00.000Z",
+            payloadHash: "hash_123",
+            payloadSummary: { kind: "message", preview: "Sign in to Example" },
+            policyVersion: "siwc-policy-v1",
+            requestType: "message",
+            requiredAcr: "phrh",
+            result: null,
+            riskLevel: null,
+            riskReasons: [],
+            signingRequestId: "sr_123",
+            status: "pending",
+            stepUpRequired: false,
+            updatedAt: "2026-05-06T12:00:00.000Z",
+          },
+        })
+      }
+
+      if (path.endsWith("/signing/requests/get")) {
+        return createJsonResponse({
+          data: {
+            cancelledAt: null,
+            chain: "evm",
+            completedAt: "2026-05-06T12:03:00.000Z",
+            createdAt: "2026-05-06T12:00:00.000Z",
+            payloadHash: "hash_123",
+            payloadSummary: { kind: "message", preview: "Sign in to Example" },
+            policyDecision: "allowed",
+            policyVersion: "siwc-policy-v1",
+            requestType: "message",
+            requiredAcr: "phrh",
+            result: {
+              algorithm: "secp256k1",
+              publicAddress: "0xabc123",
+            },
+            riskLevel: "low",
+            riskReasons: ["known_app"],
+            signingRequestId: "sr_123",
+            status: "completed",
+            stepUpRequired: false,
+            updatedAt: "2026-05-06T12:03:00.000Z",
+          },
+        })
+      }
+
+      if (path.endsWith("/signing/requests/list")) {
+        return createJsonResponse({
+          data: [
+            {
+              chain: "evm",
+              createdAt: "2026-05-06T12:00:00.000Z",
+              payloadHash: "hash_123",
+              payloadSummary: { kind: "message", preview: "Sign in to Example" },
+              policyDecision: "denied",
+              policyVersion: "siwc-policy-v1",
+              requestType: "transaction",
+              requiredAcr: "phrh",
+              riskLevel: "high",
+              riskReasons: ["transaction_signing_deferred"],
+              signingRequestId: "sr_456",
+              status: "policy_denied",
+              stepUpRequired: true,
+              transactionContractAddress: "0xcontract",
+              transactionDeclaredValueUsd: 42.5,
+              transactionOperationType: "transfer",
+              transactionRecipient: "0xrecipient",
+              updatedAt: "2026-05-06T12:01:00.000Z",
+            },
+            {
+              signingRequestId: "sr_789",
+              status: "pending",
+            },
+          ],
+        })
+      }
+
+      return createJsonResponse({
+        data: {
+          cancelledAt: "2026-05-06T12:04:00.000Z",
+          chain: "evm",
+          createdAt: "2026-05-06T12:00:00.000Z",
+          payloadHash: "hash_123",
+          payloadSummary: { kind: "message", preview: "Sign in to Example" },
+          policyDecision: "denied",
+          policyVersion: "siwc-policy-v1",
+          requestType: "transaction",
+          requiredAcr: "phrh",
+          result: null,
+          riskLevel: "high",
+          riskReasons: ["transaction_signing_deferred"],
+          signingRequestId: "sr_456",
+          status: "cancelled",
+          stepUpRequired: true,
+          transactionOperationType: "transfer",
+          updatedAt: "2026-05-06T12:04:00.000Z",
+        },
+      })
+    },
+  })
+
+  const created = await client.createSigningRequest({
+    chain: "evm",
+    idempotencyKey: "signing_key_123",
+    payload: { message: "Sign in to Example" },
+    payloadSummary: { kind: "message", preview: "Sign in to Example" },
+    requestType: "message",
+    userAccountId: "dua_123",
+    userId: "dapp_user_123",
+  })
+  const fetched = await client.getSigningRequest({
+    signingRequestId: "sr_123",
+  })
+  const listed = await client.listSigningRequests({
+    userAccountId: "dua_123",
+    userId: "dapp_user_123",
+  })
+  const cancelled = await client.cancelSigningRequest({
+    signingRequestId: "sr_456",
+  })
+
+  assert.equal(created.idempotencyKey, "signing_key_123")
+  assert.equal(created.signingRequest.signingRequestId, "sr_123")
+  assert.equal(created.signingRequest.result, null)
+  assert.equal(calls[0]?.headers.get("Idempotency-Key"), "signing_key_123")
+  assert.deepEqual(calls[0]?.body, {
+    api_key: "api_key",
+    chain: "evm",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    payload: { message: "Sign in to Example" },
+    payload_summary: { kind: "message", preview: "Sign in to Example" },
+    request_type: "message",
+    user_account_id: "dua_123",
+  })
+
+  assert.equal(fetched.signingRequest.status, "completed")
+  assert.equal(fetched.signingRequest.result?.algorithm, "secp256k1")
+  assert.equal(fetched.signingRequest.policyDecision, "allowed")
+
+  assert.equal(listed.signingRequests[0]?.status, "policy_denied")
+  assert.equal(listed.signingRequests[0]?.policyDecision, "denied")
+  assert.equal(listed.signingRequests[0]?.transactionRecipient, "0xrecipient")
+  assert.equal(listed.signingRequests[0]?.transactionDeclaredValueUsd, 42.5)
+  assert.equal(listed.signingRequests[1]?.riskLevel, null)
+  assert.deepEqual(listed.signingRequests[1]?.riskReasons, [])
+
+  assert.equal(cancelled.signingRequest.status, "cancelled")
+  assert.equal(cancelled.signingRequest.policyDecision, "denied")
+  assert.equal(cancelled.signingRequest.result, null)
+
+  assert.deepEqual(calls.map((call) => call.path), [
+    "/api/v3/signing/requests/create",
+    "/api/v3/signing/requests/get",
+    "/api/v3/signing/requests/list",
+    "/api/v3/signing/requests/cancel",
+  ])
+})
+
+test("v3 signing request create auto-generates idempotency keys when omitted", async () => {
+  let idempotencyKey: string | null = null
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      idempotencyKey = new Headers(init?.headers).get("Idempotency-Key")
+      return createJsonResponse({
+        data: {
+          signingRequestId: "sr_auto",
+          status: "pending",
+        },
+      })
+    },
+  })
+
+  const response = await client.createSigningRequest({
+    payload: { message: "Hello" },
+    payloadSummary: { kind: "message", preview: "Hello" },
+    requestType: "message",
+    userAccountId: "dua_123",
+    userId: "dapp_user_123",
+  })
+
+  assert.equal(response.idempotencyKey, idempotencyKey)
+  assert.match(String(idempotencyKey), /^[0-9a-f-]{36}$/)
+})
+
+test("v3 signing request helpers reject malformed successful payloads", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input) => {
+      const path = new URL(String(input)).pathname
+      if (path.endsWith("/signing/requests/list")) {
+        return createJsonResponse({ data: {} })
+      }
+
+      return createJsonResponse("not-an-object")
+    },
+  })
+
+  await assert.rejects(
+    () =>
+      client.createSigningRequest({
+        payload: { message: "Hello" },
+        payloadSummary: { kind: "message", preview: "Hello" },
+        requestType: "message",
+        userAccountId: "dua_123",
+        userId: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "MALFORMED_RESPONSE")
+      assert.equal(error.endpoint, "v3/signing/requests/create")
+      return true
+    }
+  )
+
+  await assert.rejects(
+    () => client.listSigningRequests({ userId: "dapp_user_123" }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "MALFORMED_RESPONSE")
+      assert.equal(error.endpoint, "v3/signing/requests/list.data")
+      return true
+    }
+  )
+})
+
 test("v3 write helpers auto-generate idempotency keys when callers omit them", async () => {
   let idempotencyKey: string | null = null
   const client = createCubidApiClient({
@@ -837,6 +1094,29 @@ test("verifyCubidWebhookSignature accepts a valid v1 signature", async () => {
   assert.equal(result.eventId, eventId)
 })
 
+test("verifyCubidWebhookSignature accepts SharedArrayBuffer-backed payloads", async () => {
+  const payloadBytes = new TextEncoder().encode("{\"event\":\"wallet.created\"}")
+  const shared = new SharedArrayBuffer(payloadBytes.length)
+  const payload = new Uint8Array(shared)
+  payload.set(payloadBytes)
+
+  const secret = "webhook_secret_123"
+  const eventId = "event_sab"
+  const timestamp = String(Math.floor(Date.now() / 1000))
+  const signature = await signWebhookPayload(secret, eventId, timestamp, payload)
+
+  const result = await verifyCubidWebhookSignature({
+    eventId,
+    payload,
+    secret,
+    signature: `v1=${signature}`,
+    timestamp,
+  })
+
+  assert.equal(result.verified, true)
+  assert.equal(result.eventId, eventId)
+})
+
 test("verifyCubidWebhookSignature rejects invalid signatures and expired timestamps", async () => {
   await assert.rejects(
     () =>
@@ -879,24 +1159,155 @@ test("verifyCubidWebhookSignature rejects invalid signatures and expired timesta
   )
 })
 
+test("verifyCubidWebhookSignature rejects invalid timestamp, tolerance, and now overrides", async () => {
+  await assert.rejects(
+    () =>
+      verifyCubidWebhookSignature({
+        eventId: "event_123",
+        now: Number.NaN,
+        payload: "{}",
+        secret: "webhook_secret_123",
+        signature: "v1=deadbeef",
+        timestamp: "1700000000",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "INVALID_WEBHOOK_NOW")
+      return true
+    }
+  )
+
+  await assert.rejects(
+    () =>
+      verifyCubidWebhookSignature({
+        eventId: "event_123",
+        payload: "{}",
+        secret: "webhook_secret_123",
+        signature: "v1=deadbeef",
+        timestamp: "1700000000.5",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "INVALID_WEBHOOK_TIMESTAMP")
+      return true
+    }
+  )
+
+  await assert.rejects(
+    () =>
+      verifyCubidWebhookSignature({
+        eventId: "event_123",
+        payload: "{}",
+        secret: "webhook_secret_123",
+        signature: "v1=deadbeef",
+        timestamp: "1700000000",
+        toleranceSeconds: Number.POSITIVE_INFINITY,
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "INVALID_WEBHOOK_TOLERANCE")
+      return true
+    }
+  )
+})
+
 test("parseCubidWebhookEvent preserves canonical and legacy event names", () => {
   const event = parseCubidWebhookEvent<{
-    stampType: string
+    result: string
+    signingRequestId: string
   }>({
     apiVersion: "v3",
     payloadVersion: "2026-05-03",
     eventId: "event_123",
-    eventType: "stamp.created",
-    legacyEventType: "credential_added",
+    eventType: "wallet.signature.completed",
+    legacyEventType: "score_increase",
     createdAt: "2026-05-03T22:00:00.000Z",
     requestId: "passport_123",
     dapp: { id: "42" },
     subject: { userId: "dapp_user_123" },
-    data: { stampType: "phone" },
+    data: { result: "signed", signingRequestId: "sr_123" },
   })
 
-  assert.equal(event.eventType, "stamp.created")
-  assert.equal(event.legacyEventType, "credential_added")
-  assert.equal(event.data.stampType, "phone")
+  assert.equal(event.eventType, "wallet.signature.completed")
+  assert.equal(event.legacyEventType, "score_increase")
+  assert.equal(event.data?.result, "signed")
+  assert.equal(event.data?.signingRequestId, "sr_123")
   assert.deepEqual(event.subject, { userId: "dapp_user_123" })
+})
+
+test("parseCubidWebhookEvent returns null data when the payload omits data", () => {
+  const event = parseCubidWebhookEvent<{ stampType: string }>({
+    apiVersion: "v3",
+    eventId: "event_123",
+    eventType: "stamp.created",
+  })
+
+  assert.equal(event.data, null)
+})
+
+test("stamp registry helpers expose canonical names and ids", () => {
+  assert.equal(getCubidStampTypeId("email"), 13)
+  assert.equal(getCubidStampTypeId("near-wallet"), 15)
+  assert.equal(getCubidStampTypeName(13), "email")
+  assert.equal(getCubidStampTypeName(15), "near")
+  assert.equal(getCubidStampTypeName(999), "999")
+  assert.equal(getCubidStampTypeNamesById()[70], "address")
+})
+
+test("normalizeStamps falls back to canonical stamp names when string names are absent", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () =>
+      createJsonResponse({
+        all_stamps: [
+          {
+            id: 1,
+            identity: "user@example.com",
+            is_valid: true,
+            stamptype: 13,
+            uniquevalue: "user@example.com",
+          },
+        ],
+      }),
+  })
+
+  const response = await client.fetchStamps({ userId: "dapp_user_123" })
+
+  assert.equal(response.allStamps[0]?.stampType, "email")
+  assert.equal(response.allStamps[0]?.stampTypeId, 13)
+})
+
+test("app-scoped helpers validate user ids and summarize disclosed stamps", () => {
+  assert.deepEqual(createCubidAppScopedSubject("dapp_user_123"), {
+    userId: "dapp_user_123",
+  })
+
+  const summary = summarizeCubidDisclosedStamp({
+    identity: "user@example.com",
+    isValid: true,
+    stampType: undefined,
+    stampTypeId: 13,
+    uniqueValue: "user@example.com",
+  })
+
+  assert.deepEqual(summary, {
+    stampType: "email",
+    stampTypeId: 13,
+    status: "Verified",
+    value: "user@example.com",
+  })
+
+  assert.throws(
+    () =>
+      summarizeCubidDisclosedStamp({
+        isValid: true,
+        stampType: "email",
+        stampTypeId: undefined,
+      }),
+    (error) =>
+      error instanceof CubidApiError &&
+      error.code === "INVALID_STAMP_TYPE" &&
+      error.endpoint === "stamps/summarize"
+  )
 })

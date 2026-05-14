@@ -1,11 +1,36 @@
 # `@cubid/web3`
 
-Interim shared wallet package during the chain split.
+Interim wallet-oriented Cubid package while the chain-specific split continues.
 
-## Status
+## When To Choose This Package
 
-New EVM integrations should prefer `@cubid/evm`, and wagmi-specific React
-helpers should prefer `@cubid/wagmi`.
+Prefer `@cubid/evm` for new EVM integrations and `@cubid/wagmi` for
+wagmi-specific React integrations. Use `@cubid/web3` only when you still depend
+on the older shared wallet surface while the split remains in progress.
 
-`@cubid/web3` remains in the repo while the chain-specific split continues, but
-it is no longer the long-term target package shape.
+## Install
+
+```sh
+npm install @cubid/web3 @cubid/core
+```
+
+## Registry Availability
+
+- npm: supported
+- JSR: not published by policy
+
+## API Reference
+
+- JSON reference: `../../docs/reference/api/web3.json`
+- Package matrix: `../../README.md`
+
+## Capability Metadata
+
+The interim wallet surface preserves optional `capabilities` metadata on
+connections and verification results. Use that metadata for features such as
+smart accounts, session keys, paymasters, or gas sponsorship instead of
+assuming every wallet connection supports them.
+
+The package exports `getCubidWalletCapabilities(...)` and
+`hasCubidWalletCapability(...)` to keep those checks explicit while the chain
+split continues.

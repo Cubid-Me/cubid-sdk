@@ -3,6 +3,7 @@ import fs from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 import { createCubidEvmClient } from "./client";
+import { getCubidEvmCapabilities, hasCubidEvmCapability } from "./internal";
 
 describe("@cubid/evm", () => {
   it("keeps wallet adapter logic behind the adapter boundary and only persists via @cubid/core", async () => {
@@ -17,7 +18,17 @@ describe("@cubid/evm", () => {
     } as const;
 
     const adapter = {
-      connect: vi.fn(async () => ({ address: "0xabc", chainId: 1, chainType: "evm" })),
+      connect: vi.fn(async () => ({
+        address: "0xabc",
+        capabilities: {
+          smartAccount: {
+            available: true,
+            metadata: { accountType: "safe" }
+          }
+        },
+        chainId: 1,
+        chainType: "evm"
+      })),
       id: "rainbowkit",
       toStampData: vi.fn((connection) => ({
         address: connection.address,
@@ -39,7 +50,13 @@ describe("@cubid/evm", () => {
     });
 
     expect(adapter.connect).toHaveBeenCalled();
-    expect(adapter.verify).toHaveBeenCalledWith({ address: "0xabc", chainId: 1, chainType: "evm" });
+    expect(adapter.verify).toHaveBeenCalledWith(
+      expect.objectContaining({
+        address: "0xabc",
+        chainId: 1,
+        chainType: "evm"
+      })
+    );
     expect(apiClient.addStamp).toHaveBeenCalledWith({
       pageId: 4,
       stampData: {
@@ -49,6 +66,19 @@ describe("@cubid/evm", () => {
       },
       stampType: "evm",
       userId: "user-1"
+    });
+    expect(getCubidEvmCapabilities(connection)).toEqual({
+      smartAccount: {
+        available: true,
+        metadata: { accountType: "safe" }
+      }
+    });
+    expect(hasCubidEvmCapability(connection, "smartAccount")).toBe(true);
+    expect(result.capabilities).toEqual({
+      smartAccount: {
+        available: true,
+        metadata: { accountType: "safe" }
+      }
     });
     expect(result.verification.isVerified).toBe(true);
     expect(result.persistedStamp?.success).toBe(true);

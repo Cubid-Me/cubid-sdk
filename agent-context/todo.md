@@ -91,22 +91,22 @@ package through the existing `.github/workflows/publish.yml` OIDC flow.
 
 ### S02. Rename the browser and React package layers
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-01T08:40:00Z
-- Timestamp completed: TBD
-- Feature branch: `dev`
+- Timestamp completed: 2026-05-09T11:20:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
 - Head: `f46c24dc` at planning start
-- Session-log reference(s): session: s08-package-migration-planning, session: s12-browser-react-package-slices
+- Session-log reference(s): session: s08-package-migration-planning, session: s12-browser-react-package-slices, session: s39-s02-compatibility-retirement
 
-Continue the migration from the interim `web2` package family toward clearer
-public names:
+The rename from the interim `web2` package family toward clearer public names is
+now complete:
 
 - `@cubid/web2` -> `@cubid/browser`
 - `@cubid/web2-react` -> `@cubid/react`
 
-Preserve the useful hosted-verification, provider-connect, OTP, callback, and
-profile-completion primitives while keeping browser-specific logic out of core
-and React-specific logic out of the headless browser layer.
+The old package names now remain only as frozen deprecated compatibility shims.
+They stay installable to preserve existing imports, but the supported package
+surfaces and normal release targets are now `@cubid/browser` and `@cubid/react`.
 
 ### S02.4 Add explicit compatibility and deprecation messaging to the interim package names
 
@@ -176,25 +176,20 @@ though the anonymous `npm view` endpoint briefly lagged after publication.
 
 ### S02.6 Republish `@cubid/browser` and `@cubid/react` with npm-resolvable dependency metadata
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): incoming message `agent-context/messages-from-chaincrew/2026-05-03-published-package-workspace-dependency-note.md`, session: s23-chaincrew-workspace-dependency-followup
+- Status: Completed
+- Timestamp started: 2026-05-03T22:05:00Z
+- Timestamp completed: 2026-05-03T22:15:00Z
+- Feature branch: `main`
+- Head: `464e1949` at trusted-publisher retry start
+- Session-log reference(s): incoming message `agent-context/messages-from-chaincrew/2026-05-03-published-package-workspace-dependency-note.md`, session: s23-chaincrew-workspace-dependency-followup, session: s27-package-metadata-republish
 
-`@cubid/browser@0.1.0` and `@cubid/react@0.1.0` were published before the repo
-switched workspace-package releases to `pnpm publish`, so the live npm package
-metadata still exposes `workspace:*` dependency ranges. That breaks direct npm
-consumers even though the repo-side publish workflow is now fixed.
+Corrective patch releases are now live:
 
-Next release action:
+- `@cubid/browser@0.1.1`
+- `@cubid/react@0.1.1`
 
-- publish corrective patch versions with npm-resolvable internal ranges
-- confirm `npm view @cubid/browser dependencies` and `npm view @cubid/react dependencies`
-  no longer contain `workspace:*`
-- notify downstream consumers such as ChainCrew that their temporary pnpm
-  overrides can be removed after the corrected versions are live
+Verified npm metadata now resolves to normal package versions rather than
+`workspace:*`.
 
 ### S03. Split chain packages
 
@@ -261,24 +256,44 @@ npm access checks confirm both packages are public under the `cubid` org.
 
 ### S03.5 Republish `@cubid/evm` and `@cubid/wagmi` with npm-resolvable dependency metadata
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): session: s23-chaincrew-workspace-dependency-followup
+- Status: Completed
+- Timestamp started: 2026-05-03T22:05:00Z
+- Timestamp completed: 2026-05-03T22:15:00Z
+- Feature branch: `main`
+- Head: `464e1949` at trusted-publisher retry start
+- Session-log reference(s): session: s23-chaincrew-workspace-dependency-followup, session: s27-package-metadata-republish
 
-`@cubid/evm@0.1.0` and `@cubid/wagmi@0.1.0` were also published before the
-workspace-package publish path switched to `pnpm publish`, so their live npm
-metadata still points at internal `workspace:*` dependency ranges.
+Corrective patch releases are now live:
 
-Next release action:
+- `@cubid/evm@0.1.1`
+- `@cubid/wagmi@0.1.1`
 
-- publish corrective patch versions for the chain packages too
-- verify `npm view @cubid/evm dependencies` and `npm view @cubid/wagmi dependencies`
-  no longer expose `workspace:*`
-- keep the public chain split moving only after the published install surface is
-  clean for downstream npm consumers
+Verified npm metadata now resolves to normal package versions rather than
+`workspace:*`.
+
+### S03.6 Keep future custody and chain helpers capability-driven
+
+- Status: Completed
+- Timestamp started: 2026-05-07T12:10:00Z
+- Timestamp completed: 2026-05-07T12:35:00Z
+- Feature branch: `dev`
+- Head: `9898fb0b` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc07-smart-account-roadmap.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest, session: s37-s03-capability-driven-chain-surface
+
+When future account, chain, or EVM-specific helpers expand beyond the current
+generated custody-account model, keep the public SDK capability-driven rather
+than assuming every Cubid account is a smart account, has a paymaster, or
+supports session keys.
+
+Near-term defaults should remain app-scoped generated custody accounts with
+Passport-hosted approval. If smart accounts, scoped session keys, paymasters,
+or gas sponsorship land later, expose them through explicit capability fields,
+feature flags, and policy-aware helpers instead of universal assumptions.
+
+The current EVM, wagmi, and interim web3 packages now preserve optional
+`capabilities` metadata on connections and verification results, and they
+export small helper functions for capability checks instead of baking in smart
+account defaults.
 
 ### S04. Create dedicated auth package boundaries when OIDC is ready
 
@@ -303,12 +318,12 @@ model them as account-management APIs rather than dapp server APIs.
 
 ### S05. Align future identity and stamp helpers with app-scoped disclosure contracts
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-03T10:25:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-03T22:40:00Z
 - Feature branch: `dev`
-- Head: `f7dfa57f` at current follow-up start
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-filtering-runtime.md`, `agent-context/messages-from-cubid-passport/2026-05-03-e01-1-disclosure-fallback-retired.md`, session: s20-disclosure-grant-only-followup
+- Head: `464e1949` at completion
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-04-30-e01-d01-app-scoped-disclosure-and-stamps.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-grant-persistence.md`, `agent-context/messages-from-cubid-passport/2026-04-30-e01-disclosure-filtering-runtime.md`, `agent-context/messages-from-cubid-passport/2026-05-03-e01-1-disclosure-fallback-retired.md`, session: s20-disclosure-grant-only-followup, session: s24-s05-disclosure-roadmap-followup, session: s28-s05-app-scoped-stamp-surface
 
 Before adding new identity, disclosure, or stamp metadata helpers, reconcile the
 public SDK surface with Passport's app-scoped subject model, selective-disclosure
@@ -351,12 +366,12 @@ data, especially profile and location helpers.
 
 ### S05.2 Define the evidence threshold for future `notGranted` helper states
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-03T22:20:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-03T22:40:00Z
 - Feature branch: `dev`
-- Head: `1f788c6c` at follow-up start
-- Session-log reference(s): session: s24-s05-disclosure-roadmap-followup
+- Head: `464e1949` at completion
+- Session-log reference(s): session: s24-s05-disclosure-roadmap-followup, session: s28-s05-app-scoped-stamp-surface
 
 Before adding typed `notGranted` outcomes to score, identity, or stamp helpers,
 require one of the following backend signals:
@@ -372,17 +387,19 @@ examples instead of overcommitting to privacy-state inference in runtime types.
 
 ### S05.3 Be ready to extend typed disclosure states when Passport exposes route-level signals
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-05-03T22:30:00Z
+- Timestamp completed: 2026-05-03T22:40:00Z
+- Feature branch: `dev`
+- Head: `464e1949` at completion
+- Session-log reference(s): session: s28-s05-app-scoped-stamp-surface
 
 If Passport later adds route-level disclosure metadata for identity, stamps, or
 scores, extend `@cubid/core` response types and helper docs in a way that keeps
 `notGranted`, `notVerified`, `notFound`, and transport failure distinct for
-downstream apps.
+downstream apps. The current tranche closes with canonical stamp-id helpers and
+app-scoped subject helpers in place, while further route-level disclosure-state
+expansion remains explicitly gated on backend evidence rather than guesswork.
 
 ### S06. Align future API v3 write helpers with idempotency requirements
 
@@ -421,3 +438,280 @@ return public custody metadata only.
 verify the v1 HMAC over the exact `eventId.timestamp.rawBody` input, preserve
 `eventId` and timestamp as replay-protection inputs, and document canonical v3
 event names alongside legacy transition names.
+
+### S07.1 Extend webhook types and examples for SIWC wallet events
+
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc06-wallet-webhook-contracts.md`, session: s30-siwc-wallet-event-and-capability-roadmap-ingest, session: s33-siwc-signing-surface
+
+Add the SIWC wallet and signing canonical event names to the public webhook
+types and receiver examples:
+
+- `wallet.created`
+- `wallet.signing_request.created`
+- `wallet.policy.denied`
+- `wallet.signing_request.approved`
+- `wallet.signing_request.rejected`
+- `wallet.signing_request.cancelled`
+- `wallet.signing_request.step_up_failed`
+- `wallet.signature.completed`
+- `wallet.signature.failed`
+
+Treat these as additive to the existing webhook envelope and verification
+helpers. Keep transaction webhook expectations fail-closed until Passport
+explicitly enables transaction signing and separately announces
+`wallet.transaction.submitted` or `wallet.transaction.failed`.
+
+### S08. Add API v3 signing-request lifecycle wrappers in `@cubid/core`
+
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc04-signing-request-lifecycle.md`, incoming message `agent-context/messages-from-cubid-passport/2026-05-06-siwc05-transaction-risk-controls.md`, session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
+
+Add typed runtime-agnostic API v3 wrappers in `@cubid/core` for the dapp-facing
+signing request lifecycle routes:
+
+- `createSigningRequest(...)`
+- `getSigningRequest(...)`
+- `listSigningRequests(...)`
+- `cancelSigningRequest(...)`
+
+This surface belongs in `@cubid/core` because it wraps public HTTP contracts
+without requiring React, browser-only routing, or hosted approval UX. The SDK
+should expose only redacted request metadata such as `signingRequestId`,
+`status`, `chain`, `requestType`, `payloadHash`, `payloadSummary`,
+`policyVersion`, `requiredAcr`, timestamps, and `result` only after completion.
+
+Do not expose or expect raw signing payloads in public summaries, raw Cubid
+internal IDs, private keys, encrypted key material, or other private custody
+data. Passport-hosted approval and rejection flows remain outside this repo,
+and transaction-signing clients must stay fail-closed until Passport explicitly
+announces signature enablement.
+
+Before starting runtime implementation, handle the adjacent incoming Passport
+notes `2026-05-06-siwc06-wallet-webhook-contracts.md` and
+`2026-05-06-siwc07-smart-account-roadmap.md` so the contract surface is planned
+with the later wallet-event and smart-account notes in view.
+
+### S08.1 Add shared request and response types for create/get/list/cancel
+
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
+
+Define the shared public request and response types for the API v3
+signing-request lifecycle. The create route should accept the app-scoped user
+and account identifiers, `requestType`, redacted `payloadSummary`, and the
+structured payload inputs Passport documents for message and typed-data signing.
+
+### S08.2 Require idempotency handling on create
+
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
+
+Keep `createSigningRequest(...)` aligned with the existing API v3 write-helper
+pattern: require or safely generate `Idempotency-Key`, preserve backend
+conflict semantics, and document the caller-owned retry story clearly.
+
+### S08.3 Normalize redacted response metadata only
+
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
+
+Normalize only the redacted public signing-request metadata returned by
+Passport. Do not surface raw request payloads, raw user identifiers, or other
+private custody material through `@cubid/core`.
+
+### S08.4 Include additive SIWC05 risk and policy fields on summaries
+
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
+
+Extend the future signing-request summary types to accept the optional SIWC05
+risk and policy fields when present:
+
+- `riskLevel`
+- `riskReasons`
+- `policyDecision`
+- `stepUpRequired`
+- `transactionOperationType`
+- `transactionRecipient`
+- `transactionContractAddress`
+- `transactionDeclaredValueUsd`
+
+### S08.5 Keep transaction-signing paths fail-closed until Passport explicitly enables them
+
+- Status: Completed
+- Timestamp started: 2026-05-06T22:20:00Z
+- Timestamp completed: 2026-05-06T22:45:00Z
+- Feature branch: `dev`
+- Head: `e6a41e46` at implementation start
+- Session-log reference(s): session: s29-s08-signing-request-roadmap-ingest, session: s33-siwc-signing-surface
+
+Even after the signing-request wrappers land, treat transaction-signing requests
+as policy-denied and deferred. SDK examples and client helpers should display
+risk and policy metadata when available, but must not imply that transaction
+signatures are supported until a later Passport note explicitly says they are.
+
+### S09. Establish testing strategy and acceptance governance for the public SDK repo
+
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
+
+Turn the current ad hoc package-level validation into an explicitly documented
+testing and acceptance strategy for this public SDK monorepo. The goal is to
+make it clear what each layer proves locally and in CI before publish or merge.
+
+### S09.1 Create a written testing strategy for the SDK monorepo
+
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
+
+Document the intended test pyramid and validation responsibilities for:
+
+- `@cubid/core` contract and normalization tests
+- browser-flow helper tests in `@cubid/browser`
+- React component tests in `@cubid/react`
+- chain-package tests in `@cubid/evm`, `@cubid/wagmi`, and later chain splits
+- package publish validation versus runtime behavior validation
+
+The written strategy should explain what must pass locally, what CI enforces,
+and what remains out of scope until a stronger acceptance harness exists.
+
+### S09.2 Create a local acceptance harness for package-consumer flows
+
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
+
+Add a small local acceptance harness that exercises the public SDK surfaces as a
+consumer would, rather than only testing packages in isolation. Focus first on:
+
+- server-only `@cubid/core` usage
+- headless browser-hosted verification helpers in `@cubid/browser`
+- React flow composition in `@cubid/react`
+
+Keep the harness lightweight and local-first so future package and publish
+changes can be validated against a realistic integration path before release.
+
+### S09.3 Decide on and document coverage governance
+
+- Status: Completed
+- Timestamp started: 2026-05-07T13:10:00Z
+- Timestamp completed: 2026-05-07T14:05:00Z
+- Feature branch: `dev`
+- Head: `49d836a5` at implementation start
+- Session-log reference(s): session: s34-repo-cleanup-control-plane, session: s38-testing-baseline-and-acceptance-harness
+
+Decide whether this repo should enforce line, branch, or package-level coverage
+thresholds, and document the answer clearly. If coverage gates are adopted,
+define:
+
+- where coverage is generated
+- what the minimum thresholds are
+- which packages or suites they apply to
+- how coverage is reviewed in CI and release decisions
+
+If strict thresholds are deferred, document the reason plainly instead of
+leaving coverage governance implicit.
+
+### S10. Publish the API and SDK surfaces to developer-ingestion platforms
+
+- Status: Completed
+- Timestamp started: 2026-05-09T12:00:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
+
+Expand the public distribution strategy beyond "packages exist on npm" so the
+Cubid API and SDKs are easier for developers and tooling to ingest, discover,
+and work with.
+
+### S10.1 Decide which packages should publish to JSR or remain npm-only
+
+- Status: Completed
+- Timestamp started: 2026-05-09T12:00:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s14-core-jsr-live-publish-success, session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
+
+`@cubid/core` is already live on JSR, but the broader package family still
+needs an explicit distribution policy. Decide which packages belong on JSR,
+which should remain npm-only, and why.
+
+### S10.2 Publish machine-friendly API reference material
+
+- Status: Completed
+- Timestamp started: 2026-05-09T12:10:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
+
+Add a developer-ingestion surface for the public API and SDK contracts, such as
+generated API reference docs or another machine-friendly contract artifact that
+stays aligned with the published package surfaces.
+
+### S10.3 Publish developer-facing reference and integration entrypoints
+
+- Status: Completed
+- Timestamp started: 2026-05-09T12:15:00Z
+- Timestamp completed: 2026-05-09T13:30:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `8c4e828c` at implementation start
+- Session-log reference(s): session: s35-testing-and-distribution-roadmap-extension, session: s40-s10-developer-ingestion-publishing
+
+Make the published SDK family easier to adopt by tightening the external
+entrypoints developers actually use: package READMEs, registry metadata,
+integration guides, and any hosted or registry-linked reference surfaces that
+improve discovery and onboarding.
+
+### S11. Add a ClearPass Verify helper surface without leaking provider internals
+
+- Status: Completed
+- Timestamp started: 2026-05-10T00:45:00Z
+- Timestamp completed: 2026-05-10T01:20:00Z
+- Feature branch: `codex/s02-retire-web2-compat`
+- Head: `a6b8ea0d` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-09-clearpass-verify-stamp.md`, session: s40-s10-developer-ingestion-publishing, session: s41-ci-fix-and-clearpass-verify-helper
+
+Add a browser or React helper surface for the new `clearpass_verify` stamp that
+launches the Cubid-hosted ClearPass Verify flow, keeps ClearPass branded as a
+third-party provider, refreshes disclosed stamps after return, and continues to
+exclude raw ClearPass document, face, OCR, or biometric payloads from the SDK
+surface.

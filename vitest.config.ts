@@ -15,11 +15,32 @@ export default defineConfig({
     }
   },
   test: {
+    coverage: {
+      exclude: [
+        "**/*.d.ts",
+        "**/*.test.*",
+        "packages/acceptance/**",
+        "packages/web2/**",
+        "packages/web2-react/**"
+      ],
+      include: [
+        "packages/core/src/**/*.{ts,tsx}",
+        "packages/browser/src/**/*.{ts,tsx}",
+        "packages/react/src/**/*.{ts,tsx}",
+        "packages/evm/src/**/*.{ts,tsx}",
+        "packages/wagmi/src/**/*.{ts,tsx}",
+        "packages/web3/src/**/*.{ts,tsx}"
+      ],
+      provider: "v8",
+      reporter: ["text", "lcov", "json-summary"],
+      reportsDirectory: path.resolve(__dirname, "coverage")
+    },
     projects: [
       {
         test: {
           environment: "node",
           include: [
+            "packages/core/src/**/*.test.ts",
             "packages/browser/src/**/*.test.ts",
             "packages/evm/src/**/*.test.ts",
             "packages/wagmi/src/**/*.test.ts",

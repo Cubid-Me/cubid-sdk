@@ -1,7 +1,7 @@
 {
   "name": "@cubid/web2",
   "version": "0.1.0",
-  "description": "Deprecated compatibility wrapper around @cubid/browser. New apps should use @cubid/browser directly.",
+  "description": "Frozen deprecated compatibility wrapper around @cubid/browser. New apps should use @cubid/browser directly.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -19,6 +19,17 @@
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
     "directory": "packages/web2"
   },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/web2",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "deprecated",
+    "compatibility",
+    "browser",
+    "identity"
+  ],
   "sideEffects": false,
   "dependencies": {
     "@cubid/browser": "workspace:*"

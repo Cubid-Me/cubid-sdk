@@ -1,6 +1,6 @@
 {
   "name": "@cubid/react",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React components and hooks for Cubid browser flows.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
@@ -19,6 +19,18 @@
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
     "directory": "packages/react"
   },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/react",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "identity",
+    "react",
+    "verification",
+    "otp",
+    "sdk"
+  ],
   "sideEffects": false,
   "dependencies": {
     "@cubid/browser": "workspace:*"

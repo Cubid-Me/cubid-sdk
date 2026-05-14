@@ -32,8 +32,8 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 ## Current Migration Direction
 
 - `packages/core` replaces the former `packages/api` package.
-- `packages/browser` now carries the first-class headless browser layer, while `@cubid/web2` remains as a temporary compatibility package.
-- `packages/react` now carries the React layer, while `@cubid/web2-react` remains as a temporary compatibility package.
+- `packages/browser` now carries the first-class headless browser layer, while `@cubid/web2` remains only as a frozen deprecated compatibility package.
+- `packages/react` now carries the React layer, while `@cubid/web2-react` remains only as a frozen deprecated compatibility package.
 - `packages/evm` now carries the first chain-specific split from `@cubid/web3`, and `packages/wagmi` now carries wagmi-specific React helpers on top of `@cubid/evm`.
 - `@cubid/web3` remains an interim package and should continue splitting over time into chain-specific packages.
 - When hosted OIDC login becomes public, prefer a dedicated `@cubid/auth` and optional `@cubid/auth-react` package family rather than collapsing auth concerns into existing packages.
@@ -41,3 +41,19 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 ## Repo Hygiene Note
 
 This local folder may be missing its `.git` checkout on some machines. Restore the canonical Git checkout before branch, commit, PR, or publish work that depends on provenance.
+
+## Branch And CI Workflow
+
+- Treat `dev` as the active integration branch for ongoing SDK work.
+- Treat `main` as the release branch for npm and JSR publication.
+- Keep local implementation, PR, and review work on feature branches or `dev`
+  unless the user explicitly asks for a direct hotfix path.
+
+## Applicability Notes
+
+- The Supabase direct-read/write audit does not apply here. This repo is a
+  public SDK monorepo, not an MCP server or multi-frontend app that should move
+  runtime data access behind Supabase Edge Functions.
+- Deno and Supabase Edge support matter only for consumer compatibility of
+  `@cubid/core`, not because this repo itself owns deployed Supabase runtime
+  code.

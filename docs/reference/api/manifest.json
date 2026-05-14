@@ -1,0 +1,46 @@
+{
+  "packages": [
+    {
+      "name": "@cubid/core",
+      "version": "0.1.2",
+      "description": "Runtime-agnostic Cubid core client for server-side integrations.",
+      "registry": "npm + jsr",
+      "referencePath": "core.json"
+    },
+    {
+      "name": "@cubid/browser",
+      "version": "0.1.2",
+      "description": "Headless browser helpers for Cubid OTP, hosted verification, and allow flows.",
+      "registry": "npm-only",
+      "referencePath": "browser.json"
+    },
+    {
+      "name": "@cubid/react",
+      "version": "0.1.2",
+      "description": "React components and hooks for Cubid browser flows.",
+      "registry": "npm-only",
+      "referencePath": "react.json"
+    },
+    {
+      "name": "@cubid/evm",
+      "version": "0.1.2",
+      "description": "EVM-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "evm.json"
+    },
+    {
+      "name": "@cubid/wagmi",
+      "version": "0.1.2",
+      "description": "wagmi-based React helpers that adapt wallet flows onto @cubid/evm.",
+      "registry": "npm-only",
+      "referencePath": "wagmi.json"
+    },
+    {
+      "name": "@cubid/web3",
+      "version": "0.1.1",
+      "description": "Wallet-oriented Cubid helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "web3.json"
+    }
+  ]
+}

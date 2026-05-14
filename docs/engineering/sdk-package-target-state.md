@@ -14,6 +14,11 @@ Official packages are published under the npm org `@cubid/*`, owned by the
 uses trusted publishing from GitHub Actions; do not publish official packages
 from personal npm accounts or long-lived local tokens.
 
+JSR should remain intentionally narrow. Use JSR only for runtime-agnostic
+packages with a real Deno or Supabase Edge value proposition. Under the current
+public package policy, that means `@cubid/core` only; the browser, React, wagmi,
+and transitional compatibility packages remain npm-only by design.
+
 Public SDK packages should use explicit package-level licenses. `@cubid/core`
 is Apache-2.0; app and service workspaces in this monorepo are not automatically
 covered by that SDK package license.
@@ -60,9 +65,31 @@ Legacy `POST /api/v2/save_secret` is removed and should not reappear in public
 SDK wrappers or examples. The secret-write surface should continue to document
 that there is no matching public decrypt/read helper today.
 
+`@cubid/core` should also carry the canonical public stamp-id registry and
+small app-scoped subject helpers so downstream apps can stay aligned with
+Passport's disclosure-aware identity model without depending on private backend
+packages or copying stamp-id maps by hand.
+
 The current custody-chain surface on those helpers includes `evm`, `near`,
 `solana`, and `sui`. The SDK must keep those helpers limited to public account
 metadata and must not grow private-key or custody-secret return values.
+
+`@cubid/core` should also carry the future dapp-facing API v3 signing-request
+lifecycle wrappers because those routes are runtime-agnostic HTTP contracts.
+Keep Passport-hosted list, approve, and reject routes out of the public SDK
+surface unless a later account-management or auth boundary is explicitly
+introduced.
+
+When those wrappers land, expose only redacted signing-request summaries:
+`signingRequestId`, `status`, `chain`, `requestType`, `payloadHash`,
+`payloadSummary`, `policyVersion`, `requiredAcr`, timestamps, and `result` only
+after completion. Do not expose raw signing payloads, raw Cubid internal IDs,
+private keys, encrypted key material, or private custody data.
+
+SIWC05's additive transaction risk and policy fields should be modeled as
+optional summary metadata in `@cubid/core` types, not as a signal that
+transaction signing is enabled. Approval remains Passport-hosted, and dapp API
+keys must not approve signing requests.
 
 `@cubid/browser` may depend on `@cubid/core`. It owns browser-safe hosted
 verification helpers, OTP/browser flow orchestration, AllowPage URL/state
@@ -71,6 +98,11 @@ helpers, and other client helpers that do not require React.
 `@cubid/react` may depend on `@cubid/browser` and `@cubid/core`. It owns React
 hooks, React components, and context/provider helpers. It must not become the
 home for protocol logic that belongs in core or the generic browser layer.
+
+If the SDK later adds UI for signing-request summaries, statuses, or risk
+labels, that presentation work may live in `@cubid/react` or
+browser-framework-specific adapters. The signing-request approval authority
+itself remains Passport-hosted and out of scope for these packages.
 
 Future user-authenticated disclosure-grant management routes, such as Allow
 Page grant listing or revocation, should not be treated as dapp server APIs in
@@ -82,9 +114,30 @@ should keep verifying Cubid's exact raw-body signature contract and preserve
 both canonical `eventType` and transition-friendly `legacyEventType` fields in
 public types and examples.
 
+Future webhook type updates should treat SIWC wallet events as additive to that
+same verified envelope, including:
+
+- `wallet.created`
+- `wallet.signing_request.created`
+- `wallet.policy.denied`
+- `wallet.signing_request.approved`
+- `wallet.signing_request.rejected`
+- `wallet.signing_request.cancelled`
+- `wallet.signing_request.step_up_failed`
+- `wallet.signature.completed`
+- `wallet.signature.failed`
+
+Do not add transaction webhook expectations until Passport explicitly enables
+transaction signing and publishes the corresponding wallet transaction events.
+
 Chain packages own chain-specific wallet, key, and signing behavior. Each chain
 package should avoid cross-chain assumptions. `@cubid/evm` may depend on
 `viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
+
+Future smart-account, session-key, paymaster, and gas-sponsorship APIs should
+also be capability-driven rather than universal. Keep app-scoped generated
+custody accounts as the default public model unless Passport later exposes
+explicit capability fields or feature gates for optional account modes.
 
 `@cubid/secrets`, if introduced, owns advanced encryption/custody helpers. Until
 then, `@cubid/core` may expose typed API wrappers for basic secret operations
@@ -123,8 +176,8 @@ npm-first foundation, then layers in package-ready integration surfaces:
   stamp sync.
 - `@cubid/react` now exists as the primary React surface for OTP forms, hosted
   verification widgets, provider connect buttons, and optional React context.
-- `@cubid/web2` and `@cubid/web2-react` now remain as compatibility wrappers
-  around those renamed packages during the migration window.
+- `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
+  compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
 - `@cubid/web3` remains the interim shared wallet package while the split
   continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
@@ -132,3 +185,6 @@ npm-first foundation, then layers in package-ready integration surfaces:
 
 Live npm and JSR publication are complete for `@cubid/core`. See
 `docs/engineering/package-migration-plan.md` for the rename and split plan.
+Machine-readable API reference artifacts live under `docs/reference/api/` for
+the primary public packages and should stay aligned with the package export
+surfaces.

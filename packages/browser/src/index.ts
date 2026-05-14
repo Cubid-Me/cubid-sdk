@@ -1,7 +1,8 @@
 export { createCubidWeb2Client } from "./client";
-export { buildHostedVerificationUrl } from "./hosted";
+export { buildClearPassVerifyUrl, buildHostedVerificationUrl } from "./hosted";
 export { WEB2_OAUTH_PROVIDERS } from "./types";
 export type {
+  ClearPassVerifyUrlRequest,
   CubidAllowFlowParams,
   CubidHostedVerificationStampType,
   CubidOAuthCallbackState,
