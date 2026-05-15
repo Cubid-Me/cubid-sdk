@@ -19,6 +19,7 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/browser` | npm-only | Browser-oriented helper layer; not marketed as a Deno or JSR surface. |
 | `@cubid/bitcoin` | npm-only | Chain-specific Bitcoin package built for the npm ecosystem. |
 | `@cubid/cardano` | npm-only | Chain-specific Cardano package built for the npm ecosystem. |
+| `@cubid/comms` | npm-only | Signed-in Passport messaging profile helpers. |
 | `@cubid/cosmos` | npm-only | Chain-specific Cosmos package built for the npm ecosystem. |
 | `@cubid/react` | npm-only | React package with peer dependency assumptions. |
 | `@cubid/evm` | npm-only | Chain-specific package built for the npm ecosystem. |

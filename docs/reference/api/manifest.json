@@ -50,6 +50,13 @@
       "referencePath": "cardano.json"
     },
     {
+      "name": "@cubid/comms",
+      "version": "0.1.0",
+      "description": "Signed-in messaging profile helpers for Cubid Passport notification channels and preferences.",
+      "registry": "npm-only",
+      "referencePath": "comms.json"
+    },
+    {
       "name": "@cubid/cosmos",
       "version": "0.1.0",
       "description": "Cosmos-oriented Cubid wallet helpers built on top of @cubid/core.",

@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s68-comms-package-boundary
+
+- Timestamp: 2026-05-15T05:40:38Z
+- Summary: Implemented the first `@cubid/comms` package slice to make the flexible-messaging package boundary real before adding any channel or preference helpers.
+- Actions:
+  - Added `packages/comms` with a minimal signed-in Passport-user client boundary, package metadata, README, and focused tests that keep the package free of `@cubid/core`, browser, and React dependency edges.
+  - Wired `@cubid/comms` into the repo package matrix, TypeScript aliases, unit-test prebuild path, Vitest coverage/test config, and machine-readable API reference generation.
+  - Updated the publishing policy and roadmap state so `S13.1` is now complete and the next work can land directly in `@cubid/comms`.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+- Follow-up:
+  - Move directly into `S13.2` to add the first signed-in channel metadata helpers on top of this package boundary.
+
 ## session: s67-flexible-messaging-roadmap-intake
 
 - Timestamp: 2026-05-15T00:40:00Z

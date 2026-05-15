@@ -1,0 +1,700 @@
+{
+  "schemaVersion": "2.0",
+  "name": "@cubid/comms",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "name": "CubidCommsError",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {},
+      "children": [
+        {
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "CubidCommsError",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidCommsErrorInput",
+                    "package": "@cubid/comms"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "CubidCommsError",
+                "package": "@cubid/comms"
+              },
+              "overwrites": {
+                "type": "reference",
+                "name": "Error.constructor",
+                "package": "typescript"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "name": "Error.constructor",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "category",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidCommsErrorCategory",
+            "package": "@cubid/comms"
+          }
+        },
+        {
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        },
+        {
+          "name": "requestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "number"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Error"
+          },
+          "name": "Error",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "CubidCommsClient",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "config",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Readonly"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "ResolvedCubidCommsClientOptions",
+                "package": "@cubid/comms"
+              }
+            ],
+            "name": "Readonly",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidCommsClientOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "accessToken",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Passport-user bearer token. This is a signed-in user credential, not a\nCubid dapp API key."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "baseUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Passport origin, for example "
+              },
+              {
+                "kind": "code",
+                "text": "`https://id.cubid.me`"
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.dom.d.ts",
+                  "qualifiedName": "URL"
+                },
+                "name": "URL",
+                "package": "typescript"
+              }
+            ]
+          }
+        },
+        {
+          "name": "fetch",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional fetch implementation for tests or custom runtimes."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidCommsFetch",
+            "package": "@cubid/comms"
+          }
+        },
+        {
+          "name": "headers",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional caller-owned headers for tracing or instrumentation."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.dom.d.ts",
+              "qualifiedName": "HeadersInit"
+            },
+            "name": "HeadersInit",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidCommsErrorInput",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "category",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidCommsErrorCategory",
+            "package": "@cubid/comms"
+          }
+        },
+        {
+          "name": "cause",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        },
+        {
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "message",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        },
+        {
+          "name": "requestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "number"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "ResolvedCubidCommsClientOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "accessToken",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "baseUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "headers",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.dom.d.ts",
+              "qualifiedName": "Headers"
+            },
+            "name": "Headers",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidCommsErrorCategory",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "auth"
+          },
+          {
+            "type": "literal",
+            "value": "config"
+          },
+          {
+            "type": "literal",
+            "value": "network"
+          },
+          {
+            "type": "literal",
+            "value": "parse"
+          },
+          {
+            "type": "literal",
+            "value": "unknown"
+          },
+          {
+            "type": "literal",
+            "value": "upstream"
+          },
+          {
+            "type": "literal",
+            "value": "validation"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidCommsFetch",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reflection",
+        "declaration": {
+          "name": "__type",
+          "variant": "declaration",
+          "kind": 65536,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "__type",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.dom.d.ts",
+                          "qualifiedName": "URL"
+                        },
+                        "name": "URL",
+                        "package": "typescript"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.dom.d.ts",
+                          "qualifiedName": "Request"
+                        },
+                        "name": "Request",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "init",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "RequestInit"
+                    },
+                    "name": "RequestInit",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "Response"
+                    },
+                    "name": "Response",
+                    "package": "typescript"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "createCubidCommsClient",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "createCubidCommsClient",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidCommsClientOptions",
+                "package": "@cubid/comms"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "CubidCommsClient",
+            "package": "@cubid/comms"
+          }
+        }
+      ]
+    }
+  ],
+  "packageName": "@cubid/comms",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/comms`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nSigned-in messaging profile helpers for Cubid Passport notification channels and\npreferences.\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/comms`"
+    },
+    {
+      "kind": "text",
+      "text": " when a Passport-authenticated user needs to manage\nCubid-owned notification channels, verification steps, or messaging\npreferences without exposing raw destinations or provider internals to the app.\n\nChoose this package instead of:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": " for Passport-user profile management surfaces\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": " for hosted browser flows\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/react`"
+    },
+    {
+      "kind": "text",
+      "text": " for React-specific UI composition\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": " later for server-authenticated dapp notification send and\nstatus helpers. Those APIs stay separate from signed-in user channel\nmanagement.\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\npnpm add @cubid/comms\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Registry availability\n\n- npm-only\n\n## API reference\n\n- Root package matrix: [/Users/botmaster/src/cubid/cubid-sdk-v2/README.md](/Users/botmaster/src/cubid/cubid-sdk-v2/README.md)\n- Machine-readable API reference: [/Users/botmaster/src/cubid/cubid-sdk-v2/docs/reference/api/comms.json](/Users/botmaster/src/cubid/cubid-sdk-v2/docs/reference/api/comms.json)\n\n## Current scope\n\nThis first package slice defines the signed-in Passport-user client boundary for\nfuture flexible messaging helpers.\n\nIt intentionally does not add:\n\n- dapp-authenticated notification send helpers\n- hosted Allow Page grant wrappers\n- raw email addresses, Telegram identifiers, ciphertext, or provider secrets\n\nThose behaviors remain deferred to later roadmap slices."
+    }
+  ]
+}

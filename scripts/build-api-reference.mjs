@@ -67,6 +67,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "comms",
+    name: "@cubid/comms",
+    dir: "packages/comms",
+    entryPoint: "packages/comms/src/index.ts",
+    tsconfig: "packages/comms/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "cosmos",
     name: "@cubid/cosmos",
     dir: "packages/cosmos",

@@ -1083,7 +1083,10 @@ remains disabled.
 
 ### S13. Add flexible messaging account-management helpers without exposing delivery internals
 
-- Status: Not started
+- Status: In progress
+- Timestamp started: 2026-05-15T05:40:38Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `848c4352` at implementation start
 - Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
 
 Track the future public SDK surface for flexible messaging without collapsing
@@ -1095,8 +1098,12 @@ family, and reserve future server-safe send and status helpers for
 
 ### S13.1 Define the package boundary for flexible messaging helpers
 
-- Status: Not started
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+- Status: Completed
+- Timestamp started: 2026-05-15T05:40:38Z
+- Timestamp completed: 2026-05-15T05:40:38Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `848c4352` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s68-comms-package-boundary
 
 Document that signed-in messaging profile helpers belong in a future
 `@cubid/comms` package family rather than `@cubid/core`, and keep hosted Allow
