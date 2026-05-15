@@ -198,6 +198,21 @@ safe routing metadata such as `eventId`, `status`, `selectedChannelType`,
 `category`, `priority`, and `createdAt`. It does not expose raw destinations,
 provider secrets, ciphertext, or hosted Allow Page grant state.
 
+When `sendNotification` rejects, prefer handling `CubidNotificationSendError`
+instead of treating every failure as a generic transport outage. Stable send
+error codes currently include:
+
+- `notification_grant_required`
+- `notification_muted`
+- `notification_provider_disabled`
+- `notification_quota_exceeded`
+- `request_in_progress`
+- `rate_limit_exceeded`
+
+These are structured send outcomes, not raw provider responses. `status:
+"accepted"` still only means Cubid accepted and routed the event; it does not
+mean email or Telegram delivery has already succeeded.
+
 Supported custody chains on the public v3 account helpers are:
 
 - `evm`

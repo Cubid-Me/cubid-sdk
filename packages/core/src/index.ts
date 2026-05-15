@@ -428,6 +428,23 @@ export const CUBID_NOTIFICATION_PRIORITIES = [
   "CRITICAL",
 ] as const
 
+export const CUBID_NOTIFICATION_SEND_ERROR_CODES = [
+  "unauthorized",
+  "invalid_request",
+  "idempotency_conflict",
+  "request_in_progress",
+  "not_found",
+  "notification_policy_disabled",
+  "notification_category_denied",
+  "notification_priority_denied",
+  "notification_grant_required",
+  "notification_muted",
+  "no_eligible_notification_channel",
+  "rate_limit_exceeded",
+  "notification_provider_disabled",
+  "notification_quota_exceeded",
+] as const
+
 export type CubidNotificationCategory =
   (typeof CUBID_NOTIFICATION_CATEGORIES)[number]
 
@@ -435,6 +452,34 @@ export type CubidNotificationPriority =
   (typeof CUBID_NOTIFICATION_PRIORITIES)[number]
 
 export type CubidNotificationSendStatus = "accepted" | string
+
+export type CubidNotificationSendErrorCode =
+  (typeof CUBID_NOTIFICATION_SEND_ERROR_CODES)[number] | string
+
+export type CubidNotificationSendErrorInput = CubidApiErrorInput & {
+  notificationCode: CubidNotificationSendErrorCode | null
+  retryable: boolean | null
+  sendAccepted: false
+}
+
+export class CubidNotificationSendError extends CubidApiError {
+  readonly notificationCode: CubidNotificationSendErrorCode | null
+  readonly retryable: boolean | null
+  readonly sendAccepted: false
+
+  constructor(input: CubidNotificationSendErrorInput) {
+    super(input)
+    this.name = "CubidNotificationSendError"
+    this.notificationCode = input.notificationCode
+    this.retryable = input.retryable
+    this.sendAccepted = false
+  }
+}
+
+export const isCubidNotificationSendError = (
+  error: unknown
+): error is CubidNotificationSendError =>
+  error instanceof CubidNotificationSendError
 
 export type CubidSendNotificationInput = CubidIdempotentRequestOptions & {
   body: string
@@ -868,6 +913,8 @@ export type IdempotentRequestOptions = CubidIdempotentRequestOptions
 export type NotificationCategory = CubidNotificationCategory
 export type NotificationPriority = CubidNotificationPriority
 export type NotificationSendStatus = CubidNotificationSendStatus
+export type NotificationSendErrorCode = CubidNotificationSendErrorCode
+export type NotificationSendErrorInput = CubidNotificationSendErrorInput
 export type SaveSecretInput = CubidSaveSecretInput
 export type SaveSecretResponse = CubidSaveSecretResponse
 export type SendNotificationInput = CubidSendNotificationInput
@@ -1238,6 +1285,11 @@ const asSiwcUserAction = (value: unknown): CubidSiwcUserAction | null =>
 const asSiwcCode = (value: unknown): CubidSiwcErrorCode | null =>
   typeof value === "string" && value.trim().length > 0 ? value : null
 
+const asNotificationSendErrorCode = (
+  value: unknown
+): CubidNotificationSendErrorCode | null =>
+  typeof value === "string" && value.trim().length > 0 ? value : null
+
 const extractSiwcErrorMetadata = (
   payload: unknown
 ):
@@ -1277,7 +1329,42 @@ const extractSiwcErrorMetadata = (
   }
 }
 
+const notificationSendRetryability = (
+  code: CubidNotificationSendErrorCode | null
+): boolean | null => {
+  switch (code) {
+    case "request_in_progress":
+    case "rate_limit_exceeded":
+      return true
+    case "unauthorized":
+    case "invalid_request":
+    case "idempotency_conflict":
+    case "not_found":
+    case "notification_policy_disabled":
+    case "notification_category_denied":
+    case "notification_priority_denied":
+    case "notification_grant_required":
+    case "notification_muted":
+    case "no_eligible_notification_channel":
+    case "notification_provider_disabled":
+    case "notification_quota_exceeded":
+      return false
+    default:
+      return null
+  }
+}
+
 const createApiError = (input: CubidApiErrorInput): CubidApiError => {
+  if (input.endpoint === "v3/notifications/send") {
+    const notificationCode = asNotificationSendErrorCode(input.code)
+    return new CubidNotificationSendError({
+      ...input,
+      notificationCode,
+      retryable: notificationSendRetryability(notificationCode),
+      sendAccepted: false,
+    })
+  }
+
   const siwc = extractSiwcErrorMetadata(input.details)
 
   if (siwc) {

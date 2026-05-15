@@ -1,5 +1,21 @@
 # Session Log
 
+## session: s74-core-notification-send-errors
+
+- Timestamp: 2026-05-15T06:42:00Z
+- Summary: Hardened the flexible-messaging send helper so accepted sends and denied sends now come back as distinct typed SDK outcomes.
+- Actions:
+  - Added `CubidNotificationSendError`, `isCubidNotificationSendError`, and stable notification send error-code typing so Passport send-route denials are no longer surfaced as generic transport-looking failures.
+  - Classified the key Passport messaging denials and in-flight outcomes with retryability hints while keeping `status: "accepted"` documented as routing acceptance rather than proof of provider delivery.
+  - Updated the core README and server-integration guide so backend consumers know how to distinguish accepted sends from policy, grant, quota, provider, and request-in-progress failures.
+- Validation:
+  - `pnpm --filter @cubid/core build`
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+- Follow-up:
+  - Move into `S13.8` and add the server-safe notification status helper so accepted events can be tracked after the initial send response.
+
 ## session: s73-core-notification-send-helper
 
 - Timestamp: 2026-05-15T06:28:00Z

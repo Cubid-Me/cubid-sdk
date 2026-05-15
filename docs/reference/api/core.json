@@ -157,6 +157,236 @@
         {
           "type": "reference",
           "name": "CubidSiwcError"
+        },
+        {
+          "type": "reference",
+          "name": "CubidNotificationSendError"
+        }
+      ]
+    },
+    {
+      "name": "CubidNotificationSendError",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {},
+      "children": [
+        {
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "CubidNotificationSendError",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidNotificationSendErrorInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "CubidNotificationSendError",
+                "package": "@cubid/core"
+              },
+              "overwrites": {
+                "type": "reference",
+                "name": "CubidApiError.constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "name": "CubidApiError.constructor"
+          }
+        },
+        {
+          "name": "category",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidApiErrorCategory",
+            "package": "@cubid/core"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.category"
+          }
+        },
+        {
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.code"
+          }
+        },
+        {
+          "name": "details",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.details"
+          }
+        },
+        {
+          "name": "endpoint",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.endpoint"
+          }
+        },
+        {
+          "name": "notificationCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "requestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.requestId"
+          }
+        },
+        {
+          "name": "retryable",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "boolean"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "sendAccepted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "literal",
+            "value": false
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.status"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidApiError",
+          "package": "@cubid/core"
         }
       ]
     },
@@ -5449,6 +5679,112 @@
       }
     },
     {
+      "name": "CubidNotificationSendErrorCode",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "indexedAccess",
+            "indexType": {
+              "type": "intrinsic",
+              "name": "number"
+            },
+            "objectType": {
+              "type": "query",
+              "queryType": {
+                "type": "reference",
+                "name": "CUBID_NOTIFICATION_SEND_ERROR_CODES",
+                "package": "@cubid/core"
+              }
+            }
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidNotificationSendErrorInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidApiErrorInput",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "notificationCode",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "name": "CubidNotificationSendErrorCode",
+                        "package": "@cubid/core"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "retryable",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "boolean"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "sendAccepted",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "literal",
+                    "value": false
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "CubidNotificationSendStatus",
       "variant": "declaration",
       "kind": 2097152,
@@ -9219,6 +9555,28 @@
       }
     },
     {
+      "name": "NotificationSendErrorCode",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidNotificationSendErrorCode",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "NotificationSendErrorInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidNotificationSendErrorInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "NotificationSendStatus",
       "variant": "declaration",
       "kind": 2097152,
@@ -9692,6 +10050,80 @@
             {
               "type": "literal",
               "value": "CRITICAL"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "CUBID_NOTIFICATION_SEND_ERROR_CODES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "unauthorized"
+            },
+            {
+              "type": "literal",
+              "value": "invalid_request"
+            },
+            {
+              "type": "literal",
+              "value": "idempotency_conflict"
+            },
+            {
+              "type": "literal",
+              "value": "request_in_progress"
+            },
+            {
+              "type": "literal",
+              "value": "not_found"
+            },
+            {
+              "type": "literal",
+              "value": "notification_policy_disabled"
+            },
+            {
+              "type": "literal",
+              "value": "notification_category_denied"
+            },
+            {
+              "type": "literal",
+              "value": "notification_priority_denied"
+            },
+            {
+              "type": "literal",
+              "value": "notification_grant_required"
+            },
+            {
+              "type": "literal",
+              "value": "notification_muted"
+            },
+            {
+              "type": "literal",
+              "value": "no_eligible_notification_channel"
+            },
+            {
+              "type": "literal",
+              "value": "rate_limit_exceeded"
+            },
+            {
+              "type": "literal",
+              "value": "notification_provider_disabled"
+            },
+            {
+              "type": "literal",
+              "value": "notification_quota_exceeded"
             }
           ]
         }
@@ -10358,6 +10790,42 @@
             ],
             "name": "Record",
             "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "isCubidNotificationSendError",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "isCubidNotificationSendError",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "error",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "predicate",
+            "name": "error",
+            "asserts": false,
+            "targetType": {
+              "type": "reference",
+              "name": "CubidNotificationSendError",
+              "package": "@cubid/core"
+            }
           }
         }
       ]
@@ -11459,7 +11927,79 @@
     },
     {
       "kind": "text",
-      "text": ". It does not expose raw destinations,\nprovider secrets, ciphertext, or hosted Allow Page grant state.\n\nSupported custody chains on the public v3 account helpers are:\n\n- "
+      "text": ". It does not expose raw destinations,\nprovider secrets, ciphertext, or hosted Allow Page grant state.\n\nWhen "
+    },
+    {
+      "kind": "code",
+      "text": "`sendNotification`"
+    },
+    {
+      "kind": "text",
+      "text": " rejects, prefer handling "
+    },
+    {
+      "kind": "code",
+      "text": "`CubidNotificationSendError`"
+    },
+    {
+      "kind": "text",
+      "text": "\ninstead of treating every failure as a generic transport outage. Stable send\nerror codes currently include:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`notification_grant_required`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`notification_muted`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`notification_provider_disabled`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`notification_quota_exceeded`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`request_in_progress`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`rate_limit_exceeded`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThese are structured send outcomes, not raw provider responses. "
+    },
+    {
+      "kind": "code",
+      "text": "`status:\n\"accepted\"`"
+    },
+    {
+      "kind": "text",
+      "text": " still only means Cubid accepted and routed the event; it does not\nmean email or Telegram delivery has already succeeded.\n\nSupported custody chains on the public v3 account helpers are:\n\n- "
     },
     {
       "kind": "code",

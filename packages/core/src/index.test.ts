@@ -6,10 +6,12 @@ import {
   createCubidAppScopedSubject,
   createCubidApiClient,
   CubidApiError,
+  CubidNotificationSendError,
   CubidSiwcError,
   getCubidStampTypeId,
   getCubidStampTypeName,
   getCubidStampTypeNamesById,
+  isCubidNotificationSendError,
   isCubidSignedTransactionResult,
   isCubidSigningSignatureResult,
   type CubidFetch,
@@ -782,6 +784,84 @@ test("notification send helpers auto-generate idempotency keys when omitted", as
 
   assert.equal(response.idempotencyKey, idempotencyKey)
   assert.match(String(idempotencyKey), /^[0-9a-f-]{36}$/)
+})
+
+test("notification send helpers normalize accepted-versus-denied outcomes as typed send errors", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () =>
+      createJsonResponse(
+        {
+          error: {
+            code: "notification_grant_required",
+            message: "The user has not granted this notification category.",
+            requestId: "passport_notif_123",
+          },
+        },
+        { status: 403 }
+      ),
+  })
+
+  await assert.rejects(
+    () =>
+      client.sendNotification({
+        body: "Your verification succeeded.",
+        category: "SECURITY",
+        priority: "HIGH",
+        title: "Verification complete",
+        userId: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidNotificationSendError)
+      assert.ok(isCubidNotificationSendError(error))
+      assert.equal(error.notificationCode, "notification_grant_required")
+      assert.equal(error.sendAccepted, false)
+      assert.equal(error.retryable, false)
+      assert.equal(error.endpoint, "v3/notifications/send")
+      assert.equal(
+        error.message,
+        "The user has not granted this notification category."
+      )
+      return true
+    }
+  )
+})
+
+test("notification send helpers flag request-in-progress outcomes as retryable typed send errors", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () =>
+      createJsonResponse(
+        {
+          error: {
+            code: "request_in_progress",
+            message: "A send with this idempotency key is still being processed.",
+          },
+        },
+        { status: 409 }
+      ),
+  })
+
+  await assert.rejects(
+    () =>
+      client.sendNotification({
+        body: "Your verification succeeded.",
+        category: "WORKFLOW",
+        idempotencyKey: "notif_send_retryable",
+        priority: "NORMAL",
+        title: "Verification complete",
+        userId: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidNotificationSendError)
+      assert.equal(error.notificationCode, "request_in_progress")
+      assert.equal(error.retryable, true)
+      assert.equal(error.sendAccepted, false)
+      return true
+    }
+  )
 })
 
 test("createNotificationIdempotencyKey returns a UUID-shaped key", () => {

@@ -197,6 +197,11 @@ When your app already has its own operation or job ID, prefer passing that as
 that an email or Telegram provider already delivered it. The public SDK
 response stays redacted to safe routing metadata only.
 
+When a send is denied before acceptance, `@cubid/core` now raises
+`CubidNotificationSendError` with a stable `notificationCode` and `retryable`
+hint so apps can distinguish policy/quota denials from retryable in-flight or
+rate-limit outcomes without inspecting raw Passport envelopes.
+
 Supported custody chains on the public SDK surface are currently:
 
 - `evm`

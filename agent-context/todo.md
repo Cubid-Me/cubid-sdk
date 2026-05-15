@@ -1182,14 +1182,18 @@ browser-safety guidance that Cubid dapp API keys must stay on the app backend.
 
 ### S13.7 Normalize flexible messaging send errors and accepted-versus-delivered semantics
 
-- Status: Not started
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-send-route.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-email-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-telegram-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-abuse-controls.md`, session: s67-flexible-messaging-roadmap-intake
+- Status: Completed
+- Timestamp started: 2026-05-15T06:42:00Z
+- Timestamp completed: 2026-05-15T06:42:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `f912504c` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-send-route.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-email-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-telegram-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-abuse-controls.md`, session: s67-flexible-messaging-roadmap-intake, session: s74-core-notification-send-errors
 
-When those send helpers land, model `status: "accepted"` as Cubid accepting
-and routing the event rather than guaranteed provider delivery. Preserve stable
-error codes such as `notification_grant_required`,
-`notification_provider_disabled`, and `notification_quota_exceeded` as
-structured send outcomes instead of retryable transport failures.
+Model `status: "accepted"` as Cubid accepting and routing the event rather
+than guaranteed provider delivery. Preserve stable error codes such as
+`notification_grant_required`, `notification_provider_disabled`, and
+`notification_quota_exceeded` as structured send outcomes instead of retryable
+transport failures.
 
 ### S13.8 Add server-safe notification status helpers in a future `@cubid/core`
 
