@@ -41,6 +41,8 @@ Current helpers:
 
 - `createCubidCommsClient(...)`
 - `client.channels.list()`
+- `client.channels.startVerification(...)`
+- `client.channels.completeVerification(...)`
 - `client.channels.update(...)`
 
 The channel helpers expose only redacted metadata:

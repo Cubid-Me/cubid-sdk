@@ -181,4 +181,175 @@ describe("@cubid/comms", () => {
       })
     ).rejects.toThrow(CubidCommsError);
   });
+
+  it("starts email channel verification without exposing a setup code", async () => {
+    const fetchImpl = vi.fn(async (_input: string | URL | Request, init?: RequestInit) => {
+      expect(JSON.parse(String(init?.body))).toEqual({
+        channelType: "email",
+        destination: "Person@Example.com",
+        isDefault: true,
+        label: "Personal email",
+      });
+
+      return new Response(
+        JSON.stringify({
+          data: {
+            channel: {
+              channelId: "channel_1",
+              channelType: "email",
+              createdAt: "2026-05-14T00:00:00.000Z",
+              displayHint: "p***@example.com",
+              isDefault: true,
+              label: "Personal email",
+              providerKey: "email_smtp",
+              status: "active",
+              updatedAt: "2026-05-14T00:00:00.000Z",
+              verificationStatus: "pending",
+              verifiedAt: null,
+            },
+            challenge: {
+              challengeId: "challenge_1",
+              expiresAt: "2026-05-14T00:10:00.000Z",
+              maxAttempts: 3,
+              providerKey: "email_smtp",
+            },
+          },
+        }),
+        {
+          headers: {
+            "content-type": "application/json",
+            "x-request-id": "passport_channels_3",
+          },
+          status: 200,
+        }
+      );
+    });
+
+    const client = createCubidCommsClient({
+      accessToken: "firebase-bearer-token",
+      baseUrl: "https://id.cubid.me",
+      fetch: fetchImpl,
+    });
+
+    const response = await client.channels.startVerification({
+      channelType: "email",
+      destination: "Person@Example.com",
+      isDefault: true,
+      label: "Personal email",
+    });
+
+    expect(response.requestId).toBe("passport_channels_3");
+    expect(response.channel.verificationStatus).toBe("pending");
+    expect(response.challenge).toEqual(
+      expect.objectContaining({
+        challengeId: "challenge_1",
+        providerKey: "email_smtp",
+        setupCode: null,
+        setupInstructions: null,
+      })
+    );
+  });
+
+  it("starts telegram channel verification with setup guidance", async () => {
+    const fetchImpl = vi.fn(async () => {
+      return new Response(
+        JSON.stringify({
+          data: {
+            channel: {
+              channelId: "channel_telegram",
+              channelType: "telegram",
+              createdAt: "2026-05-14T00:00:00.000Z",
+              displayHint: "Telegram ending rson",
+              isDefault: false,
+              label: "Telegram",
+              providerKey: "telegram_bot",
+              status: "active",
+              updatedAt: "2026-05-14T00:00:00.000Z",
+              verificationStatus: "pending",
+              verifiedAt: null,
+            },
+            challenge: {
+              challengeId: "challenge_telegram",
+              expiresAt: "2026-05-14T00:10:00.000Z",
+              maxAttempts: 3,
+              providerKey: "telegram_bot",
+              setupCode: "1234",
+              setupInstructions:
+                "Send this one-time code to the Cubid Telegram bot to finish connecting Telegram.",
+            },
+          },
+        }),
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+          status: 200,
+        }
+      );
+    });
+
+    const client = createCubidCommsClient({
+      accessToken: "firebase-bearer-token",
+      baseUrl: "https://id.cubid.me",
+      fetch: fetchImpl,
+    });
+
+    const response = await client.channels.startVerification({
+      channelType: "telegram",
+      destination: "@cubid_person",
+      label: "Telegram",
+    });
+
+    expect(response.channel.channelType).toBe("telegram");
+    expect(response.challenge.setupCode).toBe("1234");
+    expect(response.challenge.setupInstructions).toMatch(/Cubid Telegram bot/);
+  });
+
+  it("completes channel verification and returns the verified channel summary", async () => {
+    const fetchImpl = vi.fn(async (_input: string | URL | Request, init?: RequestInit) => {
+      expect(JSON.parse(String(init?.body))).toEqual({
+        challengeId: "challenge_1",
+        code: "1234",
+      });
+
+      return new Response(
+        JSON.stringify({
+          data: {
+            channelId: "channel_1",
+            channelType: "email",
+            createdAt: "2026-05-14T00:00:00.000Z",
+            displayHint: "p***@example.com",
+            isDefault: true,
+            label: "Personal email",
+            providerKey: "email_smtp",
+            status: "active",
+            updatedAt: "2026-05-14T00:02:00.000Z",
+            verificationStatus: "verified",
+            verifiedAt: "2026-05-14T00:02:00.000Z",
+          },
+        }),
+        {
+          headers: {
+            "content-type": "application/json",
+            "x-request-id": "passport_channels_4",
+          },
+          status: 200,
+        }
+      );
+    });
+
+    const client = createCubidCommsClient({
+      accessToken: "firebase-bearer-token",
+      baseUrl: "https://id.cubid.me",
+      fetch: fetchImpl,
+    });
+
+    const response = await client.channels.completeVerification({
+      challengeId: "challenge_1",
+      code: "1234",
+    });
+
+    expect(response.requestId).toBe("passport_channels_4");
+    expect(response.channel.verificationStatus).toBe("verified");
+  });
 });

@@ -67,6 +67,7 @@ export interface ResolvedCubidCommsClientOptions {
 }
 
 export type CubidNotificationChannelType = "email" | "telegram" | string;
+export type CubidNotificationSetupChannelType = "email" | "telegram";
 
 export type CubidNotificationChannelStatus =
   | "active"
@@ -120,12 +121,54 @@ export interface CubidUpdateNotificationChannelResponse {
   requestId: string | null;
 }
 
+export interface CubidStartNotificationChannelVerificationInput {
+  channelType: CubidNotificationSetupChannelType;
+  destination: string;
+  isDefault?: boolean;
+  label?: string | null;
+  signal?: AbortSignal;
+}
+
+export interface CubidNotificationVerificationChallenge {
+  challengeId: string;
+  expiresAt: string | null;
+  maxAttempts: number | null;
+  providerKey: string | null;
+  setupCode: string | null;
+  setupInstructions: string | null;
+}
+
+export interface CubidStartNotificationChannelVerificationResponse {
+  challenge: CubidNotificationVerificationChallenge;
+  channel: CubidNotificationChannelSummary;
+  raw: Record<string, unknown>;
+  requestId: string | null;
+}
+
+export interface CubidCompleteNotificationChannelVerificationInput {
+  challengeId: string;
+  code: string;
+  signal?: AbortSignal;
+}
+
+export interface CubidCompleteNotificationChannelVerificationResponse {
+  channel: CubidNotificationChannelSummary;
+  raw: Record<string, unknown>;
+  requestId: string | null;
+}
+
 export interface CubidCommsClient {
   readonly config: Readonly<ResolvedCubidCommsClientOptions>;
   readonly channels: {
+    completeVerification(
+      input: CubidCompleteNotificationChannelVerificationInput
+    ): Promise<CubidCompleteNotificationChannelVerificationResponse>;
     list(
       input?: CubidListNotificationChannelsInput
     ): Promise<CubidListNotificationChannelsResponse>;
+    startVerification(
+      input: CubidStartNotificationChannelVerificationInput
+    ): Promise<CubidStartNotificationChannelVerificationResponse>;
     update(
       input: CubidUpdateNotificationChannelInput
     ): Promise<CubidUpdateNotificationChannelResponse>;
@@ -206,6 +249,27 @@ function getOptionalBoolean(
       category: "parse",
       code: "MALFORMED_RESPONSE",
       message: `Cubid comms expected ${fieldName} to be a boolean in ${endpoint}.`,
+      raw: value,
+    });
+  }
+
+  return value;
+}
+
+function getOptionalNumber(
+  value: unknown,
+  fieldName: string,
+  endpoint: string
+): number | null {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    throw new CubidCommsError({
+      category: "parse",
+      code: "MALFORMED_RESPONSE",
+      message: `Cubid comms expected ${fieldName} to be a number in ${endpoint}.`,
       raw: value,
     });
   }
@@ -309,6 +373,28 @@ function normalizeChannelSummary(
   };
 }
 
+function normalizeVerificationChallenge(
+  payload: Record<string, unknown>,
+  endpoint: string
+): CubidNotificationVerificationChallenge {
+  return {
+    challengeId: assertNonEmptyString(
+      getOptionalString(payload.challengeId, "challengeId", endpoint) ?? "",
+      "challengeId",
+      endpoint
+    ),
+    expiresAt: getOptionalString(payload.expiresAt, "expiresAt", endpoint),
+    maxAttempts: getOptionalNumber(payload.maxAttempts, "maxAttempts", endpoint),
+    providerKey: getOptionalString(payload.providerKey, "providerKey", endpoint),
+    setupCode: getOptionalString(payload.setupCode, "setupCode", endpoint),
+    setupInstructions: getOptionalString(
+      payload.setupInstructions,
+      "setupInstructions",
+      endpoint
+    ),
+  };
+}
+
 async function requestPassportUserRoute(
   fetchImpl: CubidCommsFetch,
   config: ResolvedCubidCommsClientOptions,
@@ -382,6 +468,50 @@ export function createCubidCommsClient(
 
   return {
     channels: {
+      async completeVerification(input) {
+        const challengeId = assertNonEmptyString(
+          input.challengeId,
+          "challengeId",
+          "notifications/channels/complete-verification"
+        );
+        const code = assertNonEmptyString(
+          input.code,
+          "code",
+          "notifications/channels/complete-verification"
+        );
+
+        const { payload, requestId } = await requestPassportUserRoute(
+          fetchImpl,
+          {
+            accessToken,
+            baseUrl,
+            headers,
+          },
+          "/api/notifications/channels/complete-verification",
+          "notifications/channels/complete-verification",
+          {
+            body: {
+              challengeId,
+              code,
+            },
+            signal: input.signal,
+          }
+        );
+
+        return {
+          channel: normalizeChannelSummary(
+            assertRecord(
+              payload.data,
+              "data",
+              "notifications/channels/complete-verification"
+            ),
+            "notifications/channels/complete-verification"
+          ),
+          raw: payload,
+          requestId,
+        };
+      },
+
       async list(input = {}) {
         const { payload, requestId } = await requestPassportUserRoute(
           fetchImpl,
@@ -420,6 +550,67 @@ export function createCubidCommsClient(
               ),
               "notifications/channels/list"
             )
+          ),
+          raw: payload,
+          requestId,
+        };
+      },
+
+      async startVerification(input) {
+        const channelType = assertNonEmptyString(
+          input.channelType,
+          "channelType",
+          "notifications/channels/start-verification"
+        ) as CubidNotificationSetupChannelType;
+        const destination = assertNonEmptyString(
+          input.destination,
+          "destination",
+          "notifications/channels/start-verification"
+        );
+        const label =
+          input.label === undefined ? undefined : input.label?.trim() ?? null;
+
+        const { payload, requestId } = await requestPassportUserRoute(
+          fetchImpl,
+          {
+            accessToken,
+            baseUrl,
+            headers,
+          },
+          "/api/notifications/channels/start-verification",
+          "notifications/channels/start-verification",
+          {
+            body: {
+              channelType,
+              destination,
+              isDefault: input.isDefault,
+              label,
+            },
+            signal: input.signal,
+          }
+        );
+        const data = assertRecord(
+          payload.data,
+          "data",
+          "notifications/channels/start-verification"
+        );
+
+        return {
+          challenge: normalizeVerificationChallenge(
+            assertRecord(
+              data.challenge,
+              "data.challenge",
+              "notifications/channels/start-verification"
+            ),
+            "notifications/channels/start-verification"
+          ),
+          channel: normalizeChannelSummary(
+            assertRecord(
+              data.channel,
+              "data.channel",
+              "notifications/channels/start-verification"
+            ),
+            "notifications/channels/start-verification"
           ),
           raw: payload,
           requestId,

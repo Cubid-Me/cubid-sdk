@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s70-comms-channel-verification
+
+- Timestamp: 2026-05-15T05:45:08Z
+- Summary: Added the signed-in notification channel verification lifecycle helpers to `@cubid/comms` using the real Passport start/complete verification contract.
+- Actions:
+  - Added `channels.startVerification(...)` for email and Telegram channel setup, including the redacted channel summary plus typed challenge metadata such as `challengeId`, expiry, provider key, and optional Telegram setup guidance.
+  - Added `channels.completeVerification(...)` so callers can finish a verification challenge and receive the updated verified channel summary without exposing raw destinations or provider secrets.
+  - Updated the comms README so the current package scope now covers both channel metadata and verification lifecycle helpers.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Move into `S13.4` and add the global notification preference helpers on top of the same signed-in bearer-authenticated client boundary.
+
 ## session: s69-comms-channel-metadata
 
 - Timestamp: 2026-05-15T05:45:08Z
