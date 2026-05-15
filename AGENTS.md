@@ -25,11 +25,16 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 ## Cross-Repo Coordination
 
 - When an SDK change has corresponding implementation or follow-up impact in
-  `cubid-passport`, create a note for the Passport-side agents in that repo
-  under `agent-context/messages-from-cubid-sdk/`.
+  `cubid-passport`, create or update a sibling thread in both repos under
+  `agent-context/cross-repo-comms/`.
 - Treat any new dirty files in this repo under
-  `agent-context/messages-from-cubid-passport/` as incoming messages from
-  Passport-side agents and review or address them as part of the current task.
+  `agent-context/cross-repo-comms/` as incoming sibling notes from Passport-side
+  or downstream agents and review or address them as part of the current task.
+- Keep legacy `messages-from-*` folders as archives. Do not create new live
+  cross-repo notes there unless the user explicitly asks for the old path.
+- Every live cross-repo note must have a sibling file in each corresponding repo
+  with the same `thread_id`; when one sibling gets substantive prose, update the
+  other sibling in the same working session so git status notifies both agents.
 
 ## Current Migration Direction
 

@@ -1,5 +1,22 @@
 # Session Log
 
+## session: s77-cross-repo-wallet-handoff-response
+
+- Timestamp: 2026-05-15T15:00:00Z
+- Summary: Addressed the live SDK wallet handoff inbox thread by replying with the published helper surface, exact exported names, and the remaining Solana signing gap.
+- Actions:
+  - Reviewed the new cross-repo mailbox protocol and the live `sdk-wallet-release-handoff` sibling thread under `agent-context/cross-repo-comms/`.
+  - Verified the published npm versions for the relevant wallet helper packages and cross-checked the exported helper names in `@cubid/core` and `@cubid/browser`.
+  - Added a synchronized reply in both the SDK sibling note and the Passport owner copy so downstream agents now have a concrete readiness answer for EVM/Solana account creation, signing-request flows, hosted approval launchers, and the still-disabled Solana transaction-signing path.
+- Validation:
+  - `npm view @cubid/core version dist-tags.latest`
+  - `npm view @cubid/browser version dist-tags.latest`
+  - `npm view @cubid/near version dist-tags.latest`
+  - `npm view @cubid/solana version dist-tags.latest`
+  - `rg` export checks in `packages/core/src/index.ts` and `packages/browser/src/index.ts`
+- Follow-up:
+  - The sibling Passport note is now dirty in `/Users/botmaster/src/cubid/cubid-passport` and should be committed there if the Passport repo wants the synchronized thread update recorded immediately.
+
 ## session: s76-notification-history-boundary
 
 - Timestamp: 2026-05-15T07:12:00Z
