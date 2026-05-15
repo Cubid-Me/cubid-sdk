@@ -147,7 +147,9 @@ account-management surfaces rather than dapp server APIs. The current send and
 status backend routes are roadmap input only for now; when they are promoted in
 the SDK, they should stay server-safe and land in `@cubid/core`, while
 Passport-user history and channel-management routes remain outside the normal
-dapp API surface.
+dapp API surface. In particular, `POST /api/notifications/history/list`
+belongs with signed-in profile management rather than the dapp-authenticated
+core surface.
 
 Allow Page category-grant routes should also remain Passport-hosted for now.
 If the SDK later surfaces that state, expose only category permission metadata.

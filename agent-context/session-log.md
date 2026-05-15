@@ -1,5 +1,17 @@
 # Session Log
 
+## session: s76-notification-history-boundary
+
+- Timestamp: 2026-05-15T07:12:00Z
+- Summary: Closed the last flexible-messaging roadmap todo by making the Passport-user notification history boundary explicit across the repo guidance.
+- Actions:
+  - Updated `AGENTS.md`, the backgrounder, the SDK target-state doc, and the repo-status snapshot so `POST /api/notifications/history/list` is consistently treated as a signed-in profile route rather than a normal dapp-facing `@cubid/core` helper.
+  - Marked `S13.9` complete in `agent-context/todo.md` so the flexible-messaging roadmap now records the history-route exclusion as an explicit completed boundary decision.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - The next clean roadmap move is to decide whether the broader `S13` parent should now be marked complete or kept open for future delivery-history refinements beyond the current send/status/profile split.
+
 ## session: s75-core-notification-status-helper
 
 - Timestamp: 2026-05-15T06:58:00Z

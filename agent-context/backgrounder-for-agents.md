@@ -249,6 +249,11 @@ The current flexible messaging Passport notes are roadmap input only. They do
 not request immediate public SDK runtime helpers yet, even though the backend
 now has early send, provider, and status contracts.
 
+Passport-user notification history is still a separate boundary. Treat
+`POST /api/notifications/history/list` as a signed-in profile route that stays
+with `@cubid/comms`-style account management if it is exposed later, not as a
+normal `@cubid/core` dapp server helper.
+
 ## Mental Model
 
 Cubid should feel like:

@@ -1083,11 +1083,12 @@ remains disabled.
 
 ### S13. Add flexible messaging account-management helpers without exposing delivery internals
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-15T05:40:38Z
+- Timestamp completed: 2026-05-15T07:12:00Z
 - Feature branch: `codex/s03-main-release-followup`
 - Head: `848c4352` at implementation start
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s76-notification-history-boundary
 
 Track the future public SDK surface for flexible messaging without collapsing
 signed-in user messaging profile management into dapp server notification APIs.
@@ -1211,8 +1212,12 @@ ciphertext, provider secrets, or cross-app data.
 
 ### S13.9 Keep Passport-user notification history routes out of ordinary dapp SDK usage
 
-- Status: Not started
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-status-history.md`, session: s67-flexible-messaging-roadmap-intake
+- Status: Completed
+- Timestamp started: 2026-05-15T07:12:00Z
+- Timestamp completed: 2026-05-15T07:12:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `94c493e9` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-status-history.md`, session: s67-flexible-messaging-roadmap-intake, session: s76-notification-history-boundary
 
 Treat `POST /api/notifications/history/list` as a Passport-user profile route,
 not as a normal dapp SDK surface. If it is exposed later, keep it behind the
