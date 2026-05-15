@@ -35,6 +35,14 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - Every live cross-repo note must have a sibling file in each corresponding repo
   with the same `thread_id`; when one sibling gets substantive prose, update the
   other sibling in the same working session so git status notifies both agents.
+- When you update a sibling cross-repo note in another local repo, intentionally
+  leave that other repo dirty unless the user explicitly asks you to switch over
+  and commit it there too; the dirty state is the notification mechanism for the
+  other repo's active agent.
+- When cross-repo sibling notes or other inbound coordination files appear dirty
+  in this repo, treat them as actionable inbox items: review them, address them
+  if appropriate, and commit the resulting update in this repo rather than
+  leaving the local inbox state unresolved.
 
 ## Current Migration Direction
 
