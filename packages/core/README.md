@@ -120,6 +120,7 @@ endpoints plus the first server-facing API v3 write helpers:
 - `syncIdentitySnapshot`
 - `saveSecret`
 - `sendNotification`
+- `getNotificationStatus`
 - `generateAccount`
 - `listAccounts`
 - `fetchWalletCapabilities`
@@ -173,6 +174,7 @@ The current API v3 helpers stay server-side as well:
 
 - `saveSecret({ userId, secret, idempotencyKey? })`
 - `sendNotification({ userId, category, priority, title, body, deepLink?, metadata?, idempotencyKey? })`
+- `getNotificationStatus({ userId, eventId })`
 - `generateAccount({ userId, chain, label?, idempotencyKey? })`
 - `listAccounts({ userId, chain? })`
 - `fetchWalletCapabilities({ userId? })`
@@ -212,6 +214,16 @@ error codes currently include:
 These are structured send outcomes, not raw provider responses. `status:
 "accepted"` still only means Cubid accepted and routed the event; it does not
 mean email or Telegram delivery has already succeeded.
+
+After a send is accepted, use `getNotificationStatus` for redacted follow-up
+status. It returns app-scoped event metadata such as event status, selected
+channel type, latest delivery status, and redacted delivery attempts without
+exposing raw destinations, ciphertext, provider secrets, or cross-app event
+visibility.
+
+`@cubid/core` intentionally does not wrap Passport-user
+`POST /api/notifications/history/list`. That route remains a signed-in profile
+surface rather than a normal dapp server SDK helper.
 
 Supported custody chains on the public v3 account helpers are:
 

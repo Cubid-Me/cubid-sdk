@@ -1197,14 +1197,17 @@ transport failures.
 
 ### S13.8 Add server-safe notification status helpers in a future `@cubid/core`
 
-- Status: Not started
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-status-history.md`, session: s67-flexible-messaging-roadmap-intake
+- Status: Completed
+- Timestamp started: 2026-05-15T06:58:00Z
+- Timestamp completed: 2026-05-15T06:58:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `1316386a` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-status-history.md`, session: s67-flexible-messaging-roadmap-intake, session: s75-core-notification-status-helper
 
-When the messaging roadmap is promoted, add server-safe `@cubid/core` wrappers
-for `POST /api/v3/notifications/status` that return event status, selected
-channel type, latest delivery state, and redacted delivery attempts without
-exposing raw user ids, destinations, ciphertext, provider secrets, or
-cross-app data.
+Add server-safe `@cubid/core` wrappers for `POST /api/v3/notifications/status`
+that return event status, selected channel type, latest delivery state, and
+redacted delivery attempts without exposing raw user ids, destinations,
+ciphertext, provider secrets, or cross-app data.
 
 ### S13.9 Keep Passport-user notification history routes out of ordinary dapp SDK usage
 

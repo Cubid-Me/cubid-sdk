@@ -1,5 +1,21 @@
 # Session Log
 
+## session: s75-core-notification-status-helper
+
+- Timestamp: 2026-05-15T06:58:00Z
+- Summary: Added the first server-safe notification status helper so accepted flexible-messaging events can be tracked through a redacted app-scoped status surface.
+- Actions:
+  - Added `getNotificationStatus(...)` plus typed notification status and delivery-attempt summaries on `@cubid/core` for the dapp-authenticated `POST /api/v3/notifications/status` route.
+  - Kept the normalized response redacted to event status, selected channel type, latest delivery state, and delivery-attempt metadata without exposing destinations, ciphertext, provider secrets, or cross-app event visibility.
+  - Updated the core README and server-integration guide to position `getNotificationStatus` as the follow-up helper after an accepted send while keeping Passport-user history routes out of ordinary dapp SDK usage.
+- Validation:
+  - `pnpm --filter @cubid/core build`
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+- Follow-up:
+  - Move into `S13.9` and make the Passport-user history-route exclusion explicit in the roadmap and package-boundary docs.
+
 ## session: s74-core-notification-send-errors
 
 - Timestamp: 2026-05-15T06:42:00Z

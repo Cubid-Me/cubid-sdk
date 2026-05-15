@@ -864,6 +864,107 @@ test("notification send helpers flag request-in-progress outcomes as retryable t
   )
 })
 
+test("notification status helpers normalize redacted delivery metadata", async () => {
+  const calls: Array<{
+    body: unknown
+    input: string | URL | Request
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (input, init) => {
+      calls.push({
+        body: JSON.parse(String(init?.body)),
+        input,
+      })
+      return createJsonResponse({
+        data: {
+          category: "TRANSACTIONAL",
+          createdAt: "2026-05-15T07:00:00.000Z",
+          deliveryAttempts: [
+            {
+              attemptId: "attempt_123",
+              channelType: "email",
+              createdAt: "2026-05-15T07:00:10.000Z",
+              providerKey: "email_smtp",
+              status: "sent",
+              updatedAt: "2026-05-15T07:00:20.000Z",
+            },
+            {
+              attempt_id: "attempt_124",
+              channel_type: "telegram",
+              created_at: "2026-05-15T07:01:10.000Z",
+              failure_code: "telegram_delivery_failed",
+              failure_message: "Telegram delivery failed.",
+              provider_key: "telegram_bot",
+              status: "failed",
+              updated_at: "2026-05-15T07:01:20.000Z",
+            },
+          ],
+          eventId: "notif_evt_123",
+          latestDeliveryAttemptAt: "2026-05-15T07:01:20.000Z",
+          latestDeliveryStatus: "failed",
+          priority: "HIGH",
+          selectedChannelType: "email",
+          status: "accepted",
+          updatedAt: "2026-05-15T07:01:20.000Z",
+        },
+      })
+    },
+  })
+
+  const response = await client.getNotificationStatus({
+    eventId: "notif_evt_123",
+    userId: "dapp_user_123",
+  })
+
+  assert.equal(
+    String(calls[0]?.input),
+    "https://passport.cubid.me/api/v3/notifications/status"
+  )
+  assert.deepEqual(calls[0]?.body, {
+    api_key: "api_key",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    event_id: "notif_evt_123",
+  })
+  assert.equal(response.notification.eventId, "notif_evt_123")
+  assert.equal(response.notification.status, "accepted")
+  assert.equal(response.notification.latestDeliveryStatus, "failed")
+  assert.equal(response.notification.deliveryAttempts[0]?.status, "sent")
+  assert.equal(
+    response.notification.deliveryAttempts[1]?.failureCode,
+    "telegram_delivery_failed"
+  )
+  assert.equal(
+    response.notification.deliveryAttempts[1]?.providerKey,
+    "telegram_bot"
+  )
+})
+
+test("notification status helpers reject malformed successful payloads", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () => createJsonResponse("not-an-object"),
+  })
+
+  await assert.rejects(
+    () =>
+      client.getNotificationStatus({
+        eventId: "notif_evt_123",
+        userId: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "MALFORMED_RESPONSE")
+      assert.equal(error.endpoint, "v3/notifications/status")
+      return true
+    }
+  )
+})
+
 test("createNotificationIdempotencyKey returns a UUID-shaped key", () => {
   const value = createNotificationIdempotencyKey()
   assert.match(value, /^[0-9a-f-]{36}$/)

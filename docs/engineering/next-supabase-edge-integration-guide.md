@@ -138,6 +138,11 @@ const notification = await cubid.sendNotification({
   userId: cubidUserId,
 })
 
+const notificationStatus = await cubid.getNotificationStatus({
+  eventId: notification.eventId!,
+  userId: cubidUserId,
+})
+
 const generated = await cubid.generateAccount({
   chain: "sui",
   label: "Primary wallet",
@@ -201,6 +206,12 @@ When a send is denied before acceptance, `@cubid/core` now raises
 `CubidNotificationSendError` with a stable `notificationCode` and `retryable`
 hint so apps can distinguish policy/quota denials from retryable in-flight or
 rate-limit outcomes without inspecting raw Passport envelopes.
+
+After a send is accepted, `getNotificationStatus` is the server-safe follow-up
+helper for redacted delivery tracking. It returns app-scoped event status,
+selected channel type, latest delivery state, and redacted delivery attempts.
+Passport-user `POST /api/notifications/history/list` remains outside the normal
+dapp SDK surface.
 
 Supported custody chains on the public SDK surface are currently:
 
