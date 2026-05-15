@@ -46,6 +46,8 @@ Current helpers:
 - `client.channels.update(...)`
 - `client.preferences.list()`
 - `client.preferences.update(...)`
+- `getActiveNotificationCategoryGrants(...)`
+- `hasNotificationCategoryGrant(...)`
 
 The channel helpers expose only redacted metadata:
 
@@ -55,6 +57,10 @@ The channel helpers expose only redacted metadata:
 - masked display hint
 - verification and lifecycle status flags
 - timestamps
+
+Allow Page notification grants are modeled only as category permission state.
+This package does not wrap the hosted Allow Page grant routes directly and does
+not treat grants as access to channels or raw destinations.
 
 This package intentionally does not add:
 

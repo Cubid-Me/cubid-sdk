@@ -1021,6 +1021,212 @@
       ]
     },
     {
+      "name": "CubidNotificationAllowPageGrantSummary",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "categoryKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "dappId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "dappName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "expiresAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "grantedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "grantId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "revokedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "updatedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "CubidNotificationChannelSummary",
       "variant": "declaration",
       "kind": 256,
@@ -1867,9 +2073,21 @@
           "kind": 1024,
           "flags": {},
           "type": {
-            "type": "reference",
-            "name": "CubidNotificationCategoryKey",
-            "package": "@cubid/comms"
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "SECURITY"
+              },
+              {
+                "type": "literal",
+                "value": "TRANSACTIONAL"
+              },
+              {
+                "type": "literal",
+                "value": "WORKFLOW"
+              }
+            ]
           }
         },
         {
@@ -2233,21 +2451,19 @@
       "kind": 2097152,
       "flags": {},
       "type": {
-        "type": "union",
-        "types": [
-          {
-            "type": "literal",
-            "value": "SECURITY"
-          },
-          {
-            "type": "literal",
-            "value": "TRANSACTIONAL"
-          },
-          {
-            "type": "literal",
-            "value": "WORKFLOW"
+        "type": "indexedAccess",
+        "indexType": {
+          "type": "intrinsic",
+          "name": "number"
+        },
+        "objectType": {
+          "type": "query",
+          "queryType": {
+            "type": "reference",
+            "name": "CUBID_NOTIFICATION_CATEGORIES",
+            "package": "@cubid/comms"
           }
-        ]
+        }
       }
     },
     {
@@ -2296,6 +2512,33 @@
           {
             "type": "literal",
             "value": "telegram"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidNotificationGrantStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "active"
+          },
+          {
+            "type": "literal",
+            "value": "revoked"
+          },
+          {
+            "type": "literal",
+            "value": "expired"
           },
           {
             "type": "intrinsic",
@@ -2378,6 +2621,36 @@
       }
     },
     {
+      "name": "CUBID_NOTIFICATION_CATEGORIES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "SECURITY"
+            },
+            {
+              "type": "literal",
+              "value": "TRANSACTIONAL"
+            },
+            {
+              "type": "literal",
+              "value": "WORKFLOW"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
       "name": "createCubidCommsClient",
       "variant": "declaration",
       "kind": 64,
@@ -2405,6 +2678,121 @@
             "type": "reference",
             "name": "CubidCommsClient",
             "package": "@cubid/comms"
+          }
+        }
+      ]
+    },
+    {
+      "name": "getActiveNotificationCategoryGrants",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "getActiveNotificationCategoryGrants",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "grants",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "name": "CubidNotificationAllowPageGrantSummary",
+                    "package": "@cubid/comms"
+                  }
+                }
+              }
+            }
+          ],
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "union",
+              "types": [
+                {
+                  "type": "literal",
+                  "value": "SECURITY"
+                },
+                {
+                  "type": "literal",
+                  "value": "TRANSACTIONAL"
+                },
+                {
+                  "type": "literal",
+                  "value": "WORKFLOW"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "hasNotificationCategoryGrant",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "hasNotificationCategoryGrant",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "grants",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "name": "CubidNotificationAllowPageGrantSummary",
+                    "package": "@cubid/comms"
+                  }
+                }
+              }
+            },
+            {
+              "name": "categoryKey",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "literal",
+                    "value": "SECURITY"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "TRANSACTIONAL"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "WORKFLOW"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
           }
         }
       ]
@@ -2526,7 +2914,23 @@
     },
     {
       "kind": "text",
-      "text": "\n\nThe channel helpers expose only redacted metadata:\n\n- channel id and type\n- provider key\n- label\n- masked display hint\n- verification and lifecycle status flags\n- timestamps\n\nThis package intentionally does not add:\n\n- dapp-authenticated notification send helpers\n- hosted Allow Page grant wrappers\n- raw email addresses, Telegram identifiers, ciphertext, or provider secrets\n\nThose behaviors remain deferred to later roadmap slices."
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`getActiveNotificationCategoryGrants(...)`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`hasNotificationCategoryGrant(...)`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThe channel helpers expose only redacted metadata:\n\n- channel id and type\n- provider key\n- label\n- masked display hint\n- verification and lifecycle status flags\n- timestamps\n\nAllow Page notification grants are modeled only as category permission state.\nThis package does not wrap the hosted Allow Page grant routes directly and does\nnot treat grants as access to channels or raw destinations.\n\nThis package intentionally does not add:\n\n- dapp-authenticated notification send helpers\n- hosted Allow Page grant wrappers\n- raw email addresses, Telegram identifiers, ciphertext, or provider secrets\n\nThose behaviors remain deferred to later roadmap slices."
     }
   ]
 }

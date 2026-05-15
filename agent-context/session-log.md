@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s72-comms-allow-page-grant-model
+
+- Timestamp: 2026-05-15T05:52:52Z
+- Summary: Completed the Allow Page grant modeling slice by adding shared category-permission helpers in `@cubid/comms` without wrapping the hosted routes directly.
+- Actions:
+  - Added canonical notification category constants plus typed Allow Page grant summaries and small permission-state helpers for active-category evaluation.
+  - Kept the hosted Allow Page boundary intact by modeling grants as category permission state only instead of channel access or route wrappers.
+  - Updated the comms README so the package now documents the permission-model helpers alongside the signed-in channel and preference surfaces.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Flexible messaging work can now move out of `@cubid/comms` and into the server-safe `@cubid/core` send and status helpers.
+
 ## session: s71-comms-global-preferences
 
 - Timestamp: 2026-05-15T05:50:33Z

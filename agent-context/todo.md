@@ -1156,8 +1156,12 @@ category defaults for `SECURITY`, `TRANSACTIONAL`, and `WORKFLOW`.
 
 ### S13.5 Model Allow Page category grants as permission metadata, not channel access
 
-- Status: Not started
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, session: s67-flexible-messaging-roadmap-intake
+- Status: Completed
+- Timestamp started: 2026-05-15T05:52:52Z
+- Timestamp completed: 2026-05-15T05:52:52Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d3ff6b06` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, session: s67-flexible-messaging-roadmap-intake, session: s72-comms-allow-page-grant-model
 
 Keep Allow Page category grants Passport-hosted for now. If the SDK later
 surfaces them, represent them only as category permission state and never as

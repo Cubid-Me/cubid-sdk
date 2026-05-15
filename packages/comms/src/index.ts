@@ -68,6 +68,11 @@ export interface ResolvedCubidCommsClientOptions {
 
 export type CubidNotificationChannelType = "email" | "telegram" | string;
 export type CubidNotificationSetupChannelType = "email" | "telegram";
+export const CUBID_NOTIFICATION_CATEGORIES = [
+  "SECURITY",
+  "TRANSACTIONAL",
+  "WORKFLOW",
+] as const;
 
 export type CubidNotificationChannelStatus =
   | "active"
@@ -158,9 +163,7 @@ export interface CubidCompleteNotificationChannelVerificationResponse {
 }
 
 export type CubidNotificationCategoryKey =
-  | "SECURITY"
-  | "TRANSACTIONAL"
-  | "WORKFLOW";
+  (typeof CUBID_NOTIFICATION_CATEGORIES)[number];
 
 export type CubidNotificationPriorityFloor =
   | "LOW"
@@ -179,6 +182,22 @@ export interface CubidNotificationPreferenceSummary {
   priorityFloor: CubidNotificationPriorityFloor | string | null;
   raw: Record<string, unknown>;
   status: CubidNotificationChannelStatus | null;
+  updatedAt: string | null;
+}
+
+export type CubidNotificationGrantStatus = "active" | "revoked" | "expired" | string;
+
+export interface CubidNotificationAllowPageGrantSummary {
+  categoryKey: CubidNotificationCategoryKey | string;
+  dappId: string | null;
+  dappName: string | null;
+  dappUserUuid: string | null;
+  expiresAt: string | null;
+  grantId: string;
+  grantedAt: string | null;
+  raw: Record<string, unknown>;
+  revokedAt: string | null;
+  status: CubidNotificationGrantStatus | null;
   updatedAt: string | null;
 }
 
@@ -483,6 +502,28 @@ function normalizePreferenceSummary(
     status: getOptionalString(payload.status, "status", endpoint),
     updatedAt: getOptionalString(payload.updatedAt, "updatedAt", endpoint),
   };
+}
+
+export function getActiveNotificationCategoryGrants(
+  grants: readonly CubidNotificationAllowPageGrantSummary[]
+): CubidNotificationCategoryKey[] {
+  return grants
+    .filter((grant) => grant.status === "active")
+    .map((grant) => grant.categoryKey)
+    .filter((category): category is CubidNotificationCategoryKey =>
+      CUBID_NOTIFICATION_CATEGORIES.includes(
+        category as CubidNotificationCategoryKey
+      )
+    );
+}
+
+export function hasNotificationCategoryGrant(
+  grants: readonly CubidNotificationAllowPageGrantSummary[],
+  categoryKey: CubidNotificationCategoryKey
+): boolean {
+  return grants.some(
+    (grant) => grant.categoryKey === categoryKey && grant.status === "active"
+  );
 }
 
 async function requestPassportUserRoute(

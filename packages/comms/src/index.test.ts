@@ -2,7 +2,13 @@ import fs from "node:fs";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { createCubidCommsClient, CubidCommsError } from "./index";
+import {
+  CUBID_NOTIFICATION_CATEGORIES,
+  createCubidCommsClient,
+  CubidCommsError,
+  getActiveNotificationCategoryGrants,
+  hasNotificationCategoryGrant,
+} from "./index";
 
 describe("@cubid/comms", () => {
   it("creates a signed-in Passport-user client boundary without dapp api key assumptions", () => {
@@ -471,5 +477,46 @@ describe("@cubid/comms", () => {
         categoryKey: "SECURITY",
       })
     ).rejects.toThrow(CubidCommsError);
+  });
+
+  it("models Allow Page grants as category permission state, not channel access", () => {
+    expect(CUBID_NOTIFICATION_CATEGORIES).toEqual([
+      "SECURITY",
+      "TRANSACTIONAL",
+      "WORKFLOW",
+    ]);
+
+    const grants = [
+      {
+        categoryKey: "SECURITY",
+        dappId: "42",
+        dappName: "Notify Test App",
+        dappUserUuid: "dapp_user_1",
+        expiresAt: null,
+        grantId: "grant_1",
+        grantedAt: "2026-05-15T00:00:00.000Z",
+        raw: {},
+        revokedAt: null,
+        status: "active",
+        updatedAt: "2026-05-15T00:00:00.000Z",
+      },
+      {
+        categoryKey: "WORKFLOW",
+        dappId: "42",
+        dappName: "Notify Test App",
+        dappUserUuid: "dapp_user_1",
+        expiresAt: null,
+        grantId: "grant_2",
+        grantedAt: "2026-05-15T00:00:00.000Z",
+        raw: {},
+        revokedAt: "2026-05-15T00:02:00.000Z",
+        status: "revoked",
+        updatedAt: "2026-05-15T00:02:00.000Z",
+      },
+    ] as const;
+
+    expect(getActiveNotificationCategoryGrants(grants)).toEqual(["SECURITY"]);
+    expect(hasNotificationCategoryGrant(grants, "SECURITY")).toBe(true);
+    expect(hasNotificationCategoryGrant(grants, "WORKFLOW")).toBe(false);
   });
 });
