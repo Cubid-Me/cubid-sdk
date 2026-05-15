@@ -1169,13 +1169,16 @@ access to destinations, channel selection, or delivery capability.
 
 ### S13.6 Add server-safe notification send helpers in a future `@cubid/core`
 
-- Status: Not started
-- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-send-route.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-email-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-telegram-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-abuse-controls.md`, session: s67-flexible-messaging-roadmap-intake
+- Status: Completed
+- Timestamp started: 2026-05-15T06:28:00Z
+- Timestamp completed: 2026-05-15T06:28:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `54c2cb8c` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-send-route.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-email-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-telegram-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-abuse-controls.md`, session: s67-flexible-messaging-roadmap-intake, session: s73-core-notification-send-helper
 
-When the messaging roadmap is promoted, add server-safe `@cubid/core` wrappers
-for `POST /api/v3/notifications/send` with required idempotency, typed
-categories and priorities, and explicit browser-safety guidance that Cubid dapp
-API keys must stay on the app backend.
+Add server-safe `@cubid/core` wrappers for `POST /api/v3/notifications/send`
+with required idempotency, typed categories and priorities, and explicit
+browser-safety guidance that Cubid dapp API keys must stay on the app backend.
 
 ### S13.7 Normalize flexible messaging send errors and accepted-versus-delivered semantics
 

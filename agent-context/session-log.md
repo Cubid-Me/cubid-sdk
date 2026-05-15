@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s73-core-notification-send-helper
+
+- Timestamp: 2026-05-15T06:28:00Z
+- Summary: Added the first server-safe flexible-messaging send helper to `@cubid/core` so dapp backends can enqueue notification events without exposing delivery internals.
+- Actions:
+  - Added `sendNotification(...)` plus typed notification categories, priorities, accepted-send response metadata, and `createNotificationIdempotencyKey()` on the runtime-agnostic core client.
+  - Normalized the `POST /api/v3/notifications/send` contract to safe routing metadata only, preserving idempotency while keeping raw destinations, provider secrets, ciphertext, and hosted Allow Page grant state out of the public SDK surface.
+  - Updated the core README and the Next.js/Supabase Edge integration guide so backend consumers know this helper is server-only and must keep Cubid dapp API keys off the browser.
+- Validation:
+  - `pnpm --filter @cubid/core build`
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Move into `S13.7` and harden the send helper semantics around accepted-versus-delivered state plus stable messaging error normalization.
+
 ## session: s72-comms-allow-page-grant-model
 
 - Timestamp: 2026-05-15T05:52:52Z

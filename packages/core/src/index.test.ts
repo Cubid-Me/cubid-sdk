@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { test } from "vitest"
 
 import {
+  createNotificationIdempotencyKey,
   createCubidAppScopedSubject,
   createCubidApiClient,
   CubidApiError,
@@ -685,6 +686,107 @@ test("v3 saveSecret sends api_key credentials with an idempotency header", async
     secret: "super-secret",
     user_id: "dapp_user_123",
   })
+})
+
+test("notification send helpers use v3 credentials and required idempotency", async () => {
+  const calls: Array<{
+    body: unknown
+    headers: Headers
+    input: string | URL | Request
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (input, init) => {
+      calls.push({
+        body: JSON.parse(String(init?.body)),
+        headers: new Headers(init?.headers),
+        input,
+      })
+      return createJsonResponse({
+        data: {
+          category: "SECURITY",
+          createdAt: "2026-05-15T06:30:00.000Z",
+          eventId: "notif_evt_123",
+          priority: "HIGH",
+          selectedChannelType: "email",
+          status: "accepted",
+        },
+      })
+    },
+  })
+
+  const response = await client.sendNotification({
+    body: "Your verification succeeded.",
+    category: "SECURITY",
+    deepLink: "clearpass://verify/success",
+    idempotencyKey: "notif_send_key_123",
+    metadata: {
+      attempt: 1,
+      source: "clearpass_dashboard",
+    },
+    priority: "HIGH",
+    title: "Verification complete",
+    userId: "dapp_user_123",
+  })
+
+  assert.equal(response.idempotencyKey, "notif_send_key_123")
+  assert.equal(response.eventId, "notif_evt_123")
+  assert.equal(response.status, "accepted")
+  assert.equal(response.selectedChannelType, "email")
+  assert.equal(
+    String(calls[0]?.input),
+    "https://passport.cubid.me/api/v3/notifications/send"
+  )
+  assert.equal(calls[0]?.headers.get("Idempotency-Key"), "notif_send_key_123")
+  assert.deepEqual(calls[0]?.body, {
+    api_key: "api_key",
+    body: "Your verification succeeded.",
+    category: "SECURITY",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    deep_link: "clearpass://verify/success",
+    metadata: {
+      attempt: 1,
+      source: "clearpass_dashboard",
+    },
+    priority: "HIGH",
+    title: "Verification complete",
+  })
+})
+
+test("notification send helpers auto-generate idempotency keys when omitted", async () => {
+  let idempotencyKey: string | null = null
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      idempotencyKey = new Headers(init?.headers).get("Idempotency-Key")
+      return createJsonResponse({
+        data: {
+          eventId: "notif_evt_auto",
+          status: "accepted",
+        },
+      })
+    },
+  })
+
+  const response = await client.sendNotification({
+    body: "Your verification succeeded.",
+    category: "TRANSACTIONAL",
+    priority: "NORMAL",
+    title: "Verification complete",
+    userId: "dapp_user_123",
+  })
+
+  assert.equal(response.idempotencyKey, idempotencyKey)
+  assert.match(String(idempotencyKey), /^[0-9a-f-]{36}$/)
+})
+
+test("createNotificationIdempotencyKey returns a UUID-shaped key", () => {
+  const value = createNotificationIdempotencyKey()
+  assert.match(value, /^[0-9a-f-]{36}$/)
 })
 
 test("v3 custody helpers normalize generated and listed accounts, including sui", async () => {

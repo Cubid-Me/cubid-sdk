@@ -2160,6 +2160,50 @@
           ]
         },
         {
+          "name": "sendNotification",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "sendNotification",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidSendNotificationInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidSendNotificationResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
           "name": "sendPhoneOtp",
           "variant": "declaration",
           "kind": 2048,
@@ -5363,6 +5407,67 @@
       }
     },
     {
+      "name": "CubidNotificationCategory",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "indexedAccess",
+        "indexType": {
+          "type": "intrinsic",
+          "name": "number"
+        },
+        "objectType": {
+          "type": "query",
+          "queryType": {
+            "type": "reference",
+            "name": "CUBID_NOTIFICATION_CATEGORIES",
+            "package": "@cubid/core"
+          }
+        }
+      }
+    },
+    {
+      "name": "CubidNotificationPriority",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "indexedAccess",
+        "indexType": {
+          "type": "intrinsic",
+          "name": "number"
+        },
+        "objectType": {
+          "type": "query",
+          "queryType": {
+            "type": "reference",
+            "name": "CUBID_NOTIFICATION_PRIORITIES",
+            "package": "@cubid/core"
+          }
+        }
+      }
+    },
+    {
+      "name": "CubidNotificationSendStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "accepted"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
       "name": "CubidProfileDisclosureClaim",
       "variant": "declaration",
       "kind": 2097152,
@@ -5724,6 +5829,294 @@
           "type": {
             "type": "intrinsic",
             "name": "boolean"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidSendNotificationInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidIdempotentRequestOptions",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "body",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "category",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidNotificationCategory",
+                    "package": "@cubid/core"
+                  }
+                },
+                {
+                  "name": "deepLink",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "metadata",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                },
+                {
+                  "name": "priority",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidNotificationPriority",
+                    "package": "@cubid/core"
+                  }
+                },
+                {
+                  "name": "title",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "userId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidSendNotificationResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "category",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidNotificationCategory",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "createdAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "eventId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "idempotencyKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "priority",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidNotificationPriority",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "selectedChannelType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidNotificationSendStatus",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
           }
         }
       ]
@@ -8804,6 +9197,39 @@
       }
     },
     {
+      "name": "NotificationCategory",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidNotificationCategory",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "NotificationPriority",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidNotificationPriority",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "NotificationSendStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidNotificationSendStatus",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "SaveSecretInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -8866,6 +9292,28 @@
       "type": {
         "type": "reference",
         "name": "CubidSendEmailOtpResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "SendNotificationInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSendNotificationInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "SendNotificationResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSendNotificationResponse",
         "package": "@cubid/core"
       }
     },
@@ -9185,6 +9633,70 @@
         "name": "CubidWebhookVerificationResult",
         "package": "@cubid/core"
       }
+    },
+    {
+      "name": "CUBID_NOTIFICATION_CATEGORIES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "SECURITY"
+            },
+            {
+              "type": "literal",
+              "value": "TRANSACTIONAL"
+            },
+            {
+              "type": "literal",
+              "value": "WORKFLOW"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "CUBID_NOTIFICATION_PRIORITIES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "LOW"
+            },
+            {
+              "type": "literal",
+              "value": "NORMAL"
+            },
+            {
+              "type": "literal",
+              "value": "HIGH"
+            },
+            {
+              "type": "literal",
+              "value": "CRITICAL"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
     },
     {
       "name": "CUBID_SIWC_ERROR_CODES",
@@ -9725,6 +10237,24 @@
             "type": "reference",
             "name": "CubidAppScopedSubject",
             "package": "@cubid/core"
+          }
+        }
+      ]
+    },
+    {
+      "name": "createNotificationIdempotencyKey",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "createNotificationIdempotencyKey",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
           }
         }
       ]
@@ -10453,6 +10983,14 @@
     },
     {
       "kind": "code",
+      "text": "`sendNotification`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`generateAccount`"
     },
     {
@@ -10725,6 +11263,14 @@
     },
     {
       "kind": "code",
+      "text": "`sendNotification({ userId, category, priority, title, body, deepLink?, metadata?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`generateAccount({ userId, chain, label?, idempotencyKey? })`"
     },
     {
@@ -10821,6 +11367,14 @@
     },
     {
       "kind": "code",
+      "text": "`sendNotification`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
       "text": "`generateAccount`"
     },
     {
@@ -10833,7 +11387,7 @@
     },
     {
       "kind": "text",
-      "text": ", and\n"
+      "text": ",\nand "
     },
     {
       "kind": "code",
@@ -10841,7 +11395,7 @@
     },
     {
       "kind": "text",
-      "text": " automatically generate an idempotency key when callers\nomit one, and they return the resolved "
+      "text": " automatically generate an idempotency key when\ncallers omit one, and they return the resolved "
     },
     {
       "kind": "code",
@@ -10849,7 +11403,63 @@
     },
     {
       "kind": "text",
-      "text": " alongside the\nnormalized response so callers can log or reconcile retries safely.\n\nSupported custody chains on the public v3 account helpers are:\n\n- "
+      "text": " alongside the\nnormalized response so callers can log or reconcile retries safely.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`sendNotification`"
+    },
+    {
+      "kind": "text",
+      "text": " is the first dapp-authenticated flexible-messaging helper.\nIt stays server-side, requires the Cubid dapp API key, and normalizes only\nsafe routing metadata such as "
+    },
+    {
+      "kind": "code",
+      "text": "`eventId`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`status`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`selectedChannelType`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`category`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`priority`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`createdAt`"
+    },
+    {
+      "kind": "text",
+      "text": ". It does not expose raw destinations,\nprovider secrets, ciphertext, or hosted Allow Page grant state.\n\nSupported custody chains on the public v3 account helpers are:\n\n- "
     },
     {
       "kind": "code",

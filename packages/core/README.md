@@ -119,6 +119,7 @@ endpoints plus the first server-facing API v3 write helpers:
 - `verifyPhoneOtp`
 - `syncIdentitySnapshot`
 - `saveSecret`
+- `sendNotification`
 - `generateAccount`
 - `listAccounts`
 - `fetchWalletCapabilities`
@@ -171,6 +172,7 @@ never expose raw OTP values, even if a legacy server payload includes one.
 The current API v3 helpers stay server-side as well:
 
 - `saveSecret({ userId, secret, idempotencyKey? })`
+- `sendNotification({ userId, category, priority, title, body, deepLink?, metadata?, idempotencyKey? })`
 - `generateAccount({ userId, chain, label?, idempotencyKey? })`
 - `listAccounts({ userId, chain? })`
 - `fetchWalletCapabilities({ userId? })`
@@ -185,10 +187,16 @@ Legacy `POST /api/v2/save_secret` is retired and should not be used or
 reintroduced in the public SDK surface. `saveSecret` now targets the v3 write
 contract only.
 
-`saveSecret`, `generateAccount`, `createAccountRequest`, and
-`createSigningRequest` automatically generate an idempotency key when callers
-omit one, and they return the resolved `idempotencyKey` alongside the
+`saveSecret`, `sendNotification`, `generateAccount`, `createAccountRequest`,
+and `createSigningRequest` automatically generate an idempotency key when
+callers omit one, and they return the resolved `idempotencyKey` alongside the
 normalized response so callers can log or reconcile retries safely.
+
+`sendNotification` is the first dapp-authenticated flexible-messaging helper.
+It stays server-side, requires the Cubid dapp API key, and normalizes only
+safe routing metadata such as `eventId`, `status`, `selectedChannelType`,
+`category`, `priority`, and `createdAt`. It does not expose raw destinations,
+provider secrets, ciphertext, or hosted Allow Page grant state.
 
 Supported custody chains on the public v3 account helpers are:
 

@@ -129,6 +129,15 @@ await cubid.saveSecret({
   userId: cubidUserId,
 })
 
+const notification = await cubid.sendNotification({
+  body: "Your verification succeeded.",
+  category: "SECURITY",
+  metadata: { flow: "clearpass_dashboard" },
+  priority: "HIGH",
+  title: "Verification complete",
+  userId: cubidUserId,
+})
+
 const generated = await cubid.generateAccount({
   chain: "sui",
   label: "Primary wallet",
@@ -171,17 +180,22 @@ const cancelledRequest = await cubid.cancelSigningRequest({
 })
 ```
 
-`saveSecret`, `generateAccount`, and `createSigningRequest` require idempotency
-under Passport's v3 contract. `@cubid/core` will generate an `Idempotency-Key`
-automatically when you do not provide one, and it returns the resolved
-`idempotencyKey` on the normalized SDK response so callers can correlate
-retries or replayed success.
+`saveSecret`, `sendNotification`, `generateAccount`, and
+`createSigningRequest` require idempotency under Passport's v3 contract.
+`@cubid/core` will generate an `Idempotency-Key` automatically when you do not
+provide one, and it returns the resolved `idempotencyKey` on the normalized
+SDK response so callers can correlate retries or replayed success.
 
 Legacy `POST /api/v2/save_secret` is retired. Treat the v3 helper as the only
 supported public SDK write path for dapp-user secrets.
 
 When your app already has its own operation or job ID, prefer passing that as
 `idempotencyKey` explicitly.
+
+`sendNotification` is the first server-safe flexible-messaging helper. Treat
+`status: "accepted"` as Cubid accepting and routing the event, not as proof
+that an email or Telegram provider already delivered it. The public SDK
+response stays redacted to safe routing metadata only.
 
 Supported custody chains on the public SDK surface are currently:
 
