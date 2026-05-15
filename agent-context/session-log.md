@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s71-comms-global-preferences
+
+- Timestamp: 2026-05-15T05:50:33Z
+- Summary: Added the signed-in global notification preference helpers to `@cubid/comms` while keeping the surface limited to Passport-user category defaults.
+- Actions:
+  - Added `preferences.list()` and `preferences.update(...)` so Passport-user global category defaults can be fetched and updated through the same bearer-authenticated comms client.
+  - Normalized public preference metadata for `SECURITY`, `TRANSACTIONAL`, and `WORKFLOW`, including category, selected channel id, priority floor, status, and timestamps without exposing raw channel destinations.
+  - Updated the comms README so the current package scope now covers both channel management and global preference management.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Move into `S13.5` and decide whether the Allow Page category-grant helper should be implemented now or remain Passport-hosted despite the route existing.
+
 ## session: s70-comms-channel-verification
 
 - Timestamp: 2026-05-15T05:45:08Z

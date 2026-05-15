@@ -157,6 +157,57 @@ export interface CubidCompleteNotificationChannelVerificationResponse {
   requestId: string | null;
 }
 
+export type CubidNotificationCategoryKey =
+  | "SECURITY"
+  | "TRANSACTIONAL"
+  | "WORKFLOW";
+
+export type CubidNotificationPriorityFloor =
+  | "LOW"
+  | "NORMAL"
+  | "HIGH"
+  | "CRITICAL";
+
+export interface CubidNotificationPreferenceSummary {
+  categoryKey: CubidNotificationCategoryKey | string;
+  channelId: string | null;
+  createdAt: string | null;
+  dappId: string | null;
+  mutedUntil: string | null;
+  pausedUntil: string | null;
+  preferenceId: string;
+  priorityFloor: CubidNotificationPriorityFloor | string | null;
+  raw: Record<string, unknown>;
+  status: CubidNotificationChannelStatus | null;
+  updatedAt: string | null;
+}
+
+export interface CubidListNotificationPreferencesInput {
+  signal?: AbortSignal;
+}
+
+export interface CubidListNotificationPreferencesResponse {
+  preferences: CubidNotificationPreferenceSummary[];
+  raw: Record<string, unknown>;
+  requestId: string | null;
+}
+
+export interface CubidUpdateNotificationPreferenceInput {
+  categoryKey: CubidNotificationCategoryKey;
+  channelId?: string | null;
+  mutedUntil?: string | null;
+  pausedUntil?: string | null;
+  priorityFloor?: CubidNotificationPriorityFloor;
+  signal?: AbortSignal;
+  status?: CubidNotificationChannelStatus;
+}
+
+export interface CubidUpdateNotificationPreferenceResponse {
+  preference: CubidNotificationPreferenceSummary;
+  raw: Record<string, unknown>;
+  requestId: string | null;
+}
+
 export interface CubidCommsClient {
   readonly config: Readonly<ResolvedCubidCommsClientOptions>;
   readonly channels: {
@@ -172,6 +223,14 @@ export interface CubidCommsClient {
     update(
       input: CubidUpdateNotificationChannelInput
     ): Promise<CubidUpdateNotificationChannelResponse>;
+  };
+  readonly preferences: {
+    list(
+      input?: CubidListNotificationPreferencesInput
+    ): Promise<CubidListNotificationPreferencesResponse>;
+    update(
+      input: CubidUpdateNotificationPreferenceInput
+    ): Promise<CubidUpdateNotificationPreferenceResponse>;
   };
 }
 
@@ -392,6 +451,37 @@ function normalizeVerificationChallenge(
       "setupInstructions",
       endpoint
     ),
+  };
+}
+
+function normalizePreferenceSummary(
+  payload: Record<string, unknown>,
+  endpoint: string
+): CubidNotificationPreferenceSummary {
+  return {
+    categoryKey: assertNonEmptyString(
+      getOptionalString(payload.categoryKey, "categoryKey", endpoint) ?? "",
+      "categoryKey",
+      endpoint
+    ),
+    channelId: getOptionalString(payload.channelId, "channelId", endpoint),
+    createdAt: getOptionalString(payload.createdAt, "createdAt", endpoint),
+    dappId: getOptionalString(payload.dappId, "dappId", endpoint),
+    mutedUntil: getOptionalString(payload.mutedUntil, "mutedUntil", endpoint),
+    pausedUntil: getOptionalString(payload.pausedUntil, "pausedUntil", endpoint),
+    preferenceId: assertNonEmptyString(
+      getOptionalString(payload.preferenceId, "preferenceId", endpoint) ?? "",
+      "preferenceId",
+      endpoint
+    ),
+    priorityFloor: getOptionalString(
+      payload.priorityFloor,
+      "priorityFloor",
+      endpoint
+    ),
+    raw: payload,
+    status: getOptionalString(payload.status, "status", endpoint),
+    updatedAt: getOptionalString(payload.updatedAt, "updatedAt", endpoint),
   };
 }
 
@@ -676,6 +766,130 @@ export function createCubidCommsClient(
           channel: normalizeChannelSummary(
             assertRecord(payload.data, "data", "notifications/channels/update"),
             "notifications/channels/update"
+          ),
+          raw: payload,
+          requestId,
+        };
+      },
+    },
+    preferences: {
+      async list(input = {}) {
+        const { payload, requestId } = await requestPassportUserRoute(
+          fetchImpl,
+          {
+            accessToken,
+            baseUrl,
+            headers,
+          },
+          "/api/notifications/preferences/list",
+          "notifications/preferences/list",
+          {
+            body: {},
+            signal: input.signal,
+          }
+        );
+        const data = payload.data;
+
+        if (!Array.isArray(data)) {
+          throw new CubidCommsError({
+            category: "parse",
+            code: "MALFORMED_RESPONSE",
+            message:
+              "Cubid comms expected an array of preferences from notifications/preferences/list.",
+            raw: payload,
+            requestId,
+          });
+        }
+
+        return {
+          preferences: data.map((item, index) =>
+            normalizePreferenceSummary(
+              assertRecord(
+                item,
+                `data[${String(index)}]`,
+                "notifications/preferences/list"
+              ),
+              "notifications/preferences/list"
+            )
+          ),
+          raw: payload,
+          requestId,
+        };
+      },
+
+      async update(input) {
+        const categoryKey = assertNonEmptyString(
+          input.categoryKey,
+          "categoryKey",
+          "notifications/preferences/update"
+        ) as CubidNotificationCategoryKey;
+
+        if (
+          input.channelId === undefined &&
+          input.priorityFloor === undefined &&
+          input.status === undefined &&
+          input.mutedUntil === undefined &&
+          input.pausedUntil === undefined
+        ) {
+          throw new CubidCommsError({
+            category: "validation",
+            code: "INVALID_ARGUMENT",
+            message:
+              "Cubid comms requires at least one preference update field for notifications/preferences/update.",
+          });
+        }
+
+        const body: Record<string, unknown> = {
+          categoryKey,
+        };
+
+        if (input.channelId !== undefined) {
+          body.channelId = input.channelId?.trim() ?? null;
+        }
+        if (input.priorityFloor !== undefined) {
+          body.priorityFloor = assertNonEmptyString(
+            input.priorityFloor,
+            "priorityFloor",
+            "notifications/preferences/update"
+          );
+        }
+        if (input.status !== undefined) {
+          body.status = assertNonEmptyString(
+            input.status,
+            "status",
+            "notifications/preferences/update"
+          );
+        }
+        if (input.mutedUntil !== undefined) {
+          body.mutedUntil = input.mutedUntil;
+        }
+        if (input.pausedUntil !== undefined) {
+          body.pausedUntil = input.pausedUntil;
+        }
+
+        const { payload, requestId } = await requestPassportUserRoute(
+          fetchImpl,
+          {
+            accessToken,
+            baseUrl,
+            headers,
+          },
+          "/api/notifications/preferences/update",
+          "notifications/preferences/update",
+          {
+            body,
+            signal: input.signal,
+          }
+        );
+
+        return {
+          preference: normalizePreferenceSummary(
+            assertRecord(
+              payload.data,
+              "data",
+              "notifications/preferences/update"
+            ),
+            "notifications/preferences/update"
           ),
           raw: payload,
           requestId,

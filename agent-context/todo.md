@@ -1142,8 +1142,12 @@ delivery or bot-handshake readiness is already complete.
 
 ### S13.4 Add signed-in global preference helpers in a future `@cubid/comms`
 
-- Status: Not started
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+- Status: Completed
+- Timestamp started: 2026-05-15T05:50:33Z
+- Timestamp completed: 2026-05-15T05:50:33Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `6395fe8a` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s71-comms-global-preferences
 
 When flexible messaging is promoted, add wrappers for
 `POST /api/notifications/preferences/list` and

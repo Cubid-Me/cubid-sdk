@@ -44,6 +44,8 @@ Current helpers:
 - `client.channels.startVerification(...)`
 - `client.channels.completeVerification(...)`
 - `client.channels.update(...)`
+- `client.preferences.list()`
+- `client.preferences.update(...)`
 
 The channel helpers expose only redacted metadata:
 

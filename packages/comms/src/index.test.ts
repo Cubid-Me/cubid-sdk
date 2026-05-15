@@ -352,4 +352,124 @@ describe("@cubid/comms", () => {
     expect(response.requestId).toBe("passport_channels_4");
     expect(response.channel.verificationStatus).toBe("verified");
   });
+
+  it("lists global notification preferences without exposing raw channel destinations", async () => {
+    const fetchImpl = vi.fn(async () => {
+      return new Response(
+        JSON.stringify({
+          data: [
+            {
+              categoryKey: "SECURITY",
+              channelId: "channel_1",
+              createdAt: "2026-05-14T00:00:00.000Z",
+              dappId: null,
+              mutedUntil: null,
+              pausedUntil: null,
+              preferenceId: "preference_1",
+              priorityFloor: "HIGH",
+              status: "active",
+              updatedAt: "2026-05-14T00:02:00.000Z",
+            },
+          ],
+        }),
+        {
+          headers: {
+            "content-type": "application/json",
+            "x-request-id": "passport_preferences_1",
+          },
+          status: 200,
+        }
+      );
+    });
+
+    const client = createCubidCommsClient({
+      accessToken: "firebase-bearer-token",
+      baseUrl: "https://id.cubid.me",
+      fetch: fetchImpl,
+    });
+
+    const response = await client.preferences.list();
+
+    expect(response.requestId).toBe("passport_preferences_1");
+    expect(response.preferences).toEqual([
+      expect.objectContaining({
+        categoryKey: "SECURITY",
+        channelId: "channel_1",
+        preferenceId: "preference_1",
+        priorityFloor: "HIGH",
+        status: "active",
+      }),
+    ]);
+  });
+
+  it("updates a global notification preference with public metadata only", async () => {
+    const fetchImpl = vi.fn(async (_input: string | URL | Request, init?: RequestInit) => {
+      expect(JSON.parse(String(init?.body))).toEqual({
+        categoryKey: "WORKFLOW",
+        channelId: null,
+        priorityFloor: "LOW",
+        status: "revoked",
+      });
+
+      return new Response(
+        JSON.stringify({
+          data: {
+            categoryKey: "WORKFLOW",
+            channelId: null,
+            createdAt: "2026-05-14T00:00:00.000Z",
+            dappId: null,
+            mutedUntil: null,
+            pausedUntil: null,
+            preferenceId: "preference_2",
+            priorityFloor: "LOW",
+            status: "revoked",
+            updatedAt: "2026-05-14T00:03:00.000Z",
+          },
+        }),
+        {
+          headers: {
+            "content-type": "application/json",
+            "x-request-id": "passport_preferences_2",
+          },
+          status: 200,
+        }
+      );
+    });
+
+    const client = createCubidCommsClient({
+      accessToken: "firebase-bearer-token",
+      baseUrl: "https://id.cubid.me",
+      fetch: fetchImpl,
+    });
+
+    const response = await client.preferences.update({
+      categoryKey: "WORKFLOW",
+      channelId: null,
+      priorityFloor: "LOW",
+      status: "revoked",
+    });
+
+    expect(response.requestId).toBe("passport_preferences_2");
+    expect(response.preference).toEqual(
+      expect.objectContaining({
+        categoryKey: "WORKFLOW",
+        channelId: null,
+        priorityFloor: "LOW",
+        status: "revoked",
+      })
+    );
+  });
+
+  it("requires at least one mutable field when updating a preference", async () => {
+    const client = createCubidCommsClient({
+      accessToken: "firebase-bearer-token",
+      baseUrl: "https://id.cubid.me",
+    });
+
+    await expect(
+      client.preferences.update({
+        categoryKey: "SECURITY",
+      })
+    ).rejects.toThrow(CubidCommsError);
+  });
 });
