@@ -66,8 +66,70 @@ export interface ResolvedCubidCommsClientOptions {
   headers: Headers;
 }
 
+export type CubidNotificationChannelType = "email" | "telegram" | string;
+
+export type CubidNotificationChannelStatus =
+  | "active"
+  | "muted"
+  | "paused"
+  | "revoked"
+  | string;
+
+export type CubidNotificationVerificationStatus =
+  | "pending"
+  | "verified"
+  | "revoked"
+  | string;
+
+export interface CubidNotificationChannelSummary {
+  channelId: string;
+  channelType: CubidNotificationChannelType;
+  createdAt: string | null;
+  displayHint: string | null;
+  isDefault: boolean;
+  label: string | null;
+  providerKey: string | null;
+  raw: Record<string, unknown>;
+  status: CubidNotificationChannelStatus | null;
+  updatedAt: string | null;
+  verificationStatus: CubidNotificationVerificationStatus | null;
+  verifiedAt: string | null;
+}
+
+export interface CubidListNotificationChannelsInput {
+  signal?: AbortSignal;
+}
+
+export interface CubidListNotificationChannelsResponse {
+  channels: CubidNotificationChannelSummary[];
+  raw: Record<string, unknown>;
+  requestId: string | null;
+}
+
+export interface CubidUpdateNotificationChannelInput {
+  channelId: string;
+  isDefault?: boolean;
+  label?: string | null;
+  signal?: AbortSignal;
+  status?: CubidNotificationChannelStatus;
+}
+
+export interface CubidUpdateNotificationChannelResponse {
+  channel: CubidNotificationChannelSummary;
+  raw: Record<string, unknown>;
+  requestId: string | null;
+}
+
 export interface CubidCommsClient {
   readonly config: Readonly<ResolvedCubidCommsClientOptions>;
+  readonly channels: {
+    list(
+      input?: CubidListNotificationChannelsInput
+    ): Promise<CubidListNotificationChannelsResponse>;
+    update(
+      input: CubidUpdateNotificationChannelInput
+    ): Promise<CubidUpdateNotificationChannelResponse>;
+  };
 }
 
 function assertNonEmptyString(
@@ -109,6 +171,203 @@ function normalizeBaseUrl(baseUrl: string | URL): string {
   }
 }
 
+function getOptionalString(
+  value: unknown,
+  fieldName: string,
+  endpoint: string
+): string | null {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  if (typeof value !== "string") {
+    throw new CubidCommsError({
+      category: "parse",
+      code: "MALFORMED_RESPONSE",
+      message: `Cubid comms expected ${fieldName} to be a string in ${endpoint}.`,
+      raw: value,
+    });
+  }
+
+  return value;
+}
+
+function getOptionalBoolean(
+  value: unknown,
+  fieldName: string,
+  endpoint: string
+): boolean | null {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  if (typeof value !== "boolean") {
+    throw new CubidCommsError({
+      category: "parse",
+      code: "MALFORMED_RESPONSE",
+      message: `Cubid comms expected ${fieldName} to be a boolean in ${endpoint}.`,
+      raw: value,
+    });
+  }
+
+  return value;
+}
+
+function assertRecord(
+  value: unknown,
+  fieldName: string,
+  endpoint: string
+): Record<string, unknown> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new CubidCommsError({
+      category: "parse",
+      code: "MALFORMED_RESPONSE",
+      message: `Cubid comms expected ${fieldName} to be an object in ${endpoint}.`,
+      raw: value,
+    });
+  }
+
+  return value as Record<string, unknown>;
+}
+
+async function readJsonResponse(
+  response: Response,
+  endpoint: string
+): Promise<Record<string, unknown>> {
+  let payload: unknown = null;
+
+  try {
+    payload = await response.json();
+  } catch (error) {
+    throw new CubidCommsError({
+      category: "parse",
+      code: "INVALID_JSON",
+      cause: error,
+      message: `Cubid comms returned invalid JSON for ${endpoint}.`,
+      status: response.status,
+    });
+  }
+
+  return assertRecord(payload, "response", endpoint);
+}
+
+function getRequestId(response: Response, payload: Record<string, unknown>): string | null {
+  const headerRequestId = response.headers.get("x-request-id");
+
+  if (headerRequestId) {
+    return headerRequestId;
+  }
+
+  const errorPayload = payload.error;
+
+  if (
+    errorPayload &&
+    typeof errorPayload === "object" &&
+    !Array.isArray(errorPayload) &&
+    "requestId" in errorPayload &&
+    typeof errorPayload.requestId === "string"
+  ) {
+    return errorPayload.requestId;
+  }
+
+  return null;
+}
+
+function normalizeChannelSummary(
+  payload: Record<string, unknown>,
+  endpoint: string
+): CubidNotificationChannelSummary {
+  const channelId = assertNonEmptyString(
+    getOptionalString(payload.channelId, "channelId", endpoint) ?? "",
+    "channelId",
+    endpoint
+  );
+  const channelType = assertNonEmptyString(
+    getOptionalString(payload.channelType, "channelType", endpoint) ?? "",
+    "channelType",
+    endpoint
+  );
+
+  return {
+    channelId,
+    channelType,
+    createdAt: getOptionalString(payload.createdAt, "createdAt", endpoint),
+    displayHint: getOptionalString(payload.displayHint, "displayHint", endpoint),
+    isDefault:
+      getOptionalBoolean(payload.isDefault, "isDefault", endpoint) ?? false,
+    label: getOptionalString(payload.label, "label", endpoint),
+    providerKey: getOptionalString(payload.providerKey, "providerKey", endpoint),
+    raw: payload,
+    status: getOptionalString(payload.status, "status", endpoint),
+    updatedAt: getOptionalString(payload.updatedAt, "updatedAt", endpoint),
+    verificationStatus: getOptionalString(
+      payload.verificationStatus,
+      "verificationStatus",
+      endpoint
+    ),
+    verifiedAt: getOptionalString(payload.verifiedAt, "verifiedAt", endpoint),
+  };
+}
+
+async function requestPassportUserRoute(
+  fetchImpl: CubidCommsFetch,
+  config: ResolvedCubidCommsClientOptions,
+  endpointPath: string,
+  endpointName: string,
+  input: {
+    body: Record<string, unknown>;
+    signal?: AbortSignal;
+  }
+): Promise<{
+  payload: Record<string, unknown>;
+  requestId: string | null;
+}> {
+  const url = `${config.baseUrl}${endpointPath}`;
+  const headers = new Headers(config.headers);
+  headers.set("authorization", `Bearer ${config.accessToken}`);
+  headers.set("content-type", "application/json");
+
+  let response: Response;
+
+  try {
+    response = await fetchImpl(url, {
+      body: JSON.stringify(input.body),
+      headers,
+      method: "POST",
+      signal: input.signal,
+    });
+  } catch (error) {
+    throw new CubidCommsError({
+      category: "network",
+      code: "REQUEST_FAILED",
+      cause: error,
+      message: `Cubid comms request failed before a response was received for ${endpointName}.`,
+    });
+  }
+
+  const payload = await readJsonResponse(response, endpointName);
+  const requestId = getRequestId(response, payload);
+
+  if (!response.ok) {
+    const errorPayload = assertRecord(payload.error, "error", endpointName);
+    throw new CubidCommsError({
+      category: response.status === 401 ? "auth" : "upstream",
+      code: getOptionalString(errorPayload.code, "error.code", endpointName),
+      message:
+        getOptionalString(errorPayload.message, "error.message", endpointName) ??
+        `Cubid comms request failed for ${endpointName}.`,
+      raw: payload,
+      requestId,
+      status: response.status,
+    });
+  }
+
+  return {
+    payload,
+    requestId,
+  };
+}
+
 export function createCubidCommsClient(
   options: CubidCommsClientOptions
 ): CubidCommsClient {
@@ -119,8 +378,119 @@ export function createCubidCommsClient(
   );
   const baseUrl = normalizeBaseUrl(options.baseUrl);
   const headers = new Headers(options.headers);
+  const fetchImpl = options.fetch ?? fetch;
 
   return {
+    channels: {
+      async list(input = {}) {
+        const { payload, requestId } = await requestPassportUserRoute(
+          fetchImpl,
+          {
+            accessToken,
+            baseUrl,
+            headers,
+          },
+          "/api/notifications/channels/list",
+          "notifications/channels/list",
+          {
+            body: {},
+            signal: input.signal,
+          }
+        );
+        const data = payload.data;
+
+        if (!Array.isArray(data)) {
+          throw new CubidCommsError({
+            category: "parse",
+            code: "MALFORMED_RESPONSE",
+            message:
+              "Cubid comms expected an array of channels from notifications/channels/list.",
+            raw: payload,
+            requestId,
+          });
+        }
+
+        return {
+          channels: data.map((item, index) =>
+            normalizeChannelSummary(
+              assertRecord(
+                item,
+                `data[${String(index)}]`,
+                "notifications/channels/list"
+              ),
+              "notifications/channels/list"
+            )
+          ),
+          raw: payload,
+          requestId,
+        };
+      },
+
+      async update(input) {
+        const channelId = assertNonEmptyString(
+          input.channelId,
+          "channelId",
+          "notifications/channels/update"
+        );
+        const nextLabel =
+          input.label === undefined ? undefined : input.label?.trim() ?? null;
+
+        if (
+          input.isDefault === undefined &&
+          nextLabel === undefined &&
+          input.status === undefined
+        ) {
+          throw new CubidCommsError({
+            category: "validation",
+            code: "INVALID_ARGUMENT",
+            message:
+              "Cubid comms requires at least one channel update field for notifications/channels/update.",
+          });
+        }
+
+        const body: Record<string, unknown> = {
+          channelId,
+        };
+
+        if (input.isDefault !== undefined) {
+          body.isDefault = input.isDefault;
+        }
+        if (nextLabel !== undefined) {
+          body.label = nextLabel;
+        }
+        if (input.status !== undefined) {
+          body.status = assertNonEmptyString(
+            input.status,
+            "status",
+            "notifications/channels/update"
+          );
+        }
+
+        const { payload, requestId } = await requestPassportUserRoute(
+          fetchImpl,
+          {
+            accessToken,
+            baseUrl,
+            headers,
+          },
+          "/api/notifications/channels/update",
+          "notifications/channels/update",
+          {
+            body,
+            signal: input.signal,
+          }
+        );
+
+        return {
+          channel: normalizeChannelSummary(
+            assertRecord(payload.data, "data", "notifications/channels/update"),
+            "notifications/channels/update"
+          ),
+          raw: payload,
+          requestId,
+        };
+      },
+    },
     config: Object.freeze({
       accessToken,
       baseUrl,

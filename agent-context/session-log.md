@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s69-comms-channel-metadata
+
+- Timestamp: 2026-05-15T05:45:08Z
+- Summary: Added the first signed-in notification channel metadata helpers to `@cubid/comms` using the real Passport user-route contract.
+- Actions:
+  - Extended `createCubidCommsClient` with `channels.list()` and `channels.update(...)` so Passport-user channel metadata can be fetched and updated through bearer-authenticated requests.
+  - Added typed redacted channel summaries covering channel id/type, provider key, label, masked display hint, default and verification flags, lifecycle status, and timestamps without exposing raw destinations or provider internals.
+  - Updated the package README so the new signed-in channel metadata helpers are documented as part of the current `@cubid/comms` scope.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Move into `S13.3` and add the channel verification lifecycle wrappers on top of the same bearer-authenticated client boundary.
+
 ## session: s68-comms-package-boundary
 
 - Timestamp: 2026-05-15T05:40:38Z

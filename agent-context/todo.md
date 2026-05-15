@@ -1112,8 +1112,12 @@ explicitly promotes them.
 
 ### S13.2 Add signed-in channel metadata helpers in a future `@cubid/comms`
 
-- Status: Not started
-- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+- Status: Completed
+- Timestamp started: 2026-05-15T05:45:08Z
+- Timestamp completed: 2026-05-15T05:45:08Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `f57cce5f` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s69-comms-channel-metadata
 
 When flexible messaging is promoted, add public wrappers for
 `POST /api/notifications/channels/list` and

@@ -37,7 +37,22 @@ pnpm add @cubid/comms
 This first package slice defines the signed-in Passport-user client boundary for
 future flexible messaging helpers.
 
-It intentionally does not add:
+Current helpers:
+
+- `createCubidCommsClient(...)`
+- `client.channels.list()`
+- `client.channels.update(...)`
+
+The channel helpers expose only redacted metadata:
+
+- channel id and type
+- provider key
+- label
+- masked display hint
+- verification and lifecycle status flags
+- timestamps
+
+This package intentionally does not add:
 
 - dapp-authenticated notification send helpers
 - hosted Allow Page grant wrappers

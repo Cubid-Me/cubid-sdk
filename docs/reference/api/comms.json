@@ -162,6 +162,115 @@
       "flags": {},
       "children": [
         {
+          "name": "channels",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "list",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "name": "list",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "name": "input",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {
+                            "isOptional": true
+                          },
+                          "type": {
+                            "type": "reference",
+                            "name": "CubidListNotificationChannelsInput",
+                            "package": "@cubid/comms"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "name": "CubidListNotificationChannelsResponse",
+                            "package": "@cubid/comms"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "update",
+                  "variant": "declaration",
+                  "kind": 2048,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "name": "update",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "name": "input",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "name": "CubidUpdateNotificationChannelInput",
+                            "package": "@cubid/comms"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "name": "CubidUpdateNotificationChannelResponse",
+                            "package": "@cubid/comms"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
           "name": "config",
           "variant": "declaration",
           "kind": 1024,
@@ -419,6 +528,460 @@
       ]
     },
     {
+      "name": "CubidListNotificationChannelsInput",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "signal",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.dom.d.ts",
+              "qualifiedName": "AbortSignal"
+            },
+            "name": "AbortSignal",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidListNotificationChannelsResponse",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "channels",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidNotificationChannelSummary",
+              "package": "@cubid/comms"
+            }
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "requestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidNotificationChannelSummary",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "channelId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "channelType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "createdAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "displayHint",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "isDefault",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "label",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "providerKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "updatedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "verificationStatus",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "verifiedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidUpdateNotificationChannelInput",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "channelId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "isDefault",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "label",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "signal",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.dom.d.ts",
+              "qualifiedName": "AbortSignal"
+            },
+            "name": "AbortSignal",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidUpdateNotificationChannelResponse",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "channel",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidNotificationChannelSummary",
+            "package": "@cubid/comms"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "requestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "ResolvedCubidCommsClientOptions",
       "variant": "declaration",
       "kind": 256,
@@ -602,6 +1165,87 @@
       }
     },
     {
+      "name": "CubidNotificationChannelStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "active"
+          },
+          {
+            "type": "literal",
+            "value": "muted"
+          },
+          {
+            "type": "literal",
+            "value": "paused"
+          },
+          {
+            "type": "literal",
+            "value": "revoked"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidNotificationChannelType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "email"
+          },
+          {
+            "type": "literal",
+            "value": "telegram"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidNotificationVerificationStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "pending"
+          },
+          {
+            "type": "literal",
+            "value": "verified"
+          },
+          {
+            "type": "literal",
+            "value": "revoked"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
       "name": "createCubidCommsClient",
       "variant": "declaration",
       "kind": 64,
@@ -694,7 +1338,31 @@
     },
     {
       "kind": "text",
-      "text": "\n\n## Registry availability\n\n- npm-only\n\n## API reference\n\n- Root package matrix: [/Users/botmaster/src/cubid/cubid-sdk-v2/README.md](/Users/botmaster/src/cubid/cubid-sdk-v2/README.md)\n- Machine-readable API reference: [/Users/botmaster/src/cubid/cubid-sdk-v2/docs/reference/api/comms.json](/Users/botmaster/src/cubid/cubid-sdk-v2/docs/reference/api/comms.json)\n\n## Current scope\n\nThis first package slice defines the signed-in Passport-user client boundary for\nfuture flexible messaging helpers.\n\nIt intentionally does not add:\n\n- dapp-authenticated notification send helpers\n- hosted Allow Page grant wrappers\n- raw email addresses, Telegram identifiers, ciphertext, or provider secrets\n\nThose behaviors remain deferred to later roadmap slices."
+      "text": "\n\n## Registry availability\n\n- npm-only\n\n## API reference\n\n- Root package matrix: [/Users/botmaster/src/cubid/cubid-sdk-v2/README.md](/Users/botmaster/src/cubid/cubid-sdk-v2/README.md)\n- Machine-readable API reference: [/Users/botmaster/src/cubid/cubid-sdk-v2/docs/reference/api/comms.json](/Users/botmaster/src/cubid/cubid-sdk-v2/docs/reference/api/comms.json)\n\n## Current scope\n\nThis first package slice defines the signed-in Passport-user client boundary for\nfuture flexible messaging helpers.\n\nCurrent helpers:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`createCubidCommsClient(...)`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`client.channels.list()`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`client.channels.update(...)`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThe channel helpers expose only redacted metadata:\n\n- channel id and type\n- provider key\n- label\n- masked display hint\n- verification and lifecycle status flags\n- timestamps\n\nThis package intentionally does not add:\n\n- dapp-authenticated notification send helpers\n- hosted Allow Page grant wrappers\n- raw email addresses, Telegram identifiers, ciphertext, or provider secrets\n\nThose behaviors remain deferred to later roadmap slices."
     }
   ]
 }
