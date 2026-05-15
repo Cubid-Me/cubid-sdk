@@ -54,6 +54,9 @@ entry and summarizes what changed.
 
 ## Current Threads
 
+- [`2026-05-13-dashboard-sign-in-with-cubid-blocker.md`](./2026-05-13-dashboard-sign-in-with-cubid-blocker.md):
+  ClearPass dashboard browser-safe Sign in with Cubid blocker for a Vite/React
+  developer auth gate.
 - [`2026-05-14-sdk-wallet-release-handoff.md`](./2026-05-14-sdk-wallet-release-handoff.md):
   Passport-to-SDK wallet helper and release handoff for SIWC account/signing
   APIs.

@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s78-clearpass-dashboard-auth-cross-repo-thread
+
+- Timestamp: 2026-05-15T16:43:59Z
+- Summary: Migrated the ClearPass dashboard Sign in with Cubid blocker into the new cross-repo mailbox protocol.
+- Actions:
+  - Added the SDK sibling note under `agent-context/cross-repo-comms/` with shared `thread_id`, related repo metadata, sibling paths, status, legacy-note reference, and dated log entries.
+  - Added the ClearPass owner note in the ClearPass repo so future substantive edits can update both siblings in the same working session.
+  - Updated the cross-repo comms README current-thread list so SDK-side agents can discover the ClearPass dashboard auth blocker.
+- Validation:
+  - Manual structure check against `agent-context/cross-repo-comms/README.md` and the existing wallet handoff thread.
+- Follow-up:
+  - SDK-side work should reply in the cross-repo thread with the browser-safe Sign in with Cubid package/API names, exact imports, and a Vite/React usage path once available.
+
 ## session: s77-cross-repo-wallet-handoff-response
 
 - Timestamp: 2026-05-15T15:00:00Z
