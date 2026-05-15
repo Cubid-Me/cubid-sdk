@@ -1,5 +1,20 @@
 # Session Log
 
+## session: s79-clearpass-dashboard-auth-thread-response
+
+- Timestamp: 2026-05-15T16:55:00Z
+- Summary: Replied to the live ClearPass dashboard auth thread with the published browser-safe Sign in with Cubid package surface and the exact Vite/React integration path.
+- Actions:
+  - Verified the published npm versions for `@cubid/auth` and `@cubid/auth-react`.
+  - Cross-checked the available auth/auth-react exports and the documented ClearPass Vite example path in this repo.
+  - Added synchronized replies in the SDK sibling note and the ClearPass owner copy so the blocker thread now has exact package names, React exports, and browser-safety guidance.
+- Validation:
+  - `npm view @cubid/auth version dist-tags.latest`
+  - `npm view @cubid/auth-react version dist-tags.latest`
+  - `rg` checks across `packages/auth`, `packages/auth-react`, and `docs/examples/clearpass-dashboard-auth-vite.md`
+- Follow-up:
+  - The synchronized ClearPass sibling note is now dirty in `/Users/botmaster/src/clearpass` and should be committed there if ClearPass wants the thread update recorded immediately.
+
 ## session: s78-clearpass-dashboard-auth-cross-repo-thread
 
 - Timestamp: 2026-05-15T16:43:59Z
