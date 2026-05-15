@@ -139,6 +139,22 @@ Do not put Cubid dapp API keys, client secrets, signing keys, service-role
 credentials, or Passport internal tokens into this package's browser usage
 model.
 
+### Future `@cubid/comms`
+
+Use a later `@cubid/comms` package family for signed-in messaging profile
+management if Passport promotes the flexible messaging roadmap. That future
+surface should cover user-authenticated channel metadata, verification, and
+global preferences, not dapp server notification delivery.
+
+If Passport later promotes the server-authenticated notification send and
+status routes into the SDK roadmap, keep those helpers in `@cubid/core`
+instead. Signed-in Passport profile management and dapp backend notification
+delivery should remain separate surfaces.
+
+Treat hosted Allow Page category grants as Passport-owned UX for now. If the
+SDK later exposes them, model them only as permission state and never as
+access to raw destinations or delivery capability.
+
 ### Chain Packages
 
 Own:
@@ -224,10 +240,14 @@ These are likely future areas, but should not be over-promised in package
 boundaries until their public contracts are real and stable:
 
 - passkey/WebAuthn client helpers
-- comms helpers
+- comms helpers for signed-in messaging profile management
 - secrets helpers
 - richer multi-chain wallet packages
 - smart-account and paymaster helpers
+
+The current flexible messaging Passport notes are roadmap input only. They do
+not request immediate public SDK runtime helpers yet, even though the backend
+now has early send, provider, and status contracts.
 
 ## Mental Model
 

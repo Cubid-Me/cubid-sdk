@@ -44,7 +44,7 @@ Target packages:
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
 - `@cubid/cardano`: Cardano wallet and signing logic
 - `@cubid/sui`: Sui wallet and signing logic
-- `@cubid/comms`: optional later communications helpers
+- `@cubid/comms`: optional later signed-in messaging and communications helpers
 - `@cubid/secrets`: optional later encryption and custody helpers
 
 ## Package Responsibilities
@@ -87,6 +87,11 @@ lifecycle wrappers because those routes are runtime-agnostic HTTP contracts.
 Keep Passport-hosted list, approve, and reject routes out of the public SDK
 surface unless a later account-management or auth boundary is explicitly
 introduced.
+
+The same general split should apply to flexible messaging. Future dapp-facing
+`/api/v3/notifications/send` and `/api/v3/notifications/status` helpers belong
+in `@cubid/core` once those backend contracts are explicitly promoted, because
+they are server-authenticated runtime-agnostic APIs.
 
 The same boundary now applies to SIWC wallet capability discovery and
 passkey-approved account-request lifecycle helpers. Runtime-agnostic wrappers
@@ -134,6 +139,20 @@ Future user-authenticated disclosure-grant management routes, such as Allow
 Page grant listing or revocation, should not be treated as dapp server APIs in
 `@cubid/core`. If the public SDK exposes them later, they should sit behind a
 dedicated account-management or auth boundary.
+
+The same boundary applies to the new flexible-messaging Passport user routes.
+Signed-in channel and preference management belongs in a future `@cubid/comms`
+package family rather than `@cubid/core`, because these are user-authenticated
+account-management surfaces rather than dapp server APIs. The current send and
+status backend routes are roadmap input only for now; when they are promoted in
+the SDK, they should stay server-safe and land in `@cubid/core`, while
+Passport-user history and channel-management routes remain outside the normal
+dapp API surface.
+
+Allow Page category-grant routes should also remain Passport-hosted for now.
+If the SDK later surfaces that state, expose only category permission metadata.
+Do not expose raw destinations, channel selection, provider secrets, or
+delivery capability through those grant helpers.
 
 `@cubid/core` now exposes runtime-agnostic webhook verification helpers. They
 should keep verifying Cubid's exact raw-body signature contract and preserve

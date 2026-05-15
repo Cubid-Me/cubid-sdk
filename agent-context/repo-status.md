@@ -17,3 +17,4 @@
 | Environment and script conventions | `Pass` Root scripts cover install/build/test/lint/typecheck/core Deno checks, and `.gitignore` excludes local env files and build outputs. |
 | Developer-ingestion publishing | `Pass` Registry policy, machine-readable API reference artifacts, package metadata, and public entrypoint docs now align with the primary published SDK package surfaces. |
 | Active roadmap closeout | `Pass` The current `S03` roadmap is fully represented in dedicated chain packages, and `@cubid/web3` is now documented as a frozen compatibility package with manual-only maintenance. |
+| Next deferred expansion area | `Pass` Flexible messaging is now tracked under `S13` as a deferred split between future signed-in account-management helpers in `@cubid/comms` and later server-safe send/status helpers in `@cubid/core`, not as immediate SDK runtime work. |

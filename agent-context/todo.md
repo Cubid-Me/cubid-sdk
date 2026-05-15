@@ -1080,3 +1080,108 @@ policy metadata say otherwise. The SDK may expose the limited EVM Admin-policy
 pilot and Solana readiness summaries, but it must continue warning that Cubid
 does not broadcast EVM pilot transactions and that Solana transaction signing
 remains disabled.
+
+### S13. Add flexible messaging account-management helpers without exposing delivery internals
+
+- Status: Not started
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+
+Track the future public SDK surface for flexible messaging without collapsing
+signed-in user messaging profile management into dapp server notification APIs.
+Keep hosted Allow Page category grants modeled as permission state only, route
+signed-in channel and preference helpers toward a future `@cubid/comms` package
+family, and reserve future server-safe send and status helpers for
+`@cubid/core` once the messaging roadmap is explicitly promoted.
+
+### S13.1 Define the package boundary for flexible messaging helpers
+
+- Status: Not started
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+
+Document that signed-in messaging profile helpers belong in a future
+`@cubid/comms` package family rather than `@cubid/core`, and keep hosted Allow
+Page category-grant routes out of `@cubid/browser` until the product roadmap
+explicitly promotes them.
+
+### S13.2 Add signed-in channel metadata helpers in a future `@cubid/comms`
+
+- Status: Not started
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+
+When flexible messaging is promoted, add public wrappers for
+`POST /api/notifications/channels/list` and
+`POST /api/notifications/channels/update` that expose only channel id/type,
+provider key, label, masked display hint, verification/status/default flags,
+and timestamps.
+
+### S13.3 Add signed-in channel verification lifecycle helpers in a future `@cubid/comms`
+
+- Status: Not started
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+
+When flexible messaging is promoted, add typed wrappers for
+`POST /api/notifications/channels/start-verification` and
+`POST /api/notifications/channels/complete-verification` while keeping email
+and Telegram setup flows fail-closed and avoiding any claim that provider
+delivery or bot-handshake readiness is already complete.
+
+### S13.4 Add signed-in global preference helpers in a future `@cubid/comms`
+
+- Status: Not started
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake
+
+When flexible messaging is promoted, add wrappers for
+`POST /api/notifications/preferences/list` and
+`POST /api/notifications/preferences/update` that stay limited to the global
+category defaults for `SECURITY`, `TRANSACTIONAL`, and `WORKFLOW`.
+
+### S13.5 Model Allow Page category grants as permission metadata, not channel access
+
+- Status: Not started
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, session: s67-flexible-messaging-roadmap-intake
+
+Keep Allow Page category grants Passport-hosted for now. If the SDK later
+surfaces them, represent them only as category permission state and never as
+access to destinations, channel selection, or delivery capability.
+
+### S13.6 Add server-safe notification send helpers in a future `@cubid/core`
+
+- Status: Not started
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-send-route.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-email-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-telegram-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-abuse-controls.md`, session: s67-flexible-messaging-roadmap-intake
+
+When the messaging roadmap is promoted, add server-safe `@cubid/core` wrappers
+for `POST /api/v3/notifications/send` with required idempotency, typed
+categories and priorities, and explicit browser-safety guidance that Cubid dapp
+API keys must stay on the app backend.
+
+### S13.7 Normalize flexible messaging send errors and accepted-versus-delivered semantics
+
+- Status: Not started
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-send-route.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-email-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-telegram-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-abuse-controls.md`, session: s67-flexible-messaging-roadmap-intake
+
+When those send helpers land, model `status: "accepted"` as Cubid accepting
+and routing the event rather than guaranteed provider delivery. Preserve stable
+error codes such as `notification_grant_required`,
+`notification_provider_disabled`, and `notification_quota_exceeded` as
+structured send outcomes instead of retryable transport failures.
+
+### S13.8 Add server-safe notification status helpers in a future `@cubid/core`
+
+- Status: Not started
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-status-history.md`, session: s67-flexible-messaging-roadmap-intake
+
+When the messaging roadmap is promoted, add server-safe `@cubid/core` wrappers
+for `POST /api/v3/notifications/status` that return event status, selected
+channel type, latest delivery state, and redacted delivery attempts without
+exposing raw user ids, destinations, ciphertext, provider secrets, or
+cross-app data.
+
+### S13.9 Keep Passport-user notification history routes out of ordinary dapp SDK usage
+
+- Status: Not started
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-status-history.md`, session: s67-flexible-messaging-roadmap-intake
+
+Treat `POST /api/notifications/history/list` as a Passport-user profile route,
+not as a normal dapp SDK surface. If it is exposed later, keep it behind the
+same signed-in account-management boundary as future `@cubid/comms` helpers
+rather than mixing it into server-authenticated dapp APIs.

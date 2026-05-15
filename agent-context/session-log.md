@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s67-flexible-messaging-roadmap-intake
+
+- Timestamp: 2026-05-15T00:40:00Z
+- Summary: Ingested the new flexible messaging Passport notes as deferred SDK roadmap input and opened a future account-management track instead of adding runtime code now.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md` and `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`.
+  - Reviewed the later flexible-messaging handoff notes for `send`, email, Telegram, abuse controls, and status/history so the roadmap now reflects both the signed-in profile surface and the future server-safe dapp send/status surface.
+  - Added `S13` and its sub-items to `agent-context/todo.md` so future signed-in messaging channels, verification, preferences, Allow Page category-grant modeling, and later server-safe send/status helpers are tracked as one coherent deferred expansion area.
+  - Updated package-boundary guidance so future signed-in messaging profile helpers land in a later `@cubid/comms` package family, while future dapp notification send and status helpers remain a possible `@cubid/core` concern once the messaging roadmap is explicitly promoted.
+- Validation:
+  - Reviewed the current package-boundary docs, roadmap state, and the new Passport notes after the edits.
+- Follow-up:
+  - No runtime SDK implementation is requested yet; the next clean move after this intake is to yeet the completed `S03` branch once the inbox is committed cleanly.
+
 ## session: s66-web3-compatibility-closeout
 
 - Timestamp: 2026-05-15T00:05:00Z

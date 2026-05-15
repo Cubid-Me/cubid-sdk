@@ -16,6 +16,8 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - React-specific logic belongs in a React package, not in core.
 - Chain-specific logic should move toward dedicated chain packages rather than accumulate in shared packages.
 - "Sign in with Cubid" OAuth/OIDC helpers should live in dedicated auth packages rather than being forced into `@cubid/core` or the generic React package.
+- Signed-in messaging channel and preference management should land in a future dedicated communications package family rather than being forced into `@cubid/core` or the browser layer.
+- Future server-authenticated notification send or status helpers should stay in `@cubid/core` only when Passport promotes stable dapp-facing backend contracts for them.
 - Any SDK change that could affect underlying data models, API contracts,
   response shapes, auth flows, or other interface structure must first be
   evaluated for impact on `cubid-passport` before implementation.
