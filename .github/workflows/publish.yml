@@ -16,6 +16,7 @@ on:
           - "@cubid/browser"
           - "@cubid/bitcoin"
           - "@cubid/cardano"
+          - "@cubid/comms"
           - "@cubid/cosmos"
           - "@cubid/react"
           - "@cubid/evm"
@@ -76,6 +77,10 @@ jobs:
               ;;
             "@cubid/cardano")
               echo "package_dir=packages/cardano" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/comms")
+              echo "package_dir=packages/comms" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/cosmos")

@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s82-pr15-comms-publish-workflow-review-fix
+
+- Timestamp: 2026-05-16T05:16:21Z
+- Summary: Addressed PR #15 review feedback by making `@cubid/comms` selectable in the trusted-publishing workflow.
+- Actions:
+  - Added `@cubid/comms` to the manual `package_name` choices in `.github/workflows/publish.yml`.
+  - Added the matching resolver case so the workflow maps `@cubid/comms` to `packages/comms` with `jsr_supported=false`.
+  - Confirmed the publishing runbook and README already list `@cubid/comms` as npm-only, so no docs correction was needed beyond the workflow.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Reply to and resolve the PR #15 review thread after the fix is pushed and CI is green.
+
 ## session: s81-cross-repo-comms-passport-intake
 
 - Timestamp: 2026-05-16T02:46:38Z
