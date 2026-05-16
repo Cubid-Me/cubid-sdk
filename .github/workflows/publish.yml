@@ -12,13 +12,22 @@ on:
           - "@cubid/core"
           - "@cubid/auth"
           - "@cubid/auth-react"
+          - "@cubid/aptos"
           - "@cubid/browser"
+          - "@cubid/bitcoin"
+          - "@cubid/cardano"
+          - "@cubid/comms"
+          - "@cubid/cosmos"
           - "@cubid/react"
           - "@cubid/evm"
           - "@cubid/near"
+          - "@cubid/polkadot"
           - "@cubid/solana"
+          - "@cubid/starknet"
+          - "@cubid/stellar"
+          - "@cubid/sui"
+          - "@cubid/tezos"
           - "@cubid/wagmi"
-          - "@cubid/web3"
       publish_npm:
         description: "Publish the selected package to npm using Trusted Publishing"
         required: true
@@ -54,8 +63,28 @@ jobs:
               echo "package_dir=packages/auth-react" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
+            "@cubid/aptos")
+              echo "package_dir=packages/aptos" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
             "@cubid/browser")
               echo "package_dir=packages/browser" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/bitcoin")
+              echo "package_dir=packages/bitcoin" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/cardano")
+              echo "package_dir=packages/cardano" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/comms")
+              echo "package_dir=packages/comms" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/cosmos")
+              echo "package_dir=packages/cosmos" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             "@cubid/react")
@@ -70,16 +99,32 @@ jobs:
               echo "package_dir=packages/near" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
+            "@cubid/polkadot")
+              echo "package_dir=packages/polkadot" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
             "@cubid/solana")
               echo "package_dir=packages/solana" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
-            "@cubid/wagmi")
-              echo "package_dir=packages/wagmi" >> "$GITHUB_OUTPUT"
+            "@cubid/starknet")
+              echo "package_dir=packages/starknet" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
-            "@cubid/web3")
-              echo "package_dir=packages/web3" >> "$GITHUB_OUTPUT"
+            "@cubid/stellar")
+              echo "package_dir=packages/stellar" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/sui")
+              echo "package_dir=packages/sui" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/tezos")
+              echo "package_dir=packages/tezos" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/wagmi")
+              echo "package_dir=packages/wagmi" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             *)

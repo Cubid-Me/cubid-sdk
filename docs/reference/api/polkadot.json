@@ -1,0 +1,1374 @@
+{
+  "schemaVersion": "2.0",
+  "name": "@cubid/polkadot",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "name": "ConnectWalletRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "adapter",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "TConnection",
+                "package": "@cubid/polkadot",
+                "qualifiedName": "ConnectWalletRequest.TConnection",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidPolkadotAdapter",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotConnection",
+            "package": "@cubid/polkadot"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidPolkadotConnection",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPolkadotAdapter",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "id",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "connect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "connect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/polkadot",
+                    "qualifiedName": "CubidPolkadotAdapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "disconnect",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "name": "disconnect",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/polkadot",
+                    "qualifiedName": "CubidPolkadotAdapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  },
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "toStampData",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "name": "toStampData",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/polkadot",
+                    "qualifiedName": "CubidPolkadotAdapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                },
+                {
+                  "name": "verification",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidPolkadotVerification",
+                    "package": "@cubid/polkadot"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "unknown"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "verify",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isOptional": true
+          },
+          "signatures": [
+            {
+              "name": "verify",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/polkadot",
+                    "qualifiedName": "CubidPolkadotAdapter.TConnection",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "reference",
+                    "name": "CubidPolkadotVerification",
+                    "package": "@cubid/polkadot"
+                  },
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "CubidPolkadotVerification",
+                        "package": "@cubid/polkadot"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotConnection",
+            "package": "@cubid/polkadot"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidPolkadotConnection",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPolkadotCapabilities",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "gasSponsorship",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotCapabilityDescriptor",
+            "package": "@cubid/polkadot"
+          }
+        },
+        {
+          "name": "paymaster",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotCapabilityDescriptor",
+            "package": "@cubid/polkadot"
+          }
+        },
+        {
+          "name": "sessionKeys",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotCapabilityDescriptor",
+            "package": "@cubid/polkadot"
+          }
+        },
+        {
+          "name": "smartAccount",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotCapabilityDescriptor",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "capabilityName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidPolkadotCapabilityDescriptor",
+                "package": "@cubid/polkadot"
+              },
+              {
+                "type": "intrinsic",
+                "name": "undefined"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPolkadotCapabilityDescriptor",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "available",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPolkadotClient",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "apiClient",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/core",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidApiClient"
+            },
+            "name": "CubidApiClient",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "connectWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "connectWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidPolkadotConnection",
+                    "package": "@cubid/polkadot"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/polkadot",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "ConnectWalletRequest",
+                    "package": "@cubid/polkadot"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/polkadot",
+                    "refersToTypeParameter": true
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "disconnectWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "disconnectWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidPolkadotConnection",
+                    "package": "@cubid/polkadot"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "adapter",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/polkadot",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "CubidPolkadotAdapter",
+                    "package": "@cubid/polkadot"
+                  }
+                },
+                {
+                  "name": "connection",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "TConnection",
+                    "package": "@cubid/polkadot",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "verifyWallet",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "verifyWallet",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "typeParameters": [
+                {
+                  "name": "TConnection",
+                  "variant": "typeParam",
+                  "kind": 131072,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidPolkadotConnection",
+                    "package": "@cubid/polkadot"
+                  }
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "request",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/polkadot",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "VerifyWalletRequest",
+                    "package": "@cubid/polkadot"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "TConnection",
+                        "package": "@cubid/polkadot",
+                        "refersToTypeParameter": true
+                      }
+                    ],
+                    "name": "VerifyWalletResult",
+                    "package": "@cubid/polkadot"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CubidPolkadotClientOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "defaultStampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "literal",
+            "value": "polkadot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPolkadotConnection",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "address",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotCapabilities",
+            "package": "@cubid/polkadot"
+          }
+        },
+        {
+          "name": "chainType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "genesisHash",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "publicKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "ss58Format",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "indexSignatures": [
+        {
+          "name": "__index",
+          "variant": "signature",
+          "kind": 8192,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPolkadotVerification",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "isVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "metadata",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VerifyWalletRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "adapter",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "TConnection",
+                "package": "@cubid/polkadot",
+                "qualifiedName": "VerifyWalletRequest.TConnection",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "CubidPolkadotAdapter",
+            "package": "@cubid/polkadot"
+          }
+        },
+        {
+          "name": "connection",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "TConnection",
+            "package": "@cubid/polkadot",
+            "qualifiedName": "VerifyWalletRequest.TConnection",
+            "refersToTypeParameter": true
+          }
+        },
+        {
+          "name": "pageId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "literal",
+            "value": "polkadot"
+          }
+        },
+        {
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotConnection",
+            "package": "@cubid/polkadot"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidPolkadotConnection",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VerifyWalletResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "capabilities",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotCapabilities",
+            "package": "@cubid/polkadot"
+          }
+        },
+        {
+          "name": "connection",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "TConnection",
+            "package": "@cubid/polkadot",
+            "qualifiedName": "VerifyWalletResult.TConnection",
+            "refersToTypeParameter": true
+          }
+        },
+        {
+          "name": "persistedStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/core",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidAddStampResponse"
+            },
+            "name": "CubidAddStampResponse",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "stampData",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "literal",
+            "value": "polkadot"
+          }
+        },
+        {
+          "name": "verification",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotVerification",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "name": "TConnection",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotConnection",
+            "package": "@cubid/polkadot"
+          },
+          "default": {
+            "type": "reference",
+            "name": "CubidPolkadotConnection",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPolkadotStampType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "literal",
+        "value": "polkadot"
+      }
+    },
+    {
+      "name": "createCubidPolkadotClient",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "createCubidPolkadotClient",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "apiClient",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/core",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidApiClient"
+                },
+                "name": "CubidApiClient",
+                "package": "@cubid/core"
+              }
+            },
+            {
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidPolkadotClientOptions",
+                "package": "@cubid/polkadot"
+              },
+              "defaultValue": "{}"
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotClient",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "getCubidPolkadotCapabilities",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "getCubidPolkadotCapabilities",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "connection",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidPolkadotConnection",
+                "package": "@cubid/polkadot"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "CubidPolkadotCapabilities",
+            "package": "@cubid/polkadot"
+          }
+        }
+      ]
+    },
+    {
+      "name": "hasCubidPolkadotCapability",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "hasCubidPolkadotCapability",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "connection",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidPolkadotConnection",
+                "package": "@cubid/polkadot"
+              }
+            },
+            {
+              "name": "capabilityName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ]
+    }
+  ],
+  "packageName": "@cubid/polkadot",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/polkadot`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nPolkadot-oriented Cubid wallet helpers built on top of "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n## When To Choose This Package\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/polkadot`"
+    },
+    {
+      "kind": "text",
+      "text": " when you need Cubid's Polkadot-specific custody, connection, and\nverification helpers. Choose "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/web3`"
+    },
+    {
+      "kind": "text",
+      "text": " only when you still depend on the\nolder shared wallet surface.\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\nnpm install @cubid/polkadot @cubid/core\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## API Reference\n\n- JSON reference: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/reference/api/polkadot.json`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- Package matrix: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Connection Model\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/polkadot`"
+    },
+    {
+      "kind": "text",
+      "text": " treats wallet "
+    },
+    {
+      "kind": "code",
+      "text": "`address`"
+    },
+    {
+      "kind": "text",
+      "text": " as the primary identity for default\nstamp serialization. Optional "
+    },
+    {
+      "kind": "code",
+      "text": "`genesisHash`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`publicKey`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`ss58Format`"
+    },
+    {
+      "kind": "text",
+      "text": "\nmetadata may be preserved on the connection when a host wallet exposes them.\n\n## Capability Metadata\n\nPolkadot connections may expose optional "
+    },
+    {
+      "kind": "code",
+      "text": "`capabilities`"
+    },
+    {
+      "kind": "text",
+      "text": " metadata for features that\nare not universal across Cubid custody accounts or wallet adapters, such as:\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`smartAccount`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`sessionKeys`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`paymaster`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`gasSponsorship`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThese descriptors are intentionally opt-in and capability-driven.\n\nThe package exports "
+    },
+    {
+      "kind": "code",
+      "text": "`getCubidPolkadotCapabilities(...)`"
+    },
+    {
+      "kind": "text",
+      "text": " and\n"
+    },
+    {
+      "kind": "code",
+      "text": "`hasCubidPolkadotCapability(...)`"
+    },
+    {
+      "kind": "text",
+      "text": " so host apps can read that metadata without\nassuming any advanced custody feature is universally available."
+    }
+  ]
+}

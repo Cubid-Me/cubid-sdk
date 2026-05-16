@@ -118,6 +118,12 @@ importers:
         specifier: ^3.1.2
         version: 3.2.4(@types/node@24.12.2)(jsdom@26.1.0)(tsx@4.21.0)(yaml@2.8.4)
 
+  packages/aptos:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/auth: {}
 
   packages/auth-react:
@@ -132,7 +138,19 @@ importers:
         specifier: '>=18.2.0'
         version: 19.2.5(react@19.2.5)
 
+  packages/bitcoin:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/browser:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/cardano:
     dependencies:
       '@cubid/core':
         specifier: workspace:*
@@ -147,6 +165,12 @@ importers:
         specifier: 5.2.2
         version: 5.2.2
 
+  packages/cosmos:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/evm:
     dependencies:
       '@cubid/core':
@@ -154,6 +178,12 @@ importers:
         version: link:../core
 
   packages/near:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/polkadot:
     dependencies:
       '@cubid/core':
         specifier: workspace:*
@@ -172,6 +202,30 @@ importers:
         version: 19.2.5(react@19.2.5)
 
   packages/solana:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/starknet:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/stellar:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/sui:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/tezos:
     dependencies:
       '@cubid/core':
         specifier: workspace:*

@@ -49,6 +49,10 @@ export function createCubidNearClient(
       stampType,
       userId
     }: VerifyWalletRequest<TConnection>): Promise<VerifyWalletResult<TConnection>> => {
+      if (persistStamp && (!userId || pageId === undefined)) {
+        throw new Error("Persisting a wallet stamp requires both userId and pageId.");
+      }
+
       if (persistStamp && !adapter.verify) {
         throw new Error("Persisting a wallet stamp requires an adapter.verify implementation.");
       }

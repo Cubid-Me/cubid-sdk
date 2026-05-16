@@ -1,0 +1,42 @@
+{
+  "name": "@cubid/comms",
+  "version": "0.1.0",
+  "description": "Signed-in messaging profile helpers for Cubid Passport notification channels and preferences.",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/comms"
+  },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/comms",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "communications",
+    "notifications",
+    "passport",
+    "profile",
+    "sdk"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

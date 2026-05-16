@@ -1,5 +1,400 @@
 # Session Log
 
+## session: s82-pr15-comms-publish-workflow-review-fix
+
+- Timestamp: 2026-05-16T05:16:21Z
+- Summary: Addressed PR #15 review feedback by making `@cubid/comms` selectable in the trusted-publishing workflow.
+- Actions:
+  - Added `@cubid/comms` to the manual `package_name` choices in `.github/workflows/publish.yml`.
+  - Added the matching resolver case so the workflow maps `@cubid/comms` to `packages/comms` with `jsr_supported=false`.
+  - Confirmed the publishing runbook and README already list `@cubid/comms` as npm-only, so no docs correction was needed beyond the workflow.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Reply to and resolve the PR #15 review thread after the fix is pushed and CI is green.
+
+## session: s81-cross-repo-comms-passport-intake
+
+- Timestamp: 2026-05-16T02:46:38Z
+- Summary: Addressed new inbound cross-repo comms updates from Passport in the SDK mailbox.
+- Actions:
+  - Accepted the Passport-side resolution update for the SDK wallet helper handoff thread, including downstream SmarTrust readiness boundaries and the fail-closed Solana transaction-signing note.
+  - Added the ClearPass Dashboard OIDC SDK readiness thread to the SDK live cross-repo mailbox index after Passport moved the legacy note into the sibling-note structure.
+  - Recorded that both inbound updates are coordination-only and require no new SDK runtime implementation in this pass.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Continue to leave sibling note changes dirty in other repos unless explicitly asked to commit them there.
+
+## session: s80-pr14-notification-credential-review-fix
+
+- Timestamp: 2026-05-16T02:25:22Z
+- Summary: Addressed PR #14 review feedback for the flexible-messaging API v3 notification helpers.
+- Actions:
+  - Updated `sendNotification` and `getNotificationStatus` so the notification send/status routes serialize the dapp credential as `apikey`, matching the Passport route contracts.
+  - Kept the existing `api_key` credential shape for the other API v3 helpers whose contracts already use that field.
+  - Updated the notification helper tests to assert the contract-specific credential field for both send and status requests.
+- Validation:
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+- Follow-up:
+  - Reply to and resolve the PR #14 review thread after the fix is committed and pushed.
+
+## session: s79-clearpass-dashboard-auth-thread-response
+
+- Timestamp: 2026-05-15T16:55:00Z
+- Summary: Replied to the live ClearPass dashboard auth thread with the published browser-safe Sign in with Cubid package surface and the exact Vite/React integration path.
+- Actions:
+  - Verified the published npm versions for `@cubid/auth` and `@cubid/auth-react`.
+  - Cross-checked the available auth/auth-react exports and the documented ClearPass Vite example path in this repo.
+  - Added synchronized replies in the SDK sibling note and the ClearPass owner copy so the blocker thread now has exact package names, React exports, and browser-safety guidance.
+- Validation:
+  - `npm view @cubid/auth version dist-tags.latest`
+  - `npm view @cubid/auth-react version dist-tags.latest`
+  - `rg` checks across `packages/auth`, `packages/auth-react`, and `docs/examples/clearpass-dashboard-auth-vite.md`
+- Follow-up:
+  - The synchronized ClearPass sibling note is now dirty in `/Users/botmaster/src/clearpass` and should be committed there if ClearPass wants the thread update recorded immediately.
+
+## session: s78-clearpass-dashboard-auth-cross-repo-thread
+
+- Timestamp: 2026-05-15T16:43:59Z
+- Summary: Migrated the ClearPass dashboard Sign in with Cubid blocker into the new cross-repo mailbox protocol.
+- Actions:
+  - Added the SDK sibling note under `agent-context/cross-repo-comms/` with shared `thread_id`, related repo metadata, sibling paths, status, legacy-note reference, and dated log entries.
+  - Added the ClearPass owner note in the ClearPass repo so future substantive edits can update both siblings in the same working session.
+  - Updated the cross-repo comms README current-thread list so SDK-side agents can discover the ClearPass dashboard auth blocker.
+- Validation:
+  - Manual structure check against `agent-context/cross-repo-comms/README.md` and the existing wallet handoff thread.
+- Follow-up:
+  - SDK-side work should reply in the cross-repo thread with the browser-safe Sign in with Cubid package/API names, exact imports, and a Vite/React usage path once available.
+
+## session: s77-cross-repo-wallet-handoff-response
+
+- Timestamp: 2026-05-15T15:00:00Z
+- Summary: Addressed the live SDK wallet handoff inbox thread by replying with the published helper surface, exact exported names, and the remaining Solana signing gap.
+- Actions:
+  - Reviewed the new cross-repo mailbox protocol and the live `sdk-wallet-release-handoff` sibling thread under `agent-context/cross-repo-comms/`.
+  - Verified the published npm versions for the relevant wallet helper packages and cross-checked the exported helper names in `@cubid/core` and `@cubid/browser`.
+  - Added a synchronized reply in both the SDK sibling note and the Passport owner copy so downstream agents now have a concrete readiness answer for EVM/Solana account creation, signing-request flows, hosted approval launchers, and the still-disabled Solana transaction-signing path.
+- Validation:
+  - `npm view @cubid/core version dist-tags.latest`
+  - `npm view @cubid/browser version dist-tags.latest`
+  - `npm view @cubid/near version dist-tags.latest`
+  - `npm view @cubid/solana version dist-tags.latest`
+  - `rg` export checks in `packages/core/src/index.ts` and `packages/browser/src/index.ts`
+- Follow-up:
+  - The sibling Passport note is now dirty in `/Users/botmaster/src/cubid/cubid-passport` and should be committed there if the Passport repo wants the synchronized thread update recorded immediately.
+
+## session: s76-notification-history-boundary
+
+- Timestamp: 2026-05-15T07:12:00Z
+- Summary: Closed the last flexible-messaging roadmap todo by making the Passport-user notification history boundary explicit across the repo guidance.
+- Actions:
+  - Updated `AGENTS.md`, the backgrounder, the SDK target-state doc, and the repo-status snapshot so `POST /api/notifications/history/list` is consistently treated as a signed-in profile route rather than a normal dapp-facing `@cubid/core` helper.
+  - Marked `S13.9` complete in `agent-context/todo.md` so the flexible-messaging roadmap now records the history-route exclusion as an explicit completed boundary decision.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - The next clean roadmap move is to decide whether the broader `S13` parent should now be marked complete or kept open for future delivery-history refinements beyond the current send/status/profile split.
+
+## session: s75-core-notification-status-helper
+
+- Timestamp: 2026-05-15T06:58:00Z
+- Summary: Added the first server-safe notification status helper so accepted flexible-messaging events can be tracked through a redacted app-scoped status surface.
+- Actions:
+  - Added `getNotificationStatus(...)` plus typed notification status and delivery-attempt summaries on `@cubid/core` for the dapp-authenticated `POST /api/v3/notifications/status` route.
+  - Kept the normalized response redacted to event status, selected channel type, latest delivery state, and delivery-attempt metadata without exposing destinations, ciphertext, provider secrets, or cross-app event visibility.
+  - Updated the core README and server-integration guide to position `getNotificationStatus` as the follow-up helper after an accepted send while keeping Passport-user history routes out of ordinary dapp SDK usage.
+- Validation:
+  - `pnpm --filter @cubid/core build`
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+- Follow-up:
+  - Move into `S13.9` and make the Passport-user history-route exclusion explicit in the roadmap and package-boundary docs.
+
+## session: s74-core-notification-send-errors
+
+- Timestamp: 2026-05-15T06:42:00Z
+- Summary: Hardened the flexible-messaging send helper so accepted sends and denied sends now come back as distinct typed SDK outcomes.
+- Actions:
+  - Added `CubidNotificationSendError`, `isCubidNotificationSendError`, and stable notification send error-code typing so Passport send-route denials are no longer surfaced as generic transport-looking failures.
+  - Classified the key Passport messaging denials and in-flight outcomes with retryability hints while keeping `status: "accepted"` documented as routing acceptance rather than proof of provider delivery.
+  - Updated the core README and server-integration guide so backend consumers know how to distinguish accepted sends from policy, grant, quota, provider, and request-in-progress failures.
+- Validation:
+  - `pnpm --filter @cubid/core build`
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+- Follow-up:
+  - Move into `S13.8` and add the server-safe notification status helper so accepted events can be tracked after the initial send response.
+
+## session: s73-core-notification-send-helper
+
+- Timestamp: 2026-05-15T06:28:00Z
+- Summary: Added the first server-safe flexible-messaging send helper to `@cubid/core` so dapp backends can enqueue notification events without exposing delivery internals.
+- Actions:
+  - Added `sendNotification(...)` plus typed notification categories, priorities, accepted-send response metadata, and `createNotificationIdempotencyKey()` on the runtime-agnostic core client.
+  - Normalized the `POST /api/v3/notifications/send` contract to safe routing metadata only, preserving idempotency while keeping raw destinations, provider secrets, ciphertext, and hosted Allow Page grant state out of the public SDK surface.
+  - Updated the core README and the Next.js/Supabase Edge integration guide so backend consumers know this helper is server-only and must keep Cubid dapp API keys off the browser.
+- Validation:
+  - `pnpm --filter @cubid/core build`
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Move into `S13.7` and harden the send helper semantics around accepted-versus-delivered state plus stable messaging error normalization.
+
+## session: s72-comms-allow-page-grant-model
+
+- Timestamp: 2026-05-15T05:52:52Z
+- Summary: Completed the Allow Page grant modeling slice by adding shared category-permission helpers in `@cubid/comms` without wrapping the hosted routes directly.
+- Actions:
+  - Added canonical notification category constants plus typed Allow Page grant summaries and small permission-state helpers for active-category evaluation.
+  - Kept the hosted Allow Page boundary intact by modeling grants as category permission state only instead of channel access or route wrappers.
+  - Updated the comms README so the package now documents the permission-model helpers alongside the signed-in channel and preference surfaces.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Flexible messaging work can now move out of `@cubid/comms` and into the server-safe `@cubid/core` send and status helpers.
+
+## session: s71-comms-global-preferences
+
+- Timestamp: 2026-05-15T05:50:33Z
+- Summary: Added the signed-in global notification preference helpers to `@cubid/comms` while keeping the surface limited to Passport-user category defaults.
+- Actions:
+  - Added `preferences.list()` and `preferences.update(...)` so Passport-user global category defaults can be fetched and updated through the same bearer-authenticated comms client.
+  - Normalized public preference metadata for `SECURITY`, `TRANSACTIONAL`, and `WORKFLOW`, including category, selected channel id, priority floor, status, and timestamps without exposing raw channel destinations.
+  - Updated the comms README so the current package scope now covers both channel management and global preference management.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Move into `S13.5` and decide whether the Allow Page category-grant helper should be implemented now or remain Passport-hosted despite the route existing.
+
+## session: s70-comms-channel-verification
+
+- Timestamp: 2026-05-15T05:45:08Z
+- Summary: Added the signed-in notification channel verification lifecycle helpers to `@cubid/comms` using the real Passport start/complete verification contract.
+- Actions:
+  - Added `channels.startVerification(...)` for email and Telegram channel setup, including the redacted channel summary plus typed challenge metadata such as `challengeId`, expiry, provider key, and optional Telegram setup guidance.
+  - Added `channels.completeVerification(...)` so callers can finish a verification challenge and receive the updated verified channel summary without exposing raw destinations or provider secrets.
+  - Updated the comms README so the current package scope now covers both channel metadata and verification lifecycle helpers.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Move into `S13.4` and add the global notification preference helpers on top of the same signed-in bearer-authenticated client boundary.
+
+## session: s69-comms-channel-metadata
+
+- Timestamp: 2026-05-15T05:45:08Z
+- Summary: Added the first signed-in notification channel metadata helpers to `@cubid/comms` using the real Passport user-route contract.
+- Actions:
+  - Extended `createCubidCommsClient` with `channels.list()` and `channels.update(...)` so Passport-user channel metadata can be fetched and updated through bearer-authenticated requests.
+  - Added typed redacted channel summaries covering channel id/type, provider key, label, masked display hint, default and verification flags, lifecycle status, and timestamps without exposing raw destinations or provider internals.
+  - Updated the package README so the new signed-in channel metadata helpers are documented as part of the current `@cubid/comms` scope.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+  - `pnpm docs:api:build`
+- Follow-up:
+  - Move into `S13.3` and add the channel verification lifecycle wrappers on top of the same bearer-authenticated client boundary.
+
+## session: s68-comms-package-boundary
+
+- Timestamp: 2026-05-15T05:40:38Z
+- Summary: Implemented the first `@cubid/comms` package slice to make the flexible-messaging package boundary real before adding any channel or preference helpers.
+- Actions:
+  - Added `packages/comms` with a minimal signed-in Passport-user client boundary, package metadata, README, and focused tests that keep the package free of `@cubid/core`, browser, and React dependency edges.
+  - Wired `@cubid/comms` into the repo package matrix, TypeScript aliases, unit-test prebuild path, Vitest coverage/test config, and machine-readable API reference generation.
+  - Updated the publishing policy and roadmap state so `S13.1` is now complete and the next work can land directly in `@cubid/comms`.
+- Validation:
+  - `pnpm --filter @cubid/comms build`
+  - `pnpm exec vitest run packages/comms/src/index.test.ts`
+- Follow-up:
+  - Move directly into `S13.2` to add the first signed-in channel metadata helpers on top of this package boundary.
+
+## session: s67-flexible-messaging-roadmap-intake
+
+- Timestamp: 2026-05-15T00:40:00Z
+- Summary: Ingested the new flexible messaging Passport notes as deferred SDK roadmap input and opened a future account-management track instead of adding runtime code now.
+- Actions:
+  - Reviewed `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md` and `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`.
+  - Reviewed the later flexible-messaging handoff notes for `send`, email, Telegram, abuse controls, and status/history so the roadmap now reflects both the signed-in profile surface and the future server-safe dapp send/status surface.
+  - Added `S13` and its sub-items to `agent-context/todo.md` so future signed-in messaging channels, verification, preferences, Allow Page category-grant modeling, and later server-safe send/status helpers are tracked as one coherent deferred expansion area.
+  - Updated package-boundary guidance so future signed-in messaging profile helpers land in a later `@cubid/comms` package family, while future dapp notification send and status helpers remain a possible `@cubid/core` concern once the messaging roadmap is explicitly promoted.
+- Validation:
+  - Reviewed the current package-boundary docs, roadmap state, and the new Passport notes after the edits.
+- Follow-up:
+  - No runtime SDK implementation is requested yet; the next clean move after this intake is to yeet the completed `S03` branch once the inbox is committed cleanly.
+
+## session: s66-web3-compatibility-closeout
+
+- Timestamp: 2026-05-15T00:05:00Z
+- Summary: Closed out the remaining `@cubid/web3` roadmap items by freezing the shared wallet surface, publishing downstream migration guidance, and moving the package out of the normal release path.
+- Actions:
+  - Marked `@cubid/web3` as a frozen legacy compatibility package in package metadata, public docs, and package-boundary guidance, and made the supported legacy stamp families explicit in the shared type surface.
+  - Removed `@cubid/web3` from the normal publish workflow choices so future releases are treated as manual compatibility exceptions rather than active package work.
+  - Added `docs/engineering/web3-migration-guide.md` and updated the package matrix, publishing policy, migration plan, roadmap files, and agent guidance so dedicated chain packages are the only forward-looking wallet targets.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - The current public SDK roadmap is now closed through the planned chain-package split and `@cubid/web3` compatibility freeze.
+
+## session: s65-stellar-package-slice
+
+- Timestamp: 2026-05-14T23:45:00Z
+- Summary: Continued `S03` by extracting `@cubid/stellar` as the final currently planned bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/stellar` with Stellar-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Stellar identity for default stamp serialization while preserving optional `federationAddress`, `networkPassphrase`, and `publicKey` metadata.
+  - Wired `@cubid/stellar` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/stellar/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Move from chain extraction into the remaining `@cubid/web3` compatibility-closeout tasks.
+
+## session: s64-tezos-package-slice
+
+- Timestamp: 2026-05-14T23:05:00Z
+- Summary: Continued `S03` by extracting `@cubid/tezos` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/tezos` with Tezos-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Tezos identity for default stamp serialization while preserving optional `curve`, `networkId`, and `publicKey` metadata.
+  - Wired `@cubid/tezos` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/tezos/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slice for Stellar.
+
+## session: s63-aptos-package-slice
+
+- Timestamp: 2026-05-14T22:25:00Z
+- Summary: Continued `S03` by extracting `@cubid/aptos` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/aptos` with Aptos-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Aptos identity for default stamp serialization while preserving optional `authenticationKey`, `chainId`, `networkId`, and `publicKey` metadata.
+  - Wired `@cubid/aptos` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/aptos/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Tezos and Stellar.
+
+## session: s62-polkadot-package-slice
+
+- Timestamp: 2026-05-14T21:45:00Z
+- Summary: Continued `S03` by extracting `@cubid/polkadot` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/polkadot` with Polkadot-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Polkadot identity for default stamp serialization while preserving optional `genesisHash`, `publicKey`, and `ss58Format` metadata.
+  - Wired `@cubid/polkadot` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/polkadot/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Aptos, Tezos, and Stellar.
+
+## session: s61-web3-compatibility-closeout-planning
+
+- Timestamp: 2026-05-14T21:00:00Z
+- Summary: Started the `@cubid/web3` compatibility-closeout path by turning it into a concrete tracked migration and deprecation plan.
+- Actions:
+  - Audited the remaining public `@cubid/web3` surface and confirmed it is now a small legacy shared-wallet package with its own adapter boundary, capability helpers, and a still-published npm package.
+  - Expanded `S03` with explicit `@cubid/web3` closeout follow-ups covering surface freeze, migration messaging, release-policy narrowing, downstream migration guidance, and the final long-term compatibility decision.
+  - Updated the package-migration and target-state docs so future work treats `@cubid/web3` as a legacy compatibility surface that should stop absorbing new chain-specific behavior.
+- Validation:
+  - Reviewed the live `packages/web3` surface, README, and repo-wide references before updating the roadmap and engineering docs.
+- Follow-up:
+  - Continue with the next dedicated chain-package slices in parallel with the `@cubid/web3` closeout steps, but do not add new chain-specific helpers to `@cubid/web3`.
+
+## session: s59-cosmos-package-slice
+
+- Timestamp: 2026-05-14T20:05:00Z
+- Summary: Continued `S03` by extracting `@cubid/cosmos` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/cosmos` with a Cosmos-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Cosmos identity for default stamp serialization while preserving optional `publicKey`, `chainId`, and `bech32Prefix` metadata.
+  - Wired `@cubid/cosmos` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Polkadot, Aptos, Tezos, and Stellar.
+
+## session: s58-starknet-package-slice
+
+- Timestamp: 2026-05-14T19:35:00Z
+- Summary: Continued `S03` by extracting `@cubid/starknet` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/starknet` with a Starknet-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Starknet identity for default stamp serialization while preserving optional `publicKey`, `chainId`, and `classHash` metadata.
+  - Wired `@cubid/starknet` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Cosmos, Polkadot, Aptos, Tezos, and Stellar.
+
+## session: s57-bitcoin-package-slice
+
+- Timestamp: 2026-05-14T19:05:00Z
+- Summary: Continued `S03` by extracting `@cubid/bitcoin` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/bitcoin` with a Bitcoin-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept wallet `address` as the primary Bitcoin identity for default stamp serialization while preserving optional `publicKey`, `networkId`, and `scriptType` metadata.
+  - Wired `@cubid/bitcoin` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm exec vitest run packages/bitcoin/src/client.test.ts`
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the remaining bounded chain-package slices such as Starknet, Cosmos, Polkadot, Aptos, Tezos, and Stellar.
+
+## session: s56-cardano-package-slice
+
+- Timestamp: 2026-05-14T18:15:00Z
+- Summary: Continued `S03` by extracting `@cubid/cardano` as the next bounded chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/cardano` with a Cardano-specific client, types, capability helpers, package metadata, and focused tests.
+  - Kept `address` as the primary Cardano identity for default stamp serialization while preserving optional `stakeAddress`, `networkId`, and `chainType` metadata.
+  - Wired `@cubid/cardano` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+- Validation:
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with the eventual `@cubid/web3` compatibility closeout or any remaining release work for the newly extracted chain packages.
+
+## session: s55-sui-package-slice
+
+- Timestamp: 2026-05-14T17:15:00Z
+- Summary: Continued `S03` by extracting `@cubid/sui` as the next concrete chain-specific package on top of `@cubid/core`.
+- Actions:
+  - Added `packages/sui` with a Sui-specific client, types, capability helpers, package metadata, and focused tests.
+  - Normalized Sui wallet addresses to canonical lowercase `0x...` strings on the package surface before verification and default stamp serialization.
+  - Wired `@cubid/sui` into the root TypeScript aliases, Vitest coverage and test projects, publish workflow choices, machine-readable API reference generation, and the package-family docs and roadmap artifacts.
+  - Refreshed the publishing runbook's current verified registry state so the operator notes match the packages that are already live on npm today.
+- Validation:
+  - `pnpm validate:yeet`
+- Follow-up:
+  - Continue `S03` with later chain-specific slices or the eventual `@cubid/web3` compatibility closeout once the next bounded package step is chosen.
+
+## session: s54-s03-persistence-guard-followup
+
+- Timestamp: 2026-05-14T16:20:00Z
+- Summary: Tightened the NEAR and Solana verification helpers so stamp persistence fails before any wallet verification prompt when the required persistence context is missing.
+- Actions:
+  - Updated `@cubid/near` to validate `userId` and `pageId` before calling `adapter.verify(...)` when `persistStamp` is enabled.
+  - Mirrored the same guard ordering in `@cubid/solana` so the chain-specific helpers stay behaviorally aligned with the EVM package.
+  - Added focused test coverage that asserts both packages now throw before verification is invoked, and cleaned up duplicate package bullets plus a small `@cubid/web3` README wording issue while touching the chain-split docs.
+- Validation:
+  - `pnpm exec vitest run packages/near/src/client.test.ts packages/solana/src/client.test.ts`
+  - `git diff --check`
+- Follow-up:
+  - Continue `S03` with the next real chain package slice rather than broad `@cubid/web3` refactoring.
+
 ## session: s49-clearpass-auth-handoff
 
 - Timestamp: 2026-05-14T00:55:02Z

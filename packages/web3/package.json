@@ -1,7 +1,7 @@
 {
   "name": "@cubid/web3",
   "version": "0.1.1",
-  "description": "Wallet-oriented Cubid helpers built on top of @cubid/core.",
+  "description": "Legacy shared-wallet Cubid compatibility helpers built on top of @cubid/core.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -29,7 +29,8 @@
     "web3",
     "wallet",
     "sdk",
-    "compatibility"
+    "compatibility",
+    "legacy"
   ],
   "sideEffects": false,
   "dependencies": {

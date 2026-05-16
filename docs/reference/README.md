@@ -8,11 +8,21 @@ public Cubid SDK packages.
 - `@cubid/core`
 - `@cubid/auth`
 - `@cubid/auth-react`
+- `@cubid/aptos`
 - `@cubid/browser`
+- `@cubid/bitcoin`
+- `@cubid/cardano`
+- `@cubid/comms`
+- `@cubid/cosmos`
 - `@cubid/react`
 - `@cubid/evm`
 - `@cubid/near`
+- `@cubid/polkadot`
 - `@cubid/solana`
+- `@cubid/starknet`
+- `@cubid/stellar`
+- `@cubid/sui`
+- `@cubid/tezos`
 - `@cubid/wagmi`
 - `@cubid/web3`
 

@@ -8,16 +8,25 @@ SDK layout without breaking working integrations unnecessarily.
 The first rename and split slices now exist in the workspace:
 
 - `@cubid/browser` has been created from the former `@cubid/web2` surface
+- `@cubid/aptos` now exists as another chain-specific package on top of `@cubid/core`
+- `@cubid/bitcoin` now exists as another chain-specific package on top of `@cubid/core`
+- `@cubid/cardano` now exists as another chain-specific package on top of `@cubid/core`
+- `@cubid/cosmos` now exists as another chain-specific package on top of `@cubid/core`
 - `@cubid/react` has been created from the former `@cubid/web2-react` surface
 - `@cubid/web2` and `@cubid/web2-react` now act as compatibility re-export packages
 - `@cubid/evm` has been created as the first chain-specific package
 - `@cubid/near` now exists as the second chain-specific package on top of `@cubid/core`
+- `@cubid/polkadot` now exists as another chain-specific package on top of `@cubid/core`
 - `@cubid/solana` now exists as the third chain-specific package on top of `@cubid/core`
+- `@cubid/starknet` now exists as another chain-specific package on top of `@cubid/core`
+- `@cubid/stellar` now exists as another chain-specific package on top of `@cubid/core`
+- `@cubid/sui` now exists as the fourth chain-specific package on top of `@cubid/core`
+- `@cubid/tezos` now exists as another chain-specific package on top of `@cubid/core`
 - `@cubid/wagmi` now exists as the wagmi-specific React integration layer on top of `@cubid/evm`
-- `@cubid/web3` still remains in place while later chain splits continue
+- `@cubid/web3` now remains only as a frozen shared-wallet compatibility package
 
-The browser/React rename wave is now complete. The remaining work is frozen
-compatibility-package retirement, additional chain-package extraction, and
+The browser/React rename wave is now complete. The remaining work is
+compatibility-package retirement, long-lived compatibility maintenance, and
 later package-family expansion such as auth.
 
 ## Target Package Map
@@ -32,13 +41,21 @@ Current:
 Target:
 
 - `@cubid/core`
+- `@cubid/aptos`
 - `@cubid/browser`
+- `@cubid/bitcoin`
+- `@cubid/cardano`
+- `@cubid/cosmos`
 - `@cubid/react`
 - `@cubid/evm`
 - `@cubid/near`
+- `@cubid/polkadot`
 - `@cubid/wagmi`
 - `@cubid/solana`
-- later: `@cubid/cardano`, `@cubid/sui`
+- `@cubid/starknet`
+- `@cubid/stellar`
+- `@cubid/sui`
+- `@cubid/tezos`
 - later: `@cubid/auth`, `@cubid/auth-react`
 
 ## Principles
@@ -181,14 +198,32 @@ It should depend on:
 
 ### Phase 4: add other chain packages only when real demand exists
 
-Create `@cubid/cardano` and `@cubid/sui`
-only when the package can be backed by real adapter behavior and tests.
-
+Follow the same bounded pattern for later chain packages: real adapter
+behavior, focused tests, publish wiring, and documentation in the same change.
 Avoid publishing empty placeholders.
+
+### Phase 5: close out `@cubid/web3` as a compatibility surface
+
+Now that multiple dedicated chain packages exist, stop treating `@cubid/web3`
+as an open-ended future surface.
+
+Use this staged closeout path:
+
+1. Freeze `@cubid/web3` to the already-supported legacy shared wallet surface.
+2. Do not add newly extracted chain-specific helpers or stamp types to
+   `@cubid/web3`.
+3. Keep new docs and examples pointed at dedicated chain packages first.
+4. Add explicit migration guidance for downstream `@cubid/web3` consumers.
+5. Narrow release planning so `@cubid/web3` is treated as a compatibility
+   package rather than an active growth surface.
+6. Keep the end state as a long-lived frozen wrapper with manual-only
+   maintenance unless a later deliberate deprecation decision is made.
 
 ### Compatibility rules
 
 - Keep `@cubid/web3` as a compatibility package during the first split wave.
+- Keep new chain-package extraction work out of `@cubid/web3` once a dedicated
+  package exists for that chain family.
 - Do not let `@cubid/wagmi` or any React-specific wallet helper leak into
   `@cubid/react`.
 - Keep chain packages isolated from browser OTP and non-wallet verification
@@ -203,9 +238,20 @@ Avoid publishing empty placeholders.
 5. Publish `@cubid/evm`.
 6. Publish `@cubid/near`.
 7. Publish `@cubid/solana`.
-8. Publish `@cubid/wagmi`.
-9. Decide whether `@cubid/web3` remains as a temporary compatibility wrapper or
-   is deprecated immediately after the first chain-specific release wave.
+8. Publish `@cubid/polkadot`.
+9. Publish `@cubid/aptos`.
+10. Publish `@cubid/bitcoin`.
+11. Publish `@cubid/cardano`.
+12. Publish `@cubid/cosmos`.
+13. Publish `@cubid/starknet`.
+14. Publish `@cubid/stellar`.
+15. Publish `@cubid/sui`.
+16. Publish `@cubid/tezos`.
+17. Publish `@cubid/wagmi`.
+18. Freeze `@cubid/web3` to the legacy shared wallet surface.
+19. Publish explicit `@cubid/web3` migration and deprecation guidance.
+20. Keep `@cubid/web3` as a long-lived frozen compatibility wrapper with
+    manual-only maintenance.
 
 ## Exit Criteria
 
@@ -214,5 +260,7 @@ The migration can be considered complete when:
 - public docs no longer describe `web2`, `web2-react`, or `web3` as the target
   long-term package names
 - `@cubid/browser` and `@cubid/react` are published and documented
-- the first chain-specific packages, including `@cubid/evm`, `@cubid/near`, `@cubid/solana`, and `@cubid/wagmi`, are published with tests
+- the first chain-specific packages, including `@cubid/aptos`, `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, `@cubid/stellar`, `@cubid/sui`, `@cubid/tezos`, and `@cubid/wagmi`, are published with tests
 - compatibility packages are clearly frozen and no longer treated as active release targets
+- `@cubid/web3` is frozen with downstream migration guidance and a clear
+  manual-only compatibility maintenance policy
