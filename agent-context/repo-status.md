@@ -2,7 +2,7 @@
 | --- | --- |
 | README quality | `Pass` Root README reflects the current package map, command set, and branch/release workflow. |
 | License | `Pass` Apache-2.0 is present at the repo root and in published package manifests. |
-| Session log hygiene | `Pass` `agent-context/session-log.md` is current through `s54-siwc-wallet-helper-release-surface`. |
+| Session log hygiene | `Pass` `agent-context/session-log.md` is current through the latest `S03` package-slice work. |
 | AGENTS guidance | `Pass` `AGENTS.md` covers repo boundaries, cross-repo coordination, migration direction, branch flow, and Supabase applicability. |
 | Repo status snapshot | `Pass` This file now provides the lightweight repo-health snapshot for cleanup work. |
 | Deferred ideas file | `Pass` `agent-context/future-ideas.md` exists and is explicitly not active roadmap work. |
@@ -16,4 +16,5 @@
 | Supabase direct-access rule | `Not applicable` This repo ships SDK packages and examples; it does not own deployed Supabase runtime code. |
 | Environment and script conventions | `Pass` Root scripts cover install/build/test/lint/typecheck/core Deno checks, and `.gitignore` excludes local env files and build outputs. |
 | Developer-ingestion publishing | `Pass` Registry policy, machine-readable API reference artifacts, package metadata, and public entrypoint docs now align with the primary published SDK package surfaces. |
-| Active roadmap closeout | `Partial` Remaining non-closed roadmap item is still `S03` in `agent-context/todo.md`; `@cubid/near` and `@cubid/solana` are now extracted, and the wallet-helper release surface is now in place, leaving the later chain-specific slices and eventual `@cubid/web3` closeout. |
+| Active roadmap closeout | `Pass` The current `S03` roadmap is fully represented in dedicated chain packages, and `@cubid/web3` is now documented as a frozen compatibility package with manual-only maintenance. |
+| Next deferred expansion area | `Pass` Flexible messaging is now split cleanly: signed-in profile helpers live in `@cubid/comms`, server-safe send/status helpers now live in `@cubid/core`, and Passport-user notification history remains out of ordinary dapp SDK usage. |

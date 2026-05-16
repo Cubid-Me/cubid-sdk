@@ -6,7 +6,7 @@ Solana-oriented Cubid wallet helpers built on top of `@cubid/core`.
 
 Use `@cubid/solana` when you need Cubid's Solana-specific custody, connection,
 and verification helpers. Choose `@cubid/web3` only when you still depend on
-the older interim shared wallet surface while the chain split continues.
+the older shared wallet surface.
 
 ## Install
 

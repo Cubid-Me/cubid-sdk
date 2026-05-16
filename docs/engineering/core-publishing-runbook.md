@@ -15,13 +15,23 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/core` | npm + JSR | The only package with an explicit Deno and Supabase Edge contract. |
 | `@cubid/auth` | npm-only | Browser-safe OIDC and PKCE helper layer for public clients. |
 | `@cubid/auth-react` | npm-only | React auth/session bindings on top of `@cubid/auth`. |
+| `@cubid/aptos` | npm-only | Chain-specific Aptos package built for the npm ecosystem. |
 | `@cubid/browser` | npm-only | Browser-oriented helper layer; not marketed as a Deno or JSR surface. |
+| `@cubid/bitcoin` | npm-only | Chain-specific Bitcoin package built for the npm ecosystem. |
+| `@cubid/cardano` | npm-only | Chain-specific Cardano package built for the npm ecosystem. |
+| `@cubid/comms` | npm-only | Signed-in Passport messaging profile helpers. |
+| `@cubid/cosmos` | npm-only | Chain-specific Cosmos package built for the npm ecosystem. |
 | `@cubid/react` | npm-only | React package with peer dependency assumptions. |
 | `@cubid/evm` | npm-only | Chain-specific package built for the npm ecosystem. |
 | `@cubid/near` | npm-only | Chain-specific NEAR package built for the npm ecosystem. |
+| `@cubid/polkadot` | npm-only | Chain-specific Polkadot package built for the npm ecosystem. |
 | `@cubid/solana` | npm-only | Chain-specific Solana package built for the npm ecosystem. |
+| `@cubid/starknet` | npm-only | Chain-specific Starknet package built for the npm ecosystem. |
+| `@cubid/stellar` | npm-only | Chain-specific Stellar package built for the npm ecosystem. |
+| `@cubid/sui` | npm-only | Chain-specific Sui package built for the npm ecosystem. |
+| `@cubid/tezos` | npm-only | Chain-specific Tezos package built for the npm ecosystem. |
 | `@cubid/wagmi` | npm-only | wagmi-specific React integration package. |
-| `@cubid/web3` | npm-only | Transitional umbrella package while the chain split continues. |
+| `@cubid/web3` | npm-only | Frozen compatibility package with manual-only maintenance. |
 | `@cubid/web2` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
 | `@cubid/web2-react` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
 | `@cubid/acceptance` | Private | Local-only workspace for acceptance tests. Never publish. |
@@ -52,18 +62,28 @@ If `npm view` returns a 404, the package has not been published yet. If
 
 ## Current Verified Registry State
 
-Current verified state as of 2026-05-09:
+Current verified state as of 2026-05-14:
 
 - npm:
-  - `@cubid/core@0.1.2`
-  - `@cubid/auth` is not published yet
-  - `@cubid/auth-react` is not published yet
-  - `@cubid/browser@0.1.1`
-  - `@cubid/react@0.1.1`
-  - `@cubid/evm@0.1.1`
-  - `@cubid/near` is not published yet
-  - `@cubid/solana` is not published yet
-  - `@cubid/wagmi@0.1.1`
+  - `@cubid/core@0.1.3`
+  - `@cubid/auth@0.1.0`
+  - `@cubid/auth-react@0.1.0`
+  - `@cubid/aptos` is not published yet
+  - `@cubid/browser@0.1.3`
+  - `@cubid/bitcoin` is not published yet
+  - `@cubid/cardano` is not published yet
+  - `@cubid/cosmos` is not published yet
+  - `@cubid/react@0.1.2`
+  - `@cubid/evm@0.1.2`
+  - `@cubid/near@0.1.0`
+  - `@cubid/polkadot` is not published yet
+  - `@cubid/solana@0.1.0`
+  - `@cubid/starknet` is not published yet
+  - `@cubid/stellar` is not published yet
+  - `@cubid/sui` is not published yet
+  - `@cubid/tezos` is not published yet
+  - `@cubid/wagmi@0.1.2`
+  - `@cubid/web3@0.1.1`
 - npm trusted publishing: configured for `Cubid-Me/cubid-sdk`
 - JSR:
   - `@cubid/core` is live at `https://jsr.io/@cubid/core`
@@ -138,8 +158,8 @@ branch other than `main`.
 
 ## Compatibility Package Retirement
 
-`@cubid/web2` and `@cubid/web2-react` are frozen deprecated compatibility
-wrappers, not active package surfaces. Keep them installable for older imports,
+`@cubid/web2`, `@cubid/web2-react`, and `@cubid/web3` are compatibility
+packages, not active growth surfaces. Keep them installable for older imports,
 but do not treat them as normal publish targets in `.github/workflows/publish.yml`.
 
 If the old names still need an operator-side retirement signal on npm, deprecate
@@ -153,6 +173,10 @@ npm deprecate @cubid/web2-react "Deprecated: use @cubid/react instead. @cubid/we
 Treat those commands as manual operator actions rather than a normal workflow
 path. If an emergency metadata correction is ever needed later, handle it as a
 manual exception, not as a supported steady-state release target.
+
+`@cubid/web3` follows the same manual-exception rule. If the frozen
+compatibility package ever needs another release, treat it as a deliberate
+operator action outside the normal publish workflow.
 
 ## Verification Commands
 

@@ -16,6 +16,8 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - React-specific logic belongs in a React package, not in core.
 - Chain-specific logic should move toward dedicated chain packages rather than accumulate in shared packages.
 - "Sign in with Cubid" OAuth/OIDC helpers should live in dedicated auth packages rather than being forced into `@cubid/core` or the generic React package.
+- Signed-in messaging channel and preference management should land in a future dedicated communications package family rather than being forced into `@cubid/core` or the browser layer.
+- Future server-authenticated notification send or status helpers should stay in `@cubid/core` only when Passport promotes stable dapp-facing backend contracts for them.
 - Any SDK change that could affect underlying data models, API contracts,
   response shapes, auth flows, or other interface structure must first be
   evaluated for impact on `cubid-passport` before implementation.
@@ -23,11 +25,24 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 ## Cross-Repo Coordination
 
 - When an SDK change has corresponding implementation or follow-up impact in
-  `cubid-passport`, create a note for the Passport-side agents in that repo
-  under `agent-context/messages-from-cubid-sdk/`.
+  `cubid-passport`, create or update a sibling thread in both repos under
+  `agent-context/cross-repo-comms/`.
 - Treat any new dirty files in this repo under
-  `agent-context/messages-from-cubid-passport/` as incoming messages from
-  Passport-side agents and review or address them as part of the current task.
+  `agent-context/cross-repo-comms/` as incoming sibling notes from Passport-side
+  or downstream agents and review or address them as part of the current task.
+- Keep legacy `messages-from-*` folders as archives. Do not create new live
+  cross-repo notes there unless the user explicitly asks for the old path.
+- Every live cross-repo note must have a sibling file in each corresponding repo
+  with the same `thread_id`; when one sibling gets substantive prose, update the
+  other sibling in the same working session so git status notifies both agents.
+- When you update a sibling cross-repo note in another local repo, intentionally
+  leave that other repo dirty unless the user explicitly asks you to switch over
+  and commit it there too; the dirty state is the notification mechanism for the
+  other repo's active agent.
+- When cross-repo sibling notes or other inbound coordination files appear dirty
+  in this repo, treat them as actionable inbox items: review them, address them
+  if appropriate, and commit the resulting update in this repo rather than
+  leaving the local inbox state unresolved.
 
 ## Current Migration Direction
 
@@ -36,9 +51,12 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - `packages/auth-react` now carries the React session, callback, and sign-in ergonomics on top of `@cubid/auth`.
 - `packages/browser` now carries the first-class headless browser layer, while `@cubid/web2` remains only as a frozen deprecated compatibility package.
 - `packages/react` now carries the React layer, while `@cubid/web2-react` remains only as a frozen deprecated compatibility package.
+- `packages/comms` now carries the signed-in Passport-user messaging profile layer for channels, verification, preferences, and permission metadata.
 - `packages/evm` now carries the first chain-specific split from `@cubid/web3`, and `packages/wagmi` now carries wagmi-specific React helpers on top of `@cubid/evm`.
-- `@cubid/web3` remains an interim package and should continue splitting over time into chain-specific packages.
+- `packages/aptos`, `packages/bitcoin`, `packages/cosmos`, `packages/near`, `packages/polkadot`, `packages/solana`, `packages/starknet`, `packages/stellar`, `packages/sui`, and `packages/tezos` now carry additional chain-specific wallet layers on top of `@cubid/core`.
+- `@cubid/web3` now remains only as a frozen compatibility package with manual-only maintenance, and new chain-specific work should prefer dedicated packages instead of expanding the shared surface.
 - Prefer the dedicated `@cubid/auth` and `@cubid/auth-react` package family for hosted OIDC login rather than collapsing auth concerns into existing packages.
+- Keep Passport-user notification history routes such as `POST /api/notifications/history/list` out of ordinary dapp SDK usage; they belong with signed-in profile management rather than `@cubid/core`.
 
 ## Repo Hygiene Note
 

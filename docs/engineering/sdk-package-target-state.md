@@ -29,17 +29,22 @@ Target packages:
 - `@cubid/core`: required runtime-agnostic foundation
 - `@cubid/auth`: runtime-agnostic OIDC and PKCE helpers
 - `@cubid/auth-react`: React auth/session bindings
+- `@cubid/aptos`: Aptos wallet and signing logic
 - `@cubid/browser`: headless browser integration helpers
 - `@cubid/react`: React hooks and components built on `@cubid/browser`
 - `@cubid/evm`: EVM wallet and signing logic, using `viem` only when needed
+- `@cubid/bitcoin`: Bitcoin wallet and signing logic
+- `@cubid/cosmos`: Cosmos wallet and signing logic
 - `@cubid/near`: NEAR wallet and signing logic
+- `@cubid/polkadot`: Polkadot wallet and signing logic
 - `@cubid/solana`: Solana wallet and signing logic
+- `@cubid/starknet`: Starknet wallet and signing logic
+- `@cubid/stellar`: Stellar wallet and signing logic
+- `@cubid/tezos`: Tezos wallet and signing logic
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
-- `@cubid/solana`: Solana wallet and signing logic
 - `@cubid/cardano`: Cardano wallet and signing logic
 - `@cubid/sui`: Sui wallet and signing logic
-- `@cubid/near`: NEAR wallet and signing logic
-- `@cubid/comms`: optional later communications helpers
+- `@cubid/comms`: optional later signed-in messaging and communications helpers
 - `@cubid/secrets`: optional later encryption and custody helpers
 
 ## Package Responsibilities
@@ -82,6 +87,11 @@ lifecycle wrappers because those routes are runtime-agnostic HTTP contracts.
 Keep Passport-hosted list, approve, and reject routes out of the public SDK
 surface unless a later account-management or auth boundary is explicitly
 introduced.
+
+The same general split should apply to flexible messaging. Future dapp-facing
+`/api/v3/notifications/send` and `/api/v3/notifications/status` helpers belong
+in `@cubid/core` once those backend contracts are explicitly promoted, because
+they are server-authenticated runtime-agnostic APIs.
 
 The same boundary now applies to SIWC wallet capability discovery and
 passkey-approved account-request lifecycle helpers. Runtime-agnostic wrappers
@@ -130,6 +140,22 @@ Page grant listing or revocation, should not be treated as dapp server APIs in
 `@cubid/core`. If the public SDK exposes them later, they should sit behind a
 dedicated account-management or auth boundary.
 
+The same boundary applies to the new flexible-messaging Passport user routes.
+Signed-in channel and preference management belongs in a future `@cubid/comms`
+package family rather than `@cubid/core`, because these are user-authenticated
+account-management surfaces rather than dapp server APIs. The current send and
+status backend routes are roadmap input only for now; when they are promoted in
+the SDK, they should stay server-safe and land in `@cubid/core`, while
+Passport-user history and channel-management routes remain outside the normal
+dapp API surface. In particular, `POST /api/notifications/history/list`
+belongs with signed-in profile management rather than the dapp-authenticated
+core surface.
+
+Allow Page category-grant routes should also remain Passport-hosted for now.
+If the SDK later surfaces that state, expose only category permission metadata.
+Do not expose raw destinations, channel selection, provider secrets, or
+delivery capability through those grant helpers.
+
 `@cubid/core` now exposes runtime-agnostic webhook verification helpers. They
 should keep verifying Cubid's exact raw-body signature contract and preserve
 both canonical `eventType` and transition-friendly `legacyEventType` fields in
@@ -168,6 +194,11 @@ Chain packages own chain-specific wallet, key, and signing behavior. Each chain
 package should avoid cross-chain assumptions. `@cubid/evm` may depend on
 `viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
 
+`@cubid/web3` should now be treated as a frozen legacy compatibility surface,
+not as a growth package. It may preserve the old shared wallet adapter
+boundary for existing consumers, but new chain-specific helpers, new stamp
+shapes, and new chain families should land only in their dedicated packages.
+
 Future smart-account, session-key, paymaster, and gas-sponsorship APIs should
 also be capability-driven rather than universal. Keep app-scoped generated
 custody accounts as the default public model unless Passport later exposes
@@ -183,6 +214,60 @@ metadata such as `address`, `networkId`, and explicit capability descriptors.
 identity for default Solana stamp serialization while preserving optional
 wallet metadata such as `address`, `cluster`, and explicit capability
 descriptors.
+
+`@cubid/sui` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating canonical lowercase wallet `address`
+values as the primary public identity for default Sui stamp serialization while
+preserving optional wallet metadata such as `publicKey`, `networkId`, and
+explicit capability descriptors.
+
+`@cubid/cardano` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Cardano stamp serialization while preserving optional
+wallet metadata such as `stakeAddress`, `networkId`, and explicit capability
+descriptors.
+
+`@cubid/bitcoin` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Bitcoin stamp serialization while preserving optional
+wallet metadata such as `publicKey`, `networkId`, `scriptType`, and explicit
+capability descriptors.
+
+`@cubid/cosmos` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Cosmos stamp serialization while preserving optional
+wallet metadata such as `publicKey`, `chainId`, `bech32Prefix`, and explicit
+capability descriptors.
+
+`@cubid/starknet` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Starknet stamp serialization while preserving optional
+wallet metadata such as `publicKey`, `chainId`, `classHash`, and explicit
+capability descriptors.
+
+`@cubid/aptos` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Aptos stamp serialization while preserving optional
+wallet metadata such as `authenticationKey`, `chainId`, `networkId`, and
+explicit capability descriptors.
+
+`@cubid/polkadot` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Polkadot stamp serialization while preserving optional
+wallet metadata such as `genesisHash`, `publicKey`, `ss58Format`, and explicit
+capability descriptors.
+
+`@cubid/tezos` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Tezos stamp serialization while preserving optional
+wallet metadata such as `curve`, `networkId`, `publicKey`, and explicit
+capability descriptors.
+
+`@cubid/stellar` now exists as another chain-specific package on top of
+`@cubid/core`. It should keep treating wallet `address` as the primary public
+identity for default Stellar stamp serialization while preserving optional
+wallet metadata such as `federationAddress`, `networkPassphrase`, `publicKey`,
+and explicit capability descriptors.
 
 Future SIWC transaction work should keep chain behavior explicit and
 capability-driven: the EVM Admin-policy transaction pilot may surface typed
@@ -233,9 +318,11 @@ npm-first foundation, then layers in package-ready integration surfaces:
 - `@cubid/web2` and `@cubid/web2-react` now remain only as frozen deprecated
   compatibility wrappers around those renamed packages.
 - `@cubid/evm` now exists as the first real chain-specific package.
-- `@cubid/web3` remains the interim shared wallet package while the split
-  continues into `@cubid/evm`, `@cubid/wagmi`, and later chain-specific
-  packages.
+- `@cubid/aptos`, `@cubid/bitcoin`, `@cubid/cardano`, `@cubid/cosmos`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, `@cubid/stellar`, `@cubid/sui`, and `@cubid/tezos` now exist
+  as additional chain-specific packages layered on top of `@cubid/core`.
+- `@cubid/web3` now remains only as a frozen shared-wallet compatibility
+  package with manual-only maintenance, and it should not absorb any new
+  chain-specific behavior.
 
 Live npm and JSR publication are complete for `@cubid/core`. See
 `docs/engineering/package-migration-plan.md` for the rename and split plan.

@@ -415,6 +415,137 @@ export type CubidIdempotentRequestOptions = {
   idempotencyKey?: string
 }
 
+export const CUBID_NOTIFICATION_CATEGORIES = [
+  "SECURITY",
+  "TRANSACTIONAL",
+  "WORKFLOW",
+] as const
+
+export const CUBID_NOTIFICATION_PRIORITIES = [
+  "LOW",
+  "NORMAL",
+  "HIGH",
+  "CRITICAL",
+] as const
+
+export const CUBID_NOTIFICATION_SEND_ERROR_CODES = [
+  "unauthorized",
+  "invalid_request",
+  "idempotency_conflict",
+  "request_in_progress",
+  "not_found",
+  "notification_policy_disabled",
+  "notification_category_denied",
+  "notification_priority_denied",
+  "notification_grant_required",
+  "notification_muted",
+  "no_eligible_notification_channel",
+  "rate_limit_exceeded",
+  "notification_provider_disabled",
+  "notification_quota_exceeded",
+] as const
+
+export type CubidNotificationCategory =
+  (typeof CUBID_NOTIFICATION_CATEGORIES)[number]
+
+export type CubidNotificationPriority =
+  (typeof CUBID_NOTIFICATION_PRIORITIES)[number]
+
+export type CubidNotificationSendStatus = "accepted" | string
+
+export type CubidNotificationSendErrorCode =
+  (typeof CUBID_NOTIFICATION_SEND_ERROR_CODES)[number] | string
+
+export type CubidNotificationSendErrorInput = CubidApiErrorInput & {
+  notificationCode: CubidNotificationSendErrorCode | null
+  retryable: boolean | null
+  sendAccepted: false
+}
+
+export class CubidNotificationSendError extends CubidApiError {
+  readonly notificationCode: CubidNotificationSendErrorCode | null
+  readonly retryable: boolean | null
+  readonly sendAccepted: false
+
+  constructor(input: CubidNotificationSendErrorInput) {
+    super(input)
+    this.name = "CubidNotificationSendError"
+    this.notificationCode = input.notificationCode
+    this.retryable = input.retryable
+    this.sendAccepted = false
+  }
+}
+
+export const isCubidNotificationSendError = (
+  error: unknown
+): error is CubidNotificationSendError =>
+  error instanceof CubidNotificationSendError
+
+export type CubidSendNotificationInput = CubidIdempotentRequestOptions & {
+  body: string
+  category: CubidNotificationCategory
+  deepLink?: string
+  metadata?: Record<string, unknown>
+  priority: CubidNotificationPriority
+  title: string
+  userId: string
+}
+
+export type CubidSendNotificationResponse = {
+  category: CubidNotificationCategory | string | null
+  createdAt: string | null
+  eventId: string | null
+  idempotencyKey: string
+  priority: CubidNotificationPriority | string | null
+  raw: Record<string, unknown>
+  selectedChannelType: string | null
+  status: CubidNotificationSendStatus | null
+}
+
+export type CubidNotificationEventStatus = "accepted" | "sent" | "failed" | string
+
+export type CubidNotificationDeliveryStatus =
+  | "queued"
+  | "sent"
+  | "failed"
+  | string
+
+export type CubidNotificationDeliveryAttempt = {
+  attemptId: string | null
+  channelType: string | null
+  createdAt: string | null
+  failureCode: string | null
+  failureMessage: string | null
+  providerKey: string | null
+  raw: Record<string, unknown>
+  status: CubidNotificationDeliveryStatus | null
+  updatedAt: string | null
+}
+
+export type CubidNotificationStatusSummary = {
+  category: CubidNotificationCategory | string | null
+  createdAt: string | null
+  deliveryAttempts: CubidNotificationDeliveryAttempt[]
+  eventId: string | null
+  latestDeliveryAttemptAt: string | null
+  latestDeliveryStatus: CubidNotificationDeliveryStatus | null
+  priority: CubidNotificationPriority | string | null
+  raw: Record<string, unknown>
+  selectedChannelType: string | null
+  status: CubidNotificationEventStatus | null
+  updatedAt: string | null
+}
+
+export type CubidGetNotificationStatusInput = {
+  eventId: string
+  userId: string
+}
+
+export type CubidGetNotificationStatusResponse = {
+  notification: CubidNotificationStatusSummary
+  raw: Record<string, unknown>
+}
+
 export type CubidSaveSecretInput = CubidIdempotentRequestOptions & {
   secret: string
   userId: string
@@ -569,6 +700,9 @@ export type CubidGetAccountRequestResponse = {
   accountRequest: CubidAccountRequestSummary
   raw: Record<string, unknown>
 }
+
+export const createNotificationIdempotencyKey = (): string =>
+  resolveIdempotencyKey(undefined, "v3/notifications/send")
 
 export type CubidSigningRequestType =
   | "message"
@@ -820,8 +954,21 @@ export type VerifyPhoneOtpResponse = CubidVerifyPhoneOtpResponse
 export type IdentitySnapshotInput = CubidIdentitySnapshotInput
 export type IdentitySnapshot = CubidIdentitySnapshot
 export type IdempotentRequestOptions = CubidIdempotentRequestOptions
+export type NotificationCategory = CubidNotificationCategory
+export type NotificationPriority = CubidNotificationPriority
+export type NotificationEventStatus = CubidNotificationEventStatus
+export type NotificationDeliveryStatus = CubidNotificationDeliveryStatus
+export type NotificationDeliveryAttempt = CubidNotificationDeliveryAttempt
+export type NotificationStatusSummary = CubidNotificationStatusSummary
+export type NotificationSendStatus = CubidNotificationSendStatus
+export type NotificationSendErrorCode = CubidNotificationSendErrorCode
+export type NotificationSendErrorInput = CubidNotificationSendErrorInput
+export type GetNotificationStatusInput = CubidGetNotificationStatusInput
+export type GetNotificationStatusResponse = CubidGetNotificationStatusResponse
 export type SaveSecretInput = CubidSaveSecretInput
 export type SaveSecretResponse = CubidSaveSecretResponse
+export type SendNotificationInput = CubidSendNotificationInput
+export type SendNotificationResponse = CubidSendNotificationResponse
 export type CustodyChain = CubidCustodyChain
 export type CustodyAccount = CubidCustodyAccount
 export type GenerateAccountInput = CubidGenerateAccountInput
@@ -872,6 +1019,12 @@ export type CubidApiClient = {
   createAccountRequest(
     input: CubidCreateAccountRequestInput
   ): Promise<CubidCreateAccountRequestResponse>
+  getNotificationStatus(
+    input: CubidGetNotificationStatusInput
+  ): Promise<CubidGetNotificationStatusResponse>
+  sendNotification(
+    input: CubidSendNotificationInput
+  ): Promise<CubidSendNotificationResponse>
   ensureUserByEmail(
     input: CubidEnsureUserByEmailInput
   ): Promise<CubidEnsureUserByEmailResponse>
@@ -1185,6 +1338,11 @@ const asSiwcUserAction = (value: unknown): CubidSiwcUserAction | null =>
 const asSiwcCode = (value: unknown): CubidSiwcErrorCode | null =>
   typeof value === "string" && value.trim().length > 0 ? value : null
 
+const asNotificationSendErrorCode = (
+  value: unknown
+): CubidNotificationSendErrorCode | null =>
+  typeof value === "string" && value.trim().length > 0 ? value : null
+
 const extractSiwcErrorMetadata = (
   payload: unknown
 ):
@@ -1224,7 +1382,42 @@ const extractSiwcErrorMetadata = (
   }
 }
 
+const notificationSendRetryability = (
+  code: CubidNotificationSendErrorCode | null
+): boolean | null => {
+  switch (code) {
+    case "request_in_progress":
+    case "rate_limit_exceeded":
+      return true
+    case "unauthorized":
+    case "invalid_request":
+    case "idempotency_conflict":
+    case "not_found":
+    case "notification_policy_disabled":
+    case "notification_category_denied":
+    case "notification_priority_denied":
+    case "notification_grant_required":
+    case "notification_muted":
+    case "no_eligible_notification_channel":
+    case "notification_provider_disabled":
+    case "notification_quota_exceeded":
+      return false
+    default:
+      return null
+  }
+}
+
 const createApiError = (input: CubidApiErrorInput): CubidApiError => {
+  if (input.endpoint === "v3/notifications/send") {
+    const notificationCode = asNotificationSendErrorCode(input.code)
+    return new CubidNotificationSendError({
+      ...input,
+      notificationCode,
+      retryable: notificationSendRetryability(notificationCode),
+      sendAccepted: false,
+    })
+  }
+
   const siwc = extractSiwcErrorMetadata(input.details)
 
   if (siwc) {
@@ -2275,6 +2468,131 @@ const normalizeCancelSigningRequest = (
   }
 }
 
+const normalizeSendNotification = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidSendNotificationResponse => {
+  const record = assertRecord(payload, "v3/notifications/send", requestId, status)
+  const data = assertRecord(
+    record.data ?? record,
+    "v3/notifications/send.data",
+    requestId,
+    status
+  )
+
+  return {
+    category:
+      asString(data.category) ??
+      asString(record.category),
+    createdAt:
+      asString(data.createdAt) ??
+      asString(data.created_at) ??
+      asString(record.createdAt) ??
+      asString(record.created_at),
+    eventId:
+      asString(data.eventId) ??
+      asString(data.event_id) ??
+      asString(record.eventId) ??
+      asString(record.event_id),
+    idempotencyKey,
+    priority:
+      asString(data.priority) ??
+      asString(record.priority),
+    raw: record,
+    selectedChannelType:
+      asString(data.selectedChannelType) ??
+      asString(data.selected_channel_type) ??
+      asString(record.selectedChannelType) ??
+      asString(record.selected_channel_type),
+    status:
+      asString(data.status) ??
+      asString(record.status),
+  }
+}
+
+const normalizeNotificationDeliveryAttempt = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidNotificationDeliveryAttempt => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+
+  return {
+    attemptId: asString(record.attemptId) ?? asString(record.attempt_id),
+    channelType: asString(record.channelType) ?? asString(record.channel_type),
+    createdAt: asString(record.createdAt) ?? asString(record.created_at),
+    failureCode: asString(record.failureCode) ?? asString(record.failure_code),
+    failureMessage:
+      asString(record.failureMessage) ?? asString(record.failure_message),
+    providerKey: asString(record.providerKey) ?? asString(record.provider_key),
+    raw: record,
+    status: asString(record.status),
+    updatedAt: asString(record.updatedAt) ?? asString(record.updated_at),
+  }
+}
+
+const normalizeNotificationStatusSummary = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidNotificationStatusSummary => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+  const attempts = Array.isArray(record.deliveryAttempts)
+    ? record.deliveryAttempts
+    : Array.isArray(record.delivery_attempts)
+      ? record.delivery_attempts
+      : []
+
+  return {
+    category: asString(record.category),
+    createdAt: asString(record.createdAt) ?? asString(record.created_at),
+    deliveryAttempts: attempts.map((attempt) =>
+      normalizeNotificationDeliveryAttempt(
+        attempt,
+        `${endpoint}.deliveryAttempts`,
+        requestId,
+        status
+      )
+    ),
+    eventId: asString(record.eventId) ?? asString(record.event_id),
+    latestDeliveryAttemptAt:
+      asString(record.latestDeliveryAttemptAt) ??
+      asString(record.latest_delivery_attempt_at),
+    latestDeliveryStatus:
+      asString(record.latestDeliveryStatus) ??
+      asString(record.latest_delivery_status),
+    priority: asString(record.priority),
+    raw: record,
+    selectedChannelType:
+      asString(record.selectedChannelType) ??
+      asString(record.selected_channel_type),
+    status: asString(record.status),
+    updatedAt: asString(record.updatedAt) ?? asString(record.updated_at),
+  }
+}
+
+const normalizeGetNotificationStatus = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidGetNotificationStatusResponse => {
+  const record = assertRecord(payload, "v3/notifications/status", requestId, status)
+
+  return {
+    notification: normalizeNotificationStatusSummary(
+      record.data ?? record,
+      "v3/notifications/status.data",
+      requestId,
+      status
+    ),
+    raw: record,
+  }
+}
+
 const resolveCrypto = (): Crypto => {
   if (typeof globalThis.crypto === "object" && globalThis.crypto !== null) {
     return globalThis.crypto
@@ -2896,6 +3214,111 @@ export const createCubidApiClient = (
         "v3/accounts/requests/create",
         (payload, requestId, responseStatus) =>
           normalizeCreateAccountRequest(
+            payload,
+            requestId,
+            responseStatus,
+            idempotencyKey
+          ),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
+    getNotificationStatus(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/notifications/status"
+      )
+      const eventId = assertNonEmptyString(
+        input.eventId,
+        "eventId",
+        "v3/notifications/status"
+      )
+
+      return makeRequest<CubidGetNotificationStatusResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/notifications/status",
+        withCredentials({
+          dapp_user_uuid: userId,
+          event_id: eventId,
+        }),
+        "v3/notifications/status",
+        normalizeGetNotificationStatus,
+        headers
+      )
+    },
+
+    sendNotification(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/notifications/send"
+      )
+      const category = assertNonEmptyString(
+        input.category,
+        "category",
+        "v3/notifications/send"
+      )
+      const priority = assertNonEmptyString(
+        input.priority,
+        "priority",
+        "v3/notifications/send"
+      )
+      const title = assertNonEmptyString(
+        input.title,
+        "title",
+        "v3/notifications/send"
+      )
+      const body = assertNonEmptyString(
+        input.body,
+        "body",
+        "v3/notifications/send"
+      )
+      const deepLink =
+        input.deepLink === undefined
+          ? undefined
+          : assertNonEmptyString(
+              input.deepLink,
+              "deepLink",
+              "v3/notifications/send"
+            )
+      let metadata: Record<string, unknown> | undefined
+      if (input.metadata !== undefined) {
+        if (!isRecord(input.metadata)) {
+          throw new CubidApiError({
+            category: "validation",
+            code: "INVALID_INPUT",
+            endpoint: "v3/notifications/send",
+            message: "metadata must be an object when provided.",
+          })
+        }
+        metadata = input.metadata
+      }
+      const idempotencyKey = resolveIdempotencyKey(
+        input,
+        "v3/notifications/send"
+      )
+
+      return makeRequest<CubidSendNotificationResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/notifications/send",
+        withCredentials({
+          body,
+          category,
+          dapp_user_uuid: userId,
+          deep_link: deepLink,
+          metadata,
+          priority,
+          title,
+        }),
+        "v3/notifications/send",
+        (payload, requestId, responseStatus) =>
+          normalizeSendNotification(
             payload,
             requestId,
             responseStatus,

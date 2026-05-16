@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "@cubid/core",
-      "version": "0.1.3",
+      "version": "0.1.6",
       "description": "Runtime-agnostic Cubid core client for server-side integrations.",
       "registry": "npm + jsr",
       "referencePath": "core.json"
@@ -22,11 +22,46 @@
       "referencePath": "auth-react.json"
     },
     {
+      "name": "@cubid/aptos",
+      "version": "0.1.0",
+      "description": "Aptos-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "aptos.json"
+    },
+    {
       "name": "@cubid/browser",
       "version": "0.1.3",
       "description": "Headless browser helpers for Cubid OTP, hosted verification, approval, and allow flows.",
       "registry": "npm-only",
       "referencePath": "browser.json"
+    },
+    {
+      "name": "@cubid/bitcoin",
+      "version": "0.1.0",
+      "description": "Bitcoin-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "bitcoin.json"
+    },
+    {
+      "name": "@cubid/cardano",
+      "version": "0.1.0",
+      "description": "Cardano-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "cardano.json"
+    },
+    {
+      "name": "@cubid/comms",
+      "version": "0.1.0",
+      "description": "Signed-in messaging profile helpers for Cubid Passport notification channels and preferences.",
+      "registry": "npm-only",
+      "referencePath": "comms.json"
+    },
+    {
+      "name": "@cubid/cosmos",
+      "version": "0.1.0",
+      "description": "Cosmos-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "cosmos.json"
     },
     {
       "name": "@cubid/react",
@@ -50,11 +85,46 @@
       "referencePath": "near.json"
     },
     {
+      "name": "@cubid/polkadot",
+      "version": "0.1.0",
+      "description": "Polkadot-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "polkadot.json"
+    },
+    {
       "name": "@cubid/solana",
       "version": "0.1.0",
       "description": "Solana-oriented Cubid wallet helpers built on top of @cubid/core.",
       "registry": "npm-only",
       "referencePath": "solana.json"
+    },
+    {
+      "name": "@cubid/starknet",
+      "version": "0.1.0",
+      "description": "Starknet-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "starknet.json"
+    },
+    {
+      "name": "@cubid/stellar",
+      "version": "0.1.0",
+      "description": "Stellar-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "stellar.json"
+    },
+    {
+      "name": "@cubid/sui",
+      "version": "0.1.0",
+      "description": "Sui-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "sui.json"
+    },
+    {
+      "name": "@cubid/tezos",
+      "version": "0.1.0",
+      "description": "Tezos-oriented Cubid wallet helpers built on top of @cubid/core.",
+      "registry": "npm-only",
+      "referencePath": "tezos.json"
     },
     {
       "name": "@cubid/wagmi",
@@ -66,7 +136,7 @@
     {
       "name": "@cubid/web3",
       "version": "0.1.1",
-      "description": "Wallet-oriented Cubid helpers built on top of @cubid/core.",
+      "description": "Legacy shared-wallet Cubid compatibility helpers built on top of @cubid/core.",
       "registry": "npm-only",
       "referencePath": "web3.json"
     }

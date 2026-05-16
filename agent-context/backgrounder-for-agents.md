@@ -34,15 +34,22 @@ Build toward this package ecosystem:
 @cubid/core
 @cubid/auth
 @cubid/auth-react
+@cubid/aptos
 @cubid/browser
 @cubid/react
 
 @cubid/evm
 @cubid/wagmi
+@cubid/bitcoin
+@cubid/cosmos
 @cubid/solana
+@cubid/starknet
+@cubid/stellar
 @cubid/cardano
 @cubid/sui
 @cubid/near
+@cubid/polkadot
+@cubid/tezos
 
 (later, if backend contracts justify them)
 @cubid/comms
@@ -50,19 +57,30 @@ Build toward this package ecosystem:
 ```
 
 The current workspace now contains the target package names for the first
-browser/React/EVM slices, while frozen compatibility and interim packages remain:
+browser/React/EVM slices, while frozen compatibility packages remain:
 
 ```txt
 @cubid/auth
 @cubid/auth-react
+@cubid/aptos
 @cubid/browser
 @cubid/react
+@cubid/bitcoin
+@cubid/cardano
+@cubid/cosmos
 @cubid/evm
 @cubid/wagmi
+@cubid/near
+@cubid/polkadot
+@cubid/solana
+@cubid/starknet
+@cubid/stellar
+@cubid/sui
+@cubid/tezos
 
 @cubid/web2       -> frozen compatibility wrapper around @cubid/browser
 @cubid/web2-react -> frozen compatibility wrapper around @cubid/react
-@cubid/web3       -> interim shared wallet package pending further chain splits
+@cubid/web3       -> frozen shared-wallet compatibility package
 ```
 
 ## Package Responsibilities
@@ -121,6 +139,22 @@ Do not put Cubid dapp API keys, client secrets, signing keys, service-role
 credentials, or Passport internal tokens into this package's browser usage
 model.
 
+### Future `@cubid/comms`
+
+Use a later `@cubid/comms` package family for signed-in messaging profile
+management if Passport promotes the flexible messaging roadmap. That future
+surface should cover user-authenticated channel metadata, verification, and
+global preferences, not dapp server notification delivery.
+
+If Passport later promotes the server-authenticated notification send and
+status routes into the SDK roadmap, keep those helpers in `@cubid/core`
+instead. Signed-in Passport profile management and dapp backend notification
+delivery should remain separate surfaces.
+
+Treat hosted Allow Page category grants as Passport-owned UX for now. If the
+SDK later exposes them, model them only as permission state and never as
+access to raw destinations or delivery capability.
+
 ### Chain Packages
 
 Own:
@@ -131,6 +165,10 @@ Own:
 
 Keep chain assumptions isolated. Do not pile them back into one shared `web3`
 blob once dedicated packages exist.
+
+Treat `@cubid/web3` as a legacy shared-wallet compatibility surface now that
+multiple dedicated chain packages exist. New chain-specific helpers should land
+only in the dedicated package for that chain family.
 
 Future smart-account, session-key, paymaster, or gas-sponsorship helpers must
 be capability-driven and explicitly optional. Do not assume every Cubid account
@@ -202,10 +240,19 @@ These are likely future areas, but should not be over-promised in package
 boundaries until their public contracts are real and stable:
 
 - passkey/WebAuthn client helpers
-- comms helpers
+- comms helpers for signed-in messaging profile management
 - secrets helpers
 - richer multi-chain wallet packages
 - smart-account and paymaster helpers
+
+The current flexible messaging Passport notes are roadmap input only. They do
+not request immediate public SDK runtime helpers yet, even though the backend
+now has early send, provider, and status contracts.
+
+Passport-user notification history is still a separate boundary. Treat
+`POST /api/notifications/history/list` as a signed-in profile route that stays
+with `@cubid/comms`-style account management if it is exposed later, not as a
+normal `@cubid/core` dapp server helper.
 
 ## Mental Model
 

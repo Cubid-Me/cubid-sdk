@@ -193,12 +193,12 @@ Verified npm metadata now resolves to normal package versions rather than
 
 ### S03. Split chain packages
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-01T08:40:00Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-05-15T00:05:00Z
 - Feature branch: `dev`
 - Head: `f46c24dc` at planning start
-- Session-log reference(s): session: s08-package-migration-planning, session: s13-evm-package-slice
+- Session-log reference(s): session: s08-package-migration-planning, session: s13-evm-package-slice, session: s66-web3-compatibility-closeout
 
 Plan the migration from `@cubid/web3` into chain-specific packages such as `@cubid/evm`, `@cubid/wagmi`, `@cubid/solana`, `@cubid/cardano`, `@cubid/sui`, and `@cubid/near`, starting with lightweight contract boundaries before adding heavier SDK dependencies.
 
@@ -320,6 +320,205 @@ metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
 Added `packages/solana` as the next chain-specific package on top of
 `@cubid/core`, with Solana-specific connection and stamp types, capability
 metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.9 Create the first `@cubid/sui` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T16:30:00Z
+- Timestamp completed: 2026-05-14T17:15:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `a8ded0e0` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-03-c05-2-1-sui-v3-custody.md`, session: s55-sui-package-slice
+
+Added `packages/sui` as the next chain-specific package on top of
+`@cubid/core`, with canonical lowercase address normalization, capability
+metadata helpers, tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.10 Create the first `@cubid/cardano` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T17:30:00Z
+- Timestamp completed: 2026-05-14T18:15:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `50f8038a` at implementation start
+- Session-log reference(s): session: s56-cardano-package-slice
+
+Added `packages/cardano` as the next bounded chain-specific package on top of
+`@cubid/core`, with Cardano-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.11 Create the first `@cubid/bitcoin` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T18:40:00Z
+- Timestamp completed: 2026-05-14T19:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `b7b3919a` at implementation start
+- Session-log reference(s): session: s57-bitcoin-package-slice
+
+Added `packages/bitcoin` as the next bounded chain-specific package on top of
+`@cubid/core`, with Bitcoin-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.12 Create the first `@cubid/starknet` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T19:10:00Z
+- Timestamp completed: 2026-05-14T19:35:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `f2f2d9cb` at implementation start
+- Session-log reference(s): session: s58-starknet-package-slice
+
+Added `packages/starknet` as the next bounded chain-specific package on top of
+`@cubid/core`, with Starknet-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.13 Create the first `@cubid/cosmos` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T19:40:00Z
+- Timestamp completed: 2026-05-14T20:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `14e84812` at implementation start
+- Session-log reference(s): session: s59-cosmos-package-slice
+
+Added `packages/cosmos` as the next bounded chain-specific package on top of
+`@cubid/core`, with Cosmos-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.14 Create the first `@cubid/polkadot` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T21:15:00Z
+- Timestamp completed: 2026-05-14T21:45:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `e8b7cd77` at implementation start
+- Session-log reference(s): session: s62-polkadot-package-slice
+
+Added `packages/polkadot` as the next bounded chain-specific package on top of
+`@cubid/core`, with Polkadot-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.15 Create the first `@cubid/aptos` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T21:55:00Z
+- Timestamp completed: 2026-05-14T22:25:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `2e5bc0aa` at implementation start
+- Session-log reference(s): session: s63-aptos-package-slice
+
+Added `packages/aptos` as the next bounded chain-specific package on top of
+`@cubid/core`, with Aptos-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.16 Create the first `@cubid/tezos` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T22:35:00Z
+- Timestamp completed: 2026-05-14T23:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `5bde7b75` at implementation start
+- Session-log reference(s): session: s64-tezos-package-slice
+
+Added `packages/tezos` as the next bounded chain-specific package on top of
+`@cubid/core`, with Tezos-specific connection metadata, capability helpers,
+tests, publish-workflow wiring, and developer-ingestion docs.
+
+### S03.17 Create the first `@cubid/stellar` package slice
+
+- Status: Completed
+- Timestamp started: 2026-05-14T23:15:00Z
+- Timestamp completed: 2026-05-14T23:45:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `1feeede7` at implementation start
+- Session-log reference(s): session: s65-stellar-package-slice
+
+Added `packages/stellar` as the final currently planned bounded chain-specific
+package on top of `@cubid/core`, with Stellar-specific connection metadata,
+capability helpers, tests, publish-workflow wiring, and developer-ingestion
+docs.
+
+### S03.18 Start the `@cubid/web3` compatibility-closeout plan
+
+- Status: Completed
+- Timestamp started: 2026-05-14T20:40:00Z
+- Timestamp completed: 2026-05-14T21:00:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `2a5312af` at implementation start
+- Session-log reference(s): session: s61-web3-compatibility-closeout-planning
+
+Turn the eventual `@cubid/web3` retirement into a concrete compatibility-closeout
+plan now that multiple chain-specific packages exist. The plan should freeze
+`@cubid/web3` as a legacy shared wallet surface, keep new chain-specific work
+out of it, and break the remaining closeout into explicit migration,
+deprecation, and release-policy steps.
+
+### S03.19 Freeze `@cubid/web3` to the legacy shared wallet surface
+
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
+
+Keep `@cubid/web3` limited to the already-supported legacy shared wallet
+surface instead of expanding it for newly extracted chains. New chain-specific
+helpers should land only in their dedicated packages.
+
+### S03.20 Add explicit `@cubid/web3` migration and deprecation messaging
+
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
+
+Update package metadata, README messaging, and developer docs so downstream
+consumers are clearly pointed toward dedicated chain packages while preserving
+the current compatibility surface for existing installs.
+
+### S03.21 Move `@cubid/web3` out of the normal active-package path
+
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
+
+Once the migration messaging is live, treat `@cubid/web3` like a controlled
+compatibility package rather than a primary forward-looking SDK surface. That
+includes narrowing when it appears in release planning, roadmap summaries, and
+package-selection guidance.
+
+### S03.22 Write a downstream `@cubid/web3` migration guide
+
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
+
+Document how existing `@cubid/web3` consumers should move to the dedicated
+chain packages, including the preserved adapter concepts, capability helpers,
+and the right package choice by chain and framework.
+
+### S03.23 Decide the final long-term `@cubid/web3` end state
+
+- Status: Completed
+- Timestamp started: 2026-05-14T23:55:00Z
+- Timestamp completed: 2026-05-15T00:05:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d45ebc79` at implementation start
+- Session-log reference(s): session: s66-web3-compatibility-closeout
+
+After the compatibility package is frozen and downstream migrations are in
+motion, keep `@cubid/web3` as a long-lived frozen wrapper with manual-only
+maintenance unless a later deliberate deprecation decision is made.
 
 ### S04. Create dedicated auth package boundaries for Sign in with Cubid
 
@@ -881,3 +1080,146 @@ policy metadata say otherwise. The SDK may expose the limited EVM Admin-policy
 pilot and Solana readiness summaries, but it must continue warning that Cubid
 does not broadcast EVM pilot transactions and that Solana transaction signing
 remains disabled.
+
+### S13. Add flexible messaging account-management helpers without exposing delivery internals
+
+- Status: Completed
+- Timestamp started: 2026-05-15T05:40:38Z
+- Timestamp completed: 2026-05-15T07:12:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `848c4352` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s76-notification-history-boundary
+
+Track the future public SDK surface for flexible messaging without collapsing
+signed-in user messaging profile management into dapp server notification APIs.
+Keep hosted Allow Page category grants modeled as permission state only, route
+signed-in channel and preference helpers toward a future `@cubid/comms` package
+family, and reserve future server-safe send and status helpers for
+`@cubid/core` once the messaging roadmap is explicitly promoted.
+
+### S13.1 Define the package boundary for flexible messaging helpers
+
+- Status: Completed
+- Timestamp started: 2026-05-15T05:40:38Z
+- Timestamp completed: 2026-05-15T05:40:38Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `848c4352` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s68-comms-package-boundary
+
+Document that signed-in messaging profile helpers belong in a future
+`@cubid/comms` package family rather than `@cubid/core`, and keep hosted Allow
+Page category-grant routes out of `@cubid/browser` until the product roadmap
+explicitly promotes them.
+
+### S13.2 Add signed-in channel metadata helpers in a future `@cubid/comms`
+
+- Status: Completed
+- Timestamp started: 2026-05-15T05:45:08Z
+- Timestamp completed: 2026-05-15T05:45:08Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `f57cce5f` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s69-comms-channel-metadata
+
+When flexible messaging is promoted, add public wrappers for
+`POST /api/notifications/channels/list` and
+`POST /api/notifications/channels/update` that expose only channel id/type,
+provider key, label, masked display hint, verification/status/default flags,
+and timestamps.
+
+### S13.3 Add signed-in channel verification lifecycle helpers in a future `@cubid/comms`
+
+- Status: Completed
+- Timestamp started: 2026-05-15T05:45:08Z
+- Timestamp completed: 2026-05-15T05:45:08Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `96192119` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s70-comms-channel-verification
+
+When flexible messaging is promoted, add typed wrappers for
+`POST /api/notifications/channels/start-verification` and
+`POST /api/notifications/channels/complete-verification` while keeping email
+and Telegram setup flows fail-closed and avoiding any claim that provider
+delivery or bot-handshake readiness is already complete.
+
+### S13.4 Add signed-in global preference helpers in a future `@cubid/comms`
+
+- Status: Completed
+- Timestamp started: 2026-05-15T05:50:33Z
+- Timestamp completed: 2026-05-15T05:50:33Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `6395fe8a` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-passport-channel-routes.md`, session: s67-flexible-messaging-roadmap-intake, session: s71-comms-global-preferences
+
+When flexible messaging is promoted, add wrappers for
+`POST /api/notifications/preferences/list` and
+`POST /api/notifications/preferences/update` that stay limited to the global
+category defaults for `SECURITY`, `TRANSACTIONAL`, and `WORKFLOW`.
+
+### S13.5 Model Allow Page category grants as permission metadata, not channel access
+
+- Status: Completed
+- Timestamp started: 2026-05-15T05:52:52Z
+- Timestamp completed: 2026-05-15T05:52:52Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `d3ff6b06` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-allow-page-grants.md`, session: s67-flexible-messaging-roadmap-intake, session: s72-comms-allow-page-grant-model
+
+Keep Allow Page category grants Passport-hosted for now. If the SDK later
+surfaces them, represent them only as category permission state and never as
+access to destinations, channel selection, or delivery capability.
+
+### S13.6 Add server-safe notification send helpers in a future `@cubid/core`
+
+- Status: Completed
+- Timestamp started: 2026-05-15T06:28:00Z
+- Timestamp completed: 2026-05-15T06:28:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `54c2cb8c` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-send-route.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-email-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-telegram-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-abuse-controls.md`, session: s67-flexible-messaging-roadmap-intake, session: s73-core-notification-send-helper
+
+Add server-safe `@cubid/core` wrappers for `POST /api/v3/notifications/send`
+with required idempotency, typed categories and priorities, and explicit
+browser-safety guidance that Cubid dapp API keys must stay on the app backend.
+
+### S13.7 Normalize flexible messaging send errors and accepted-versus-delivered semantics
+
+- Status: Completed
+- Timestamp started: 2026-05-15T06:42:00Z
+- Timestamp completed: 2026-05-15T06:42:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `f912504c` at implementation start
+- Session-log reference(s): incoming messages `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-send-route.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-email-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-14-flexible-messaging-telegram-provider.md`, `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-abuse-controls.md`, session: s67-flexible-messaging-roadmap-intake, session: s74-core-notification-send-errors
+
+Model `status: "accepted"` as Cubid accepting and routing the event rather
+than guaranteed provider delivery. Preserve stable error codes such as
+`notification_grant_required`, `notification_provider_disabled`, and
+`notification_quota_exceeded` as structured send outcomes instead of retryable
+transport failures.
+
+### S13.8 Add server-safe notification status helpers in a future `@cubid/core`
+
+- Status: Completed
+- Timestamp started: 2026-05-15T06:58:00Z
+- Timestamp completed: 2026-05-15T06:58:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `1316386a` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-status-history.md`, session: s67-flexible-messaging-roadmap-intake, session: s75-core-notification-status-helper
+
+Add server-safe `@cubid/core` wrappers for `POST /api/v3/notifications/status`
+that return event status, selected channel type, latest delivery state, and
+redacted delivery attempts without exposing raw user ids, destinations,
+ciphertext, provider secrets, or cross-app data.
+
+### S13.9 Keep Passport-user notification history routes out of ordinary dapp SDK usage
+
+- Status: Completed
+- Timestamp started: 2026-05-15T07:12:00Z
+- Timestamp completed: 2026-05-15T07:12:00Z
+- Feature branch: `codex/s03-main-release-followup`
+- Head: `94c493e9` at implementation start
+- Session-log reference(s): incoming message `agent-context/messages-from-cubid-passport/2026-05-15-flexible-messaging-status-history.md`, session: s67-flexible-messaging-roadmap-intake, session: s76-notification-history-boundary
+
+Treat `POST /api/notifications/history/list` as a Passport-user profile route,
+not as a normal dapp SDK surface. If it is exposed later, keep it behind the
+same signed-in account-management boundary as future `@cubid/comms` helpers
+rather than mixing it into server-authenticated dapp APIs.

@@ -57,10 +57,19 @@ Scope:
 
 - `@cubid/auth`
 - `@cubid/auth-react`
+- `@cubid/aptos`
 - `@cubid/browser`
+- `@cubid/bitcoin`
+- `@cubid/cardano`
+- `@cubid/cosmos`
 - `@cubid/evm`
 - `@cubid/near`
+- `@cubid/polkadot`
 - `@cubid/solana`
+- `@cubid/starknet`
+- `@cubid/stellar`
+- `@cubid/sui`
+- `@cubid/tezos`
 - `@cubid/wagmi`
 - `@cubid/web3`
 
@@ -188,11 +197,20 @@ Coverage target scope:
 - include `@cubid/core`
 - include `@cubid/auth`
 - include `@cubid/auth-react`
+- include `@cubid/aptos`
 - include `@cubid/browser`
+- include `@cubid/bitcoin`
+- include `@cubid/cardano`
+- include `@cubid/cosmos`
 - include `@cubid/react`
 - include `@cubid/evm`
 - include `@cubid/near`
+- include `@cubid/polkadot`
 - include `@cubid/solana`
+- include `@cubid/starknet`
+- include `@cubid/stellar`
+- include `@cubid/sui`
+- include `@cubid/tezos`
 - include `@cubid/wagmi`
 - include `@cubid/web3`
 

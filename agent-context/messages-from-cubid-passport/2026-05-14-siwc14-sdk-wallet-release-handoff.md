@@ -1,5 +1,9 @@
 # Cubid Passport SIWC14: SDK Wallet Helper And Release Handoff
 
+> Legacy note: this handoff is now tracked as a sibling cross-repo comms thread
+> in `agent-context/cross-repo-comms/2026-05-14-sdk-wallet-release-handoff.md`
+> in both `cubid-passport` and `cubid-sdk-v2`.
+
 This is the consolidated handoff for the SmarTrust-oriented SIWC wallet work
 implemented in `cubid-passport`. Public SDK code belongs in `Cubid-Me/cubid-sdk`,
 not in `cubid-passport`.

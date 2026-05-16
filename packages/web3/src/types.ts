@@ -1,5 +1,7 @@
 import type { CubidAddStampResponse, CubidApiClient } from "@cubid/core";
 
+// Keep the shared web3 surface frozen to the original legacy stamp families.
+// New dedicated chain packages should not expand this compatibility union.
 export type CubidWeb3StampType = "evm" | "near" | "near-wallet" | "solana";
 
 export interface CubidWalletCapabilityDescriptor {
