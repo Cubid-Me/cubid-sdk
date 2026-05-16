@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s80-pr14-notification-credential-review-fix
+
+- Timestamp: 2026-05-16T02:25:22Z
+- Summary: Addressed PR #14 review feedback for the flexible-messaging API v3 notification helpers.
+- Actions:
+  - Updated `sendNotification` and `getNotificationStatus` so the notification send/status routes serialize the dapp credential as `apikey`, matching the Passport route contracts.
+  - Kept the existing `api_key` credential shape for the other API v3 helpers whose contracts already use that field.
+  - Updated the notification helper tests to assert the contract-specific credential field for both send and status requests.
+- Validation:
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+- Follow-up:
+  - Reply to and resolve the PR #14 review thread after the fix is committed and pushed.
+
 ## session: s79-clearpass-dashboard-auth-thread-response
 
 - Timestamp: 2026-05-15T16:55:00Z

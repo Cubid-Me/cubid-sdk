@@ -743,7 +743,7 @@ test("notification send helpers use v3 credentials and required idempotency", as
   )
   assert.equal(calls[0]?.headers.get("Idempotency-Key"), "notif_send_key_123")
   assert.deepEqual(calls[0]?.body, {
-    api_key: "api_key",
+    apikey: "api_key",
     body: "Your verification succeeded.",
     category: "SECURITY",
     dapp_id: "dapp_123",
@@ -924,7 +924,7 @@ test("notification status helpers normalize redacted delivery metadata", async (
     "https://passport.cubid.me/api/v3/notifications/status"
   )
   assert.deepEqual(calls[0]?.body, {
-    api_key: "api_key",
+    apikey: "api_key",
     dapp_id: "dapp_123",
     dapp_user_uuid: "dapp_user_123",
     event_id: "notif_evt_123",

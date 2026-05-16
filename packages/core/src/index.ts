@@ -3242,7 +3242,7 @@ export const createCubidApiClient = (
         fetchImpl,
         baseUrl,
         "/api/v3/notifications/status",
-        withV3Credentials({
+        withCredentials({
           dapp_user_uuid: userId,
           event_id: eventId,
         }),
@@ -3307,7 +3307,7 @@ export const createCubidApiClient = (
         fetchImpl,
         baseUrl,
         "/api/v3/notifications/send",
-        withV3Credentials({
+        withCredentials({
           body,
           category,
           dapp_user_uuid: userId,
