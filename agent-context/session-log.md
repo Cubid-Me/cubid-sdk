@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s81-cross-repo-comms-passport-intake
+
+- Timestamp: 2026-05-16T02:46:38Z
+- Summary: Addressed new inbound cross-repo comms updates from Passport in the SDK mailbox.
+- Actions:
+  - Accepted the Passport-side resolution update for the SDK wallet helper handoff thread, including downstream SmarTrust readiness boundaries and the fail-closed Solana transaction-signing note.
+  - Added the ClearPass Dashboard OIDC SDK readiness thread to the SDK live cross-repo mailbox index after Passport moved the legacy note into the sibling-note structure.
+  - Recorded that both inbound updates are coordination-only and require no new SDK runtime implementation in this pass.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Continue to leave sibling note changes dirty in other repos unless explicitly asked to commit them there.
+
 ## session: s80-pr14-notification-credential-review-fix
 
 - Timestamp: 2026-05-16T02:25:22Z

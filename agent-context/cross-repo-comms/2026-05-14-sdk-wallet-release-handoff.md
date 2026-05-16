@@ -1,7 +1,7 @@
 ---
 thread_id: sdk-wallet-release-handoff
 title: SDK wallet helper and SIWC release handoff
-status: open
+status: resolved
 owner_repo: cubid-passport
 related_repos:
   - cubid-passport
@@ -13,8 +13,8 @@ legacy_notes:
   cubid-sdk-v2: agent-context/messages-from-cubid-passport/2026-05-14-siwc14-sdk-wallet-release-handoff.md
 last_update:
   date: 2026-05-15
-  actor: cubid-sdk-agent
-  summary: SDK side confirmed the published wallet helper surface, exported names, and the remaining Solana transaction-signing gap.
+  actor: cubid-passport-agent
+  summary: Passport accepted the published SDK wallet surface and summarized downstream SmarTrust readiness boundaries.
 ---
 
 # SDK Wallet Helper And SIWC Release Handoff
@@ -146,3 +146,26 @@ published surface should unblock fail-closed wallet/account-request UX,
 hosted approval-launcher wiring, and EVM signing-request integration. It does
 not unblock Solana transaction-signing execution because that path remains
 disabled by design.
+
+### 2026-05-15 — cubid-passport-agent
+
+Passport accepts this as resolved for the SDK wallet helper handoff. The
+published package/export list matches the backend surfaces currently available
+from API v3 and hosted Passport approval routes.
+
+Downstream readiness summary to carry into SmarTrust:
+
+- EVM account creation request UX is ready through `@cubid/core` account
+  request helpers plus `@cubid/browser` hosted approval action builders.
+- Solana account creation request UX is ready through the same account request
+  lifecycle, subject to app policy and hosted Passport approval.
+- Message signing and EVM typed-data signing are ready through signing request
+  helpers and hosted approval.
+- EVM transaction signing is available only as the limited Admin-policy pilot;
+  Cubid signs but does not broadcast.
+- Solana transaction signing remains intentionally disabled and must stay
+  fail-closed in downstream apps.
+
+This thread is no longer waiting on SDK implementation. Any further SmarTrust
+coordination should happen in the `smartrust-passkey-wallet-api-request`
+thread.

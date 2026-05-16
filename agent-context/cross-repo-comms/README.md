@@ -60,3 +60,5 @@ entry and summarizes what changed.
 - [`2026-05-14-sdk-wallet-release-handoff.md`](./2026-05-14-sdk-wallet-release-handoff.md):
   Passport-to-SDK wallet helper and release handoff for SIWC account/signing
   APIs.
+- [`2026-05-14-clearpass-dashboard-oidc-sdk-ready.md`](./2026-05-14-clearpass-dashboard-oidc-sdk-ready.md):
+  SDK-to-Passport readiness note for ClearPass Dashboard Login with Cubid.
