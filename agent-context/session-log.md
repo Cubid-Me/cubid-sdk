@@ -1,5 +1,26 @@
 # Session Log
 
+## session: s92-recovery-bundle-list-scope-followup
+
+- Timestamp: 2026-05-25T04:45:00Z
+- Summary: Closed the pre-release recovery bundle-list privacy gap so public app SDKs do not expose Passport's user-wide bundle list.
+- Actions:
+  - Removed public `listBundles` from `@cubid/wallet-recovery` and removed `useCubidRecoveryBundles` from `@cubid/wallet-recovery-react`.
+  - Updated docs and package-boundary guidance so apps must track their own app-scoped `recoveryBundleId` metadata and start recovery for an exact bundle.
+  - Recorded that any future dapp-facing bundle list needs a Passport-enforced app/dapp-user scoped contract before returning bundle summaries to calling app code.
+  - Left broader user-wide listing as a Cubid-hosted UI concern, where the UI can show dapp names without leaking cross-app bundle data back to dapps.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm exec vitest run packages/wallet-recovery/src/index.test.ts packages/wallet-recovery-react/src/index.test.tsx packages/acceptance/src/wallet-recovery.acceptance.test.ts packages/acceptance/src/wallet-recovery-react.acceptance.test.tsx`
+  - `pnpm --filter @cubid/wallet-recovery typecheck`
+  - `pnpm --filter @cubid/wallet-recovery-react typecheck`
+  - `pnpm test:acceptance`
+  - `pnpm lint`
+  - `git diff --check`
+- Follow-up:
+  - Push the PR #17 follow-up and wait for CI to return green.
+
 ## session: s91-pr16-review-followup
 
 - Timestamp: 2026-05-25T04:05:00Z

@@ -49,7 +49,7 @@ test("buildHostedRecoveryUrl rejects unsafe Passport URL schemes", () => {
   );
 });
 
-test("wallet recovery client completes user-authorized release and lists safe bundles", async () => {
+test("wallet recovery client completes user-authorized release with safe raw metadata", async () => {
   const calls: Array<{
     authorization: string | null;
     body: unknown;
@@ -66,33 +66,17 @@ test("wallet recovery client completes user-authorized release and lists safe bu
         path,
       });
 
-      if (path.endsWith("/release/complete")) {
-        return createJsonResponse({
-          data: {
-            bundleMaterial: "opaque-app-owned-recovery-material",
-            dappUserUuid: "dapp_user_123",
-            providerKey: "cubid",
-            recoveryBundleId: "rw_bundle_123",
-            recoverySessionId: "rw_release_123",
-            releasedAt: "2026-05-20T19:20:00.000Z",
-            status: "released",
-            wrapped_data_key: "must-not-leak",
-          },
-        });
-      }
-
       return createJsonResponse({
-        data: [
-          {
-            bundleVersion: 1,
-            createdAt: "2026-05-20T19:10:00.000Z",
-            dappUserUuid: "dapp_user_123",
-            providerKey: "cubid",
-            recoveryBundleId: "rw_bundle_123",
-            status: "active",
-            vaultMetadata: { hidden: true },
-          },
-        ],
+        data: {
+          bundleMaterial: "opaque-app-owned-recovery-material",
+          dappUserUuid: "dapp_user_123",
+          providerKey: "cubid",
+          recoveryBundleId: "rw_bundle_123",
+          recoverySessionId: "rw_release_123",
+          releasedAt: "2026-05-20T19:20:00.000Z",
+          status: "released",
+          wrapped_data_key: "must-not-leak",
+        },
       });
     },
   });
@@ -100,25 +84,17 @@ test("wallet recovery client completes user-authorized release and lists safe bu
   const release = await client.completeRelease({
     recoverySessionId: "rw_release_123",
   });
-  const list = await client.listBundles();
 
   assert.equal(release.bundleMaterial, "opaque-app-owned-recovery-material");
   assert.equal(release.release.recoveryBundleId, "rw_bundle_123");
   assert.equal((release.raw.data as Record<string, unknown>).bundleMaterial, undefined);
   assert.equal(release.release.raw.bundleMaterial, undefined);
   assert.equal(release.release.raw.wrapped_data_key, undefined);
-  assert.equal(list.bundles[0]?.status, "active");
-  assert.equal(list.bundles[0]?.raw.vaultMetadata, undefined);
   assert.deepEqual(calls, [
     {
       authorization: "Bearer user_token_123",
       body: { recovery_session_id: "rw_release_123" },
       path: "/api/recovery-bundles/release/complete",
-    },
-    {
-      authorization: "Bearer user_token_123",
-      body: {},
-      path: "/api/recovery-bundles/list",
     },
   ]);
 });

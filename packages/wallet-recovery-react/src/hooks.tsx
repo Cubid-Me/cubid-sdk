@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   createCubidWalletRecoveryClient,
   type CubidCompleteRecoveryBundleReleaseInput,
   type CubidCompleteRecoveryBundleReleaseResponse,
-  type CubidListRecoveryBundlesInput,
-  type CubidListRecoveryBundlesResponse,
   type CubidWalletRecoveryClientOptions,
 } from "@cubid/wallet-recovery";
 
@@ -30,22 +28,6 @@ export interface CubidRecoveryReleaseState {
   ) => Promise<CubidCompleteRecoveryBundleReleaseResponse>;
   data: CubidCompleteRecoveryBundleReleaseResponse | null;
   error: Error | null;
-  reset: () => void;
-  status: CubidWalletRecoveryReactStatus;
-}
-
-export interface CubidRecoveryBundlesHookOptions
-  extends CubidWalletRecoveryHookOptions {
-  autoLoad?: boolean;
-}
-
-export interface CubidRecoveryBundlesState {
-  bundles: CubidListRecoveryBundlesResponse["bundles"];
-  data: CubidListRecoveryBundlesResponse | null;
-  error: Error | null;
-  reload: (
-    input?: CubidListRecoveryBundlesInput
-  ) => Promise<CubidListRecoveryBundlesResponse>;
   reset: () => void;
   status: CubidWalletRecoveryReactStatus;
 }
@@ -99,88 +81,6 @@ export function useCubidRecoveryRelease(
     completeRelease,
     data,
     error,
-    reset() {
-      setData(null);
-      setError(null);
-      setStatus("idle");
-    },
-    status,
-  };
-}
-
-export function useCubidRecoveryBundles(
-  options: CubidRecoveryBundlesHookOptions
-): CubidRecoveryBundlesState {
-  const [data, setData] =
-    useState<CubidListRecoveryBundlesResponse | null>(null);
-  const [error, setError] = useState<Error | null>(null);
-  const [status, setStatus] =
-    useState<CubidWalletRecoveryReactStatus>("idle");
-
-  async function reload(input: CubidListRecoveryBundlesInput = {}) {
-    setStatus("loading");
-    setError(null);
-
-    try {
-      const client = createClient(options);
-      const result = await client.listBundles(input);
-      setData(result);
-      setStatus("success");
-      return result;
-    } catch (caught) {
-      const normalized = normalizeError(caught);
-      setError(normalized);
-      setStatus("error");
-      throw normalized;
-    }
-  }
-
-  useEffect(() => {
-    if (options.autoLoad === false) {
-      return;
-    }
-
-    let active = true;
-
-    setStatus("loading");
-    setError(null);
-
-    void createClient(options)
-      .listBundles()
-      .then((result) => {
-        if (!active) {
-          return;
-        }
-
-        setData(result);
-        setStatus("success");
-      })
-      .catch((caught) => {
-        if (!active) {
-          return;
-        }
-
-        setError(normalizeError(caught));
-        setStatus("error");
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [
-    options.accessToken,
-    options.autoLoad,
-    options.baseUrl,
-    options.fetch,
-    options.getAccessToken,
-    options.headers,
-  ]);
-
-  return {
-    bundles: data?.bundles ?? [],
-    data,
-    error,
-    reload,
     reset() {
       setData(null);
       setError(null);

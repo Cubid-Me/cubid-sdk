@@ -30,7 +30,7 @@ verification, migrations, and service-role access.
 | `@cubid/tezos` | Tezos-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
 | `@cubid/wagmi` | wagmi-specific React integration helpers built on `@cubid/evm`. | npm-only |
 | `@cubid/wallet-recovery` | Browser/client helpers for hosted wallet recovery, user-authorized release completion, and bundle visibility. | npm-only |
-| `@cubid/wallet-recovery-react` | React launch, completion, and bundle-list ergonomics for wallet recovery flows. | npm-only |
+| `@cubid/wallet-recovery-react` | React launch and completion ergonomics for wallet recovery flows. | npm-only |
 | `@cubid/web3` | Frozen legacy shared-wallet compatibility package for older installs. | npm-only, compatibility-only |
 | `@cubid/web2` | Frozen compatibility wrapper around `@cubid/browser`. | npm-only, deprecated |
 | `@cubid/web2-react` | Frozen compatibility wrapper around `@cubid/react`. | npm-only, deprecated |

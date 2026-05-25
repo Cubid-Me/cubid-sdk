@@ -173,10 +173,18 @@ private keys, seed material, key shares, or service-role fields.
 
 Browser/client recovery helpers belong in `@cubid/wallet-recovery`, with React
 ergonomics in `@cubid/wallet-recovery-react`. Those packages may launch
-Passport-hosted recovery, complete user-authorized release, and list signed-in
-user bundle visibility. They must use signed-in user bearer tokens, not Cubid
-dapp API keys. Recovery material may appear only in the user-authenticated
-release-completion response and should stay typed as opaque app-owned material.
+Passport-hosted recovery and complete user-authorized release. They must use
+signed-in user bearer tokens, not Cubid dapp API keys. Recovery material may
+appear only in the user-authenticated release-completion response and should
+stay typed as opaque app-owned material.
+
+Public app SDKs must not expose Passport's user-wide recovery-bundle list. A
+dapp should only learn about recovery bundles that belong to its own app and
+app-user context. Until Passport ships an app-scoped list contract, apps should
+track their own app-scoped `recoveryBundleId` metadata and start recovery for an
+exact bundle through `@cubid/core`. Cubid-owned hosted UI may show a broader
+user-wide list, but that UI should include dapp names and must not leak the
+list back to calling dapps.
 
 `@cubid/core` now exposes runtime-agnostic webhook verification helpers. They
 should keep verifying Cubid's exact raw-body signature contract and preserve
