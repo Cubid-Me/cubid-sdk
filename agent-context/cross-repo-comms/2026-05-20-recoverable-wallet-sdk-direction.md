@@ -159,11 +159,9 @@ Implemented packages and public helpers:
   - `buildHostedRecoveryUrl`
   - `createCubidWalletRecoveryClient`
   - `completeRelease`
-  - `listBundles`
 - `@cubid/wallet-recovery-react@0.1.0`
   - `CubidRecoveryLaunchButton`
   - `useCubidRecoveryRelease`
-  - `useCubidRecoveryBundles`
 
 SDK boundaries now recorded:
 
@@ -172,6 +170,11 @@ SDK boundaries now recorded:
   service-role fields, private keys, seed material, or key shares.
 - `bundleMaterial` is exposed only by the signed-in user completion path in
   `@cubid/wallet-recovery` and remains typed as opaque app-owned material.
+- Public app SDKs do not expose Passport's user-wide recovery-bundle list,
+  because that route can include bundles and dapp-user ids from other dapps.
+  Apps should track their own app-scoped `recoveryBundleId` metadata and start
+  recovery for an exact bundle until Passport ships an app-scoped list
+  contract.
 - Legacy `generateAccount`, SIWC account-request helpers, and SIWC
   signing-request helpers remain callable but are deprecated in docs/JSDoc for
   new integrations.

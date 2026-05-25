@@ -53,8 +53,8 @@ Mirrored the taxonomy in SDK packages:
   union.
 - `@cubid/core` maps Passport recovery error envelopes for the server-safe
   recovery bundle routes.
-- `@cubid/wallet-recovery@0.1.0` maps signed-in browser/client completion and
-  bundle-list errors into the same `CubidRecoverableWalletError` type.
+- `@cubid/wallet-recovery@0.1.0` maps signed-in browser/client completion
+  errors into the same `CubidRecoverableWalletError` type.
 - `@cubid/wallet-recovery-react@0.1.0` surfaces those errors through explicit
   hook `error` and `status: "error"` states without owning authentication.
 

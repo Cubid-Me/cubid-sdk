@@ -42,3 +42,9 @@ const released = await recovery.completeRelease({
 Passport user-authenticated recovery completion route. Backend dapp credentials
 must use `@cubid/core` for metadata-only enroll/status/release-start/rotate and
 revoke helpers.
+
+This package intentionally does not expose the Passport user-wide recovery
+bundle list route. Public app SDK calls must not reveal recovery bundles or
+dapp-user ids from other dapps. Apps should track their own app-scoped
+`recoveryBundleId` metadata and start recovery for that exact bundle through
+`@cubid/core`.

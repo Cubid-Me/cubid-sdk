@@ -1286,11 +1286,12 @@ for both server-side recovery helpers and browser/client recovery helpers.
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
 - Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s85-wallet-recovery-browser-package
 
-Create a browser-safe npm-only package for hosted recovery launch,
-user-authorized release completion, and signed-in user bundle listing. The
-package must accept a bearer token or async token provider, never dapp API
-keys, and return opaque `bundleMaterial` only from the user-authenticated
-completion path.
+Create a browser-safe npm-only package for hosted recovery launch and
+user-authorized release completion. The package must accept a bearer token or
+async token provider, never dapp API keys, and return opaque `bundleMaterial`
+only from the user-authenticated completion path. Public app SDKs must not
+expose Passport's user-wide recovery-bundle list until Passport provides an
+app-scoped list contract.
 
 ### S14.5 Add `@cubid/wallet-recovery-react`
 
@@ -1301,9 +1302,9 @@ completion path.
 - Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s86-wallet-recovery-react-package
 
 Create React helpers on top of `@cubid/wallet-recovery` for hosted recovery
-launch, release completion, and user bundle visibility. Keep `@cubid/auth-react`
-integration optional by accepting token provider props rather than hard-coupling
-the packages.
+launch and release completion. Keep `@cubid/auth-react` integration optional by
+accepting token provider props rather than hard-coupling the packages. Do not
+surface unscoped user-wide bundle visibility to calling dapps.
 
 ### S14.6 Deprecate legacy Cubid-generated wallet and normal-signing direction
 

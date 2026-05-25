@@ -2,8 +2,8 @@
 
 React helpers for Cubid Passport recoverable wallet flows.
 
-Use this package when a React app needs hosted recovery launch, signed-in
-release completion, or user-visible recovery bundle listing. It builds on
+Use this package when a React app needs hosted recovery launch or signed-in
+release completion. It builds on
 `@cubid/wallet-recovery`, accepts an explicit bearer token or async token
 provider, and does not depend on `@cubid/auth-react`.
 
@@ -47,3 +47,8 @@ function Recovery({ recoverySessionId }: { recoverySessionId: string }) {
 
 `bundleMaterial` is only returned by the signed-in completion hook. Backend
 dapp credentials should use metadata-only helpers from `@cubid/core`.
+
+This React package intentionally does not expose a recovery-bundle list hook.
+Public app code must not receive recovery bundles or dapp-user ids that belong
+to other dapps. Apps should use their own app-scoped recovery metadata and
+launch Passport recovery for an exact `recoveryBundleId`.

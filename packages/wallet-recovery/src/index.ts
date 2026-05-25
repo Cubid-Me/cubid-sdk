@@ -2,7 +2,6 @@ import {
   CubidApiError,
   CubidRecoverableWalletError,
   type CubidRecoverableWalletErrorCode,
-  type CubidRecoveryBundleStatus,
 } from "@cubid/core";
 
 export type CubidWalletRecoveryFetch = (
@@ -31,28 +30,6 @@ export interface CubidCompleteRecoveryBundleReleaseInput {
   signal?: AbortSignal;
 }
 
-export interface CubidListRecoveryBundlesInput {
-  accessToken?: string;
-  signal?: AbortSignal;
-}
-
-export interface CubidUserRecoveryBundleSummary {
-  bundleVersion: number | null;
-  createdAt: string | null;
-  dappUserUuid: string | null;
-  expiresAt: string | null;
-  lastReleasedAt: string | null;
-  providerKey: string | null;
-  raw: Record<string, unknown>;
-  recoveryBundleId: string | null;
-  recoveryReference: string | null;
-  revokedAt: string | null;
-  rotatedAt: string | null;
-  staleAt: string | null;
-  status: CubidRecoveryBundleStatus | null;
-  updatedAt: string | null;
-}
-
 export interface CubidRecoveryReleaseSummary {
   dappUserUuid: string | null;
   providerKey: string | null;
@@ -70,12 +47,6 @@ export interface CubidCompleteRecoveryBundleReleaseResponse {
   requestId: string | null;
 }
 
-export interface CubidListRecoveryBundlesResponse {
-  bundles: CubidUserRecoveryBundleSummary[];
-  raw: Record<string, unknown>;
-  requestId: string | null;
-}
-
 export interface CubidWalletRecoveryClient {
   readonly config: Readonly<{
     baseUrl: string;
@@ -85,9 +56,6 @@ export interface CubidWalletRecoveryClient {
   completeRelease(
     input: CubidCompleteRecoveryBundleReleaseInput
   ): Promise<CubidCompleteRecoveryBundleReleaseResponse>;
-  listBundles(
-    input?: CubidListRecoveryBundlesInput
-  ): Promise<CubidListRecoveryBundlesResponse>;
 }
 
 const RECOVERY_FORBIDDEN_RAW_KEYS = new Set([
@@ -201,10 +169,6 @@ function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
 }
 
-function asNumber(value: unknown): number | null {
-  return typeof value === "number" && Number.isFinite(value) ? value : null;
-}
-
 function assertRecord(
   value: unknown,
   fieldName: string,
@@ -230,35 +194,6 @@ function getRequestId(response: Response, payload: Record<string, unknown>): str
 
   const error = isRecord(payload.error) ? payload.error : null;
   return asString(error?.requestId);
-}
-
-function normalizeBundleSummary(
-  payload: Record<string, unknown>
-): CubidUserRecoveryBundleSummary {
-  return {
-    bundleVersion:
-      asNumber(payload.bundleVersion) ?? asNumber(payload.bundle_version),
-    createdAt: asString(payload.createdAt) ?? asString(payload.created_at),
-    dappUserUuid:
-      asString(payload.dappUserUuid) ?? asString(payload.dapp_user_uuid),
-    expiresAt: asString(payload.expiresAt) ?? asString(payload.expires_at),
-    lastReleasedAt:
-      asString(payload.lastReleasedAt) ?? asString(payload.last_released_at),
-    providerKey:
-      asString(payload.providerKey) ?? asString(payload.provider_key),
-    raw: sanitizeRecord(payload),
-    recoveryBundleId:
-      asString(payload.recoveryBundleId) ??
-      asString(payload.recovery_bundle_id),
-    recoveryReference:
-      asString(payload.recoveryReference) ??
-      asString(payload.recovery_reference),
-    revokedAt: asString(payload.revokedAt) ?? asString(payload.revoked_at),
-    rotatedAt: asString(payload.rotatedAt) ?? asString(payload.rotated_at),
-    staleAt: asString(payload.staleAt) ?? asString(payload.stale_at),
-    status: asString(payload.status),
-    updatedAt: asString(payload.updatedAt) ?? asString(payload.updated_at),
-  };
 }
 
 function normalizeReleaseSummary(
@@ -481,40 +416,5 @@ export function createCubidWalletRecoveryClient(
       baseUrl,
       headers,
     }),
-    async listBundles(input = {}) {
-      const { payload, requestId } = await requestUserRoute(
-        fetchImpl,
-        options,
-        { baseUrl, headers },
-        "/api/recovery-bundles/list",
-        "recovery-bundles/list",
-        {
-          accessToken: input.accessToken,
-          body: {},
-          signal: input.signal,
-        }
-      );
-
-      if (!Array.isArray(payload.data)) {
-        throw new CubidApiError({
-          category: "upstream",
-          code: "MALFORMED_RESPONSE",
-          endpoint: "recovery-bundles/list",
-          message:
-            "Cubid wallet recovery expected an array of bundles from recovery-bundles/list.",
-          requestId,
-        });
-      }
-
-      return {
-        bundles: payload.data.map((item, index) =>
-          normalizeBundleSummary(
-            assertRecord(item, `data[${String(index)}]`, "recovery-bundles/list")
-          )
-        ),
-        raw: sanitizeRecord(payload),
-        requestId,
-      };
-    },
   };
 }

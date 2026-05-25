@@ -171,9 +171,15 @@ recovery-material reader.
 
 `@cubid/core` should own only dapp-authenticated recovery bundle metadata
 routes such as enroll, status, release-start, rotate, and revoke. Browser/client
-helpers that launch Passport-hosted recovery, complete user-authorized release,
-or list signed-in user bundles should live in `@cubid/wallet-recovery`, with
-React ergonomics in `@cubid/wallet-recovery-react`.
+helpers that launch Passport-hosted recovery or complete user-authorized
+release should live in `@cubid/wallet-recovery`, with React ergonomics in
+`@cubid/wallet-recovery-react`.
+
+Do not expose Passport's user-wide recovery-bundle list through public app SDK
+helpers. A calling dapp should only see bundles from its own dapp and dapp-user
+context. Until Passport provides an app-scoped list contract, downstream apps
+should store their own app-scoped recovery metadata and request recovery for an
+exact `recoveryBundleId`.
 
 Recovery material may be returned only by the user-authenticated browser/client
 completion path. Backend dapp credentials must never retrieve bundle material,

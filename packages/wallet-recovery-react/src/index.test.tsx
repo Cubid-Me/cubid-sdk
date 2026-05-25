@@ -4,7 +4,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   CubidRecoveryLaunchButton,
-  useCubidRecoveryBundles,
   useCubidRecoveryRelease,
 } from "./index";
 
@@ -116,90 +115,6 @@ describe("@cubid/wallet-recovery-react", () => {
     expect(screen.getByTestId("material").textContent).toBe(
       "opaque-app-owned-material"
     );
-  });
-
-  it("loads user-visible recovery bundles through the hook", async () => {
-    const fetchImpl = vi.fn(async () =>
-      createJsonResponse({
-        data: [
-          {
-            recoveryBundleId: "rw_bundle_123",
-            status: "active",
-          },
-        ],
-      })
-    );
-
-    function Harness() {
-      const bundles = useCubidRecoveryBundles({
-        autoLoad: true,
-        baseUrl: "https://passport.cubid.me",
-        fetch: fetchImpl,
-        accessToken: "user_token_123",
-      });
-
-      return (
-        <div>
-          <span data-testid="status">{bundles.status}</span>
-          <span data-testid="count">{String(bundles.bundles.length)}</span>
-        </div>
-      );
-    }
-
-    render(<Harness />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId("status").textContent).toBe("success");
-    });
-    expect(screen.getByTestId("count").textContent).toBe("1");
-  });
-
-  it("reloads user-visible recovery bundles when auth-scoped inputs change", async () => {
-    const fetchImpl = vi.fn(async (_input: string | URL | Request, init?: RequestInit) =>
-      createJsonResponse({
-        data: [
-          {
-            recoveryBundleId:
-              new Headers(init?.headers).get("authorization") ===
-              "Bearer user_token_456"
-                ? "rw_bundle_456"
-                : "rw_bundle_123",
-            status: "active",
-          },
-        ],
-      })
-    );
-
-    function Harness({ accessToken }: { accessToken: string }) {
-      const bundles = useCubidRecoveryBundles({
-        autoLoad: true,
-        baseUrl: "https://passport.cubid.me",
-        fetch: fetchImpl,
-        accessToken,
-      });
-
-      return (
-        <div>
-          <span data-testid="status">{bundles.status}</span>
-          <span data-testid="bundle">
-            {bundles.bundles[0]?.recoveryBundleId ?? "none"}
-          </span>
-        </div>
-      );
-    }
-
-    const { rerender } = render(<Harness accessToken="user_token_123" />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId("bundle").textContent).toBe("rw_bundle_123");
-    });
-
-    rerender(<Harness accessToken="user_token_456" />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId("bundle").textContent).toBe("rw_bundle_456");
-    });
-    expect(fetchImpl).toHaveBeenCalledTimes(2);
   });
 
   it("surfaces recovery errors through the release hook", async () => {
