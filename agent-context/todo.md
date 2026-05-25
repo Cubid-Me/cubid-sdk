@@ -1293,9 +1293,11 @@ completion path.
 
 ### S14.5 Add `@cubid/wallet-recovery-react`
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-25T03:35:00Z
+- Timestamp completed: 2026-05-25T03:43:00Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s86-wallet-recovery-react-package
 
 Create React helpers on top of `@cubid/wallet-recovery` for hosted recovery
 launch, release completion, and user bundle visibility. Keep `@cubid/auth-react`

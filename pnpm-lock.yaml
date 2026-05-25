@@ -260,6 +260,18 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/wallet-recovery-react:
+    dependencies:
+      '@cubid/wallet-recovery':
+        specifier: workspace:*
+        version: link:../wallet-recovery
+      react:
+        specifier: '>=18.2.0'
+        version: 19.2.5
+      react-dom:
+        specifier: '>=18.2.0'
+        version: 19.2.5(react@19.2.5)
+
   packages/web2:
     dependencies:
       '@cubid/browser':

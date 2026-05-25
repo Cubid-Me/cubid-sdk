@@ -1,5 +1,21 @@
 # Session Log
 
+## session: s86-wallet-recovery-react-package
+
+- Timestamp: 2026-05-25T03:43:00Z
+- Summary: Added `@cubid/wallet-recovery-react` on top of the browser-safe recovery client package.
+- Actions:
+  - Created a React package with a hosted recovery launch button, a release-completion hook, and a signed-in bundle-list hook.
+  - Kept auth integration optional by accepting bearer-token strings or async token providers through the underlying `@cubid/wallet-recovery` options.
+  - Added explicit `idle`, `loading`, `success`, and `error` states for recovery release and bundle-list flows.
+  - Wired the package into TypeScript aliases, jsdom Vitest coverage, the root unit prebuild sequence, and lockfile metadata.
+- Validation:
+  - `pnpm --filter @cubid/wallet-recovery-react typecheck`
+  - `pnpm --filter @cubid/wallet-recovery-react build`
+  - `pnpm exec vitest run packages/wallet-recovery-react/src/index.test.tsx`
+- Follow-up:
+  - Deprecate the legacy Cubid-generated wallet and normal signing direction while keeping existing exports callable.
+
 ## session: s85-wallet-recovery-browser-package
 
 - Timestamp: 2026-05-25T03:34:00Z
