@@ -24,6 +24,8 @@ public Cubid SDK packages.
 - `@cubid/sui`
 - `@cubid/tezos`
 - `@cubid/wagmi`
+- `@cubid/wallet-recovery`
+- `@cubid/wallet-recovery-react`
 - `@cubid/web3`
 
 ## Excluded Packages

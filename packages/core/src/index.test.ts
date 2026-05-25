@@ -3,15 +3,18 @@ import { test } from "vitest"
 
 import {
   createNotificationIdempotencyKey,
+  createRecoveryBundleIdempotencyKey,
   createCubidAppScopedSubject,
   createCubidApiClient,
   CubidApiError,
   CubidNotificationSendError,
+  CubidRecoverableWalletError,
   CubidSiwcError,
   getCubidStampTypeId,
   getCubidStampTypeName,
   getCubidStampTypeNamesById,
   isCubidNotificationSendError,
+  isCubidRecoverableWalletError,
   isCubidSignedTransactionResult,
   isCubidSigningSignatureResult,
   type CubidFetch,
@@ -1213,6 +1216,236 @@ test("v3 wallet capability and account-request helpers normalize passkey-approve
     "/api/v3/accounts/requests/create",
     "/api/v3/accounts/requests/get",
   ])
+})
+
+test("v3 recovery bundle helpers send safe metadata requests with required idempotency", async () => {
+  const calls: Array<{
+    body: Record<string, unknown>
+    headers: Headers
+    path: string
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (input, init) => {
+      const path = new URL(String(input)).pathname
+      calls.push({
+        body: JSON.parse(String(init?.body)) as Record<string, unknown>,
+        headers: new Headers(init?.headers),
+        path,
+      })
+
+      if (path.endsWith("/recovery-bundles/enroll")) {
+        return createJsonResponse({
+          data: {
+            bundleMaterial: "must-not-leak",
+            bundleVersion: 1,
+            createdAt: "2026-05-20T19:10:00.000Z",
+            dappUserUuid: "dapp_user_123",
+            providerKey: "cubid",
+            recoveryBundleId: "rw_bundle_123",
+            recoveryReference: "provider_ref_123",
+            status: "active",
+            updatedAt: "2026-05-20T19:10:00.000Z",
+            wrapped_data_key: "must-not-leak",
+          },
+        })
+      }
+
+      if (path.endsWith("/recovery-bundles/status")) {
+        return createJsonResponse({
+          data: {
+            bundleVersion: 1,
+            dappUserUuid: "dapp_user_123",
+            lastReleasedAt: null,
+            providerKey: "cubid",
+            recoveryBundleId: "rw_bundle_123",
+            status: "active",
+          },
+        })
+      }
+
+      if (path.endsWith("/recovery-bundles/release/start")) {
+        return createJsonResponse({
+          data: {
+            createdAt: "2026-05-20T19:11:00.000Z",
+            dappUserUuid: "dapp_user_123",
+            expiresAt: "2026-05-20T19:26:00.000Z",
+            providerKey: "cubid",
+            recoveryBundleId: "rw_bundle_123",
+            recoverySessionId: "rw_release_123",
+            recoveryUrl: "/recovery/wallet?recovery_session_id=rw_release_123",
+            status: "pending",
+          },
+        })
+      }
+
+      if (path.endsWith("/recovery-bundles/rotate")) {
+        return createJsonResponse({
+          data: {
+            bundleVersion: 2,
+            dappUserUuid: "dapp_user_123",
+            providerKey: "cubid",
+            recoveryBundleId: "rw_bundle_456",
+            status: "active",
+          },
+        })
+      }
+
+      return createJsonResponse({
+        data: {
+          dappUserUuid: "dapp_user_123",
+          providerKey: "cubid",
+          recoveryBundleId: "rw_bundle_456",
+          revokedAt: "2026-05-20T19:12:00.000Z",
+          status: "revoked",
+        },
+      })
+    },
+  })
+
+  const enrolled = await client.enrollRecoveryBundle({
+    bundleMaterial: "opaque-app-owned-material",
+    bundleVersion: 1,
+    idempotencyKey: "rw_enroll_key_123",
+    metadata: { walletProvider: "host-mpc" },
+    providerKey: "cubid",
+    recoveryBundleId: "rw_bundle_123",
+    recoveryReference: "provider_ref_123",
+    userId: "dapp_user_123",
+  })
+  const status = await client.getRecoveryBundleStatus({
+    providerKey: "cubid",
+    recoveryBundleId: "rw_bundle_123",
+    userId: "dapp_user_123",
+  })
+  const release = await client.startRecoveryBundleRelease({
+    idempotencyKey: "rw_release_key_123",
+    providerKey: "cubid",
+    recoveryBundleId: "rw_bundle_123",
+    userId: "dapp_user_123",
+  })
+  const rotated = await client.rotateRecoveryBundle({
+    bundleMaterial: "replacement-opaque-material",
+    idempotencyKey: "rw_rotate_key_123",
+    newRecoveryBundleId: "rw_bundle_456",
+    recoveryBundleId: "rw_bundle_123",
+    userId: "dapp_user_123",
+  })
+  const revoked = await client.revokeRecoveryBundle({
+    recoveryBundleId: "rw_bundle_456",
+    userId: "dapp_user_123",
+  })
+
+  assert.equal(enrolled.idempotencyKey, "rw_enroll_key_123")
+  assert.equal(enrolled.bundle.recoveryBundleId, "rw_bundle_123")
+  assert.equal(enrolled.bundle.bundleVersion, 1)
+  assert.equal(enrolled.bundle.raw.bundleMaterial, undefined)
+  assert.equal(enrolled.raw.wrapped_data_key, undefined)
+  assert.equal(status.bundle.status, "active")
+  assert.equal(release.releaseSession.recoverySessionId, "rw_release_123")
+  assert.equal(
+    release.releaseSession.recoveryUrl,
+    "/recovery/wallet?recovery_session_id=rw_release_123"
+  )
+  assert.equal(rotated.bundle.recoveryBundleId, "rw_bundle_456")
+  assert.equal(revoked.bundle.status, "revoked")
+
+  assert.equal(calls[0]?.headers.get("Idempotency-Key"), "rw_enroll_key_123")
+  assert.equal(calls[2]?.headers.get("Idempotency-Key"), "rw_release_key_123")
+  assert.equal(calls[3]?.headers.get("Idempotency-Key"), "rw_rotate_key_123")
+  assert.deepEqual(calls[0]?.body, {
+    api_key: "api_key",
+    bundle_material: "opaque-app-owned-material",
+    bundle_version: 1,
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    metadata: { walletProvider: "host-mpc" },
+    provider_key: "cubid",
+    recovery_bundle_id: "rw_bundle_123",
+    recovery_reference: "provider_ref_123",
+  })
+  assert.deepEqual(calls[1]?.body, {
+    api_key: "api_key",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    provider_key: "cubid",
+    recovery_bundle_id: "rw_bundle_123",
+  })
+  assert.deepEqual(calls[2]?.body, {
+    api_key: "api_key",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    provider_key: "cubid",
+    recovery_bundle_id: "rw_bundle_123",
+  })
+  assert.deepEqual(calls[3]?.body, {
+    api_key: "api_key",
+    bundle_material: "replacement-opaque-material",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    new_recovery_bundle_id: "rw_bundle_456",
+    recovery_bundle_id: "rw_bundle_123",
+  })
+  assert.deepEqual(calls[4]?.body, {
+    api_key: "api_key",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    recovery_bundle_id: "rw_bundle_456",
+  })
+  assert.deepEqual(calls.map((call) => call.path), [
+    "/api/v3/recovery-bundles/enroll",
+    "/api/v3/recovery-bundles/status",
+    "/api/v3/recovery-bundles/release/start",
+    "/api/v3/recovery-bundles/rotate",
+    "/api/v3/recovery-bundles/revoke",
+  ])
+})
+
+test("v3 recovery bundle helpers auto-generate idempotency keys and map recovery errors", async () => {
+  let idempotencyKey: string | null = null
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      idempotencyKey = new Headers(init?.headers).get("Idempotency-Key")
+      return createJsonResponse(
+        {
+          error: {
+            code: "cooldown_active",
+            message: "Recovery is temporarily blocked by cooldown policy.",
+            requestId: "passport_rw_123",
+          },
+        },
+        { status: 429 }
+      )
+    },
+  })
+
+  assert.match(createRecoveryBundleIdempotencyKey(), /^[0-9a-f-]{36}$/)
+
+  await assert.rejects(
+    () =>
+      client.enrollRecoveryBundle({
+        bundleMaterial: "opaque-app-owned-material",
+        providerKey: "cubid",
+        userId: "dapp_user_123",
+      }),
+    (error) => {
+      assert.match(String(idempotencyKey), /^[0-9a-f-]{36}$/)
+      assert.ok(error instanceof CubidRecoverableWalletError)
+      assert.ok(isCubidRecoverableWalletError(error))
+      assert.equal(error.recoveryCode, "cooldown_active")
+      assert.equal(error.status, 429)
+      assert.equal(error.endpoint, "v3/recovery-bundles/enroll")
+      assert.equal(
+        error.message,
+        "Recovery is temporarily blocked by cooldown policy."
+      )
+      return true
+    }
+  )
 })
 
 test("v3 signing request helpers normalize redacted summaries and risk fields", async () => {

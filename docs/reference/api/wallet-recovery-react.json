@@ -1,0 +1,1107 @@
+{
+  "schemaVersion": "2.0",
+  "name": "@cubid/wallet-recovery-react",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "name": "CubidRecoveryBundlesHookOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "accessToken",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.accessToken"
+          }
+        },
+        {
+          "name": "autoLoad",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "baseUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.dom.d.ts",
+                  "qualifiedName": "URL"
+                },
+                "name": "URL",
+                "package": "typescript"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.baseUrl"
+          }
+        },
+        {
+          "name": "fetch",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/wallet-recovery",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidWalletRecoveryFetch"
+            },
+            "name": "CubidWalletRecoveryFetch",
+            "package": "@cubid/wallet-recovery"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.fetch"
+          }
+        },
+        {
+          "name": "getAccessToken",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/wallet-recovery",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidWalletRecoveryTokenProvider"
+            },
+            "name": "CubidWalletRecoveryTokenProvider",
+            "package": "@cubid/wallet-recovery"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.getAccessToken"
+          }
+        },
+        {
+          "name": "headers",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.dom.d.ts",
+              "qualifiedName": "HeadersInit"
+            },
+            "name": "HeadersInit",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.headers"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@cubid/wallet-recovery-react",
+            "packagePath": "src/hooks.tsx",
+            "qualifiedName": "CubidWalletRecoveryHookOptions"
+          },
+          "name": "CubidWalletRecoveryHookOptions",
+          "package": "@cubid/wallet-recovery-react"
+        }
+      ]
+    },
+    {
+      "name": "CubidRecoveryBundlesState",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "bundles",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "target": {
+                "packageName": "@cubid/wallet-recovery",
+                "packagePath": "src/index.ts",
+                "qualifiedName": "CubidUserRecoveryBundleSummary"
+              },
+              "name": "CubidUserRecoveryBundleSummary",
+              "package": "@cubid/wallet-recovery"
+            }
+          }
+        },
+        {
+          "name": "data",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/wallet-recovery",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidListRecoveryBundlesResponse"
+                },
+                "name": "CubidListRecoveryBundlesResponse",
+                "package": "@cubid/wallet-recovery"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "error",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Error"
+                },
+                "name": "Error",
+                "package": "typescript"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "reload",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "input",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/wallet-recovery",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidListRecoveryBundlesInput"
+                        },
+                        "name": "CubidListRecoveryBundlesInput",
+                        "package": "@cubid/wallet-recovery"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/wallet-recovery",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidListRecoveryBundlesResponse"
+                        },
+                        "name": "CubidListRecoveryBundlesResponse",
+                        "package": "@cubid/wallet-recovery"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "reset",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryReactStatus",
+            "package": "@cubid/wallet-recovery-react"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidRecoveryLaunchButtonProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "children",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Error"
+                        },
+                        "name": "Error",
+                        "package": "typescript"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onLaunched",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "url",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "openWindow",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "url",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "passportOrigin",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.dom.d.ts",
+                  "qualifiedName": "URL"
+                },
+                "name": "URL",
+                "package": "typescript"
+              }
+            ]
+          }
+        },
+        {
+          "name": "recoverySessionId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "typescript",
+            "packagePath": "lib/lib.es5.d.ts",
+            "qualifiedName": "Omit"
+          },
+          "typeArguments": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "@types/react",
+                "packagePath": "index.d.ts",
+                "qualifiedName": "React.ButtonHTMLAttributes"
+              },
+              "typeArguments": [
+                {
+                  "type": "reference",
+                  "target": {
+                    "packageName": "typescript",
+                    "packagePath": "lib/lib.dom.d.ts",
+                    "qualifiedName": "HTMLButtonElement"
+                  },
+                  "name": "HTMLButtonElement",
+                  "package": "typescript"
+                }
+              ],
+              "name": "ButtonHTMLAttributes",
+              "package": "@types/react",
+              "qualifiedName": "React.ButtonHTMLAttributes"
+            },
+            {
+              "type": "union",
+              "types": [
+                {
+                  "type": "literal",
+                  "value": "children"
+                },
+                {
+                  "type": "literal",
+                  "value": "onClick"
+                },
+                {
+                  "type": "literal",
+                  "value": "onError"
+                }
+              ]
+            }
+          ],
+          "name": "Omit",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "name": "CubidRecoveryReleaseHookOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "accessToken",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.accessToken"
+          }
+        },
+        {
+          "name": "baseUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.dom.d.ts",
+                  "qualifiedName": "URL"
+                },
+                "name": "URL",
+                "package": "typescript"
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.baseUrl"
+          }
+        },
+        {
+          "name": "fetch",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/wallet-recovery",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidWalletRecoveryFetch"
+            },
+            "name": "CubidWalletRecoveryFetch",
+            "package": "@cubid/wallet-recovery"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.fetch"
+          }
+        },
+        {
+          "name": "getAccessToken",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/wallet-recovery",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidWalletRecoveryTokenProvider"
+            },
+            "name": "CubidWalletRecoveryTokenProvider",
+            "package": "@cubid/wallet-recovery"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.getAccessToken"
+          }
+        },
+        {
+          "name": "headers",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.dom.d.ts",
+              "qualifiedName": "HeadersInit"
+            },
+            "name": "HeadersInit",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryHookOptions.headers"
+          }
+        },
+        {
+          "name": "recoverySessionId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "packageName": "@cubid/wallet-recovery-react",
+            "packagePath": "src/hooks.tsx",
+            "qualifiedName": "CubidWalletRecoveryHookOptions"
+          },
+          "name": "CubidWalletRecoveryHookOptions",
+          "package": "@cubid/wallet-recovery-react"
+        }
+      ]
+    },
+    {
+      "name": "CubidRecoveryReleaseState",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "completeRelease",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "input",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {
+                        "isOptional": true
+                      },
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Partial"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "@cubid/wallet-recovery",
+                              "packagePath": "src/index.ts",
+                              "qualifiedName": "CubidCompleteRecoveryBundleReleaseInput"
+                            },
+                            "name": "CubidCompleteRecoveryBundleReleaseInput",
+                            "package": "@cubid/wallet-recovery"
+                          }
+                        ],
+                        "name": "Partial",
+                        "package": "typescript"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/wallet-recovery",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidCompleteRecoveryBundleReleaseResponse"
+                        },
+                        "name": "CubidCompleteRecoveryBundleReleaseResponse",
+                        "package": "@cubid/wallet-recovery"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "data",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/wallet-recovery",
+                  "packagePath": "src/index.ts",
+                  "qualifiedName": "CubidCompleteRecoveryBundleReleaseResponse"
+                },
+                "name": "CubidCompleteRecoveryBundleReleaseResponse",
+                "package": "@cubid/wallet-recovery"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "error",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Error"
+                },
+                "name": "Error",
+                "package": "typescript"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "reset",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidWalletRecoveryReactStatus",
+            "package": "@cubid/wallet-recovery-react"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidWalletRecoveryReactStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "error"
+          },
+          {
+            "type": "literal",
+            "value": "idle"
+          },
+          {
+            "type": "literal",
+            "value": "loading"
+          },
+          {
+            "type": "literal",
+            "value": "success"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidRecoveryLaunchButton",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidRecoveryLaunchButton",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidRecoveryLaunchButtonProps",
+                "package": "@cubid/wallet-recovery-react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useCubidRecoveryBundles",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useCubidRecoveryBundles",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidRecoveryBundlesHookOptions",
+                "package": "@cubid/wallet-recovery-react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "CubidRecoveryBundlesState",
+            "package": "@cubid/wallet-recovery-react"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useCubidRecoveryRelease",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useCubidRecoveryRelease",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidRecoveryReleaseHookOptions",
+                "package": "@cubid/wallet-recovery-react"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "CubidRecoveryReleaseState",
+            "package": "@cubid/wallet-recovery-react"
+          }
+        }
+      ]
+    }
+  ],
+  "packageName": "@cubid/wallet-recovery-react",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# @cubid/wallet-recovery-react\n\nReact helpers for Cubid Passport recoverable wallet flows.\n\nUse this package when a React app needs hosted recovery launch, signed-in\nrelease completion, or user-visible recovery bundle listing. It builds on\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/wallet-recovery`"
+    },
+    {
+      "kind": "text",
+      "text": ", accepts an explicit bearer token or async token\nprovider, and does not depend on "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/auth-react`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\npnpm add @cubid/wallet-recovery-react\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## API Reference\n\n- JSON reference: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/reference/api/wallet-recovery-react.json`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- Package matrix: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\nimport {\n  CubidRecoveryLaunchButton,\n  useCubidRecoveryRelease,\n} from \"@cubid/wallet-recovery-react\"\n\nfunction Recovery({ recoverySessionId }: { recoverySessionId: string }) {\n  const release = useCubidRecoveryRelease({\n    baseUrl: \"https://passport.cubid.me\",\n    getAccessToken: () => firebaseUser.getIdToken(),\n    recoverySessionId,\n  })\n\n  return (\n    <>\n      <CubidRecoveryLaunchButton recoverySessionId={recoverySessionId} />\n      <button onClick={() => void release.completeRelease()}>\n        Complete recovery\n      </button>\n    </>\n  )\n}\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`bundleMaterial`"
+    },
+    {
+      "kind": "text",
+      "text": " is only returned by the signed-in completion hook. Backend\ndapp credentials should use metadata-only helpers from "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": "."
+    }
+  ]
+}

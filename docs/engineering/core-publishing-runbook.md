@@ -31,6 +31,8 @@ publication are complete. Do not publish public SDK packages from
 | `@cubid/sui` | npm-only | Chain-specific Sui package built for the npm ecosystem. |
 | `@cubid/tezos` | npm-only | Chain-specific Tezos package built for the npm ecosystem. |
 | `@cubid/wagmi` | npm-only | wagmi-specific React integration package. |
+| `@cubid/wallet-recovery` | npm-only | Browser/client recoverable-wallet package. |
+| `@cubid/wallet-recovery-react` | npm-only | React recoverable-wallet package. |
 | `@cubid/web3` | npm-only | Frozen compatibility package with manual-only maintenance. |
 | `@cubid/web2` | npm-only | Deprecated compatibility wrapper; not a normal release target. |
 | `@cubid/web2-react` | npm-only | Deprecated compatibility wrapper; not a normal release target. |

@@ -1,5 +1,149 @@
 # Session Log
 
+## session: s91-pr16-review-followup
+
+- Timestamp: 2026-05-25T04:05:00Z
+- Summary: Addressed PR #16 Copilot and Codex review feedback for the recoverable-wallet client packages.
+- Actions:
+  - Redacted `bundleMaterial` and `bundle_material` from sanitized raw recovery payloads while keeping the explicit top-level `bundleMaterial` completion field.
+  - Restricted recovery base URLs to HTTPS, with HTTP allowed only for localhost development.
+  - Resolved `fetch` through `globalThis.fetch` and added a clear missing-fetch configuration error for runtimes without a global fetch implementation.
+  - Classified HTTP 403 recovery failures as auth errors so wrong-user and token-scope flows can trigger account-switch or re-auth handling.
+  - Replaced the new recovery package LICENSE stubs with the full Apache-2.0 license text.
+- Validation:
+  - `pnpm exec vitest run packages/wallet-recovery/src/index.test.ts packages/wallet-recovery-react/src/index.test.tsx`
+  - `pnpm --filter @cubid/wallet-recovery typecheck`
+  - `pnpm --filter @cubid/wallet-recovery-react typecheck`
+  - `pnpm lint`
+- Follow-up:
+  - Push the review-fix commit, reply to and resolve the PR #16 review threads, then wait for CI to return green.
+
+## session: s90-recoverable-wallet-handoff
+
+- Timestamp: 2026-05-25T04:18:00Z
+- Summary: Completed the S14 SDK-to-Passport handoff for the recoverable-wallet package family.
+- Actions:
+  - Updated the SDK-side recoverable-wallet direction and error-taxonomy cross-repo notes with implemented package names, helper exports, versions, validation evidence, and downstream app boundaries.
+  - Updated the sibling Passport notes with the same handoff details while leaving the Passport repo dirty as the cross-repo notification mechanism.
+  - Marked S14 and S14.9 complete in the SDK roadmap and refreshed repo status to show recoverable-wallet SDK implementation as the current closed baseline.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Run the full pre-yeet validation gate before publishing this branch to `dev`.
+
+## session: s89-recovery-package-wiring
+
+- Timestamp: 2026-05-25T04:10:00Z
+- Summary: Wired the recoverable-wallet packages into publishing, API reference generation, acceptance coverage, and package docs.
+- Actions:
+  - Added `@cubid/wallet-recovery` and `@cubid/wallet-recovery-react` to the trusted-publishing workflow as npm-only packages.
+  - Added both recovery packages to the TypeDoc API reference generator, generated new JSON artifacts, and updated the reference index and root package matrix.
+  - Added acceptance tests that import the recovery packages through their public package names.
+  - Bumped `@cubid/core` and its JSR manifest to `0.1.7` for the new public recovery helper surface.
+  - Updated publishing policy docs and the Next/Supabase guide to keep JSR limited to `@cubid/core` and recovery material out of backend helpers.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm test:acceptance`
+  - `pnpm lint`
+  - `pnpm --filter @cubid/core typecheck`
+  - `pnpm --filter @cubid/wallet-recovery typecheck`
+  - `pnpm --filter @cubid/wallet-recovery-react typecheck`
+  - `pnpm --filter @cubid/core build`
+  - `pnpm --filter @cubid/wallet-recovery build`
+  - `pnpm --filter @cubid/wallet-recovery-react build`
+  - `pnpm exec vitest run packages/core/src/index.test.ts packages/wallet-recovery/src/index.test.ts packages/wallet-recovery-react/src/index.test.tsx`
+  - `git diff --check`
+- Follow-up:
+  - Write the SDK-to-Passport release handoff in the live sibling cross-repo notes.
+
+## session: s88-chain-provider-abstract-docs
+
+- Timestamp: 2026-05-25T03:56:00Z
+- Summary: Kept dedicated chain packages provider-abstract under the recoverable-wallet direction.
+- Actions:
+  - Updated chain package READMEs to describe public wallet metadata, provider-adapter, and verification responsibilities rather than Cubid custody/signing ownership.
+  - Added explicit non-goals across chain packages: no wallet key creation, no normal transaction signing, no MPC provider operation, and no transaction broadcasting.
+  - Updated the target-state package matrix wording so chain packages are documented as wallet/provider adapter packages.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Wire the new recovery packages into publishing, API reference generation, public package matrices, and acceptance coverage.
+
+## session: s87-legacy-wallet-direction-deprecation
+
+- Timestamp: 2026-05-25T03:49:00Z
+- Summary: Deprecated the legacy Cubid-generated wallet and normal Cubid-signing direction for new SDK integrations without removing existing exports.
+- Actions:
+  - Added JSDoc deprecation guidance on the existing `@cubid/core` generated-account, SIWC capability, account-request, and signing-request methods.
+  - Updated the core README to describe those helpers as compatibility surfaces and point new integrations toward host-created wallet material plus Cubid recovery bundles.
+  - Updated the Next/Supabase Edge integration guide so legacy wallet/signing examples are explicitly framed as deprecated compatibility flows.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Keep chain package docs provider-abstract so dedicated chain packages do not imply Cubid creates wallet keys or normally signs transactions.
+
+## session: s86-wallet-recovery-react-package
+
+- Timestamp: 2026-05-25T03:43:00Z
+- Summary: Added `@cubid/wallet-recovery-react` on top of the browser-safe recovery client package.
+- Actions:
+  - Created a React package with a hosted recovery launch button, a release-completion hook, and a signed-in bundle-list hook.
+  - Kept auth integration optional by accepting bearer-token strings or async token providers through the underlying `@cubid/wallet-recovery` options.
+  - Added explicit `idle`, `loading`, `success`, and `error` states for recovery release and bundle-list flows.
+  - Wired the package into TypeScript aliases, jsdom Vitest coverage, the root unit prebuild sequence, and lockfile metadata.
+- Validation:
+  - `pnpm --filter @cubid/wallet-recovery-react typecheck`
+  - `pnpm --filter @cubid/wallet-recovery-react build`
+  - `pnpm exec vitest run packages/wallet-recovery-react/src/index.test.tsx`
+- Follow-up:
+  - Deprecate the legacy Cubid-generated wallet and normal signing direction while keeping existing exports callable.
+
+## session: s85-wallet-recovery-browser-package
+
+- Timestamp: 2026-05-25T03:34:00Z
+- Summary: Added the browser-safe `@cubid/wallet-recovery` package for hosted recoverable-wallet UX and signed-in recovery bundle visibility.
+- Actions:
+  - Created `packages/wallet-recovery` as an npm-only browser/client package with hosted recovery URL construction.
+  - Added bearer-token release completion and bundle-list calls for the Passport user-authenticated recovery routes without accepting dapp API keys.
+  - Normalized user-visible bundle and release metadata, returning opaque `bundleMaterial` only from the user-authorized completion path and stripping recovery-sensitive raw fields.
+  - Reused the shared `CubidRecoverableWalletError` taxonomy from `@cubid/core` for Passport recovery error envelopes.
+  - Wired the package into the TypeScript path aliases, unit-test project, coverage scope, and unit prebuild sequence.
+- Validation:
+  - `pnpm --filter @cubid/wallet-recovery typecheck`
+  - `pnpm --filter @cubid/wallet-recovery build`
+- Follow-up:
+  - Add `@cubid/wallet-recovery-react` on top of this browser-safe package for React launch, completion, and bundle-list ergonomics.
+
+## session: s83-recoverable-wallet-direction-intake
+
+- Timestamp: 2026-05-25T03:20:52Z
+- Summary: Ingested Passport's recoverable-wallet direction reset and opened the SDK-side S14 implementation track.
+- Actions:
+  - Reviewed the new Passport cross-repo notes for recoverable-wallet SDK direction and browser-safe recovery error taxonomy.
+  - Cross-checked the Passport recoverable-wallet roadmap and API docs showing hosted smoke coverage for enrollment, status, release start, release completion, rotation, revocation, and user bundle listing.
+  - Added S14 and its implementation subitems to `agent-context/todo.md`.
+  - Updated AGENTS guidance, the agent backgrounder, the target-state doc, and repo status so Cubid is now modeled as an identity-bound recovery provider rather than a wallet generator or normal signer for new integrations.
+- Validation:
+  - Reviewed the current SDK package boundaries and Passport recovery route contracts.
+- Follow-up:
+  - Implement S14.2 next by adding server-safe recovery bundle wrappers and structured recovery errors in `@cubid/core`.
+
+## session: s84-core-recovery-bundle-helpers
+
+- Timestamp: 2026-05-25T03:25:08Z
+- Summary: Added the server-safe recoverable-wallet API v3 wrapper surface and shared browser-safe recovery error taxonomy in `@cubid/core`.
+- Actions:
+  - Added typed helpers for recovery bundle enroll, status, release-start, rotate, and revoke.
+  - Added `CubidRecoverableWalletError`, `isCubidRecoverableWalletError`, and the Passport recoverable-wallet error-code taxonomy.
+  - Normalized recovery bundle and release-session responses as safe metadata only, with recovery-sensitive raw fields stripped from SDK raw summaries.
+  - Added focused core tests for request bodies, idempotency headers, response normalization, raw redaction, generated idempotency keys, and structured recovery errors.
+- Validation:
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+  - `pnpm --filter @cubid/core typecheck`
+- Follow-up:
+  - Add the browser/client `@cubid/wallet-recovery` package for hosted recovery launch, user-authorized release completion, and signed-in bundle visibility.
+
 ## session: s82-pr15-comms-publish-workflow-review-fix
 
 - Timestamp: 2026-05-16T05:16:21Z

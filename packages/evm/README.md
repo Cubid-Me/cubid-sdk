@@ -1,12 +1,13 @@
 # `@cubid/evm`
 
-EVM-oriented Cubid wallet helpers built on top of `@cubid/core`.
+EVM-oriented Cubid wallet/provider helpers built on top of `@cubid/core`.
 
 ## When To Choose This Package
 
-Use `@cubid/evm` when you need Cubid's EVM-specific custody, connection, and
-verification helpers. Choose `@cubid/wagmi` only when your host app already
-uses wagmi and needs React-friendly adapters on top of this package.
+Use `@cubid/evm` when you need EVM-specific public wallet metadata,
+provider-adapter, and verification helpers. Choose `@cubid/wagmi` only when
+your host app already uses wagmi and needs React-friendly adapters on top of
+this package.
 
 ## Install
 
@@ -27,7 +28,7 @@ npm install @cubid/evm @cubid/core
 ## Capability Metadata
 
 EVM connections may expose optional `capabilities` metadata for features that
-are not universal across Cubid custody accounts, such as:
+are not universal across host wallet providers or adapters, such as:
 
 - `smartAccount`
 - `sessionKeys`
@@ -40,3 +41,7 @@ every EVM account supports those features by default.
 The package exports `getCubidEvmCapabilities(...)` and
 `hasCubidEvmCapability(...)` so host apps can read that metadata without
 hard-coding smart-account assumptions into the integration path.
+
+This package does not create wallet keys, perform normal transaction signing,
+operate an MPC provider, or broadcast transactions. Host apps or specialist
+wallet providers own those responsibilities.

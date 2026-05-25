@@ -53,6 +53,8 @@ Build toward this package ecosystem:
 
 (later, if backend contracts justify them)
 @cubid/comms
+@cubid/wallet-recovery
+@cubid/wallet-recovery-react
 @cubid/secrets
 ```
 
@@ -64,6 +66,7 @@ browser/React/EVM slices, while frozen compatibility packages remain:
 @cubid/auth-react
 @cubid/aptos
 @cubid/browser
+@cubid/comms
 @cubid/react
 @cubid/bitcoin
 @cubid/cardano
@@ -77,6 +80,10 @@ browser/React/EVM slices, while frozen compatibility packages remain:
 @cubid/stellar
 @cubid/sui
 @cubid/tezos
+
+(planned next)
+@cubid/wallet-recovery
+@cubid/wallet-recovery-react
 
 @cubid/web2       -> frozen compatibility wrapper around @cubid/browser
 @cubid/web2-react -> frozen compatibility wrapper around @cubid/react
@@ -155,6 +162,24 @@ Treat hosted Allow Page category grants as Passport-owned UX for now. If the
 SDK later exposes them, model them only as permission state and never as
 access to raw destinations or delivery capability.
 
+### Future `@cubid/wallet-recovery`
+
+Use a dedicated wallet-recovery package family for the recoverable-wallet
+direction reset. Cubid is the recovery provider, not the wallet generator,
+normal signer, transaction broadcaster, MPC provider, or server-side
+recovery-material reader.
+
+`@cubid/core` should own only dapp-authenticated recovery bundle metadata
+routes such as enroll, status, release-start, rotate, and revoke. Browser/client
+helpers that launch Passport-hosted recovery, complete user-authorized release,
+or list signed-in user bundles should live in `@cubid/wallet-recovery`, with
+React ergonomics in `@cubid/wallet-recovery-react`.
+
+Recovery material may be returned only by the user-authenticated browser/client
+completion path. Backend dapp credentials must never retrieve bundle material,
+ciphertext, Vault metadata, raw Cubid user ids, private keys, seed material, or
+key shares.
+
 ### Chain Packages
 
 Own:
@@ -173,6 +198,11 @@ only in the dedicated package for that chain family.
 Future smart-account, session-key, paymaster, or gas-sponsorship helpers must
 be capability-driven and explicitly optional. Do not assume every Cubid account
 supports those features by default.
+
+Chain packages should remain provider-abstract. They may help host apps persist
+or inspect public wallet metadata, but they should not imply that Cubid creates
+wallets, signs normal transactions, or broadcasts transactions for new
+integrations.
 
 ### `@cubid/auth-react`
 

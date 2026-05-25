@@ -1212,7 +1212,7 @@
     },
     {
       "kind": "text",
-      "text": "\n\nwagmi-based React helpers that adapt wallet flows onto "
+      "text": "\n\nwagmi-based React helpers that adapt host wallet-provider flows onto\n"
     },
     {
       "kind": "code",
@@ -1228,7 +1228,7 @@
     },
     {
       "kind": "text",
-      "text": " when your app already uses wagmi and you want Cubid's\nReact-friendly wallet adapters on top of the EVM package. Choose "
+      "text": " when your app already uses wagmi and you want Cubid's\nReact-friendly provider adapters on top of the EVM package. Choose\n"
     },
     {
       "kind": "code",
@@ -1236,7 +1236,7 @@
     },
     {
       "kind": "text",
-      "text": "\ninstead for non-wagmi or framework-neutral EVM flows.\n\n## Install\n\n"
+      "text": " instead for non-wagmi or framework-neutral EVM flows.\n\n## Install\n\n"
     },
     {
       "kind": "code",
@@ -1284,7 +1284,7 @@
     },
     {
       "kind": "text",
-      "text": " for apps that want to wire\ntheir own wagmi actions into the Cubid EVM adapter surface without using the\nprovided hook."
+      "text": " for apps that want to wire\ntheir own wagmi actions into the Cubid EVM adapter surface without using the\nprovided hook.\n\nThis package does not create wallet keys, perform normal transaction signing,\noperate an MPC provider, or broadcast transactions. Host apps and their wagmi\nconnectors own those responsibilities."
     }
   ]
 }

@@ -121,6 +121,11 @@ endpoints plus the first server-facing API v3 write helpers:
 - `saveSecret`
 - `sendNotification`
 - `getNotificationStatus`
+- `enrollRecoveryBundle`
+- `getRecoveryBundleStatus`
+- `startRecoveryBundleRelease`
+- `rotateRecoveryBundle`
+- `revokeRecoveryBundle`
 - `generateAccount`
 - `listAccounts`
 - `fetchWalletCapabilities`
@@ -130,6 +135,12 @@ endpoints plus the first server-facing API v3 write helpers:
 - `getSigningRequest`
 - `listSigningRequests`
 - `cancelSigningRequest`
+
+The legacy Cubid-generated wallet and normal Cubid-signing direction is now
+deprecated for new integrations. These exports remain callable as compatibility
+surfaces, but new wallet work should create wallet material in the host app or
+specialist signing provider and use Cubid only as the identity-bound recovery
+bundle provider.
 
 Responses use SDK-friendly camelCase fields while retaining the original
 server payload in `raw` for migration/debugging. Malformed successful responses
@@ -175,6 +186,11 @@ The current API v3 helpers stay server-side as well:
 - `saveSecret({ userId, secret, idempotencyKey? })`
 - `sendNotification({ userId, category, priority, title, body, deepLink?, metadata?, idempotencyKey? })`
 - `getNotificationStatus({ userId, eventId })`
+- `enrollRecoveryBundle({ userId, bundleMaterial, providerKey?, recoveryBundleId?, idempotencyKey? })`
+- `getRecoveryBundleStatus({ userId, providerKey?, recoveryBundleId? })`
+- `startRecoveryBundleRelease({ userId, providerKey?, recoveryBundleId?, idempotencyKey? })`
+- `rotateRecoveryBundle({ userId, recoveryBundleId, bundleMaterial, providerKey?, idempotencyKey? })`
+- `revokeRecoveryBundle({ userId, recoveryBundleId, providerKey? })`
 - `generateAccount({ userId, chain, label?, idempotencyKey? })`
 - `listAccounts({ userId, chain? })`
 - `fetchWalletCapabilities({ userId? })`
@@ -185,14 +201,30 @@ The current API v3 helpers stay server-side as well:
 - `listSigningRequests({ userId, userAccountId?, limit? })`
 - `cancelSigningRequest({ signingRequestId })`
 
+`enrollRecoveryBundle`, `getRecoveryBundleStatus`,
+`startRecoveryBundleRelease`, `rotateRecoveryBundle`, and
+`revokeRecoveryBundle` are the server-safe recovery bundle helpers. They expose
+only safe metadata and never return recovery material, ciphertext, Vault
+metadata, raw Cubid user ids, service-role fields, private keys, seed material,
+or key shares.
+
+`generateAccount`, `fetchWalletCapabilities`, `createAccountRequest`,
+`getAccountRequest`, `createSigningRequest`, `getSigningRequest`,
+`listSigningRequests`, and `cancelSigningRequest` are deprecated compatibility
+helpers for the older SIWC wallet-generation and normal-signing direction. New
+integrations should use host-created wallet material, host-selected signing
+infrastructure, and Cubid recovery bundle helpers instead.
+
 Legacy `POST /api/v2/save_secret` is retired and should not be used or
 reintroduced in the public SDK surface. `saveSecret` now targets the v3 write
 contract only.
 
-`saveSecret`, `sendNotification`, `generateAccount`, `createAccountRequest`,
-and `createSigningRequest` automatically generate an idempotency key when
-callers omit one, and they return the resolved `idempotencyKey` alongside the
-normalized response so callers can log or reconcile retries safely.
+`saveSecret`, `sendNotification`, `enrollRecoveryBundle`,
+`startRecoveryBundleRelease`, `rotateRecoveryBundle`, `generateAccount`,
+`createAccountRequest`, and `createSigningRequest` automatically generate an
+idempotency key when callers omit one, and they return the resolved
+`idempotencyKey` alongside the normalized response so callers can log or
+reconcile retries safely.
 
 `sendNotification` is the first dapp-authenticated flexible-messaging helper.
 It stays server-side, requires the Cubid dapp API key, and normalizes only
@@ -225,15 +257,16 @@ visibility.
 `POST /api/notifications/history/list`. That route remains a signed-in profile
 surface rather than a normal dapp server SDK helper.
 
-Supported custody chains on the public v3 account helpers are:
+Supported custody chains on the deprecated public v3 account compatibility
+helpers are:
 
 - `evm`
 - `near`
 - `solana`
 - `sui`
 
-`fetchWalletCapabilities` is the public fail-closed discovery surface for SIWC
-wallet UX. It can return:
+`fetchWalletCapabilities` remains the deprecated fail-closed discovery surface
+for older SIWC wallet UX. It can return:
 
 - dapp-scoped policy state
 - per-chain capability flags such as `passkeyApprovedCreation`,
@@ -243,8 +276,9 @@ wallet UX. It can return:
 This route is app-scoped only. Do not build flows that expect lookup by raw
 Cubid identity, global wallet inventory, or cross-app account visibility.
 
-`createAccountRequest` and `getAccountRequest` are the public helpers for
-passkey-approved wallet creation. They expose stable public statuses such as:
+`createAccountRequest` and `getAccountRequest` remain deprecated compatibility
+helpers for passkey-approved Cubid wallet creation. They expose stable public
+statuses such as:
 
 - `pending_user_approval`
 - `policy_denied`
@@ -285,8 +319,8 @@ v3 contract does not expose a public decrypt/read endpoint for these secrets,
 so do not build app flows that assume the SDK can read plaintext secret values
 back out later.
 
-The signing-request helpers also stay redacted by default. They normalize only
-safe summary metadata such as:
+The deprecated signing-request compatibility helpers also stay redacted by
+default. They normalize only safe summary metadata such as:
 
 - `signingRequestId`
 - `status`

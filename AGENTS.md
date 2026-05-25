@@ -18,6 +18,11 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - "Sign in with Cubid" OAuth/OIDC helpers should live in dedicated auth packages rather than being forced into `@cubid/core` or the generic React package.
 - Signed-in messaging channel and preference management should land in a future dedicated communications package family rather than being forced into `@cubid/core` or the browser layer.
 - Future server-authenticated notification send or status helpers should stay in `@cubid/core` only when Passport promotes stable dapp-facing backend contracts for them.
+- Recoverable wallet work should model Cubid as an identity-bound recovery
+  provider, not as a wallet generator, normal signer, transaction broadcaster,
+  MPC provider, or server-side recovery-material reader.
+- Browser/client recovery helpers belong in dedicated wallet-recovery packages;
+  dapp-authenticated recovery bundle metadata helpers belong in `@cubid/core`.
 - Any SDK change that could affect underlying data models, API contracts,
   response shapes, auth flows, or other interface structure must first be
   evaluated for impact on `cubid-passport` before implementation.
@@ -52,11 +57,18 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - `packages/browser` now carries the first-class headless browser layer, while `@cubid/web2` remains only as a frozen deprecated compatibility package.
 - `packages/react` now carries the React layer, while `@cubid/web2-react` remains only as a frozen deprecated compatibility package.
 - `packages/comms` now carries the signed-in Passport-user messaging profile layer for channels, verification, preferences, and permission metadata.
+- `packages/wallet-recovery` and `packages/wallet-recovery-react` are the next
+  dedicated package family for passkey-first, app-mediated recoverable wallet
+  recovery UX once implemented.
 - `packages/evm` now carries the first chain-specific split from `@cubid/web3`, and `packages/wagmi` now carries wagmi-specific React helpers on top of `@cubid/evm`.
 - `packages/aptos`, `packages/bitcoin`, `packages/cosmos`, `packages/near`, `packages/polkadot`, `packages/solana`, `packages/starknet`, `packages/stellar`, `packages/sui`, and `packages/tezos` now carry additional chain-specific wallet layers on top of `@cubid/core`.
 - `@cubid/web3` now remains only as a frozen compatibility package with manual-only maintenance, and new chain-specific work should prefer dedicated packages instead of expanding the shared surface.
 - Prefer the dedicated `@cubid/auth` and `@cubid/auth-react` package family for hosted OIDC login rather than collapsing auth concerns into existing packages.
 - Keep Passport-user notification history routes such as `POST /api/notifications/history/list` out of ordinary dapp SDK usage; they belong with signed-in profile management rather than `@cubid/core`.
+- Treat legacy Cubid-generated wallet and normal Cubid-signing helpers as
+  deprecated compatibility surfaces for new integrations. New wallet-adjacent
+  work should use host-created wallet material, host/provider signing, and
+  Cubid recovery bundles.
 
 ## Repo Hygiene Note
 

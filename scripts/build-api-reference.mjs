@@ -163,6 +163,22 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "wallet-recovery",
+    name: "@cubid/wallet-recovery",
+    dir: "packages/wallet-recovery",
+    entryPoint: "packages/wallet-recovery/src/index.ts",
+    tsconfig: "packages/wallet-recovery/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
+    slug: "wallet-recovery-react",
+    name: "@cubid/wallet-recovery-react",
+    dir: "packages/wallet-recovery-react",
+    entryPoint: "packages/wallet-recovery-react/src/index.ts",
+    tsconfig: "packages/wallet-recovery-react/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "web3",
     name: "@cubid/web3",
     dir: "packages/web3",

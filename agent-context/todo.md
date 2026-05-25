@@ -1223,3 +1223,135 @@ Treat `POST /api/notifications/history/list` as a Passport-user profile route,
 not as a normal dapp SDK surface. If it is exposed later, keep it behind the
 same signed-in account-management boundary as future `@cubid/comms` helpers
 rather than mixing it into server-authenticated dapp APIs.
+
+### S14. Adopt passkey-first recoverable wallet SDK direction
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:20:52Z
+- Timestamp completed: 2026-05-25T04:18:00Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`, session: s90-recoverable-wallet-handoff
+
+Track the SDK-side pivot from legacy SIWC wallet generation/signing toward
+app-mediated recoverable embedded wallets. The SDK should model Cubid as an
+identity-bound recovery provider, not as the wallet generator, normal signer,
+transaction broadcaster, MPC provider, or server-side recovery-material reader.
+
+### S14.1 Ingest recoverable-wallet Passport notes and update package boundaries
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:20:52Z
+- Timestamp completed: 2026-05-25T03:20:52Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): session: s83-recoverable-wallet-direction-intake
+
+Commit the inbound Passport notes, add a session-log intake entry, and update
+repo-status, AGENTS guidance, the backgrounder, and target-state docs. Record
+that backend recovery routes are available and smoke-tested, and that old SIWC
+wallet-generation/signing docs are now superseded for new integrations.
+
+### S14.2 Add server-safe recovery bundle wrappers in `@cubid/core`
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:20:52Z
+- Timestamp completed: 2026-05-25T03:25:08Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s84-core-recovery-bundle-helpers
+
+Add typed API v3 helpers for `enrollRecoveryBundle`,
+`getRecoveryBundleStatus`, `startRecoveryBundleRelease`,
+`rotateRecoveryBundle`, and `revokeRecoveryBundle`. Dapp-authenticated routes
+must use `api_key`; enroll, release-start, and rotate must require
+`Idempotency-Key`; normalized responses must expose safe metadata only and
+must not return recovery material, ciphertext, Vault metadata, raw Cubid user
+ids, or service-role fields.
+
+### S14.3 Mirror the browser-safe recoverable-wallet error taxonomy
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:20:52Z
+- Timestamp completed: 2026-05-25T03:25:08Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`, session: s84-core-recovery-bundle-helpers
+
+Add `CubidRecoverableWalletError`, `isCubidRecoverableWalletError`, and typed
+recoverable-wallet error codes. Map Passport structured errors into this type
+for both server-side recovery helpers and browser/client recovery helpers.
+
+### S14.4 Add `@cubid/wallet-recovery` browser/client package
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:29:00Z
+- Timestamp completed: 2026-05-25T03:34:00Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s85-wallet-recovery-browser-package
+
+Create a browser-safe npm-only package for hosted recovery launch,
+user-authorized release completion, and signed-in user bundle listing. The
+package must accept a bearer token or async token provider, never dapp API
+keys, and return opaque `bundleMaterial` only from the user-authenticated
+completion path.
+
+### S14.5 Add `@cubid/wallet-recovery-react`
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:35:00Z
+- Timestamp completed: 2026-05-25T03:43:00Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s86-wallet-recovery-react-package
+
+Create React helpers on top of `@cubid/wallet-recovery` for hosted recovery
+launch, release completion, and user bundle visibility. Keep `@cubid/auth-react`
+integration optional by accepting token provider props rather than hard-coupling
+the packages.
+
+### S14.6 Deprecate legacy Cubid-generated wallet and normal-signing direction
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:44:00Z
+- Timestamp completed: 2026-05-25T03:49:00Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s87-legacy-wallet-direction-deprecation
+
+Keep existing public exports working, but mark `generateAccount`, legacy SIWC
+account-request helpers, and legacy SIWC signing-request helpers as deprecated
+compatibility surfaces. Update docs so new integrations use host-created
+wallet material plus Cubid recovery bundles.
+
+### S14.7 Keep chain packages provider-abstract
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:50:00Z
+- Timestamp completed: 2026-05-25T03:56:00Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s88-chain-provider-abstract-docs
+
+Update chain package docs and types only where needed so chain packages remain
+wallet-provider adapters, not Cubid signing engines. Do not add Cubid normal
+signing flows to chain packages.
+
+### S14.8 Wire package publishing, API references, tests, and acceptance
+
+- Status: Completed
+- Timestamp started: 2026-05-25T03:57:00Z
+- Timestamp completed: 2026-05-25T04:10:00Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s89-recovery-package-wiring
+
+Wire the new packages into workspace manifests, TypeScript aliases, Vitest,
+API reference generation, publish workflow choices, README package matrix, and
+the acceptance harness where useful. Bump changed public package versions and
+keep JSR support limited to `@cubid/core`.
+
+### S14.9 Write SDK-to-Passport release handoff
+
+- Status: Completed
+- Timestamp started: 2026-05-25T04:11:00Z
+- Timestamp completed: 2026-05-25T04:18:00Z
+- Feature branch: `codex/s14-recoverable-wallet-sdk`
+- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`, session: s90-recoverable-wallet-handoff
+
+After implementation, update the sibling cross-repo notes with implemented
+package names, exported helper names, version bumps, validation evidence, and
+remaining boundaries for SmarTrust and other downstream apps. Leave sibling
+note updates dirty in Passport unless explicitly asked to commit there.
