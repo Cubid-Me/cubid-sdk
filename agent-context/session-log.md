@@ -1,5 +1,21 @@
 # Session Log
 
+## session: s85-wallet-recovery-browser-package
+
+- Timestamp: 2026-05-25T03:34:00Z
+- Summary: Added the browser-safe `@cubid/wallet-recovery` package for hosted recoverable-wallet UX and signed-in recovery bundle visibility.
+- Actions:
+  - Created `packages/wallet-recovery` as an npm-only browser/client package with hosted recovery URL construction.
+  - Added bearer-token release completion and bundle-list calls for the Passport user-authenticated recovery routes without accepting dapp API keys.
+  - Normalized user-visible bundle and release metadata, returning opaque `bundleMaterial` only from the user-authorized completion path and stripping recovery-sensitive raw fields.
+  - Reused the shared `CubidRecoverableWalletError` taxonomy from `@cubid/core` for Passport recovery error envelopes.
+  - Wired the package into the TypeScript path aliases, unit-test project, coverage scope, and unit prebuild sequence.
+- Validation:
+  - `pnpm --filter @cubid/wallet-recovery typecheck`
+  - `pnpm --filter @cubid/wallet-recovery build`
+- Follow-up:
+  - Add `@cubid/wallet-recovery-react` on top of this browser-safe package for React launch, completion, and bundle-list ergonomics.
+
 ## session: s83-recoverable-wallet-direction-intake
 
 - Timestamp: 2026-05-25T03:20:52Z

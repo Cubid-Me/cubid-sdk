@@ -1,0 +1,45 @@
+{
+  "name": "@cubid/wallet-recovery",
+  "version": "0.1.0",
+  "description": "Browser-safe recoverable wallet helpers for Cubid Passport recovery flows.",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/wallet-recovery"
+  },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/wallet-recovery",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "wallet",
+    "recovery",
+    "passkey",
+    "passport",
+    "sdk"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@cubid/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

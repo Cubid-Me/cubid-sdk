@@ -156,6 +156,8 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/comms: {}
+
   packages/core:
     devDependencies:
       '@types/node':
@@ -251,6 +253,12 @@ importers:
       wagmi:
         specifier: '>=3.0.0'
         version: 3.6.9(@tanstack/query-core@5.100.8)(@tanstack/react-query@5.100.8(react@19.2.5))(@types/react@19.2.14)(react@19.2.5)(typescript@5.9.3)(viem@2.48.8(typescript@5.9.3))
+
+  packages/wallet-recovery:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
 
   packages/web2:
     dependencies:

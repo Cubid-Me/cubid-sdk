@@ -25,7 +25,8 @@ export default defineConfig({
       "@cubid/wagmi": path.resolve(__dirname, "packages/wagmi/src/index.ts"),
       "@cubid/web2": path.resolve(__dirname, "packages/web2/src/index.ts"),
       "@cubid/web2-react": path.resolve(__dirname, "packages/web2-react/src/index.ts"),
-      "@cubid/web3": path.resolve(__dirname, "packages/web3/src/index.ts")
+      "@cubid/web3": path.resolve(__dirname, "packages/web3/src/index.ts"),
+      "@cubid/wallet-recovery": path.resolve(__dirname, "packages/wallet-recovery/src/index.ts")
     }
   },
   test: {
@@ -57,7 +58,8 @@ export default defineConfig({
         "packages/sui/src/**/*.{ts,tsx}",
         "packages/tezos/src/**/*.{ts,tsx}",
         "packages/wagmi/src/**/*.{ts,tsx}",
-        "packages/web3/src/**/*.{ts,tsx}"
+        "packages/web3/src/**/*.{ts,tsx}",
+        "packages/wallet-recovery/src/**/*.{ts,tsx}"
       ],
       provider: "v8",
       reporter: ["text", "lcov", "json-summary"],
@@ -85,7 +87,8 @@ export default defineConfig({
             "packages/sui/src/**/*.test.ts",
             "packages/tezos/src/**/*.test.ts",
             "packages/wagmi/src/**/*.test.ts",
-            "packages/web3/src/**/*.test.ts"
+            "packages/web3/src/**/*.test.ts",
+            "packages/wallet-recovery/src/**/*.test.ts"
           ],
           name: "node"
         }

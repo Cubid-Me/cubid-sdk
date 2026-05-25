@@ -1279,9 +1279,11 @@ for both server-side recovery helpers and browser/client recovery helpers.
 
 ### S14.4 Add `@cubid/wallet-recovery` browser/client package
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-25T03:29:00Z
+- Timestamp completed: 2026-05-25T03:34:00Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s85-wallet-recovery-browser-package
 
 Create a browser-safe npm-only package for hosted recovery launch,
 user-authorized release completion, and signed-in user bundle listing. The
