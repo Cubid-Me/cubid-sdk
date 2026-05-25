@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s90-recoverable-wallet-handoff
+
+- Timestamp: 2026-05-25T04:18:00Z
+- Summary: Completed the S14 SDK-to-Passport handoff for the recoverable-wallet package family.
+- Actions:
+  - Updated the SDK-side recoverable-wallet direction and error-taxonomy cross-repo notes with implemented package names, helper exports, versions, validation evidence, and downstream app boundaries.
+  - Updated the sibling Passport notes with the same handoff details while leaving the Passport repo dirty as the cross-repo notification mechanism.
+  - Marked S14 and S14.9 complete in the SDK roadmap and refreshed repo status to show recoverable-wallet SDK implementation as the current closed baseline.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Run the full pre-yeet validation gate before publishing this branch to `dev`.
+
 ## session: s89-recovery-package-wiring
 
 - Timestamp: 2026-05-25T04:10:00Z

@@ -1,7 +1,7 @@
 ---
 thread_id: recoverable-wallet-sdk-direction
 title: Recoverable wallet SDK direction reset
-status: open
+status: sdk-implemented
 owner_repo: cubid-passport
 related_repos:
   - cubid-passport
@@ -11,8 +11,8 @@ sibling_notes:
   cubid-sdk-v2: agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md
 last_update:
   date: 2026-05-25
-  actor: cubid-passport-agent
-  summary: Passport requested SDK package updates and npm releases for the recoverable-wallet surface.
+  actor: cubid-sdk-agent
+  summary: SDK implemented the recoverable-wallet package family and handed back validation/release details.
 ---
 
 # Recoverable Wallet SDK Direction Reset
@@ -139,3 +139,58 @@ Relevant Passport artifacts:
   `apps/passport/pages/api/recovery-bundles/*`
 - Error taxonomy sibling:
   `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`
+
+### 2026-05-25 — cubid-sdk-agent
+
+Implemented the SDK side of the recoverable-wallet direction on
+`codex/s14-recoverable-wallet-sdk`.
+
+Implemented packages and public helpers:
+
+- `@cubid/core@0.1.7`
+  - `enrollRecoveryBundle`
+  - `getRecoveryBundleStatus`
+  - `startRecoveryBundleRelease`
+  - `rotateRecoveryBundle`
+  - `revokeRecoveryBundle`
+  - `CubidRecoverableWalletError`
+  - `isCubidRecoverableWalletError`
+- `@cubid/wallet-recovery@0.1.0`
+  - `buildHostedRecoveryUrl`
+  - `createCubidWalletRecoveryClient`
+  - `completeRelease`
+  - `listBundles`
+- `@cubid/wallet-recovery-react@0.1.0`
+  - `CubidRecoveryLaunchButton`
+  - `useCubidRecoveryRelease`
+  - `useCubidRecoveryBundles`
+
+SDK boundaries now recorded:
+
+- Backend dapp helpers in `@cubid/core` return safe metadata only and never
+  return recovery material, ciphertext, Vault metadata, raw Cubid user ids,
+  service-role fields, private keys, seed material, or key shares.
+- `bundleMaterial` is exposed only by the signed-in user completion path in
+  `@cubid/wallet-recovery` and remains typed as opaque app-owned material.
+- Legacy `generateAccount`, SIWC account-request helpers, and SIWC
+  signing-request helpers remain callable but are deprecated in docs/JSDoc for
+  new integrations.
+- Chain packages are documented as provider-abstract metadata/adapter packages,
+  not Cubid wallet generators, normal signers, MPC providers, or broadcasters.
+
+Validation evidence recorded in the SDK session log includes:
+
+- `pnpm lint`
+- `pnpm test:acceptance`
+- `pnpm docs:api:build`
+- `pnpm docs:api:check`
+- focused core, wallet-recovery, and wallet-recovery-react type/build/test
+  checks
+
+Remaining downstream boundary for SmarTrust and other apps: host apps should
+create wallet material through their selected wallet/MPC provider, enroll that
+material through `@cubid/core`, start release through `@cubid/core`, launch
+Passport recovery through `@cubid/wallet-recovery` or
+`@cubid/wallet-recovery-react`, and complete release only in a signed-in
+browser/client context. Do not use Cubid as the normal transaction signer or
+broadcaster.

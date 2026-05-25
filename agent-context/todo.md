@@ -1226,10 +1226,11 @@ rather than mixing it into server-authenticated dapp APIs.
 
 ### S14. Adopt passkey-first recoverable wallet SDK direction
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-05-25T03:20:52Z
+- Timestamp completed: 2026-05-25T04:18:00Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`
+- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`, session: s90-recoverable-wallet-handoff
 
 Track the SDK-side pivot from legacy SIWC wallet generation/signing toward
 app-mediated recoverable embedded wallets. The SDK should model Cubid as an
@@ -1344,9 +1345,11 @@ keep JSR support limited to `@cubid/core`.
 
 ### S14.9 Write SDK-to-Passport release handoff
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-25T04:11:00Z
+- Timestamp completed: 2026-05-25T04:18:00Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`
+- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`, session: s90-recoverable-wallet-handoff
 
 After implementation, update the sibling cross-repo notes with implemented
 package names, exported helper names, version bumps, validation evidence, and
