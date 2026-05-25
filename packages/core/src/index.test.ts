@@ -1414,9 +1414,17 @@ test("v3 recovery bundle helpers auto-generate idempotency keys and map recovery
         {
           error: {
             code: "cooldown_active",
+            details: {
+              bundleMaterial: "must-not-leak",
+              nested: {
+                wrapped_data_key: "must-not-leak",
+                safe: "safe-detail",
+              },
+            },
             message: "Recovery is temporarily blocked by cooldown policy.",
             requestId: "passport_rw_123",
           },
+          bundle_material: "must-not-leak",
         },
         { status: 429 }
       )
@@ -1439,6 +1447,18 @@ test("v3 recovery bundle helpers auto-generate idempotency keys and map recovery
       assert.equal(error.recoveryCode, "cooldown_active")
       assert.equal(error.status, 429)
       assert.equal(error.endpoint, "v3/recovery-bundles/enroll")
+      assert.equal((error.details as { bundle_material?: unknown }).bundle_material, undefined)
+      const details = error.details as {
+        error?: {
+          details?: {
+            bundleMaterial?: unknown
+            nested?: { safe?: unknown; wrapped_data_key?: unknown }
+          }
+        }
+      }
+      assert.equal(details.error?.details?.bundleMaterial, undefined)
+      assert.equal(details.error?.details?.nested?.wrapped_data_key, undefined)
+      assert.equal(details.error?.details?.nested?.safe, "safe-detail")
       assert.equal(
         error.message,
         "Recovery is temporarily blocked by cooldown policy."

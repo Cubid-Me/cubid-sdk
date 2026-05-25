@@ -22,7 +22,11 @@ function defaultOpenWindow(url: string) {
     return;
   }
 
-  window.open(url, "cubid-wallet-recovery", "width=600,height=800");
+  window.open(
+    url,
+    "cubid-wallet-recovery",
+    "width=600,height=800,noopener,noreferrer"
+  );
 }
 
 function normalizeError(error: unknown): Error {

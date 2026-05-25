@@ -1632,6 +1632,7 @@ const createApiError = (input: CubidApiErrorInput): CubidApiError => {
   ) {
     return new CubidRecoverableWalletError({
       ...input,
+      details: sanitizeRecoveryRaw(input.details),
       recoveryCode: asRecoverableWalletErrorCode(input.code),
     })
   }

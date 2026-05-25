@@ -140,8 +140,41 @@ export function useCubidRecoveryBundles(
       return;
     }
 
-    void reload();
-  }, []);
+    let active = true;
+
+    setStatus("loading");
+    setError(null);
+
+    void createClient(options)
+      .listBundles()
+      .then((result) => {
+        if (!active) {
+          return;
+        }
+
+        setData(result);
+        setStatus("success");
+      })
+      .catch((caught) => {
+        if (!active) {
+          return;
+        }
+
+        setError(normalizeError(caught));
+        setStatus("error");
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [
+    options.accessToken,
+    options.autoLoad,
+    options.baseUrl,
+    options.fetch,
+    options.getAccessToken,
+    options.headers,
+  ]);
 
   return {
     bundles: data?.bundles ?? [],
