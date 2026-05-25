@@ -1178,6 +1178,11 @@ export type CubidApiClient = {
     input: CubidEnrollRecoveryBundleInput
   ): Promise<CubidEnrollRecoveryBundleResponse>
   createUser(input: CubidCreateUserInput): Promise<CubidCreateUserResponse>
+  /**
+   * @deprecated Use host-created wallet material with Cubid recovery bundles for
+   * new integrations. This SIWC account-request helper remains callable as a
+   * compatibility surface for existing passkey-approved account flows.
+   */
   createAccountRequest(
     input: CubidCreateAccountRequestInput
   ): Promise<CubidCreateAccountRequestResponse>
@@ -1202,6 +1207,11 @@ export type CubidApiClient = {
   ensureUserByEmail(
     input: CubidEnsureUserByEmailInput
   ): Promise<CubidEnsureUserByEmailResponse>
+  /**
+   * @deprecated New wallet integrations should model Cubid as a recovery
+   * provider rather than a wallet generator or normal signer. This SIWC
+   * capability helper remains available for existing compatibility flows.
+   */
   fetchWalletCapabilities(
     input?: CubidFetchWalletCapabilitiesInput
   ): Promise<CubidFetchWalletCapabilitiesResponse>
@@ -1222,22 +1232,51 @@ export type CubidApiClient = {
   fetchUserData(
     input: CubidFetchIdentityInput
   ): Promise<CubidFetchUserDataResponse>
+  /**
+   * @deprecated New integrations should use host-selected wallet or signing
+   * infrastructure and Cubid recovery bundles. This SIWC signing-request helper
+   * remains callable for existing compatibility flows.
+   */
   createSigningRequest(
     input: CubidCreateSigningRequestInput
   ): Promise<CubidCreateSigningRequestResponse>
+  /**
+   * @deprecated Use host-created wallet material with Cubid recovery bundles for
+   * new integrations. This SIWC account-request helper remains callable as a
+   * compatibility surface for existing passkey-approved account flows.
+   */
   getAccountRequest(
     input: CubidGetAccountRequestInput
   ): Promise<CubidGetAccountRequestResponse>
+  /**
+   * @deprecated New integrations should use host-selected wallet or signing
+   * infrastructure and Cubid recovery bundles. This SIWC signing-request helper
+   * remains callable for existing compatibility flows.
+   */
   getSigningRequest(
     input: CubidGetSigningRequestInput
   ): Promise<CubidGetSigningRequestResponse>
+  /**
+   * @deprecated Cubid-generated wallets are superseded for new integrations by
+   * host-created wallet material enrolled into Cubid recovery bundles.
+   */
   generateAccount(
     input: CubidGenerateAccountInput
   ): Promise<CubidGenerateAccountResponse>
   listAccounts(input: CubidListAccountsInput): Promise<CubidListAccountsResponse>
+  /**
+   * @deprecated New integrations should use host-selected wallet or signing
+   * infrastructure and Cubid recovery bundles. This SIWC signing-request helper
+   * remains callable for existing compatibility flows.
+   */
   listSigningRequests(
     input: CubidListSigningRequestsInput
   ): Promise<CubidListSigningRequestsResponse>
+  /**
+   * @deprecated New integrations should use host-selected wallet or signing
+   * infrastructure and Cubid recovery bundles. This SIWC signing-request helper
+   * remains callable for existing compatibility flows.
+   */
   cancelSigningRequest(
     input: CubidCancelSigningRequestInput
   ): Promise<CubidCancelSigningRequestResponse>

@@ -117,11 +117,17 @@ The OTP helpers return delivery or verification metadata only; they never return
 raw OTP codes. React UI primitives, AllowPage helpers, and provider handoff
 flows belong in later `@cubid/react` work, not in `@cubid/core`.
 
-## API v3 Secrets And Custody Writes
+## API v3 Secrets, Notifications, And Legacy Wallet Writes
 
 `@cubid/core` now also exposes the first server-facing API v3 write helpers.
 Keep these on trusted servers or Edge Functions only because they use the dapp
 API key and can mutate app-owned data.
+
+The Cubid-generated wallet and normal Cubid-signing examples below are
+deprecated compatibility flows. New wallet integrations should create wallet
+material in the host app or specialist signing provider, enroll that material
+into Cubid recovery bundles, and treat Cubid as the identity-bound recovery
+provider rather than the wallet generator or normal signer.
 
 ```ts
 await cubid.saveSecret({
@@ -224,18 +230,19 @@ The custody helpers return public metadata only. They never expose raw private
 keys or custody secrets, and Sui public addresses are normalized to lowercase
 `0x...` strings on the SDK surface.
 
-The wallet helper surface now also includes:
+The deprecated SIWC wallet helper compatibility surface also includes:
 
 - `fetchWalletCapabilities({ userId? })`
 - `createAccountRequest({ userId, chain, label?, idempotencyKey? })`
 - `getAccountRequest({ accountRequestId })`
 
-Use `fetchWalletCapabilities` before rendering passkey-approved creation,
-message signing, typed-data signing, or transaction actions. The response is
-app-scoped and fail-closed: missing or disabled SIWC policy keeps custody and
-signing features off by default.
+Use `fetchWalletCapabilities` only when preserving an existing SIWC wallet
+compatibility flow before rendering passkey-approved creation, message signing,
+typed-data signing, or transaction actions. The response is app-scoped and
+fail-closed: missing or disabled SIWC policy keeps custody and signing features
+off by default.
 
-`createAccountRequest` and `getAccountRequest` are the public helpers for
+`createAccountRequest` and `getAccountRequest` remain compatibility helpers for
 passkey-approved wallet creation. They expose stable statuses like
 `pending_user_approval`, `policy_denied`, `approved`, `rejected`, `expired`,
 and `failed`, but they never expose private keys, key shares, ciphertext, or
@@ -246,8 +253,8 @@ now follows Passport's numeric policy contract, so the public SDK surface
 exposes it as `number | null` instead of the older string-shaped fixture
 examples from early planning notes.
 
-The signing-request helpers also stay redacted by default. They normalize only
-safe summary metadata such as `signingRequestId`, `status`, `chain`,
+The deprecated signing-request compatibility helpers also stay redacted by
+default. They normalize only safe summary metadata such as `signingRequestId`, `status`, `chain`,
 `requestType`, `payloadHash`, `payloadSummary`, `policyVersion`,
 `requiredAcr`, timestamps, and optional safe `result` metadata after
 completion. When Passport includes SIWC05 policy fields, the normalized

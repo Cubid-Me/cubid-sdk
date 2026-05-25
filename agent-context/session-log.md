@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s87-legacy-wallet-direction-deprecation
+
+- Timestamp: 2026-05-25T03:49:00Z
+- Summary: Deprecated the legacy Cubid-generated wallet and normal Cubid-signing direction for new SDK integrations without removing existing exports.
+- Actions:
+  - Added JSDoc deprecation guidance on the existing `@cubid/core` generated-account, SIWC capability, account-request, and signing-request methods.
+  - Updated the core README to describe those helpers as compatibility surfaces and point new integrations toward host-created wallet material plus Cubid recovery bundles.
+  - Updated the Next/Supabase Edge integration guide so legacy wallet/signing examples are explicitly framed as deprecated compatibility flows.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Keep chain package docs provider-abstract so dedicated chain packages do not imply Cubid creates wallet keys or normally signs transactions.
+
 ## session: s86-wallet-recovery-react-package
 
 - Timestamp: 2026-05-25T03:43:00Z

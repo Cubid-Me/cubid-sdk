@@ -1306,9 +1306,11 @@ the packages.
 
 ### S14.6 Deprecate legacy Cubid-generated wallet and normal-signing direction
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-25T03:44:00Z
+- Timestamp completed: 2026-05-25T03:49:00Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s87-legacy-wallet-direction-deprecation
 
 Keep existing public exports working, but mark `generateAccount`, legacy SIWC
 account-request helpers, and legacy SIWC signing-request helpers as deprecated
