@@ -84,9 +84,26 @@ export const CUBID_SIWC_ERROR_CODES = [
   "wrong_user",
 ] as const
 
+export const CUBID_RECOVERABLE_WALLET_ERROR_CODES = [
+  "verification_required",
+  "wrong_user",
+  "recovery_session_expired",
+  "recovery_session_consumed",
+  "recovery_cancelled",
+  "unsupported_app_context",
+  "recovery_bundle_not_found",
+  "bundle_revoked",
+  "unavailable_credential",
+  "cooldown_active",
+  "provider_outage",
+] as const
+
 export type CubidSiwcUserAction = (typeof CUBID_SIWC_USER_ACTIONS)[number] | string
 
 export type CubidSiwcErrorCode = (typeof CUBID_SIWC_ERROR_CODES)[number] | string
+
+export type CubidRecoverableWalletErrorCode =
+  (typeof CUBID_RECOVERABLE_WALLET_ERROR_CODES)[number] | string
 
 export type CubidSiwcErrorInput = CubidApiErrorInput & {
   retryable: boolean | null
@@ -110,6 +127,25 @@ export class CubidSiwcError extends CubidApiError {
 
 export const isCubidSiwcError = (error: unknown): error is CubidSiwcError =>
   error instanceof CubidSiwcError
+
+export type CubidRecoverableWalletErrorInput = CubidApiErrorInput & {
+  recoveryCode: CubidRecoverableWalletErrorCode | null
+}
+
+export class CubidRecoverableWalletError extends CubidApiError {
+  readonly recoveryCode: CubidRecoverableWalletErrorCode | null
+
+  constructor(input: CubidRecoverableWalletErrorInput) {
+    super(input)
+    this.name = "CubidRecoverableWalletError"
+    this.recoveryCode = input.recoveryCode
+  }
+}
+
+export const isCubidRecoverableWalletError = (
+  error: unknown
+): error is CubidRecoverableWalletError =>
+  error instanceof CubidRecoverableWalletError
 
 export type CubidApiClientOptions = {
   /**
@@ -546,6 +582,111 @@ export type CubidGetNotificationStatusResponse = {
   raw: Record<string, unknown>
 }
 
+export type CubidRecoveryBundleStatus =
+  | "active"
+  | "not_enrolled"
+  | "revoked"
+  | "rotated"
+  | "stale"
+  | string
+
+export type CubidRecoveryBundleSummary = {
+  bundleVersion: number | null
+  createdAt: string | null
+  dappUserUuid: string | null
+  expiresAt: string | null
+  lastReleasedAt: string | null
+  providerKey: string | null
+  raw: Record<string, unknown>
+  recoveryBundleId: string | null
+  recoveryReference: string | null
+  revokedAt: string | null
+  rotatedAt: string | null
+  staleAt: string | null
+  status: CubidRecoveryBundleStatus | null
+  updatedAt: string | null
+}
+
+export type CubidRecoveryBundleReleaseSession = {
+  createdAt: string | null
+  dappUserUuid: string | null
+  expiresAt: string | null
+  providerKey: string | null
+  raw: Record<string, unknown>
+  recoveryBundleId: string | null
+  recoverySessionId: string | null
+  recoveryUrl: string | null
+  status: string | null
+}
+
+export type CubidEnrollRecoveryBundleInput = CubidIdempotentRequestOptions & {
+  bundleMaterial: string
+  bundleVersion?: number
+  expiresAt?: string
+  metadata?: Record<string, unknown>
+  providerKey?: string
+  recoveryBundleId?: string
+  recoveryReference?: string
+  userId: string
+}
+
+export type CubidEnrollRecoveryBundleResponse = {
+  bundle: CubidRecoveryBundleSummary
+  idempotencyKey: string
+  raw: Record<string, unknown>
+}
+
+export type CubidGetRecoveryBundleStatusInput = {
+  providerKey?: string
+  recoveryBundleId?: string
+  userId: string
+}
+
+export type CubidGetRecoveryBundleStatusResponse = {
+  bundle: CubidRecoveryBundleSummary
+  raw: Record<string, unknown>
+}
+
+export type CubidStartRecoveryBundleReleaseInput = CubidIdempotentRequestOptions & {
+  providerKey?: string
+  recoveryBundleId?: string
+  userId: string
+}
+
+export type CubidStartRecoveryBundleReleaseResponse = {
+  idempotencyKey: string
+  raw: Record<string, unknown>
+  releaseSession: CubidRecoveryBundleReleaseSession
+}
+
+export type CubidRotateRecoveryBundleInput = CubidIdempotentRequestOptions & {
+  bundleMaterial: string
+  expiresAt?: string
+  metadata?: Record<string, unknown>
+  newRecoveryBundleId?: string
+  providerKey?: string
+  recoveryBundleId: string
+  recoveryReference?: string
+  userId: string
+}
+
+export type CubidRotateRecoveryBundleResponse = {
+  bundle: CubidRecoveryBundleSummary
+  idempotencyKey: string
+  raw: Record<string, unknown>
+}
+
+export type CubidRevokeRecoveryBundleInput = {
+  providerKey?: string
+  recoveryBundleId: string
+  userId: string
+}
+
+export type CubidRevokeRecoveryBundleResponse = {
+  bundle: CubidRecoveryBundleSummary
+  raw: Record<string, unknown>
+}
+
 export type CubidSaveSecretInput = CubidIdempotentRequestOptions & {
   secret: string
   userId: string
@@ -703,6 +844,9 @@ export type CubidGetAccountRequestResponse = {
 
 export const createNotificationIdempotencyKey = (): string =>
   resolveIdempotencyKey(undefined, "v3/notifications/send")
+
+export const createRecoveryBundleIdempotencyKey = (): string =>
+  resolveIdempotencyKey(undefined, "v3/recovery-bundles")
 
 export type CubidSigningRequestType =
   | "message"
@@ -963,6 +1107,21 @@ export type NotificationStatusSummary = CubidNotificationStatusSummary
 export type NotificationSendStatus = CubidNotificationSendStatus
 export type NotificationSendErrorCode = CubidNotificationSendErrorCode
 export type NotificationSendErrorInput = CubidNotificationSendErrorInput
+export type RecoverableWalletErrorCode = CubidRecoverableWalletErrorCode
+export type RecoverableWalletErrorInput = CubidRecoverableWalletErrorInput
+export type RecoveryBundleStatus = CubidRecoveryBundleStatus
+export type RecoveryBundleSummary = CubidRecoveryBundleSummary
+export type RecoveryBundleReleaseSession = CubidRecoveryBundleReleaseSession
+export type EnrollRecoveryBundleInput = CubidEnrollRecoveryBundleInput
+export type EnrollRecoveryBundleResponse = CubidEnrollRecoveryBundleResponse
+export type GetRecoveryBundleStatusInput = CubidGetRecoveryBundleStatusInput
+export type GetRecoveryBundleStatusResponse = CubidGetRecoveryBundleStatusResponse
+export type StartRecoveryBundleReleaseInput = CubidStartRecoveryBundleReleaseInput
+export type StartRecoveryBundleReleaseResponse = CubidStartRecoveryBundleReleaseResponse
+export type RotateRecoveryBundleInput = CubidRotateRecoveryBundleInput
+export type RotateRecoveryBundleResponse = CubidRotateRecoveryBundleResponse
+export type RevokeRecoveryBundleInput = CubidRevokeRecoveryBundleInput
+export type RevokeRecoveryBundleResponse = CubidRevokeRecoveryBundleResponse
 export type GetNotificationStatusInput = CubidGetNotificationStatusInput
 export type GetNotificationStatusResponse = CubidGetNotificationStatusResponse
 export type SaveSecretInput = CubidSaveSecretInput
@@ -1015,10 +1174,30 @@ export type SiwcErrorInput = CubidSiwcErrorInput
 export type CubidApiClient = {
   addStamp(input: CubidAddStampInput): Promise<CubidAddStampResponse>
   config: Readonly<CubidClientConfig>
+  enrollRecoveryBundle(
+    input: CubidEnrollRecoveryBundleInput
+  ): Promise<CubidEnrollRecoveryBundleResponse>
   createUser(input: CubidCreateUserInput): Promise<CubidCreateUserResponse>
+  /**
+   * @deprecated Use host-created wallet material with Cubid recovery bundles for
+   * new integrations. This SIWC account-request helper remains callable as a
+   * compatibility surface for existing passkey-approved account flows.
+   */
   createAccountRequest(
     input: CubidCreateAccountRequestInput
   ): Promise<CubidCreateAccountRequestResponse>
+  getRecoveryBundleStatus(
+    input: CubidGetRecoveryBundleStatusInput
+  ): Promise<CubidGetRecoveryBundleStatusResponse>
+  startRecoveryBundleRelease(
+    input: CubidStartRecoveryBundleReleaseInput
+  ): Promise<CubidStartRecoveryBundleReleaseResponse>
+  rotateRecoveryBundle(
+    input: CubidRotateRecoveryBundleInput
+  ): Promise<CubidRotateRecoveryBundleResponse>
+  revokeRecoveryBundle(
+    input: CubidRevokeRecoveryBundleInput
+  ): Promise<CubidRevokeRecoveryBundleResponse>
   getNotificationStatus(
     input: CubidGetNotificationStatusInput
   ): Promise<CubidGetNotificationStatusResponse>
@@ -1028,6 +1207,11 @@ export type CubidApiClient = {
   ensureUserByEmail(
     input: CubidEnsureUserByEmailInput
   ): Promise<CubidEnsureUserByEmailResponse>
+  /**
+   * @deprecated New wallet integrations should model Cubid as a recovery
+   * provider rather than a wallet generator or normal signer. This SIWC
+   * capability helper remains available for existing compatibility flows.
+   */
   fetchWalletCapabilities(
     input?: CubidFetchWalletCapabilitiesInput
   ): Promise<CubidFetchWalletCapabilitiesResponse>
@@ -1048,22 +1232,51 @@ export type CubidApiClient = {
   fetchUserData(
     input: CubidFetchIdentityInput
   ): Promise<CubidFetchUserDataResponse>
+  /**
+   * @deprecated New integrations should use host-selected wallet or signing
+   * infrastructure and Cubid recovery bundles. This SIWC signing-request helper
+   * remains callable for existing compatibility flows.
+   */
   createSigningRequest(
     input: CubidCreateSigningRequestInput
   ): Promise<CubidCreateSigningRequestResponse>
+  /**
+   * @deprecated Use host-created wallet material with Cubid recovery bundles for
+   * new integrations. This SIWC account-request helper remains callable as a
+   * compatibility surface for existing passkey-approved account flows.
+   */
   getAccountRequest(
     input: CubidGetAccountRequestInput
   ): Promise<CubidGetAccountRequestResponse>
+  /**
+   * @deprecated New integrations should use host-selected wallet or signing
+   * infrastructure and Cubid recovery bundles. This SIWC signing-request helper
+   * remains callable for existing compatibility flows.
+   */
   getSigningRequest(
     input: CubidGetSigningRequestInput
   ): Promise<CubidGetSigningRequestResponse>
+  /**
+   * @deprecated Cubid-generated wallets are superseded for new integrations by
+   * host-created wallet material enrolled into Cubid recovery bundles.
+   */
   generateAccount(
     input: CubidGenerateAccountInput
   ): Promise<CubidGenerateAccountResponse>
   listAccounts(input: CubidListAccountsInput): Promise<CubidListAccountsResponse>
+  /**
+   * @deprecated New integrations should use host-selected wallet or signing
+   * infrastructure and Cubid recovery bundles. This SIWC signing-request helper
+   * remains callable for existing compatibility flows.
+   */
   listSigningRequests(
     input: CubidListSigningRequestsInput
   ): Promise<CubidListSigningRequestsResponse>
+  /**
+   * @deprecated New integrations should use host-selected wallet or signing
+   * infrastructure and Cubid recovery bundles. This SIWC signing-request helper
+   * remains callable for existing compatibility flows.
+   */
   cancelSigningRequest(
     input: CubidCancelSigningRequestInput
   ): Promise<CubidCancelSigningRequestResponse>
@@ -1343,6 +1556,11 @@ const asNotificationSendErrorCode = (
 ): CubidNotificationSendErrorCode | null =>
   typeof value === "string" && value.trim().length > 0 ? value : null
 
+const asRecoverableWalletErrorCode = (
+  value: unknown
+): CubidRecoverableWalletErrorCode | null =>
+  typeof value === "string" && value.trim().length > 0 ? value : null
+
 const extractSiwcErrorMetadata = (
   payload: unknown
 ):
@@ -1408,6 +1626,17 @@ const notificationSendRetryability = (
 }
 
 const createApiError = (input: CubidApiErrorInput): CubidApiError => {
+  if (
+    input.endpoint?.startsWith("v3/recovery-bundles") ||
+    input.endpoint?.startsWith("recovery-bundles")
+  ) {
+    return new CubidRecoverableWalletError({
+      ...input,
+      details: sanitizeRecoveryRaw(input.details),
+      recoveryCode: asRecoverableWalletErrorCode(input.code),
+    })
+  }
+
   if (input.endpoint === "v3/notifications/send") {
     const notificationCode = asNotificationSendErrorCode(input.code)
     return new CubidNotificationSendError({
@@ -2593,6 +2822,232 @@ const normalizeGetNotificationStatus = (
   }
 }
 
+const RECOVERY_FORBIDDEN_RAW_KEYS = new Set([
+  "auth_tag",
+  "bundle_auth_tag",
+  "bundle_ciphertext",
+  "bundle_iv",
+  "bundle_material",
+  "bundleMaterial",
+  "ciphertext",
+  "encrypted_bundle_material",
+  "encryptedBundleMaterial",
+  "encrypted_recovery_material",
+  "encryptedRecoveryMaterial",
+  "encryption_context",
+  "encryption_key_id",
+  "iv",
+  "raw_cubid_user_id",
+  "rawCubidUserId",
+  "service_role",
+  "vault_metadata",
+  "vaultMetadata",
+  "wrapped_data_key",
+  "wrappedDataKey",
+])
+
+const sanitizeRecoveryRaw = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeRecoveryRaw(item))
+  }
+
+  if (!isRecord(value)) {
+    return value
+  }
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => !RECOVERY_FORBIDDEN_RAW_KEYS.has(key))
+      .map(([key, child]) => [key, sanitizeRecoveryRaw(child)])
+  )
+}
+
+const sanitizeRecoveryRecord = (record: Record<string, unknown>): Record<string, unknown> =>
+  sanitizeRecoveryRaw(record) as Record<string, unknown>
+
+const assertRecoveryMetadata = (
+  value: Record<string, unknown> | undefined,
+  endpoint: string
+): Record<string, unknown> | undefined => {
+  if (value === undefined) {
+    return undefined
+  }
+
+  if (!isRecord(value)) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_INPUT",
+      endpoint,
+      message: "metadata must be an object when provided.",
+    })
+  }
+
+  return value
+}
+
+const normalizeRecoveryBundleSummary = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidRecoveryBundleSummary => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+  const raw = sanitizeRecoveryRecord(record)
+
+  return {
+    bundleVersion:
+      asNumberLike(record.bundleVersion ?? record.bundle_version) ?? null,
+    createdAt: asString(record.createdAt) ?? asString(record.created_at),
+    dappUserUuid:
+      asString(record.dappUserUuid) ?? asString(record.dapp_user_uuid),
+    expiresAt: asString(record.expiresAt) ?? asString(record.expires_at),
+    lastReleasedAt:
+      asString(record.lastReleasedAt) ?? asString(record.last_released_at),
+    providerKey:
+      asString(record.providerKey) ?? asString(record.provider_key),
+    raw,
+    recoveryBundleId:
+      asString(record.recoveryBundleId) ??
+      asString(record.recovery_bundle_id),
+    recoveryReference:
+      asString(record.recoveryReference) ??
+      asString(record.recovery_reference),
+    revokedAt: asString(record.revokedAt) ?? asString(record.revoked_at),
+    rotatedAt: asString(record.rotatedAt) ?? asString(record.rotated_at),
+    staleAt: asString(record.staleAt) ?? asString(record.stale_at),
+    status: asString(record.status),
+    updatedAt: asString(record.updatedAt) ?? asString(record.updated_at),
+  }
+}
+
+const normalizeRecoveryBundleReleaseSession = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidRecoveryBundleReleaseSession => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+  const raw = sanitizeRecoveryRecord(record)
+
+  return {
+    createdAt: asString(record.createdAt) ?? asString(record.created_at),
+    dappUserUuid:
+      asString(record.dappUserUuid) ?? asString(record.dapp_user_uuid),
+    expiresAt: asString(record.expiresAt) ?? asString(record.expires_at),
+    providerKey:
+      asString(record.providerKey) ?? asString(record.provider_key),
+    raw,
+    recoveryBundleId:
+      asString(record.recoveryBundleId) ??
+      asString(record.recovery_bundle_id),
+    recoverySessionId:
+      asString(record.recoverySessionId) ??
+      asString(record.recovery_session_id),
+    recoveryUrl:
+      asString(record.recoveryUrl) ?? asString(record.recovery_url),
+    status: asString(record.status),
+  }
+}
+
+const normalizeEnrollRecoveryBundle = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidEnrollRecoveryBundleResponse => {
+  const record = assertRecord(payload, "v3/recovery-bundles/enroll", requestId, status)
+  const raw = sanitizeRecoveryRecord(record)
+
+  return {
+    bundle: normalizeRecoveryBundleSummary(
+      record.data ?? record,
+      "v3/recovery-bundles/enroll.data",
+      requestId,
+      status
+    ),
+    idempotencyKey,
+    raw,
+  }
+}
+
+const normalizeGetRecoveryBundleStatus = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidGetRecoveryBundleStatusResponse => {
+  const record = assertRecord(payload, "v3/recovery-bundles/status", requestId, status)
+
+  return {
+    bundle: normalizeRecoveryBundleSummary(
+      record.data ?? record,
+      "v3/recovery-bundles/status.data",
+      requestId,
+      status
+    ),
+    raw: sanitizeRecoveryRecord(record),
+  }
+}
+
+const normalizeStartRecoveryBundleRelease = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidStartRecoveryBundleReleaseResponse => {
+  const record = assertRecord(payload, "v3/recovery-bundles/release/start", requestId, status)
+  const raw = sanitizeRecoveryRecord(record)
+
+  return {
+    idempotencyKey,
+    raw,
+    releaseSession: normalizeRecoveryBundleReleaseSession(
+      record.data ?? record,
+      "v3/recovery-bundles/release/start.data",
+      requestId,
+      status
+    ),
+  }
+}
+
+const normalizeRotateRecoveryBundle = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidRotateRecoveryBundleResponse => {
+  const record = assertRecord(payload, "v3/recovery-bundles/rotate", requestId, status)
+  const raw = sanitizeRecoveryRecord(record)
+
+  return {
+    bundle: normalizeRecoveryBundleSummary(
+      record.data ?? record,
+      "v3/recovery-bundles/rotate.data",
+      requestId,
+      status
+    ),
+    idempotencyKey,
+    raw,
+  }
+}
+
+const normalizeRevokeRecoveryBundle = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidRevokeRecoveryBundleResponse => {
+  const record = assertRecord(payload, "v3/recovery-bundles/revoke", requestId, status)
+
+  return {
+    bundle: normalizeRecoveryBundleSummary(
+      record.data ?? record,
+      "v3/recovery-bundles/revoke.data",
+      requestId,
+      status
+    ),
+    raw: sanitizeRecoveryRecord(record),
+  }
+}
+
 const resolveCrypto = (): Crypto => {
   if (typeof globalThis.crypto === "object" && globalThis.crypto !== null) {
     return globalThis.crypto
@@ -2973,6 +3428,54 @@ export const createCubidApiClient = (
       headers,
     },
 
+    enrollRecoveryBundle(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/recovery-bundles/enroll"
+      )
+      const bundleMaterial = assertNonEmptyString(
+        input.bundleMaterial,
+        "bundleMaterial",
+        "v3/recovery-bundles/enroll"
+      )
+      const idempotencyKey = resolveIdempotencyKey(
+        input,
+        "v3/recovery-bundles/enroll"
+      )
+
+      return makeRequest<CubidEnrollRecoveryBundleResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/recovery-bundles/enroll",
+        withV3Credentials({
+          bundle_material: bundleMaterial,
+          bundle_version: input.bundleVersion,
+          dapp_user_uuid: userId,
+          expires_at: input.expiresAt,
+          metadata: assertRecoveryMetadata(
+            input.metadata,
+            "v3/recovery-bundles/enroll"
+          ),
+          provider_key: input.providerKey,
+          recovery_bundle_id: input.recoveryBundleId,
+          recovery_reference: input.recoveryReference,
+        }),
+        "v3/recovery-bundles/enroll",
+        (payload, requestId, responseStatus) =>
+          normalizeEnrollRecoveryBundle(
+            payload,
+            requestId,
+            responseStatus,
+            idempotencyKey
+          ),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
     createUser(input) {
       const dappId = input.dappId ?? options.dappId
       if (dappId === undefined) {
@@ -3223,6 +3726,143 @@ export const createCubidApiClient = (
         {
           "Idempotency-Key": idempotencyKey,
         }
+      )
+    },
+
+    getRecoveryBundleStatus(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/recovery-bundles/status"
+      )
+
+      return makeRequest<CubidGetRecoveryBundleStatusResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/recovery-bundles/status",
+        withV3Credentials({
+          dapp_user_uuid: userId,
+          provider_key: input.providerKey,
+          recovery_bundle_id: input.recoveryBundleId,
+        }),
+        "v3/recovery-bundles/status",
+        normalizeGetRecoveryBundleStatus,
+        headers
+      )
+    },
+
+    startRecoveryBundleRelease(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/recovery-bundles/release/start"
+      )
+      const idempotencyKey = resolveIdempotencyKey(
+        input,
+        "v3/recovery-bundles/release/start"
+      )
+
+      return makeRequest<CubidStartRecoveryBundleReleaseResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/recovery-bundles/release/start",
+        withV3Credentials({
+          dapp_user_uuid: userId,
+          provider_key: input.providerKey,
+          recovery_bundle_id: input.recoveryBundleId,
+        }),
+        "v3/recovery-bundles/release/start",
+        (payload, requestId, responseStatus) =>
+          normalizeStartRecoveryBundleRelease(
+            payload,
+            requestId,
+            responseStatus,
+            idempotencyKey
+          ),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
+    rotateRecoveryBundle(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/recovery-bundles/rotate"
+      )
+      const recoveryBundleId = assertNonEmptyString(
+        input.recoveryBundleId,
+        "recoveryBundleId",
+        "v3/recovery-bundles/rotate"
+      )
+      const bundleMaterial = assertNonEmptyString(
+        input.bundleMaterial,
+        "bundleMaterial",
+        "v3/recovery-bundles/rotate"
+      )
+      const idempotencyKey = resolveIdempotencyKey(
+        input,
+        "v3/recovery-bundles/rotate"
+      )
+
+      return makeRequest<CubidRotateRecoveryBundleResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/recovery-bundles/rotate",
+        withV3Credentials({
+          bundle_material: bundleMaterial,
+          dapp_user_uuid: userId,
+          expires_at: input.expiresAt,
+          metadata: assertRecoveryMetadata(
+            input.metadata,
+            "v3/recovery-bundles/rotate"
+          ),
+          new_recovery_bundle_id: input.newRecoveryBundleId,
+          provider_key: input.providerKey,
+          recovery_bundle_id: recoveryBundleId,
+          recovery_reference: input.recoveryReference,
+        }),
+        "v3/recovery-bundles/rotate",
+        (payload, requestId, responseStatus) =>
+          normalizeRotateRecoveryBundle(
+            payload,
+            requestId,
+            responseStatus,
+            idempotencyKey
+          ),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
+    revokeRecoveryBundle(input) {
+      const userId = assertNonEmptyString(
+        input.userId,
+        "userId",
+        "v3/recovery-bundles/revoke"
+      )
+      const recoveryBundleId = assertNonEmptyString(
+        input.recoveryBundleId,
+        "recoveryBundleId",
+        "v3/recovery-bundles/revoke"
+      )
+
+      return makeRequest<CubidRevokeRecoveryBundleResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/recovery-bundles/revoke",
+        withV3Credentials({
+          dapp_user_uuid: userId,
+          provider_key: input.providerKey,
+          recovery_bundle_id: recoveryBundleId,
+        }),
+        "v3/recovery-bundles/revoke",
+        normalizeRevokeRecoveryBundle,
+        headers
       )
     },
 

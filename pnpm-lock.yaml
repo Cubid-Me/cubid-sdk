@@ -89,6 +89,12 @@ importers:
       '@cubid/react':
         specifier: workspace:*
         version: link:../react
+      '@cubid/wallet-recovery':
+        specifier: workspace:*
+        version: link:../wallet-recovery
+      '@cubid/wallet-recovery-react':
+        specifier: workspace:*
+        version: link:../wallet-recovery-react
       react:
         specifier: ^19.1.0
         version: 19.2.5
@@ -155,6 +161,8 @@ importers:
       '@cubid/core':
         specifier: workspace:*
         version: link:../core
+
+  packages/comms: {}
 
   packages/core:
     devDependencies:
@@ -251,6 +259,24 @@ importers:
       wagmi:
         specifier: '>=3.0.0'
         version: 3.6.9(@tanstack/query-core@5.100.8)(@tanstack/react-query@5.100.8(react@19.2.5))(@types/react@19.2.14)(react@19.2.5)(typescript@5.9.3)(viem@2.48.8(typescript@5.9.3))
+
+  packages/wallet-recovery:
+    dependencies:
+      '@cubid/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/wallet-recovery-react:
+    dependencies:
+      '@cubid/wallet-recovery':
+        specifier: workspace:*
+        version: link:../wallet-recovery
+      react:
+        specifier: '>=18.2.0'
+        version: 19.2.5
+      react-dom:
+        specifier: '>=18.2.0'
+        version: 19.2.5(react@19.2.5)
 
   packages/web2:
     dependencies:

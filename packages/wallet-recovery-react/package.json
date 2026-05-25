@@ -1,0 +1,49 @@
+{
+  "name": "@cubid/wallet-recovery-react",
+  "version": "0.1.0",
+  "description": "React helpers for Cubid Passport recoverable wallet flows.",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/wallet-recovery-react"
+  },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/wallet-recovery-react",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "wallet",
+    "recovery",
+    "react",
+    "passkey",
+    "sdk"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@cubid/wallet-recovery": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-dom",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

@@ -1212,7 +1212,7 @@
     },
     {
       "kind": "text",
-      "text": "\n\nCardano-oriented Cubid wallet helpers built on top of "
+      "text": "\n\nCardano-oriented Cubid wallet/provider helpers built on top of "
     },
     {
       "kind": "code",
@@ -1228,7 +1228,7 @@
     },
     {
       "kind": "text",
-      "text": " when you need Cubid's Cardano-specific custody, connection, and\nverification helpers. Choose "
+      "text": " when you need Cardano-specific public wallet metadata,\nprovider-adapter, and verification helpers. Choose "
     },
     {
       "kind": "code",
@@ -1236,7 +1236,7 @@
     },
     {
       "kind": "text",
-      "text": " only when you still depend on the\nolder shared wallet surface.\n\n## Install\n\n"
+      "text": " only when you\nstill depend on the older shared wallet surface.\n\n## Install\n\n"
     },
     {
       "kind": "code",
@@ -1308,7 +1308,7 @@
     },
     {
       "kind": "text",
-      "text": " metadata for features that\nare not universal across Cubid custody accounts or wallet adapters, such as:\n\n- "
+      "text": " metadata for features that\nare not universal across host wallet providers or adapters, such as:\n\n- "
     },
     {
       "kind": "code",
@@ -1356,7 +1356,7 @@
     },
     {
       "kind": "text",
-      "text": " so host apps can read that metadata without\nassuming any advanced custody feature is universally available."
+      "text": " so host apps can read that metadata without\nassuming any advanced custody feature is universally available.\n\nThis package does not create wallet keys, perform normal transaction signing,\noperate an MPC provider, or broadcast transactions. Host apps or specialist\nwallet providers own those responsibilities."
     }
   ]
 }

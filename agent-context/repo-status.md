@@ -2,7 +2,7 @@
 | --- | --- |
 | README quality | `Pass` Root README reflects the current package map, command set, and branch/release workflow. |
 | License | `Pass` Apache-2.0 is present at the repo root and in published package manifests. |
-| Session log hygiene | `Pass` `agent-context/session-log.md` is current through the latest `S03` package-slice work. |
+| Session log hygiene | `Pass` `agent-context/session-log.md` is current through the latest `S14` recoverable-wallet SDK implementation work. |
 | AGENTS guidance | `Pass` `AGENTS.md` covers repo boundaries, cross-repo coordination, migration direction, branch flow, and Supabase applicability. |
 | Repo status snapshot | `Pass` This file now provides the lightweight repo-health snapshot for cleanup work. |
 | Deferred ideas file | `Pass` `agent-context/future-ideas.md` exists and is explicitly not active roadmap work. |
@@ -17,4 +17,4 @@
 | Environment and script conventions | `Pass` Root scripts cover install/build/test/lint/typecheck/core Deno checks, and `.gitignore` excludes local env files and build outputs. |
 | Developer-ingestion publishing | `Pass` Registry policy, machine-readable API reference artifacts, package metadata, and public entrypoint docs now align with the primary published SDK package surfaces. |
 | Active roadmap closeout | `Pass` The current `S03` roadmap is fully represented in dedicated chain packages, and `@cubid/web3` is now documented as a frozen compatibility package with manual-only maintenance. |
-| Next deferred expansion area | `Pass` Flexible messaging is now split cleanly: signed-in profile helpers live in `@cubid/comms`, server-safe send/status helpers now live in `@cubid/core`, and Passport-user notification history remains out of ordinary dapp SDK usage. |
+| Next expansion area | `Pass` S14 is implemented as the current recoverable-wallet SDK baseline: `@cubid/core` owns server-safe recovery bundle metadata helpers, `@cubid/wallet-recovery` owns browser/client recovery UX, `@cubid/wallet-recovery-react` owns React ergonomics, chain packages remain provider-abstract, and legacy Cubid-generated wallet/signing helpers are deprecated compatibility surfaces. |

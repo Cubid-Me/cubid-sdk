@@ -1,12 +1,13 @@
 # `@cubid/wagmi`
 
-wagmi-based React helpers that adapt wallet flows onto `@cubid/evm`.
+wagmi-based React helpers that adapt host wallet-provider flows onto
+`@cubid/evm`.
 
 ## When To Choose This Package
 
 Use `@cubid/wagmi` when your app already uses wagmi and you want Cubid's
-React-friendly wallet adapters on top of the EVM package. Choose `@cubid/evm`
-instead for non-wagmi or framework-neutral EVM flows.
+React-friendly provider adapters on top of the EVM package. Choose
+`@cubid/evm` instead for non-wagmi or framework-neutral EVM flows.
 
 ## Install
 
@@ -52,3 +53,7 @@ function WalletVerifier({
 The package also exports `createCubidWagmiAdapter` for apps that want to wire
 their own wagmi actions into the Cubid EVM adapter surface without using the
 provided hook.
+
+This package does not create wallet keys, perform normal transaction signing,
+operate an MPC provider, or broadcast transactions. Host apps and their wagmi
+connectors own those responsibilities.

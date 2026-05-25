@@ -17,8 +17,8 @@ from personal npm accounts or long-lived local tokens.
 JSR should remain intentionally narrow. Use JSR only for runtime-agnostic
 packages with a real Deno or Supabase Edge value proposition. Under the current
 public package policy, that means `@cubid/core` only; the auth, auth-react,
-browser, React, wagmi, and transitional compatibility packages remain npm-only
-by design.
+browser, React, wagmi, wallet-recovery, chain, and transitional compatibility
+packages remain npm-only by design.
 
 Public SDK packages should use explicit package-level licenses. `@cubid/core`
 is Apache-2.0; app and service workspaces in this monorepo are not automatically
@@ -29,22 +29,24 @@ Target packages:
 - `@cubid/core`: required runtime-agnostic foundation
 - `@cubid/auth`: runtime-agnostic OIDC and PKCE helpers
 - `@cubid/auth-react`: React auth/session bindings
-- `@cubid/aptos`: Aptos wallet and signing logic
+- `@cubid/aptos`: Aptos wallet/provider adapter logic
 - `@cubid/browser`: headless browser integration helpers
 - `@cubid/react`: React hooks and components built on `@cubid/browser`
-- `@cubid/evm`: EVM wallet and signing logic, using `viem` only when needed
-- `@cubid/bitcoin`: Bitcoin wallet and signing logic
-- `@cubid/cosmos`: Cosmos wallet and signing logic
-- `@cubid/near`: NEAR wallet and signing logic
-- `@cubid/polkadot`: Polkadot wallet and signing logic
-- `@cubid/solana`: Solana wallet and signing logic
-- `@cubid/starknet`: Starknet wallet and signing logic
-- `@cubid/stellar`: Stellar wallet and signing logic
-- `@cubid/tezos`: Tezos wallet and signing logic
+- `@cubid/evm`: EVM wallet/provider adapter logic, using `viem` only when needed
+- `@cubid/bitcoin`: Bitcoin wallet/provider adapter logic
+- `@cubid/cosmos`: Cosmos wallet/provider adapter logic
+- `@cubid/near`: NEAR wallet/provider adapter logic
+- `@cubid/polkadot`: Polkadot wallet/provider adapter logic
+- `@cubid/solana`: Solana wallet/provider adapter logic
+- `@cubid/starknet`: Starknet wallet/provider adapter logic
+- `@cubid/stellar`: Stellar wallet/provider adapter logic
+- `@cubid/tezos`: Tezos wallet/provider adapter logic
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
-- `@cubid/cardano`: Cardano wallet and signing logic
-- `@cubid/sui`: Sui wallet and signing logic
-- `@cubid/comms`: optional later signed-in messaging and communications helpers
+- `@cubid/cardano`: Cardano wallet/provider adapter logic
+- `@cubid/sui`: Sui wallet/provider adapter logic
+- `@cubid/comms`: signed-in messaging and communications helpers
+- `@cubid/wallet-recovery`: browser/client recoverable-wallet helpers
+- `@cubid/wallet-recovery-react`: React recoverable-wallet helpers
 - `@cubid/secrets`: optional later encryption and custody helpers
 
 ## Package Responsibilities
@@ -156,6 +158,26 @@ If the SDK later surfaces that state, expose only category permission metadata.
 Do not expose raw destinations, channel selection, provider secrets, or
 delivery capability through those grant helpers.
 
+The recoverable-wallet direction supersedes the old Cubid-generated wallet and
+normal Cubid-signing product path for new integrations. Cubid should be modeled
+as an identity-bound recovery provider: host apps or specialist signing
+infrastructure create wallet material, perform normal signing, enforce signing
+policy, and broadcast transactions. Cubid stores and releases recovery bundle
+material only through the documented recovery flow.
+
+Runtime-agnostic, dapp-authenticated recovery bundle metadata helpers belong in
+`@cubid/core`: enroll, status, release-start, rotate, and revoke. These helpers
+must use the stable API v3 routes and return only safe metadata. They must not
+return recovery material, ciphertext, Vault metadata, raw Cubid user ids,
+private keys, seed material, key shares, or service-role fields.
+
+Browser/client recovery helpers belong in `@cubid/wallet-recovery`, with React
+ergonomics in `@cubid/wallet-recovery-react`. Those packages may launch
+Passport-hosted recovery, complete user-authorized release, and list signed-in
+user bundle visibility. They must use signed-in user bearer tokens, not Cubid
+dapp API keys. Recovery material may appear only in the user-authenticated
+release-completion response and should stay typed as opaque app-owned material.
+
 `@cubid/core` now exposes runtime-agnostic webhook verification helpers. They
 should keep verifying Cubid's exact raw-body signature contract and preserve
 both canonical `eventType` and transition-friendly `legacyEventType` fields in
@@ -190,9 +212,15 @@ same verified envelope, including:
 Do not add transaction webhook expectations until Passport explicitly enables
 transaction signing and publishes the corresponding wallet transaction events.
 
-Chain packages own chain-specific wallet, key, and signing behavior. Each chain
-package should avoid cross-chain assumptions. `@cubid/evm` may depend on
-`viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
+Chain packages own chain-specific public wallet metadata, provider-adapter, and
+verification behavior. Each chain package should avoid cross-chain assumptions.
+`@cubid/evm` may depend on `viem`; `@cubid/wagmi` is the only package that may
+depend on `wagmi`.
+
+Chain packages must remain provider-abstract under the recoverable-wallet
+direction. They may help host apps persist and inspect public wallet metadata,
+but they should not imply Cubid creates wallet keys, signs normal transactions,
+operates an MPC provider, or broadcasts transactions for new integrations.
 
 `@cubid/web3` should now be treated as a frozen legacy compatibility surface,
 not as a growth package. It may preserve the old shared wallet adapter
