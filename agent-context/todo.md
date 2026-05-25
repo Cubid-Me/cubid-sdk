@@ -1319,9 +1319,11 @@ wallet material plus Cubid recovery bundles.
 
 ### S14.7 Keep chain packages provider-abstract
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-25T03:50:00Z
+- Timestamp completed: 2026-05-25T03:56:00Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s88-chain-provider-abstract-docs
 
 Update chain package docs and types only where needed so chain packages remain
 wallet-provider adapters, not Cubid signing engines. Do not add Cubid normal

@@ -17,6 +17,11 @@ integrations. Use `@cubid/web3` only when you still depend on the older shared
 wallet surface. New chain-specific work should prefer the dedicated chain
 packages instead of expanding this shared surface.
 
+`@cubid/web3` is also not a Cubid signing engine. It does not create wallet
+keys, perform normal transaction signing, operate an MPC provider, or broadcast
+transactions. Host apps or specialist wallet providers own those
+responsibilities.
+
 ## Install
 
 ```sh

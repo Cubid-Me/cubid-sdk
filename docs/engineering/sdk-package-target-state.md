@@ -29,21 +29,21 @@ Target packages:
 - `@cubid/core`: required runtime-agnostic foundation
 - `@cubid/auth`: runtime-agnostic OIDC and PKCE helpers
 - `@cubid/auth-react`: React auth/session bindings
-- `@cubid/aptos`: Aptos wallet and signing logic
+- `@cubid/aptos`: Aptos wallet/provider adapter logic
 - `@cubid/browser`: headless browser integration helpers
 - `@cubid/react`: React hooks and components built on `@cubid/browser`
-- `@cubid/evm`: EVM wallet and signing logic, using `viem` only when needed
-- `@cubid/bitcoin`: Bitcoin wallet and signing logic
-- `@cubid/cosmos`: Cosmos wallet and signing logic
-- `@cubid/near`: NEAR wallet and signing logic
-- `@cubid/polkadot`: Polkadot wallet and signing logic
-- `@cubid/solana`: Solana wallet and signing logic
-- `@cubid/starknet`: Starknet wallet and signing logic
-- `@cubid/stellar`: Stellar wallet and signing logic
-- `@cubid/tezos`: Tezos wallet and signing logic
+- `@cubid/evm`: EVM wallet/provider adapter logic, using `viem` only when needed
+- `@cubid/bitcoin`: Bitcoin wallet/provider adapter logic
+- `@cubid/cosmos`: Cosmos wallet/provider adapter logic
+- `@cubid/near`: NEAR wallet/provider adapter logic
+- `@cubid/polkadot`: Polkadot wallet/provider adapter logic
+- `@cubid/solana`: Solana wallet/provider adapter logic
+- `@cubid/starknet`: Starknet wallet/provider adapter logic
+- `@cubid/stellar`: Stellar wallet/provider adapter logic
+- `@cubid/tezos`: Tezos wallet/provider adapter logic
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
-- `@cubid/cardano`: Cardano wallet and signing logic
-- `@cubid/sui`: Sui wallet and signing logic
+- `@cubid/cardano`: Cardano wallet/provider adapter logic
+- `@cubid/sui`: Sui wallet/provider adapter logic
 - `@cubid/comms`: signed-in messaging and communications helpers
 - `@cubid/wallet-recovery`: browser/client recoverable-wallet helpers
 - `@cubid/wallet-recovery-react`: React recoverable-wallet helpers
@@ -212,9 +212,10 @@ same verified envelope, including:
 Do not add transaction webhook expectations until Passport explicitly enables
 transaction signing and publishes the corresponding wallet transaction events.
 
-Chain packages own chain-specific wallet, key, and signing behavior. Each chain
-package should avoid cross-chain assumptions. `@cubid/evm` may depend on
-`viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
+Chain packages own chain-specific public wallet metadata, provider-adapter, and
+verification behavior. Each chain package should avoid cross-chain assumptions.
+`@cubid/evm` may depend on `viem`; `@cubid/wagmi` is the only package that may
+depend on `wagmi`.
 
 Chain packages must remain provider-abstract under the recoverable-wallet
 direction. They may help host apps persist and inspect public wallet metadata,

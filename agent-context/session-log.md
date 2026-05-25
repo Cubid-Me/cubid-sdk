@@ -1,5 +1,18 @@
 # Session Log
 
+## session: s88-chain-provider-abstract-docs
+
+- Timestamp: 2026-05-25T03:56:00Z
+- Summary: Kept dedicated chain packages provider-abstract under the recoverable-wallet direction.
+- Actions:
+  - Updated chain package READMEs to describe public wallet metadata, provider-adapter, and verification responsibilities rather than Cubid custody/signing ownership.
+  - Added explicit non-goals across chain packages: no wallet key creation, no normal transaction signing, no MPC provider operation, and no transaction broadcasting.
+  - Updated the target-state package matrix wording so chain packages are documented as wallet/provider adapter packages.
+- Validation:
+  - `git diff --check`
+- Follow-up:
+  - Wire the new recovery packages into publishing, API reference generation, public package matrices, and acceptance coverage.
+
 ## session: s87-legacy-wallet-direction-deprecation
 
 - Timestamp: 2026-05-25T03:49:00Z

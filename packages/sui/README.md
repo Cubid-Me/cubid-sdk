@@ -1,12 +1,12 @@
 # `@cubid/sui`
 
-Sui-oriented Cubid wallet helpers built on top of `@cubid/core`.
+Sui-oriented Cubid wallet/provider helpers built on top of `@cubid/core`.
 
 ## When To Choose This Package
 
-Use `@cubid/sui` when you need Cubid's Sui-specific custody, connection, and
-verification helpers. Choose `@cubid/web3` only when you still depend on the
-older shared wallet surface.
+Use `@cubid/sui` when you need Sui-specific public wallet metadata,
+provider-adapter, and verification helpers. Choose `@cubid/web3` only when you
+still depend on the older shared wallet surface.
 
 ## Install
 
@@ -34,7 +34,7 @@ exposes them.
 ## Capability Metadata
 
 Sui connections may expose optional `capabilities` metadata for features that
-are not universal across Cubid custody accounts or wallet adapters, such as:
+are not universal across host wallet providers or adapters, such as:
 
 - `smartAccount`
 - `sessionKeys`
@@ -46,3 +46,7 @@ These descriptors are intentionally opt-in and capability-driven.
 The package exports `getCubidSuiCapabilities(...)` and
 `hasCubidSuiCapability(...)` so host apps can read that metadata without
 assuming any advanced custody feature is universally available.
+
+This package does not create wallet keys, perform normal transaction signing,
+operate an MPC provider, or broadcast transactions. Host apps or specialist
+wallet providers own those responsibilities.
