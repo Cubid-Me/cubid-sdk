@@ -1,5 +1,19 @@
 # Session Log
 
+## session: s83-recoverable-wallet-direction-intake
+
+- Timestamp: 2026-05-25T03:20:52Z
+- Summary: Ingested Passport's recoverable-wallet direction reset and opened the SDK-side S14 implementation track.
+- Actions:
+  - Reviewed the new Passport cross-repo notes for recoverable-wallet SDK direction and browser-safe recovery error taxonomy.
+  - Cross-checked the Passport recoverable-wallet roadmap and API docs showing hosted smoke coverage for enrollment, status, release start, release completion, rotation, revocation, and user bundle listing.
+  - Added S14 and its implementation subitems to `agent-context/todo.md`.
+  - Updated AGENTS guidance, the agent backgrounder, the target-state doc, and repo status so Cubid is now modeled as an identity-bound recovery provider rather than a wallet generator or normal signer for new integrations.
+- Validation:
+  - Reviewed the current SDK package boundaries and Passport recovery route contracts.
+- Follow-up:
+  - Implement S14.2 next by adding server-safe recovery bundle wrappers and structured recovery errors in `@cubid/core`.
+
 ## session: s82-pr15-comms-publish-workflow-review-fix
 
 - Timestamp: 2026-05-16T05:16:21Z

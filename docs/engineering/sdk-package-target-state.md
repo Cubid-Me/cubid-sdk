@@ -44,7 +44,9 @@ Target packages:
 - `@cubid/wagmi`: wagmi-specific React/EVM integration
 - `@cubid/cardano`: Cardano wallet and signing logic
 - `@cubid/sui`: Sui wallet and signing logic
-- `@cubid/comms`: optional later signed-in messaging and communications helpers
+- `@cubid/comms`: signed-in messaging and communications helpers
+- `@cubid/wallet-recovery`: browser/client recoverable-wallet helpers
+- `@cubid/wallet-recovery-react`: React recoverable-wallet helpers
 - `@cubid/secrets`: optional later encryption and custody helpers
 
 ## Package Responsibilities
@@ -156,6 +158,26 @@ If the SDK later surfaces that state, expose only category permission metadata.
 Do not expose raw destinations, channel selection, provider secrets, or
 delivery capability through those grant helpers.
 
+The recoverable-wallet direction supersedes the old Cubid-generated wallet and
+normal Cubid-signing product path for new integrations. Cubid should be modeled
+as an identity-bound recovery provider: host apps or specialist signing
+infrastructure create wallet material, perform normal signing, enforce signing
+policy, and broadcast transactions. Cubid stores and releases recovery bundle
+material only through the documented recovery flow.
+
+Runtime-agnostic, dapp-authenticated recovery bundle metadata helpers belong in
+`@cubid/core`: enroll, status, release-start, rotate, and revoke. These helpers
+must use the stable API v3 routes and return only safe metadata. They must not
+return recovery material, ciphertext, Vault metadata, raw Cubid user ids,
+private keys, seed material, key shares, or service-role fields.
+
+Browser/client recovery helpers belong in `@cubid/wallet-recovery`, with React
+ergonomics in `@cubid/wallet-recovery-react`. Those packages may launch
+Passport-hosted recovery, complete user-authorized release, and list signed-in
+user bundle visibility. They must use signed-in user bearer tokens, not Cubid
+dapp API keys. Recovery material may appear only in the user-authenticated
+release-completion response and should stay typed as opaque app-owned material.
+
 `@cubid/core` now exposes runtime-agnostic webhook verification helpers. They
 should keep verifying Cubid's exact raw-body signature contract and preserve
 both canonical `eventType` and transition-friendly `legacyEventType` fields in
@@ -193,6 +215,11 @@ transaction signing and publishes the corresponding wallet transaction events.
 Chain packages own chain-specific wallet, key, and signing behavior. Each chain
 package should avoid cross-chain assumptions. `@cubid/evm` may depend on
 `viem`; `@cubid/wagmi` is the only package that may depend on `wagmi`.
+
+Chain packages must remain provider-abstract under the recoverable-wallet
+direction. They may help host apps persist and inspect public wallet metadata,
+but they should not imply Cubid creates wallet keys, signs normal transactions,
+operates an MPC provider, or broadcasts transactions for new integrations.
 
 `@cubid/web3` should now be treated as a frozen legacy compatibility surface,
 not as a growth package. It may preserve the old shared wallet adapter
