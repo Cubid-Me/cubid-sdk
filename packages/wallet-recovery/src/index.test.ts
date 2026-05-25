@@ -30,6 +30,25 @@ test("buildHostedRecoveryUrl creates the Passport recovery launcher URL", () => 
   );
 });
 
+test("buildHostedRecoveryUrl rejects unsafe Passport URL schemes", () => {
+  assert.throws(
+    () =>
+      buildHostedRecoveryUrl({
+        passportOrigin: "javascript:alert(1)",
+        recoverySessionId: "rw_release_123",
+      }),
+    /requires an https Passport URL/u
+  );
+
+  assert.equal(
+    buildHostedRecoveryUrl({
+      passportOrigin: "http://localhost:3000",
+      recoverySessionId: "rw_release_123",
+    }),
+    "http://localhost:3000/recovery/wallet?recovery_session_id=rw_release_123"
+  );
+});
+
 test("wallet recovery client completes user-authorized release and lists safe bundles", async () => {
   const calls: Array<{
     authorization: string | null;
@@ -85,6 +104,8 @@ test("wallet recovery client completes user-authorized release and lists safe bu
 
   assert.equal(release.bundleMaterial, "opaque-app-owned-recovery-material");
   assert.equal(release.release.recoveryBundleId, "rw_bundle_123");
+  assert.equal((release.raw.data as Record<string, unknown>).bundleMaterial, undefined);
+  assert.equal(release.release.raw.bundleMaterial, undefined);
   assert.equal(release.release.raw.wrapped_data_key, undefined);
   assert.equal(list.bundles[0]?.status, "active");
   assert.equal(list.bundles[0]?.raw.vaultMetadata, undefined);
@@ -125,9 +146,37 @@ test("wallet recovery client maps Passport recovery errors", async () => {
       assert.ok(error instanceof CubidRecoverableWalletError);
       assert.ok(isCubidRecoverableWalletError(error));
       assert.equal(error.recoveryCode, "wrong_user");
+      assert.equal(error.category, "auth");
       assert.equal(error.status, 403);
       assert.equal(error.endpoint, "recovery-bundles/release/complete");
       return true;
     }
   );
+});
+
+test("wallet recovery client reports missing fetch clearly", () => {
+  const originalFetch = globalThis.fetch;
+
+  try {
+    Object.defineProperty(globalThis, "fetch", {
+      configurable: true,
+      value: undefined,
+      writable: true,
+    });
+
+    assert.throws(
+      () =>
+        createCubidWalletRecoveryClient({
+          accessToken: "user_token_123",
+          baseUrl: "https://passport.cubid.me",
+        }),
+      /requires fetch support/u
+    );
+  } finally {
+    Object.defineProperty(globalThis, "fetch", {
+      configurable: true,
+      value: originalFetch,
+      writable: true,
+    });
+  }
 });

@@ -95,6 +95,8 @@ const RECOVERY_FORBIDDEN_RAW_KEYS = new Set([
   "bundle_auth_tag",
   "bundle_ciphertext",
   "bundle_iv",
+  "bundle_material",
+  "bundleMaterial",
   "ciphertext",
   "encrypted_bundle_material",
   "encryptedBundleMaterial",
@@ -161,11 +163,30 @@ function normalizeBaseUrl(baseUrl: string | URL): string {
 
   try {
     const parsed = new URL(value);
+    const isLoopbackHost =
+      parsed.hostname === "localhost" ||
+      parsed.hostname === "127.0.0.1" ||
+      parsed.hostname === "[::1]";
+
+    if (parsed.protocol !== "https:" && !(parsed.protocol === "http:" && isLoopbackHost)) {
+      throw new CubidApiError({
+        category: "config",
+        code: "INVALID_BASE_URL",
+        endpoint: "wallet-recovery",
+        message:
+          "Cubid wallet recovery requires an https Passport URL, with http allowed only for localhost development.",
+      });
+    }
+
     parsed.pathname = parsed.pathname.replace(/\/+$/u, "");
     parsed.search = "";
     parsed.hash = "";
     return parsed.toString().replace(/\/+$/u, "");
   } catch (error) {
+    if (error instanceof CubidApiError) {
+      throw error;
+    }
+
     throw new CubidApiError({
       category: "config",
       code: "INVALID_BASE_URL",
@@ -291,9 +312,11 @@ function createRecoveryError(
     asString(errorPayload.message) ??
     code ??
     `Cubid wallet recovery request failed for ${endpoint}.`;
+  const category =
+    response.status === 401 || response.status === 403 ? "auth" : "upstream";
 
   return new CubidRecoverableWalletError({
-    category: response.status === 401 ? "auth" : "upstream",
+    category,
     code: code ?? undefined,
     details: sanitizeRecord(payload),
     endpoint,
@@ -399,7 +422,17 @@ export function createCubidWalletRecoveryClient(
 ): CubidWalletRecoveryClient {
   const baseUrl = normalizeBaseUrl(options.baseUrl);
   const headers = new Headers(options.headers);
-  const fetchImpl = options.fetch ?? fetch;
+  const fetchImpl = options.fetch ?? globalThis.fetch;
+
+  if (!fetchImpl) {
+    throw new CubidApiError({
+      category: "config",
+      code: "MISSING_FETCH",
+      endpoint: "wallet-recovery",
+      message:
+        "Cubid wallet recovery requires fetch support or an explicit fetch implementation.",
+    });
+  }
 
   return {
     buildHostedRecoveryUrl(input) {
@@ -485,4 +518,3 @@ export function createCubidWalletRecoveryClient(
     },
   };
 }
-

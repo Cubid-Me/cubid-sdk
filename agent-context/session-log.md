@@ -1,5 +1,23 @@
 # Session Log
 
+## session: s91-pr16-review-followup
+
+- Timestamp: 2026-05-25T04:05:00Z
+- Summary: Addressed PR #16 Copilot and Codex review feedback for the recoverable-wallet client packages.
+- Actions:
+  - Redacted `bundleMaterial` and `bundle_material` from sanitized raw recovery payloads while keeping the explicit top-level `bundleMaterial` completion field.
+  - Restricted recovery base URLs to HTTPS, with HTTP allowed only for localhost development.
+  - Resolved `fetch` through `globalThis.fetch` and added a clear missing-fetch configuration error for runtimes without a global fetch implementation.
+  - Classified HTTP 403 recovery failures as auth errors so wrong-user and token-scope flows can trigger account-switch or re-auth handling.
+  - Replaced the new recovery package LICENSE stubs with the full Apache-2.0 license text.
+- Validation:
+  - `pnpm exec vitest run packages/wallet-recovery/src/index.test.ts packages/wallet-recovery-react/src/index.test.tsx`
+  - `pnpm --filter @cubid/wallet-recovery typecheck`
+  - `pnpm --filter @cubid/wallet-recovery-react typecheck`
+  - `pnpm lint`
+- Follow-up:
+  - Push the review-fix commit, reply to and resolve the PR #16 review threads, then wait for CI to return green.
+
 ## session: s90-recoverable-wallet-handoff
 
 - Timestamp: 2026-05-25T04:18:00Z
