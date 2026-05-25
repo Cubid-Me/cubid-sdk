@@ -14,6 +14,21 @@
 - Follow-up:
   - Implement S14.2 next by adding server-safe recovery bundle wrappers and structured recovery errors in `@cubid/core`.
 
+## session: s84-core-recovery-bundle-helpers
+
+- Timestamp: 2026-05-25T03:25:08Z
+- Summary: Added the server-safe recoverable-wallet API v3 wrapper surface and shared browser-safe recovery error taxonomy in `@cubid/core`.
+- Actions:
+  - Added typed helpers for recovery bundle enroll, status, release-start, rotate, and revoke.
+  - Added `CubidRecoverableWalletError`, `isCubidRecoverableWalletError`, and the Passport recoverable-wallet error-code taxonomy.
+  - Normalized recovery bundle and release-session responses as safe metadata only, with recovery-sensitive raw fields stripped from SDK raw summaries.
+  - Added focused core tests for request bodies, idempotency headers, response normalization, raw redaction, generated idempotency keys, and structured recovery errors.
+- Validation:
+  - `pnpm exec vitest run packages/core/src/index.test.ts`
+  - `pnpm --filter @cubid/core typecheck`
+- Follow-up:
+  - Add the browser/client `@cubid/wallet-recovery` package for hosted recovery launch, user-authorized release completion, and signed-in bundle visibility.
+
 ## session: s82-pr15-comms-publish-workflow-review-fix
 
 - Timestamp: 2026-05-16T05:16:21Z

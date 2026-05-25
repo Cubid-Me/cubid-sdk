@@ -1251,9 +1251,11 @@ wallet-generation/signing docs are now superseded for new integrations.
 
 ### S14.2 Add server-safe recovery bundle wrappers in `@cubid/core`
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-25T03:20:52Z
+- Timestamp completed: 2026-05-25T03:25:08Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s84-core-recovery-bundle-helpers
 
 Add typed API v3 helpers for `enrollRecoveryBundle`,
 `getRecoveryBundleStatus`, `startRecoveryBundleRelease`,
@@ -1265,9 +1267,11 @@ ids, or service-role fields.
 
 ### S14.3 Mirror the browser-safe recoverable-wallet error taxonomy
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-25T03:20:52Z
+- Timestamp completed: 2026-05-25T03:25:08Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-error-taxonomy.md`, session: s84-core-recovery-bundle-helpers
 
 Add `CubidRecoverableWalletError`, `isCubidRecoverableWalletError`, and typed
 recoverable-wallet error codes. Map Passport structured errors into this type
