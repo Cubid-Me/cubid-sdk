@@ -11,6 +11,16 @@ provider, and does not depend on `@cubid/auth-react`.
 pnpm add @cubid/wallet-recovery-react
 ```
 
+## Registry Availability
+
+- npm: supported
+- JSR: not published by policy
+
+## API Reference
+
+- JSON reference: `../../docs/reference/api/wallet-recovery-react.json`
+- Package matrix: `../../README.md`
+
 ```tsx
 import {
   CubidRecoveryLaunchButton,

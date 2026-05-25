@@ -12,6 +12,8 @@
     "@cubid/browser": "workspace:*",
     "@cubid/core": "workspace:*",
     "@cubid/react": "workspace:*",
+    "@cubid/wallet-recovery": "workspace:*",
+    "@cubid/wallet-recovery-react": "workspace:*",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

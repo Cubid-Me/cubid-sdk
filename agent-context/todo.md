@@ -1331,9 +1331,11 @@ signing flows to chain packages.
 
 ### S14.8 Wire package publishing, API references, tests, and acceptance
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-05-25T03:57:00Z
+- Timestamp completed: 2026-05-25T04:10:00Z
 - Feature branch: `codex/s14-recoverable-wallet-sdk`
-- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-05-20-recoverable-wallet-sdk-direction.md`, session: s89-recovery-package-wiring
 
 Wire the new packages into workspace manifests, TypeScript aliases, Vitest,
 API reference generation, publish workflow choices, README package matrix, and

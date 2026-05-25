@@ -13,22 +13,24 @@ verification, migrations, and service-role access.
 | `@cubid/core` | Runtime-agnostic Cubid foundation client for servers, workers, Deno, and Supabase Edge Functions. | npm + JSR |
 | `@cubid/auth` | Runtime-agnostic OIDC and PKCE helpers for browser-safe Sign in with Cubid. | npm-only |
 | `@cubid/auth-react` | React provider, hooks, callback helpers, and session controls for Sign in with Cubid. | npm-only |
-| `@cubid/aptos` | Aptos-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/aptos` | Aptos-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
 | `@cubid/browser` | Headless browser helpers for hosted verification, OTP, Allow Page, and provider handoff flows. | npm-only |
-| `@cubid/bitcoin` | Bitcoin-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
-| `@cubid/cardano` | Cardano-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/bitcoin` | Bitcoin-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
+| `@cubid/cardano` | Cardano-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
 | `@cubid/comms` | Signed-in messaging profile helpers for Passport notification channels and preferences. | npm-only |
-| `@cubid/cosmos` | Cosmos-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/cosmos` | Cosmos-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
 | `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
-| `@cubid/evm` | EVM-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
-| `@cubid/near` | NEAR-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
-| `@cubid/polkadot` | Polkadot-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
-| `@cubid/solana` | Solana-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
-| `@cubid/starknet` | Starknet-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
-| `@cubid/stellar` | Stellar-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
-| `@cubid/sui` | Sui-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
-| `@cubid/tezos` | Tezos-specific wallet and custody helpers built on `@cubid/core`. | npm-only |
+| `@cubid/evm` | EVM-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
+| `@cubid/near` | NEAR-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
+| `@cubid/polkadot` | Polkadot-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
+| `@cubid/solana` | Solana-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
+| `@cubid/starknet` | Starknet-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
+| `@cubid/stellar` | Stellar-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
+| `@cubid/sui` | Sui-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
+| `@cubid/tezos` | Tezos-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
 | `@cubid/wagmi` | wagmi-specific React integration helpers built on `@cubid/evm`. | npm-only |
+| `@cubid/wallet-recovery` | Browser/client helpers for hosted wallet recovery, user-authorized release completion, and bundle visibility. | npm-only |
+| `@cubid/wallet-recovery-react` | React launch, completion, and bundle-list ergonomics for wallet recovery flows. | npm-only |
 | `@cubid/web3` | Frozen legacy shared-wallet compatibility package for older installs. | npm-only, compatibility-only |
 | `@cubid/web2` | Frozen compatibility wrapper around `@cubid/browser`. | npm-only, deprecated |
 | `@cubid/web2-react` | Frozen compatibility wrapper around `@cubid/react`. | npm-only, deprecated |
@@ -36,16 +38,17 @@ verification, migrations, and service-role access.
 
 `@cubid/core` is the only JSR package today because it is the only package with
 an explicit runtime-agnostic Deno and Supabase Edge contract. The auth,
-auth-react, browser, React, wagmi, and interim compatibility packages remain
-npm-only by design.
+auth-react, browser, React, chain, wallet-recovery, and interim compatibility
+packages remain npm-only by design.
 
 `@cubid/web2` and `@cubid/web2-react` remain installable for older imports, but
 they are compatibility names only. New integrations should use
 `@cubid/browser` and `@cubid/react`.
 
 `@cubid/web3` also remains installable, but it is now a frozen compatibility
-package. New wallet integrations should use the dedicated chain packages
-instead.
+package. New wallet integrations should use the dedicated chain packages for
+provider-adapter metadata and `@cubid/wallet-recovery` or
+`@cubid/wallet-recovery-react` for Cubid recovery flows.
 
 ## API Reference
 
@@ -73,6 +76,8 @@ Machine-readable package reference artifacts live in `docs/reference/`.
   - `docs/reference/api/sui.json`
   - `docs/reference/api/tezos.json`
   - `docs/reference/api/wagmi.json`
+  - `docs/reference/api/wallet-recovery.json`
+  - `docs/reference/api/wallet-recovery-react.json`
   - `docs/reference/api/web3.json`
 
 Shared-wallet migrations now have a dedicated guide:
@@ -147,8 +152,10 @@ package directly:
 import { createCubidApiClient } from "@cubid/core"
 ```
 
-`@cubid/auth`, `@cubid/auth-react`, `@cubid/aptos`, `@cubid/browser`, `@cubid/comms`, `@cubid/react`,
-`@cubid/bitcoin`, `@cubid/cosmos`, `@cubid/evm`, `@cubid/near`,
-`@cubid/polkadot`, `@cubid/solana`, `@cubid/starknet`, `@cubid/stellar`, `@cubid/sui`, `@cubid/tezos`, `@cubid/wagmi`, and
-`@cubid/web3` remain npm packages; they are not part of the JSR
-publication policy.
+`@cubid/auth`, `@cubid/auth-react`, `@cubid/aptos`, `@cubid/browser`,
+`@cubid/comms`, `@cubid/react`, `@cubid/bitcoin`, `@cubid/cosmos`,
+`@cubid/evm`, `@cubid/near`, `@cubid/polkadot`, `@cubid/solana`,
+`@cubid/starknet`, `@cubid/stellar`, `@cubid/sui`, `@cubid/tezos`,
+`@cubid/wagmi`, `@cubid/wallet-recovery`, `@cubid/wallet-recovery-react`, and
+`@cubid/web3` remain npm packages; they are not part of the JSR publication
+policy.

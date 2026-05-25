@@ -149,6 +149,18 @@ const notificationStatus = await cubid.getNotificationStatus({
   userId: cubidUserId,
 })
 
+const enrolledRecovery = await cubid.enrollRecoveryBundle({
+  bundleMaterial: encryptedAppOwnedRecoveryBundle,
+  providerKey: "host_wallet",
+  recoveryReference: "wallet:v1:user-123",
+  userId: cubidUserId,
+})
+
+const releaseSession = await cubid.startRecoveryBundleRelease({
+  recoveryBundleId: enrolledRecovery.bundle.recoveryBundleId!,
+  userId: cubidUserId,
+})
+
 const generated = await cubid.generateAccount({
   chain: "sui",
   label: "Primary wallet",
@@ -191,7 +203,8 @@ const cancelledRequest = await cubid.cancelSigningRequest({
 })
 ```
 
-`saveSecret`, `sendNotification`, `generateAccount`, and
+`saveSecret`, `sendNotification`, `enrollRecoveryBundle`,
+`startRecoveryBundleRelease`, `rotateRecoveryBundle`, `generateAccount`, and
 `createSigningRequest` require idempotency under Passport's v3 contract.
 `@cubid/core` will generate an `Idempotency-Key` automatically when you do not
 provide one, and it returns the resolved `idempotencyKey` on the normalized
@@ -218,6 +231,15 @@ helper for redacted delivery tracking. It returns app-scoped event status,
 selected channel type, latest delivery state, and redacted delivery attempts.
 Passport-user `POST /api/notifications/history/list` remains outside the normal
 dapp SDK surface.
+
+The recovery bundle helpers are the new default wallet direction. Use
+`enrollRecoveryBundle`, `getRecoveryBundleStatus`,
+`startRecoveryBundleRelease`, `rotateRecoveryBundle`, and
+`revokeRecoveryBundle` from trusted servers or Edge Functions. These helpers
+return only safe metadata; they never return recovery material, ciphertext,
+Vault metadata, raw Cubid user ids, service-role fields, private keys, seed
+material, or key shares. User-authorized recovery completion belongs in
+`@cubid/wallet-recovery` or `@cubid/wallet-recovery-react`.
 
 Supported custody chains on the public SDK surface are currently:
 

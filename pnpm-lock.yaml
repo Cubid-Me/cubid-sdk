@@ -89,6 +89,12 @@ importers:
       '@cubid/react':
         specifier: workspace:*
         version: link:../react
+      '@cubid/wallet-recovery':
+        specifier: workspace:*
+        version: link:../wallet-recovery
+      '@cubid/wallet-recovery-react':
+        specifier: workspace:*
+        version: link:../wallet-recovery-react
       react:
         specifier: ^19.1.0
         version: 19.2.5

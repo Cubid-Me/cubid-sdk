@@ -160,6 +160,10 @@
         },
         {
           "type": "reference",
+          "name": "CubidRecoverableWalletError"
+        },
+        {
+          "type": "reference",
           "name": "CubidNotificationSendError"
         }
       ]
@@ -361,6 +365,199 @@
           "type": {
             "type": "literal",
             "value": false
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.status"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidApiError",
+          "package": "@cubid/core"
+        }
+      ]
+    },
+    {
+      "name": "CubidRecoverableWalletError",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {},
+      "children": [
+        {
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "CubidRecoverableWalletError",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidRecoverableWalletErrorInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "name": "CubidRecoverableWalletError",
+                "package": "@cubid/core"
+              },
+              "overwrites": {
+                "type": "reference",
+                "name": "CubidApiError.constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "name": "CubidApiError.constructor"
+          }
+        },
+        {
+          "name": "category",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidApiErrorCategory",
+            "package": "@cubid/core"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.category"
+          }
+        },
+        {
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.code"
+          }
+        },
+        {
+          "name": "details",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.details"
+          }
+        },
+        {
+          "name": "endpoint",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.endpoint"
+          }
+        },
+        {
+          "name": "recoveryCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "requestId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidApiError.requestId"
           }
         },
         {
@@ -1474,6 +1671,20 @@
               "variant": "signature",
               "kind": 4096,
               "flags": {},
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "New integrations should use host-selected wallet or signing\ninfrastructure and Cubid recovery bundles. This SIWC signing-request helper\nremains callable for existing compatibility flows."
+                      }
+                    ]
+                  }
+                ]
+              },
               "parameters": [
                 {
                   "name": "input",
@@ -1518,6 +1729,20 @@
               "variant": "signature",
               "kind": 4096,
               "flags": {},
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Use host-created wallet material with Cubid recovery bundles for\nnew integrations. This SIWC account-request helper remains callable as a\ncompatibility surface for existing passkey-approved account flows."
+                      }
+                    ]
+                  }
+                ]
+              },
               "parameters": [
                 {
                   "name": "input",
@@ -1562,6 +1787,20 @@
               "variant": "signature",
               "kind": 4096,
               "flags": {},
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "New integrations should use host-selected wallet or signing\ninfrastructure and Cubid recovery bundles. This SIWC signing-request helper\nremains callable for existing compatibility flows."
+                      }
+                    ]
+                  }
+                ]
+              },
               "parameters": [
                 {
                   "name": "input",
@@ -1630,6 +1869,50 @@
                   {
                     "type": "reference",
                     "name": "CubidCreateUserResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "enrollRecoveryBundle",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "enrollRecoveryBundle",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidEnrollRecoveryBundleInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidEnrollRecoveryBundleResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -2002,6 +2285,20 @@
               "variant": "signature",
               "kind": 4096,
               "flags": {},
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "New wallet integrations should model Cubid as a recovery\nprovider rather than a wallet generator or normal signer. This SIWC\ncapability helper remains available for existing compatibility flows."
+                      }
+                    ]
+                  }
+                ]
+              },
               "parameters": [
                 {
                   "name": "input",
@@ -2048,6 +2345,20 @@
               "variant": "signature",
               "kind": 4096,
               "flags": {},
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Cubid-generated wallets are superseded for new integrations by\nhost-created wallet material enrolled into Cubid recovery bundles."
+                      }
+                    ]
+                  }
+                ]
+              },
               "parameters": [
                 {
                   "name": "input",
@@ -2092,6 +2403,20 @@
               "variant": "signature",
               "kind": 4096,
               "flags": {},
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Use host-created wallet material with Cubid recovery bundles for\nnew integrations. This SIWC account-request helper remains callable as a\ncompatibility surface for existing passkey-approved account flows."
+                      }
+                    ]
+                  }
+                ]
+              },
               "parameters": [
                 {
                   "name": "input",
@@ -2170,6 +2495,50 @@
           ]
         },
         {
+          "name": "getRecoveryBundleStatus",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "getRecoveryBundleStatus",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidGetRecoveryBundleStatusInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidGetRecoveryBundleStatusResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
           "name": "getSigningRequest",
           "variant": "declaration",
           "kind": 2048,
@@ -2180,6 +2549,20 @@
               "variant": "signature",
               "kind": 4096,
               "flags": {},
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "New integrations should use host-selected wallet or signing\ninfrastructure and Cubid recovery bundles. This SIWC signing-request helper\nremains callable for existing compatibility flows."
+                      }
+                    ]
+                  }
+                ]
+              },
               "parameters": [
                 {
                   "name": "input",
@@ -2268,6 +2651,20 @@
               "variant": "signature",
               "kind": 4096,
               "flags": {},
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "New integrations should use host-selected wallet or signing\ninfrastructure and Cubid recovery bundles. This SIWC signing-request helper\nremains callable for existing compatibility flows."
+                      }
+                    ]
+                  }
+                ]
+              },
               "parameters": [
                 {
                   "name": "input",
@@ -2292,6 +2689,94 @@
                   {
                     "type": "reference",
                     "name": "CubidListSigningRequestsResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "revokeRecoveryBundle",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "revokeRecoveryBundle",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidRevokeRecoveryBundleInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidRevokeRecoveryBundleResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "rotateRecoveryBundle",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "rotateRecoveryBundle",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidRotateRecoveryBundleInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidRotateRecoveryBundleResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -2512,6 +2997,50 @@
                   {
                     "type": "reference",
                     "name": "CubidSendPhoneOtpResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startRecoveryBundleRelease",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startRecoveryBundleRelease",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartRecoveryBundleReleaseInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartRecoveryBundleReleaseResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -3990,6 +4519,196 @@
       ]
     },
     {
+      "name": "CubidEnrollRecoveryBundleInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidIdempotentRequestOptions",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "bundleMaterial",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "bundleVersion",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "number"
+                  }
+                },
+                {
+                  "name": "expiresAt",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "metadata",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                },
+                {
+                  "name": "providerKey",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "recoveryBundleId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "recoveryReference",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "userId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidEnrollRecoveryBundleResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "bundle",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidRecoveryBundleSummary",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "idempotencyKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
       "name": "CubidEnsureUserByEmailInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -5357,6 +6076,93 @@
       ]
     },
     {
+      "name": "CubidGetRecoveryBundleStatusInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "providerKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "recoveryBundleId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidGetRecoveryBundleStatusResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "bundle",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidRecoveryBundleSummary",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
       "name": "CubidGetSigningRequestInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -6505,6 +7311,859 @@
           }
         ]
       }
+    },
+    {
+      "name": "CubidRecoverableWalletErrorCode",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "indexedAccess",
+            "indexType": {
+              "type": "intrinsic",
+              "name": "number"
+            },
+            "objectType": {
+              "type": "query",
+              "queryType": {
+                "type": "reference",
+                "name": "CUBID_RECOVERABLE_WALLET_ERROR_CODES",
+                "package": "@cubid/core"
+              }
+            }
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidRecoverableWalletErrorInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidApiErrorInput",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "recoveryCode",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "name": "CubidRecoverableWalletErrorCode",
+                        "package": "@cubid/core"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidRecoveryBundleReleaseSession",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "createdAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "expiresAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "providerKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "recoveryBundleId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "recoverySessionId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "recoveryUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidRecoveryBundleStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "active"
+          },
+          {
+            "type": "literal",
+            "value": "not_enrolled"
+          },
+          {
+            "type": "literal",
+            "value": "revoked"
+          },
+          {
+            "type": "literal",
+            "value": "rotated"
+          },
+          {
+            "type": "literal",
+            "value": "stale"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidRecoveryBundleSummary",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "bundleVersion",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "number"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "createdAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "expiresAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "lastReleasedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "providerKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "recoveryBundleId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "recoveryReference",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "revokedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "rotatedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "staleAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidRecoveryBundleStatus",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "updatedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidRevokeRecoveryBundleInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "providerKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "recoveryBundleId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "userId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidRevokeRecoveryBundleResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "bundle",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidRecoveryBundleSummary",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidRotateRecoveryBundleInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidIdempotentRequestOptions",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "bundleMaterial",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "expiresAt",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "metadata",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                },
+                {
+                  "name": "newRecoveryBundleId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "providerKey",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "recoveryBundleId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "recoveryReference",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "userId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidRotateRecoveryBundleResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "bundle",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidRecoveryBundleSummary",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "idempotencyKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
     },
     {
       "name": "CubidSaveSecretInput",
@@ -8463,6 +10122,122 @@
       }
     },
     {
+      "name": "CubidStartRecoveryBundleReleaseInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidIdempotentRequestOptions",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "providerKey",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "recoveryBundleId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "userId",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidStartRecoveryBundleReleaseResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "idempotencyKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "releaseSession",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidRecoveryBundleReleaseSession",
+            "package": "@cubid/core"
+          }
+        }
+      ]
+    },
+    {
       "name": "CubidUnknownSigningResult",
       "variant": "declaration",
       "kind": 2097152,
@@ -9825,6 +11600,28 @@
       }
     },
     {
+      "name": "EnrollRecoveryBundleInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidEnrollRecoveryBundleInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "EnrollRecoveryBundleResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidEnrollRecoveryBundleResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "EnsureUserByEmailInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -10045,6 +11842,28 @@
       }
     },
     {
+      "name": "GetRecoveryBundleStatusInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidGetRecoveryBundleStatusInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "GetRecoveryBundleStatusResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidGetRecoveryBundleStatusResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "GetSigningRequestInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -10239,6 +12058,105 @@
       "type": {
         "type": "reference",
         "name": "CubidNotificationStatusSummary",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RecoverableWalletErrorCode",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRecoverableWalletErrorCode",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RecoverableWalletErrorInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRecoverableWalletErrorInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RecoveryBundleReleaseSession",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRecoveryBundleReleaseSession",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RecoveryBundleStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRecoveryBundleStatus",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RecoveryBundleSummary",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRecoveryBundleSummary",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RevokeRecoveryBundleInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRevokeRecoveryBundleInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RevokeRecoveryBundleResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRevokeRecoveryBundleResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RotateRecoveryBundleInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRotateRecoveryBundleInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "RotateRecoveryBundleResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidRotateRecoveryBundleResponse",
         "package": "@cubid/core"
       }
     },
@@ -10459,6 +12377,28 @@
       "type": {
         "type": "reference",
         "name": "CubidStampType",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartRecoveryBundleReleaseInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartRecoveryBundleReleaseInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartRecoveryBundleReleaseResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartRecoveryBundleReleaseResponse",
         "package": "@cubid/core"
       }
     },
@@ -10779,6 +12719,68 @@
             {
               "type": "literal",
               "value": "notification_quota_exceeded"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "CUBID_RECOVERABLE_WALLET_ERROR_CODES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "verification_required"
+            },
+            {
+              "type": "literal",
+              "value": "wrong_user"
+            },
+            {
+              "type": "literal",
+              "value": "recovery_session_expired"
+            },
+            {
+              "type": "literal",
+              "value": "recovery_session_consumed"
+            },
+            {
+              "type": "literal",
+              "value": "recovery_cancelled"
+            },
+            {
+              "type": "literal",
+              "value": "unsupported_app_context"
+            },
+            {
+              "type": "literal",
+              "value": "recovery_bundle_not_found"
+            },
+            {
+              "type": "literal",
+              "value": "bundle_revoked"
+            },
+            {
+              "type": "literal",
+              "value": "unavailable_credential"
+            },
+            {
+              "type": "literal",
+              "value": "cooldown_active"
+            },
+            {
+              "type": "literal",
+              "value": "provider_outage"
             }
           ]
         }
@@ -11347,6 +13349,24 @@
       ]
     },
     {
+      "name": "createRecoveryBundleIdempotencyKey",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "createRecoveryBundleIdempotencyKey",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
       "name": "getCubidStampTypeId",
       "variant": "declaration",
       "kind": 64,
@@ -11479,6 +13499,42 @@
             "targetType": {
               "type": "reference",
               "name": "CubidNotificationSendError",
+              "package": "@cubid/core"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "isCubidRecoverableWalletError",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "isCubidRecoverableWalletError",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "error",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "predicate",
+            "name": "error",
+            "asserts": false,
+            "targetType": {
+              "type": "reference",
+              "name": "CubidRecoverableWalletError",
               "package": "@cubid/core"
             }
           }
@@ -12122,6 +14178,46 @@
     },
     {
       "kind": "code",
+      "text": "`enrollRecoveryBundle`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`getRecoveryBundleStatus`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startRecoveryBundleRelease`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`rotateRecoveryBundle`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`revokeRecoveryBundle`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`generateAccount`"
     },
     {
@@ -12190,7 +14286,7 @@
     },
     {
       "kind": "text",
-      "text": "\n\nResponses use SDK-friendly camelCase fields while retaining the original\nserver payload in "
+      "text": "\n\nThe legacy Cubid-generated wallet and normal Cubid-signing direction is now\ndeprecated for new integrations. These exports remain callable as compatibility\nsurfaces, but new wallet work should create wallet material in the host app or\nspecialist signing provider and use Cubid only as the identity-bound recovery\nbundle provider.\n\nResponses use SDK-friendly camelCase fields while retaining the original\nserver payload in "
     },
     {
       "kind": "code",
@@ -12410,6 +14506,46 @@
     },
     {
       "kind": "code",
+      "text": "`enrollRecoveryBundle({ userId, bundleMaterial, providerKey?, recoveryBundleId?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`getRecoveryBundleStatus({ userId, providerKey?, recoveryBundleId? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startRecoveryBundleRelease({ userId, providerKey?, recoveryBundleId?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`rotateRecoveryBundle({ userId, recoveryBundleId, bundleMaterial, providerKey?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`revokeRecoveryBundle({ userId, recoveryBundleId, providerKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`generateAccount({ userId, chain, label?, idempotencyKey? })`"
     },
     {
@@ -12478,7 +14614,111 @@
     },
     {
       "kind": "text",
-      "text": "\n\nLegacy "
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`enrollRecoveryBundle`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`getRecoveryBundleStatus`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startRecoveryBundleRelease`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`rotateRecoveryBundle`"
+    },
+    {
+      "kind": "text",
+      "text": ", and\n"
+    },
+    {
+      "kind": "code",
+      "text": "`revokeRecoveryBundle`"
+    },
+    {
+      "kind": "text",
+      "text": " are the server-safe recovery bundle helpers. They expose\nonly safe metadata and never return recovery material, ciphertext, Vault\nmetadata, raw Cubid user ids, service-role fields, private keys, seed material,\nor key shares.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`generateAccount`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`fetchWalletCapabilities`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`createAccountRequest`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`getAccountRequest`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`createSigningRequest`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`getSigningRequest`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`listSigningRequests`"
+    },
+    {
+      "kind": "text",
+      "text": ", and "
+    },
+    {
+      "kind": "code",
+      "text": "`cancelSigningRequest`"
+    },
+    {
+      "kind": "text",
+      "text": " are deprecated compatibility\nhelpers for the older SIWC wallet-generation and normal-signing direction. New\nintegrations should use host-created wallet material, host-selected signing\ninfrastructure, and Cubid recovery bundle helpers instead.\n\nLegacy "
     },
     {
       "kind": "code",
@@ -12514,7 +14754,15 @@
     },
     {
       "kind": "code",
-      "text": "`generateAccount`"
+      "text": "`enrollRecoveryBundle`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startRecoveryBundleRelease`"
     },
     {
       "kind": "text",
@@ -12522,11 +14770,27 @@
     },
     {
       "kind": "code",
+      "text": "`rotateRecoveryBundle`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`generateAccount`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
       "text": "`createAccountRequest`"
     },
     {
       "kind": "text",
-      "text": ",\nand "
+      "text": ", and "
     },
     {
       "kind": "code",
@@ -12534,7 +14798,7 @@
     },
     {
       "kind": "text",
-      "text": " automatically generate an idempotency key when\ncallers omit one, and they return the resolved "
+      "text": " automatically generate an\nidempotency key when callers omit one, and they return the resolved\n"
     },
     {
       "kind": "code",
@@ -12542,7 +14806,7 @@
     },
     {
       "kind": "text",
-      "text": " alongside the\nnormalized response so callers can log or reconcile retries safely.\n\n"
+      "text": " alongside the normalized response so callers can log or\nreconcile retries safely.\n\n"
     },
     {
       "kind": "code",
@@ -12694,7 +14958,7 @@
     },
     {
       "kind": "text",
-      "text": ". That route remains a signed-in profile\nsurface rather than a normal dapp server SDK helper.\n\nSupported custody chains on the public v3 account helpers are:\n\n- "
+      "text": ". That route remains a signed-in profile\nsurface rather than a normal dapp server SDK helper.\n\nSupported custody chains on the deprecated public v3 account compatibility\nhelpers are:\n\n- "
     },
     {
       "kind": "code",
@@ -12734,7 +14998,7 @@
     },
     {
       "kind": "text",
-      "text": " is the public fail-closed discovery surface for SIWC\nwallet UX. It can return:\n\n- dapp-scoped policy state\n- per-chain capability flags such as "
+      "text": " remains the deprecated fail-closed discovery surface\nfor older SIWC wallet UX. It can return:\n\n- dapp-scoped policy state\n- per-chain capability flags such as "
     },
     {
       "kind": "code",
@@ -12790,7 +15054,7 @@
     },
     {
       "kind": "text",
-      "text": " are the public helpers for\npasskey-approved wallet creation. They expose stable public statuses such as:\n\n- "
+      "text": " remain deprecated compatibility\nhelpers for passkey-approved Cubid wallet creation. They expose stable public\nstatuses such as:\n\n- "
     },
     {
       "kind": "code",
@@ -12950,7 +15214,7 @@
     },
     {
       "kind": "text",
-      "text": " is also write-only from the public SDK point of view. Passport's\nv3 contract does not expose a public decrypt/read endpoint for these secrets,\nso do not build app flows that assume the SDK can read plaintext secret values\nback out later.\n\nThe signing-request helpers also stay redacted by default. They normalize only\nsafe summary metadata such as:\n\n- "
+      "text": " is also write-only from the public SDK point of view. Passport's\nv3 contract does not expose a public decrypt/read endpoint for these secrets,\nso do not build app flows that assume the SDK can read plaintext secret values\nback out later.\n\nThe deprecated signing-request compatibility helpers also stay redacted by\ndefault. They normalize only safe summary metadata such as:\n\n- "
     },
     {
       "kind": "code",

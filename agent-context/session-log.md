@@ -1,5 +1,31 @@
 # Session Log
 
+## session: s89-recovery-package-wiring
+
+- Timestamp: 2026-05-25T04:10:00Z
+- Summary: Wired the recoverable-wallet packages into publishing, API reference generation, acceptance coverage, and package docs.
+- Actions:
+  - Added `@cubid/wallet-recovery` and `@cubid/wallet-recovery-react` to the trusted-publishing workflow as npm-only packages.
+  - Added both recovery packages to the TypeDoc API reference generator, generated new JSON artifacts, and updated the reference index and root package matrix.
+  - Added acceptance tests that import the recovery packages through their public package names.
+  - Bumped `@cubid/core` and its JSR manifest to `0.1.7` for the new public recovery helper surface.
+  - Updated publishing policy docs and the Next/Supabase guide to keep JSR limited to `@cubid/core` and recovery material out of backend helpers.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+  - `pnpm test:acceptance`
+  - `pnpm lint`
+  - `pnpm --filter @cubid/core typecheck`
+  - `pnpm --filter @cubid/wallet-recovery typecheck`
+  - `pnpm --filter @cubid/wallet-recovery-react typecheck`
+  - `pnpm --filter @cubid/core build`
+  - `pnpm --filter @cubid/wallet-recovery build`
+  - `pnpm --filter @cubid/wallet-recovery-react build`
+  - `pnpm exec vitest run packages/core/src/index.test.ts packages/wallet-recovery/src/index.test.ts packages/wallet-recovery-react/src/index.test.tsx`
+  - `git diff --check`
+- Follow-up:
+  - Write the SDK-to-Passport release handoff in the live sibling cross-repo notes.
+
 ## session: s88-chain-provider-abstract-docs
 
 - Timestamp: 2026-05-25T03:56:00Z

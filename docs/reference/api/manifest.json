@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "@cubid/core",
-      "version": "0.1.6",
+      "version": "0.1.7",
       "description": "Runtime-agnostic Cubid core client for server-side integrations.",
       "registry": "npm + jsr",
       "referencePath": "core.json"
@@ -132,6 +132,20 @@
       "description": "wagmi-based React helpers that adapt wallet flows onto @cubid/evm.",
       "registry": "npm-only",
       "referencePath": "wagmi.json"
+    },
+    {
+      "name": "@cubid/wallet-recovery",
+      "version": "0.1.0",
+      "description": "Browser-safe recoverable wallet helpers for Cubid Passport recovery flows.",
+      "registry": "npm-only",
+      "referencePath": "wallet-recovery.json"
+    },
+    {
+      "name": "@cubid/wallet-recovery-react",
+      "version": "0.1.0",
+      "description": "React helpers for Cubid Passport recoverable wallet flows.",
+      "registry": "npm-only",
+      "referencePath": "wallet-recovery-react.json"
     },
     {
       "name": "@cubid/web3",

@@ -1341,7 +1341,15 @@
     },
     {
       "kind": "text",
-      "text": " only when you still depend on the older shared\nwallet surface. New chain-specific work should prefer the dedicated chain\npackages instead of expanding this shared surface.\n\n## Install\n\n"
+      "text": " only when you still depend on the older shared\nwallet surface. New chain-specific work should prefer the dedicated chain\npackages instead of expanding this shared surface.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/web3`"
+    },
+    {
+      "kind": "text",
+      "text": " is also not a Cubid signing engine. It does not create wallet\nkeys, perform normal transaction signing, operate an MPC provider, or broadcast\ntransactions. Host apps or specialist wallet providers own those\nresponsibilities.\n\n## Install\n\n"
     },
     {
       "kind": "code",

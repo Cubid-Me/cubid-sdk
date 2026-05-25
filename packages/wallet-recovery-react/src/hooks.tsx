@@ -17,8 +17,7 @@ export type CubidWalletRecoveryReactStatus =
   | "loading"
   | "success";
 
-interface CubidWalletRecoveryHookOptions
-  extends CubidWalletRecoveryClientOptions {}
+type CubidWalletRecoveryHookOptions = CubidWalletRecoveryClientOptions;
 
 export interface CubidRecoveryReleaseHookOptions
   extends CubidWalletRecoveryHookOptions {

@@ -28,6 +28,8 @@ on:
           - "@cubid/sui"
           - "@cubid/tezos"
           - "@cubid/wagmi"
+          - "@cubid/wallet-recovery"
+          - "@cubid/wallet-recovery-react"
       publish_npm:
         description: "Publish the selected package to npm using Trusted Publishing"
         required: true
@@ -125,6 +127,14 @@ jobs:
               ;;
             "@cubid/wagmi")
               echo "package_dir=packages/wagmi" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/wallet-recovery")
+              echo "package_dir=packages/wallet-recovery" >> "$GITHUB_OUTPUT"
+              echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
+              ;;
+            "@cubid/wallet-recovery-react")
+              echo "package_dir=packages/wallet-recovery-react" >> "$GITHUB_OUTPUT"
               echo "jsr_supported=false" >> "$GITHUB_OUTPUT"
               ;;
             *)

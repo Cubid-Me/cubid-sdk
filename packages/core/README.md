@@ -121,6 +121,11 @@ endpoints plus the first server-facing API v3 write helpers:
 - `saveSecret`
 - `sendNotification`
 - `getNotificationStatus`
+- `enrollRecoveryBundle`
+- `getRecoveryBundleStatus`
+- `startRecoveryBundleRelease`
+- `rotateRecoveryBundle`
+- `revokeRecoveryBundle`
 - `generateAccount`
 - `listAccounts`
 - `fetchWalletCapabilities`
@@ -181,6 +186,11 @@ The current API v3 helpers stay server-side as well:
 - `saveSecret({ userId, secret, idempotencyKey? })`
 - `sendNotification({ userId, category, priority, title, body, deepLink?, metadata?, idempotencyKey? })`
 - `getNotificationStatus({ userId, eventId })`
+- `enrollRecoveryBundle({ userId, bundleMaterial, providerKey?, recoveryBundleId?, idempotencyKey? })`
+- `getRecoveryBundleStatus({ userId, providerKey?, recoveryBundleId? })`
+- `startRecoveryBundleRelease({ userId, providerKey?, recoveryBundleId?, idempotencyKey? })`
+- `rotateRecoveryBundle({ userId, recoveryBundleId, bundleMaterial, providerKey?, idempotencyKey? })`
+- `revokeRecoveryBundle({ userId, recoveryBundleId, providerKey? })`
 - `generateAccount({ userId, chain, label?, idempotencyKey? })`
 - `listAccounts({ userId, chain? })`
 - `fetchWalletCapabilities({ userId? })`
@@ -190,6 +200,13 @@ The current API v3 helpers stay server-side as well:
 - `getSigningRequest({ signingRequestId })`
 - `listSigningRequests({ userId, userAccountId?, limit? })`
 - `cancelSigningRequest({ signingRequestId })`
+
+`enrollRecoveryBundle`, `getRecoveryBundleStatus`,
+`startRecoveryBundleRelease`, `rotateRecoveryBundle`, and
+`revokeRecoveryBundle` are the server-safe recovery bundle helpers. They expose
+only safe metadata and never return recovery material, ciphertext, Vault
+metadata, raw Cubid user ids, service-role fields, private keys, seed material,
+or key shares.
 
 `generateAccount`, `fetchWalletCapabilities`, `createAccountRequest`,
 `getAccountRequest`, `createSigningRequest`, `getSigningRequest`,
@@ -202,10 +219,12 @@ Legacy `POST /api/v2/save_secret` is retired and should not be used or
 reintroduced in the public SDK surface. `saveSecret` now targets the v3 write
 contract only.
 
-`saveSecret`, `sendNotification`, `generateAccount`, `createAccountRequest`,
-and `createSigningRequest` automatically generate an idempotency key when
-callers omit one, and they return the resolved `idempotencyKey` alongside the
-normalized response so callers can log or reconcile retries safely.
+`saveSecret`, `sendNotification`, `enrollRecoveryBundle`,
+`startRecoveryBundleRelease`, `rotateRecoveryBundle`, `generateAccount`,
+`createAccountRequest`, and `createSigningRequest` automatically generate an
+idempotency key when callers omit one, and they return the resolved
+`idempotencyKey` alongside the normalized response so callers can log or
+reconcile retries safely.
 
 `sendNotification` is the first dapp-authenticated flexible-messaging helper.
 It stays server-side, requires the Cubid dapp API key, and normalizes only

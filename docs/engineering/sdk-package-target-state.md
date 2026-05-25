@@ -17,8 +17,8 @@ from personal npm accounts or long-lived local tokens.
 JSR should remain intentionally narrow. Use JSR only for runtime-agnostic
 packages with a real Deno or Supabase Edge value proposition. Under the current
 public package policy, that means `@cubid/core` only; the auth, auth-react,
-browser, React, wagmi, and transitional compatibility packages remain npm-only
-by design.
+browser, React, wagmi, wallet-recovery, chain, and transitional compatibility
+packages remain npm-only by design.
 
 Public SDK packages should use explicit package-level licenses. `@cubid/core`
 is Apache-2.0; app and service workspaces in this monorepo are not automatically

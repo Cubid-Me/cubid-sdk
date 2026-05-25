@@ -11,6 +11,16 @@ transactions, or accept Cubid dapp API keys.
 pnpm add @cubid/wallet-recovery
 ```
 
+## Registry Availability
+
+- npm: supported
+- JSR: not published by policy
+
+## API Reference
+
+- JSON reference: `../../docs/reference/api/wallet-recovery.json`
+- Package matrix: `../../README.md`
+
 ```ts
 import { createCubidWalletRecoveryClient } from "@cubid/wallet-recovery"
 
