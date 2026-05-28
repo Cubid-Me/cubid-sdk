@@ -15,3 +15,16 @@
   - `pnpm --filter @cubid/auth build && pnpm --filter @cubid/auth-react build`
 - Follow-ups:
   - Continue wiring the consuming app repos to the SDK auth contract and run app-level SIWC smoke tests.
+
+## 2026-05-28T06:24:28Z
+
+- Agent: Codex
+- Branch: `codex/passkey-first-siwc-sdk`
+- Head: `355aae4a`
+- Summary:
+  - Fixed PR validation lint by applying Node globals to `.mjs` scripts in ESLint config.
+  - Left the passkey-first SIWC SDK API unchanged.
+- Validation:
+  - `pnpm lint` passed.
+- Follow-ups:
+  - Re-check GitHub PR validation after pushing this CI hygiene fix.
