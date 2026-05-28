@@ -40,7 +40,7 @@ const state = createCubidAuthState()
 const nonce = createCubidAuthNonce()
 
 const signInUrl = buildCubidAuthorizationUrl({
-  authorizationEndpoint: "https://id.cubid.me/oauth2/authorize",
+  authorizationEndpoint: "https://id.cubid.me/authorize",
   clientId: "clearpass-dashboard",
   codeChallenge: pkce.codeChallenge,
   nonce,

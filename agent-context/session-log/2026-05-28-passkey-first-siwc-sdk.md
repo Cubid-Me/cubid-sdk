@@ -43,3 +43,18 @@
   - `pnpm lint` passed.
 - Follow-ups:
   - Push the docs refresh so PR validation can rerun.
+
+## 2026-05-28T06:39:14Z
+
+- Agent: Codex
+- Branch: `codex/passkey-first-siwc-sdk`
+- Head: `cfe2db6b`
+- Summary:
+  - Corrected the low-level auth README/API example to use the Cubid issuer `/authorize` endpoint shape.
+  - Regenerated generated API reference output after the example correction.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check` passed.
+  - `pnpm lint` passed.
+- Follow-ups:
+  - Push the documentation correction so PR validation reruns against the actual issuer endpoint example.
