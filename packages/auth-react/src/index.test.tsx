@@ -139,6 +139,9 @@ describe("@cubid/auth-react", () => {
     const parsed = new URL(String(launchedUrl));
     expect(parsed.searchParams.get("client_id")).toBe("clearpass-dashboard");
     expect(parsed.searchParams.get("nonce")).toBe("nonce-123");
+    expect(parsed.searchParams.get("acr_values")).toBe(
+      "urn:cubid:acr:passkey"
+    );
 
     const storedTransaction = storage.getItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY);
     expect(storedTransaction).toBeTruthy();

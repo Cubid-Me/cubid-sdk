@@ -51,6 +51,7 @@ interface CubidAuthTransaction {
 }
 
 export interface CubidAuthSignInOptions {
+  acrValues?: BuildCubidAuthorizationUrlInput["acrValues"];
   extraParams?: BuildCubidAuthorizationUrlInput["extraParams"];
   loginHint?: string;
   maxAge?: number;
@@ -59,6 +60,7 @@ export interface CubidAuthSignInOptions {
   nonce?: string;
   performRedirect?: boolean;
   prompt?: string;
+  requirePasskey?: boolean;
   scope?: readonly string[] | string;
   stateByteLength?: number;
   verifierByteLength?: number;
@@ -86,6 +88,7 @@ export interface CubidAuthProviderProps {
   issuer: string;
   postLogoutRedirectUri?: string;
   redirectUri: string;
+  requirePasskey?: boolean;
   scope?: readonly string[] | string;
   storage?: CubidAuthStorageLike | null;
 }
@@ -298,6 +301,7 @@ export function CubidAuthProvider({
   issuer,
   postLogoutRedirectUri,
   redirectUri,
+  requirePasskey = true,
   scope,
   storage: providedStorage,
 }: CubidAuthProviderProps) {
@@ -374,6 +378,7 @@ export function CubidAuthProvider({
 
       const url = buildCubidAuthorizationUrl({
         authorizationEndpoint: nextDiscovery.authorization_endpoint,
+        acrValues: options.acrValues,
         clientId,
         codeChallenge: pkce.codeChallenge,
         codeChallengeMethod: pkce.codeChallengeMethod,
@@ -383,6 +388,7 @@ export function CubidAuthProvider({
         nonce,
         prompt: options.prompt,
         redirectUri,
+        requirePasskey: options.requirePasskey ?? requirePasskey,
         scope: nextScope,
         state,
       });

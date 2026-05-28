@@ -1,6 +1,7 @@
 export const CUBID_PRODUCTION_ISSUER = "https://id.cubid.me";
 export const CUBID_STAGING_ISSUER = "https://staging-id.cubid.me";
 export const CUBID_DEFAULT_OIDC_SCOPES = ["openid", "email", "profile"] as const;
+export const CUBID_PASSKEY_ACR_VALUE = "urn:cubid:acr:passkey";
 export const CUBID_AUTH_SESSION_STORAGE_KEY = "cubid.auth.session";
 
 const DISCOVERY_PATH = "/.well-known/openid-configuration";
@@ -87,6 +88,7 @@ export interface CreateCubidPkcePairOptions {
 }
 
 export interface BuildCubidAuthorizationUrlInput {
+  acrValues?: readonly string[] | string;
   authorizationEndpoint: string | URL;
   clientId: string;
   codeChallenge: string;
@@ -97,6 +99,7 @@ export interface BuildCubidAuthorizationUrlInput {
   nonce?: string;
   prompt?: string;
   redirectUri: string;
+  requirePasskey?: boolean;
   scope?: readonly string[] | string;
   state: string;
 }
@@ -551,6 +554,29 @@ function normalizeScopes(scope?: readonly string[] | string): string[] {
   return values;
 }
 
+function normalizeAcrValues(acrValues?: readonly string[] | string): string[] {
+  if (!acrValues) {
+    return [];
+  }
+
+  const values =
+    typeof acrValues === "string"
+      ? acrValues.split(/\s+/u)
+      : [...acrValues];
+  const normalized = values
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
+
+  if (normalized.length === 0) {
+    throw new CubidAuthError("Cubid auth requires at least one ACR value.", {
+      category: "validation",
+      code: "invalid_acr_values",
+    });
+  }
+
+  return [...new Set(normalized)];
+}
+
 function appendExtraParams(
   params: URLSearchParams,
   extraParams?: Record<string, boolean | number | string | undefined>
@@ -926,6 +952,15 @@ export function buildCubidAuthorizationUrl(
   }
 
   appendExtraParams(url.searchParams, input.extraParams);
+
+  const acrValues = normalizeAcrValues(input.acrValues);
+  if (input.requirePasskey && !acrValues.includes(CUBID_PASSKEY_ACR_VALUE)) {
+    acrValues.unshift(CUBID_PASSKEY_ACR_VALUE);
+  }
+
+  if (acrValues.length > 0) {
+    url.searchParams.set("acr_values", acrValues.join(" "));
+  }
 
   return url.toString();
 }

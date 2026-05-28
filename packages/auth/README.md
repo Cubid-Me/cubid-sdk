@@ -44,10 +44,15 @@ const signInUrl = buildCubidAuthorizationUrl({
   clientId: "clearpass-dashboard",
   codeChallenge: pkce.codeChallenge,
   nonce,
+  requirePasskey: true,
   redirectUri: "https://dashboard.clearpass.app/callback",
   state,
 })
 ```
+
+`requirePasskey: true` adds `acr_values=urn:cubid:acr:passkey`, which asks the
+Cubid-hosted login surface to satisfy the request with Cubid-owned passkey
+assurance before consent and callback.
 
 This package is intentionally browser-safe. It does not require a Cubid dapp
 API key, a client secret, or any other privileged credential in frontend code.
