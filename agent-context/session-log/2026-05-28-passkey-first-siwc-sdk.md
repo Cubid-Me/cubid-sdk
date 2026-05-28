@@ -28,3 +28,18 @@
   - `pnpm lint` passed.
 - Follow-ups:
   - Re-check GitHub PR validation after pushing this CI hygiene fix.
+
+## 2026-05-28T06:34:42Z
+
+- Agent: Codex
+- Branch: `codex/passkey-first-siwc-sdk`
+- Head: `bfc255a2`
+- Summary:
+  - Regenerated API reference artifacts for the passkey-first SIWC auth contract.
+  - Updated generated `@cubid/auth` and `@cubid/auth-react` docs after CI reported stale API reference output.
+- Validation:
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check` passed.
+  - `pnpm lint` passed.
+- Follow-ups:
+  - Push the docs refresh so PR validation can rerun.

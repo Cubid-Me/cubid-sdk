@@ -975,6 +975,18 @@
           }
         },
         {
+          "name": "requirePasskey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
           "name": "scope",
           "variant": "declaration",
           "kind": 1024,
@@ -1037,6 +1049,34 @@
       "kind": 256,
       "flags": {},
       "children": [
+        {
+          "name": "acrValues",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              }
+            ]
+          }
+        },
         {
           "name": "extraParams",
           "variant": "declaration",
@@ -1193,6 +1233,18 @@
           "type": {
             "type": "intrinsic",
             "name": "string"
+          }
+        },
+        {
+          "name": "requirePasskey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
           }
         },
         {
@@ -1938,11 +1990,35 @@
     },
     {
       "kind": "code",
-      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return <p>Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}</p>;\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://staging-id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n  );\n}\n```"
+      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return <p>Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}</p>;\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://staging-id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n);\n}\n```"
     },
     {
       "kind": "text",
       "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`CubidAuthProvider`"
+    },
+    {
+      "kind": "text",
+      "text": " requests Cubid passkey assurance by default using\n"
+    },
+    {
+      "kind": "code",
+      "text": "`acr_values=urn:cubid:acr:passkey`"
+    },
+    {
+      "kind": "text",
+      "text": ". Set "
+    },
+    {
+      "kind": "code",
+      "text": "`requirePasskey={false}`"
+    },
+    {
+      "kind": "text",
+      "text": " only for a\ncompatibility flow that intentionally does not require passkey-backed Cubid\nauthentication.\n\n"
     },
     {
       "kind": "code",
