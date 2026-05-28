@@ -56,9 +56,14 @@ export function App() {
     >
       {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}
     </CubidAuthProvider>
-  );
+);
 }
 ```
+
+`CubidAuthProvider` requests Cubid passkey assurance by default using
+`acr_values=urn:cubid:acr:passkey`. Set `requirePasskey={false}` only for a
+compatibility flow that intentionally does not require passkey-backed Cubid
+authentication.
 
 `@cubid/auth-react` helps with the browser session experience only. Apps still
 need to enforce protected dashboard access and server-side authorization using

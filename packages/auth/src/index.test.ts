@@ -130,6 +130,23 @@ describe("@cubid/auth", () => {
     expect(parsed.searchParams.get("audience")).toBe("developers");
   });
 
+  it("can request passkey-backed Cubid assurance with ACR values", () => {
+    const url = buildCubidAuthorizationUrl({
+      authorizationEndpoint: "https://id.cubid.me/authorize",
+      clientId: "consumer-app",
+      codeChallenge: "challenge-123",
+      nonce: "nonce-123",
+      redirectUri: "https://app.example.com/auth/callback",
+      requirePasskey: true,
+      state: "state-123",
+    });
+
+    const parsed = new URL(url);
+    expect(parsed.searchParams.get("acr_values")).toBe(
+      "urn:cubid:acr:passkey"
+    );
+  });
+
   it("parses successful and failed authorization callbacks", () => {
     expect(
       parseCubidAuthorizationCallback(
