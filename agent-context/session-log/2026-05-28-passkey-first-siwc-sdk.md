@@ -58,3 +58,19 @@
   - `pnpm lint` passed.
 - Follow-ups:
   - Push the documentation correction so PR validation reruns against the actual issuer endpoint example.
+
+## 2026-05-29T08:54:44Z
+
+- Agent: Codex
+- Branch: `codex/passkey-first-siwc-sdk`
+- Head: `e5def98c`
+- Summary:
+  - Added a generic passkey-first SIWC integration guide for SmarTrust, i-am-human, ChainCrew, and starter/demo apps.
+  - Clarified that consuming apps start OIDC, handle callback/session state, and must not implement Cubid passkeys or recovery locally.
+  - Linked the guide from the root README and the `@cubid/auth` / `@cubid/auth-react` package READMEs.
+- Validation:
+  - `git diff --check`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+- Follow-ups:
+  - Use the guide while wiring and validating each consuming app's returning-user and lost-passkey SIWC flows.
