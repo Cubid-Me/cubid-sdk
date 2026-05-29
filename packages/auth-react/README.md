@@ -22,6 +22,8 @@ npm install @cubid/auth-react @cubid/auth
 - Machine-readable API JSON:
   [`docs/reference/api/auth-react.json`](../../docs/reference/api/auth-react.json)
 - Root package matrix: [`README.md`](../../README.md)
+- Passkey-first SIWC guide:
+  [`docs/examples/passkey-first-siwc.md`](../../docs/examples/passkey-first-siwc.md)
 - ClearPass-oriented Vite example:
   [`docs/examples/clearpass-dashboard-auth-vite.md`](../../docs/examples/clearpass-dashboard-auth-vite.md)
 
@@ -56,7 +58,7 @@ export function App() {
     >
       {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}
     </CubidAuthProvider>
-);
+  );
 }
 ```
 
@@ -68,3 +70,8 @@ authentication.
 `@cubid/auth-react` helps with the browser session experience only. Apps still
 need to enforce protected dashboard access and server-side authorization using
 the authenticated session on their own backend or edge routes.
+
+Passkey creation, returning-user authentication, recovery proof collection, and
+fresh passkey enrollment after lost-passkey recovery remain Cubid-hosted at
+`login.cubid.me`. React apps should surface "Sign in with Cubid" and callback
+state, not embed Cubid passkey or recovery ceremonies locally.
