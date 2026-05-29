@@ -85,6 +85,8 @@ Shared-wallet migrations now have a dedicated guide:
 
 ## Examples
 
+- Passkey-first SIWC integration guide:
+  `docs/examples/passkey-first-siwc.md`
 - ClearPass Dashboard Vite auth example:
   `docs/examples/clearpass-dashboard-auth-vite.md`
 

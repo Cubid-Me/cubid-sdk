@@ -24,6 +24,8 @@ npm install @cubid/auth
 
 - JSON reference: `../../docs/reference/api/auth.json`
 - Package matrix: `../../README.md`
+- Passkey-first SIWC guide:
+  `../../docs/examples/passkey-first-siwc.md`
 
 ## Basic Usage
 
@@ -56,3 +58,8 @@ assurance before consent and callback.
 
 This package is intentionally browser-safe. It does not require a Cubid dapp
 API key, a client secret, or any other privileged credential in frontend code.
+
+Consuming apps should not implement Cubid passkey creation, returning-user
+passkey authentication, or lost-passkey recovery locally. Those flows are owned
+by `login.cubid.me`; apps only start the OIDC request, handle the callback, and
+create their own app session from consented app-scoped claims.

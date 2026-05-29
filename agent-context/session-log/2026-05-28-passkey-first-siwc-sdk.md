@@ -58,3 +58,39 @@
   - `pnpm lint` passed.
 - Follow-ups:
   - Push the documentation correction so PR validation reruns against the actual issuer endpoint example.
+
+## 2026-05-29T08:54:44Z
+
+- Agent: Codex
+- Branch: `codex/passkey-first-siwc-sdk`
+- Head: `e5def98c`
+- Summary:
+  - Added a generic passkey-first SIWC integration guide for SmarTrust, i-am-human, ChainCrew, and starter/demo apps.
+  - Clarified that consuming apps start OIDC, handle callback/session state, and must not implement Cubid passkeys or recovery locally.
+  - Linked the guide from the root README and the `@cubid/auth` / `@cubid/auth-react` package READMEs.
+- Validation:
+  - `git diff --check`
+  - `pnpm docs:api:build`
+  - `pnpm docs:api:check`
+- Follow-ups:
+  - Use the guide while wiring and validating each consuming app's returning-user and lost-passkey SIWC flows.
+
+## 2026-05-29T11:23:20Z
+
+- Agent: Codex
+- Branch: `codex/passkey-first-siwc-sdk`
+- Head: `5a5dbed9`
+- Summary:
+  - Rebuilt the SDK PR branch on current `origin/dev`, which already contains the passkey-assurance SDK implementation and endpoint-example correction.
+  - Replayed only the passkey-first SIWC integration guide commit so the PR diff is now focused on the consuming-app setup notes and generated API-reference links.
+  - Preserved the old local branch as `codex/passkey-first-siwc-sdk-preclean` for archive context.
+- Validation:
+  - `pnpm docs:api:check` passed.
+  - `pnpm lint` passed.
+  - `pnpm --filter @cubid/auth typecheck && pnpm --filter @cubid/auth-react typecheck` passed.
+  - `pnpm --filter @cubid/auth build && pnpm --filter @cubid/auth-react build` passed.
+  - `pnpm exec vitest run packages/auth/src/index.test.ts packages/auth-react/src/index.test.tsx` partially passed: `packages/auth/src/index.test.ts` passed, while `packages/auth-react/src/index.test.tsx` still fails in this checkout with the existing duplicate-React invalid-hook-call issue.
+  - `git diff --check` passed.
+- Follow-ups:
+  - Force-push the cleaned branch over the existing PR branch and let PR state refresh.
+  - Keep the passkey-first SIWC guide aligned with Login-hosted recovery behaviour as consuming-app smoke evidence evolves.
