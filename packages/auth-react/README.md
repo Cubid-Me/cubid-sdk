@@ -53,7 +53,7 @@ export function App() {
   return (
     <CubidAuthProvider
       clientId="clearpass-dashboard"
-      issuer="https://staging-id.cubid.me"
+      issuer="https://id.cubid.me"
       redirectUri="https://dashboard.clearpass.app/auth/callback"
     >
       {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}
@@ -73,5 +73,10 @@ the authenticated session on their own backend or edge routes.
 
 Passkey creation, returning-user authentication, recovery proof collection, and
 fresh passkey enrollment after lost-passkey recovery remain Cubid-hosted at
-`login.cubid.me`. React apps should surface "Sign in with Cubid" and callback
-state, not embed Cubid passkey or recovery ceremonies locally.
+the Identity issuer, `https://id.cubid.me`. React apps should surface "Sign in
+with Cubid" and callback state, not embed Cubid passkey or recovery ceremonies
+locally.
+
+Use OIDC discovery from `https://id.cubid.me/.well-known/openid-configuration`
+for production endpoint metadata. Passport, Verify, Admin, and internal OIDC
+interaction routes are not public SDK integration targets.

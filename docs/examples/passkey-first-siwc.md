@@ -6,8 +6,9 @@ in with Cubid.
 
 The important boundary is simple:
 
-- Cubid owns passkey creation, returning-user passkey authentication, lost
-  passkey recovery, recovery proof collection, and consent at `login.cubid.me`.
+- Cubid owns passkey creation, returning-user passkey authentication,
+  cross-device handoff, lost passkey recovery, recovery proof collection, and
+  consent through the Identity issuer at `https://id.cubid.me`.
 - The consuming app owns its OIDC client registration, redirect callback,
   local app session, and app-specific authorization.
 - The consuming app must not implement Cubid passkeys locally and must not put
@@ -20,7 +21,7 @@ The important boundary is simple:
 
 1. The app sends the user to the Cubid issuer authorization endpoint with PKCE,
    `openid profile email`, and `acr_values=urn:cubid:acr:passkey`.
-2. `login.cubid.me` creates the Cubid passkey and account, including the
+2. Identity creates the Cubid passkey and account, including the
    duplicate-account acknowledgement when account creation is required.
 3. The user approves the minimum identity information requested by the app.
 4. Cubid redirects back to the app callback with an authorization code.
@@ -30,15 +31,14 @@ The important boundary is simple:
 ### Returning User With A Passkey
 
 1. The app starts the same OIDC request with passkey assurance required.
-2. `login.cubid.me` prompts for the existing passkey, including platform,
-   phone/tablet, security-key, or password-manager options supported by the
-   browser.
+2. Identity prompts for the existing passkey, including platform, phone/tablet,
+   security-key, or password-manager options supported by the browser.
 3. Consent is shown when the app, scopes, or disclosed claims require it.
 4. Cubid redirects back to the app callback.
 
 ### Returning User With A Lost Passkey
 
-1. The user enters the Login recovery path from `login.cubid.me`.
+1. The user enters the hosted Identity recovery path.
 2. Cubid collects recovery proofs such as email, phone, Google, GitHub, or EVM
    proofs. Provider tokens and authorization codes stay server-side in Cubid.
 3. If the proof set satisfies the recovery policy, Cubid asks the user to enroll
@@ -54,7 +54,7 @@ recovery proofs itself.
 Use public relying-party metadata in browser code:
 
 ```env
-VITE_CUBID_ISSUER=https://staging-id.cubid.me
+VITE_CUBID_ISSUER=https://id.cubid.me
 VITE_CUBID_CLIENT_ID=your-client-id
 VITE_CUBID_REDIRECT_URI=http://localhost:5173/auth/callback
 VITE_CUBID_POST_LOGOUT_REDIRECT_URI=http://localhost:5173/
@@ -62,8 +62,8 @@ VITE_CUBID_POST_LOGOUT_REDIRECT_URI=http://localhost:5173/
 
 Use `NEXT_PUBLIC_` names instead of `VITE_` in Next.js apps. Production should
 use `https://id.cubid.me` after the production client and callback URLs are
-registered. Staging and demo apps should use `https://staging-id.cubid.me`
-until their production relying-party records are ready.
+registered. Staging and demo apps may use `https://staging-id.cubid.me` while
+they are wired to staging relying-party records.
 
 Keep these values server-only:
 
@@ -98,7 +98,7 @@ sessionStorage.setItem(
 );
 
 const signInUrl = buildCubidAuthorizationUrl({
-  authorizationEndpoint: "https://staging-id.cubid.me/authorize",
+  authorizationEndpoint: "https://id.cubid.me/authorize",
   clientId: "your-client-id",
   codeChallenge: pkce.codeChallenge,
   nonce,
@@ -151,7 +151,7 @@ export function App() {
   return (
     <CubidAuthProvider
       clientId="your-client-id"
-      issuer="https://staging-id.cubid.me"
+      issuer="https://id.cubid.me"
       postLogoutRedirectUri="http://localhost:5173/"
       redirectUri="http://localhost:5173/auth/callback"
     >
@@ -192,8 +192,8 @@ Before calling a consuming app integration ready:
 - Discovery returns the expected issuer metadata from
   `/.well-known/openid-configuration`.
 - Authorization URL includes PKCE, `openid`, and passkey ACR.
-- The user lands at `login.cubid.me` for passkey login, creation, consent, and
-  recovery.
+- The user lands on the hosted Identity surface for passkey login, creation,
+  consent, and recovery.
 - The callback verifies `state`, token issuer, audience, expiry, and nonce.
 - `/userinfo` succeeds with the returned access token.
 - The app creates its own session from app-scoped claims.

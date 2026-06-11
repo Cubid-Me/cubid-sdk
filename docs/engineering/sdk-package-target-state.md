@@ -195,9 +195,13 @@ public types and examples.
 should stay runtime-agnostic and web-standard only: PKCE verifier and challenge
 helpers, state and nonce generation, authorization URL builders, callback
 parsing, token exchange and userinfo helpers, logout and session-clear helpers,
-and structured auth errors. It must not require a Cubid dapp API key, client
-secret, service-role credential, Passport internal token, or any other
-privileged material in browser code.
+and structured auth errors. The stable production protocol boundary is the
+Identity issuer at `https://id.cubid.me`; integrations should discover
+authorization, token, UserInfo, JWKS, logout, revoke, and registration
+endpoints from that issuer instead of calling Passport, Verify, Admin, or
+internal OIDC interaction routes directly. It must not require a Cubid dapp API
+key, client secret, service-role credential, Passport internal token, or any
+other privileged material in browser code.
 
 `@cubid/auth-react` now owns the React layer for Sign in with Cubid. It should
 provide provider, hook, callback, sign-in, and logout ergonomics for browser

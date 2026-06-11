@@ -142,6 +142,11 @@ Own:
 - Token exchange, userinfo, logout, and session-clear helpers
 - Structured auth errors without React or private runtime dependencies
 
+Use `https://id.cubid.me` as the stable public Identity issuer for production
+Sign in with Cubid examples. SDK integrations should rely on OIDC discovery
+from the configured issuer and should not call Passport, Verify, Admin, or
+internal OIDC interaction routes directly.
+
 Do not put Cubid dapp API keys, client secrets, signing keys, service-role
 credentials, or Passport internal tokens into this package's browser usage
 model.

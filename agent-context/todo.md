@@ -1417,7 +1417,11 @@ collection, or recovery passkey enrollment locally.
 
 ### S16. Align SDK docs with the Identity protocol boundary
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-06-11T19:27:19Z
+- Timestamp completed: 2026-06-11T19:29:30Z
+- Feature branch: `dev`
+- Head: `02d5393a` at implementation start
 - Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-06-11-identity-protocol-boundary-sdk-handoff.md`
 
 Update public SDK docs, examples, package defaults, and generated API reference

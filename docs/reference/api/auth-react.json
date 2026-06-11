@@ -2006,7 +2006,7 @@
     },
     {
       "kind": "code",
-      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return <p>Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}</p>;\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://staging-id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n  );\n}\n```"
+      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return <p>Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}</p>;\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n  );\n}\n```"
     },
     {
       "kind": "text",
@@ -2042,15 +2042,23 @@
     },
     {
       "kind": "text",
-      "text": " helps with the browser session experience only. Apps still\nneed to enforce protected dashboard access and server-side authorization using\nthe authenticated session on their own backend or edge routes.\n\nPasskey creation, returning-user authentication, recovery proof collection, and\nfresh passkey enrollment after lost-passkey recovery remain Cubid-hosted at\n"
+      "text": " helps with the browser session experience only. Apps still\nneed to enforce protected dashboard access and server-side authorization using\nthe authenticated session on their own backend or edge routes.\n\nPasskey creation, returning-user authentication, recovery proof collection, and\nfresh passkey enrollment after lost-passkey recovery remain Cubid-hosted at\nthe Identity issuer, "
     },
     {
       "kind": "code",
-      "text": "`login.cubid.me`"
+      "text": "`https://id.cubid.me`"
     },
     {
       "kind": "text",
-      "text": ". React apps should surface \"Sign in with Cubid\" and callback\nstate, not embed Cubid passkey or recovery ceremonies locally."
+      "text": ". React apps should surface \"Sign in\nwith Cubid\" and callback state, not embed Cubid passkey or recovery ceremonies\nlocally.\n\nUse OIDC discovery from "
+    },
+    {
+      "kind": "code",
+      "text": "`https://id.cubid.me/.well-known/openid-configuration`"
+    },
+    {
+      "kind": "text",
+      "text": "\nfor production endpoint metadata. Passport, Verify, Admin, and internal OIDC\ninteraction routes are not public SDK integration targets."
     }
   ]
 }

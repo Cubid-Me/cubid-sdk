@@ -4,8 +4,8 @@ Runtime-agnostic OIDC and PKCE helpers for browser-safe Sign in with Cubid.
 
 ## When To Choose This Package
 
-Use `@cubid/auth` when you need Login with Cubid in a public browser or hybrid
-web app and want the protocol foundation without a React dependency. Choose
+Use `@cubid/auth` when you need Sign in with Cubid in a public browser or
+hybrid web app and want the protocol foundation without a React dependency. Choose
 `@cubid/auth-react` later when you want React-specific session bindings on top
 of this package.
 
@@ -53,7 +53,7 @@ const signInUrl = buildCubidAuthorizationUrl({
 ```
 
 `requirePasskey: true` adds `acr_values=urn:cubid:acr:passkey`, which asks the
-Cubid-hosted login surface to satisfy the request with Cubid-owned passkey
+Cubid-hosted Identity surface to satisfy the request with Cubid-owned passkey
 assurance before consent and callback.
 
 This package is intentionally browser-safe. It does not require a Cubid dapp
@@ -61,5 +61,11 @@ API key, a client secret, or any other privileged credential in frontend code.
 
 Consuming apps should not implement Cubid passkey creation, returning-user
 passkey authentication, or lost-passkey recovery locally. Those flows are owned
-by `login.cubid.me`; apps only start the OIDC request, handle the callback, and
-create their own app session from consented app-scoped claims.
+by the Identity issuer at `https://id.cubid.me`; apps only start the OIDC
+request, handle the callback, and create their own app session from consented
+app-scoped claims.
+
+Use OIDC discovery from `https://id.cubid.me/.well-known/openid-configuration`
+for production authorization, token, UserInfo, JWKS, logout, revoke, and
+registration endpoints. Do not call Passport, Verify, Admin, or internal OIDC
+interaction routes directly from SDK integrations.
