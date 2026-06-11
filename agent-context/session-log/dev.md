@@ -71,3 +71,12 @@
 - summary: Marked the S15 passkey-first auth assurance ergonomics parent complete after S15.1 through S15.5 landed as separate implementation commits.
 - validation: Not run (control-plane status update only).
 - follow-ups: Push or PR the seven local commits on `dev` when ready.
+
+## 2026-06-11T20:07:24.708Z - Auth React render test hardening
+
+- agent: Codex
+- branch: dev
+- head: d54fd3a1
+- summary: Added React/ReactDOM dedupe aliases for root and acceptance Vitest runs and introduced a focused `test:auth-react` script that rebuilds auth packages before exercising the auth-react render tests.
+- validation: `pnpm install --frozen-lockfile`; `pnpm test:auth-react`; `pnpm test:acceptance`; `pnpm test:unit`; `git diff --check`; `pnpm lint`
+- follow-ups: None.
