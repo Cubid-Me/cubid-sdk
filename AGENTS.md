@@ -4,7 +4,7 @@
 
 - Use `agent-context/session-log/` for active session logs. Do not add new entries to legacy `agent-context/session-log.md` files.
 - For feature branches, update the branch log immediately before each commit. Use `YYYY-MM-DD-featurebranch.md` in single-app repos and `YYYY-MM-DD-app-featurebranch.md` in monorepos.
-- Direct work on `main` may use `agent-context/session-log/main.md`; direct work on `dev` may use `agent-context/session-log/dev.md`.
+- Direct work on `main` may use `agent-context/session-log/main.md`; direct work on `dev` may use `agent-context/session-log/dev.md` only when the user has explicitly authorized direct shared-branch work.
 - Each entry must include UTC timestamp, agent, branch, head, summary, validation, and follow-ups.
 - Keep `agent-context/todo.md` focused on roadmap items and active follow-ups. Completed work belongs in the current branch log.
 - See `agent-context/session-log/README.md` for naming and archival rules.
@@ -88,8 +88,14 @@ This local folder may be missing its `.git` checkout on some machines. Restore t
 
 - Treat `dev` as the active integration branch for ongoing SDK work.
 - Treat `main` as the release branch for npm and JSR publication.
-- Keep local implementation, PR, and review work on feature branches or `dev`
-  unless the user explicitly asks for a direct hotfix path.
+- Do not implement or commit directly on `dev` unless the user explicitly
+  authorizes direct shared-branch work in the current task.
+- Do implementation, review, and fix work on feature branches by default, using
+  the `codex/` prefix unless the user requests a different branch name.
+- Open pull requests from feature branches into `dev` so GitHub CI and code
+  review run before integration.
+- Treat direct pushes to `dev` as an exception for explicitly authorized
+  emergency, cleanup, or operator-directed flows, not the normal yeet path.
 
 ## Applicability Notes
 
