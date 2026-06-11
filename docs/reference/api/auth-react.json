@@ -287,6 +287,22 @@
       "flags": {},
       "children": [
         {
+          "name": "assurance",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/auth",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidAuthAssurance"
+            },
+            "name": "CubidAuthAssurance",
+            "package": "@cubid/auth"
+          }
+        },
+        {
           "name": "clearError",
           "variant": "declaration",
           "kind": 1024,
@@ -448,6 +464,16 @@
                 }
               ]
             }
+          }
+        },
+        {
+          "name": "hasPasskeyAssurance",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
           }
         },
         {
@@ -2006,7 +2032,7 @@
     },
     {
       "kind": "code",
-      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return <p>Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}</p>;\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n  );\n}\n```"
+      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return (\n      <p>\n        Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}\n        {auth.hasPasskeyAssurance ? \" with a Cubid passkey\" : \"\"}\n      </p>\n    );\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n  );\n}\n```"
     },
     {
       "kind": "text",
@@ -2035,6 +2061,46 @@
     {
       "kind": "text",
       "text": " only for a\ncompatibility flow that intentionally does not require passkey-backed Cubid\nauthentication.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`useCubidAuth()`"
+    },
+    {
+      "kind": "text",
+      "text": " exposes "
+    },
+    {
+      "kind": "code",
+      "text": "`assurance`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`hasPasskeyAssurance`"
+    },
+    {
+      "kind": "text",
+      "text": " so React apps can\nrender passkey-backed state without manually decoding "
+    },
+    {
+      "kind": "code",
+      "text": "`acr`"
+    },
+    {
+      "kind": "text",
+      "text": " or "
+    },
+    {
+      "kind": "code",
+      "text": "`amr`"
+    },
+    {
+      "kind": "text",
+      "text": " claims.\n\n"
     },
     {
       "kind": "code",

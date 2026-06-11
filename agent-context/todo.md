@@ -1411,7 +1411,11 @@ decoded claims, or SDK session objects without manually parsing raw `acr` and
 
 ### S15.4 Expose assurance status through `@cubid/auth-react`
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-06-11T19:37:31Z
+- Timestamp completed: 2026-06-11T19:40:16Z
+- Feature branch: `dev`
+- Head: `91740607` at implementation start
 
 Expose the same passkey-assurance status through the `@cubid/auth-react`
 session context so React apps can render "passkey-backed" state, warnings, or

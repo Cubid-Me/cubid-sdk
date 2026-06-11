@@ -41,7 +41,12 @@ function DashboardGate() {
   const auth = useCubidAuth();
 
   if (auth.isAuthenticated) {
-    return <p>Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}</p>;
+    return (
+      <p>
+        Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}
+        {auth.hasPasskeyAssurance ? " with a Cubid passkey" : ""}
+      </p>
+    );
   }
 
   return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;
@@ -66,6 +71,9 @@ export function App() {
 `acr_values=urn:cubid:acr:passkey`. Set `requirePasskey={false}` only for a
 compatibility flow that intentionally does not require passkey-backed Cubid
 authentication.
+
+`useCubidAuth()` exposes `assurance` and `hasPasskeyAssurance` so React apps can
+render passkey-backed state without manually decoding `acr` or `amr` claims.
 
 `@cubid/auth-react` helps with the browser session experience only. Apps still
 need to enforce protected dashboard access and server-side authorization using

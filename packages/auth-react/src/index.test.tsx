@@ -82,6 +82,10 @@ function SessionViewer() {
       <span data-testid="status">{auth.status}</span>
       <span data-testid="subject">{auth.session?.subject ?? "none"}</span>
       <span data-testid="email">{auth.session?.userInfo?.email ?? "none"}</span>
+      <span data-testid="acr">{auth.assurance.acr ?? "none"}</span>
+      <span data-testid="has-passkey">
+        {auth.hasPasskeyAssurance ? "passkey" : "none"}
+      </span>
     </div>
   );
 }
@@ -155,6 +159,8 @@ describe("@cubid/auth-react", () => {
   it("handles an authorization callback and creates an authenticated session", async () => {
     const storage = new MemoryStorage();
     const { idToken, jwks } = await createSignedIdToken({
+      acr: "urn:cubid:acr:passkey",
+      amr: ["passkey"],
       aud: "clearpass-dashboard",
       email: "developer@clearpass.app",
       exp: Math.floor(Date.now() / 1000) + 3600,
@@ -259,6 +265,8 @@ describe("@cubid/auth-react", () => {
 
     expect(within(view.container).getByTestId("subject").textContent).toBe("pairwise-user-123");
     expect(within(view.container).getByTestId("email").textContent).toBe("developer@clearpass.app");
+    expect(within(view.container).getByTestId("acr").textContent).toBe("urn:cubid:acr:passkey");
+    expect(within(view.container).getByTestId("has-passkey").textContent).toBe("passkey");
     expect(storage.getItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY)).toBeNull();
     expect(storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY)).toBeTruthy();
   });

@@ -44,3 +44,12 @@
 - summary: Completed S15.3 by adding `getCubidAuthAssurance(...)` and `hasCubidPasskeyAssurance(...)` for ID tokens, decoded claims, and `CubidAuthSession` objects, plus README usage and focused unit coverage.
 - validation: `pnpm docs:api:build`; `pnpm exec vitest run packages/auth/src/index.test.ts`; `pnpm --filter @cubid/auth typecheck`; `pnpm docs:api:check`; `git diff --check`
 - follow-ups: Expose the normalized assurance status through `@cubid/auth-react` context in S15.4.
+
+## 2026-06-11T19:40:16.000Z - S15.4 React auth assurance context
+
+- agent: Codex
+- branch: dev
+- head: 91740607
+- summary: Completed S15.4 by exposing normalized `assurance` and `hasPasskeyAssurance` values from `useCubidAuth()`, documenting the React usage, and extending the callback test expectations.
+- validation: `pnpm docs:api:build`; `pnpm --filter @cubid/auth-react typecheck`; `pnpm --filter @cubid/auth-react build`; `pnpm docs:api:check`; `git diff --check`. `pnpm exec vitest run packages/auth-react/src/index.test.tsx` was attempted and still fails with the existing duplicate-React invalid-hook-call issue in this checkout.
+- follow-ups: Keep the React render-test environment cleanup separate from this public API slice unless it blocks CI.
