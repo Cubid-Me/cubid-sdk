@@ -19,6 +19,8 @@ import {
   exchangeCubidAuthorizationCode,
   fetchCubidOidcDiscoveryDocument,
   fetchCubidUserInfo,
+  getCubidAuthAssurance,
+  hasCubidPasskeyAssurance,
   isCubidAuthSessionExpired,
   isCubidIdTokenExpired,
   loadCubidAuthSession,
@@ -383,6 +385,42 @@ describe("@cubid/auth", () => {
 
     expect(claims.acr).toBe("urn:cubid:acr:passkey");
     expect(claims.amr).toEqual(["passkey"]);
+  });
+
+  it("normalizes passkey assurance from claims, ID tokens, and auth sessions", () => {
+    const idToken = createIdToken({
+      amr: ["passkey"],
+      iss: "https://id.cubid.me",
+      sub: "pairwise-user-123",
+    });
+    const tokenResponse = {
+      accessToken: "access-token",
+      expiresAt: null,
+      expiresIn: null,
+      idToken,
+      issuedAt: Date.now(),
+      raw: {},
+      refreshToken: null,
+      scope: ["openid"],
+      tokenType: "Bearer",
+    };
+    const session = createCubidAuthSession({
+      clientId: "client-123",
+      issuer: "https://id.cubid.me",
+      tokenResponse,
+    });
+
+    expect(hasCubidPasskeyAssurance({
+      acr: "urn:cubid:acr:passkey",
+      sub: "pairwise-user-123",
+    })).toBe(true);
+    expect(hasCubidPasskeyAssurance(idToken)).toBe(true);
+    expect(getCubidAuthAssurance(session)).toEqual({
+      acr: null,
+      amr: ["passkey"],
+      hasPasskeyAssurance: true,
+    });
+    expect(hasCubidPasskeyAssurance({ amr: ["email_otp"] })).toBe(false);
   });
 
   it("requires exactly three JWT segments when decoding ID token claims", () => {

@@ -35,3 +35,12 @@
 - summary: Completed S15.2 by adding typed optional `acr` and `amr` fields to `CubidIdTokenClaims`, documenting the fields in `@cubid/auth`, and adding a focused decode test for passkey-backed assurance claims.
 - validation: `pnpm docs:api:build`; `pnpm exec vitest run packages/auth/src/index.test.ts`; `pnpm --filter @cubid/auth typecheck`; `pnpm docs:api:check`; `git diff --check`
 - follow-ups: Implement S15.3 passkey-assurance inspection helpers on top of the typed claim surface.
+
+## 2026-06-11T19:37:31.000Z - S15.3 passkey assurance helpers
+
+- agent: Codex
+- branch: dev
+- head: 5b284d8b
+- summary: Completed S15.3 by adding `getCubidAuthAssurance(...)` and `hasCubidPasskeyAssurance(...)` for ID tokens, decoded claims, and `CubidAuthSession` objects, plus README usage and focused unit coverage.
+- validation: `pnpm docs:api:build`; `pnpm exec vitest run packages/auth/src/index.test.ts`; `pnpm --filter @cubid/auth typecheck`; `pnpm docs:api:check`; `git diff --check`
+- follow-ups: Expose the normalized assurance status through `@cubid/auth-react` context in S15.4.

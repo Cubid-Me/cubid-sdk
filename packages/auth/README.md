@@ -60,6 +60,18 @@ Decoded `CubidIdTokenClaims` include typed optional `acr` and `amr` fields so
 apps can inspect returned authentication assurance without treating the whole
 token payload as an untyped record.
 
+Use `getCubidAuthAssurance(...)` or `hasCubidPasskeyAssurance(...)` with an ID
+token, decoded claims, or `CubidAuthSession` when app UI or backend handoff
+logic needs to confirm the returned session was passkey-backed:
+
+```ts
+import { hasCubidPasskeyAssurance } from "@cubid/auth"
+
+if (!hasCubidPasskeyAssurance(session)) {
+  throw new Error("Expected a passkey-backed Cubid session")
+}
+```
+
 This package is intentionally browser-safe. It does not require a Cubid dapp
 API key, a client secret, or any other privileged credential in frontend code.
 

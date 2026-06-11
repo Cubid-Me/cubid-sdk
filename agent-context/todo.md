@@ -1398,7 +1398,11 @@ inspecting passkey-backed Cubid sessions.
 
 ### S15.3 Add passkey-assurance inspection helpers
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-06-11T19:35:28Z
+- Timestamp completed: 2026-06-11T19:37:31Z
+- Feature branch: `dev`
+- Head: `5b284d8b` at implementation start
 
 Add small helper functions such as `hasCubidPasskeyAssurance(...)` and
 `getCubidAuthAssurance(...)` so apps can inspect returned ID-token claims,
