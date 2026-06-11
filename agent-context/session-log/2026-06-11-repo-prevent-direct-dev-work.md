@@ -17,3 +17,12 @@
 - summary: Expanded AGENTS guidance so direct implementation or commits are discouraged on both `dev` and `main`, with PRs expected for feature integration and release promotion unless the user explicitly authorizes a shared-branch exception.
 - validation: `git diff --check`
 - follow-ups: Cherry-pick the branch-scoped session-log migration commit onto this feature branch, then reset local `main` to `origin/main` after the commit is preserved here.
+
+## 2026-06-11T21:00:46.557Z - Dependabot alert dependency updates
+
+- agent: Codex
+- branch: codex/prevent-direct-dev-work
+- head: d426a630
+- summary: Investigated GitHub Dependabot alerts and updated the dev/test dependency graph so Vitest resolves to `3.2.6`, PostCSS resolves to `8.5.15`, and transitive `ws` and `brace-expansion` vulnerabilities are forced to patched versions through pnpm overrides.
+- validation: `pnpm audit --audit-level moderate`; `pnpm lint`; `pnpm test:auth-react`; `pnpm test:unit`; `pnpm test:acceptance`; `git diff --check`
+- follow-ups: None.
