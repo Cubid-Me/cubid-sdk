@@ -33,8 +33,13 @@ The important boundary is simple:
 1. The app starts the same OIDC request with passkey assurance required.
 2. Identity prompts for the existing passkey, including platform, phone/tablet,
    security-key, or password-manager options supported by the browser.
-3. Consent is shown when the app, scopes, or disclosed claims require it.
-4. Cubid redirects back to the app callback.
+3. If the current browser cannot complete the passkey ceremony, Identity may
+   show a Cubid-hosted QR/deep-link handoff. The original browser creates and
+   polls a short-lived handoff session, the second device completes Cubid
+   passkey authentication, and the original browser resumes the same OIDC/SIWC
+   request.
+4. Consent is shown when the app, scopes, or disclosed claims require it.
+5. Cubid redirects back to the app callback.
 
 ### Returning User With A Lost Passkey
 
@@ -43,7 +48,11 @@ The important boundary is simple:
    proofs. Provider tokens and authorization codes stay server-side in Cubid.
 3. If the proof set satisfies the recovery policy, Cubid asks the user to enroll
    a fresh passkey and completes a passkey-backed session.
-4. The original OIDC/SIWC request can continue through consent and callback.
+4. The recovery flow preserves the original OIDC/SIWC login challenge, so the
+   recovered user can continue through consent and return to the relying app
+   instead of ending in a standalone Cubid session.
+5. The app callback receives the normal OIDC control parameters after Cubid
+   completes recovery and consent.
 
 The app should treat recovery as Cubid-owned. It can explain that Cubid recovery
 will return the user to the app after sign-in, but it should not collect Cubid
@@ -104,7 +113,7 @@ const signInUrl = buildCubidAuthorizationUrl({
   nonce,
   redirectUri: "http://localhost:5173/auth/callback",
   requirePasskey: true,
-  scopes: ["openid", "profile", "email"],
+  scope: ["openid", "profile", "email"],
   state,
 });
 
@@ -142,6 +151,10 @@ function SiwcPanel() {
       <p>
         Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}
       </p>
+      <p>
+        Cubid assurance:{" "}
+        {auth.hasPasskeyAssurance ? "passkey-backed" : "not passkey-backed"}
+      </p>
       <CubidSignOutButton />
     </section>
   );
@@ -178,8 +191,9 @@ For SmarTrust, i-am-human, ChainCrew, and starter/demo apps:
    `sub`, and does not depend on global Cubid user IDs.
 6. Keep the callback route able to resume the original app flow after Cubid
    passkey login, account creation, or recovery.
-7. Test three paths: new user creates passkey, returning user authenticates with
-   passkey, and lost-passkey user recovers at Cubid and returns to the app.
+7. Test four paths: new user creates a passkey, returning user authenticates
+   with a passkey, returning user completes Cubid-hosted QR handoff from another
+   device, and lost-passkey user recovers at Cubid and returns to the app.
 
 Starter/demo apps can show the OIDC calls and responses in a panel to teach
 developers what is happening, but that panel should still use the real hosted
@@ -194,14 +208,19 @@ Before calling a consuming app integration ready:
 - Authorization URL includes PKCE, `openid`, and passkey ACR.
 - The user lands on the hosted Identity surface for passkey login, creation,
   consent, and recovery.
+- Cross-device handoff, when used, completes through the hosted Identity QR or
+  deep-link path and returns the original browser to the pending OIDC/SIWC flow.
 - The callback verifies `state`, token issuer, audience, expiry, and nonce.
+- The app can inspect returned assurance through `hasCubidPasskeyAssurance(...)`
+  or `useCubidAuth().hasPasskeyAssurance` instead of manually parsing `acr` and
+  `amr`.
 - `/userinfo` succeeds with the returned access token.
 - The app creates its own session from app-scoped claims.
 - Logout clears the app session and routes through Cubid logout when needed.
 - Lost-passkey recovery returns to the original app flow after Cubid enrolls a
   fresh passkey.
 
-Current hosted recovery provider validation depends on the Login deployment
+Current hosted recovery provider validation depends on the Identity deployment
 having OAuth state and provider credentials configured. Missing Google or GitHub
 provider configuration is a Cubid-hosted recovery blocker, not a consuming-app
 SDK responsibility.

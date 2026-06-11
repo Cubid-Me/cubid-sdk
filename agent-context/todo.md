@@ -1423,7 +1423,11 @@ debug UI without manually parsing ID-token claims.
 
 ### S15.5 Refresh the passkey-first SIWC guide for hosted handoff and recovery
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-06-11T19:40:16Z
+- Timestamp completed: 2026-06-11T19:41:00Z
+- Feature branch: `dev`
+- Head: `e975a093` at implementation start
 
 Update the passkey-first SIWC guide with the now-proven Login/Identity-owned
 QR handoff and lost-passkey recovery behavior. Keep the boundary explicit:

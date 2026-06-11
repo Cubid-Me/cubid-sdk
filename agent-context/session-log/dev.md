@@ -53,3 +53,12 @@
 - summary: Completed S15.4 by exposing normalized `assurance` and `hasPasskeyAssurance` values from `useCubidAuth()`, documenting the React usage, and extending the callback test expectations.
 - validation: `pnpm docs:api:build`; `pnpm --filter @cubid/auth-react typecheck`; `pnpm --filter @cubid/auth-react build`; `pnpm docs:api:check`; `git diff --check`. `pnpm exec vitest run packages/auth-react/src/index.test.tsx` was attempted and still fails with the existing duplicate-React invalid-hook-call issue in this checkout.
 - follow-ups: Keep the React render-test environment cleanup separate from this public API slice unless it blocks CI.
+
+## 2026-06-11T19:41:00.000Z - S15.5 passkey-first SIWC guide refresh
+
+- agent: Codex
+- branch: dev
+- head: e975a093
+- summary: Completed S15.5 by refreshing the passkey-first SIWC guide for Identity-owned QR/deep-link handoff, lost-passkey challenge preservation through recovery and consent, assurance helper usage, and the correct `scope` option in the low-level auth example.
+- validation: `pnpm docs:api:check`; `git diff --check`
+- follow-ups: None for the guide refresh.
