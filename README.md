@@ -83,6 +83,9 @@ Machine-readable package reference artifacts live in `docs/reference/`.
 Shared-wallet migrations now have a dedicated guide:
 - `docs/engineering/web3-migration-guide.md`
 
+Recoverable-wallet hosted validation has a dedicated smoke strategy:
+- `docs/engineering/recoverable-wallet-hosted-smoke.md`
+
 ## Examples
 
 - Passkey-first SIWC integration guide:

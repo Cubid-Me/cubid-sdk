@@ -1370,7 +1370,11 @@ assurance from returned OIDC tokens and session state.
 
 ### S15.1 Track app-recoverable wallet hosted enrollment and recovery smoke gaps
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-06-11T19:29:30Z
+- Timestamp completed: 2026-06-11T19:34:08Z
+- Feature branch: `dev`
+- Head: `efec4a65` at implementation start
 
 Record and close the remaining app-recoverable-wallet validation gap: the SDK
 and hosted Identity/Passport surfaces still need a real Cubid recovery SDK,

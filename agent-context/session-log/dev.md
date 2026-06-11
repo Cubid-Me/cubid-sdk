@@ -17,3 +17,12 @@
 - summary: Completed S16 by updating public SDK docs, examples, agent guidance, and generated API reference text so `https://id.cubid.me` is the stable SIWC/OIDC issuer boundary, while `https://login.cubid.me` is documented only as a temporary compatibility host.
 - validation: `pnpm docs:api:build`; `pnpm docs:api:check`; `git diff --check`
 - follow-ups: Implement S15 assurance ergonomics and then refresh the SIWC guide with the now-proven hosted QR handoff and lost-passkey recovery behavior.
+
+## 2026-06-11T19:34:08.000Z - S15.1 recoverable wallet hosted smoke strategy
+
+- agent: Codex
+- branch: dev
+- head: efec4a65
+- summary: Completed S15.1 by adding a recoverable-wallet hosted smoke strategy, linking it from package and integration docs, and adding a consumer-style acceptance test that stitches `@cubid/core` enrollment/release-start to `@cubid/wallet-recovery` hosted launch and release completion.
+- validation: `pnpm docs:api:build`; `pnpm exec vitest run --config vitest.config.ts src/wallet-recovery-hosted-path.acceptance.test.ts src/wallet-recovery.acceptance.test.ts` from `packages/acceptance`; `pnpm exec vitest run packages/wallet-recovery/src/index.test.ts`; `pnpm docs:api:check`; `git diff --check`
+- follow-ups: Run a real hosted app-recoverable-wallet smoke against Cubid Identity/Passport with a marked throwaway relying app before calling production recovery UX complete.
