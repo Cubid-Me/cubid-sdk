@@ -14,6 +14,7 @@ import {
   exchangeCubidAuthorizationCode,
   fetchCubidOidcDiscoveryDocument,
   fetchCubidUserInfo,
+  getCubidAuthAssurance,
   isCubidAuthSessionExpired,
   loadCubidAuthSession,
   persistCubidAuthSession,
@@ -21,6 +22,7 @@ import {
   CubidAuthError,
   validateCubidIdToken,
   type BuildCubidAuthorizationUrlInput,
+  type CubidAuthAssurance,
   type CubidAuthFetch,
   type CubidAuthSession,
   type CubidAuthStorageLike,
@@ -51,6 +53,7 @@ interface CubidAuthTransaction {
 }
 
 export interface CubidAuthSignInOptions {
+  acrValues?: BuildCubidAuthorizationUrlInput["acrValues"];
   extraParams?: BuildCubidAuthorizationUrlInput["extraParams"];
   loginHint?: string;
   maxAge?: number;
@@ -59,6 +62,7 @@ export interface CubidAuthSignInOptions {
   nonce?: string;
   performRedirect?: boolean;
   prompt?: string;
+  requirePasskey?: boolean;
   scope?: readonly string[] | string;
   stateByteLength?: number;
   verifierByteLength?: number;
@@ -86,16 +90,19 @@ export interface CubidAuthProviderProps {
   issuer: string;
   postLogoutRedirectUri?: string;
   redirectUri: string;
+  requirePasskey?: boolean;
   scope?: readonly string[] | string;
   storage?: CubidAuthStorageLike | null;
 }
 
 export interface CubidAuthContextValue {
+  assurance: CubidAuthAssurance;
   clearError: () => void;
   clearSession: () => void;
   discovery: CubidOidcDiscoveryDocument | null;
   error: Error | null;
   handleCallback: (options?: CubidAuthHandleCallbackOptions) => Promise<CubidAuthSession>;
+  hasPasskeyAssurance: boolean;
   isAuthenticated: boolean;
   logout: (options?: CubidAuthLogoutOptions) => Promise<string | null>;
   refreshUserInfo: () => Promise<CubidUserInfo | null>;
@@ -298,6 +305,7 @@ export function CubidAuthProvider({
   issuer,
   postLogoutRedirectUri,
   redirectUri,
+  requirePasskey = true,
   scope,
   storage: providedStorage,
 }: CubidAuthProviderProps) {
@@ -374,6 +382,7 @@ export function CubidAuthProvider({
 
       const url = buildCubidAuthorizationUrl({
         authorizationEndpoint: nextDiscovery.authorization_endpoint,
+        acrValues: options.acrValues,
         clientId,
         codeChallenge: pkce.codeChallenge,
         codeChallengeMethod: pkce.codeChallengeMethod,
@@ -383,6 +392,7 @@ export function CubidAuthProvider({
         nonce,
         prompt: options.prompt,
         redirectUri,
+        requirePasskey: options.requirePasskey ?? requirePasskey,
         scope: nextScope,
         state,
       });
@@ -600,12 +610,16 @@ export function CubidAuthProvider({
     }
   }
 
+  const assurance = getCubidAuthAssurance(session);
+
   const value: CubidAuthContextValue = {
+    assurance,
     clearError,
     clearSession,
     discovery,
     error,
     handleCallback,
+    hasPasskeyAssurance: assurance.hasPasskeyAssurance,
     isAuthenticated: session !== null && !isCubidAuthSessionExpired(session),
     logout,
     refreshUserInfo,

@@ -1,6 +1,6 @@
 # @cubid/wallet-recovery-react
 
-React helpers for Cubid Passport recoverable wallet flows.
+React helpers for Cubid recoverable wallet flows.
 
 Use this package when a React app needs hosted recovery launch or signed-in
 release completion. It builds on
@@ -29,7 +29,7 @@ import {
 
 function Recovery({ recoverySessionId }: { recoverySessionId: string }) {
   const release = useCubidRecoveryRelease({
-    baseUrl: "https://passport.cubid.me",
+    baseUrl: "https://id.cubid.me",
     getAccessToken: () => firebaseUser.getIdToken(),
     recoverySessionId,
   })
@@ -48,7 +48,17 @@ function Recovery({ recoverySessionId }: { recoverySessionId: string }) {
 `bundleMaterial` is only returned by the signed-in completion hook. Backend
 dapp credentials should use metadata-only helpers from `@cubid/core`.
 
+## Hosted Smoke Status
+
+The local SDK acceptance harness verifies the mocked app-recoverable-wallet path
+from server enrollment to hosted launch and browser completion. Production
+readiness still requires a hosted smoke against Cubid Identity/Passport and a
+marked throwaway relying app.
+
+- Hosted smoke strategy:
+  `../../docs/engineering/recoverable-wallet-hosted-smoke.md`
+
 This React package intentionally does not expose a recovery-bundle list hook.
 Public app code must not receive recovery bundles or dapp-user ids that belong
 to other dapps. Apps should use their own app-scoped recovery metadata and
-launch Passport recovery for an exact `recoveryBundleId`.
+launch hosted Cubid recovery for an exact `recoveryBundleId`.

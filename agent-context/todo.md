@@ -1356,3 +1356,103 @@ After implementation, update the sibling cross-repo notes with implemented
 package names, exported helper names, version bumps, validation evidence, and
 remaining boundaries for SmarTrust and other downstream apps. Leave sibling
 note updates dirty in Passport unless explicitly asked to commit there.
+
+### S15. Add passkey-first auth assurance ergonomics
+
+- Status: Completed
+- Timestamp started: 2026-06-11T19:34:08Z
+- Timestamp completed: 2026-06-11T19:42:20Z
+- Feature branch: `dev`
+- Head: `38ba0aac` at implementation start
+
+Add a public SDK ergonomics tranche for passkey-first OIDC/SIWC assurance
+inspection without reviving direct WebAuthn SDK helpers. Consuming apps should
+continue to redirect to Cubid-hosted Identity/Login surfaces for passkey
+account creation, returning-user authentication, cross-device handoff, consent,
+and recovery. The SDK should help apps request and inspect passkey-backed
+assurance from returned OIDC tokens and session state.
+
+### S15.1 Track app-recoverable wallet hosted enrollment and recovery smoke gaps
+
+- Status: Completed
+- Timestamp started: 2026-06-11T19:29:30Z
+- Timestamp completed: 2026-06-11T19:34:08Z
+- Feature branch: `dev`
+- Head: `efec4a65` at implementation start
+
+Record and close the remaining app-recoverable-wallet validation gap: the SDK
+and hosted Identity/Passport surfaces still need a real Cubid recovery SDK,
+hosted enrollment, and hosted recovery smoke path that proves an app-created
+recoverable wallet can enroll recovery material, launch Cubid recovery, release
+the app-owned bundle material through the user-authorized path, and return to
+the relying app without exposing recovery material to dapp server helpers or
+ordinary browser state.
+
+### S15.2 Type OIDC authentication assurance claims
+
+- Status: Completed
+- Timestamp started: 2026-06-11T19:34:08Z
+- Timestamp completed: 2026-06-11T19:35:28Z
+- Feature branch: `dev`
+- Head: `38ba0aac` at implementation start
+
+Add explicit typed `acr?: string` and `amr?: string[]` fields to
+`CubidIdTokenClaims` so apps can rely on the public TypeScript contract when
+inspecting passkey-backed Cubid sessions.
+
+### S15.3 Add passkey-assurance inspection helpers
+
+- Status: Completed
+- Timestamp started: 2026-06-11T19:35:28Z
+- Timestamp completed: 2026-06-11T19:37:31Z
+- Feature branch: `dev`
+- Head: `5b284d8b` at implementation start
+
+Add small helper functions such as `hasCubidPasskeyAssurance(...)` and
+`getCubidAuthAssurance(...)` so apps can inspect returned ID-token claims,
+decoded claims, or SDK session objects without manually parsing raw `acr` and
+`amr` values.
+
+### S15.4 Expose assurance status through `@cubid/auth-react`
+
+- Status: Completed
+- Timestamp started: 2026-06-11T19:37:31Z
+- Timestamp completed: 2026-06-11T19:40:16Z
+- Feature branch: `dev`
+- Head: `91740607` at implementation start
+
+Expose the same passkey-assurance status through the `@cubid/auth-react`
+session context so React apps can render "passkey-backed" state, warnings, or
+debug UI without manually parsing ID-token claims.
+
+### S15.5 Refresh the passkey-first SIWC guide for hosted handoff and recovery
+
+- Status: Completed
+- Timestamp started: 2026-06-11T19:40:16Z
+- Timestamp completed: 2026-06-11T19:41:00Z
+- Feature branch: `dev`
+- Head: `e975a093` at implementation start
+
+Update the passkey-first SIWC guide with the now-proven Login/Identity-owned
+QR handoff and lost-passkey recovery behavior. Keep the boundary explicit:
+consuming apps start OIDC, receive callbacks, and validate their own app
+session; they must not implement Cubid passkey ceremonies, recovery proof
+collection, or recovery passkey enrollment locally.
+
+### S16. Align SDK docs with the Identity protocol boundary
+
+- Status: Completed
+- Timestamp started: 2026-06-11T19:27:19Z
+- Timestamp completed: 2026-06-11T19:29:30Z
+- Feature branch: `dev`
+- Head: `02d5393a` at implementation start
+- Session-log reference(s): incoming cross-repo note `agent-context/cross-repo-comms/2026-06-11-identity-protocol-boundary-sdk-handoff.md`
+
+Update public SDK docs, examples, package defaults, and generated API reference
+text so `https://id.cubid.me` is the target stable SIWC/OIDC issuer and
+Identity is described as the public protocol boundary. `https://login.cubid.me`
+should be described only as a temporary compatibility host during cutover when
+needed. SDK docs must not present Passport, Verify, Admin, or internal OIDC
+interaction routes as SDK-callable SIWC internals, and verified identifier
+release should use standard OIDC scopes and claims such as `email` and `phone`
+according to Admin-configured SIWC page policy.

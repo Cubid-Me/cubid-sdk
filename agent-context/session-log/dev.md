@@ -1,0 +1,91 @@
+# Dev Session Log
+
+## 2026-06-11T19:27:19.000Z - Roadmap intake for Identity boundary and assurance ergonomics
+
+- agent: Codex
+- branch: dev
+- head: 8ca64752
+- summary: Ingested the new Identity protocol boundary cross-repo handoff and added roadmap items for passkey-first auth assurance ergonomics, app-recoverable-wallet hosted smoke gaps, SIWC guide refresh, and Identity issuer documentation alignment.
+- validation: `git diff --check`
+- follow-ups: Implement S16 before S15.5 so the SIWC guide refresh treats `https://id.cubid.me` as the long-term issuer boundary rather than preserving `https://login.cubid.me` as the default.
+
+## 2026-06-11T19:29:30.000Z - S16 Identity protocol boundary docs
+
+- agent: Codex
+- branch: dev
+- head: 02d5393a
+- summary: Completed S16 by updating public SDK docs, examples, agent guidance, and generated API reference text so `https://id.cubid.me` is the stable SIWC/OIDC issuer boundary, while `https://login.cubid.me` is documented only as a temporary compatibility host.
+- validation: `pnpm docs:api:build`; `pnpm docs:api:check`; `git diff --check`
+- follow-ups: Implement S15 assurance ergonomics and then refresh the SIWC guide with the now-proven hosted QR handoff and lost-passkey recovery behavior.
+
+## 2026-06-11T19:34:08.000Z - S15.1 recoverable wallet hosted smoke strategy
+
+- agent: Codex
+- branch: dev
+- head: efec4a65
+- summary: Completed S15.1 by adding a recoverable-wallet hosted smoke strategy, linking it from package and integration docs, and adding a consumer-style acceptance test that stitches `@cubid/core` enrollment/release-start to `@cubid/wallet-recovery` hosted launch and release completion.
+- validation: `pnpm docs:api:build`; `pnpm exec vitest run --config vitest.config.ts src/wallet-recovery-hosted-path.acceptance.test.ts src/wallet-recovery.acceptance.test.ts` from `packages/acceptance`; `pnpm exec vitest run packages/wallet-recovery/src/index.test.ts`; `pnpm docs:api:check`; `git diff --check`
+- follow-ups: Run a real hosted app-recoverable-wallet smoke against Cubid Identity/Passport with a marked throwaway relying app before calling production recovery UX complete.
+
+## 2026-06-11T19:35:28.000Z - S15.2 typed auth assurance claims
+
+- agent: Codex
+- branch: dev
+- head: 38ba0aac
+- summary: Completed S15.2 by adding typed optional `acr` and `amr` fields to `CubidIdTokenClaims`, documenting the fields in `@cubid/auth`, and adding a focused decode test for passkey-backed assurance claims.
+- validation: `pnpm docs:api:build`; `pnpm exec vitest run packages/auth/src/index.test.ts`; `pnpm --filter @cubid/auth typecheck`; `pnpm docs:api:check`; `git diff --check`
+- follow-ups: Implement S15.3 passkey-assurance inspection helpers on top of the typed claim surface.
+
+## 2026-06-11T19:37:31.000Z - S15.3 passkey assurance helpers
+
+- agent: Codex
+- branch: dev
+- head: 5b284d8b
+- summary: Completed S15.3 by adding `getCubidAuthAssurance(...)` and `hasCubidPasskeyAssurance(...)` for ID tokens, decoded claims, and `CubidAuthSession` objects, plus README usage and focused unit coverage.
+- validation: `pnpm docs:api:build`; `pnpm exec vitest run packages/auth/src/index.test.ts`; `pnpm --filter @cubid/auth typecheck`; `pnpm docs:api:check`; `git diff --check`
+- follow-ups: Expose the normalized assurance status through `@cubid/auth-react` context in S15.4.
+
+## 2026-06-11T19:40:16.000Z - S15.4 React auth assurance context
+
+- agent: Codex
+- branch: dev
+- head: 91740607
+- summary: Completed S15.4 by exposing normalized `assurance` and `hasPasskeyAssurance` values from `useCubidAuth()`, documenting the React usage, and extending the callback test expectations.
+- validation: `pnpm docs:api:build`; `pnpm --filter @cubid/auth-react typecheck`; `pnpm --filter @cubid/auth-react build`; `pnpm docs:api:check`; `git diff --check`. `pnpm exec vitest run packages/auth-react/src/index.test.tsx` was attempted and still fails with the existing duplicate-React invalid-hook-call issue in this checkout.
+- follow-ups: Keep the React render-test environment cleanup separate from this public API slice unless it blocks CI.
+
+## 2026-06-11T19:41:00.000Z - S15.5 passkey-first SIWC guide refresh
+
+- agent: Codex
+- branch: dev
+- head: e975a093
+- summary: Completed S15.5 by refreshing the passkey-first SIWC guide for Identity-owned QR/deep-link handoff, lost-passkey challenge preservation through recovery and consent, assurance helper usage, and the correct `scope` option in the low-level auth example.
+- validation: `pnpm docs:api:check`; `git diff --check`
+- follow-ups: None for the guide refresh.
+
+## 2026-06-11T19:42:20.000Z - S15 parent closeout
+
+- agent: Codex
+- branch: dev
+- head: d28609b1
+- summary: Marked the S15 passkey-first auth assurance ergonomics parent complete after S15.1 through S15.5 landed as separate implementation commits.
+- validation: Not run (control-plane status update only).
+- follow-ups: Push or PR the seven local commits on `dev` when ready.
+
+## 2026-06-11T20:07:24.708Z - Auth React render test hardening
+
+- agent: Codex
+- branch: dev
+- head: d54fd3a1
+- summary: Added React/ReactDOM dedupe aliases for root and acceptance Vitest runs and introduced a focused `test:auth-react` script that rebuilds auth packages before exercising the auth-react render tests.
+- validation: `pnpm install --frozen-lockfile`; `pnpm test:auth-react`; `pnpm test:acceptance`; `pnpm test:unit`; `git diff --check`; `pnpm lint`
+- follow-ups: None.
+
+## 2026-06-11T20:31:01.970Z - PR 21 version-bump review fixes
+
+- agent: Codex
+- branch: dev
+- head: 88f371bf
+- summary: Addressed PR 21 review feedback by teaching the PR version-bump script to detect publishable `packages/*` workspaces, skip private package manifests, fetch base branch history without shallow merge-base risk, and stage pnpm workspace package manifests.
+- validation: `node .github/scripts/pr-version-bump.mjs --base main --dry-run`; `node .github/scripts/pr-version-bump.mjs --base dev --dry-run`; `pnpm lint`; `git diff --check`
+- follow-ups: Reply to and resolve the PR 21 review threads after pushing the fix.

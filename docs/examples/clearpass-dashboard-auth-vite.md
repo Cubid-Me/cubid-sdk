@@ -17,14 +17,16 @@ These values are safe for the browser because they are public relying-party
 metadata rather than privileged credentials:
 
 ```env
-VITE_CUBID_ISSUER=https://staging-id.cubid.me
+VITE_CUBID_ISSUER=https://id.cubid.me
 VITE_CUBID_CLIENT_ID=clearpass-dashboard
 VITE_CUBID_REDIRECT_URI=http://localhost:5173/auth/callback
 VITE_CUBID_POST_LOGOUT_REDIRECT_URI=http://localhost:5173/
 ```
 
-Production should switch the issuer to `https://id.cubid.me` and use the real
-hosted callback/logout URLs registered in Passport.
+Production should use the stable Identity issuer `https://id.cubid.me` and the
+real hosted callback/logout URLs registered for the relying party. Staging or
+Preview integrations may use `https://staging-id.cubid.me` only when their
+client registration is scoped to that environment.
 
 ## `src/main.tsx`
 
@@ -136,6 +138,8 @@ ClearPass server or edge routes still need to:
 - `sub` is a pairwise OIDC subject scoped to the ClearPass client. Do not treat
   it as a raw Cubid internal user id.
 - Keep staging and production callback/logout URLs aligned with the relying
-  party registered in Passport.
+  party registered for the Identity issuer.
+- Use OIDC discovery from the configured issuer. Do not call Passport, Verify,
+  Admin, or internal OIDC interaction routes directly from the dashboard.
 - If ClearPass later wants a backend-assisted token or cookie exchange, document
   which values remain public browser config and which values stay server-only.

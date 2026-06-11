@@ -676,7 +676,7 @@
   "readme": [
     {
       "kind": "text",
-      "text": "# @cubid/wallet-recovery-react\n\nReact helpers for Cubid Passport recoverable wallet flows.\n\nUse this package when a React app needs hosted recovery launch or signed-in\nrelease completion. It builds on\n"
+      "text": "# @cubid/wallet-recovery-react\n\nReact helpers for Cubid recoverable wallet flows.\n\nUse this package when a React app needs hosted recovery launch or signed-in\nrelease completion. It builds on\n"
     },
     {
       "kind": "code",
@@ -720,7 +720,7 @@
     },
     {
       "kind": "code",
-      "text": "```tsx\nimport {\n  CubidRecoveryLaunchButton,\n  useCubidRecoveryRelease,\n} from \"@cubid/wallet-recovery-react\"\n\nfunction Recovery({ recoverySessionId }: { recoverySessionId: string }) {\n  const release = useCubidRecoveryRelease({\n    baseUrl: \"https://passport.cubid.me\",\n    getAccessToken: () => firebaseUser.getIdToken(),\n    recoverySessionId,\n  })\n\n  return (\n    <>\n      <CubidRecoveryLaunchButton recoverySessionId={recoverySessionId} />\n      <button onClick={() => void release.completeRelease()}>\n        Complete recovery\n      </button>\n    </>\n  )\n}\n```"
+      "text": "```tsx\nimport {\n  CubidRecoveryLaunchButton,\n  useCubidRecoveryRelease,\n} from \"@cubid/wallet-recovery-react\"\n\nfunction Recovery({ recoverySessionId }: { recoverySessionId: string }) {\n  const release = useCubidRecoveryRelease({\n    baseUrl: \"https://id.cubid.me\",\n    getAccessToken: () => firebaseUser.getIdToken(),\n    recoverySessionId,\n  })\n\n  return (\n    <>\n      <CubidRecoveryLaunchButton recoverySessionId={recoverySessionId} />\n      <button onClick={() => void release.completeRelease()}>\n        Complete recovery\n      </button>\n    </>\n  )\n}\n```"
     },
     {
       "kind": "text",
@@ -740,7 +740,15 @@
     },
     {
       "kind": "text",
-      "text": ".\n\nThis React package intentionally does not expose a recovery-bundle list hook.\nPublic app code must not receive recovery bundles or dapp-user ids that belong\nto other dapps. Apps should use their own app-scoped recovery metadata and\nlaunch Passport recovery for an exact "
+      "text": ".\n\n## Hosted Smoke Status\n\nThe local SDK acceptance harness verifies the mocked app-recoverable-wallet path\nfrom server enrollment to hosted launch and browser completion. Production\nreadiness still requires a hosted smoke against Cubid Identity/Passport and a\nmarked throwaway relying app.\n\n- Hosted smoke strategy:\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/engineering/recoverable-wallet-hosted-smoke.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThis React package intentionally does not expose a recovery-bundle list hook.\nPublic app code must not receive recovery bundles or dapp-user ids that belong\nto other dapps. Apps should use their own app-scoped recovery metadata and\nlaunch hosted Cubid recovery for an exact "
     },
     {
       "kind": "code",

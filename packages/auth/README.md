@@ -4,8 +4,8 @@ Runtime-agnostic OIDC and PKCE helpers for browser-safe Sign in with Cubid.
 
 ## When To Choose This Package
 
-Use `@cubid/auth` when you need Login with Cubid in a public browser or hybrid
-web app and want the protocol foundation without a React dependency. Choose
+Use `@cubid/auth` when you need Sign in with Cubid in a public browser or
+hybrid web app and want the protocol foundation without a React dependency. Choose
 `@cubid/auth-react` later when you want React-specific session bindings on top
 of this package.
 
@@ -24,6 +24,8 @@ npm install @cubid/auth
 
 - JSON reference: `../../docs/reference/api/auth.json`
 - Package matrix: `../../README.md`
+- Passkey-first SIWC guide:
+  `../../docs/examples/passkey-first-siwc.md`
 
 ## Basic Usage
 
@@ -40,14 +42,46 @@ const state = createCubidAuthState()
 const nonce = createCubidAuthNonce()
 
 const signInUrl = buildCubidAuthorizationUrl({
-  authorizationEndpoint: "https://id.cubid.me/oauth2/authorize",
+  authorizationEndpoint: "https://id.cubid.me/authorize",
   clientId: "clearpass-dashboard",
   codeChallenge: pkce.codeChallenge,
   nonce,
+  requirePasskey: true,
   redirectUri: "https://dashboard.clearpass.app/callback",
   state,
 })
 ```
 
+`requirePasskey: true` adds `acr_values=urn:cubid:acr:passkey`, which asks the
+Cubid-hosted Identity surface to satisfy the request with Cubid-owned passkey
+assurance before consent and callback.
+
+Decoded `CubidIdTokenClaims` include typed optional `acr` and `amr` fields so
+apps can inspect returned authentication assurance without treating the whole
+token payload as an untyped record.
+
+Use `getCubidAuthAssurance(...)` or `hasCubidPasskeyAssurance(...)` with an ID
+token, decoded claims, or `CubidAuthSession` when app UI or backend handoff
+logic needs to confirm the returned session was passkey-backed:
+
+```ts
+import { hasCubidPasskeyAssurance } from "@cubid/auth"
+
+if (!hasCubidPasskeyAssurance(session)) {
+  throw new Error("Expected a passkey-backed Cubid session")
+}
+```
+
 This package is intentionally browser-safe. It does not require a Cubid dapp
 API key, a client secret, or any other privileged credential in frontend code.
+
+Consuming apps should not implement Cubid passkey creation, returning-user
+passkey authentication, or lost-passkey recovery locally. Those flows are owned
+by the Identity issuer at `https://id.cubid.me`; apps only start the OIDC
+request, handle the callback, and create their own app session from consented
+app-scoped claims.
+
+Use OIDC discovery from `https://id.cubid.me/.well-known/openid-configuration`
+for production authorization, token, UserInfo, JWKS, logout, revoke, and
+registration endpoints. Do not call Passport, Verify, Admin, or internal OIDC
+interaction routes directly from SDK integrations.

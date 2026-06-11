@@ -765,7 +765,7 @@
   "readme": [
     {
       "kind": "text",
-      "text": "# @cubid/wallet-recovery\n\nBrowser-safe helpers for Cubid Passport recoverable wallet flows.\n\nUse this package when a host app creates and signs with its own wallet or\nspecialist signing provider, but uses Cubid as the user-authorized recovery\nprovider. This package does not create wallets, sign transactions, broadcast\ntransactions, or accept Cubid dapp API keys.\n\n"
+      "text": "# @cubid/wallet-recovery\n\nBrowser-safe helpers for Cubid recoverable wallet flows.\n\nUse this package when a host app creates and signs with its own wallet or\nspecialist signing provider, but uses Cubid as the user-authorized recovery\nprovider. This package does not create wallets, sign transactions, broadcast\ntransactions, or accept Cubid dapp API keys.\n\n"
     },
     {
       "kind": "code",
@@ -793,7 +793,7 @@
     },
     {
       "kind": "code",
-      "text": "```ts\nimport { createCubidWalletRecoveryClient } from \"@cubid/wallet-recovery\"\n\nconst recovery = createCubidWalletRecoveryClient({\n  baseUrl: \"https://passport.cubid.me\",\n  getAccessToken: () => firebaseUser.getIdToken(),\n})\n\nconst recoveryUrl = recovery.buildHostedRecoveryUrl({\n  recoverySessionId: \"rw_release_123\",\n})\n\nconst released = await recovery.completeRelease({\n  recoverySessionId: \"rw_release_123\",\n})\n```"
+      "text": "```ts\nimport { createCubidWalletRecoveryClient } from \"@cubid/wallet-recovery\"\n\nconst recovery = createCubidWalletRecoveryClient({\n  baseUrl: \"https://id.cubid.me\",\n  getAccessToken: () => firebaseUser.getIdToken(),\n})\n\nconst recoveryUrl = recovery.buildHostedRecoveryUrl({\n  recoverySessionId: \"rw_release_123\",\n})\n\nconst released = await recovery.completeRelease({\n  recoverySessionId: \"rw_release_123\",\n})\n```"
     },
     {
       "kind": "text",
@@ -813,7 +813,7 @@
     },
     {
       "kind": "text",
-      "text": ", which calls the\nPassport user-authenticated recovery completion route. Backend dapp credentials\nmust use "
+      "text": ", which calls the\nCubid user-authenticated recovery completion route. Backend dapp credentials\nmust use "
     },
     {
       "kind": "code",
@@ -821,7 +821,15 @@
     },
     {
       "kind": "text",
-      "text": " for metadata-only enroll/status/release-start/rotate and\nrevoke helpers.\n\nThis package intentionally does not expose the Passport user-wide recovery\nbundle list route. Public app SDK calls must not reveal recovery bundles or\ndapp-user ids from other dapps. Apps should track their own app-scoped\n"
+      "text": " for metadata-only enroll/status/release-start/rotate and\nrevoke helpers.\n\n## Hosted Smoke Status\n\nThe local SDK acceptance harness verifies the mocked app-recoverable-wallet path\nfrom server enrollment to hosted launch and browser completion. Production\nreadiness still requires a hosted smoke against Cubid Identity/Passport and a\nmarked throwaway relying app.\n\n- Hosted smoke strategy:\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/engineering/recoverable-wallet-hosted-smoke.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThis package intentionally does not expose the Passport user-wide recovery\nbundle list route. Public app SDK calls must not reveal recovery bundles or\ndapp-user ids from other dapps. Apps should track their own app-scoped\n"
     },
     {
       "kind": "code",

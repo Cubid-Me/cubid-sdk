@@ -241,6 +241,13 @@ Vault metadata, raw Cubid user ids, service-role fields, private keys, seed
 material, or key shares. User-authorized recovery completion belongs in
 `@cubid/wallet-recovery` or `@cubid/wallet-recovery-react`.
 
+Before treating an app-recoverable wallet integration as production-ready, run
+the hosted smoke path in
+`docs/engineering/recoverable-wallet-hosted-smoke.md`. The local SDK acceptance
+harness proves the package contract with mocked network calls; it does not prove
+hosted passkeys, recovery policy, provider configuration, or app wallet
+restoration.
+
 Supported custody chains on the public SDK surface are currently:
 
 - `evm`

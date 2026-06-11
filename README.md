@@ -2,9 +2,9 @@
 
 This repo is the canonical public SDK home for Cubid.
 
-Private backend concerns stay in `cubid-passport`: hosted login, Passport UI,
-Admin, OIDC issuer runtime, signing keys, provider secrets, passkey
-verification, migrations, and service-role access.
+Private backend concerns stay in `cubid-monorepo`: the hosted Identity app at
+`https://id.cubid.me`, Passport UI, Admin, OIDC issuer runtime, signing keys,
+provider secrets, passkey verification, migrations, and service-role access.
 
 ## Package Matrix
 
@@ -83,10 +83,22 @@ Machine-readable package reference artifacts live in `docs/reference/`.
 Shared-wallet migrations now have a dedicated guide:
 - `docs/engineering/web3-migration-guide.md`
 
+Recoverable-wallet hosted validation has a dedicated smoke strategy:
+- `docs/engineering/recoverable-wallet-hosted-smoke.md`
+
 ## Examples
 
+- Passkey-first SIWC integration guide:
+  `docs/examples/passkey-first-siwc.md`
 - ClearPass Dashboard Vite auth example:
   `docs/examples/clearpass-dashboard-auth-vite.md`
+
+For Sign in with Cubid, `https://id.cubid.me` is the stable public OIDC/SIWC
+issuer and protocol boundary. SDKs should use OIDC discovery from that issuer
+instead of calling Passport, Verify, Admin, or internal OIDC interaction routes
+directly. `https://login.cubid.me` may remain available as a compatibility host
+during cutover, but new SDK docs and examples should not treat it as the
+long-term default.
 
 ## Commands
 

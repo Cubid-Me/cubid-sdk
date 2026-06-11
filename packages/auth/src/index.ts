@@ -1,6 +1,7 @@
 export const CUBID_PRODUCTION_ISSUER = "https://id.cubid.me";
 export const CUBID_STAGING_ISSUER = "https://staging-id.cubid.me";
 export const CUBID_DEFAULT_OIDC_SCOPES = ["openid", "email", "profile"] as const;
+export const CUBID_PASSKEY_ACR_VALUE = "urn:cubid:acr:passkey";
 export const CUBID_AUTH_SESSION_STORAGE_KEY = "cubid.auth.session";
 
 const DISCOVERY_PATH = "/.well-known/openid-configuration";
@@ -87,6 +88,7 @@ export interface CreateCubidPkcePairOptions {
 }
 
 export interface BuildCubidAuthorizationUrlInput {
+  acrValues?: readonly string[] | string;
   authorizationEndpoint: string | URL;
   clientId: string;
   codeChallenge: string;
@@ -97,6 +99,7 @@ export interface BuildCubidAuthorizationUrlInput {
   nonce?: string;
   prompt?: string;
   redirectUri: string;
+  requirePasskey?: boolean;
   scope?: readonly string[] | string;
   state: string;
 }
@@ -177,6 +180,8 @@ export interface CubidUserInfo {
 }
 
 export interface CubidIdTokenClaims extends Record<string, unknown> {
+  acr?: string;
+  amr?: string[];
   aud?: string | string[];
   email?: string;
   email_verified?: boolean;
@@ -226,6 +231,19 @@ export interface CubidAuthSession {
   subject: string | null;
   tokenType: string;
   userInfo: CubidUserInfo | null;
+}
+
+export type CubidAuthAssuranceInput =
+  | CubidAuthSession
+  | CubidIdTokenClaims
+  | string
+  | null
+  | undefined;
+
+export interface CubidAuthAssurance {
+  acr: string | null;
+  amr: string[];
+  hasPasskeyAssurance: boolean;
 }
 
 export interface CubidAuthStorageLike {
@@ -292,6 +310,10 @@ function toRecord(value: unknown, context: string): Record<string, unknown> {
   }
 
   return value as Record<string, unknown>;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === "object" && !Array.isArray(value));
 }
 
 function getRequiredString(
@@ -383,6 +405,38 @@ function getOptionalRecord(
   }
 
   return value as Record<string, unknown>;
+}
+
+function normalizeAmr(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.filter((entry): entry is string => typeof entry === "string");
+}
+
+function resolveAssuranceClaims(
+  input: CubidAuthAssuranceInput
+): CubidIdTokenClaims | null {
+  if (!input) {
+    return null;
+  }
+
+  if (typeof input === "string") {
+    return decodeCubidIdTokenClaims(input);
+  }
+
+  const record = input as Record<string, unknown>;
+
+  if (isRecord(record.idTokenClaims)) {
+    return record.idTokenClaims as CubidIdTokenClaims;
+  }
+
+  if (typeof record.idToken === "string") {
+    return decodeCubidIdTokenClaims(record.idToken);
+  }
+
+  return input as CubidIdTokenClaims;
 }
 
 function getFetch(fetchImpl?: CubidAuthFetch): CubidAuthFetch {
@@ -549,6 +603,29 @@ function normalizeScopes(scope?: readonly string[] | string): string[] {
   }
 
   return values;
+}
+
+function normalizeAcrValues(acrValues?: readonly string[] | string): string[] {
+  if (!acrValues) {
+    return [];
+  }
+
+  const values =
+    typeof acrValues === "string"
+      ? acrValues.split(/\s+/u)
+      : [...acrValues];
+  const normalized = values
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
+
+  if (normalized.length === 0) {
+    throw new CubidAuthError("Cubid auth requires at least one ACR value.", {
+      category: "validation",
+      code: "invalid_acr_values",
+    });
+  }
+
+  return [...new Set(normalized)];
 }
 
 function appendExtraParams(
@@ -927,6 +1004,15 @@ export function buildCubidAuthorizationUrl(
 
   appendExtraParams(url.searchParams, input.extraParams);
 
+  const acrValues = normalizeAcrValues(input.acrValues);
+  if (input.requirePasskey && !acrValues.includes(CUBID_PASSKEY_ACR_VALUE)) {
+    acrValues.unshift(CUBID_PASSKEY_ACR_VALUE);
+  }
+
+  if (acrValues.length > 0) {
+    url.searchParams.set("acr_values", acrValues.join(" "));
+  }
+
   return url.toString();
 }
 
@@ -1121,6 +1207,25 @@ export async function fetchCubidUserInfo(
 
 export function decodeCubidIdTokenClaims(idToken: string): CubidIdTokenClaims {
   return decodeCompactJwt(idToken).payload;
+}
+
+export function getCubidAuthAssurance(
+  input: CubidAuthAssuranceInput
+): CubidAuthAssurance {
+  const claims = resolveAssuranceClaims(input);
+  const acr = typeof claims?.acr === "string" && claims.acr.length > 0 ? claims.acr : null;
+  const amr = normalizeAmr(claims?.amr);
+
+  return {
+    acr,
+    amr,
+    hasPasskeyAssurance:
+      acr === CUBID_PASSKEY_ACR_VALUE || amr.includes("passkey"),
+  };
+}
+
+export function hasCubidPasskeyAssurance(input: CubidAuthAssuranceInput): boolean {
+  return getCubidAuthAssurance(input).hasPasskeyAssurance;
 }
 
 export async function validateCubidIdToken(

@@ -4,6 +4,8 @@ import path from "node:path";
 export default defineConfig({
   resolve: {
     alias: {
+      "react": path.resolve(__dirname, "node_modules/react"),
+      "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
       "@cubid/auth": path.resolve(__dirname, "packages/auth/src/index.ts"),
       "@cubid/auth-react": path.resolve(__dirname, "packages/auth-react/src/index.ts"),
       "@cubid/aptos": path.resolve(__dirname, "packages/aptos/src/index.ts"),
@@ -28,7 +30,8 @@ export default defineConfig({
       "@cubid/web3": path.resolve(__dirname, "packages/web3/src/index.ts"),
       "@cubid/wallet-recovery": path.resolve(__dirname, "packages/wallet-recovery/src/index.ts"),
       "@cubid/wallet-recovery-react": path.resolve(__dirname, "packages/wallet-recovery-react/src/index.ts")
-    }
+    },
+    dedupe: ["react", "react-dom"]
   },
   test: {
     coverage: {

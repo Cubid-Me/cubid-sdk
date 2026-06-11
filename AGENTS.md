@@ -1,5 +1,14 @@
 # AGENTS
 
+## Branch-Scoped Session Logs And Todos
+
+- Use `agent-context/session-log/` for active session logs. Do not add new entries to legacy `agent-context/session-log.md` files.
+- For feature branches, update the branch log immediately before each commit. Use `YYYY-MM-DD-featurebranch.md` in single-app repos and `YYYY-MM-DD-app-featurebranch.md` in monorepos.
+- Direct work on `main` may use `agent-context/session-log/main.md`; direct work on `dev` may use `agent-context/session-log/dev.md`.
+- Each entry must include UTC timestamp, agent, branch, head, summary, validation, and follow-ups.
+- Keep `agent-context/todo.md` focused on roadmap items and active follow-ups. Completed work belongs in the current branch log.
+- See `agent-context/session-log/README.md` for naming and archival rules.
+
 This repo is the canonical public SDK home for Cubid and is intended to live at
 `Cubid-Me/cubid-sdk`.
 
@@ -16,6 +25,7 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 - React-specific logic belongs in a React package, not in core.
 - Chain-specific logic should move toward dedicated chain packages rather than accumulate in shared packages.
 - "Sign in with Cubid" OAuth/OIDC helpers should live in dedicated auth packages rather than being forced into `@cubid/core` or the generic React package.
+- `https://id.cubid.me` is the target stable public Identity issuer for Sign in with Cubid. SDKs should use OIDC discovery and standard OIDC endpoints from that issuer rather than calling Passport, Verify, Admin, or internal OIDC interaction routes directly.
 - Signed-in messaging channel and preference management should land in a future dedicated communications package family rather than being forced into `@cubid/core` or the browser layer.
 - Future server-authenticated notification send or status helpers should stay in `@cubid/core` only when Passport promotes stable dapp-facing backend contracts for them.
 - Recoverable wallet work should model Cubid as an identity-bound recovery

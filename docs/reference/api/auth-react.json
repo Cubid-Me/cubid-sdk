@@ -287,6 +287,22 @@
       "flags": {},
       "children": [
         {
+          "name": "assurance",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/auth",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidAuthAssurance"
+            },
+            "name": "CubidAuthAssurance",
+            "package": "@cubid/auth"
+          }
+        },
+        {
           "name": "clearError",
           "variant": "declaration",
           "kind": 1024,
@@ -448,6 +464,16 @@
                 }
               ]
             }
+          }
+        },
+        {
+          "name": "hasPasskeyAssurance",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
           }
         },
         {
@@ -975,6 +1001,18 @@
           }
         },
         {
+          "name": "requirePasskey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
           "name": "scope",
           "variant": "declaration",
           "kind": 1024,
@@ -1037,6 +1075,34 @@
       "kind": 256,
       "flags": {},
       "children": [
+        {
+          "name": "acrValues",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              }
+            ]
+          }
+        },
         {
           "name": "extraParams",
           "variant": "declaration",
@@ -1193,6 +1259,18 @@
           "type": {
             "type": "intrinsic",
             "name": "string"
+          }
+        },
+        {
+          "name": "requirePasskey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
           }
         },
         {
@@ -1918,6 +1996,22 @@
     },
     {
       "kind": "text",
+      "text": ")\n- Passkey-first SIWC guide:\n  ["
+    },
+    {
+      "kind": "code",
+      "text": "`docs/examples/passkey-first-siwc.md`"
+    },
+    {
+      "kind": "text",
+      "text": "]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../docs/examples/passkey-first-siwc.md"
+    },
+    {
+      "kind": "text",
       "text": ")\n- ClearPass-oriented Vite example:\n  ["
     },
     {
@@ -1938,7 +2032,7 @@
     },
     {
       "kind": "code",
-      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return <p>Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}</p>;\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://staging-id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n  );\n}\n```"
+      "text": "```tsx\nimport {\n  CubidAuthProvider,\n  CubidAuthCallback,\n  CubidSignInButton,\n  useCubidAuth,\n} from \"@cubid/auth-react\";\n\nfunction DashboardGate() {\n  const auth = useCubidAuth();\n\n  if (auth.isAuthenticated) {\n    return (\n      <p>\n        Signed in as {auth.session?.userInfo?.email ?? auth.session?.subject}\n        {auth.hasPasskeyAssurance ? \" with a Cubid passkey\" : \"\"}\n      </p>\n    );\n  }\n\n  return <CubidSignInButton>Sign in with Cubid</CubidSignInButton>;\n}\n\nexport function App() {\n  const isCallbackRoute = window.location.pathname === \"/auth/callback\";\n\n  return (\n    <CubidAuthProvider\n      clientId=\"clearpass-dashboard\"\n      issuer=\"https://id.cubid.me\"\n      redirectUri=\"https://dashboard.clearpass.app/auth/callback\"\n    >\n      {isCallbackRoute ? <CubidAuthCallback /> : <DashboardGate />}\n    </CubidAuthProvider>\n  );\n}\n```"
     },
     {
       "kind": "text",
@@ -1946,11 +2040,91 @@
     },
     {
       "kind": "code",
+      "text": "`CubidAuthProvider`"
+    },
+    {
+      "kind": "text",
+      "text": " requests Cubid passkey assurance by default using\n"
+    },
+    {
+      "kind": "code",
+      "text": "`acr_values=urn:cubid:acr:passkey`"
+    },
+    {
+      "kind": "text",
+      "text": ". Set "
+    },
+    {
+      "kind": "code",
+      "text": "`requirePasskey={false}`"
+    },
+    {
+      "kind": "text",
+      "text": " only for a\ncompatibility flow that intentionally does not require passkey-backed Cubid\nauthentication.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`useCubidAuth()`"
+    },
+    {
+      "kind": "text",
+      "text": " exposes "
+    },
+    {
+      "kind": "code",
+      "text": "`assurance`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`hasPasskeyAssurance`"
+    },
+    {
+      "kind": "text",
+      "text": " so React apps can\nrender passkey-backed state without manually decoding "
+    },
+    {
+      "kind": "code",
+      "text": "`acr`"
+    },
+    {
+      "kind": "text",
+      "text": " or "
+    },
+    {
+      "kind": "code",
+      "text": "`amr`"
+    },
+    {
+      "kind": "text",
+      "text": " claims.\n\n"
+    },
+    {
+      "kind": "code",
       "text": "`@cubid/auth-react`"
     },
     {
       "kind": "text",
-      "text": " helps with the browser session experience only. Apps still\nneed to enforce protected dashboard access and server-side authorization using\nthe authenticated session on their own backend or edge routes."
+      "text": " helps with the browser session experience only. Apps still\nneed to enforce protected dashboard access and server-side authorization using\nthe authenticated session on their own backend or edge routes.\n\nPasskey creation, returning-user authentication, recovery proof collection, and\nfresh passkey enrollment after lost-passkey recovery remain Cubid-hosted at\nthe Identity issuer, "
+    },
+    {
+      "kind": "code",
+      "text": "`https://id.cubid.me`"
+    },
+    {
+      "kind": "text",
+      "text": ". React apps should surface \"Sign in\nwith Cubid\" and callback state, not embed Cubid passkey or recovery ceremonies\nlocally.\n\nUse OIDC discovery from "
+    },
+    {
+      "kind": "code",
+      "text": "`https://id.cubid.me/.well-known/openid-configuration`"
+    },
+    {
+      "kind": "text",
+      "text": "\nfor production endpoint metadata. Passport, Verify, Admin, and internal OIDC\ninteraction routes are not public SDK integration targets."
     }
   ]
 }
