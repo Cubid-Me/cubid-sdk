@@ -56,6 +56,10 @@ const signInUrl = buildCubidAuthorizationUrl({
 Cubid-hosted Identity surface to satisfy the request with Cubid-owned passkey
 assurance before consent and callback.
 
+Decoded `CubidIdTokenClaims` include typed optional `acr` and `amr` fields so
+apps can inspect returned authentication assurance without treating the whole
+token payload as an untyped record.
+
 This package is intentionally browser-safe. It does not require a Cubid dapp
 API key, a client secret, or any other privileged credential in frontend code.
 

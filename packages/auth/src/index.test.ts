@@ -372,6 +372,19 @@ describe("@cubid/auth", () => {
     expect(isCubidIdTokenExpired(idToken)).toBe(false);
   });
 
+  it("preserves typed ID token ACR and AMR assurance claims", () => {
+    const idToken = createIdToken({
+      acr: "urn:cubid:acr:passkey",
+      amr: ["passkey"],
+      iss: "https://id.cubid.me",
+      sub: "pairwise-user-123",
+    });
+    const claims = decodeCubidIdTokenClaims(idToken);
+
+    expect(claims.acr).toBe("urn:cubid:acr:passkey");
+    expect(claims.amr).toEqual(["passkey"]);
+  });
+
   it("requires exactly three JWT segments when decoding ID token claims", () => {
     expect(() => decodeCubidIdTokenClaims("header.payload")).toThrow(CubidAuthError);
     expect(() => decodeCubidIdTokenClaims("header.payload.signature.extra")).toThrow(

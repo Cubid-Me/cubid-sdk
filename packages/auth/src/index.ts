@@ -180,6 +180,8 @@ export interface CubidUserInfo {
 }
 
 export interface CubidIdTokenClaims extends Record<string, unknown> {
+  acr?: string;
+  amr?: string[];
   aud?: string | string[];
   email?: string;
   email_verified?: boolean;

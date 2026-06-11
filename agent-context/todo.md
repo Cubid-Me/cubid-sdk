@@ -1386,7 +1386,11 @@ ordinary browser state.
 
 ### S15.2 Type OIDC authentication assurance claims
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-06-11T19:34:08Z
+- Timestamp completed: 2026-06-11T19:35:28Z
+- Feature branch: `dev`
+- Head: `38ba0aac` at implementation start
 
 Add explicit typed `acr?: string` and `amr?: string[]` fields to
 `CubidIdTokenClaims` so apps can rely on the public TypeScript contract when

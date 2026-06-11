@@ -26,3 +26,12 @@
 - summary: Completed S15.1 by adding a recoverable-wallet hosted smoke strategy, linking it from package and integration docs, and adding a consumer-style acceptance test that stitches `@cubid/core` enrollment/release-start to `@cubid/wallet-recovery` hosted launch and release completion.
 - validation: `pnpm docs:api:build`; `pnpm exec vitest run --config vitest.config.ts src/wallet-recovery-hosted-path.acceptance.test.ts src/wallet-recovery.acceptance.test.ts` from `packages/acceptance`; `pnpm exec vitest run packages/wallet-recovery/src/index.test.ts`; `pnpm docs:api:check`; `git diff --check`
 - follow-ups: Run a real hosted app-recoverable-wallet smoke against Cubid Identity/Passport with a marked throwaway relying app before calling production recovery UX complete.
+
+## 2026-06-11T19:35:28.000Z - S15.2 typed auth assurance claims
+
+- agent: Codex
+- branch: dev
+- head: 38ba0aac
+- summary: Completed S15.2 by adding typed optional `acr` and `amr` fields to `CubidIdTokenClaims`, documenting the fields in `@cubid/auth`, and adding a focused decode test for passkey-backed assurance claims.
+- validation: `pnpm docs:api:build`; `pnpm exec vitest run packages/auth/src/index.test.ts`; `pnpm --filter @cubid/auth typecheck`; `pnpm docs:api:check`; `git diff --check`
+- follow-ups: Implement S15.3 passkey-assurance inspection helpers on top of the typed claim surface.
