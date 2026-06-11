@@ -46,22 +46,40 @@ function baseJson(file) {
   }
 }
 
+function addPackageCandidate(candidates, file) {
+  if (!fs.existsSync(file)) {
+    return;
+  }
+
+  const manifest = readJson(file);
+  if (manifest.private === true) {
+    return;
+  }
+
+  candidates.add(file);
+}
+
 function packageCandidates() {
   const changed = git(["diff", "--name-only", `origin/${base}...HEAD`], "")
     .split("\n")
     .filter(Boolean);
   const candidates = new Set();
   for (const file of changed) {
-    const appMatch = file.match(/^apps\/([^/]+)\//);
-    if (appMatch && fs.existsSync(path.join("apps", appMatch[1], "package.json"))) {
-      candidates.add(path.join("apps", appMatch[1], "package.json"));
+    const packageMatch = file.match(/^packages\/([^/]+)\//);
+    if (packageMatch) {
+      addPackageCandidate(candidates, path.join("packages", packageMatch[1], "package.json"));
     }
-    if (file.startsWith("app/") && fs.existsSync(path.join("app", "package.json"))) {
-      candidates.add(path.join("app", "package.json"));
+
+    const appMatch = file.match(/^apps\/([^/]+)\//);
+    if (appMatch) {
+      addPackageCandidate(candidates, path.join("apps", appMatch[1], "package.json"));
+    }
+    if (file.startsWith("app/")) {
+      addPackageCandidate(candidates, path.join("app", "package.json"));
     }
   }
-  if (candidates.size === 0 && fs.existsSync("package.json")) candidates.add("package.json");
-  if (candidates.size === 0 && fs.existsSync(path.join("app", "package.json"))) candidates.add(path.join("app", "package.json"));
+  if (candidates.size === 0) addPackageCandidate(candidates, "package.json");
+  if (candidates.size === 0) addPackageCandidate(candidates, path.join("app", "package.json"));
   return [...candidates];
 }
 
@@ -90,8 +108,8 @@ function updatePackage(file) {
 
 const candidates = packageCandidates();
 if (candidates.length === 0) {
-  console.error("No package.json candidate found for version bump.");
-  process.exit(1);
+  console.log("No publishable package.json candidate found for version bump.");
+  process.exit(0);
 }
 
 for (const candidate of candidates) updatePackage(candidate);

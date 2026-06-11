@@ -80,3 +80,12 @@
 - summary: Added React/ReactDOM dedupe aliases for root and acceptance Vitest runs and introduced a focused `test:auth-react` script that rebuilds auth packages before exercising the auth-react render tests.
 - validation: `pnpm install --frozen-lockfile`; `pnpm test:auth-react`; `pnpm test:acceptance`; `pnpm test:unit`; `git diff --check`; `pnpm lint`
 - follow-ups: None.
+
+## 2026-06-11T20:31:01.970Z - PR 21 version-bump review fixes
+
+- agent: Codex
+- branch: dev
+- head: 88f371bf
+- summary: Addressed PR 21 review feedback by teaching the PR version-bump script to detect publishable `packages/*` workspaces, skip private package manifests, fetch base branch history without shallow merge-base risk, and stage pnpm workspace package manifests.
+- validation: `node .github/scripts/pr-version-bump.mjs --base main --dry-run`; `node .github/scripts/pr-version-bump.mjs --base dev --dry-run`; `pnpm lint`; `git diff --check`
+- follow-ups: Reply to and resolve the PR 21 review threads after pushing the fix.
