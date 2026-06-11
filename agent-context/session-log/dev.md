@@ -62,3 +62,12 @@
 - summary: Completed S15.5 by refreshing the passkey-first SIWC guide for Identity-owned QR/deep-link handoff, lost-passkey challenge preservation through recovery and consent, assurance helper usage, and the correct `scope` option in the low-level auth example.
 - validation: `pnpm docs:api:check`; `git diff --check`
 - follow-ups: None for the guide refresh.
+
+## 2026-06-11T19:42:20.000Z - S15 parent closeout
+
+- agent: Codex
+- branch: dev
+- head: d28609b1
+- summary: Marked the S15 passkey-first auth assurance ergonomics parent complete after S15.1 through S15.5 landed as separate implementation commits.
+- validation: Not run (control-plane status update only).
+- follow-ups: Push or PR the seven local commits on `dev` when ready.

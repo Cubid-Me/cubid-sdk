@@ -1359,7 +1359,11 @@ note updates dirty in Passport unless explicitly asked to commit there.
 
 ### S15. Add passkey-first auth assurance ergonomics
 
-- Status: Not started
+- Status: Completed
+- Timestamp started: 2026-06-11T19:34:08Z
+- Timestamp completed: 2026-06-11T19:42:20Z
+- Feature branch: `dev`
+- Head: `38ba0aac` at implementation start
 
 Add a public SDK ergonomics tranche for passkey-first OIDC/SIWC assurance
 inspection without reviving direct WebAuthn SDK helpers. Consuming apps should
