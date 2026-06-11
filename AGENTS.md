@@ -98,8 +98,8 @@ This local folder may be missing its `.git` checkout on some machines. Restore t
 - Open pull requests from `dev` into `main` for release promotion, rather than
   committing directly on `main`.
 - Treat direct pushes to `dev` or `main` as exceptions for explicitly authorized
-  emergency, cleanup, release, or operator-directed flows, not the normal yeet
-  path.
+  emergency, cleanup, release, or operator-directed flows, not the normal
+  reviewed workflow.
 
 ## Applicability Notes
 

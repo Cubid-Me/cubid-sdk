@@ -26,3 +26,12 @@
 - summary: Investigated GitHub Dependabot alerts and updated the dev/test dependency graph so Vitest resolves to `3.2.6`, PostCSS resolves to `8.5.15`, and transitive `ws` and `brace-expansion` vulnerabilities are forced to patched versions through pnpm overrides.
 - validation: `pnpm audit --audit-level moderate`; `pnpm lint`; `pnpm test:auth-react`; `pnpm test:unit`; `pnpm test:acceptance`; `git diff --check`
 - follow-ups: None.
+
+## 2026-06-11T21:21:46.690Z - PR 22 workflow wording review fix
+
+- agent: Codex
+- branch: codex/prevent-direct-dev-work
+- head: bf7ebbd
+- summary: Addressed PR 22 review feedback by replacing the informal "normal yeet path" wording in AGENTS workflow guidance with clearer "normal reviewed workflow" language.
+- validation: `git diff --check`; `pnpm lint`
+- follow-ups: Reply to and resolve the PR 22 review thread after pushing the fix.
