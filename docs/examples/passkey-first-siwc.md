@@ -124,6 +124,17 @@ The app callback must verify `state`, exchange the code with the saved PKCE
 verifier, validate issuer/audience/nonce, and then fetch `/userinfo` when the app
 needs consented profile claims.
 
+To receive verified identifiers, request the standard OIDC scopes that match
+the app's Admin-configured SIWC page policy:
+
+- `email` releases consented `email` and `email_verified` claims.
+- `phone` releases consented `phone_number` and `phone_number_verified` claims.
+
+Admin may require verified email, verified phone, either identifier, or both
+before Identity shows consent or redirects back to the app. That requirement
+does not put raw identifiers in redirect parameters; the app still reads them
+only from ID token claims or `/userinfo` after consent.
+
 ## React With `@cubid/auth-react`
 
 ```tsx
@@ -186,6 +197,9 @@ For SmarTrust, i-am-human, ChainCrew, and starter/demo apps:
 2. Register exact callback and post-logout redirect URIs for local, preview,
    staging, and production domains.
 3. Request only the minimum scopes needed. Start with `openid profile email`.
+   Add `phone` only when the app needs the standard `phone_number` /
+   `phone_number_verified` OIDC claims or when the Admin SIWC page policy
+   requires a verified phone identifier.
 4. Ensure sign-in launches include `acr_values=urn:cubid:acr:passkey`.
 5. Confirm the app stores only app-scoped OIDC identifiers, such as the pairwise
    `sub`, and does not depend on global Cubid user IDs.
@@ -215,6 +229,9 @@ Before calling a consuming app integration ready:
   or `useCubidAuth().hasPasskeyAssurance` instead of manually parsing `acr` and
   `amr`.
 - `/userinfo` succeeds with the returned access token.
+- Apps that requested `email` or `phone` receive only the consented standard
+  OIDC claims they requested: `email` / `email_verified` and/or
+  `phone_number` / `phone_number_verified`.
 - The app creates its own session from app-scoped claims.
 - Logout clears the app session and routes through Cubid logout when needed.
 - Lost-passkey recovery returns to the original app flow after Cubid enrolls a
