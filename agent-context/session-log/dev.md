@@ -89,3 +89,12 @@
 - summary: Addressed PR 21 review feedback by teaching the PR version-bump script to detect publishable `packages/*` workspaces, skip private package manifests, fetch base branch history without shallow merge-base risk, and stage pnpm workspace package manifests.
 - validation: `node .github/scripts/pr-version-bump.mjs --base main --dry-run`; `node .github/scripts/pr-version-bump.mjs --base dev --dry-run`; `pnpm lint`; `git diff --check`
 - follow-ups: Reply to and resolve the PR 21 review threads after pushing the fix.
+
+## 2026-06-24T16:11:47.184Z - PR 24 session-log review fixes
+
+- agent: Codex
+- branch: dev
+- head: 713fd058
+- summary: Addressed PR 24 review feedback by aligning the session-log README with shared-branch authorization guidance and normalizing the SIWC phone-claims session-log keys to the lowercase template.
+- validation: `pnpm docs:api:check`; `git diff --check`
+- follow-ups: Reply to and resolve PR 24 review threads, then request Codex review after pushing.

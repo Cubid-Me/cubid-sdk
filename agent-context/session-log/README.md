@@ -6,8 +6,8 @@ This folder contains branch-scoped session logs. Use it instead of a single long
 
 - Feature branches in single-app repos use `YYYY-MM-DD-featurebranch.md`.
 - Feature branches in monorepos use `YYYY-MM-DD-app-featurebranch.md`.
-- Direct work on `main` uses `main.md`.
-- Direct work on `dev` uses `dev.md`.
+- Direct work on `main` uses `main.md` only when explicitly authorized.
+- Direct work on `dev` uses `dev.md` only when explicitly authorized.
 - The date is the best-known branch creation date: local reflog date first, first branch-only commit date second, current date last.
 - Slug branch names by replacing `/` and unsafe path characters with `-`.
 
