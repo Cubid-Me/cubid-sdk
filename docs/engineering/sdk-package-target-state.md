@@ -95,6 +95,24 @@ The same general split should apply to flexible messaging. Future dapp-facing
 in `@cubid/core` once those backend contracts are explicitly promoted, because
 they are server-authenticated runtime-agnostic APIs.
 
+The GlobalPayTo Pay-To MVP follows the same split. PR22 in `cubid-monorepo`
+defines the backend contract for submitted-candidate eligibility checks,
+opaque alias resolution, Pay-To action starts, grant status, lifecycle event
+polling, and constrained `payment_intent_created` notification delivery.
+Those dapp-authenticated API v3 helpers belong in `@cubid/core` after PR22
+lands on `dev` or is otherwise handed off as stable. Dapp API keys must stay
+server/Edge-only, `startPayToAction` and notification send must preserve
+idempotency, and resolver helpers must not expose list-all-payment-stamps
+behavior.
+
+Browser-safe Pay-To action launch belongs in `@cubid/browser`, with optional
+React ergonomics in `@cubid/react`. Signed-in user Pay-To stamp and grant
+owner-management routes are not resolver APIs and should not be presented as
+ordinary dapp server helpers. The SDK must not expose universal Cubid IDs, raw
+stamp identifiers, raw payment identifiers, provider subjects, route counts,
+route preferences, wallet graphs, private resolver diagnostics, or cross-app
+grants by default.
+
 The same boundary now applies to SIWC wallet capability discovery and
 passkey-approved account-request lifecycle helpers. Runtime-agnostic wrappers
 for `accounts/capabilities`, `accounts/requests/create`, and
