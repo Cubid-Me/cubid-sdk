@@ -37,7 +37,11 @@ plus hosted browser helpers.
 
 ## Server Helper Group
 
-The initial `@cubid/core` server helper surface should mirror the PR22 handoff:
+The initial `@cubid/core` server helper surface should mirror the PR22 handoff
+as methods on the initialized Cubid API client, following the existing
+`createCubidApiClient(...)` and client configuration pattern. They should not
+be standalone free functions that hide base URL, fetch, credential, or auth
+behavior:
 
 - `checkPayToEligibility(candidates, dappUserUuid)`
 - `resolvePayToAliases(aliases, dappUserUuid, resolverKey?)`
@@ -73,8 +77,10 @@ The browser layer should start with `openPayToHostedAction(hostedUrl)`, which
 opens a server-created hosted Pay-To action URL without exposing the dapp API
 key.
 
-Optional user-session wrappers may be added later for Cubid-authenticated owner
-management routes:
+Signed-in user-session wrappers are deferred unless the SDK already has a
+Cubid-authenticated user-session pattern ready to carry bearer-token calls
+safely. If that boundary is ready later, wrappers may cover owner-management
+routes such as:
 
 - `POST /api/pay-to/actions/complete`
 - `POST /api/pay-to/stamps/list`
@@ -163,4 +169,4 @@ Future implementation should add tests that prove:
 - hosted action start attaches `Idempotency-Key`;
 - unsupported payment notification events are denied or unrepresentable through
   the typed helper before event creation;
-- browser helpers never accept dapp API keys.
+- browser and React Pay-To helpers cannot accept dapp API keys.

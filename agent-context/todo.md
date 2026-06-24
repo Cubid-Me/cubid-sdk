@@ -1516,7 +1516,9 @@ Add server/Edge helpers for `checkPayToEligibility(candidates, dappUserUuid)`,
 `getPayToGrantStatus(dappUserUuid)`, `listPayToEvents(dappUserUuid, since?,
 limit?)`, `startPayToAction(actionType, dappUserUuid, options?)`, and
 `sendPaymentIntentCreatedNotification(dappUserUuid, payload)` once the PR22
-backend contracts are available to the SDK.
+backend contracts are available to the SDK. These helpers should be exposed on
+the existing initialized `@cubid/core` client/config pattern, not as free
+functions that hide base URL, fetch, credential, or auth behavior.
 
 ### S17.4 Preserve server-only API-key and idempotency boundaries
 
@@ -1542,8 +1544,9 @@ idempotency pattern. Browser packages must never accept dapp API keys.
 
 Add `openPayToHostedAction(hostedUrl)` in the browser layer. Optional
 signed-in Cubid-session wrappers for stamp and grant owner-management routes
-may follow only when the user is already in a Cubid-authenticated context.
-User routes remain owner-management routes, not resolver APIs.
+are explicitly deferred unless the SDK already has a Cubid-authenticated
+user-session pattern ready to carry bearer-token calls safely. User routes
+remain owner-management routes, not resolver APIs.
 
 ### S17.6 Document and enforce anti-enumeration behavior
 
@@ -1587,4 +1590,5 @@ Add GlobalPayTo resolver-backend and hosted-site examples, update generated API
 reference artifacts for new exports, and add tests proving boolean eligibility
 only, generic negative responses, no raw identifier leakage, redacted
 lifecycle events, idempotent action start, and unsupported payment event
-denial before event creation.
+denial before event creation. Add explicit browser and React package tests
+showing Pay-To helpers cannot accept dapp API keys.
