@@ -1536,12 +1536,12 @@ idempotency pattern. Browser packages must never accept dapp API keys.
 
 ### S17.5 Add browser-safe hosted action helpers
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-06-25T21:19:25Z
+- Timestamp completed: 2026-06-25T21:19:25Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `0151aae5` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.5 browser hosted action helper
 
 Add `openPayToHostedAction(hostedUrl)` in the browser layer. Optional
 signed-in Cubid-session wrappers for stamp and grant owner-management routes

@@ -42,3 +42,12 @@
 - summary: Added focused coverage that Pay-To write helpers auto-generate idempotency keys through the initialized core client and return the resolved keys, preserving the server-only API-key/idempotency boundary.
 - validation: `pnpm --filter @cubid/core test`; `pnpm --filter @cubid/core typecheck`.
 - follow-ups: Continue with S17.5 browser hosted action helper without accepting dapp API keys.
+
+## 2026-06-25T21:19:25.300Z - GlobalPayTo Pay-To S17.5 browser hosted action helper
+
+- agent: Codex
+- branch: codex/globalpayto-cubid-mvp-dependencies
+- head: 0151aae5
+- summary: Added `openPayToHostedAction(...)` to `@cubid/browser`, restricted it to hosted action completion URLs, rejected API-key query parameters, and kept signed-in owner-management wrappers deferred.
+- validation: `pnpm --filter @cubid/browser typecheck`; `pnpm --dir . exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`.
+- follow-ups: Continue with S17.6 anti-enumeration docs/tests, then S17.7/S17.8 docs and reference updates.
