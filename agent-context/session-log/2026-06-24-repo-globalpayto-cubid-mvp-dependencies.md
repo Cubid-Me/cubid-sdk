@@ -15,3 +15,12 @@
 - summary: Clarified that S17 core helpers should follow the initialized client/config pattern, deferred signed-in owner-management wrappers behind a ready user-session boundary, and added browser/React API-key rejection test expectations.
 - validation: `git diff --check`; targeted `rg` for initialized client/config, user-session deferral, and browser/React API-key test expectations.
 - follow-ups: None.
+
+## 2026-06-25T21:10:10.300Z - GlobalPayTo Pay-To S17.1 handoff intake
+
+- agent: Codex
+- branch: codex/globalpayto-cubid-mvp-dependencies
+- head: be0b4810
+- summary: Ingested the updated Cubid monorepo PR22 handoff that marks Pay-To backend support merged to dev, completed S17.1, and updated architecture/package-boundary docs from prerequisite framing to implementation-ready framing.
+- validation: `git diff --check`; targeted `rg` for S17.1, PR22 merged-to-dev, and ready-for-sdk-implementation references.
+- follow-ups: Implement S17.2 and S17.3 as `@cubid/core` types and initialized-client methods.

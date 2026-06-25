@@ -99,9 +99,9 @@ The GlobalPayTo Pay-To MVP follows the same split. PR22 in `cubid-monorepo`
 defines the backend contract for submitted-candidate eligibility checks,
 opaque alias resolution, Pay-To action starts, grant status, lifecycle event
 polling, and constrained `payment_intent_created` notification delivery.
-Those dapp-authenticated API v3 helpers belong in `@cubid/core` after PR22
-lands on `dev` or is otherwise handed off as stable. Dapp API keys must stay
-server/Edge-only, `startPayToAction` and notification send must preserve
+Those dapp-authenticated API v3 helpers belong in `@cubid/core` now that PR22
+has merged to `dev` and handed off the stable MVP contract. Dapp API keys must
+stay server/Edge-only, `startPayToAction` and notification send must preserve
 idempotency, and resolver helpers must not expose list-all-payment-stamps
 behavior.
 

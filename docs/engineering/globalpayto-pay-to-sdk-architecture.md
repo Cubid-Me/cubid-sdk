@@ -2,8 +2,8 @@
 
 This document translates the GlobalPayTo Pay-To handoff notes into SDK package
 ownership and implementation sequencing. It is an architecture and roadmap
-baseline only; public runtime helpers should wait until Cubid monorepo PR22
-lands on `dev` or is otherwise handed off as stable.
+baseline for the SDK implementation now that Cubid monorepo PR22 has merged to
+`dev` and handed off the backend contract.
 
 Sources:
 
@@ -11,6 +11,10 @@ Sources:
 - `agent-context/cross-repo-comms/2026-06-24-globalpayto-pay-to-sdk-handoff.md`
 
 The PR22 handoff is the authoritative contract where the two notes differ.
+Merged review fixes included in that contract require `pay_to` as an accepted
+selective-disclosure source, passkey-assurance enforcement during hosted
+action completion when requested, lifecycle polling that filters before
+limits, and reachable hosted action completion URLs.
 
 ## Package Ownership
 

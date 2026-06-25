@@ -169,9 +169,9 @@ access to raw destinations or delivery capability.
 
 ### GlobalPayTo Pay-To SDK Direction
 
-GlobalPayTo Pay-To support is now tracked as the deferred S17 SDK roadmap.
-Cubid monorepo PR22 is the platform prerequisite and defines the concrete
-backend contracts. Once that backend lands, server/Edge helpers for
+GlobalPayTo Pay-To support is now tracked as the S17 SDK roadmap. Cubid
+monorepo PR22 has merged to `dev` and defines the concrete backend contracts.
+Server/Edge helpers for
 submitted-candidate eligibility, opaque alias resolution, hosted action start,
 grant status, lifecycle event polling, and constrained
 `payment_intent_created` notification delivery belong in `@cubid/core`.

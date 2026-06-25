@@ -2,17 +2,21 @@
 from: cubid-monorepo
 to: cubid-sdk
 created: 2026-06-24
-status: open
+status: ready-for-sdk-implementation
 topic: GlobalPayTo Pay-To SDK helper handoff
 source_pr: https://github.com/Cubid-Me/cubid-monorepo/pull/22
+source_pr_status: merged-to-dev
+source_dev_head: 1745f89
+review_fix_commit: ba2dea6
 ---
 
 # GlobalPayTo Pay-To SDK Helper Handoff
 
-Cubid monorepo PR22 implements the GlobalPayTo MVP backend contract through the
-Passport/API v3 surfaces below. Please design public SDK helpers around these
-contracts after PR22 lands on `dev`; do not add public SDK implementation to
-`cubid-monorepo`.
+Cubid monorepo PR22 has merged to `dev` and implements the GlobalPayTo MVP
+backend contract through the Passport/API v3 surfaces below. Please finish the
+SDK S17 handoff/architecture ingestion and implement the first `@cubid/core`
+Pay-To types and helpers against this merged contract; do not add public SDK
+implementation to `cubid-monorepo`.
 
 PR22 scope summary:
 
@@ -24,6 +28,15 @@ PR22 scope summary:
 - redacted lifecycle event polling;
 - `payment_intent_created`-only notification support;
 - Pay-To-specific throttling and generic negative responses.
+
+Merged review-fix details included in the contract:
+
+- `selective_disclosure_grants.source` accepts `pay_to`.
+- hosted Pay-To action completion enforces stored
+  `required_passkey_assurance` when requested.
+- lifecycle polling filters by user and lifecycle event type before applying
+  limits.
+- `hostedUrl` points to a reachable `/pay-to/actions/complete` page.
 
 Server-only helper surfaces:
 
@@ -129,9 +142,22 @@ Smoke expectations for SDK examples:
 
 Implementation sequencing suggestion:
 
-1. Add typed request/response models and server-only client methods.
-2. Add hosted-action URL helper that does not expose server credentials.
-3. Add examples showing submitted-candidate checks and alias resolution.
-4. Add smoke tests that assert generic negative responses and no list-style
+1. Finish S17.1 by marking this handoff and
+   `docs/engineering/globalpayto-pay-to-sdk-architecture.md` as ingested now
+   that PR22 is merged to Cubid `dev`.
+2. Implement S17.2 with typed request/response models in `@cubid/core`.
+3. Implement S17.3 with server-only client methods on the existing initialized
+   `@cubid/core` client/config pattern.
+4. Add hosted-action URL helper that does not expose server credentials.
+5. Add examples showing submitted-candidate checks and alias resolution.
+6. Add smoke tests that assert generic negative responses and no list-style
    resolver helper.
-5. Update package docs to say PR22 backend support is required.
+7. Update package docs to say PR22 backend support is required.
+
+Immediate SDK request:
+
+- Prioritize S17.1, S17.2, and S17.3 before browser/React ergonomics.
+- Keep dapp API keys out of `@cubid/browser`, `@cubid/react`, examples, and any
+  hosted action opener.
+- Do not expose a dapp resolver helper for `POST /api/pay-to/stamps/list`; it
+  remains a signed-in user owner-management route only.

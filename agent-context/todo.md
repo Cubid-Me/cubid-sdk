@@ -1459,28 +1459,29 @@ according to Admin-configured SIWC page policy.
 
 ### S17. Add GlobalPayTo Pay-To SDK support from PR22 backend contracts
 
-- Status: Not started
-- Timestamp started: TBD
+- Status: In progress
+- Timestamp started: 2026-06-25T21:10:10Z
 - Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `be0b4810` at implementation start
 - Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-06-24-globalpayto-cubid-mvp-dependencies.md`, `agent-context/cross-repo-comms/2026-06-24-globalpayto-pay-to-sdk-handoff.md`
 
-Track public SDK support for the GlobalPayTo Pay-To MVP after Cubid monorepo
-PR22 lands on `dev` or is otherwise handed off as stable. The PR22 handoff note
-is authoritative where it differs from the earlier dependency request. SDK
-work should preserve submitted-candidate and opaque-alias resolver flows,
-server-only dapp API key use, browser-safe hosted action launch, redacted
-lifecycle summaries, and `payment_intent_created`-only notification support.
+Track public SDK support for the GlobalPayTo Pay-To MVP now that Cubid
+monorepo PR22 has merged to `dev` and handed off the backend contract. The PR22
+handoff note is authoritative where it differs from the earlier dependency
+request. SDK work should preserve submitted-candidate and opaque-alias resolver
+flows, server-only dapp API key use, browser-safe hosted action launch,
+redacted lifecycle summaries, and `payment_intent_created`-only notification
+support.
 
 ### S17.1 Ingest GlobalPayTo Pay-To SDK handoff and architecture
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-06-25T21:10:10Z
+- Timestamp completed: 2026-06-25T21:10:10Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `be0b4810` at implementation start
+- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-06-24-globalpayto-cubid-mvp-dependencies.md`, `agent-context/cross-repo-comms/2026-06-24-globalpayto-pay-to-sdk-handoff.md`, session: GlobalPayTo Pay-To S17.1 handoff intake
 
 Record both GlobalPayTo coordination notes, document PR22 as the platform
 prerequisite, and publish the SDK-side package ownership and route-mapping
@@ -1515,10 +1516,10 @@ Add server/Edge helpers for `checkPayToEligibility(candidates, dappUserUuid)`,
 `resolvePayToAliases(aliases, dappUserUuid, resolverKey?)`,
 `getPayToGrantStatus(dappUserUuid)`, `listPayToEvents(dappUserUuid, since?,
 limit?)`, `startPayToAction(actionType, dappUserUuid, options?)`, and
-`sendPaymentIntentCreatedNotification(dappUserUuid, payload)` once the PR22
-backend contracts are available to the SDK. These helpers should be exposed on
-the existing initialized `@cubid/core` client/config pattern, not as free
-functions that hide base URL, fetch, credential, or auth behavior.
+`sendPaymentIntentCreatedNotification(dappUserUuid, payload)` against the
+merged PR22 backend contracts. These helpers should be exposed on the existing
+initialized `@cubid/core` client/config pattern, not as free functions that
+hide base URL, fetch, credential, or auth behavior.
 
 ### S17.4 Preserve server-only API-key and idempotency boundaries
 
