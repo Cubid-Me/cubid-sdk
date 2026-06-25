@@ -1186,6 +1186,52 @@ test("pay-to payment intent notification helper is constrained and idempotent", 
   })
 })
 
+test("pay-to write helpers auto-generate idempotency keys when omitted", async () => {
+  const idempotencyKeys: string[] = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input, init) => {
+      idempotencyKeys.push(String(new Headers(init?.headers).get("Idempotency-Key")))
+      const path = new URL(String(input)).pathname
+
+      if (path.endsWith("/pay-to/actions/start")) {
+        return createJsonResponse({
+          data: {
+            actionToken: "pta_act_auto",
+            actionType: "route_authorization",
+            hostedUrl: "/pay-to/actions/complete?action_token=pta_act_auto",
+            status: "pending",
+          },
+        })
+      }
+
+      return createJsonResponse({
+        data: {
+          category: "TRANSACTIONAL",
+          eventId: "notif_evt_payto_auto",
+          status: "accepted",
+        },
+      })
+    },
+  })
+
+  const action = await client.startPayToAction({
+    actionType: "route_authorization",
+    dappUserUuid: "dapp_user_123",
+  })
+  const notification = await client.sendPaymentIntentCreatedNotification({
+    body: "A payment intent is ready for review.",
+    dappUserUuid: "dapp_user_123",
+    title: "Payment intent created",
+  })
+
+  assert.equal(action.idempotencyKey, idempotencyKeys[0])
+  assert.equal(notification.idempotencyKey, idempotencyKeys[1])
+  assert.match(String(idempotencyKeys[0]), /^[0-9a-f-]{36}$/)
+  assert.match(String(idempotencyKeys[1]), /^[0-9a-f-]{36}$/)
+})
+
 test("pay-to helpers reject malformed successful payloads", async () => {
   const client = createCubidApiClient({
     apiKey: "api_key",

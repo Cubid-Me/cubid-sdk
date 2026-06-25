@@ -1523,12 +1523,12 @@ hide base URL, fetch, credential, or auth behavior.
 
 ### S17.4 Preserve server-only API-key and idempotency boundaries
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-06-25T21:17:11Z
+- Timestamp completed: 2026-06-25T21:17:11Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `b14af2ef` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.4 idempotency boundary
 
 Keep dapp API keys server/Edge-only. `startPayToAction(...)` and notification
 send must require or resolve `Idempotency-Key` through the existing SDK

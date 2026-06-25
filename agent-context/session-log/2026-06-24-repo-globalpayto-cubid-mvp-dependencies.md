@@ -33,3 +33,12 @@
 - summary: Added `@cubid/core` Pay-To request/response types and initialized-client methods for eligibility checks, alias resolution, grant status, lifecycle events, hosted action start, and constrained payment-intent-created notification sends; bumped core to 0.1.8.
 - validation: `pnpm --filter @cubid/core test`; `pnpm --filter @cubid/core typecheck`.
 - follow-ups: Continue with S17.4 server-only idempotency/API-key boundary hardening, then S17.5 browser hosted action helpers.
+
+## 2026-06-25T21:17:11.300Z - GlobalPayTo Pay-To S17.4 idempotency boundary
+
+- agent: Codex
+- branch: codex/globalpayto-cubid-mvp-dependencies
+- head: b14af2ef
+- summary: Added focused coverage that Pay-To write helpers auto-generate idempotency keys through the initialized core client and return the resolved keys, preserving the server-only API-key/idempotency boundary.
+- validation: `pnpm --filter @cubid/core test`; `pnpm --filter @cubid/core typecheck`.
+- follow-ups: Continue with S17.5 browser hosted action helper without accepting dapp API keys.
