@@ -51,3 +51,12 @@
 - summary: Added `openPayToHostedAction(...)` to `@cubid/browser`, restricted it to hosted action completion URLs, rejected API-key query parameters, and kept signed-in owner-management wrappers deferred.
 - validation: `pnpm --filter @cubid/browser typecheck`; `pnpm --dir . exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`.
 - follow-ups: Continue with S17.6 anti-enumeration docs/tests, then S17.7/S17.8 docs and reference updates.
+
+## 2026-06-25T21:19:59.300Z - GlobalPayTo Pay-To S17.6 anti-enumeration enforcement
+
+- agent: Codex
+- branch: codex/globalpayto-cubid-mvp-dependencies
+- head: b56cf7b0
+- summary: Added core test coverage that Pay-To resolver helpers do not expose list-style payment-enabled stamp discovery and preserve generic negative response states.
+- validation: `pnpm --filter @cubid/core test`; `pnpm --filter @cubid/core typecheck`.
+- follow-ups: Continue with S17.7 constrained payment notification coverage and S17.8 docs/reference updates.

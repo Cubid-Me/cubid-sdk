@@ -1551,12 +1551,12 @@ remain owner-management routes, not resolver APIs.
 
 ### S17.6 Document and enforce anti-enumeration behavior
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-06-25T21:19:59Z
+- Timestamp completed: 2026-06-25T21:19:59Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `b56cf7b0` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.6 anti-enumeration enforcement
 
 Do not add a list-all-payment-stamps resolver helper. Eligibility and alias
 resolution must stay submitted-candidate or opaque-alias based. Preserve

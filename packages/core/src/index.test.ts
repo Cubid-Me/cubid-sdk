@@ -1256,6 +1256,52 @@ test("pay-to helpers reject malformed successful payloads", async () => {
   )
 })
 
+test("pay-to resolver surface stays anti-enumeration focused", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input) => {
+      const path = new URL(String(input)).pathname
+
+      if (path.endsWith("/pay-to/stamps/eligibility/check")) {
+        return createJsonResponse({
+          data: {
+            results: [{ candidateRef: "unknown", eligible: false }],
+            status: "resolution_unavailable",
+          },
+        })
+      }
+
+      return createJsonResponse({
+        data: {
+          events: [],
+          status: "no_events",
+        },
+      })
+    },
+  })
+
+  assert.equal("listPayToStamps" in client, false)
+  assert.equal("listPaymentEnabledStamps" in client, false)
+
+  const eligibility = await client.checkPayToEligibility({
+    candidates: [{ candidateRef: "unknown", stampType: "phone", value: "+15555550123" }],
+    dappUserUuid: "dapp_user_123",
+  })
+  const events = await client.listPayToEvents({
+    dappUserUuid: "dapp_user_123",
+  })
+
+  assert.equal(eligibility.status, "resolution_unavailable")
+  assert.equal(eligibility.results[0]?.eligible, false)
+  assert.deepEqual(Object.keys(eligibility.results[0]?.raw ?? {}).sort(), [
+    "candidateRef",
+    "eligible",
+  ])
+  assert.equal(events.status, "no_events")
+  assert.deepEqual(events.events, [])
+})
+
 test("v3 custody helpers normalize generated and listed accounts, including sui", async () => {
   const calls: Array<{
     body: unknown
