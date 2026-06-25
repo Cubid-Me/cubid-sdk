@@ -582,6 +582,165 @@ export type CubidGetNotificationStatusResponse = {
   raw: Record<string, unknown>
 }
 
+export const CUBID_PAY_TO_STAMP_TYPES = [
+  "email",
+  "phone",
+  "github",
+  "google",
+  "evm",
+] as const
+
+export const CUBID_PAY_TO_ACTION_TYPES = [
+  "setup",
+  "route_registration",
+  "route_authorization",
+  "route_selection",
+  "grant_revocation",
+] as const
+
+export const CUBID_PAY_TO_LIFECYCLE_EVENT_TYPES = [
+  "pay_to.stamp.disabled",
+  "pay_to.grant.revoked",
+  "pay_to.grant.expired",
+  "pay_to.identity_state.changed",
+] as const
+
+export type CubidPayToStampType = (typeof CUBID_PAY_TO_STAMP_TYPES)[number]
+
+export type CubidPayToActionType = (typeof CUBID_PAY_TO_ACTION_TYPES)[number]
+
+export type CubidPayToEligibilityStatus =
+  | "checked"
+  | "resolution_unavailable"
+  | string
+
+export type CubidPayToAliasResolutionStatus =
+  | "checked"
+  | "resolution_unavailable"
+  | string
+
+export type CubidPayToGrantStatus = "active" | "revoked" | "missing" | string
+
+export type CubidPayToEventsStatus = "ok" | "no_events" | string
+
+export type CubidPayToLifecycleEventType =
+  (typeof CUBID_PAY_TO_LIFECYCLE_EVENT_TYPES)[number] | string
+
+export type CubidPaymentIntentCreatedEventType = "payment_intent_created"
+
+export type CubidPayToEligibilityCandidate = {
+  candidateRef?: string
+  stampType: CubidPayToStampType
+  value: string
+}
+
+export type CubidPayToEligibilityResult = {
+  candidateRef: string | null
+  eligible: boolean
+  raw: Record<string, unknown>
+}
+
+export type CubidCheckPayToEligibilityInput = {
+  candidates: CubidPayToEligibilityCandidate[]
+  dappUserUuid: string
+}
+
+export type CubidCheckPayToEligibilityResponse = {
+  raw: Record<string, unknown>
+  results: CubidPayToEligibilityResult[]
+  status: CubidPayToEligibilityStatus | null
+}
+
+export type CubidPayToAliasCandidate = {
+  alias: string
+  aliasRef?: string
+}
+
+export type CubidPayToAliasResolutionResult = {
+  aliasRef: string | null
+  eligible: boolean
+  raw: Record<string, unknown>
+}
+
+export type CubidResolvePayToAliasesInput = {
+  aliases: CubidPayToAliasCandidate[]
+  dappUserUuid: string
+  resolverKey?: string
+}
+
+export type CubidResolvePayToAliasesResponse = {
+  raw: Record<string, unknown>
+  results: CubidPayToAliasResolutionResult[]
+  status: CubidPayToAliasResolutionStatus | null
+}
+
+export type CubidGetPayToGrantStatusInput = {
+  dappUserUuid: string
+}
+
+export type CubidGetPayToGrantStatusResponse = {
+  dappUserUuid: string | null
+  grantedAt: string | null
+  grantStatus: CubidPayToGrantStatus | null
+  raw: Record<string, unknown>
+  revokedAt: string | null
+}
+
+export type CubidPayToLifecycleEventSummary = {
+  createdAt: string | null
+  eventRef: string | null
+  eventType: CubidPayToLifecycleEventType | null
+  outcome: "success" | "failure" | string | null
+  raw: Record<string, unknown>
+  reason: string | null
+}
+
+export type CubidListPayToEventsInput = {
+  dappUserUuid: string
+  limit?: number
+  since?: string
+}
+
+export type CubidListPayToEventsResponse = {
+  events: CubidPayToLifecycleEventSummary[]
+  raw: Record<string, unknown>
+  status: CubidPayToEventsStatus | null
+}
+
+export type CubidStartPayToActionInput = CubidIdempotentRequestOptions & {
+  actionType: CubidPayToActionType
+  dappUserUuid: string
+  metadata?: Record<string, unknown>
+  requiredPasskeyAssurance?: boolean
+  returnUrl?: string
+}
+
+export type CubidStartPayToActionResponse = {
+  actionToken: string | null
+  actionType: CubidPayToActionType | string | null
+  expiresAt: string | null
+  hostedUrl: string | null
+  idempotencyKey: string
+  raw: Record<string, unknown>
+  status: string | null
+}
+
+export type CubidSendPaymentIntentCreatedNotificationInput =
+  CubidIdempotentRequestOptions & {
+    body: string
+    deepLink?: string
+    dappUserUuid: string
+    metadata?: Record<string, unknown>
+    priority?: CubidNotificationPriority
+    title: string
+  }
+
+export type CubidSendPaymentIntentCreatedNotificationResponse =
+  CubidSendNotificationResponse & {
+    category: "TRANSACTIONAL"
+    paymentEventType: CubidPaymentIntentCreatedEventType
+  }
+
 export type CubidRecoveryBundleStatus =
   | "active"
   | "not_enrolled"
@@ -1128,6 +1287,33 @@ export type SaveSecretInput = CubidSaveSecretInput
 export type SaveSecretResponse = CubidSaveSecretResponse
 export type SendNotificationInput = CubidSendNotificationInput
 export type SendNotificationResponse = CubidSendNotificationResponse
+export type PayToStampType = CubidPayToStampType
+export type PayToActionType = CubidPayToActionType
+export type PayToEligibilityStatus = CubidPayToEligibilityStatus
+export type PayToAliasResolutionStatus = CubidPayToAliasResolutionStatus
+export type PayToGrantStatus = CubidPayToGrantStatus
+export type PayToEventsStatus = CubidPayToEventsStatus
+export type PayToLifecycleEventType = CubidPayToLifecycleEventType
+export type PaymentIntentCreatedEventType = CubidPaymentIntentCreatedEventType
+export type PayToEligibilityCandidate = CubidPayToEligibilityCandidate
+export type PayToEligibilityResult = CubidPayToEligibilityResult
+export type CheckPayToEligibilityInput = CubidCheckPayToEligibilityInput
+export type CheckPayToEligibilityResponse = CubidCheckPayToEligibilityResponse
+export type PayToAliasCandidate = CubidPayToAliasCandidate
+export type PayToAliasResolutionResult = CubidPayToAliasResolutionResult
+export type ResolvePayToAliasesInput = CubidResolvePayToAliasesInput
+export type ResolvePayToAliasesResponse = CubidResolvePayToAliasesResponse
+export type GetPayToGrantStatusInput = CubidGetPayToGrantStatusInput
+export type GetPayToGrantStatusResponse = CubidGetPayToGrantStatusResponse
+export type PayToLifecycleEventSummary = CubidPayToLifecycleEventSummary
+export type ListPayToEventsInput = CubidListPayToEventsInput
+export type ListPayToEventsResponse = CubidListPayToEventsResponse
+export type StartPayToActionInput = CubidStartPayToActionInput
+export type StartPayToActionResponse = CubidStartPayToActionResponse
+export type SendPaymentIntentCreatedNotificationInput =
+  CubidSendPaymentIntentCreatedNotificationInput
+export type SendPaymentIntentCreatedNotificationResponse =
+  CubidSendPaymentIntentCreatedNotificationResponse
 export type CustodyChain = CubidCustodyChain
 export type CustodyAccount = CubidCustodyAccount
 export type GenerateAccountInput = CubidGenerateAccountInput
@@ -1204,6 +1390,24 @@ export type CubidApiClient = {
   sendNotification(
     input: CubidSendNotificationInput
   ): Promise<CubidSendNotificationResponse>
+  checkPayToEligibility(
+    input: CubidCheckPayToEligibilityInput
+  ): Promise<CubidCheckPayToEligibilityResponse>
+  resolvePayToAliases(
+    input: CubidResolvePayToAliasesInput
+  ): Promise<CubidResolvePayToAliasesResponse>
+  getPayToGrantStatus(
+    input: CubidGetPayToGrantStatusInput
+  ): Promise<CubidGetPayToGrantStatusResponse>
+  listPayToEvents(
+    input: CubidListPayToEventsInput
+  ): Promise<CubidListPayToEventsResponse>
+  startPayToAction(
+    input: CubidStartPayToActionInput
+  ): Promise<CubidStartPayToActionResponse>
+  sendPaymentIntentCreatedNotification(
+    input: CubidSendPaymentIntentCreatedNotificationInput
+  ): Promise<CubidSendPaymentIntentCreatedNotificationResponse>
   ensureUserByEmail(
     input: CubidEnsureUserByEmailInput
   ): Promise<CubidEnsureUserByEmailResponse>
@@ -1398,6 +1602,45 @@ const assertPositiveInteger = (
       code: "INVALID_INPUT",
       endpoint,
       message: `${field} must be a positive integer.`,
+    })
+  }
+
+  return value
+}
+
+const assertArrayLength = <T>(
+  value: T[],
+  field: string,
+  endpoint: string,
+  options: { max: number; min: number }
+): T[] => {
+  if (value.length < options.min || value.length > options.max) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_INPUT",
+      endpoint,
+      message: `${field} must contain between ${options.min} and ${options.max} entries.`,
+    })
+  }
+
+  return value
+}
+
+const assertOptionalRecordInput = (
+  value: Record<string, unknown> | undefined,
+  field: string,
+  endpoint: string
+): Record<string, unknown> | undefined => {
+  if (value === undefined) {
+    return undefined
+  }
+
+  if (!isRecord(value)) {
+    throw new CubidApiError({
+      category: "validation",
+      code: "INVALID_INPUT",
+      endpoint,
+      message: `${field} must be an object when provided.`,
     })
   }
 
@@ -2697,6 +2940,222 @@ const normalizeCancelSigningRequest = (
   }
 }
 
+const normalizePayToEligibilityResult = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidPayToEligibilityResult => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+
+  return {
+    candidateRef: asString(record.candidateRef) ?? asString(record.candidate_ref),
+    eligible: Boolean(record.eligible),
+    raw: record,
+  }
+}
+
+const normalizeCheckPayToEligibility = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidCheckPayToEligibilityResponse => {
+  const record = assertRecord(
+    payload,
+    "v3/pay-to/stamps/eligibility/check",
+    requestId,
+    status
+  )
+  const data = assertRecord(
+    record.data ?? record,
+    "v3/pay-to/stamps/eligibility/check.data",
+    requestId,
+    status
+  )
+  const results = Array.isArray(data.results) ? data.results : []
+
+  return {
+    raw: record,
+    results: results.map((result) =>
+      normalizePayToEligibilityResult(
+        result,
+        "v3/pay-to/stamps/eligibility/check.data.results",
+        requestId,
+        status
+      )
+    ),
+    status: asString(data.status) ?? asString(record.status),
+  }
+}
+
+const normalizePayToAliasResolutionResult = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidPayToAliasResolutionResult => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+
+  return {
+    aliasRef: asString(record.aliasRef) ?? asString(record.alias_ref),
+    eligible: Boolean(record.eligible),
+    raw: record,
+  }
+}
+
+const normalizeResolvePayToAliases = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidResolvePayToAliasesResponse => {
+  const record = assertRecord(payload, "v3/pay-to/aliases/resolve", requestId, status)
+  const data = assertRecord(
+    record.data ?? record,
+    "v3/pay-to/aliases/resolve.data",
+    requestId,
+    status
+  )
+  const results = Array.isArray(data.results) ? data.results : []
+
+  return {
+    raw: record,
+    results: results.map((result) =>
+      normalizePayToAliasResolutionResult(
+        result,
+        "v3/pay-to/aliases/resolve.data.results",
+        requestId,
+        status
+      )
+    ),
+    status: asString(data.status) ?? asString(record.status),
+  }
+}
+
+const normalizeGetPayToGrantStatus = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidGetPayToGrantStatusResponse => {
+  const record = assertRecord(payload, "v3/pay-to/grants/status", requestId, status)
+  const data = assertRecord(
+    record.data ?? record,
+    "v3/pay-to/grants/status.data",
+    requestId,
+    status
+  )
+
+  return {
+    dappUserUuid:
+      asString(data.dappUserUuid) ??
+      asString(data.dapp_user_uuid) ??
+      asString(record.dappUserUuid) ??
+      asString(record.dapp_user_uuid),
+    grantedAt:
+      asString(data.grantedAt) ??
+      asString(data.granted_at) ??
+      asString(record.grantedAt) ??
+      asString(record.granted_at),
+    grantStatus:
+      asString(data.grantStatus) ??
+      asString(data.grant_status) ??
+      asString(record.grantStatus) ??
+      asString(record.grant_status),
+    raw: record,
+    revokedAt:
+      asString(data.revokedAt) ??
+      asString(data.revoked_at) ??
+      asString(record.revokedAt) ??
+      asString(record.revoked_at),
+  }
+}
+
+const normalizePayToLifecycleEvent = (
+  payload: unknown,
+  endpoint: string,
+  requestId?: string | null,
+  status?: number
+): CubidPayToLifecycleEventSummary => {
+  const record = assertRecord(payload, endpoint, requestId, status)
+
+  return {
+    createdAt: asString(record.createdAt) ?? asString(record.created_at),
+    eventRef: asString(record.eventRef) ?? asString(record.event_ref),
+    eventType: asString(record.eventType) ?? asString(record.event_type),
+    outcome: asString(record.outcome),
+    raw: record,
+    reason: asString(record.reason),
+  }
+}
+
+const normalizeListPayToEvents = (
+  payload: unknown,
+  requestId?: string | null,
+  status?: number
+): CubidListPayToEventsResponse => {
+  const record = assertRecord(payload, "v3/pay-to/events/list", requestId, status)
+  const data = assertRecord(
+    record.data ?? record,
+    "v3/pay-to/events/list.data",
+    requestId,
+    status
+  )
+  const events = Array.isArray(data.events) ? data.events : []
+
+  return {
+    events: events.map((event) =>
+      normalizePayToLifecycleEvent(
+        event,
+        "v3/pay-to/events/list.data.events",
+        requestId,
+        status
+      )
+    ),
+    raw: record,
+    status: asString(data.status) ?? asString(record.status),
+  }
+}
+
+const normalizeStartPayToAction = (
+  payload: unknown,
+  requestId: string | null | undefined,
+  status: number | undefined,
+  idempotencyKey: string
+): CubidStartPayToActionResponse => {
+  const record = assertRecord(payload, "v3/pay-to/actions/start", requestId, status)
+  const data = assertRecord(
+    record.data ?? record,
+    "v3/pay-to/actions/start.data",
+    requestId,
+    status
+  )
+
+  return {
+    actionToken:
+      asString(data.actionToken) ??
+      asString(data.action_token) ??
+      asString(record.actionToken) ??
+      asString(record.action_token),
+    actionType:
+      asString(data.actionType) ??
+      asString(data.action_type) ??
+      asString(record.actionType) ??
+      asString(record.action_type),
+    expiresAt:
+      asString(data.expiresAt) ??
+      asString(data.expires_at) ??
+      asString(record.expiresAt) ??
+      asString(record.expires_at),
+    hostedUrl:
+      asString(data.hostedUrl) ??
+      asString(data.hosted_url) ??
+      asString(record.hostedUrl) ??
+      asString(record.hosted_url),
+    idempotencyKey,
+    raw: record,
+    status: asString(data.status) ?? asString(record.status),
+  }
+}
+
 const normalizeSendNotification = (
   payload: unknown,
   requestId: string | null | undefined,
@@ -3964,6 +4423,236 @@ export const createCubidApiClient = (
             responseStatus,
             idempotencyKey
           ),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
+    checkPayToEligibility(input) {
+      const endpoint = "v3/pay-to/stamps/eligibility/check"
+      const dappUserUuid = assertNonEmptyString(
+        input.dappUserUuid,
+        "dappUserUuid",
+        endpoint
+      )
+      const candidates = assertArrayLength(input.candidates, "candidates", endpoint, {
+        max: 25,
+        min: 1,
+      }).map((candidate) => ({
+        candidateRef:
+          candidate.candidateRef === undefined
+            ? undefined
+            : assertNonEmptyString(
+                candidate.candidateRef,
+                "candidateRef",
+                endpoint
+              ),
+        stampType: assertNonEmptyString(candidate.stampType, "stampType", endpoint),
+        value: assertNonEmptyString(candidate.value, "value", endpoint),
+      }))
+
+      return makeRequest<CubidCheckPayToEligibilityResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/pay-to/stamps/eligibility/check",
+        withV3Credentials({
+          candidates: candidates.map((candidate) => ({
+            candidateRef: candidate.candidateRef,
+            stampType: candidate.stampType,
+            value: candidate.value,
+          })),
+          dapp_user_uuid: dappUserUuid,
+        }),
+        endpoint,
+        normalizeCheckPayToEligibility,
+        headers
+      )
+    },
+
+    resolvePayToAliases(input) {
+      const endpoint = "v3/pay-to/aliases/resolve"
+      const dappUserUuid = assertNonEmptyString(
+        input.dappUserUuid,
+        "dappUserUuid",
+        endpoint
+      )
+      const aliases = assertArrayLength(input.aliases, "aliases", endpoint, {
+        max: 25,
+        min: 1,
+      }).map((alias) => ({
+        alias: assertNonEmptyString(alias.alias, "alias", endpoint),
+        aliasRef:
+          alias.aliasRef === undefined
+            ? undefined
+            : assertNonEmptyString(alias.aliasRef, "aliasRef", endpoint),
+      }))
+      const resolverKey =
+        input.resolverKey === undefined
+          ? undefined
+          : assertNonEmptyString(input.resolverKey, "resolverKey", endpoint)
+
+      return makeRequest<CubidResolvePayToAliasesResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/pay-to/aliases/resolve",
+        withV3Credentials({
+          aliases: aliases.map((alias) => ({
+            alias: alias.alias,
+            aliasRef: alias.aliasRef,
+          })),
+          dapp_user_uuid: dappUserUuid,
+          resolver_key: resolverKey,
+        }),
+        endpoint,
+        normalizeResolvePayToAliases,
+        headers
+      )
+    },
+
+    getPayToGrantStatus(input) {
+      const endpoint = "v3/pay-to/grants/status"
+      const dappUserUuid = assertNonEmptyString(
+        input.dappUserUuid,
+        "dappUserUuid",
+        endpoint
+      )
+
+      return makeRequest<CubidGetPayToGrantStatusResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/pay-to/grants/status",
+        withV3Credentials({
+          dapp_user_uuid: dappUserUuid,
+        }),
+        endpoint,
+        normalizeGetPayToGrantStatus,
+        headers
+      )
+    },
+
+    listPayToEvents(input) {
+      const endpoint = "v3/pay-to/events/list"
+      const dappUserUuid = assertNonEmptyString(
+        input.dappUserUuid,
+        "dappUserUuid",
+        endpoint
+      )
+      const since =
+        input.since === undefined
+          ? undefined
+          : assertNonEmptyString(input.since, "since", endpoint)
+      const limit =
+        input.limit === undefined
+          ? undefined
+          : assertPositiveInteger(input.limit, "limit", endpoint)
+
+      return makeRequest<CubidListPayToEventsResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/pay-to/events/list",
+        withV3Credentials({
+          dapp_user_uuid: dappUserUuid,
+          limit,
+          since,
+        }),
+        endpoint,
+        normalizeListPayToEvents,
+        headers
+      )
+    },
+
+    startPayToAction(input) {
+      const endpoint = "v3/pay-to/actions/start"
+      const actionType = assertNonEmptyString(
+        input.actionType,
+        "actionType",
+        endpoint
+      )
+      const dappUserUuid = assertNonEmptyString(
+        input.dappUserUuid,
+        "dappUserUuid",
+        endpoint
+      )
+      const returnUrl =
+        input.returnUrl === undefined
+          ? undefined
+          : assertNonEmptyString(input.returnUrl, "returnUrl", endpoint)
+      const metadata = assertOptionalRecordInput(input.metadata, "metadata", endpoint)
+      const idempotencyKey = resolveIdempotencyKey(input, endpoint)
+
+      return makeRequest<CubidStartPayToActionResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/pay-to/actions/start",
+        withV3Credentials({
+          action_type: actionType,
+          dapp_user_uuid: dappUserUuid,
+          metadata,
+          required_passkey_assurance: input.requiredPasskeyAssurance,
+          return_url: returnUrl,
+        }),
+        endpoint,
+        (payload, requestId, responseStatus) =>
+          normalizeStartPayToAction(
+            payload,
+            requestId,
+            responseStatus,
+            idempotencyKey
+          ),
+        headers,
+        {
+          "Idempotency-Key": idempotencyKey,
+        }
+      )
+    },
+
+    sendPaymentIntentCreatedNotification(input) {
+      const endpoint = "v3/notifications/send"
+      const dappUserUuid = assertNonEmptyString(
+        input.dappUserUuid,
+        "dappUserUuid",
+        endpoint
+      )
+      const title = assertNonEmptyString(input.title, "title", endpoint)
+      const body = assertNonEmptyString(input.body, "body", endpoint)
+      const deepLink =
+        input.deepLink === undefined
+          ? undefined
+          : assertNonEmptyString(input.deepLink, "deepLink", endpoint)
+      const metadata = assertOptionalRecordInput(input.metadata, "metadata", endpoint)
+      const priority = input.priority ?? "NORMAL"
+      const idempotencyKey = resolveIdempotencyKey(input, endpoint)
+
+      return makeRequest<CubidSendPaymentIntentCreatedNotificationResponse>(
+        fetchImpl,
+        baseUrl,
+        "/api/v3/notifications/send",
+        withV3Credentials({
+          body,
+          category: "TRANSACTIONAL",
+          dapp_user_uuid: dappUserUuid,
+          deep_link: deepLink,
+          metadata,
+          payment_event_type: "payment_intent_created",
+          priority,
+          title,
+        }),
+        endpoint,
+        (payload, requestId, responseStatus) => {
+          const normalized = normalizeSendNotification(
+            payload,
+            requestId,
+            responseStatus,
+            idempotencyKey
+          )
+          return {
+            ...normalized,
+            category: "TRANSACTIONAL",
+            paymentEventType: "payment_intent_created",
+          }
+        },
         headers,
         {
           "Idempotency-Key": idempotencyKey,

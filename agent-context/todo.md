@@ -1489,12 +1489,12 @@ architecture. Do not add public SDK implementation code to `cubid-monorepo`.
 
 ### S17.2 Add server-only Pay-To request/response types in `@cubid/core`
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-06-25T21:16:28Z
+- Timestamp completed: 2026-06-25T21:16:28Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `efb299ce` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.2/S17.3 core helpers
 
 Add typed models for submitted-candidate eligibility, opaque alias resolution,
 grant status, redacted lifecycle events, hosted action start, and
@@ -1505,12 +1505,12 @@ hosted action types are `setup`, `route_registration`, `route_authorization`,
 
 ### S17.3 Add `@cubid/core` server helpers
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-06-25T21:16:28Z
+- Timestamp completed: 2026-06-25T21:16:28Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `efb299ce` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.2/S17.3 core helpers
 
 Add server/Edge helpers for `checkPayToEligibility(candidates, dappUserUuid)`,
 `resolvePayToAliases(aliases, dappUserUuid, resolverKey?)`,
