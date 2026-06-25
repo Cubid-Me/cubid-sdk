@@ -69,3 +69,12 @@
 - summary: Added explicit coverage that the GlobalPayTo payment notification helper always sends `payment_intent_created` as a TRANSACTIONAL notification and cannot be retargeted to unsupported payment events.
 - validation: `pnpm --filter @cubid/core test`; `pnpm --filter @cubid/core typecheck`.
 - follow-ups: Complete S17.8 docs, examples, API reference, and acceptance updates.
+
+## 2026-06-25T21:24:32.300Z - GlobalPayTo Pay-To S17.8 docs and acceptance
+
+- agent: Codex
+- branch: codex/globalpayto-cubid-mvp-dependencies
+- head: c6997a2f
+- summary: Added Pay-To examples to package READMEs, added consumer-style acceptance coverage for core and browser Pay-To helpers, regenerated API reference artifacts for the new exports and package versions, and marked S17 complete.
+- validation: `pnpm --filter @cubid/core build`; `pnpm --filter @cubid/browser build`; `pnpm test:acceptance`; `pnpm docs:api:build`; `pnpm docs:api:check`; `pnpm typecheck`; `pnpm lint`; `git diff --check`.
+- follow-ups: Run unit tests or `pnpm validate:yeet` before PR/yeet if time allows.

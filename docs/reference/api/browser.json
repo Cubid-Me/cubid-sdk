@@ -1965,6 +1965,51 @@
       ]
     },
     {
+      "name": "PayToHostedActionOpenOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "features",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "opener",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "PayToHostedActionOpener",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "target",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
       "name": "PhoneOtpStartRequest",
       "variant": "declaration",
       "kind": 256,
@@ -2931,6 +2976,84 @@
       }
     },
     {
+      "name": "PayToHostedActionOpener",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reflection",
+        "declaration": {
+          "name": "__type",
+          "variant": "declaration",
+          "kind": 65536,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "__type",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "url",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "target",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "features",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.dom.d.ts",
+                      "qualifiedName": "WindowProxy"
+                    },
+                    "name": "WindowProxy",
+                    "package": "typescript"
+                  },
+                  {
+                    "type": "literal",
+                    "value": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
       "name": "WEB2_OAUTH_PROVIDERS",
       "variant": "declaration",
       "kind": 32,
@@ -3150,6 +3273,63 @@
           }
         }
       ]
+    },
+    {
+      "name": "openPayToHostedAction",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "openPayToHostedAction",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "parameters": [
+            {
+              "name": "hostedUrl",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            },
+            {
+              "name": "options",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "PayToHostedActionOpenOptions",
+                "package": "@cubid/browser"
+              },
+              "defaultValue": "{}"
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.dom.d.ts",
+                  "qualifiedName": "Window"
+                },
+                "name": "Window",
+                "package": "typescript"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
     }
   ],
   "packageName": "@cubid/browser",
@@ -3228,7 +3408,7 @@
     },
     {
       "kind": "text",
-      "text": " and\nout of React-specific packages. Today that includes:\n\n- Allow Page URL helpers\n- OTP flow orchestration\n- hosted verification URL builders\n- ClearPass Verify URL builders\n- hosted SIWC approval/rejection request descriptors\n\nUse this package when your app needs browser-facing Cubid flow helpers but\nshould not embed Cubid API keys, server credentials, or private approval logic\nin the browser bundle.\n\n## Hosted SIWC Approval Descriptors\n\nPasskey-approved wallet creation and signing approval remain Passport-hosted.\n"
+      "text": " and\nout of React-specific packages. Today that includes:\n\n- Allow Page URL helpers\n- OTP flow orchestration\n- hosted verification URL builders\n- ClearPass Verify URL builders\n- hosted SIWC approval/rejection request descriptors\n- hosted Pay-To action opener\n\nUse this package when your app needs browser-facing Cubid flow helpers but\nshould not embed Cubid API keys, server credentials, or private approval logic\nin the browser bundle.\n\n## Hosted SIWC Approval Descriptors\n\nPasskey-approved wallet creation and signing approval remain Passport-hosted.\n"
     },
     {
       "kind": "code",
@@ -3300,7 +3480,63 @@
     },
     {
       "kind": "text",
-      "text": "\ncall will send the authenticated Passport session cookie during the hosted\napproval or rejection step.\n\nThese helpers are intentionally thin. They prepare the browser-safe request\nshape for Passport-hosted approval flows, but they do not bypass Passport user\nauthentication, fresh passkey step-up, or app policy checks.\n\nUse them only in environments where the authenticated Passport user session is\nalready expected to perform the approval or rejection step."
+      "text": "\ncall will send the authenticated Passport session cookie during the hosted\napproval or rejection step.\n\nThese helpers are intentionally thin. They prepare the browser-safe request\nshape for Passport-hosted approval flows, but they do not bypass Passport user\nauthentication, fresh passkey step-up, or app policy checks.\n\nUse them only in environments where the authenticated Passport user session is\nalready expected to perform the approval or rejection step.\n\n## Hosted Pay-To Actions\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": " exposes "
+    },
+    {
+      "kind": "code",
+      "text": "`openPayToHostedAction(...)`"
+    },
+    {
+      "kind": "text",
+      "text": " for server-created Pay-To\nhosted action URLs returned by "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": "'s "
+    },
+    {
+      "kind": "code",
+      "text": "`startPayToAction(...)`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```ts\nimport { openPayToHostedAction } from \"@cubid/browser\"\n\nopenPayToHostedAction(action.hostedUrl)\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThe helper only opens "
+    },
+    {
+      "kind": "code",
+      "text": "`/pay-to/actions/complete`"
+    },
+    {
+      "kind": "text",
+      "text": " URLs and rejects URL query\nparameters that look like dapp API keys. It does not create action tokens and\ndoes not accept dapp API keys. Create hosted Pay-To actions server-side through\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\nSigned-in owner-management wrappers for Pay-To stamp and grant routes remain\ndeferred until the SDK has a Cubid-authenticated user-session pattern ready for\nbearer-token calls."
     }
   ]
 }

@@ -1459,9 +1459,9 @@ according to Admin-configured SIWC page policy.
 
 ### S17. Add GlobalPayTo Pay-To SDK support from PR22 backend contracts
 
-- Status: In progress
+- Status: Completed
 - Timestamp started: 2026-06-25T21:10:10Z
-- Timestamp completed: TBD
+- Timestamp completed: 2026-06-25T21:24:32Z
 - Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
 - Head: `be0b4810` at implementation start
 - Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-06-24-globalpayto-cubid-mvp-dependencies.md`, `agent-context/cross-repo-comms/2026-06-24-globalpayto-pay-to-sdk-handoff.md`
@@ -1580,12 +1580,12 @@ payment-status helpers.
 
 ### S17.8 Add docs, examples, API reference, and acceptance tests
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-06-25T21:24:32Z
+- Timestamp completed: 2026-06-25T21:24:32Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `c6997a2f` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.8 docs and acceptance
 
 Add GlobalPayTo resolver-backend and hosted-site examples, update generated API
 reference artifacts for new exports, and add tests proving boolean eligibility
