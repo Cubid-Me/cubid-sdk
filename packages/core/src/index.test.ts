@@ -1186,6 +1186,35 @@ test("pay-to payment intent notification helper is constrained and idempotent", 
   })
 })
 
+test("pay-to payment notification helper cannot be retargeted to unsupported events", async () => {
+  let body: Record<string, unknown> = {}
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      body = JSON.parse(String(init?.body)) as Record<string, unknown>
+      return createJsonResponse({
+        data: {
+          eventId: "notif_evt_payto_locked",
+          status: "accepted",
+        },
+      })
+    },
+  })
+
+  await client.sendPaymentIntentCreatedNotification({
+    body: "A payment intent is ready for review.",
+    dappUserUuid: "dapp_user_123",
+    paymentEventType: "payment_received",
+    priority: "CRITICAL",
+    title: "Payment received",
+  } as never)
+
+  assert.equal(body?.category, "TRANSACTIONAL")
+  assert.equal(body?.payment_event_type, "payment_intent_created")
+  assert.equal("payment_received" in body, false)
+})
+
 test("pay-to write helpers auto-generate idempotency keys when omitted", async () => {
   const idempotencyKeys: string[] = []
   const client = createCubidApiClient({

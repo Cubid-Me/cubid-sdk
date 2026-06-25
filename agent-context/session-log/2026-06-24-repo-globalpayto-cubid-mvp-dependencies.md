@@ -60,3 +60,12 @@
 - summary: Added core test coverage that Pay-To resolver helpers do not expose list-style payment-enabled stamp discovery and preserve generic negative response states.
 - validation: `pnpm --filter @cubid/core test`; `pnpm --filter @cubid/core typecheck`.
 - follow-ups: Continue with S17.7 constrained payment notification coverage and S17.8 docs/reference updates.
+
+## 2026-06-25T21:21:06.300Z - GlobalPayTo Pay-To S17.7 constrained payment notification
+
+- agent: Codex
+- branch: codex/globalpayto-cubid-mvp-dependencies
+- head: df886e24
+- summary: Added explicit coverage that the GlobalPayTo payment notification helper always sends `payment_intent_created` as a TRANSACTIONAL notification and cannot be retargeted to unsupported payment events.
+- validation: `pnpm --filter @cubid/core test`; `pnpm --filter @cubid/core typecheck`.
+- follow-ups: Complete S17.8 docs, examples, API reference, and acceptance updates.

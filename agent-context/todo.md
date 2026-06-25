@@ -1566,12 +1566,12 @@ and `mismatch` without expanding them into probing-friendly detail.
 
 ### S17.7 Add constrained payment notification support
 
-- Status: Not started
-- Timestamp started: TBD
-- Timestamp completed: TBD
-- Feature branch: TBD
-- Head: TBD
-- Session-log reference(s): TBD
+- Status: Completed
+- Timestamp started: 2026-06-25T21:21:06Z
+- Timestamp completed: 2026-06-25T21:21:06Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `df886e24` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.7 constrained payment notification
 
 Support only `payment_event_type: "payment_intent_created"` with
 `category: "TRANSACTIONAL"` for the GlobalPayTo MVP. Do not add
