@@ -78,3 +78,18 @@
 - summary: Added Pay-To examples to package READMEs, added consumer-style acceptance coverage for core and browser Pay-To helpers, regenerated API reference artifacts for the new exports and package versions, and marked S17 complete.
 - validation: `pnpm --filter @cubid/core build`; `pnpm --filter @cubid/browser build`; `pnpm test:acceptance`; `pnpm docs:api:build`; `pnpm docs:api:check`; `pnpm typecheck`; `pnpm lint`; `git diff --check`.
 - follow-ups: Run unit tests or `pnpm validate:yeet` before PR/yeet if time allows.
+## 2026-06-27T20:27:00Z
+
+- Agent: Codex
+- Branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `81e709f4`
+- Summary: Addressed PR #25 review comments by aligning `sendPaymentIntentCreatedNotification(...)` with the existing `/api/v3/notifications/send` `apikey` credential contract and by making Pay-To hosted action launches open absolute Passport-hosted URLs for relative action paths.
+- Validation:
+  - `pnpm install --frozen-lockfile`
+  - `pnpm --filter @cubid/core build`
+  - `pnpm --filter @cubid/browser build`
+  - `pnpm exec vitest run --config vitest.config.ts packages/core/src/index.test.ts --testNamePattern "pay-to payment intent notification helper|pay-to payment notification helper|pay-to write helpers"`
+  - `pnpm exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`
+  - `pnpm lint`
+  - `git diff --check`
+- Follow-ups: Reply to and resolve the two GitHub review threads after pushing the fix commit.

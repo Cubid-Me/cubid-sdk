@@ -272,7 +272,7 @@ describe("@cubid/browser", () => {
       )
     ).toBeNull();
     expect(opener).toHaveBeenCalledWith(
-      "/pay-to/actions/complete?action_token=pta_act_123",
+      "https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123",
       "_blank",
       "popup=yes"
     );

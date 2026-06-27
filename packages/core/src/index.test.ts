@@ -1174,7 +1174,7 @@ test("pay-to payment intent notification helper is constrained and idempotent", 
     "payment_intent_key_123"
   )
   assert.deepEqual(calls[0]?.body, {
-    api_key: "api_key",
+    apikey: "api_key",
     body: "A payment intent is ready for review.",
     category: "TRANSACTIONAL",
     dapp_id: "dapp_123",

@@ -50,7 +50,7 @@ function assertPayToHostedActionUrl(hostedUrl: string): string {
     }
   }
 
-  return normalized;
+  return parsed.toString();
 }
 
 export function buildHostedVerificationUrl(request: HostedVerificationUrlRequest): string {

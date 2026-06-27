@@ -4624,21 +4624,27 @@ export const createCubidApiClient = (
       const metadata = assertOptionalRecordInput(input.metadata, "metadata", endpoint)
       const priority = input.priority ?? "NORMAL"
       const idempotencyKey = resolveIdempotencyKey(input, endpoint)
+      const requestBody: CubidRequestBody = {
+        apikey: apiKey,
+        body,
+        category: "TRANSACTIONAL",
+        dapp_user_uuid: dappUserUuid,
+        deep_link: deepLink,
+        metadata,
+        payment_event_type: "payment_intent_created",
+        priority,
+        title,
+      }
+
+      if (options.dappId !== undefined) {
+        requestBody.dapp_id = options.dappId
+      }
 
       return makeRequest<CubidSendPaymentIntentCreatedNotificationResponse>(
         fetchImpl,
         baseUrl,
         "/api/v3/notifications/send",
-        withV3Credentials({
-          body,
-          category: "TRANSACTIONAL",
-          dapp_user_uuid: dappUserUuid,
-          deep_link: deepLink,
-          metadata,
-          payment_event_type: "payment_intent_created",
-          priority,
-          title,
-        }),
+        requestBody,
         endpoint,
         (payload, requestId, responseStatus) => {
           const normalized = normalizeSendNotification(
