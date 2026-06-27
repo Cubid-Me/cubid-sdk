@@ -1,0 +1,572 @@
+openapi: 3.1.0
+info:
+  title: Cubid Public API
+  summary: Public Cubid dapp API contracts exposed through the Cubid SDK.
+  version: 0.1.0
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  description: |
+    This OpenAPI document is the source of truth for lightweight HTTP API
+    documentation in this SDK repository.
+
+    The first documented surface is the server/Edge Pay-To MVP contract used by
+    `@cubid/core`. These routes are dapp-authenticated and must be called from
+    trusted server runtimes, not directly from browsers.
+servers:
+  - url: http://localhost:3000
+    description: Local Cubid API runtime
+  - url: https://staging.passport.cubid.me
+    description: Staging Cubid Passport API
+  - url: https://passport.cubid.me
+    description: Production Cubid Passport API
+tags:
+  - name: Health
+    description: Service health and diagnostics.
+  - name: Pay-To
+    description: Privacy-preserving GlobalPayTo resolver and hosted action APIs.
+  - name: Notifications
+    description: Constrained dapp notification APIs.
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      operationId: getHealth
+      summary: Check API health
+      description: Returns a lightweight health response for operational checks.
+      security: []
+      responses:
+        "200":
+          description: The API is reachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+              examples:
+                ok:
+                  value:
+                    status: ok
+                    service: cubid-passport
+                    timestamp: "2026-06-27T12:00:00.000Z"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/v3/pay-to/stamps/eligibility/check:
+    post:
+      tags:
+        - Pay-To
+      operationId: checkPayToEligibility
+      summary: Check Pay-To eligibility for submitted candidates
+      description: |
+        Checks whether submitted candidate identifiers are eligible for a dapp's
+        Pay-To flow. This route is deliberately candidate-based and does not
+        expose a list-all payment-stamp resolver.
+      security:
+        - DappApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PayToEligibilityCheckRequest"
+            examples:
+              emailCandidate:
+                value:
+                  api_key: cubid_dapp_api_key
+                  dapp_user_uuid: dapp_user_123
+                  candidates:
+                    - candidateRef: payee-1
+                      stampType: email
+                      value: user@example.com
+      responses:
+        "200":
+          description: Eligibility was checked for the submitted candidates.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PayToEligibilityCheckResponse"
+              examples:
+                checked:
+                  value:
+                    data:
+                      status: checked
+                      results:
+                        - candidateRef: payee-1
+                          eligible: true
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v3/pay-to/actions/start:
+    post:
+      tags:
+        - Pay-To
+      operationId: startPayToAction
+      summary: Start a hosted Pay-To action
+      description: |
+        Creates a Cubid-hosted Pay-To setup or management action for a single
+        dapp user. This write route requires an `Idempotency-Key` header.
+      security:
+        - DappApiKey: []
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PayToActionStartRequest"
+            examples:
+              setup:
+                value:
+                  api_key: cubid_dapp_api_key
+                  action_type: setup
+                  dapp_user_uuid: dapp_user_123
+                  return_url: https://merchant.example/pay-to/callback
+                  required_passkey_assurance: true
+                  metadata:
+                    correlation_id: order_123
+      responses:
+        "200":
+          description: Hosted action was created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PayToActionStartResponse"
+              examples:
+                created:
+                  value:
+                    data:
+                      status: created
+                      action_token: pta_act_123
+                      action_type: setup
+                      hosted_url: https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123
+                      expires_at: "2026-06-27T12:15:00.000Z"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v3/notifications/send:
+    post:
+      tags:
+        - Notifications
+      operationId: sendPaymentIntentCreatedNotification
+      summary: Send a payment-intent-created notification
+      description: |
+        Sends the constrained GlobalPayTo MVP payment notification. The public
+        SDK only supports `payment_event_type: payment_intent_created` with
+        `category: TRANSACTIONAL` for this route.
+      security:
+        - DappApiKey: []
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentIntentCreatedNotificationRequest"
+            examples:
+              intentCreated:
+                value:
+                  apikey: cubid_dapp_api_key
+                  dapp_user_uuid: dapp_user_123
+                  payment_event_type: payment_intent_created
+                  category: TRANSACTIONAL
+                  title: Payment intent created
+                  body: Review the pending payment intent.
+                  deep_link: https://merchant.example/payments/pi_123
+                  priority: NORMAL
+                  metadata:
+                    intent_id: pi_123
+      responses:
+        "200":
+          description: Notification was accepted for processing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationSendResponse"
+              examples:
+                accepted:
+                  value:
+                    data:
+                      notification_id: notif_123
+                      status: queued
+                      category: TRANSACTIONAL
+                      payment_event_type: payment_intent_created
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  securitySchemes:
+    DappApiKey:
+      type: apiKey
+      in: header
+      name: X-Cubid-API-Key
+      description: |
+        Dapp API key for server/Edge routes. Current SDK helpers send this
+        credential as `api_key` in Pay-To request bodies and `apikey` for the
+        legacy notification-send route; the header scheme keeps the
+        authentication requirement visible to OpenAPI tools.
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Stable caller-generated key used to make write requests safe to retry.
+      schema:
+        type: string
+        minLength: 1
+        example: idem_01JZ0D0W4WB4VT9PR3J50XQ6TA
+  schemas:
+    HealthResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: ok
+        service:
+          type: string
+          example: cubid-passport
+        timestamp:
+          type: string
+          format: date-time
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          $ref: "#/components/schemas/ErrorObject"
+        request_id:
+          type:
+            - string
+            - "null"
+          description: Request correlation identifier when available.
+          example: req_01JZ0D0W4WB4VT9PR3J50XQ6TA
+    ErrorObject:
+      type: object
+      additionalProperties: true
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Stable machine-readable error code.
+          example: unauthorized
+        message:
+          type: string
+          description: Human-readable error summary.
+          example: Missing or invalid dapp API key.
+        details:
+          type:
+            - object
+            - "null"
+          additionalProperties: true
+        request_id:
+          type:
+            - string
+            - "null"
+          example: req_01JZ0D0W4WB4VT9PR3J50XQ6TA
+    DappUserUuid:
+      type: string
+      minLength: 1
+      description: Dapp-scoped user identifier. Do not use raw Cubid internal IDs.
+      example: dapp_user_123
+    PayToStampType:
+      type: string
+      enum:
+        - email
+        - phone
+        - github
+        - google
+        - evm
+    PayToActionType:
+      type: string
+      enum:
+        - setup
+        - route_registration
+        - route_authorization
+        - route_selection
+        - grant_revocation
+    PayToEligibilityCandidate:
+      type: object
+      additionalProperties: false
+      required:
+        - stampType
+        - value
+      properties:
+        candidateRef:
+          type: string
+          description: Caller-local reference echoed in the response.
+          example: payee-1
+        stampType:
+          $ref: "#/components/schemas/PayToStampType"
+        value:
+          type: string
+          description: Submitted candidate value. Responses never return raw values.
+          example: user@example.com
+    PayToEligibilityCheckRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - api_key
+        - dapp_user_uuid
+        - candidates
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          description: Dapp API key. SDK helpers inject this from initialized client config.
+          writeOnly: true
+        dapp_user_uuid:
+          $ref: "#/components/schemas/DappUserUuid"
+        candidates:
+          type: array
+          minItems: 1
+          maxItems: 25
+          items:
+            $ref: "#/components/schemas/PayToEligibilityCandidate"
+    PayToEligibilityResult:
+      type: object
+      additionalProperties: true
+      required:
+        - eligible
+      properties:
+        candidateRef:
+          type:
+            - string
+            - "null"
+          example: payee-1
+        eligible:
+          type: boolean
+          description: Boolean eligibility only; no route counts or raw identifiers.
+          example: true
+    PayToEligibilityCheckResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          required:
+            - results
+          properties:
+            status:
+              type: string
+              enum:
+                - checked
+                - resolution_unavailable
+              example: checked
+            results:
+              type: array
+              items:
+                $ref: "#/components/schemas/PayToEligibilityResult"
+    PayToActionStartRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - api_key
+        - action_type
+        - dapp_user_uuid
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          description: Dapp API key. SDK helpers inject this from initialized client config.
+          writeOnly: true
+        action_type:
+          $ref: "#/components/schemas/PayToActionType"
+        dapp_user_uuid:
+          $ref: "#/components/schemas/DappUserUuid"
+        return_url:
+          type: string
+          format: uri
+          example: https://merchant.example/pay-to/callback
+        required_passkey_assurance:
+          type: boolean
+          default: false
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Caller-owned redacted metadata for correlation.
+    PayToActionStartResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          properties:
+            status:
+              type: string
+              example: created
+            action_token:
+              type:
+                - string
+                - "null"
+              example: pta_act_123
+            action_type:
+              $ref: "#/components/schemas/PayToActionType"
+            hosted_url:
+              type:
+                - string
+                - "null"
+              format: uri
+              example: https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123
+            expires_at:
+              type:
+                - string
+                - "null"
+              format: date-time
+    NotificationPriority:
+      type: string
+      enum:
+        - LOW
+        - NORMAL
+        - HIGH
+    PaymentIntentCreatedNotificationRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - apikey
+        - dapp_user_uuid
+        - payment_event_type
+        - category
+        - title
+        - body
+      properties:
+        apikey:
+          type: string
+          minLength: 1
+          description: Dapp API key. SDK helpers inject this from initialized client config.
+          writeOnly: true
+        dapp_user_uuid:
+          $ref: "#/components/schemas/DappUserUuid"
+        payment_event_type:
+          type: string
+          const: payment_intent_created
+        category:
+          type: string
+          const: TRANSACTIONAL
+        title:
+          type: string
+          minLength: 1
+          example: Payment intent created
+        body:
+          type: string
+          minLength: 1
+          example: Review the pending payment intent.
+        deep_link:
+          type: string
+          format: uri
+          example: https://merchant.example/payments/pi_123
+        priority:
+          $ref: "#/components/schemas/NotificationPriority"
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Caller-owned redacted metadata.
+    NotificationSendResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          properties:
+            notification_id:
+              type:
+                - string
+                - "null"
+              example: notif_123
+            status:
+              type:
+                - string
+                - "null"
+              example: queued
+            category:
+              type: string
+              const: TRANSACTIONAL
+            payment_event_type:
+              type: string
+              const: payment_intent_created
+  responses:
+    BadRequest:
+      description: Request failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Unauthorized:
+      description: Missing or invalid authentication.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Forbidden:
+      description: The authenticated caller is not allowed to perform this operation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Conflict:
+      description: Request conflicts with the current resource state or idempotency state.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    RateLimited:
+      description: The caller exceeded a rate limit.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before retrying, when available.
+          schema:
+            type: integer
+            minimum: 0
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    InternalServerError:
+      description: Unexpected server error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
