@@ -93,3 +93,22 @@
   - `pnpm lint`
   - `git diff --check`
 - Follow-ups: Reply to and resolve the two GitHub review threads after pushing the fix commit.
+
+## 2026-06-27T20:43:00Z
+
+- Agent: Codex
+- Branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `bc5bb6c0`
+- Summary: Addressed the three open default-branch Dependabot alerts by pinning patched transitive versions for `js-yaml`, `markdown-it`, and `esbuild`; updated the existing `ws` override to the newer patched line; and added a pnpm patch so `read-yaml-file@1.1.0` remains CommonJS-compatible while using `js-yaml@4.2.0`.
+- Validation:
+  - `gh api repos/Cubid-Me/cubid-sdk/dependabot/alerts`
+  - `pnpm install`
+  - `pnpm why js-yaml markdown-it esbuild ws --recursive`
+  - `pnpm audit --audit-level low`
+  - `pnpm lint`
+  - `pnpm docs:api:check`
+  - `pnpm --filter @cubid/browser build`
+  - `pnpm --filter @cubid/core build`
+  - `pnpm install --frozen-lockfile`
+  - `git diff --check`
+- Follow-ups: Dependabot alert state will update after the branch lands on the default branch and GitHub rescans the lockfile.
