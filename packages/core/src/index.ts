@@ -582,7 +582,7 @@ export type CubidGetNotificationStatusResponse = {
   raw: Record<string, unknown>
 }
 
-export const CUBID_PAY_TO_STAMP_TYPES = [
+export const CUBID_PAYTAG_STAMP_TYPES = [
   "email",
   "phone",
   "github",
@@ -590,156 +590,148 @@ export const CUBID_PAY_TO_STAMP_TYPES = [
   "evm",
 ] as const
 
-export const CUBID_PAY_TO_ACTION_TYPES = [
+export const CUBID_PAYTAG_ACTION_TYPES = [
   "setup",
+  "paytag_enable",
+  "paytag_alias_create",
+  "paytag_alias_select",
+  "paytag_grant",
+  "paytag_revoke",
+] as const
+
+export const CUBID_PAYTAG_COMPAT_ACTION_TYPES = [
   "route_registration",
   "route_authorization",
   "route_selection",
   "grant_revocation",
 ] as const
 
-export const CUBID_PAY_TO_LIFECYCLE_EVENT_TYPES = [
+export const CUBID_PAYTAG_LIFECYCLE_EVENT_TYPES = [
   "pay_to.stamp.disabled",
   "pay_to.grant.revoked",
   "pay_to.grant.expired",
   "pay_to.identity_state.changed",
 ] as const
 
-export type CubidPayToStampType = (typeof CUBID_PAY_TO_STAMP_TYPES)[number]
+export type CubidPaytagStampType = (typeof CUBID_PAYTAG_STAMP_TYPES)[number]
 
-export type CubidPayToActionType = (typeof CUBID_PAY_TO_ACTION_TYPES)[number]
+export type CubidPaytagActionType =
+  | (typeof CUBID_PAYTAG_ACTION_TYPES)[number]
+  | (typeof CUBID_PAYTAG_COMPAT_ACTION_TYPES)[number]
 
-export type CubidPayToEligibilityStatus =
+export type CubidPaytagAuthorizationStatus =
   | "checked"
   | "resolution_unavailable"
   | string
 
-export type CubidPayToAliasResolutionStatus =
+export type CubidPaytagAliasValidationStatus =
   | "checked"
   | "resolution_unavailable"
   | string
 
-export type CubidPayToGrantStatus = "active" | "revoked" | "missing" | string
+export type CubidPaytagGrantStatus = "active" | "revoked" | "missing" | string
 
-export type CubidPayToEventsStatus = "ok" | "no_events" | string
+export type CubidPaytagLifecycleStatus = "ok" | "no_events" | string
 
-export type CubidPayToLifecycleEventType =
-  (typeof CUBID_PAY_TO_LIFECYCLE_EVENT_TYPES)[number] | string
+export type CubidPaytagLifecycleEventType =
+  (typeof CUBID_PAYTAG_LIFECYCLE_EVENT_TYPES)[number] | string
 
-export type CubidPaymentIntentCreatedEventType = "payment_intent_created"
-
-export type CubidPayToEligibilityCandidate = {
+export type CubidPaytagAuthorizationCandidate = {
   candidateRef?: string
-  stampType: CubidPayToStampType
+  stampType: CubidPaytagStampType
   value: string
 }
 
-export type CubidPayToEligibilityResult = {
+export type CubidPaytagAuthorizationResult = {
   candidateRef: string | null
   eligible: boolean
   raw: Record<string, unknown>
 }
 
-export type CubidCheckPayToEligibilityInput = {
-  candidates: CubidPayToEligibilityCandidate[]
+export type CubidCheckPaytagAuthorizationInput = {
+  candidates: CubidPaytagAuthorizationCandidate[]
   dappUserUuid: string
 }
 
-export type CubidCheckPayToEligibilityResponse = {
+export type CubidCheckPaytagAuthorizationResponse = {
   raw: Record<string, unknown>
-  results: CubidPayToEligibilityResult[]
-  status: CubidPayToEligibilityStatus | null
+  results: CubidPaytagAuthorizationResult[]
+  status: CubidPaytagAuthorizationStatus | null
 }
 
-export type CubidPayToAliasCandidate = {
+export type CubidPaytagAliasCandidate = {
   alias: string
   aliasRef?: string
 }
 
-export type CubidPayToAliasResolutionResult = {
+export type CubidPaytagAliasValidationResult = {
   aliasRef: string | null
   eligible: boolean
   raw: Record<string, unknown>
 }
 
-export type CubidResolvePayToAliasesInput = {
-  aliases: CubidPayToAliasCandidate[]
+export type CubidValidatePaytagAliasesInput = {
+  aliases: CubidPaytagAliasCandidate[]
   dappUserUuid: string
   resolverKey?: string
 }
 
-export type CubidResolvePayToAliasesResponse = {
+export type CubidValidatePaytagAliasesResponse = {
   raw: Record<string, unknown>
-  results: CubidPayToAliasResolutionResult[]
-  status: CubidPayToAliasResolutionStatus | null
+  results: CubidPaytagAliasValidationResult[]
+  status: CubidPaytagAliasValidationStatus | null
 }
 
-export type CubidGetPayToGrantStatusInput = {
+export type CubidGetPaytagGrantStatusInput = {
   dappUserUuid: string
 }
 
-export type CubidGetPayToGrantStatusResponse = {
+export type CubidGetPaytagGrantStatusResponse = {
   dappUserUuid: string | null
   grantedAt: string | null
-  grantStatus: CubidPayToGrantStatus | null
+  grantStatus: CubidPaytagGrantStatus | null
   raw: Record<string, unknown>
   revokedAt: string | null
 }
 
-export type CubidPayToLifecycleEventSummary = {
+export type CubidPaytagLifecycleEventSummary = {
   createdAt: string | null
   eventRef: string | null
-  eventType: CubidPayToLifecycleEventType | null
+  eventType: CubidPaytagLifecycleEventType | null
   outcome: "success" | "failure" | string | null
   raw: Record<string, unknown>
   reason: string | null
 }
 
-export type CubidListPayToEventsInput = {
+export type CubidListPaytagLifecycleEventsInput = {
   dappUserUuid: string
   limit?: number
   since?: string
 }
 
-export type CubidListPayToEventsResponse = {
-  events: CubidPayToLifecycleEventSummary[]
+export type CubidListPaytagLifecycleEventsResponse = {
+  events: CubidPaytagLifecycleEventSummary[]
   raw: Record<string, unknown>
-  status: CubidPayToEventsStatus | null
+  status: CubidPaytagLifecycleStatus | null
 }
 
-export type CubidStartPayToActionInput = CubidIdempotentRequestOptions & {
-  actionType: CubidPayToActionType
+export type CubidStartHostedPaytagActionInput = CubidIdempotentRequestOptions & {
+  actionType: CubidPaytagActionType
   dappUserUuid: string
   metadata?: Record<string, unknown>
   requiredPasskeyAssurance?: boolean
   returnUrl?: string
 }
 
-export type CubidStartPayToActionResponse = {
+export type CubidStartHostedPaytagActionResponse = {
   actionToken: string | null
-  actionType: CubidPayToActionType | string | null
+  actionType: CubidPaytagActionType | string | null
   expiresAt: string | null
   hostedUrl: string | null
   idempotencyKey: string
   raw: Record<string, unknown>
   status: string | null
 }
-
-export type CubidSendPaymentIntentCreatedNotificationInput =
-  CubidIdempotentRequestOptions & {
-    body: string
-    deepLink?: string
-    dappUserUuid: string
-    metadata?: Record<string, unknown>
-    priority?: CubidNotificationPriority
-    title: string
-  }
-
-export type CubidSendPaymentIntentCreatedNotificationResponse =
-  CubidSendNotificationResponse & {
-    category: "TRANSACTIONAL"
-    paymentEventType: CubidPaymentIntentCreatedEventType
-  }
 
 export type CubidRecoveryBundleStatus =
   | "active"
@@ -1287,33 +1279,29 @@ export type SaveSecretInput = CubidSaveSecretInput
 export type SaveSecretResponse = CubidSaveSecretResponse
 export type SendNotificationInput = CubidSendNotificationInput
 export type SendNotificationResponse = CubidSendNotificationResponse
-export type PayToStampType = CubidPayToStampType
-export type PayToActionType = CubidPayToActionType
-export type PayToEligibilityStatus = CubidPayToEligibilityStatus
-export type PayToAliasResolutionStatus = CubidPayToAliasResolutionStatus
-export type PayToGrantStatus = CubidPayToGrantStatus
-export type PayToEventsStatus = CubidPayToEventsStatus
-export type PayToLifecycleEventType = CubidPayToLifecycleEventType
-export type PaymentIntentCreatedEventType = CubidPaymentIntentCreatedEventType
-export type PayToEligibilityCandidate = CubidPayToEligibilityCandidate
-export type PayToEligibilityResult = CubidPayToEligibilityResult
-export type CheckPayToEligibilityInput = CubidCheckPayToEligibilityInput
-export type CheckPayToEligibilityResponse = CubidCheckPayToEligibilityResponse
-export type PayToAliasCandidate = CubidPayToAliasCandidate
-export type PayToAliasResolutionResult = CubidPayToAliasResolutionResult
-export type ResolvePayToAliasesInput = CubidResolvePayToAliasesInput
-export type ResolvePayToAliasesResponse = CubidResolvePayToAliasesResponse
-export type GetPayToGrantStatusInput = CubidGetPayToGrantStatusInput
-export type GetPayToGrantStatusResponse = CubidGetPayToGrantStatusResponse
-export type PayToLifecycleEventSummary = CubidPayToLifecycleEventSummary
-export type ListPayToEventsInput = CubidListPayToEventsInput
-export type ListPayToEventsResponse = CubidListPayToEventsResponse
-export type StartPayToActionInput = CubidStartPayToActionInput
-export type StartPayToActionResponse = CubidStartPayToActionResponse
-export type SendPaymentIntentCreatedNotificationInput =
-  CubidSendPaymentIntentCreatedNotificationInput
-export type SendPaymentIntentCreatedNotificationResponse =
-  CubidSendPaymentIntentCreatedNotificationResponse
+export type PaytagStampType = CubidPaytagStampType
+export type PaytagActionType = CubidPaytagActionType
+export type PaytagAuthorizationStatus = CubidPaytagAuthorizationStatus
+export type PaytagAliasValidationStatus = CubidPaytagAliasValidationStatus
+export type PaytagGrantStatus = CubidPaytagGrantStatus
+export type PaytagLifecycleStatus = CubidPaytagLifecycleStatus
+export type PaytagLifecycleEventType = CubidPaytagLifecycleEventType
+export type PaytagAuthorizationCandidate = CubidPaytagAuthorizationCandidate
+export type PaytagAuthorizationResult = CubidPaytagAuthorizationResult
+export type CheckPaytagAuthorizationInput = CubidCheckPaytagAuthorizationInput
+export type CheckPaytagAuthorizationResponse = CubidCheckPaytagAuthorizationResponse
+export type PaytagAliasCandidate = CubidPaytagAliasCandidate
+export type PaytagAliasValidationResult = CubidPaytagAliasValidationResult
+export type ValidatePaytagAliasesInput = CubidValidatePaytagAliasesInput
+export type ValidatePaytagAliasesResponse = CubidValidatePaytagAliasesResponse
+export type GetPaytagGrantStatusInput = CubidGetPaytagGrantStatusInput
+export type GetPaytagGrantStatusResponse = CubidGetPaytagGrantStatusResponse
+export type PaytagLifecycleEventSummary = CubidPaytagLifecycleEventSummary
+export type ListPaytagLifecycleEventsInput = CubidListPaytagLifecycleEventsInput
+export type ListPaytagLifecycleEventsResponse =
+  CubidListPaytagLifecycleEventsResponse
+export type StartHostedPaytagActionInput = CubidStartHostedPaytagActionInput
+export type StartHostedPaytagActionResponse = CubidStartHostedPaytagActionResponse
 export type CustodyChain = CubidCustodyChain
 export type CustodyAccount = CubidCustodyAccount
 export type GenerateAccountInput = CubidGenerateAccountInput
@@ -1390,24 +1378,21 @@ export type CubidApiClient = {
   sendNotification(
     input: CubidSendNotificationInput
   ): Promise<CubidSendNotificationResponse>
-  checkPayToEligibility(
-    input: CubidCheckPayToEligibilityInput
-  ): Promise<CubidCheckPayToEligibilityResponse>
-  resolvePayToAliases(
-    input: CubidResolvePayToAliasesInput
-  ): Promise<CubidResolvePayToAliasesResponse>
-  getPayToGrantStatus(
-    input: CubidGetPayToGrantStatusInput
-  ): Promise<CubidGetPayToGrantStatusResponse>
-  listPayToEvents(
-    input: CubidListPayToEventsInput
-  ): Promise<CubidListPayToEventsResponse>
-  startPayToAction(
-    input: CubidStartPayToActionInput
-  ): Promise<CubidStartPayToActionResponse>
-  sendPaymentIntentCreatedNotification(
-    input: CubidSendPaymentIntentCreatedNotificationInput
-  ): Promise<CubidSendPaymentIntentCreatedNotificationResponse>
+  checkPaytagAuthorization(
+    input: CubidCheckPaytagAuthorizationInput
+  ): Promise<CubidCheckPaytagAuthorizationResponse>
+  validatePaytagAliases(
+    input: CubidValidatePaytagAliasesInput
+  ): Promise<CubidValidatePaytagAliasesResponse>
+  getPaytagGrantStatus(
+    input: CubidGetPaytagGrantStatusInput
+  ): Promise<CubidGetPaytagGrantStatusResponse>
+  listPaytagLifecycleEvents(
+    input: CubidListPaytagLifecycleEventsInput
+  ): Promise<CubidListPaytagLifecycleEventsResponse>
+  startHostedPaytagAction(
+    input: CubidStartHostedPaytagActionInput
+  ): Promise<CubidStartHostedPaytagActionResponse>
   ensureUserByEmail(
     input: CubidEnsureUserByEmailInput
   ): Promise<CubidEnsureUserByEmailResponse>
@@ -2940,12 +2925,12 @@ const normalizeCancelSigningRequest = (
   }
 }
 
-const normalizePayToEligibilityResult = (
+const normalizePaytagAuthorizationResult = (
   payload: unknown,
   endpoint: string,
   requestId?: string | null,
   status?: number
-): CubidPayToEligibilityResult => {
+): CubidPaytagAuthorizationResult => {
   const record = assertRecord(payload, endpoint, requestId, status)
 
   return {
@@ -2955,11 +2940,11 @@ const normalizePayToEligibilityResult = (
   }
 }
 
-const normalizeCheckPayToEligibility = (
+const normalizeCheckPaytagAuthorization = (
   payload: unknown,
   requestId?: string | null,
   status?: number
-): CubidCheckPayToEligibilityResponse => {
+): CubidCheckPaytagAuthorizationResponse => {
   const record = assertRecord(
     payload,
     "v3/pay-to/stamps/eligibility/check",
@@ -2977,7 +2962,7 @@ const normalizeCheckPayToEligibility = (
   return {
     raw: record,
     results: results.map((result) =>
-      normalizePayToEligibilityResult(
+      normalizePaytagAuthorizationResult(
         result,
         "v3/pay-to/stamps/eligibility/check.data.results",
         requestId,
@@ -2988,12 +2973,12 @@ const normalizeCheckPayToEligibility = (
   }
 }
 
-const normalizePayToAliasResolutionResult = (
+const normalizePaytagAliasValidationResult = (
   payload: unknown,
   endpoint: string,
   requestId?: string | null,
   status?: number
-): CubidPayToAliasResolutionResult => {
+): CubidPaytagAliasValidationResult => {
   const record = assertRecord(payload, endpoint, requestId, status)
 
   return {
@@ -3003,11 +2988,11 @@ const normalizePayToAliasResolutionResult = (
   }
 }
 
-const normalizeResolvePayToAliases = (
+const normalizeValidatePaytagAliases = (
   payload: unknown,
   requestId?: string | null,
   status?: number
-): CubidResolvePayToAliasesResponse => {
+): CubidValidatePaytagAliasesResponse => {
   const record = assertRecord(payload, "v3/pay-to/aliases/resolve", requestId, status)
   const data = assertRecord(
     record.data ?? record,
@@ -3020,7 +3005,7 @@ const normalizeResolvePayToAliases = (
   return {
     raw: record,
     results: results.map((result) =>
-      normalizePayToAliasResolutionResult(
+      normalizePaytagAliasValidationResult(
         result,
         "v3/pay-to/aliases/resolve.data.results",
         requestId,
@@ -3031,11 +3016,11 @@ const normalizeResolvePayToAliases = (
   }
 }
 
-const normalizeGetPayToGrantStatus = (
+const normalizeGetPaytagGrantStatus = (
   payload: unknown,
   requestId?: string | null,
   status?: number
-): CubidGetPayToGrantStatusResponse => {
+): CubidGetPaytagGrantStatusResponse => {
   const record = assertRecord(payload, "v3/pay-to/grants/status", requestId, status)
   const data = assertRecord(
     record.data ?? record,
@@ -3069,12 +3054,12 @@ const normalizeGetPayToGrantStatus = (
   }
 }
 
-const normalizePayToLifecycleEvent = (
+const normalizePaytagLifecycleEvent = (
   payload: unknown,
   endpoint: string,
   requestId?: string | null,
   status?: number
-): CubidPayToLifecycleEventSummary => {
+): CubidPaytagLifecycleEventSummary => {
   const record = assertRecord(payload, endpoint, requestId, status)
 
   return {
@@ -3087,11 +3072,11 @@ const normalizePayToLifecycleEvent = (
   }
 }
 
-const normalizeListPayToEvents = (
+const normalizeListPaytagLifecycleEvents = (
   payload: unknown,
   requestId?: string | null,
   status?: number
-): CubidListPayToEventsResponse => {
+): CubidListPaytagLifecycleEventsResponse => {
   const record = assertRecord(payload, "v3/pay-to/events/list", requestId, status)
   const data = assertRecord(
     record.data ?? record,
@@ -3103,7 +3088,7 @@ const normalizeListPayToEvents = (
 
   return {
     events: events.map((event) =>
-      normalizePayToLifecycleEvent(
+      normalizePaytagLifecycleEvent(
         event,
         "v3/pay-to/events/list.data.events",
         requestId,
@@ -3115,12 +3100,12 @@ const normalizeListPayToEvents = (
   }
 }
 
-const normalizeStartPayToAction = (
+const normalizeStartHostedPaytagAction = (
   payload: unknown,
   requestId: string | null | undefined,
   status: number | undefined,
   idempotencyKey: string
-): CubidStartPayToActionResponse => {
+): CubidStartHostedPaytagActionResponse => {
   const record = assertRecord(payload, "v3/pay-to/actions/start", requestId, status)
   const data = assertRecord(
     record.data ?? record,
@@ -4430,7 +4415,7 @@ export const createCubidApiClient = (
       )
     },
 
-    checkPayToEligibility(input) {
+    checkPaytagAuthorization(input) {
       const endpoint = "v3/pay-to/stamps/eligibility/check"
       const dappUserUuid = assertNonEmptyString(
         input.dappUserUuid,
@@ -4453,7 +4438,7 @@ export const createCubidApiClient = (
         value: assertNonEmptyString(candidate.value, "value", endpoint),
       }))
 
-      return makeRequest<CubidCheckPayToEligibilityResponse>(
+      return makeRequest<CubidCheckPaytagAuthorizationResponse>(
         fetchImpl,
         baseUrl,
         "/api/v3/pay-to/stamps/eligibility/check",
@@ -4466,12 +4451,12 @@ export const createCubidApiClient = (
           dapp_user_uuid: dappUserUuid,
         }),
         endpoint,
-        normalizeCheckPayToEligibility,
+        normalizeCheckPaytagAuthorization,
         headers
       )
     },
 
-    resolvePayToAliases(input) {
+    validatePaytagAliases(input) {
       const endpoint = "v3/pay-to/aliases/resolve"
       const dappUserUuid = assertNonEmptyString(
         input.dappUserUuid,
@@ -4493,7 +4478,7 @@ export const createCubidApiClient = (
           ? undefined
           : assertNonEmptyString(input.resolverKey, "resolverKey", endpoint)
 
-      return makeRequest<CubidResolvePayToAliasesResponse>(
+      return makeRequest<CubidValidatePaytagAliasesResponse>(
         fetchImpl,
         baseUrl,
         "/api/v3/pay-to/aliases/resolve",
@@ -4506,12 +4491,12 @@ export const createCubidApiClient = (
           resolver_key: resolverKey,
         }),
         endpoint,
-        normalizeResolvePayToAliases,
+        normalizeValidatePaytagAliases,
         headers
       )
     },
 
-    getPayToGrantStatus(input) {
+    getPaytagGrantStatus(input) {
       const endpoint = "v3/pay-to/grants/status"
       const dappUserUuid = assertNonEmptyString(
         input.dappUserUuid,
@@ -4519,7 +4504,7 @@ export const createCubidApiClient = (
         endpoint
       )
 
-      return makeRequest<CubidGetPayToGrantStatusResponse>(
+      return makeRequest<CubidGetPaytagGrantStatusResponse>(
         fetchImpl,
         baseUrl,
         "/api/v3/pay-to/grants/status",
@@ -4527,12 +4512,12 @@ export const createCubidApiClient = (
           dapp_user_uuid: dappUserUuid,
         }),
         endpoint,
-        normalizeGetPayToGrantStatus,
+        normalizeGetPaytagGrantStatus,
         headers
       )
     },
 
-    listPayToEvents(input) {
+    listPaytagLifecycleEvents(input) {
       const endpoint = "v3/pay-to/events/list"
       const dappUserUuid = assertNonEmptyString(
         input.dappUserUuid,
@@ -4548,7 +4533,7 @@ export const createCubidApiClient = (
           ? undefined
           : assertPositiveInteger(input.limit, "limit", endpoint)
 
-      return makeRequest<CubidListPayToEventsResponse>(
+      return makeRequest<CubidListPaytagLifecycleEventsResponse>(
         fetchImpl,
         baseUrl,
         "/api/v3/pay-to/events/list",
@@ -4558,12 +4543,12 @@ export const createCubidApiClient = (
           since,
         }),
         endpoint,
-        normalizeListPayToEvents,
+        normalizeListPaytagLifecycleEvents,
         headers
       )
     },
 
-    startPayToAction(input) {
+    startHostedPaytagAction(input) {
       const endpoint = "v3/pay-to/actions/start"
       const actionType = assertNonEmptyString(
         input.actionType,
@@ -4582,7 +4567,7 @@ export const createCubidApiClient = (
       const metadata = assertOptionalRecordInput(input.metadata, "metadata", endpoint)
       const idempotencyKey = resolveIdempotencyKey(input, endpoint)
 
-      return makeRequest<CubidStartPayToActionResponse>(
+      return makeRequest<CubidStartHostedPaytagActionResponse>(
         fetchImpl,
         baseUrl,
         "/api/v3/pay-to/actions/start",
@@ -4595,70 +4580,12 @@ export const createCubidApiClient = (
         }),
         endpoint,
         (payload, requestId, responseStatus) =>
-          normalizeStartPayToAction(
+          normalizeStartHostedPaytagAction(
             payload,
             requestId,
             responseStatus,
             idempotencyKey
           ),
-        headers,
-        {
-          "Idempotency-Key": idempotencyKey,
-        }
-      )
-    },
-
-    sendPaymentIntentCreatedNotification(input) {
-      const endpoint = "v3/notifications/send"
-      const dappUserUuid = assertNonEmptyString(
-        input.dappUserUuid,
-        "dappUserUuid",
-        endpoint
-      )
-      const title = assertNonEmptyString(input.title, "title", endpoint)
-      const body = assertNonEmptyString(input.body, "body", endpoint)
-      const deepLink =
-        input.deepLink === undefined
-          ? undefined
-          : assertNonEmptyString(input.deepLink, "deepLink", endpoint)
-      const metadata = assertOptionalRecordInput(input.metadata, "metadata", endpoint)
-      const priority = input.priority ?? "NORMAL"
-      const idempotencyKey = resolveIdempotencyKey(input, endpoint)
-      const requestBody: CubidRequestBody = {
-        apikey: apiKey,
-        body,
-        category: "TRANSACTIONAL",
-        dapp_user_uuid: dappUserUuid,
-        deep_link: deepLink,
-        metadata,
-        payment_event_type: "payment_intent_created",
-        priority,
-        title,
-      }
-
-      if (options.dappId !== undefined) {
-        requestBody.dapp_id = options.dappId
-      }
-
-      return makeRequest<CubidSendPaymentIntentCreatedNotificationResponse>(
-        fetchImpl,
-        baseUrl,
-        "/api/v3/notifications/send",
-        requestBody,
-        endpoint,
-        (payload, requestId, responseStatus) => {
-          const normalized = normalizeSendNotification(
-            payload,
-            requestId,
-            responseStatus,
-            idempotencyKey
-          )
-          return {
-            ...normalized,
-            category: "TRANSACTIONAL",
-            paymentEventType: "payment_intent_created",
-          }
-        },
         headers,
         {
           "Idempotency-Key": idempotencyKey,
