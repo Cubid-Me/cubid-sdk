@@ -24,3 +24,12 @@
 - summary: Reframed the core/browser READMEs, package target-state docs, architecture doc, and OpenAPI source around MyPayTag paytag identity and consent; removed the payment-intent notification endpoint from the documented Paytag API surface.
 - validation: `pnpm api:validate`
 - follow-ups: Regenerate deterministic Postman and TypeDoc API artifacts, then update acceptance tests and S18 roadmap state.
+
+## 2026-06-28T11:27:28Z - S18 regenerated Paytag API artifacts
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: a5d1155b
+- summary: Regenerated the committed Postman collection and TypeDoc JSON references after the Paytag-only API source and package version changes, removing the generated payment-intent notification examples and old Pay-To SDK symbols from machine-ingestible artifacts.
+- validation: `pnpm api:postman`; `pnpm docs:api:build`; `pnpm docs:api:check`; targeted `rg` over generated API artifacts for old Pay-To/payment-intent public terms.
+- follow-ups: Update consumer acceptance tests and roadmap metadata for the completed S18 realignment.

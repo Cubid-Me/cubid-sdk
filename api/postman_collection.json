@@ -146,18 +146,18 @@
       "event": []
     },
     {
-      "name": "Pay-To",
+      "name": "Paytag",
       "description": {
-        "content": "Privacy-preserving GlobalPayTo resolver and hosted action APIs.",
+        "content": "Privacy-preserving MyPayTag identity, consent, alias, and hosted action APIs.",
         "type": "text/plain"
       },
       "item": [
         {
-          "name": "Check Pay-To eligibility for submitted candidates",
+          "name": "Check submitted paytag authorization",
           "request": {
-            "name": "Check Pay-To eligibility for submitted candidates",
+            "name": "Check submitted paytag authorization",
             "description": {
-              "content": "Checks whether submitted candidate identifiers are eligible for a dapp's\nPay-To flow. This route is deliberately candidate-based and does not\nexpose a list-all payment-stamp resolver.\n",
+              "content": "Checks whether submitted paytag candidates are valid and consented for\nthe dapp context. This route is deliberately candidate-based and does\nnot expose a list-all paytag or payment-stamp resolver.\n",
               "type": "text/plain"
             },
             "url": {
@@ -198,7 +198,7 @@
           },
           "response": [
             {
-              "name": "Eligibility was checked for the submitted candidates.",
+              "name": "Authorization was checked for the submitted candidates.",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -224,7 +224,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"user@example.com\"\n    }\n  ]\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -271,7 +271,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"user@example.com\"\n    }\n  ]\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -318,7 +318,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"user@example.com\"\n    }\n  ]\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -365,7 +365,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"user@example.com\"\n    }\n  ]\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -412,7 +412,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"user@example.com\"\n    }\n  ]\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -465,7 +465,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"user@example.com\"\n    }\n  ]\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -492,11 +492,11 @@
           }
         },
         {
-          "name": "Start a hosted Pay-To action",
+          "name": "Start a hosted paytag action",
           "request": {
-            "name": "Start a hosted Pay-To action",
+            "name": "Start a hosted paytag action",
             "description": {
-              "content": "Creates a Cubid-hosted Pay-To setup or management action for a single\ndapp user. This write route requires an `Idempotency-Key` header.\n",
+              "content": "Creates a Cubid-hosted paytag setup or consent action for a single\ndapp user. This write route requires an `Idempotency-Key` header.\n",
               "type": "text/plain"
             },
             "url": {
@@ -573,7 +573,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"setup\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://merchant.example/pay-to/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"order_123\"\n  }\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -589,7 +589,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"data\": {\n    \"status\": \"created\",\n    \"action_token\": \"pta_act_123\",\n    \"action_type\": \"setup\",\n    \"hosted_url\": \"https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123\",\n    \"expires_at\": \"2026-06-27T12:15:00.000Z\"\n  }\n}",
+              "body": "{\n  \"data\": {\n    \"status\": \"created\",\n    \"action_token\": \"pta_act_123\",\n    \"action_type\": \"paytag_enable\",\n    \"hosted_url\": \"https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123\",\n    \"expires_at\": \"2026-06-27T12:15:00.000Z\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
@@ -625,7 +625,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"setup\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://merchant.example/pay-to/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"order_123\"\n  }\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -677,7 +677,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"setup\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://merchant.example/pay-to/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"order_123\"\n  }\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -729,7 +729,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"setup\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://merchant.example/pay-to/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"order_123\"\n  }\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -781,7 +781,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"setup\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://merchant.example/pay-to/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"order_123\"\n  }\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -833,7 +833,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"setup\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://merchant.example/pay-to/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"order_123\"\n  }\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -891,435 +891,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"setup\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://merchant.example/pay-to/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"order_123\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        }
-      ],
-      "event": []
-    },
-    {
-      "name": "Notifications",
-      "description": {
-        "content": "Constrained dapp notification APIs.",
-        "type": "text/plain"
-      },
-      "item": [
-        {
-          "name": "Send a payment-intent-created notification",
-          "request": {
-            "name": "Send a payment-intent-created notification",
-            "description": {
-              "content": "Sends the constrained GlobalPayTo MVP payment notification. The public\nSDK only supports `payment_event_type: payment_intent_created` with\n`category: TRANSACTIONAL` for this route.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "v3",
-                "notifications",
-                "send"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "disabled": false,
-                "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
-                "key": "Idempotency-Key",
-                "value": "<string>"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"apikey\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"payment_event_type\": \"<string>\",\n  \"category\": \"<string>\",\n  \"title\": \"<string>\",\n  \"body\": \"<string>\",\n  \"deep_link\": \"<uri>\",\n  \"priority\": \"<string>\",\n  \"metadata\": {}\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "name": "Notification was accepted for processing.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v3",
-                    "notifications",
-                    "send"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "disabled": false,
-                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
-                    "key": "Idempotency-Key",
-                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apikey\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"payment_event_type\": \"payment_intent_created\",\n  \"category\": \"TRANSACTIONAL\",\n  \"title\": \"Payment intent created\",\n  \"body\": \"Review the pending payment intent.\",\n  \"deep_link\": \"https://merchant.example/payments/pi_123\",\n  \"priority\": \"NORMAL\",\n  \"metadata\": {\n    \"intent_id\": \"pi_123\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"data\": {\n    \"notification_id\": \"notif_123\",\n    \"status\": \"queued\",\n    \"category\": \"TRANSACTIONAL\",\n    \"payment_event_type\": \"payment_intent_created\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "name": "Request failed validation.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v3",
-                    "notifications",
-                    "send"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "disabled": false,
-                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
-                    "key": "Idempotency-Key",
-                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apikey\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"payment_event_type\": \"payment_intent_created\",\n  \"category\": \"TRANSACTIONAL\",\n  \"title\": \"Payment intent created\",\n  \"body\": \"Review the pending payment intent.\",\n  \"deep_link\": \"https://merchant.example/payments/pi_123\",\n  \"priority\": \"NORMAL\",\n  \"metadata\": {\n    \"intent_id\": \"pi_123\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "name": "Missing or invalid authentication.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v3",
-                    "notifications",
-                    "send"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "disabled": false,
-                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
-                    "key": "Idempotency-Key",
-                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apikey\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"payment_event_type\": \"payment_intent_created\",\n  \"category\": \"TRANSACTIONAL\",\n  \"title\": \"Payment intent created\",\n  \"body\": \"Review the pending payment intent.\",\n  \"deep_link\": \"https://merchant.example/payments/pi_123\",\n  \"priority\": \"NORMAL\",\n  \"metadata\": {\n    \"intent_id\": \"pi_123\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "name": "The authenticated caller is not allowed to perform this operation.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v3",
-                    "notifications",
-                    "send"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "disabled": false,
-                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
-                    "key": "Idempotency-Key",
-                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apikey\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"payment_event_type\": \"payment_intent_created\",\n  \"category\": \"TRANSACTIONAL\",\n  \"title\": \"Payment intent created\",\n  \"body\": \"Review the pending payment intent.\",\n  \"deep_link\": \"https://merchant.example/payments/pi_123\",\n  \"priority\": \"NORMAL\",\n  \"metadata\": {\n    \"intent_id\": \"pi_123\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "name": "Request conflicts with the current resource state or idempotency state.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v3",
-                    "notifications",
-                    "send"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "disabled": false,
-                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
-                    "key": "Idempotency-Key",
-                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apikey\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"payment_event_type\": \"payment_intent_created\",\n  \"category\": \"TRANSACTIONAL\",\n  \"title\": \"Payment intent created\",\n  \"body\": \"Review the pending payment intent.\",\n  \"deep_link\": \"https://merchant.example/payments/pi_123\",\n  \"priority\": \"NORMAL\",\n  \"metadata\": {\n    \"intent_id\": \"pi_123\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "name": "The caller exceeded a rate limit.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v3",
-                    "notifications",
-                    "send"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "disabled": false,
-                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
-                    "key": "Idempotency-Key",
-                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apikey\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"payment_event_type\": \"payment_intent_created\",\n  \"category\": \"TRANSACTIONAL\",\n  \"title\": \"Payment intent created\",\n  \"body\": \"Review the pending payment intent.\",\n  \"deep_link\": \"https://merchant.example/payments/pi_123\",\n  \"priority\": \"NORMAL\",\n  \"metadata\": {\n    \"intent_id\": \"pi_123\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "Number of seconds to wait before retrying, when available.",
-                  "key": "Retry-After",
-                  "value": "<integer>"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "name": "Unexpected server error.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "v3",
-                    "notifications",
-                    "send"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "disabled": false,
-                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
-                    "key": "Idempotency-Key",
-                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apikey\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"payment_event_type\": \"payment_intent_created\",\n  \"category\": \"TRANSACTIONAL\",\n  \"title\": \"Payment intent created\",\n  \"body\": \"Review the pending payment intent.\",\n  \"deep_link\": \"https://merchant.example/payments/pi_123\",\n  \"priority\": \"NORMAL\",\n  \"metadata\": {\n    \"intent_id\": \"pi_123\"\n  }\n}",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1361,7 +933,7 @@
     "name": "Cubid Public API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
-      "content": "This OpenAPI document is the source of truth for lightweight HTTP API\ndocumentation in this SDK repository.\n\nThe first documented surface is the server/Edge Pay-To MVP contract used by\n`@cubid/core`. These routes are dapp-authenticated and must be called from\ntrusted server runtimes, not directly from browsers.\n",
+      "content": "This OpenAPI document is the source of truth for lightweight HTTP API\ndocumentation in this SDK repository.\n\nThe first documented surface is the server/Edge MyPayTag paytag identity\nand consent contract used by `@cubid/core`. These routes are\ndapp-authenticated and must be called from trusted server runtimes, not\ndirectly from browsers.\n",
       "type": "text/plain"
     }
   }

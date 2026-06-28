@@ -1965,7 +1965,7 @@
       ]
     },
     {
-      "name": "PayToHostedActionOpenOptions",
+      "name": "PaytagHostedActionOpenOptions",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
@@ -1991,7 +1991,7 @@
           },
           "type": {
             "type": "reference",
-            "name": "PayToHostedActionOpener",
+            "name": "PaytagHostedActionOpener",
             "package": "@cubid/browser"
           }
         },
@@ -2976,7 +2976,7 @@
       }
     },
     {
-      "name": "PayToHostedActionOpener",
+      "name": "PaytagHostedActionOpener",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -3275,13 +3275,13 @@
       ]
     },
     {
-      "name": "openPayToHostedAction",
+      "name": "openHostedPaytagAction",
       "variant": "declaration",
       "kind": 64,
       "flags": {},
       "signatures": [
         {
-          "name": "openPayToHostedAction",
+          "name": "openHostedPaytagAction",
           "variant": "signature",
           "kind": 4096,
           "flags": {},
@@ -3303,7 +3303,7 @@
               "flags": {},
               "type": {
                 "type": "reference",
-                "name": "PayToHostedActionOpenOptions",
+                "name": "PaytagHostedActionOpenOptions",
                 "package": "@cubid/browser"
               },
               "defaultValue": "{}"
@@ -3408,7 +3408,7 @@
     },
     {
       "kind": "text",
-      "text": " and\nout of React-specific packages. Today that includes:\n\n- Allow Page URL helpers\n- OTP flow orchestration\n- hosted verification URL builders\n- ClearPass Verify URL builders\n- hosted SIWC approval/rejection request descriptors\n- hosted Pay-To action opener\n\nUse this package when your app needs browser-facing Cubid flow helpers but\nshould not embed Cubid API keys, server credentials, or private approval logic\nin the browser bundle.\n\n## Hosted SIWC Approval Descriptors\n\nPasskey-approved wallet creation and signing approval remain Passport-hosted.\n"
+      "text": " and\nout of React-specific packages. Today that includes:\n\n- Allow Page URL helpers\n- OTP flow orchestration\n- hosted verification URL builders\n- ClearPass Verify URL builders\n- hosted SIWC approval/rejection request descriptors\n- hosted paytag action opener\n\nUse this package when your app needs browser-facing Cubid flow helpers but\nshould not embed Cubid API keys, server credentials, or private approval logic\nin the browser bundle.\n\n## Hosted SIWC Approval Descriptors\n\nPasskey-approved wallet creation and signing approval remain Passport-hosted.\n"
     },
     {
       "kind": "code",
@@ -3480,7 +3480,7 @@
     },
     {
       "kind": "text",
-      "text": "\ncall will send the authenticated Passport session cookie during the hosted\napproval or rejection step.\n\nThese helpers are intentionally thin. They prepare the browser-safe request\nshape for Passport-hosted approval flows, but they do not bypass Passport user\nauthentication, fresh passkey step-up, or app policy checks.\n\nUse them only in environments where the authenticated Passport user session is\nalready expected to perform the approval or rejection step.\n\n## Hosted Pay-To Actions\n\n"
+      "text": "\ncall will send the authenticated Passport session cookie during the hosted\napproval or rejection step.\n\nThese helpers are intentionally thin. They prepare the browser-safe request\nshape for Passport-hosted approval flows, but they do not bypass Passport user\nauthentication, fresh passkey step-up, or app policy checks.\n\nUse them only in environments where the authenticated Passport user session is\nalready expected to perform the approval or rejection step.\n\n## Hosted Paytag Actions\n\n"
     },
     {
       "kind": "code",
@@ -3492,11 +3492,11 @@
     },
     {
       "kind": "code",
-      "text": "`openPayToHostedAction(...)`"
+      "text": "`openHostedPaytagAction(...)`"
     },
     {
       "kind": "text",
-      "text": " for server-created Pay-To\nhosted action URLs returned by "
+      "text": " for server-created\nCubid hosted paytag action URLs returned by "
     },
     {
       "kind": "code",
@@ -3504,11 +3504,11 @@
     },
     {
       "kind": "text",
-      "text": "'s "
+      "text": "'s\n"
     },
     {
       "kind": "code",
-      "text": "`startPayToAction(...)`"
+      "text": "`startHostedPaytagAction(...)`"
     },
     {
       "kind": "text",
@@ -3516,7 +3516,7 @@
     },
     {
       "kind": "code",
-      "text": "```ts\nimport { openPayToHostedAction } from \"@cubid/browser\"\n\nopenPayToHostedAction(action.hostedUrl)\n```"
+      "text": "```ts\nimport { openHostedPaytagAction } from \"@cubid/browser\"\n\nopenHostedPaytagAction(action.hostedUrl)\n```"
     },
     {
       "kind": "text",
@@ -3528,7 +3528,7 @@
     },
     {
       "kind": "text",
-      "text": " URLs and rejects URL query\nparameters that look like dapp API keys. It does not create action tokens and\ndoes not accept dapp API keys. Create hosted Pay-To actions server-side through\n"
+      "text": " URLs and rejects URL query\nparameters that look like dapp API keys. It does not create action tokens and\ndoes not accept dapp API keys. Create hosted paytag actions server-side through\n"
     },
     {
       "kind": "code",
@@ -3536,7 +3536,15 @@
     },
     {
       "kind": "text",
-      "text": ".\n\nSigned-in owner-management wrappers for Pay-To stamp and grant routes remain\ndeferred until the SDK has a Cubid-authenticated user-session pattern ready for\nbearer-token calls."
+      "text": ". The "
+    },
+    {
+      "kind": "code",
+      "text": "`/pay-to/actions/complete`"
+    },
+    {
+      "kind": "text",
+      "text": " path is backend wire\ncompatibility; the public browser SDK API is Paytag-only.\n\nSigned-in owner-management wrappers for paytag stamp and grant routes remain\ndeferred until the SDK has a Cubid-authenticated user-session pattern ready for\nbearer-token calls."
     }
   ]
 }
