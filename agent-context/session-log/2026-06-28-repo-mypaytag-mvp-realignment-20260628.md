@@ -114,3 +114,12 @@
 - summary: Expanded the MyPayTag Paytag staged smoke checklist to cover local SDK checks, paytag enable, opaque alias create/select, raw-stamp exposure dependency, grant, revoke, lifecycle polling, MyPayTag validation after state transitions, and the explicit boundary that payment routing/execution remains outside Cubid SDK ownership.
 - validation: `git diff --check`.
 - follow-ups: Regenerate API references and run the final targeted S19 validation bundle in S19.8.
+
+## 2026-06-28T23:03:27Z - S19.8 Paytag artifact regeneration and validation
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: aed9f66c
+- summary: Regenerated Postman and TypeDoc API reference artifacts after S19 public type, README, OpenAPI, and browser-helper changes; marked S19 complete; and updated repo-status with the Paytag MVP gap-closure baseline.
+- validation: `corepack pnpm api:postman`; `corepack pnpm docs:api:build`; `corepack pnpm docs:api:check`; `corepack pnpm --filter @cubid/core test`; `corepack pnpm --filter @cubid/browser build`; `corepack pnpm api:validate`; `corepack pnpm paytag:check`; `git diff --check`; targeted scans confirmed old Pay-To helper names are absent from generated artifacts/public source and route compatibility strings only remain in negative tests or explanatory boundary docs.
+- follow-ups: Run the full `corepack pnpm validate:yeet` bundle before opening or updating the PR if time allows.

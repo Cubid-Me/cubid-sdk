@@ -3205,6 +3205,226 @@
           ]
         },
         {
+          "name": "startPaytagAliasCreateAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagAliasCreateAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagAliasCreateActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagAliasSelectAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagAliasSelectAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagAliasSelectActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagEnableAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagEnableAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagEnableActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagGrantAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagGrantAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagGrantActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagRevokeAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagRevokeAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagRevokeActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
           "name": "startRecoveryBundleRelease",
           "variant": "declaration",
           "kind": 2048,
@@ -7785,39 +8005,19 @@
       "kind": 2097152,
       "flags": {},
       "type": {
-        "type": "union",
-        "types": [
-          {
-            "type": "indexedAccess",
-            "indexType": {
-              "type": "intrinsic",
-              "name": "number"
-            },
-            "objectType": {
-              "type": "query",
-              "queryType": {
-                "type": "reference",
-                "name": "CUBID_PAYTAG_ACTION_TYPES",
-                "package": "@cubid/core"
-              }
-            }
-          },
-          {
-            "type": "indexedAccess",
-            "indexType": {
-              "type": "intrinsic",
-              "name": "number"
-            },
-            "objectType": {
-              "type": "query",
-              "queryType": {
-                "type": "reference",
-                "name": "CUBID_PAYTAG_COMPAT_ACTION_TYPES",
-                "package": "@cubid/core"
-              }
-            }
+        "type": "indexedAccess",
+        "indexType": {
+          "type": "intrinsic",
+          "name": "number"
+        },
+        "objectType": {
+          "type": "query",
+          "queryType": {
+            "type": "reference",
+            "name": "CUBID_PAYTAG_ACTION_TYPES",
+            "package": "@cubid/core"
           }
-        ]
+        }
       }
     },
     {
@@ -7849,6 +8049,16 @@
           }
         }
       ]
+    },
+    {
+      "name": "CubidPaytagAliasExposure",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "literal",
+        "value": "opaque"
+      }
     },
     {
       "name": "CubidPaytagAliasValidationResult",
@@ -11470,6 +11680,98 @@
       ]
     },
     {
+      "name": "CubidStartPaytagAliasCreateActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidStartTypedPaytagActionInput",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "aliasExposure",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Opaque paytag aliases are the only SDK-supported default. Explicit\nraw-stamp exposure requires a separate Passport-hosted action contract\nbefore the SDK can expose a typed helper for it."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidPaytagAliasExposure",
+                    "package": "@cubid/core"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidStartPaytagAliasSelectActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CubidStartPaytagEnableActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CubidStartPaytagGrantActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CubidStartPaytagRevokeActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "CubidStartRecoveryBundleReleaseInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -11584,6 +11886,33 @@
           }
         }
       ]
+    },
+    {
+      "name": "CubidStartTypedPaytagActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "typescript",
+          "packagePath": "lib/lib.es5.d.ts",
+          "qualifiedName": "Omit"
+        },
+        "typeArguments": [
+          {
+            "type": "reference",
+            "name": "CubidStartHostedPaytagActionInput",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "literal",
+            "value": "actionType"
+          }
+        ],
+        "name": "Omit",
+        "package": "typescript"
+      }
     },
     {
       "name": "CubidUnknownSigningResult",
@@ -13588,6 +13917,17 @@
       }
     },
     {
+      "name": "PaytagAliasExposure",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPaytagAliasExposure",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "PaytagAliasValidationResult",
       "variant": "declaration",
       "kind": 2097152,
@@ -14039,6 +14379,61 @@
       }
     },
     {
+      "name": "StartPaytagAliasCreateActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagAliasCreateActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagAliasSelectActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagAliasSelectActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagEnableActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagEnableActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagGrantActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagGrantActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagRevokeActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagRevokeActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "StartRecoveryBundleReleaseInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -14057,6 +14452,17 @@
       "type": {
         "type": "reference",
         "name": "CubidStartRecoveryBundleReleaseResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartTypedPaytagActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
         "package": "@cubid/core"
       }
     },
@@ -14420,10 +14826,6 @@
           "elements": [
             {
               "type": "literal",
-              "value": "setup"
-            },
-            {
-              "type": "literal",
               "value": "paytag_enable"
             },
             {
@@ -14441,40 +14843,6 @@
             {
               "type": "literal",
               "value": "paytag_revoke"
-            }
-          ]
-        }
-      },
-      "defaultValue": "..."
-    },
-    {
-      "name": "CUBID_PAYTAG_COMPAT_ACTION_TYPES",
-      "variant": "declaration",
-      "kind": 32,
-      "flags": {
-        "isConst": true
-      },
-      "type": {
-        "type": "typeOperator",
-        "operator": "readonly",
-        "target": {
-          "type": "tuple",
-          "elements": [
-            {
-              "type": "literal",
-              "value": "route_registration"
-            },
-            {
-              "type": "literal",
-              "value": "route_authorization"
-            },
-            {
-              "type": "literal",
-              "value": "route_selection"
-            },
-            {
-              "type": "literal",
-              "value": "grant_revocation"
             }
           ]
         }
@@ -16046,6 +16414,46 @@
     },
     {
       "kind": "code",
+      "text": "`startPaytagEnableAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasCreateAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasSelectAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagGrantAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagRevokeAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`enrollRecoveryBundle`"
     },
     {
@@ -16414,6 +16822,46 @@
     },
     {
       "kind": "code",
+      "text": "`startPaytagEnableAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasCreateAction({ dappUserUuid, aliasExposure?: \"opaque\", returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasSelectAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagGrantAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagRevokeAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`enrollRecoveryBundle({ userId, bundleMaterial, providerKey?, recoveryBundleId?, idempotencyKey? })`"
     },
     {
@@ -16678,11 +17126,59 @@
     },
     {
       "kind": "code",
-      "text": "```ts\nconst authorization = await cubid.checkPaytagAuthorization({\n  dappUserUuid: \"app-user-123\",\n  candidates: [\n    { candidateRef: \"paytag-1\", stampType: \"email\", value: \"abd123@cubid.mypaytag\" },\n  ],\n})\n\nconst aliases = await cubid.validatePaytagAliases({\n  dappUserUuid: \"app-user-123\",\n  aliases: [{ aliasRef: \"alias-1\", alias: \"abd123@cubid.mypaytag\" }],\n})\n\nconst action = await cubid.startHostedPaytagAction({\n  actionType: \"paytag_enable\",\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  returnUrl: \"https://mypaytag.example/paytag/callback\",\n  requiredPasskeyAssurance: true,\n})\n```"
+      "text": "```ts\nconst authorization = await cubid.checkPaytagAuthorization({\n  dappUserUuid: \"app-user-123\",\n  candidates: [\n    { candidateRef: \"paytag-1\", stampType: \"email\", value: \"abd123@cubid.mypaytag\" },\n  ],\n})\n\nconst aliases = await cubid.validatePaytagAliases({\n  dappUserUuid: \"app-user-123\",\n  aliases: [{ aliasRef: \"alias-1\", alias: \"abd123@cubid.mypaytag\" }],\n})\n\nconst action = await cubid.startPaytagEnableAction({\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  returnUrl: \"https://mypaytag.example/paytag/callback\",\n  requiredPasskeyAssurance: true,\n})\n\nconst aliasAction = await cubid.startPaytagAliasCreateAction({\n  dappUserUuid: \"app-user-123\",\n  aliasExposure: \"opaque\",\n  idempotencyKey: crypto.randomUUID(),\n})\n```"
     },
     {
       "kind": "text",
-      "text": "\n\nPaytag helpers are deliberately submitted-candidate or opaque-alias based.\nThere is no dapp helper for listing all user paytags or payment-enabled\nstamps. Negative responses such as "
+      "text": "\n\nPrefer the typed action helpers for ordinary MVP flows:\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagEnableAction`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasCreateAction`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasSelectAction`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagGrantAction`"
+    },
+    {
+      "kind": "text",
+      "text": ", and\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagRevokeAction`"
+    },
+    {
+      "kind": "text",
+      "text": ". "
+    },
+    {
+      "kind": "code",
+      "text": "`startHostedPaytagAction`"
+    },
+    {
+      "kind": "text",
+      "text": " remains available as a\nlower-level primitive for canonical Paytag action strings only, but app code\nshould not need to pass raw action strings for common Paytag flows. Route\nregistration, route authorization, and route selection belong to MyPayTag, not\nto Cubid Paytag SDK helpers.\n\nPaytag helpers are deliberately submitted-candidate or opaque-alias based.\nThere is no dapp helper for listing all user paytags or payment-enabled\nstamps. Negative responses such as "
     },
     {
       "kind": "code",
@@ -16714,7 +17210,23 @@
     },
     {
       "kind": "text",
-      "text": " require\nexplicit user choice outside ordinary dapp validation.\n\nDapp API keys must stay server-side. Browser launch of a hosted Cubid paytag\naction belongs in "
+      "text": " require\nexplicit user choice outside ordinary dapp validation. The SDK does not expose\na raw-stamp action helper yet because Passport has not promoted a stable\nseparate raw-stamp exposure action contract. Passing "
+    },
+    {
+      "kind": "code",
+      "text": "`aliasExposure:\n\"raw_stamp\"`"
+    },
+    {
+      "kind": "text",
+      "text": " to "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasCreateAction`"
+    },
+    {
+      "kind": "text",
+      "text": " is rejected; when raw exposure\nis added later it should be a separate, explicitly named helper and must not\nreturn raw stamp values to dapps unless Passport documents a safe redacted\nresponse shape.\n\nDapp API keys must stay server-side. Browser launch of a hosted Cubid paytag\naction belongs in "
     },
     {
       "kind": "code",
@@ -16778,7 +17290,7 @@
     },
     {
       "kind": "text",
-      "text": ", "
+      "text": ", the typed Paytag action helpers,\n"
     },
     {
       "kind": "code",

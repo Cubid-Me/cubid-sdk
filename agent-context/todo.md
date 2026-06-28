@@ -1673,12 +1673,12 @@ Document the breaking removal of current `PayTo` names and the replacement Payta
 
 ### S19. Close Cubid SDK MyPayTag MVP Gaps
 
-- Status: Planned
-- Timestamp started:
-- Timestamp completed:
+- Status: Completed
+- Timestamp started: 2026-06-28T22:46:54Z
+- Timestamp completed: 2026-06-28T23:03:27Z
 - Feature branch: `codex/mypaytag-mvp-realignment-20260628`
-- Head:
-- Session-log reference(s):
+- Head: aed9f66c
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
 
 Track the follow-up gaps recorded in `agent-context/2026-06-28-cubid-sdk-mypaytag-mvp-gap-review.md`. The SDK should keep Cubid limited to paytag identity, consent, verified stamps, opaque aliases, explicit raw-stamp exposure, grants, hosted Cubid actions, and lifecycle signals while MyPayTag owns wallets, routes, priority, provider callbacks, payment instructions, NEAR 1Click, quotes, and execution.
 
@@ -1821,12 +1821,12 @@ Acceptance notes:
 
 ### S19.8 Regenerate and validate Cubid SDK artifacts
 
-- Status: Planned
-- Timestamp started:
-- Timestamp completed:
+- Status: Completed
+- Timestamp started: 2026-06-28T23:03:27Z
+- Timestamp completed: 2026-06-28T23:03:27Z
 - Feature branch: `codex/mypaytag-mvp-realignment-20260628`
-- Head:
-- Session-log reference(s):
+- Head: aed9f66c
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
 
 Refresh generated artifacts and prove the Cubid SDK Paytag surface is internally consistent after S19 gap closure.
 

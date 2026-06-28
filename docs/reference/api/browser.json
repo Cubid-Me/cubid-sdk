@@ -3528,7 +3528,15 @@
     },
     {
       "kind": "text",
-      "text": " URLs and rejects URL query\nparameters that look like dapp API keys. It does not create action tokens and\ndoes not accept dapp API keys. Create hosted paytag actions server-side through\n"
+      "text": " URLs that already include a\nserver-created "
+    },
+    {
+      "kind": "code",
+      "text": "`action_token`"
+    },
+    {
+      "kind": "text",
+      "text": ", and it rejects URL query parameters that look\nlike dapp API keys. It never creates action tokens and does not accept dapp API\nkeys. Create hosted paytag actions server-side through "
     },
     {
       "kind": "code",
@@ -3536,7 +3544,7 @@
     },
     {
       "kind": "text",
-      "text": ". The "
+      "text": ". The\n"
     },
     {
       "kind": "code",
@@ -3544,7 +3552,7 @@
     },
     {
       "kind": "text",
-      "text": " path is backend wire\ncompatibility; the public browser SDK API is Paytag-only.\n\nSigned-in owner-management wrappers for paytag stamp and grant routes remain\ndeferred until the SDK has a Cubid-authenticated user-session pattern ready for\nbearer-token calls."
+      "text": " path is backend wire compatibility; the public\nbrowser SDK API is Paytag-only.\n\nSigned-in owner-management wrappers for paytag stamp and grant routes remain\ndeferred until the SDK has a Cubid-authenticated user-session pattern ready for\nbearer-token calls."
     }
   ]
 }
