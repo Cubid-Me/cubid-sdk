@@ -1802,12 +1802,12 @@ Acceptance notes:
 
 ### S19.7 Update Cubid SDK staged smoke checklist
 
-- Status: Planned
-- Timestamp started:
-- Timestamp completed:
+- Status: Completed
+- Timestamp started: 2026-06-28T23:00:57Z
+- Timestamp completed: 2026-06-28T23:00:57Z
 - Feature branch: `codex/mypaytag-mvp-realignment-20260628`
-- Head:
-- Session-log reference(s):
+- Head: 8b4bc701
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
 
 Revise smoke guidance so launch readiness proves each Cubid-owned paytag lifecycle path without pulling MyPayTag-owned payment routing into the Cubid SDK.
 

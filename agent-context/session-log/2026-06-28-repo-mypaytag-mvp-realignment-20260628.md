@@ -105,3 +105,12 @@
 - summary: Expanded @cubid/browser hosted Paytag action coverage across canonical action-token URLs, dapp API key query variants, foreign origins, non-action/list paths, and malformed URL inputs. Tightened the opener to require a server-created action token and documented that browser helpers never mint action tokens or accept dapp API keys.
 - validation: `corepack pnpm exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`; `corepack pnpm --filter @cubid/browser build`.
 - follow-ups: Update staged Cubid/MyPayTag smoke guidance in S19.7.
+
+## 2026-06-28T23:00:57Z - S19.7 Paytag staged smoke checklist
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: 8b4bc701
+- summary: Expanded the MyPayTag Paytag staged smoke checklist to cover local SDK checks, paytag enable, opaque alias create/select, raw-stamp exposure dependency, grant, revoke, lifecycle polling, MyPayTag validation after state transitions, and the explicit boundary that payment routing/execution remains outside Cubid SDK ownership.
+- validation: `git diff --check`.
+- follow-ups: Regenerate API references and run the final targeted S19 validation bundle in S19.8.

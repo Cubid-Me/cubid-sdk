@@ -168,27 +168,51 @@ validation passes.
 Local SDK baseline:
 
 - `pnpm --filter @cubid/core test`
+- `pnpm exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`
 - `pnpm --filter @cubid/core build`
 - `pnpm --filter @cubid/browser build`
 - `pnpm test:acceptance`
 - `pnpm api:validate`
 - `pnpm api:postman`
+- `pnpm paytag:check`
 - `pnpm docs:api:build`
 - `pnpm docs:api:check`
 
 Hosted staging baseline:
 
-- Cubid hosted action start returns a hosted paytag action URL for
-  `paytag_enable`.
+- Cubid hosted action start returns a hosted paytag action URL for each
+  canonical Cubid-owned action: `paytag_enable`, `paytag_alias_create`,
+  `paytag_alias_select`, `paytag_grant`, and `paytag_revoke`.
 - `@cubid/browser` opens only the Cubid-hosted paytag action URL and rejects
   dapp API keys in the URL.
+- Paytag enable smoke proves a verified Cubid stamp can become paytag-capable
+  identity state without returning raw stamp values to the dapp.
+- Opaque alias creation smoke proves `abd123@cubid.mypaytag`-style aliases are
+  the default and that MyPayTag validates availability before issuance.
+- Opaque alias selection smoke proves the user can select among existing
+  opaque aliases without exposing raw stamp identifiers or cross-app state.
+- Explicit raw-stamp exposure smoke is blocked until Passport exposes a stable
+  separate hosted action contract. When that exists, smoke must prove the user
+  made the explicit choice and that Cubid SDK normalized responses remain
+  redacted unless Passport documents a safe public raw-stamp response field.
+- Grant smoke proves MyPayTag can obtain dapp-scoped consent to validate a
+  submitted paytag through Cubid.
+- Revoke smoke proves the grant can be revoked and subsequent MyPayTag
+  validation receives a generic negative status rather than probing-friendly
+  detail.
+- Lifecycle polling smoke proves `listPaytagLifecycleEvents` returns redacted
+  identity, alias, and consent events after enable, alias create/select, grant,
+  and revoke transitions.
 - MyPayTag backend validates a submitted opaque paytag such as
-  `abd123@cubid.mypaytag` through the Cubid SDK without sending wallet, route,
-  provider, asset, or payment-intent fields to Cubid.
+  `abd123@cubid.mypaytag` through the Cubid SDK after each state transition
+  without sending wallet, route, provider, asset, payment instruction, quote,
+  settlement, solver, bridge, swap, or execution fields to Cubid.
 - MyPayTag site can send the user to the Cubid hosted paytag action and return
   to its own Paytag UX without exposing raw stamp values by default.
 - One test PayingDapp calls MyPayTag, not Cubid directly, for paytag payment
-  discovery.
+  resolution.
 - One test PayToDapp route flow proves MyPayTag owns route selection and
   provider intent creation while Cubid remains limited to identity, consent,
-  aliases, and lifecycle state.
+  aliases, and lifecycle state. Wallets, routes, route priority, provider
+  callbacks, payment instructions, NEAR 1Click, quotes, settlement, solvers,
+  bridges, swaps, and execution stay outside Cubid SDK ownership.
