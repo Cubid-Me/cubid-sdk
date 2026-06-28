@@ -95,18 +95,20 @@ The same general split should apply to flexible messaging. Future dapp-facing
 in `@cubid/core` once those backend contracts are explicitly promoted, because
 they are server-authenticated runtime-agnostic APIs.
 
-The GlobalPayTo Pay-To MVP follows the same split. PR22 in `cubid-monorepo`
-defines the backend contract for submitted-candidate eligibility checks,
-opaque alias resolution, Pay-To action starts, grant status, lifecycle event
-polling, and constrained `payment_intent_created` notification delivery.
-Those dapp-authenticated API v3 helpers belong in `@cubid/core` now that PR22
-has merged to `dev` and handed off the stable MVP contract. Dapp API keys must
-stay server/Edge-only, `startPayToAction` and notification send must preserve
-idempotency, and resolver helpers must not expose list-all-payment-stamps
-behavior.
+The MyPayTag MVP follows the same split. Cubid provides paytag identity,
+verified stamp, opaque alias, consent, grant, hosted action, and lifecycle
+primitives; MyPayTag owns payment routes, wallets, provider callbacks,
+payment intents, settlement, solvers, bridges, swaps, and execution. The
+dapp-authenticated identity/consent helpers belong in `@cubid/core` and are
+exposed with Paytag names only: `checkPaytagAuthorization`,
+`validatePaytagAliases`, `getPaytagGrantStatus`,
+`listPaytagLifecycleEvents`, and `startHostedPaytagAction`.
 
-Browser-safe Pay-To action launch belongs in `@cubid/browser`, with optional
-React ergonomics in `@cubid/react`. Signed-in user Pay-To stamp and grant
+Dapp API keys must stay server/Edge-only, `startHostedPaytagAction` must
+preserve idempotency, and validation helpers must not expose list-all-paytags
+or list-all-payment-stamps behavior. Browser-safe hosted paytag action launch
+belongs in `@cubid/browser` as `openHostedPaytagAction`, with optional React
+ergonomics in `@cubid/react`. Signed-in user paytag stamp and grant
 owner-management routes are not resolver APIs and should not be presented as
 ordinary dapp server helpers. The SDK must not expose universal Cubid IDs, raw
 stamp identifiers, raw payment identifiers, provider subjects, route counts,

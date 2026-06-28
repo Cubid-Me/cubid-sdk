@@ -15,3 +15,12 @@
 - summary: Replaced the public `@cubid/browser` Pay-To hosted action opener and option types with Paytag-only exports, updated hosted action validation errors to Paytag terminology, and bumped `@cubid/browser` to 0.2.0 for the breaking API realignment.
 - validation: `pnpm --filter @cubid/browser build`; `pnpm exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`
 - follow-ups: Remove payment-intent framing from docs/API artifacts, update acceptance tests, and mark S18 roadmap state.
+
+## 2026-06-28T11:25:54Z - S18 remove payment-intent framing from Paytag docs
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: 51442999
+- summary: Reframed the core/browser READMEs, package target-state docs, architecture doc, and OpenAPI source around MyPayTag paytag identity and consent; removed the payment-intent notification endpoint from the documented Paytag API surface.
+- validation: `pnpm api:validate`
+- follow-ups: Regenerate deterministic Postman and TypeDoc API artifacts, then update acceptance tests and S18 roadmap state.

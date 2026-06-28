@@ -121,12 +121,11 @@ endpoints plus the first server-facing API v3 write helpers:
 - `saveSecret`
 - `sendNotification`
 - `getNotificationStatus`
-- `checkPayToEligibility`
-- `resolvePayToAliases`
-- `getPayToGrantStatus`
-- `listPayToEvents`
-- `startPayToAction`
-- `sendPaymentIntentCreatedNotification`
+- `checkPaytagAuthorization`
+- `validatePaytagAliases`
+- `getPaytagGrantStatus`
+- `listPaytagLifecycleEvents`
+- `startHostedPaytagAction`
 - `enrollRecoveryBundle`
 - `getRecoveryBundleStatus`
 - `startRecoveryBundleRelease`
@@ -192,12 +191,11 @@ The current API v3 helpers stay server-side as well:
 - `saveSecret({ userId, secret, idempotencyKey? })`
 - `sendNotification({ userId, category, priority, title, body, deepLink?, metadata?, idempotencyKey? })`
 - `getNotificationStatus({ userId, eventId })`
-- `checkPayToEligibility({ dappUserUuid, candidates })`
-- `resolvePayToAliases({ dappUserUuid, aliases, resolverKey? })`
-- `getPayToGrantStatus({ dappUserUuid })`
-- `listPayToEvents({ dappUserUuid, since?, limit? })`
-- `startPayToAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
-- `sendPaymentIntentCreatedNotification({ dappUserUuid, title, body, priority?, deepLink?, metadata?, idempotencyKey? })`
+- `checkPaytagAuthorization({ dappUserUuid, candidates })`
+- `validatePaytagAliases({ dappUserUuid, aliases, resolverKey? })`
+- `getPaytagGrantStatus({ dappUserUuid })`
+- `listPaytagLifecycleEvents({ dappUserUuid, since?, limit? })`
+- `startHostedPaytagAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `enrollRecoveryBundle({ userId, bundleMaterial, providerKey?, recoveryBundleId?, idempotencyKey? })`
 - `getRecoveryBundleStatus({ userId, providerKey?, recoveryBundleId? })`
 - `startRecoveryBundleRelease({ userId, providerKey?, recoveryBundleId?, idempotencyKey? })`
@@ -231,51 +229,55 @@ Legacy `POST /api/v2/save_secret` is retired and should not be used or
 reintroduced in the public SDK surface. `saveSecret` now targets the v3 write
 contract only.
 
-## GlobalPayTo Pay-To Helpers
+## MyPayTag Paytag Identity Helpers
 
-`@cubid/core` exposes the server/Edge side of the GlobalPayTo Pay-To MVP
-contract. These helpers use the initialized client configuration, including
-`baseUrl`, injected `fetch`, dapp API key, and optional `dappId`.
+`@cubid/core` exposes the server/Edge side of Cubid's MyPayTag identity and
+consent contract. These helpers use the initialized client configuration,
+including `baseUrl`, injected `fetch`, dapp API key, and optional `dappId`.
+They answer paytag identity, alias, grant, and lifecycle questions only; Cubid
+does not own wallets, routes, payment instructions, settlement, solvers,
+bridges, swaps, or execution.
 
 ```ts
-const eligibility = await cubid.checkPayToEligibility({
+const authorization = await cubid.checkPaytagAuthorization({
   dappUserUuid: "app-user-123",
   candidates: [
-    { candidateRef: "payee-1", stampType: "email", value: "payee@example.com" },
+    { candidateRef: "paytag-1", stampType: "email", value: "abd123@cubid.mypaytag" },
   ],
 })
 
-const action = await cubid.startPayToAction({
-  actionType: "setup",
+const aliases = await cubid.validatePaytagAliases({
   dappUserUuid: "app-user-123",
-  idempotencyKey: crypto.randomUUID(),
-  returnUrl: "https://app.example/pay-to/callback",
-  requiredPasskeyAssurance: true,
+  aliases: [{ aliasRef: "alias-1", alias: "abd123@cubid.mypaytag" }],
 })
 
-await cubid.sendPaymentIntentCreatedNotification({
+const action = await cubid.startHostedPaytagAction({
+  actionType: "paytag_enable",
   dappUserUuid: "app-user-123",
   idempotencyKey: crypto.randomUUID(),
-  title: "Payment intent created",
-  body: "Review the pending payment intent.",
-  metadata: { intentId: "pi_123" },
+  returnUrl: "https://mypaytag.example/paytag/callback",
+  requiredPasskeyAssurance: true,
 })
 ```
 
-Pay-To resolver helpers are deliberately submitted-candidate or opaque-alias
-based. There is no dapp resolver helper for listing all payment-enabled stamps.
-Negative responses such as `resolution_unavailable` and `no_events` are
-generic by design and should not be expanded into probing-friendly detail.
+Paytag helpers are deliberately submitted-candidate or opaque-alias based.
+There is no dapp helper for listing all user paytags or payment-enabled
+stamps. Negative responses such as `resolution_unavailable` and `no_events`
+are generic by design and should not be expanded into probing-friendly detail.
+Opaque paytags such as `abd123@cubid.mypaytag` are the default. Raw
+stamp-based paytags such as `+1234569999@phone.cubid.mypaytag` require
+explicit user choice outside ordinary dapp validation.
 
-Dapp API keys must stay server-side. Browser launch of a hosted Pay-To action
-belongs in `@cubid/browser` via `openPayToHostedAction(action.hostedUrl)`.
+Dapp API keys must stay server-side. Browser launch of a hosted Cubid paytag
+action belongs in `@cubid/browser` via
+`openHostedPaytagAction(action.hostedUrl)`.
 
 `saveSecret`, `sendNotification`, `enrollRecoveryBundle`,
-`startRecoveryBundleRelease`, `rotateRecoveryBundle`, `generateAccount`,
-`createAccountRequest`, and `createSigningRequest` automatically generate an
-idempotency key when callers omit one, and they return the resolved
-`idempotencyKey` alongside the normalized response so callers can log or
-reconcile retries safely.
+`startRecoveryBundleRelease`, `rotateRecoveryBundle`,
+`startHostedPaytagAction`, `generateAccount`, `createAccountRequest`, and
+`createSigningRequest` automatically generate an idempotency key when callers
+omit one, and they return the resolved `idempotencyKey` alongside the
+normalized response so callers can log or reconcile retries safely.
 
 `sendNotification` is the first dapp-authenticated flexible-messaging helper.
 It stays server-side, requires the Cubid dapp API key, and normalizes only
