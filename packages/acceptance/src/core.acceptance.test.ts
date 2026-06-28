@@ -36,7 +36,7 @@ describe("@cubid/acceptance core consumer flow", () => {
     expect(fetchImpl).toHaveBeenCalledTimes(1);
   });
 
-  it("uses the published core entrypoint for Pay-To server helper flows", async () => {
+  it("uses the published core entrypoint for Paytag server helper flows", async () => {
     const calls: Array<{ body: Record<string, unknown>; headers: Headers; path: string }> = [];
     const fetchImpl = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const path = new URL(String(input)).pathname;
@@ -62,7 +62,7 @@ describe("@cubid/acceptance core consumer flow", () => {
         JSON.stringify({
           data: {
             actionToken: "pta_act_123",
-            actionType: "setup",
+            actionType: "paytag_enable",
             hostedUrl: "/pay-to/actions/complete?action_token=pta_act_123",
             status: "pending"
           }
@@ -78,18 +78,24 @@ describe("@cubid/acceptance core consumer flow", () => {
       fetch: fetchImpl
     });
 
-    const eligibility = await client.checkPayToEligibility({
-      candidates: [{ candidateRef: "payee-1", stampType: "email", value: "payee@example.com" }],
+    expect("checkPayToEligibility" in client).toBe(false);
+    expect("startPayToAction" in client).toBe(false);
+    expect("sendPaymentIntentCreatedNotification" in client).toBe(false);
+
+    const authorization = await client.checkPaytagAuthorization({
+      candidates: [
+        { candidateRef: "paytag-1", stampType: "email", value: "abd123@cubid.mypaytag" }
+      ],
       dappUserUuid: "app-user-123"
     });
-    const action = await client.startPayToAction({
-      actionType: "setup",
+    const action = await client.startHostedPaytagAction({
+      actionType: "paytag_enable",
       dappUserUuid: "app-user-123",
-      idempotencyKey: "acceptance-pay-to-action"
+      idempotencyKey: "acceptance-paytag-action"
     });
 
-    expect(eligibility.status).toBe("resolution_unavailable");
-    expect(eligibility.results[0]?.eligible).toBe(false);
+    expect(authorization.status).toBe("resolution_unavailable");
+    expect(authorization.results[0]?.eligible).toBe(false);
     expect(action.hostedUrl).toBe("/pay-to/actions/complete?action_token=pta_act_123");
     expect(calls.map((call) => call.path)).toEqual([
       "/api/v3/pay-to/stamps/eligibility/check",
@@ -98,8 +104,20 @@ describe("@cubid/acceptance core consumer flow", () => {
     expect(calls[0]?.body).toMatchObject({
       api_key: "acceptance-api-key",
       dapp_id: "acceptance-dapp",
+      dapp_user_uuid: "app-user-123",
+      candidates: [
+        { candidateRef: "paytag-1", stampType: "email", value: "abd123@cubid.mypaytag" }
+      ]
+    });
+    expect(calls[1]?.body).toMatchObject({
+      action_type: "paytag_enable",
+      api_key: "acceptance-api-key",
+      dapp_id: "acceptance-dapp",
       dapp_user_uuid: "app-user-123"
     });
-    expect(calls[1]?.headers.get("Idempotency-Key")).toBe("acceptance-pay-to-action");
+    expect(calls[1]?.body).not.toHaveProperty("payment_event_type");
+    expect(calls[1]?.body).not.toHaveProperty("provider");
+    expect(calls[1]?.body).not.toHaveProperty("wallet");
+    expect(calls[1]?.headers.get("Idempotency-Key")).toBe("acceptance-paytag-action");
   });
 });

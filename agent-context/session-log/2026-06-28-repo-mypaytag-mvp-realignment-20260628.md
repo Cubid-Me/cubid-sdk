@@ -33,3 +33,12 @@
 - summary: Regenerated the committed Postman collection and TypeDoc JSON references after the Paytag-only API source and package version changes, removing the generated payment-intent notification examples and old Pay-To SDK symbols from machine-ingestible artifacts.
 - validation: `pnpm api:postman`; `pnpm docs:api:build`; `pnpm docs:api:check`; targeted `rg` over generated API artifacts for old Pay-To/payment-intent public terms.
 - follow-ups: Update consumer acceptance tests and roadmap metadata for the completed S18 realignment.
+
+## 2026-06-28T11:28:38Z - S18 Paytag-only acceptance boundary
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: 1c03fb11
+- summary: Updated consumer-style acceptance tests to import and call only Paytag public exports, assert old Pay-To and payment-intent exports are absent, and verify Paytag request bodies avoid payment, wallet, provider, and route fields.
+- validation: `pnpm --filter @cubid/core build`; `pnpm --filter @cubid/browser build`; `pnpm test:acceptance`
+- follow-ups: Complete S18 roadmap/session metadata and add staged MyPayTag smoke guidance.
