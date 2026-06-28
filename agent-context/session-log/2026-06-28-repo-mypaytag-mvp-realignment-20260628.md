@@ -96,3 +96,12 @@
 - summary: Removed old setup and route-oriented compatibility strings from the public Paytag action type, added runtime validation for the generic hosted-action primitive, replaced the positive hosted-action test response with a canonical paytag action, and documented that MyPayTag owns route registration, authorization, and selection.
 - validation: `corepack pnpm --filter @cubid/core test`; `corepack pnpm paytag:check`.
 - follow-ups: Expand @cubid/browser hosted Paytag action URL tests in S19.6.
+
+## 2026-06-28T22:59:28Z - S19.6 browser Paytag hosted action hardening
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: 173621e5
+- summary: Expanded @cubid/browser hosted Paytag action coverage across canonical action-token URLs, dapp API key query variants, foreign origins, non-action/list paths, and malformed URL inputs. Tightened the opener to require a server-created action token and documented that browser helpers never mint action tokens or accept dapp API keys.
+- validation: `corepack pnpm exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`; `corepack pnpm --filter @cubid/browser build`.
+- follow-ups: Update staged Cubid/MyPayTag smoke guidance in S19.7.

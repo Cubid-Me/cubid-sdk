@@ -112,11 +112,12 @@ import { openHostedPaytagAction } from "@cubid/browser"
 openHostedPaytagAction(action.hostedUrl)
 ```
 
-The helper only opens `/pay-to/actions/complete` URLs and rejects URL query
-parameters that look like dapp API keys. It does not create action tokens and
-does not accept dapp API keys. Create hosted paytag actions server-side through
-`@cubid/core`. The `/pay-to/actions/complete` path is backend wire
-compatibility; the public browser SDK API is Paytag-only.
+The helper only opens `/pay-to/actions/complete` URLs that already include a
+server-created `action_token`, and it rejects URL query parameters that look
+like dapp API keys. It never creates action tokens and does not accept dapp API
+keys. Create hosted paytag actions server-side through `@cubid/core`. The
+`/pay-to/actions/complete` path is backend wire compatibility; the public
+browser SDK API is Paytag-only.
 
 Signed-in owner-management wrappers for paytag stamp and grant routes remain
 deferred until the SDK has a Cubid-authenticated user-session pattern ready for

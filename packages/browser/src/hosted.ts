@@ -47,6 +47,10 @@ function assertPaytagHostedActionUrl(hostedUrl: string): string {
     throw new Error("Paytag hosted action URLs must target /pay-to/actions/complete.");
   }
 
+  if (!parsed.searchParams.get("action_token")?.trim()) {
+    throw new Error("Paytag hosted action URLs must include a server-created action token.");
+  }
+
   for (const key of parsed.searchParams.keys()) {
     const normalizedKey = key.replace(/[-_]/g, "").toLowerCase();
 
