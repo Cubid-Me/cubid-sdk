@@ -1456,3 +1456,140 @@ needed. SDK docs must not present Passport, Verify, Admin, or internal OIDC
 interaction routes as SDK-callable SIWC internals, and verified identifier
 release should use standard OIDC scopes and claims such as `email` and `phone`
 according to Admin-configured SIWC page policy.
+
+### S17. Add GlobalPayTo Pay-To SDK support from PR22 backend contracts
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:10:10Z
+- Timestamp completed: 2026-06-25T21:24:32Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `be0b4810` at implementation start
+- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-06-24-globalpayto-cubid-mvp-dependencies.md`, `agent-context/cross-repo-comms/2026-06-24-globalpayto-pay-to-sdk-handoff.md`
+
+Track public SDK support for the GlobalPayTo Pay-To MVP now that Cubid
+monorepo PR22 has merged to `dev` and handed off the backend contract. The PR22
+handoff note is authoritative where it differs from the earlier dependency
+request. SDK work should preserve submitted-candidate and opaque-alias resolver
+flows, server-only dapp API key use, browser-safe hosted action launch,
+redacted lifecycle summaries, and `payment_intent_created`-only notification
+support.
+
+### S17.1 Ingest GlobalPayTo Pay-To SDK handoff and architecture
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:10:10Z
+- Timestamp completed: 2026-06-25T21:10:10Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `be0b4810` at implementation start
+- Session-log reference(s): incoming cross-repo notes `agent-context/cross-repo-comms/2026-06-24-globalpayto-cubid-mvp-dependencies.md`, `agent-context/cross-repo-comms/2026-06-24-globalpayto-pay-to-sdk-handoff.md`, session: GlobalPayTo Pay-To S17.1 handoff intake
+
+Record both GlobalPayTo coordination notes, document PR22 as the platform
+prerequisite, and publish the SDK-side package ownership and route-mapping
+architecture. Do not add public SDK implementation code to `cubid-monorepo`.
+
+### S17.2 Add server-only Pay-To request/response types in `@cubid/core`
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:16:28Z
+- Timestamp completed: 2026-06-25T21:16:28Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `efb299ce` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.2/S17.3 core helpers
+
+Add typed models for submitted-candidate eligibility, opaque alias resolution,
+grant status, redacted lifecycle events, hosted action start, and
+`payment_intent_created` notification helpers. Supported submitted-candidate
+stamp types are `email`, `phone`, `github`, `google`, and `evm`. Supported
+hosted action types are `setup`, `route_registration`, `route_authorization`,
+`route_selection`, and `grant_revocation`.
+
+### S17.3 Add `@cubid/core` server helpers
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:16:28Z
+- Timestamp completed: 2026-06-25T21:16:28Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `efb299ce` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.2/S17.3 core helpers
+
+Add server/Edge helpers for `checkPayToEligibility(candidates, dappUserUuid)`,
+`resolvePayToAliases(aliases, dappUserUuid, resolverKey?)`,
+`getPayToGrantStatus(dappUserUuid)`, `listPayToEvents(dappUserUuid, since?,
+limit?)`, `startPayToAction(actionType, dappUserUuid, options?)`, and
+`sendPaymentIntentCreatedNotification(dappUserUuid, payload)` against the
+merged PR22 backend contracts. These helpers should be exposed on the existing
+initialized `@cubid/core` client/config pattern, not as free functions that
+hide base URL, fetch, credential, or auth behavior.
+
+### S17.4 Preserve server-only API-key and idempotency boundaries
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:17:11Z
+- Timestamp completed: 2026-06-25T21:17:11Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `b14af2ef` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.4 idempotency boundary
+
+Keep dapp API keys server/Edge-only. `startPayToAction(...)` and notification
+send must require or resolve `Idempotency-Key` through the existing SDK
+idempotency pattern. Browser packages must never accept dapp API keys.
+
+### S17.5 Add browser-safe hosted action helpers
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:19:25Z
+- Timestamp completed: 2026-06-25T21:19:25Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `0151aae5` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.5 browser hosted action helper
+
+Add `openPayToHostedAction(hostedUrl)` in the browser layer. Optional
+signed-in Cubid-session wrappers for stamp and grant owner-management routes
+are explicitly deferred unless the SDK already has a Cubid-authenticated
+user-session pattern ready to carry bearer-token calls safely. User routes
+remain owner-management routes, not resolver APIs.
+
+### S17.6 Document and enforce anti-enumeration behavior
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:19:59Z
+- Timestamp completed: 2026-06-25T21:19:59Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `b56cf7b0` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.6 anti-enumeration enforcement
+
+Do not add a list-all-payment-stamps resolver helper. Eligibility and alias
+resolution must stay submitted-candidate or opaque-alias based. Preserve
+generic negative statuses such as `resolution_unavailable`, `no_events`,
+`expired`, `wrong_user`, `unsupported_app_context`, `rate_limited`, `replay`,
+and `mismatch` without expanding them into probing-friendly detail.
+
+### S17.7 Add constrained payment notification support
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:21:06Z
+- Timestamp completed: 2026-06-25T21:21:06Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `df886e24` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.7 constrained payment notification
+
+Support only `payment_event_type: "payment_intent_created"` with
+`category: "TRANSACTIONAL"` for the GlobalPayTo MVP. Do not add
+`payment_received`, settlement, marketing, inbox, activity-feed, or generic
+payment-status helpers.
+
+### S17.8 Add docs, examples, API reference, and acceptance tests
+
+- Status: Completed
+- Timestamp started: 2026-06-25T21:24:32Z
+- Timestamp completed: 2026-06-25T21:24:32Z
+- Feature branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `c6997a2f` at implementation start
+- Session-log reference(s): session: GlobalPayTo Pay-To S17.8 docs and acceptance
+
+Add GlobalPayTo resolver-backend and hosted-site examples, update generated API
+reference artifacts for new exports, and add tests proving boolean eligibility
+only, generic negative responses, no raw identifier leakage, redacted
+lifecycle events, idempotent action start, and unsupported payment event
+denial before event creation. Add explicit browser and React package tests
+showing Pay-To helpers cannot accept dapp API keys.

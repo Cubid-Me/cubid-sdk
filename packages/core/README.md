@@ -121,6 +121,12 @@ endpoints plus the first server-facing API v3 write helpers:
 - `saveSecret`
 - `sendNotification`
 - `getNotificationStatus`
+- `checkPayToEligibility`
+- `resolvePayToAliases`
+- `getPayToGrantStatus`
+- `listPayToEvents`
+- `startPayToAction`
+- `sendPaymentIntentCreatedNotification`
 - `enrollRecoveryBundle`
 - `getRecoveryBundleStatus`
 - `startRecoveryBundleRelease`
@@ -186,6 +192,12 @@ The current API v3 helpers stay server-side as well:
 - `saveSecret({ userId, secret, idempotencyKey? })`
 - `sendNotification({ userId, category, priority, title, body, deepLink?, metadata?, idempotencyKey? })`
 - `getNotificationStatus({ userId, eventId })`
+- `checkPayToEligibility({ dappUserUuid, candidates })`
+- `resolvePayToAliases({ dappUserUuid, aliases, resolverKey? })`
+- `getPayToGrantStatus({ dappUserUuid })`
+- `listPayToEvents({ dappUserUuid, since?, limit? })`
+- `startPayToAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
+- `sendPaymentIntentCreatedNotification({ dappUserUuid, title, body, priority?, deepLink?, metadata?, idempotencyKey? })`
 - `enrollRecoveryBundle({ userId, bundleMaterial, providerKey?, recoveryBundleId?, idempotencyKey? })`
 - `getRecoveryBundleStatus({ userId, providerKey?, recoveryBundleId? })`
 - `startRecoveryBundleRelease({ userId, providerKey?, recoveryBundleId?, idempotencyKey? })`
@@ -218,6 +230,45 @@ infrastructure, and Cubid recovery bundle helpers instead.
 Legacy `POST /api/v2/save_secret` is retired and should not be used or
 reintroduced in the public SDK surface. `saveSecret` now targets the v3 write
 contract only.
+
+## GlobalPayTo Pay-To Helpers
+
+`@cubid/core` exposes the server/Edge side of the GlobalPayTo Pay-To MVP
+contract. These helpers use the initialized client configuration, including
+`baseUrl`, injected `fetch`, dapp API key, and optional `dappId`.
+
+```ts
+const eligibility = await cubid.checkPayToEligibility({
+  dappUserUuid: "app-user-123",
+  candidates: [
+    { candidateRef: "payee-1", stampType: "email", value: "payee@example.com" },
+  ],
+})
+
+const action = await cubid.startPayToAction({
+  actionType: "setup",
+  dappUserUuid: "app-user-123",
+  idempotencyKey: crypto.randomUUID(),
+  returnUrl: "https://app.example/pay-to/callback",
+  requiredPasskeyAssurance: true,
+})
+
+await cubid.sendPaymentIntentCreatedNotification({
+  dappUserUuid: "app-user-123",
+  idempotencyKey: crypto.randomUUID(),
+  title: "Payment intent created",
+  body: "Review the pending payment intent.",
+  metadata: { intentId: "pi_123" },
+})
+```
+
+Pay-To resolver helpers are deliberately submitted-candidate or opaque-alias
+based. There is no dapp resolver helper for listing all payment-enabled stamps.
+Negative responses such as `resolution_unavailable` and `no_events` are
+generic by design and should not be expanded into probing-friendly detail.
+
+Dapp API keys must stay server-side. Browser launch of a hosted Pay-To action
+belongs in `@cubid/browser` via `openPayToHostedAction(action.hostedUrl)`.
 
 `saveSecret`, `sendNotification`, `enrollRecoveryBundle`,
 `startRecoveryBundleRelease`, `rotateRecoveryBundle`, `generateAccount`,

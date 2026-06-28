@@ -167,6 +167,23 @@ Treat hosted Allow Page category grants as Passport-owned UX for now. If the
 SDK later exposes them, model them only as permission state and never as
 access to raw destinations or delivery capability.
 
+### GlobalPayTo Pay-To SDK Direction
+
+GlobalPayTo Pay-To support is now tracked as the S17 SDK roadmap. Cubid
+monorepo PR22 has merged to `dev` and defines the concrete backend contracts.
+Server/Edge helpers for
+submitted-candidate eligibility, opaque alias resolution, hosted action start,
+grant status, lifecycle event polling, and constrained
+`payment_intent_created` notification delivery belong in `@cubid/core`.
+
+Browser-safe hosted action launch belongs in `@cubid/browser`, with optional
+React ergonomics in `@cubid/react`. Signed-in user stamp and grant management
+routes are owner-management surfaces, not dapp resolver APIs. Do not add a
+list-all-payment-stamps resolver helper, and do not expose universal Cubid
+IDs, raw stamp identifiers, raw payment identifiers, provider internals, route
+counts, route preferences, wallet graphs, resolver diagnostics, or cross-app
+grant state.
+
 ### Future `@cubid/wallet-recovery`
 
 Use a dedicated wallet-recovery package family for the recoverable-wallet

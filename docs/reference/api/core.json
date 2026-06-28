@@ -935,6 +935,28 @@
       }
     },
     {
+      "name": "CheckPayToEligibilityInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidCheckPayToEligibilityInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CheckPayToEligibilityResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidCheckPayToEligibilityResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "ClientConfig",
       "variant": "declaration",
       "kind": 2097152,
@@ -1709,6 +1731,50 @@
                   {
                     "type": "reference",
                     "name": "CubidCancelSigningRequestResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "checkPayToEligibility",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "checkPayToEligibility",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidCheckPayToEligibilityInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidCheckPayToEligibilityResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -2495,6 +2561,50 @@
           ]
         },
         {
+          "name": "getPayToGrantStatus",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "getPayToGrantStatus",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidGetPayToGrantStatusInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidGetPayToGrantStatusResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
           "name": "getRecoveryBundleStatus",
           "variant": "declaration",
           "kind": 2048,
@@ -2641,6 +2751,50 @@
           ]
         },
         {
+          "name": "listPayToEvents",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "listPayToEvents",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidListPayToEventsInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidListPayToEventsResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
           "name": "listSigningRequests",
           "variant": "declaration",
           "kind": 2048,
@@ -2689,6 +2843,50 @@
                   {
                     "type": "reference",
                     "name": "CubidListSigningRequestsResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "resolvePayToAliases",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "resolvePayToAliases",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidResolvePayToAliasesInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidResolvePayToAliasesResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -2963,6 +3161,50 @@
           ]
         },
         {
+          "name": "sendPaymentIntentCreatedNotification",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "sendPaymentIntentCreatedNotification",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidSendPaymentIntentCreatedNotificationInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidSendPaymentIntentCreatedNotificationResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
           "name": "sendPhoneOtp",
           "variant": "declaration",
           "kind": 2048,
@@ -2997,6 +3239,50 @@
                   {
                     "type": "reference",
                     "name": "CubidSendPhoneOtpResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPayToAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPayToAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPayToActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartPayToActionResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -3545,6 +3831,106 @@
             "type": "reference",
             "name": "CubidSigningRequestSummary",
             "package": "@cubid/core"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidCheckPayToEligibilityInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "candidates",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidPayToEligibilityCandidate",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidCheckPayToEligibilityResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "results",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidPayToEligibilityResult",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidPayToEligibilityStatus",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
           }
         }
       ]
@@ -6076,6 +6462,135 @@
       ]
     },
     {
+      "name": "CubidGetPayToGrantStatusInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidGetPayToGrantStatusResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "grantedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "grantStatus",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidPayToGrantStatus",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "revokedAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "CubidGetRecoveryBundleStatusInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -6415,6 +6930,116 @@
             ],
             "name": "Record",
             "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidListPayToEventsInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "limit",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "since",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidListPayToEventsResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "events",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidPayToLifecycleEventSummary",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidPayToEventsStatus",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
           }
         }
       ]
@@ -7199,6 +7824,519 @@
       ]
     },
     {
+      "name": "CubidPaymentIntentCreatedEventType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "literal",
+        "value": "payment_intent_created"
+      }
+    },
+    {
+      "name": "CubidPayToActionType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "indexedAccess",
+        "indexType": {
+          "type": "intrinsic",
+          "name": "number"
+        },
+        "objectType": {
+          "type": "query",
+          "queryType": {
+            "type": "reference",
+            "name": "CUBID_PAY_TO_ACTION_TYPES",
+            "package": "@cubid/core"
+          }
+        }
+      }
+    },
+    {
+      "name": "CubidPayToAliasCandidate",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "alias",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "aliasRef",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPayToAliasResolutionResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "aliasRef",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "eligible",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPayToAliasResolutionStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "checked"
+          },
+          {
+            "type": "literal",
+            "value": "resolution_unavailable"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidPayToEligibilityCandidate",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "candidateRef",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "stampType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidPayToStampType",
+            "package": "@cubid/core"
+          }
+        },
+        {
+          "name": "value",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPayToEligibilityResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "candidateRef",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "eligible",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPayToEligibilityStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "checked"
+          },
+          {
+            "type": "literal",
+            "value": "resolution_unavailable"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidPayToEventsStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "ok"
+          },
+          {
+            "type": "literal",
+            "value": "no_events"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidPayToGrantStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "active"
+          },
+          {
+            "type": "literal",
+            "value": "revoked"
+          },
+          {
+            "type": "literal",
+            "value": "missing"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidPayToLifecycleEventSummary",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "createdAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "eventRef",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "eventType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidPayToLifecycleEventType",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "outcome",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "success"
+              },
+              {
+                "type": "literal",
+                "value": "failure"
+              },
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "reason",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidPayToLifecycleEventType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "indexedAccess",
+            "indexType": {
+              "type": "intrinsic",
+              "name": "number"
+            },
+            "objectType": {
+              "type": "query",
+              "queryType": {
+                "type": "reference",
+                "name": "CUBID_PAY_TO_LIFECYCLE_EVENT_TYPES",
+                "package": "@cubid/core"
+              }
+            }
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidPayToStampType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "indexedAccess",
+        "indexType": {
+          "type": "intrinsic",
+          "name": "number"
+        },
+        "objectType": {
+          "type": "query",
+          "queryType": {
+            "type": "reference",
+            "name": "CUBID_PAY_TO_STAMP_TYPES",
+            "package": "@cubid/core"
+          }
+        }
+      }
+    },
+    {
       "name": "CubidProfileDisclosureClaim",
       "variant": "declaration",
       "kind": 2097152,
@@ -7882,6 +9020,118 @@
               {
                 "type": "intrinsic",
                 "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidResolvePayToAliasesInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "aliases",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidPayToAliasCandidate",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "resolverKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidResolvePayToAliasesResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "results",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidPayToAliasResolutionResult",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidPayToAliasResolutionStatus",
+                "package": "@cubid/core"
               },
               {
                 "type": "literal",
@@ -8704,6 +9954,164 @@
           }
         }
       ]
+    },
+    {
+      "name": "CubidSendPaymentIntentCreatedNotificationInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidIdempotentRequestOptions",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "body",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "dappUserUuid",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "deepLink",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "metadata",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                },
+                {
+                  "name": "priority",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidNotificationPriority",
+                    "package": "@cubid/core"
+                  }
+                },
+                {
+                  "name": "title",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidSendPaymentIntentCreatedNotificationResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidSendNotificationResponse",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "category",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "literal",
+                    "value": "TRANSACTIONAL"
+                  }
+                },
+                {
+                  "name": "paymentEventType",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidPaymentIntentCreatedEventType",
+                    "package": "@cubid/core"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "name": "CubidSendPhoneOtpInput",
@@ -10120,6 +11528,250 @@
           }
         }
       }
+    },
+    {
+      "name": "CubidStartPayToActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidIdempotentRequestOptions",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "actionType",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidPayToActionType",
+                    "package": "@cubid/core"
+                  }
+                },
+                {
+                  "name": "dappUserUuid",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "name": "metadata",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Record"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    ],
+                    "name": "Record",
+                    "package": "typescript"
+                  }
+                },
+                {
+                  "name": "requiredPasskeyAssurance",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "boolean"
+                  }
+                },
+                {
+                  "name": "returnUrl",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidStartPayToActionResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "actionToken",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "actionType",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidPayToActionType",
+                "package": "@cubid/core"
+              },
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "expiresAt",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "hostedUrl",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "idempotencyKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "CubidStartRecoveryBundleReleaseInput",
@@ -11842,6 +13494,28 @@
       }
     },
     {
+      "name": "GetPayToGrantStatusInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidGetPayToGrantStatusInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "GetPayToGrantStatusResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidGetPayToGrantStatusResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "GetRecoveryBundleStatusInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -11937,6 +13611,28 @@
       "type": {
         "type": "reference",
         "name": "CubidListAccountsResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "ListPayToEventsInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidListPayToEventsInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "ListPayToEventsResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidListPayToEventsResponse",
         "package": "@cubid/core"
       }
     },
@@ -12062,6 +13758,149 @@
       }
     },
     {
+      "name": "PaymentIntentCreatedEventType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPaymentIntentCreatedEventType",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToActionType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToActionType",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToAliasCandidate",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToAliasCandidate",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToAliasResolutionResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToAliasResolutionResult",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToAliasResolutionStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToAliasResolutionStatus",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToEligibilityCandidate",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToEligibilityCandidate",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToEligibilityResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToEligibilityResult",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToEligibilityStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToEligibilityStatus",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToEventsStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToEventsStatus",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToGrantStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToGrantStatus",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToLifecycleEventSummary",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToLifecycleEventSummary",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToLifecycleEventType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToLifecycleEventType",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "PayToStampType",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidPayToStampType",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "RecoverableWalletErrorCode",
       "variant": "declaration",
       "kind": 2097152,
@@ -12113,6 +13952,28 @@
       "type": {
         "type": "reference",
         "name": "CubidRecoveryBundleSummary",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "ResolvePayToAliasesInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidResolvePayToAliasesInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "ResolvePayToAliasesResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidResolvePayToAliasesResponse",
         "package": "@cubid/core"
       }
     },
@@ -12249,6 +14110,28 @@
       }
     },
     {
+      "name": "SendPaymentIntentCreatedNotificationInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSendPaymentIntentCreatedNotificationInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "SendPaymentIntentCreatedNotificationResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidSendPaymentIntentCreatedNotificationResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "SendPhoneOtpInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -12377,6 +14260,28 @@
       "type": {
         "type": "reference",
         "name": "CubidStampType",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPayToActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPayToActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPayToActionResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPayToActionResponse",
         "package": "@cubid/core"
       }
     },
@@ -12719,6 +14624,116 @@
             {
               "type": "literal",
               "value": "notification_quota_exceeded"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "CUBID_PAY_TO_ACTION_TYPES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "setup"
+            },
+            {
+              "type": "literal",
+              "value": "route_registration"
+            },
+            {
+              "type": "literal",
+              "value": "route_authorization"
+            },
+            {
+              "type": "literal",
+              "value": "route_selection"
+            },
+            {
+              "type": "literal",
+              "value": "grant_revocation"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "CUBID_PAY_TO_LIFECYCLE_EVENT_TYPES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "pay_to.stamp.disabled"
+            },
+            {
+              "type": "literal",
+              "value": "pay_to.grant.revoked"
+            },
+            {
+              "type": "literal",
+              "value": "pay_to.grant.expired"
+            },
+            {
+              "type": "literal",
+              "value": "pay_to.identity_state.changed"
+            }
+          ]
+        }
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "CUBID_PAY_TO_STAMP_TYPES",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "typeOperator",
+        "operator": "readonly",
+        "target": {
+          "type": "tuple",
+          "elements": [
+            {
+              "type": "literal",
+              "value": "email"
+            },
+            {
+              "type": "literal",
+              "value": "phone"
+            },
+            {
+              "type": "literal",
+              "value": "github"
+            },
+            {
+              "type": "literal",
+              "value": "google"
+            },
+            {
+              "type": "literal",
+              "value": "evm"
             }
           ]
         }
@@ -14178,6 +16193,54 @@
     },
     {
       "kind": "code",
+      "text": "`checkPayToEligibility`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`resolvePayToAliases`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`getPayToGrantStatus`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`listPayToEvents`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPayToAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`sendPaymentIntentCreatedNotification`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`enrollRecoveryBundle`"
     },
     {
@@ -14506,6 +16569,54 @@
     },
     {
       "kind": "code",
+      "text": "`checkPayToEligibility({ dappUserUuid, candidates })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`resolvePayToAliases({ dappUserUuid, aliases, resolverKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`getPayToGrantStatus({ dappUserUuid })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`listPayToEvents({ dappUserUuid, since?, limit? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPayToAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`sendPaymentIntentCreatedNotification({ dappUserUuid, title, body, priority?, deepLink?, metadata?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`enrollRecoveryBundle({ userId, bundleMaterial, providerKey?, recoveryBundleId?, idempotencyKey? })`"
     },
     {
@@ -14734,7 +16845,79 @@
     },
     {
       "kind": "text",
-      "text": " now targets the v3 write\ncontract only.\n\n"
+      "text": " now targets the v3 write\ncontract only.\n\n## GlobalPayTo Pay-To Helpers\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/core`"
+    },
+    {
+      "kind": "text",
+      "text": " exposes the server/Edge side of the GlobalPayTo Pay-To MVP\ncontract. These helpers use the initialized client configuration, including\n"
+    },
+    {
+      "kind": "code",
+      "text": "`baseUrl`"
+    },
+    {
+      "kind": "text",
+      "text": ", injected "
+    },
+    {
+      "kind": "code",
+      "text": "`fetch`"
+    },
+    {
+      "kind": "text",
+      "text": ", dapp API key, and optional "
+    },
+    {
+      "kind": "code",
+      "text": "`dappId`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```ts\nconst eligibility = await cubid.checkPayToEligibility({\n  dappUserUuid: \"app-user-123\",\n  candidates: [\n    { candidateRef: \"payee-1\", stampType: \"email\", value: \"payee@example.com\" },\n  ],\n})\n\nconst action = await cubid.startPayToAction({\n  actionType: \"setup\",\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  returnUrl: \"https://app.example/pay-to/callback\",\n  requiredPasskeyAssurance: true,\n})\n\nawait cubid.sendPaymentIntentCreatedNotification({\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  title: \"Payment intent created\",\n  body: \"Review the pending payment intent.\",\n  metadata: { intentId: \"pi_123\" },\n})\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nPay-To resolver helpers are deliberately submitted-candidate or opaque-alias\nbased. There is no dapp resolver helper for listing all payment-enabled stamps.\nNegative responses such as "
+    },
+    {
+      "kind": "code",
+      "text": "`resolution_unavailable`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`no_events`"
+    },
+    {
+      "kind": "text",
+      "text": " are\ngeneric by design and should not be expanded into probing-friendly detail.\n\nDapp API keys must stay server-side. Browser launch of a hosted Pay-To action\nbelongs in "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": " via "
+    },
+    {
+      "kind": "code",
+      "text": "`openPayToHostedAction(action.hostedUrl)`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n"
     },
     {
       "kind": "code",
