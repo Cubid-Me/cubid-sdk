@@ -24,7 +24,9 @@ describe("@cubid/acceptance browser consumer flow", () => {
       }
     });
 
-    expect(opened).toEqual(["/pay-to/actions/complete?action_token=pta_act_123"]);
+    expect(opened).toEqual([
+      "https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123"
+    ]);
     expect(() =>
       openPayToHostedAction("/pay-to/actions/complete?action_token=pta_act_123&apikey=secret", {
         opener: () => null

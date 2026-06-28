@@ -112,3 +112,16 @@
   - `pnpm install --frozen-lockfile`
   - `git diff --check`
 - Follow-ups: Dependabot alert state will update after the branch lands on the default branch and GitHub rescans the lockfile.
+
+## 2026-06-27T21:12:00Z
+
+- Agent: Codex
+- Branch: `codex/globalpayto-cubid-mvp-dependencies`
+- Head: `cbcd51d0`
+- Summary: Fixed the CI acceptance failure by updating the consumer-style browser acceptance test to expect absolute Passport-hosted Pay-To action URLs after the review-driven URL normalization change.
+- Validation:
+  - `gh run view 28300943201 --job 83848997381 --log-failed`
+  - `pnpm test:acceptance`
+  - `pnpm exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`
+  - `git diff --check`
+- Follow-ups: Push the CI-fix commit and confirm the replacement CI run is green before merging PR #25.
