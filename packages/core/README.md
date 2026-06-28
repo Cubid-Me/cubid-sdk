@@ -279,8 +279,10 @@ Prefer the typed action helpers for ordinary MVP flows:
 `startPaytagEnableAction`, `startPaytagAliasCreateAction`,
 `startPaytagAliasSelectAction`, `startPaytagGrantAction`, and
 `startPaytagRevokeAction`. `startHostedPaytagAction` remains available as a
-lower-level primitive for backend wire compatibility, but app code should not
-need to pass raw action strings for common Paytag flows.
+lower-level primitive for canonical Paytag action strings only, but app code
+should not need to pass raw action strings for common Paytag flows. Route
+registration, route authorization, and route selection belong to MyPayTag, not
+to Cubid Paytag SDK helpers.
 
 Paytag helpers are deliberately submitted-candidate or opaque-alias based.
 There is no dapp helper for listing all user paytags or payment-enabled

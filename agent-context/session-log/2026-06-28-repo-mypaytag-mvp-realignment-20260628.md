@@ -87,3 +87,12 @@
 - summary: Added a Paytag surface guardrail script that checks @cubid/core public Paytag helpers against OpenAPI operation IDs, scans generated artifacts for removed Pay-To public helper names, and blocks forbidden Paytag-owned payment/routing/provider field keys in OpenAPI. Wired the guardrail into `paytag:check` and the yeet validation bundle.
 - validation: `corepack pnpm paytag:check`; `corepack pnpm api:validate`.
 - follow-ups: Quarantine route-oriented compatibility action strings from the public action type surface in S19.5.
+
+## 2026-06-28T22:57:15Z - S19.5 canonical Paytag action strings
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: 3682b355
+- summary: Removed old setup and route-oriented compatibility strings from the public Paytag action type, added runtime validation for the generic hosted-action primitive, replaced the positive hosted-action test response with a canonical paytag action, and documented that MyPayTag owns route registration, authorization, and selection.
+- validation: `corepack pnpm --filter @cubid/core test`; `corepack pnpm paytag:check`.
+- follow-ups: Expand @cubid/browser hosted Paytag action URL tests in S19.6.

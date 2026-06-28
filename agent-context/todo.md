@@ -1764,12 +1764,12 @@ Acceptance notes:
 
 ### S19.5 Quarantine route-oriented compatibility action strings
 
-- Status: Planned
-- Timestamp started:
-- Timestamp completed:
+- Status: Completed
+- Timestamp started: 2026-06-28T22:57:15Z
+- Timestamp completed: 2026-06-28T22:57:15Z
 - Feature branch: `codex/mypaytag-mvp-realignment-20260628`
-- Head:
-- Session-log reference(s):
+- Head: 3682b355
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
 
 Remove route-oriented action strings from the ordinary public Paytag type surface, or explicitly quarantine them as backend wire compatibility.
 

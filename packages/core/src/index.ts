@@ -591,19 +591,11 @@ export const CUBID_PAYTAG_STAMP_TYPES = [
 ] as const
 
 export const CUBID_PAYTAG_ACTION_TYPES = [
-  "setup",
   "paytag_enable",
   "paytag_alias_create",
   "paytag_alias_select",
   "paytag_grant",
   "paytag_revoke",
-] as const
-
-export const CUBID_PAYTAG_COMPAT_ACTION_TYPES = [
-  "route_registration",
-  "route_authorization",
-  "route_selection",
-  "grant_revocation",
 ] as const
 
 export const CUBID_PAYTAG_LIFECYCLE_EVENT_TYPES = [
@@ -617,9 +609,7 @@ export type CubidPaytagStampType = (typeof CUBID_PAYTAG_STAMP_TYPES)[number]
 
 export type CubidPaytagAliasExposure = "opaque"
 
-export type CubidPaytagActionType =
-  | (typeof CUBID_PAYTAG_ACTION_TYPES)[number]
-  | (typeof CUBID_PAYTAG_COMPAT_ACTION_TYPES)[number]
+export type CubidPaytagActionType = (typeof CUBID_PAYTAG_ACTION_TYPES)[number]
 
 export type CubidPaytagAuthorizationStatus =
   | "checked"
@@ -1696,6 +1686,23 @@ const assertPaytagAliasExposure = (
     endpoint,
     message:
       "aliasExposure must be \"opaque\". Explicit raw-stamp exposure requires a separate Passport-hosted action contract before the SDK can expose it.",
+  })
+}
+
+const assertPaytagActionType = (
+  value: string,
+  endpoint: string
+): CubidPaytagActionType => {
+  if ((CUBID_PAYTAG_ACTION_TYPES as readonly string[]).includes(value)) {
+    return value as CubidPaytagActionType
+  }
+
+  throw new CubidApiError({
+    category: "validation",
+    code: "INVALID_INPUT",
+    endpoint,
+    message:
+      "actionType must be one of the canonical paytag_* actions. MyPayTag owns route registration, route authorization, and route selection.",
   })
 }
 
@@ -4622,6 +4629,7 @@ export const createCubidApiClient = (
         "actionType",
         endpoint
       )
+      const canonicalActionType = assertPaytagActionType(actionType, endpoint)
       const dappUserUuid = assertNonEmptyString(
         input.dappUserUuid,
         "dappUserUuid",
@@ -4639,7 +4647,7 @@ export const createCubidApiClient = (
         baseUrl,
         "/api/v3/pay-to/actions/start",
         withV3Credentials({
-          action_type: actionType,
+          action_type: canonicalActionType,
           dapp_user_uuid: dappUserUuid,
           metadata,
           required_passkey_assurance: input.requiredPasskeyAssurance,

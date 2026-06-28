@@ -1136,7 +1136,7 @@ test("paytag hosted action helper auto-generates idempotency key when omitted", 
         return createJsonResponse({
           data: {
             actionToken: "pta_act_auto",
-            actionType: "route_authorization",
+            actionType: "paytag_grant",
             hostedUrl: "/pay-to/actions/complete?action_token=pta_act_auto",
             status: "pending",
           },
@@ -1154,6 +1154,36 @@ test("paytag hosted action helper auto-generates idempotency key when omitted", 
 
   assert.equal(action.idempotencyKey, idempotencyKeys[0])
   assert.match(String(idempotencyKeys[0]), /^[0-9a-f-]{36}$/)
+})
+
+test("paytag hosted action helper rejects route-oriented compatibility action strings", () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () => createJsonResponse({ data: { status: "unreachable" } }),
+  })
+
+  for (const actionType of [
+    "setup",
+    "route_registration",
+    "route_authorization",
+    "route_selection",
+    "grant_revocation",
+  ]) {
+    assert.throws(
+      () =>
+        client.startHostedPaytagAction({
+          actionType: actionType as "paytag_enable",
+          dappUserUuid: "dapp_user_123",
+        }),
+      (error) => {
+        assert.ok(error instanceof CubidApiError)
+        assert.equal(error.code, "INVALID_INPUT")
+        assert.match(error.message, /canonical paytag_\* actions/)
+        return true
+      }
+    )
+  }
 })
 
 test("typed paytag action helpers send canonical action types through the initialized client", async () => {

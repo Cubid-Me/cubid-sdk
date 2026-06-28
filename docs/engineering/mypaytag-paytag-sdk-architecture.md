@@ -60,10 +60,12 @@ Route mapping remains wire-compatible:
 Supported submitted-candidate stamp types are `email`, `phone`, `github`,
 `google`, and `evm`.
 
-Preferred action types are `paytag_enable`, `paytag_alias_create`,
-`paytag_alias_select`, `paytag_grant`, and `paytag_revoke`. Temporary backend
-compatibility action strings may still pass through the type until the runtime
-fully removes them, but they are not the documented SDK examples.
+Supported SDK action types are `paytag_enable`, `paytag_alias_create`,
+`paytag_alias_select`, `paytag_grant`, and `paytag_revoke`. Route-oriented
+strings such as `route_registration`, `route_authorization`,
+`route_selection`, and `grant_revocation` are not public Paytag SDK actions.
+MyPayTag, not Cubid, owns PayToDapp route registration, route authorization,
+and route selection.
 
 `startPaytagAliasCreateAction` is explicitly opaque by default and only accepts
 `aliasExposure: "opaque"` in the current SDK contract. Raw stamp-based paytags
