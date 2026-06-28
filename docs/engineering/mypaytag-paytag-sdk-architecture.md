@@ -151,3 +151,36 @@ Implementation should keep tests proving:
 - SDK examples and normalized paytag responses do not expose wallet, route,
   provider, asset, payment intent, settlement, solver, bridge, swap, or
   execution fields.
+
+## Staged Smoke Checklist
+
+Treat hosted staging smoke as launch-readiness evidence only after local SDK
+validation passes.
+
+Local SDK baseline:
+
+- `pnpm --filter @cubid/core test`
+- `pnpm --filter @cubid/core build`
+- `pnpm --filter @cubid/browser build`
+- `pnpm test:acceptance`
+- `pnpm api:validate`
+- `pnpm api:postman`
+- `pnpm docs:api:build`
+- `pnpm docs:api:check`
+
+Hosted staging baseline:
+
+- Cubid hosted action start returns a hosted paytag action URL for
+  `paytag_enable`.
+- `@cubid/browser` opens only the Cubid-hosted paytag action URL and rejects
+  dapp API keys in the URL.
+- MyPayTag backend validates a submitted opaque paytag such as
+  `abd123@cubid.mypaytag` through the Cubid SDK without sending wallet, route,
+  provider, asset, or payment-intent fields to Cubid.
+- MyPayTag site can send the user to the Cubid hosted paytag action and return
+  to its own Paytag UX without exposing raw stamp values by default.
+- One test PayingDapp calls MyPayTag, not Cubid directly, for paytag payment
+  discovery.
+- One test PayToDapp route flow proves MyPayTag owns route selection and
+  provider intent creation while Cubid remains limited to identity, consent,
+  aliases, and lifecycle state.

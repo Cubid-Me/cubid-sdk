@@ -42,3 +42,12 @@
 - summary: Updated consumer-style acceptance tests to import and call only Paytag public exports, assert old Pay-To and payment-intent exports are absent, and verify Paytag request bodies avoid payment, wallet, provider, and route fields.
 - validation: `pnpm --filter @cubid/core build`; `pnpm --filter @cubid/browser build`; `pnpm test:acceptance`
 - follow-ups: Complete S18 roadmap/session metadata and add staged MyPayTag smoke guidance.
+
+## 2026-06-28T11:31:00Z - S18 roadmap closeout and staged smoke guidance
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: b73d3860
+- summary: Marked S18 and S18.1 through S18.6 complete, updated repo-status and backgrounder with the Paytag-only SDK direction, and added local plus hosted staging smoke guidance for Cubid/MyPayTag integration readiness.
+- validation: `pnpm api:validate`; `pnpm docs:api:check`; `git diff --check`; targeted `rg` confirming old Pay-To public names only remain in negative tests.
+- follow-ups: Run full repo validation before yeeting the branch.

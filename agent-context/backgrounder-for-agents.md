@@ -167,22 +167,26 @@ Treat hosted Allow Page category grants as Passport-owned UX for now. If the
 SDK later exposes them, model them only as permission state and never as
 access to raw destinations or delivery capability.
 
-### GlobalPayTo Pay-To SDK Direction
+### MyPayTag Paytag SDK Direction
 
-GlobalPayTo Pay-To support is now tracked as the S17 SDK roadmap. Cubid
-monorepo PR22 has merged to `dev` and defines the concrete backend contracts.
-Server/Edge helpers for
-submitted-candidate eligibility, opaque alias resolution, hosted action start,
-grant status, lifecycle event polling, and constrained
-`payment_intent_created` notification delivery belong in `@cubid/core`.
+MyPayTag paytag support is tracked as the S18 SDK realignment. Cubid owns
+paytag identity, verified stamps, opaque aliases, consent, grants, hosted
+actions, and lifecycle state. MyPayTag owns wallets, payment routes, provider
+callbacks, payment intents, settlement, solvers, bridges, swaps, and
+execution.
 
-Browser-safe hosted action launch belongs in `@cubid/browser`, with optional
-React ergonomics in `@cubid/react`. Signed-in user stamp and grant management
-routes are owner-management surfaces, not dapp resolver APIs. Do not add a
-list-all-payment-stamps resolver helper, and do not expose universal Cubid
-IDs, raw stamp identifiers, raw payment identifiers, provider internals, route
-counts, route preferences, wallet graphs, resolver diagnostics, or cross-app
-grant state.
+Server/Edge helpers for submitted paytag authorization, opaque alias
+validation, grant status, lifecycle event polling, and hosted paytag action
+start belong in `@cubid/core`. Browser-safe hosted action launch belongs in
+`@cubid/browser`, with optional React ergonomics in `@cubid/react`.
+
+Do not re-add old Pay-To public SDK exports. Backend wire paths may still use
+`/pay-to` for compatibility, but public SDK names and examples should remain
+Paytag-only. Signed-in user stamp and grant management routes are
+owner-management surfaces, not dapp resolver APIs. Do not add a list-all-paytags
+resolver helper, and do not expose universal Cubid IDs, raw stamp identifiers,
+raw payment identifiers, provider internals, route counts, route preferences,
+wallet graphs, resolver diagnostics, or cross-app grant state.
 
 ### Future `@cubid/wallet-recovery`
 
