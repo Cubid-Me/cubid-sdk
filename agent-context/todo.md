@@ -1593,3 +1593,80 @@ only, generic negative responses, no raw identifier leakage, redacted
 lifecycle events, idempotent action start, and unsupported payment event
 denial before event creation. Add explicit browser and React package tests
 showing Pay-To helpers cannot accept dapp API keys.
+
+### S18. Realign Cubid SDK Paytag Identity And Consent Helpers For MyPayTag
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Track the SDK refactor requested in `agent-context/2026-06-28-mypaytag-mvp-realignment.md`. The SDK should expose Cubid as the paytag identity and consent layer for a MyPayTag-branded payment identity, not as a wallet resolver, payment router, PayToDapp route manager, provider callback surface, payment-intent system, settlement layer, solver, bridge, swap, or execution adapter.
+
+### S18.1 Rename and reframe server-only Pay-To helpers as Paytag identity helpers
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Rename or wrap `checkPayToEligibility` as a submitted paytag authorization check, `resolvePayToAliases` as opaque paytag validation, and `startPayToAction` as a hosted Cubid paytag action starter. Keep compatibility aliases only where needed and mark them deprecated. Present direct validation helpers as MyPayTag/server-only integration tools rather than ordinary PayingDapp APIs. PayingDapps should integrate with MyPayTag and should not directly probe Cubid for paytag state.
+
+### S18.2 Add browser-safe hosted paytag action helpers
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Add user-facing browser/session helpers once `cubid-monorepo` exposes the routes. Helpers should open hosted Cubid actions for `paytag_enable`, `paytag_alias_create`, paytag alias selection, paytag grant, and paytag revoke. Default examples should use opaque paytags such as `abd123@cubid.mypaytag`. Explicit raw-stamp exposure should be modeled separately with examples such as `+1234569999@phone.cubid.mypaytag`. Browser helpers must not accept dapp API keys.
+
+### S18.3 Remove payment-intent semantics from Cubid SDK surfaces
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Remove, move, or deprecate `sendPaymentIntentCreatedNotification` as MyPayTag-specific compatibility or as a generic comms helper outside the paytag identity surface. OpenAPI examples and README material must not include payment intent ids, payment deep links, settlement language, pending payment copy, provider callbacks, PayToDapp route priority, wallets, solvers, bridges, swaps, or execution as Cubid-owned primitives.
+
+### S18.4 Update OpenAPI and generated docs around paytag identity and consent
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Reframe documented routes around paytag identity, verified stamps, opaque aliases, grants, consent, and lifecycle state. Add user-owned hosted paytag action documentation when backend support exists. Keep server-only dapp API key boundaries. Do not document list-all paytags for dapps unless it is an explicit user-authorized disclosure path. Use MyPayTag terminology for product-facing paytags while describing Cubid as the identity, consent, verified stamp, and alias provider.
+
+### S18.5 Add SDK tests for the Cubid/MyPayTag separation
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Add tests asserting browser helpers reject dapp API keys and only open Cubid-hosted paytag actions. Server helpers should send only paytag candidate, alias, grant, and lifecycle fields. SDK examples and normalized responses must contain no wallet, route, provider, asset, payment intent, settlement, solver, bridge, swap, or execution fields for Cubid paytag operations. PayingDapp examples must call MyPayTag rather than Cubid directly.
+
+### S18.6 Add compatibility and staging smoke guidance
+
+- Status: Not started
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: TBD
+- Head: TBD
+- Session-log reference(s): TBD
+
+Document compatibility aliases for current `PayTo` names, mark them deprecated, and prefer new `Paytag` examples. Add a staged smoke checklist that pairs the Cubid SDK with Cubid hosted actions, MyPayTag SDK/backend/site, one test PayingDapp, and one test PayToDapp. Local package tests must pass before hosted staging smoke is treated as launch-readiness evidence.
