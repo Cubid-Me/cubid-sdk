@@ -78,3 +78,12 @@
 - summary: Added OpenAPI paths, request schemas, response schemas, and opaque-default examples for Paytag alias validation, dapp-scoped grant status, and redacted lifecycle event listing. Regenerated the deterministic Postman collection from the updated OpenAPI source.
 - validation: `corepack pnpm api:validate`; `corepack pnpm api:postman`.
 - follow-ups: Add guardrails so Paytag public helpers, OpenAPI operation IDs, and generated artifacts stay in sync in S19.4.
+
+## 2026-06-28T22:54:45Z - S19.4 Paytag surface guardrail
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: c279297b
+- summary: Added a Paytag surface guardrail script that checks @cubid/core public Paytag helpers against OpenAPI operation IDs, scans generated artifacts for removed Pay-To public helper names, and blocks forbidden Paytag-owned payment/routing/provider field keys in OpenAPI. Wired the guardrail into `paytag:check` and the yeet validation bundle.
+- validation: `corepack pnpm paytag:check`; `corepack pnpm api:validate`.
+- follow-ups: Quarantine route-oriented compatibility action strings from the public action type surface in S19.5.

@@ -16,6 +16,7 @@
     "docs:api:build": "node scripts/build-api-reference.mjs",
     "docs:api:check": "node scripts/build-api-reference.mjs --check",
     "lint": "eslint .",
+    "paytag:check": "node scripts/check-paytag-surface.mjs",
     "release": "changeset publish",
     "test": "pnpm test:unit && pnpm build && pnpm test:acceptance",
     "test:acceptance": "pnpm --filter @cubid/acceptance test",
@@ -23,7 +24,7 @@
     "test:coverage": "vitest run --config vitest.config.ts --coverage",
     "test:unit": "pnpm --filter @cubid/core build && pnpm --filter @cubid/auth build && pnpm --filter @cubid/aptos build && pnpm --filter @cubid/browser build && pnpm --filter @cubid/bitcoin build && pnpm --filter @cubid/cardano build && pnpm --filter @cubid/comms build && pnpm --filter @cubid/cosmos build && pnpm --filter @cubid/evm build && pnpm --filter @cubid/near build && pnpm --filter @cubid/polkadot build && pnpm --filter @cubid/solana build && pnpm --filter @cubid/starknet build && pnpm --filter @cubid/stellar build && pnpm --filter @cubid/sui build && pnpm --filter @cubid/tezos build && pnpm --filter @cubid/wallet-recovery build && pnpm --filter @cubid/wallet-recovery-react build && vitest run --config vitest.config.ts",
     "typecheck": "pnpm -r typecheck",
-    "validate:yeet": "pnpm install --frozen-lockfile && pnpm lint && pnpm typecheck && pnpm test:unit && pnpm build && pnpm test:acceptance && pnpm test:coverage && pnpm api:validate && pnpm docs:api:check && pnpm check:core-package"
+    "validate:yeet": "pnpm install --frozen-lockfile && pnpm lint && pnpm typecheck && pnpm test:unit && pnpm build && pnpm test:acceptance && pnpm test:coverage && pnpm api:validate && pnpm paytag:check && pnpm docs:api:check && pnpm check:core-package"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.4",
