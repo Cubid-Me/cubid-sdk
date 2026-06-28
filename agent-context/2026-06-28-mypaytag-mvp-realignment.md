@@ -38,6 +38,18 @@ Cubid SDK must not expose or describe:
 - MyPayTag provider callbacks;
 - payment intents, payment instructions, settlement, solvers, swaps, bridges, or execution.
 
+## Product Decisions To Preserve
+
+- A paytag is a MyPayTag-branded payment identity powered by Cubid identity and consent primitives.
+- User-facing "Paytag" branding should live primarily in MyPayTag. Cubid SDK should describe Cubid as identity, consent, verified stamps, and aliases.
+- Paytags are universal global identifiers for PayingDapps at the product layer, while Cubid implementation may default to PayToDapp-scoped aliases/references behind the scenes.
+- Opaque paytags such as `abd123@cubid.mypaytag` are the default.
+- Raw stamp-based paytags such as `+1234569999@phone.cubid.mypaytag` require explicit user choice.
+- MyPayTag should be the primary caller of Cubid validation. PayingDapps integrate with MyPayTag and should not directly probe Cubid.
+- Cubid grants primarily authorize MyPayTag to validate identity/paytag state. MyPayTag manages PayingDapp and PayToDapp route authorization separately.
+- MyPayTag validates paytag uniqueness and availability before issuance so future identity providers beyond Cubid can fit the model.
+- Launch readiness requires local tests first, then hosted staging smoke across Cubid, MyPayTag, one test PayingDapp, and one test PayToDapp.
+
 ## SDK Refactor Required
 
 1. Replace resolver/payment helper framing with paytag identity helper framing.
@@ -45,10 +57,12 @@ Cubid SDK must not expose or describe:
    - Rename or wrap `resolvePayToAliases` as opaque paytag validation.
    - Rename or wrap `startPayToAction` as a hosted Cubid paytag action starter.
    - Deprecate route/payment-oriented names after compatibility coverage exists.
+   - Present direct dapp validation helpers as MyPayTag/server-only integration tools, not as ordinary PayingDapp APIs.
 
 2. Add user-facing browser/session helpers once `cubid-monorepo` exposes the routes.
    - Open a hosted action for `paytag_enable`.
    - Open a hosted action for `paytag_alias_create` or equivalent.
+   - Support explicit raw-stamp exposure actions separately from default opaque paytag creation.
    - Open a hosted action for paytag grant/revoke.
    - Keep dapp API keys out of browser helpers.
 
@@ -61,11 +75,13 @@ Cubid SDK must not expose or describe:
    - Add user-owned hosted paytag action documentation when backend support exists.
    - Keep server-only dapp API key boundaries.
    - Do not document list-all paytags for dapps unless it is an explicit user-authorized disclosure path.
+   - Use opaque and raw-explicit paytag examples consistently, including `abd123@cubid.mypaytag` and `+1234569999@phone.cubid.mypaytag`.
 
 5. Update tests.
    - Assert that browser helpers reject dapp API keys and only open Cubid-hosted paytag actions.
    - Assert that server helpers send only paytag candidate/alias/grant/lifecycle fields.
    - Assert that SDK examples and normalized responses contain no wallet, route, provider, asset, payment intent, settlement, solver, bridge, or swap fields for Cubid paytag operations.
+   - Assert that PayingDapp examples call MyPayTag rather than Cubid directly.
 
 6. Preserve package compatibility deliberately.
    - If current `PayTo` names are already consumed, keep deprecated aliases that call the new `Paytag` helpers.
