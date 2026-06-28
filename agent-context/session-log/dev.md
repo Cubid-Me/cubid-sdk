@@ -98,3 +98,12 @@
 - summary: Addressed PR 24 review feedback by aligning the session-log README with shared-branch authorization guidance and normalizing the SIWC phone-claims session-log keys to the lowercase template.
 - validation: `pnpm docs:api:check`; `git diff --check`
 - follow-ups: Reply to and resolve PR 24 review threads, then request Codex review after pushing.
+
+## 2026-06-28T00:48:00.000Z - PR 26 hosted Pay-To review fixes
+
+- agent: Codex
+- branch: dev
+- head: 78e78e78
+- summary: Addressed PR 26 Codex review feedback by rejecting non-Passport absolute Pay-To hosted action URLs and normalizing sensitive query parameter names so camel-case dapp API key variants are blocked.
+- validation: `pnpm exec vitest run --config vitest.config.ts packages/browser/src/client.test.ts`; `pnpm --filter @cubid/browser build`; `pnpm test:acceptance`; `pnpm lint`; `git diff --check`
+- follow-ups: Push the fix to `dev`, reply to and resolve PR 26 review threads, then confirm CI is green before merge.

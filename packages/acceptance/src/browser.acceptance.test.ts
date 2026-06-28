@@ -32,5 +32,13 @@ describe("@cubid/acceptance browser consumer flow", () => {
         opener: () => null
       })
     ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
+    expect(() =>
+      openPayToHostedAction(
+        "https://attacker.example/pay-to/actions/complete?action_token=pta_act_123",
+        {
+          opener: () => null
+        }
+      )
+    ).toThrow("Pay-To hosted action URLs must use the Cubid Passport origin.");
   });
 });

@@ -11,9 +11,8 @@ const DEFAULT_PASSPORT_ORIGIN = "https://passport.cubid.me";
 const HOSTED_SIWC_DECISIONS = new Set(["approve", "reject"]);
 const PAY_TO_HOSTED_ACTION_PATH = "/pay-to/actions/complete";
 const SENSITIVE_PAY_TO_QUERY_PARAMS = new Set([
-  "api_key",
   "apikey",
-  "dapp_api_key"
+  "dappapikey"
 ]);
 
 function normalizePassportOrigin(passportOrigin?: string): string {
@@ -40,12 +39,18 @@ function assertPayToHostedActionUrl(hostedUrl: string): string {
   const normalized = assertNonEmpty(hostedUrl, "hostedUrl");
   const parsed = new URL(normalized, DEFAULT_PASSPORT_ORIGIN);
 
+  if (parsed.origin !== DEFAULT_PASSPORT_ORIGIN) {
+    throw new Error("Pay-To hosted action URLs must use the Cubid Passport origin.");
+  }
+
   if (parsed.pathname !== PAY_TO_HOSTED_ACTION_PATH) {
     throw new Error("Pay-To hosted action URLs must target /pay-to/actions/complete.");
   }
 
-  for (const key of SENSITIVE_PAY_TO_QUERY_PARAMS) {
-    if (parsed.searchParams.has(key)) {
+  for (const key of parsed.searchParams.keys()) {
+    const normalizedKey = key.replace(/[-_]/g, "").toLowerCase();
+
+    if (SENSITIVE_PAY_TO_QUERY_PARAMS.has(normalizedKey)) {
       throw new Error("Pay-To hosted action URLs must not contain dapp API keys.");
     }
   }

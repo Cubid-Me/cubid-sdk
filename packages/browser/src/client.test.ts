@@ -284,6 +284,18 @@ describe("@cubid/browser", () => {
       )
     ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
     expect(() =>
+      openPayToHostedAction(
+        "/pay-to/actions/complete?action_token=pta_act_123&dappApiKey=secret",
+        { opener }
+      )
+    ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
+    expect(() =>
+      openPayToHostedAction(
+        "https://attacker.example/pay-to/actions/complete?action_token=pta_act_123",
+        { opener }
+      )
+    ).toThrow("Pay-To hosted action URLs must use the Cubid Passport origin.");
+    expect(() =>
       openPayToHostedAction("/api/pay-to/stamps/list", { opener })
     ).toThrow("Pay-To hosted action URLs must target /pay-to/actions/complete.");
   });
