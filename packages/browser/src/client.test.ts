@@ -4,7 +4,8 @@ import {
   buildClearPassVerifyUrl,
   buildHostedSiwcAccountRequestAction,
   buildHostedSiwcSigningRequestAction,
-  buildHostedVerificationUrl
+  buildHostedVerificationUrl,
+  openPayToHostedAction
 } from "./hosted";
 import { createCubidWeb2Client } from "./client";
 
@@ -255,5 +256,47 @@ describe("@cubid/browser", () => {
         signingRequestId: "siwc_req_456"
       })
     ).toThrow('Hosted SIWC actions require decision to be "approve" or "reject".');
+  });
+
+  it("opens Pay-To hosted action URLs without accepting dapp API keys", () => {
+    const opener = vi.fn(() => null);
+
+    expect(
+      openPayToHostedAction(
+        "/pay-to/actions/complete?action_token=pta_act_123",
+        {
+          features: "popup=yes",
+          opener,
+          target: "_blank"
+        }
+      )
+    ).toBeNull();
+    expect(opener).toHaveBeenCalledWith(
+      "https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123",
+      "_blank",
+      "popup=yes"
+    );
+
+    expect(() =>
+      openPayToHostedAction(
+        "/pay-to/actions/complete?action_token=pta_act_123&api_key=secret",
+        { opener }
+      )
+    ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
+    expect(() =>
+      openPayToHostedAction(
+        "/pay-to/actions/complete?action_token=pta_act_123&dappApiKey=secret",
+        { opener }
+      )
+    ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
+    expect(() =>
+      openPayToHostedAction(
+        "https://attacker.example/pay-to/actions/complete?action_token=pta_act_123",
+        { opener }
+      )
+    ).toThrow("Pay-To hosted action URLs must use the Cubid Passport origin.");
+    expect(() =>
+      openPayToHostedAction("/api/pay-to/stamps/list", { opener })
+    ).toThrow("Pay-To hosted action URLs must target /pay-to/actions/complete.");
   });
 });

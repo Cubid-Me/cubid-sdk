@@ -52,6 +52,7 @@ out of React-specific packages. Today that includes:
 - hosted verification URL builders
 - ClearPass Verify URL builders
 - hosted SIWC approval/rejection request descriptors
+- hosted Pay-To action opener
 
 Use this package when your app needs browser-facing Cubid flow helpers but
 should not embed Cubid API keys, server credentials, or private approval logic
@@ -98,3 +99,23 @@ authentication, fresh passkey step-up, or app policy checks.
 
 Use them only in environments where the authenticated Passport user session is
 already expected to perform the approval or rejection step.
+
+## Hosted Pay-To Actions
+
+`@cubid/browser` exposes `openPayToHostedAction(...)` for server-created Pay-To
+hosted action URLs returned by `@cubid/core`'s `startPayToAction(...)`.
+
+```ts
+import { openPayToHostedAction } from "@cubid/browser"
+
+openPayToHostedAction(action.hostedUrl)
+```
+
+The helper only opens `/pay-to/actions/complete` URLs and rejects URL query
+parameters that look like dapp API keys. It does not create action tokens and
+does not accept dapp API keys. Create hosted Pay-To actions server-side through
+`@cubid/core`.
+
+Signed-in owner-management wrappers for Pay-To stamp and grant routes remain
+deferred until the SDK has a Cubid-authenticated user-session pattern ready for
+bearer-token calls.

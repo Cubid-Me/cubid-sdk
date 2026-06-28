@@ -54,6 +54,18 @@ export interface HostedSiwcSigningRequestActionRequest {
   signingRequestId: string;
 }
 
+export type PayToHostedActionOpener = (
+  url: string,
+  target?: string,
+  features?: string
+) => WindowProxy | null;
+
+export interface PayToHostedActionOpenOptions {
+  features?: string;
+  opener?: PayToHostedActionOpener;
+  target?: string;
+}
+
 export interface ResolvedCubidWeb2ClientOptions {
   allowPath: "/allow" | "/widget-allow";
   passportOrigin: string;

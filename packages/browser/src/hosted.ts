@@ -3,11 +3,17 @@ import type {
   HostedSiwcAccountRequestActionRequest,
   HostedSiwcRequestDescriptor,
   HostedSiwcSigningRequestActionRequest,
-  HostedVerificationUrlRequest
+  HostedVerificationUrlRequest,
+  PayToHostedActionOpenOptions
 } from "./types";
 
 const DEFAULT_PASSPORT_ORIGIN = "https://passport.cubid.me";
 const HOSTED_SIWC_DECISIONS = new Set(["approve", "reject"]);
+const PAY_TO_HOSTED_ACTION_PATH = "/pay-to/actions/complete";
+const SENSITIVE_PAY_TO_QUERY_PARAMS = new Set([
+  "apikey",
+  "dappapikey"
+]);
 
 function normalizePassportOrigin(passportOrigin?: string): string {
   return (passportOrigin ?? DEFAULT_PASSPORT_ORIGIN).replace(/\/+$/, "");
@@ -27,6 +33,29 @@ function assertHostedSiwcDecision(value: string): "approve" | "reject" {
   }
 
   return value as "approve" | "reject";
+}
+
+function assertPayToHostedActionUrl(hostedUrl: string): string {
+  const normalized = assertNonEmpty(hostedUrl, "hostedUrl");
+  const parsed = new URL(normalized, DEFAULT_PASSPORT_ORIGIN);
+
+  if (parsed.origin !== DEFAULT_PASSPORT_ORIGIN) {
+    throw new Error("Pay-To hosted action URLs must use the Cubid Passport origin.");
+  }
+
+  if (parsed.pathname !== PAY_TO_HOSTED_ACTION_PATH) {
+    throw new Error("Pay-To hosted action URLs must target /pay-to/actions/complete.");
+  }
+
+  for (const key of parsed.searchParams.keys()) {
+    const normalizedKey = key.replace(/[-_]/g, "").toLowerCase();
+
+    if (SENSITIVE_PAY_TO_QUERY_PARAMS.has(normalizedKey)) {
+      throw new Error("Pay-To hosted action URLs must not contain dapp API keys.");
+    }
+  }
+
+  return parsed.toString();
 }
 
 export function buildHostedVerificationUrl(request: HostedVerificationUrlRequest): string {
@@ -117,4 +146,18 @@ export function buildHostedSiwcSigningRequestAction(
     `/api/siwc/signing/requests/${decision}`,
     { signingRequestId }
   );
+}
+
+export function openPayToHostedAction(
+  hostedUrl: string,
+  options: PayToHostedActionOpenOptions = {}
+): WindowProxy | null {
+  const safeHostedUrl = assertPayToHostedActionUrl(hostedUrl);
+  const opener = options.opener ?? globalThis.open;
+
+  if (typeof opener !== "function") {
+    throw new Error("Pay-To hosted action launch requires a browser window opener.");
+  }
+
+  return opener(safeHostedUrl, options.target, options.features);
 }

@@ -973,6 +973,364 @@ test("createNotificationIdempotencyKey returns a UUID-shaped key", () => {
   assert.match(value, /^[0-9a-f-]{36}$/)
 })
 
+test("pay-to core helpers use initialized client credentials and normalize redacted responses", async () => {
+  const calls: Array<{
+    body: unknown
+    headers: Headers
+    path: string
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (input, init) => {
+      const path = new URL(String(input)).pathname
+      calls.push({
+        body: JSON.parse(String(init?.body)),
+        headers: new Headers(init?.headers),
+        path,
+      })
+
+      if (path.endsWith("/pay-to/stamps/eligibility/check")) {
+        return createJsonResponse({
+          data: {
+            results: [{ candidateRef: "payee-1", eligible: true }],
+            status: "checked",
+          },
+        })
+      }
+
+      if (path.endsWith("/pay-to/aliases/resolve")) {
+        return createJsonResponse({
+          data: {
+            results: [{ aliasRef: "alias-1", eligible: false }],
+            status: "resolution_unavailable",
+          },
+        })
+      }
+
+      if (path.endsWith("/pay-to/grants/status")) {
+        return createJsonResponse({
+          data: {
+            dappUserUuid: "dapp_user_123",
+            grantedAt: "2026-06-25T10:00:00.000Z",
+            grantStatus: "active",
+            revokedAt: null,
+          },
+        })
+      }
+
+      if (path.endsWith("/pay-to/events/list")) {
+        return createJsonResponse({
+          data: {
+            events: [
+              {
+                createdAt: "2026-06-25T11:00:00.000Z",
+                eventRef: "pay_to_event:evt_123",
+                eventType: "pay_to.grant.revoked",
+                outcome: "success",
+                reason: "user_revoked",
+              },
+            ],
+            status: "ok",
+          },
+        })
+      }
+
+      return createJsonResponse({
+        data: {
+          actionToken: "pta_act_123",
+          actionType: "setup",
+          expiresAt: "2026-06-25T11:10:00.000Z",
+          hostedUrl: "/pay-to/actions/complete?action_token=pta_act_123",
+          status: "pending",
+        },
+      })
+    },
+  })
+
+  const eligibility = await client.checkPayToEligibility({
+    candidates: [
+      { candidateRef: "payee-1", stampType: "email", value: "user@example.com" },
+    ],
+    dappUserUuid: "dapp_user_123",
+  })
+  const aliases = await client.resolvePayToAliases({
+    aliases: [{ alias: "pta_alias_123", aliasRef: "alias-1" }],
+    dappUserUuid: "dapp_user_123",
+    resolverKey: "resolver_globalpayto",
+  })
+  const grant = await client.getPayToGrantStatus({
+    dappUserUuid: "dapp_user_123",
+  })
+  const events = await client.listPayToEvents({
+    dappUserUuid: "dapp_user_123",
+    limit: 10,
+    since: "2026-06-25T00:00:00.000Z",
+  })
+  const action = await client.startPayToAction({
+    actionType: "setup",
+    dappUserUuid: "dapp_user_123",
+    idempotencyKey: "payto_action_key_123",
+    metadata: { flow: "globalpayto_setup" },
+    requiredPasskeyAssurance: true,
+    returnUrl: "https://globalpayto.example/pay-to/callback",
+  })
+
+  assert.equal(eligibility.status, "checked")
+  assert.equal(eligibility.results[0]?.candidateRef, "payee-1")
+  assert.equal(eligibility.results[0]?.eligible, true)
+  assert.equal(aliases.status, "resolution_unavailable")
+  assert.equal(aliases.results[0]?.aliasRef, "alias-1")
+  assert.equal(aliases.results[0]?.eligible, false)
+  assert.equal(grant.grantStatus, "active")
+  assert.equal(events.events[0]?.eventRef, "pay_to_event:evt_123")
+  assert.equal(events.events[0]?.eventType, "pay_to.grant.revoked")
+  assert.equal(action.idempotencyKey, "payto_action_key_123")
+  assert.equal(action.hostedUrl, "/pay-to/actions/complete?action_token=pta_act_123")
+  assert.equal(calls[4]?.headers.get("Idempotency-Key"), "payto_action_key_123")
+
+  assert.deepEqual(calls.map((call) => call.path), [
+    "/api/v3/pay-to/stamps/eligibility/check",
+    "/api/v3/pay-to/aliases/resolve",
+    "/api/v3/pay-to/grants/status",
+    "/api/v3/pay-to/events/list",
+    "/api/v3/pay-to/actions/start",
+  ])
+  assert.deepEqual(calls[0]?.body, {
+    api_key: "api_key",
+    candidates: [
+      { candidateRef: "payee-1", stampType: "email", value: "user@example.com" },
+    ],
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+  })
+  assert.deepEqual(calls[1]?.body, {
+    aliases: [{ alias: "pta_alias_123", aliasRef: "alias-1" }],
+    api_key: "api_key",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    resolver_key: "resolver_globalpayto",
+  })
+  assert.deepEqual(calls[4]?.body, {
+    action_type: "setup",
+    api_key: "api_key",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    metadata: { flow: "globalpayto_setup" },
+    required_passkey_assurance: true,
+    return_url: "https://globalpayto.example/pay-to/callback",
+  })
+})
+
+test("pay-to payment intent notification helper is constrained and idempotent", async () => {
+  const calls: Array<{
+    body: unknown
+    headers: Headers
+    input: string | URL | Request
+  }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (input, init) => {
+      calls.push({
+        body: JSON.parse(String(init?.body)),
+        headers: new Headers(init?.headers),
+        input,
+      })
+      return createJsonResponse({
+        data: {
+          category: "TRANSACTIONAL",
+          createdAt: "2026-06-25T12:00:00.000Z",
+          eventId: "notif_evt_payto_123",
+          priority: "HIGH",
+          selectedChannelType: "email",
+          status: "accepted",
+        },
+      })
+    },
+  })
+
+  const response = await client.sendPaymentIntentCreatedNotification({
+    body: "A payment intent is ready for review.",
+    dappUserUuid: "dapp_user_123",
+    idempotencyKey: "payment_intent_key_123",
+    metadata: { intentId: "pi_123" },
+    priority: "HIGH",
+    title: "Payment intent created",
+  })
+
+  assert.equal(response.category, "TRANSACTIONAL")
+  assert.equal(response.paymentEventType, "payment_intent_created")
+  assert.equal(response.eventId, "notif_evt_payto_123")
+  assert.equal(response.idempotencyKey, "payment_intent_key_123")
+  assert.equal(
+    String(calls[0]?.input),
+    "https://passport.cubid.me/api/v3/notifications/send"
+  )
+  assert.equal(
+    calls[0]?.headers.get("Idempotency-Key"),
+    "payment_intent_key_123"
+  )
+  assert.deepEqual(calls[0]?.body, {
+    apikey: "api_key",
+    body: "A payment intent is ready for review.",
+    category: "TRANSACTIONAL",
+    dapp_id: "dapp_123",
+    dapp_user_uuid: "dapp_user_123",
+    metadata: { intentId: "pi_123" },
+    payment_event_type: "payment_intent_created",
+    priority: "HIGH",
+    title: "Payment intent created",
+  })
+})
+
+test("pay-to payment notification helper cannot be retargeted to unsupported events", async () => {
+  let body: Record<string, unknown> = {}
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      body = JSON.parse(String(init?.body)) as Record<string, unknown>
+      return createJsonResponse({
+        data: {
+          eventId: "notif_evt_payto_locked",
+          status: "accepted",
+        },
+      })
+    },
+  })
+
+  await client.sendPaymentIntentCreatedNotification({
+    body: "A payment intent is ready for review.",
+    dappUserUuid: "dapp_user_123",
+    paymentEventType: "payment_received",
+    priority: "CRITICAL",
+    title: "Payment received",
+  } as never)
+
+  assert.equal(body?.category, "TRANSACTIONAL")
+  assert.equal(body?.payment_event_type, "payment_intent_created")
+  assert.equal("payment_received" in body, false)
+})
+
+test("pay-to write helpers auto-generate idempotency keys when omitted", async () => {
+  const idempotencyKeys: string[] = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input, init) => {
+      idempotencyKeys.push(String(new Headers(init?.headers).get("Idempotency-Key")))
+      const path = new URL(String(input)).pathname
+
+      if (path.endsWith("/pay-to/actions/start")) {
+        return createJsonResponse({
+          data: {
+            actionToken: "pta_act_auto",
+            actionType: "route_authorization",
+            hostedUrl: "/pay-to/actions/complete?action_token=pta_act_auto",
+            status: "pending",
+          },
+        })
+      }
+
+      return createJsonResponse({
+        data: {
+          category: "TRANSACTIONAL",
+          eventId: "notif_evt_payto_auto",
+          status: "accepted",
+        },
+      })
+    },
+  })
+
+  const action = await client.startPayToAction({
+    actionType: "route_authorization",
+    dappUserUuid: "dapp_user_123",
+  })
+  const notification = await client.sendPaymentIntentCreatedNotification({
+    body: "A payment intent is ready for review.",
+    dappUserUuid: "dapp_user_123",
+    title: "Payment intent created",
+  })
+
+  assert.equal(action.idempotencyKey, idempotencyKeys[0])
+  assert.equal(notification.idempotencyKey, idempotencyKeys[1])
+  assert.match(String(idempotencyKeys[0]), /^[0-9a-f-]{36}$/)
+  assert.match(String(idempotencyKeys[1]), /^[0-9a-f-]{36}$/)
+})
+
+test("pay-to helpers reject malformed successful payloads", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () => createJsonResponse("not-an-object"),
+  })
+
+  await assert.rejects(
+    () =>
+      client.checkPayToEligibility({
+        candidates: [
+          { stampType: "email", value: "user@example.com" },
+        ],
+        dappUserUuid: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "MALFORMED_RESPONSE")
+      assert.equal(error.endpoint, "v3/pay-to/stamps/eligibility/check")
+      return true
+    }
+  )
+})
+
+test("pay-to resolver surface stays anti-enumeration focused", async () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (input) => {
+      const path = new URL(String(input)).pathname
+
+      if (path.endsWith("/pay-to/stamps/eligibility/check")) {
+        return createJsonResponse({
+          data: {
+            results: [{ candidateRef: "unknown", eligible: false }],
+            status: "resolution_unavailable",
+          },
+        })
+      }
+
+      return createJsonResponse({
+        data: {
+          events: [],
+          status: "no_events",
+        },
+      })
+    },
+  })
+
+  assert.equal("listPayToStamps" in client, false)
+  assert.equal("listPaymentEnabledStamps" in client, false)
+
+  const eligibility = await client.checkPayToEligibility({
+    candidates: [{ candidateRef: "unknown", stampType: "phone", value: "+15555550123" }],
+    dappUserUuid: "dapp_user_123",
+  })
+  const events = await client.listPayToEvents({
+    dappUserUuid: "dapp_user_123",
+  })
+
+  assert.equal(eligibility.status, "resolution_unavailable")
+  assert.equal(eligibility.results[0]?.eligible, false)
+  assert.deepEqual(Object.keys(eligibility.results[0]?.raw ?? {}).sort(), [
+    "candidateRef",
+    "eligible",
+  ])
+  assert.equal(events.status, "no_events")
+  assert.deepEqual(events.events, [])
+})
+
 test("v3 custody helpers normalize generated and listed accounts, including sui", async () => {
   const calls: Array<{
     body: unknown
