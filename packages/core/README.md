@@ -202,7 +202,7 @@ The current API v3 helpers stay server-side as well:
 - `listPaytagLifecycleEvents({ dappUserUuid, since?, limit? })`
 - `startHostedPaytagAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `startPaytagEnableAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
-- `startPaytagAliasCreateAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
+- `startPaytagAliasCreateAction({ dappUserUuid, aliasExposure?: "opaque", returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `startPaytagAliasSelectAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `startPaytagGrantAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `startPaytagRevokeAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
@@ -267,6 +267,12 @@ const action = await cubid.startPaytagEnableAction({
   returnUrl: "https://mypaytag.example/paytag/callback",
   requiredPasskeyAssurance: true,
 })
+
+const aliasAction = await cubid.startPaytagAliasCreateAction({
+  dappUserUuid: "app-user-123",
+  aliasExposure: "opaque",
+  idempotencyKey: crypto.randomUUID(),
+})
 ```
 
 Prefer the typed action helpers for ordinary MVP flows:
@@ -282,7 +288,13 @@ stamps. Negative responses such as `resolution_unavailable` and `no_events`
 are generic by design and should not be expanded into probing-friendly detail.
 Opaque paytags such as `abd123@cubid.mypaytag` are the default. Raw
 stamp-based paytags such as `+1234569999@phone.cubid.mypaytag` require
-explicit user choice outside ordinary dapp validation.
+explicit user choice outside ordinary dapp validation. The SDK does not expose
+a raw-stamp action helper yet because Passport has not promoted a stable
+separate raw-stamp exposure action contract. Passing `aliasExposure:
+"raw_stamp"` to `startPaytagAliasCreateAction` is rejected; when raw exposure
+is added later it should be a separate, explicitly named helper and must not
+return raw stamp values to dapps unless Passport documents a safe redacted
+response shape.
 
 Dapp API keys must stay server-side. Browser launch of a hosted Cubid paytag
 action belongs in `@cubid/browser` via

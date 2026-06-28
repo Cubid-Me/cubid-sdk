@@ -1705,12 +1705,12 @@ Acceptance notes:
 
 ### S19.2 Model opaque default and explicit raw-stamp exposure
 
-- Status: Planned
-- Timestamp started:
-- Timestamp completed:
+- Status: Completed
+- Timestamp started: 2026-06-28T22:50:34Z
+- Timestamp completed: 2026-06-28T22:50:34Z
 - Feature branch: `codex/mypaytag-mvp-realignment-20260628`
-- Head:
-- Session-log reference(s):
+- Head: a27aa81a
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
 
 Make the SDK contract prove that opaque paytags are default and raw stamp-based paytags require explicit user choice.
 

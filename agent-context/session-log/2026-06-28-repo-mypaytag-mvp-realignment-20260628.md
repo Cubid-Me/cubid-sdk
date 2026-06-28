@@ -60,3 +60,12 @@
 - summary: Added typed @cubid/core hosted Paytag action starter methods for enable, opaque alias create/select, grant, and revoke while keeping startHostedPaytagAction as the lower-level wire-compatibility primitive. Updated core README guidance and focused tests so ordinary MVP callers no longer pass raw action strings.
 - validation: Pending; will run focused @cubid/core tests before commit.
 - follow-ups: Model opaque default versus explicit raw-stamp exposure in S19.2.
+
+## 2026-06-28T22:50:34Z - S19.2 opaque default Paytag alias contract
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: a27aa81a
+- summary: Made Paytag alias creation explicitly opaque by default via the `aliasExposure: "opaque"` input contract, added runtime rejection for attempted raw-stamp exposure through the generic alias-create helper, and documented that raw-stamp paytags require a separate Passport-hosted action contract before SDK exposure.
+- validation: Pending; will run focused @cubid/core tests before commit.
+- follow-ups: Complete OpenAPI coverage for the remaining Paytag helper routes in S19.3.

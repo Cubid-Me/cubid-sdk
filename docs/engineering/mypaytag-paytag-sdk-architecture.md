@@ -65,6 +65,12 @@ Preferred action types are `paytag_enable`, `paytag_alias_create`,
 compatibility action strings may still pass through the type until the runtime
 fully removes them, but they are not the documented SDK examples.
 
+`startPaytagAliasCreateAction` is explicitly opaque by default and only accepts
+`aliasExposure: "opaque"` in the current SDK contract. Raw stamp-based paytags
+such as `+1234569999@phone.cubid.mypaytag` require a separate Passport-hosted
+action contract before the SDK should expose a typed helper. Do not route raw
+stamp exposure through the generic alias-create helper.
+
 Supported lifecycle event types remain identity/consent events:
 `pay_to.stamp.disabled`, `pay_to.grant.revoked`, `pay_to.grant.expired`, and
 `pay_to.identity_state.changed`.

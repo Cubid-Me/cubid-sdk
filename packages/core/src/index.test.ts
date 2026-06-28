@@ -1191,6 +1191,9 @@ test("typed paytag action helpers send canonical action types through the initia
 
   for (const [actionType, helper] of helpers) {
     const response = await helper({
+      ...(actionType === "paytag_alias_create"
+        ? { metadata: { flow: "default_alias" } }
+        : {}),
       dappUserUuid: "dapp_user_123",
       idempotencyKey: `${actionType}_key`,
       returnUrl: "https://mypaytag.example/paytag/callback",
@@ -1212,14 +1215,73 @@ test("typed paytag action helpers send canonical action types through the initia
   )
   for (const call of calls) {
     assert.equal(call.idempotencyKey, `${String(call.actionType)}_key`)
-    assert.deepEqual(call.body, {
+    const expectedBody: Record<string, unknown> = {
       action_type: call.actionType,
       api_key: "api_key",
       dapp_id: "dapp_123",
       dapp_user_uuid: "dapp_user_123",
       return_url: "https://mypaytag.example/paytag/callback",
-    })
+    }
+    if (call.actionType === "paytag_alias_create") {
+      expectedBody.metadata = {
+        flow: "default_alias",
+        paytag_alias_exposure: "opaque",
+      }
+    }
+    assert.deepEqual(call.body, expectedBody)
   }
+})
+
+test("paytag alias creation defaults to opaque aliases and rejects raw stamp exposure", async () => {
+  const bodies: unknown[] = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      const body = JSON.parse(String(init?.body))
+      bodies.push(body)
+
+      return createJsonResponse({
+        data: {
+          actionToken: "pta_alias_create",
+          actionType: "paytag_alias_create",
+          hostedUrl: "/pay-to/actions/complete?action_token=pta_alias_create",
+          status: "pending",
+        },
+      })
+    },
+  })
+
+  await client.startPaytagAliasCreateAction({
+    dappUserUuid: "dapp_user_123",
+    idempotencyKey: "opaque_alias_key",
+  })
+
+  assert.deepEqual(bodies[0], {
+    action_type: "paytag_alias_create",
+    api_key: "api_key",
+    dapp_user_uuid: "dapp_user_123",
+    metadata: {
+      paytag_alias_exposure: "opaque",
+    },
+  })
+  assert.equal(JSON.stringify(bodies[0]).includes("+1234569999"), false)
+  assert.equal(JSON.stringify(bodies[0]).includes("payment"), false)
+  assert.equal(JSON.stringify(bodies[0]).includes("route"), false)
+
+  assert.throws(
+    () =>
+      client.startPaytagAliasCreateAction({
+        aliasExposure: "raw_stamp" as "opaque",
+        dappUserUuid: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "INVALID_INPUT")
+      assert.match(error.message, /raw-stamp exposure requires a separate/)
+      return true
+    }
+  )
 })
 
 test("paytag helpers reject malformed successful payloads", async () => {

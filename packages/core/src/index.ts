@@ -615,6 +615,8 @@ export const CUBID_PAYTAG_LIFECYCLE_EVENT_TYPES = [
 
 export type CubidPaytagStampType = (typeof CUBID_PAYTAG_STAMP_TYPES)[number]
 
+export type CubidPaytagAliasExposure = "opaque"
+
 export type CubidPaytagActionType =
   | (typeof CUBID_PAYTAG_ACTION_TYPES)[number]
   | (typeof CUBID_PAYTAG_COMPAT_ACTION_TYPES)[number]
@@ -731,7 +733,14 @@ export type CubidStartTypedPaytagActionInput = Omit<
 export type CubidStartPaytagEnableActionInput = CubidStartTypedPaytagActionInput
 
 export type CubidStartPaytagAliasCreateActionInput =
-  CubidStartTypedPaytagActionInput
+  CubidStartTypedPaytagActionInput & {
+    /**
+     * Opaque paytag aliases are the only SDK-supported default. Explicit
+     * raw-stamp exposure requires a separate Passport-hosted action contract
+     * before the SDK can expose a typed helper for it.
+     */
+    aliasExposure?: CubidPaytagAliasExposure
+  }
 
 export type CubidStartPaytagAliasSelectActionInput =
   CubidStartTypedPaytagActionInput
@@ -1297,6 +1306,7 @@ export type SaveSecretResponse = CubidSaveSecretResponse
 export type SendNotificationInput = CubidSendNotificationInput
 export type SendNotificationResponse = CubidSendNotificationResponse
 export type PaytagStampType = CubidPaytagStampType
+export type PaytagAliasExposure = CubidPaytagAliasExposure
 export type PaytagActionType = CubidPaytagActionType
 export type PaytagAuthorizationStatus = CubidPaytagAuthorizationStatus
 export type PaytagAliasValidationStatus = CubidPaytagAliasValidationStatus
@@ -1670,6 +1680,23 @@ const assertOptionalRecordInput = (
   }
 
   return value
+}
+
+const assertPaytagAliasExposure = (
+  value: unknown,
+  endpoint: string
+): CubidPaytagAliasExposure => {
+  if (value === undefined || value === "opaque") {
+    return "opaque"
+  }
+
+  throw new CubidApiError({
+    category: "validation",
+    code: "INVALID_INPUT",
+    endpoint,
+    message:
+      "aliasExposure must be \"opaque\". Explicit raw-stamp exposure requires a separate Passport-hosted action contract before the SDK can expose it.",
+  })
 }
 
 const categoryForStatus = (status: number): CubidApiErrorCategory => {
@@ -4641,9 +4668,20 @@ export const createCubidApiClient = (
     },
 
     startPaytagAliasCreateAction(input) {
+      const endpoint = "v3/pay-to/actions/start"
+      const aliasExposure = assertPaytagAliasExposure(
+        input.aliasExposure,
+        endpoint
+      )
+      const metadata = assertOptionalRecordInput(input.metadata, "metadata", endpoint)
+
       return client.startHostedPaytagAction({
         ...input,
         actionType: "paytag_alias_create",
+        metadata: {
+          ...metadata,
+          paytag_alias_exposure: aliasExposure,
+        },
       })
     },
 
