@@ -126,6 +126,11 @@ endpoints plus the first server-facing API v3 write helpers:
 - `getPaytagGrantStatus`
 - `listPaytagLifecycleEvents`
 - `startHostedPaytagAction`
+- `startPaytagEnableAction`
+- `startPaytagAliasCreateAction`
+- `startPaytagAliasSelectAction`
+- `startPaytagGrantAction`
+- `startPaytagRevokeAction`
 - `enrollRecoveryBundle`
 - `getRecoveryBundleStatus`
 - `startRecoveryBundleRelease`
@@ -196,6 +201,11 @@ The current API v3 helpers stay server-side as well:
 - `getPaytagGrantStatus({ dappUserUuid })`
 - `listPaytagLifecycleEvents({ dappUserUuid, since?, limit? })`
 - `startHostedPaytagAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
+- `startPaytagEnableAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
+- `startPaytagAliasCreateAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
+- `startPaytagAliasSelectAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
+- `startPaytagGrantAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
+- `startPaytagRevokeAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `enrollRecoveryBundle({ userId, bundleMaterial, providerKey?, recoveryBundleId?, idempotencyKey? })`
 - `getRecoveryBundleStatus({ userId, providerKey?, recoveryBundleId? })`
 - `startRecoveryBundleRelease({ userId, providerKey?, recoveryBundleId?, idempotencyKey? })`
@@ -251,14 +261,20 @@ const aliases = await cubid.validatePaytagAliases({
   aliases: [{ aliasRef: "alias-1", alias: "abd123@cubid.mypaytag" }],
 })
 
-const action = await cubid.startHostedPaytagAction({
-  actionType: "paytag_enable",
+const action = await cubid.startPaytagEnableAction({
   dappUserUuid: "app-user-123",
   idempotencyKey: crypto.randomUUID(),
   returnUrl: "https://mypaytag.example/paytag/callback",
   requiredPasskeyAssurance: true,
 })
 ```
+
+Prefer the typed action helpers for ordinary MVP flows:
+`startPaytagEnableAction`, `startPaytagAliasCreateAction`,
+`startPaytagAliasSelectAction`, `startPaytagGrantAction`, and
+`startPaytagRevokeAction`. `startHostedPaytagAction` remains available as a
+lower-level primitive for backend wire compatibility, but app code should not
+need to pass raw action strings for common Paytag flows.
 
 Paytag helpers are deliberately submitted-candidate or opaque-alias based.
 There is no dapp helper for listing all user paytags or payment-enabled
@@ -274,7 +290,8 @@ action belongs in `@cubid/browser` via
 
 `saveSecret`, `sendNotification`, `enrollRecoveryBundle`,
 `startRecoveryBundleRelease`, `rotateRecoveryBundle`,
-`startHostedPaytagAction`, `generateAccount`, `createAccountRequest`, and
+`startHostedPaytagAction`, the typed Paytag action helpers,
+`generateAccount`, `createAccountRequest`, and
 `createSigningRequest` automatically generate an idempotency key when callers
 omit one, and they return the resolved `idempotencyKey` alongside the
 normalized response so callers can log or reconcile retries safely.

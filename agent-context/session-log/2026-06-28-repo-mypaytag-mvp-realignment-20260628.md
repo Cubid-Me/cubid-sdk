@@ -51,3 +51,12 @@
 - summary: Marked S18 and S18.1 through S18.6 complete, updated repo-status and backgrounder with the Paytag-only SDK direction, and added local plus hosted staging smoke guidance for Cubid/MyPayTag integration readiness.
 - validation: `pnpm api:validate`; `pnpm docs:api:check`; `git diff --check`; targeted `rg` confirming old Pay-To public names only remain in negative tests.
 - follow-ups: Run full repo validation before yeeting the branch.
+
+## 2026-06-28T22:46:54Z - S19.1 typed Paytag action starters
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: 123d86e2
+- summary: Added typed @cubid/core hosted Paytag action starter methods for enable, opaque alias create/select, grant, and revoke while keeping startHostedPaytagAction as the lower-level wire-compatibility primitive. Updated core README guidance and focused tests so ordinary MVP callers no longer pass raw action strings.
+- validation: Pending; will run focused @cubid/core tests before commit.
+- follow-ups: Model opaque default versus explicit raw-stamp exposure in S19.2.

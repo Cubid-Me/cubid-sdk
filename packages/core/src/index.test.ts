@@ -1156,6 +1156,72 @@ test("paytag hosted action helper auto-generates idempotency key when omitted", 
   assert.match(String(idempotencyKeys[0]), /^[0-9a-f-]{36}$/)
 })
 
+test("typed paytag action helpers send canonical action types through the initialized client", async () => {
+  const calls: Array<{ actionType: unknown; body: unknown; idempotencyKey: string | null }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (_input, init) => {
+      const body = JSON.parse(String(init?.body))
+      calls.push({
+        actionType: body.action_type,
+        body,
+        idempotencyKey: new Headers(init?.headers).get("Idempotency-Key"),
+      })
+
+      return createJsonResponse({
+        data: {
+          actionToken: `pta_${String(body.action_type)}`,
+          actionType: body.action_type,
+          hostedUrl: `/pay-to/actions/complete?action_token=pta_${String(body.action_type)}`,
+          status: "pending",
+        },
+      })
+    },
+  })
+
+  const helpers = [
+    ["paytag_enable", client.startPaytagEnableAction.bind(client)],
+    ["paytag_alias_create", client.startPaytagAliasCreateAction.bind(client)],
+    ["paytag_alias_select", client.startPaytagAliasSelectAction.bind(client)],
+    ["paytag_grant", client.startPaytagGrantAction.bind(client)],
+    ["paytag_revoke", client.startPaytagRevokeAction.bind(client)],
+  ] as const
+
+  for (const [actionType, helper] of helpers) {
+    const response = await helper({
+      dappUserUuid: "dapp_user_123",
+      idempotencyKey: `${actionType}_key`,
+      returnUrl: "https://mypaytag.example/paytag/callback",
+    })
+
+    assert.equal(response.actionType, actionType)
+    assert.equal(response.idempotencyKey, `${actionType}_key`)
+  }
+
+  assert.deepEqual(
+    calls.map((call) => call.actionType),
+    [
+      "paytag_enable",
+      "paytag_alias_create",
+      "paytag_alias_select",
+      "paytag_grant",
+      "paytag_revoke",
+    ]
+  )
+  for (const call of calls) {
+    assert.equal(call.idempotencyKey, `${String(call.actionType)}_key`)
+    assert.deepEqual(call.body, {
+      action_type: call.actionType,
+      api_key: "api_key",
+      dapp_id: "dapp_123",
+      dapp_user_uuid: "dapp_user_123",
+      return_url: "https://mypaytag.example/paytag/callback",
+    })
+  }
+})
+
 test("paytag helpers reject malformed successful payloads", async () => {
   const client = createCubidApiClient({
     apiKey: "api_key",

@@ -723,6 +723,23 @@ export type CubidStartHostedPaytagActionInput = CubidIdempotentRequestOptions & 
   returnUrl?: string
 }
 
+export type CubidStartTypedPaytagActionInput = Omit<
+  CubidStartHostedPaytagActionInput,
+  "actionType"
+>
+
+export type CubidStartPaytagEnableActionInput = CubidStartTypedPaytagActionInput
+
+export type CubidStartPaytagAliasCreateActionInput =
+  CubidStartTypedPaytagActionInput
+
+export type CubidStartPaytagAliasSelectActionInput =
+  CubidStartTypedPaytagActionInput
+
+export type CubidStartPaytagGrantActionInput = CubidStartTypedPaytagActionInput
+
+export type CubidStartPaytagRevokeActionInput = CubidStartTypedPaytagActionInput
+
 export type CubidStartHostedPaytagActionResponse = {
   actionToken: string | null
   actionType: CubidPaytagActionType | string | null
@@ -1302,6 +1319,14 @@ export type ListPaytagLifecycleEventsResponse =
   CubidListPaytagLifecycleEventsResponse
 export type StartHostedPaytagActionInput = CubidStartHostedPaytagActionInput
 export type StartHostedPaytagActionResponse = CubidStartHostedPaytagActionResponse
+export type StartTypedPaytagActionInput = CubidStartTypedPaytagActionInput
+export type StartPaytagEnableActionInput = CubidStartPaytagEnableActionInput
+export type StartPaytagAliasCreateActionInput =
+  CubidStartPaytagAliasCreateActionInput
+export type StartPaytagAliasSelectActionInput =
+  CubidStartPaytagAliasSelectActionInput
+export type StartPaytagGrantActionInput = CubidStartPaytagGrantActionInput
+export type StartPaytagRevokeActionInput = CubidStartPaytagRevokeActionInput
 export type CustodyChain = CubidCustodyChain
 export type CustodyAccount = CubidCustodyAccount
 export type GenerateAccountInput = CubidGenerateAccountInput
@@ -1392,6 +1417,21 @@ export type CubidApiClient = {
   ): Promise<CubidListPaytagLifecycleEventsResponse>
   startHostedPaytagAction(
     input: CubidStartHostedPaytagActionInput
+  ): Promise<CubidStartHostedPaytagActionResponse>
+  startPaytagEnableAction(
+    input: CubidStartPaytagEnableActionInput
+  ): Promise<CubidStartHostedPaytagActionResponse>
+  startPaytagAliasCreateAction(
+    input: CubidStartPaytagAliasCreateActionInput
+  ): Promise<CubidStartHostedPaytagActionResponse>
+  startPaytagAliasSelectAction(
+    input: CubidStartPaytagAliasSelectActionInput
+  ): Promise<CubidStartHostedPaytagActionResponse>
+  startPaytagGrantAction(
+    input: CubidStartPaytagGrantActionInput
+  ): Promise<CubidStartHostedPaytagActionResponse>
+  startPaytagRevokeAction(
+    input: CubidStartPaytagRevokeActionInput
   ): Promise<CubidStartHostedPaytagActionResponse>
   ensureUserByEmail(
     input: CubidEnsureUserByEmailInput
@@ -4591,6 +4631,41 @@ export const createCubidApiClient = (
           "Idempotency-Key": idempotencyKey,
         }
       )
+    },
+
+    startPaytagEnableAction(input) {
+      return client.startHostedPaytagAction({
+        ...input,
+        actionType: "paytag_enable",
+      })
+    },
+
+    startPaytagAliasCreateAction(input) {
+      return client.startHostedPaytagAction({
+        ...input,
+        actionType: "paytag_alias_create",
+      })
+    },
+
+    startPaytagAliasSelectAction(input) {
+      return client.startHostedPaytagAction({
+        ...input,
+        actionType: "paytag_alias_select",
+      })
+    },
+
+    startPaytagGrantAction(input) {
+      return client.startHostedPaytagAction({
+        ...input,
+        actionType: "paytag_grant",
+      })
+    },
+
+    startPaytagRevokeAction(input) {
+      return client.startHostedPaytagAction({
+        ...input,
+        actionType: "paytag_revoke",
+      })
     },
 
     createSigningRequest(input) {
