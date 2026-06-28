@@ -5,7 +5,7 @@ import {
   buildHostedSiwcAccountRequestAction,
   buildHostedSiwcSigningRequestAction,
   buildHostedVerificationUrl,
-  openPayToHostedAction
+  openHostedPaytagAction
 } from "./hosted";
 import { createCubidWeb2Client } from "./client";
 
@@ -258,11 +258,11 @@ describe("@cubid/browser", () => {
     ).toThrow('Hosted SIWC actions require decision to be "approve" or "reject".');
   });
 
-  it("opens Pay-To hosted action URLs without accepting dapp API keys", () => {
+  it("opens Paytag hosted action URLs without accepting dapp API keys", () => {
     const opener = vi.fn(() => null);
 
     expect(
-      openPayToHostedAction(
+      openHostedPaytagAction(
         "/pay-to/actions/complete?action_token=pta_act_123",
         {
           features: "popup=yes",
@@ -278,25 +278,25 @@ describe("@cubid/browser", () => {
     );
 
     expect(() =>
-      openPayToHostedAction(
+      openHostedPaytagAction(
         "/pay-to/actions/complete?action_token=pta_act_123&api_key=secret",
         { opener }
       )
-    ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
+    ).toThrow("Paytag hosted action URLs must not contain dapp API keys.");
     expect(() =>
-      openPayToHostedAction(
+      openHostedPaytagAction(
         "/pay-to/actions/complete?action_token=pta_act_123&dappApiKey=secret",
         { opener }
       )
-    ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
+    ).toThrow("Paytag hosted action URLs must not contain dapp API keys.");
     expect(() =>
-      openPayToHostedAction(
+      openHostedPaytagAction(
         "https://attacker.example/pay-to/actions/complete?action_token=pta_act_123",
         { opener }
       )
-    ).toThrow("Pay-To hosted action URLs must use the Cubid Passport origin.");
+    ).toThrow("Paytag hosted action URLs must use the Cubid Passport origin.");
     expect(() =>
-      openPayToHostedAction("/api/pay-to/stamps/list", { opener })
-    ).toThrow("Pay-To hosted action URLs must target /pay-to/actions/complete.");
+      openHostedPaytagAction("/api/pay-to/stamps/list", { opener })
+    ).toThrow("Paytag hosted action URLs must target /pay-to/actions/complete.");
   });
 });
