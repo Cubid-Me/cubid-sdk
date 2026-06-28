@@ -69,3 +69,12 @@
 - summary: Made Paytag alias creation explicitly opaque by default via the `aliasExposure: "opaque"` input contract, added runtime rejection for attempted raw-stamp exposure through the generic alias-create helper, and documented that raw-stamp paytags require a separate Passport-hosted action contract before SDK exposure.
 - validation: Pending; will run focused @cubid/core tests before commit.
 - follow-ups: Complete OpenAPI coverage for the remaining Paytag helper routes in S19.3.
+
+## 2026-06-28T22:52:52Z - S19.3 Paytag OpenAPI route coverage
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: a977c773
+- summary: Added OpenAPI paths, request schemas, response schemas, and opaque-default examples for Paytag alias validation, dapp-scoped grant status, and redacted lifecycle event listing. Regenerated the deterministic Postman collection from the updated OpenAPI source.
+- validation: `corepack pnpm api:validate`; `corepack pnpm api:postman`.
+- follow-ups: Add guardrails so Paytag public helpers, OpenAPI operation IDs, and generated artifacts stay in sync in S19.4.

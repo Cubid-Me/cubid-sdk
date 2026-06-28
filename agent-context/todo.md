@@ -1725,12 +1725,12 @@ Acceptance notes:
 
 ### S19.3 Complete Paytag OpenAPI route coverage
 
-- Status: Planned
-- Timestamp started:
-- Timestamp completed:
+- Status: Completed
+- Timestamp started: 2026-06-28T22:52:52Z
+- Timestamp completed: 2026-06-28T22:52:52Z
 - Feature branch: `codex/mypaytag-mvp-realignment-20260628`
-- Head:
-- Session-log reference(s):
+- Head: a977c773
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
 
 Bring `api/openapi.yaml` into line with the implemented Paytag SDK helper surface.
 
