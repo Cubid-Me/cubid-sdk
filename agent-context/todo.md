@@ -1881,7 +1881,7 @@ Acceptance notes:
 
 ### S20.2 Add staged smoke coverage for raw exposure and MyPayTag validation
 
-- Status: Todo
+- Status: Complete
 - Timestamp started: TBD
 - Timestamp completed: TBD
 - Feature branch: `codex/mypaytag-mvp-code-gap-todos-20260629`
