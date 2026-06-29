@@ -973,7 +973,7 @@ test("createNotificationIdempotencyKey returns a UUID-shaped key", () => {
   assert.match(value, /^[0-9a-f-]{36}$/)
 })
 
-test("pay-to core helpers use initialized client credentials and normalize redacted responses", async () => {
+test("paytag core helpers use initialized client credentials and normalize redacted responses", async () => {
   const calls: Array<{
     body: unknown
     headers: Headers
@@ -1040,7 +1040,7 @@ test("pay-to core helpers use initialized client credentials and normalize redac
       return createJsonResponse({
         data: {
           actionToken: "pta_act_123",
-          actionType: "setup",
+          actionType: "paytag_enable",
           expiresAt: "2026-06-25T11:10:00.000Z",
           hostedUrl: "/pay-to/actions/complete?action_token=pta_act_123",
           status: "pending",
@@ -1049,32 +1049,32 @@ test("pay-to core helpers use initialized client credentials and normalize redac
     },
   })
 
-  const eligibility = await client.checkPayToEligibility({
+  const eligibility = await client.checkPaytagAuthorization({
     candidates: [
       { candidateRef: "payee-1", stampType: "email", value: "user@example.com" },
     ],
     dappUserUuid: "dapp_user_123",
   })
-  const aliases = await client.resolvePayToAliases({
+  const aliases = await client.validatePaytagAliases({
     aliases: [{ alias: "pta_alias_123", aliasRef: "alias-1" }],
     dappUserUuid: "dapp_user_123",
-    resolverKey: "resolver_globalpayto",
+    resolverKey: "resolver_mypaytag",
   })
-  const grant = await client.getPayToGrantStatus({
+  const grant = await client.getPaytagGrantStatus({
     dappUserUuid: "dapp_user_123",
   })
-  const events = await client.listPayToEvents({
+  const events = await client.listPaytagLifecycleEvents({
     dappUserUuid: "dapp_user_123",
     limit: 10,
     since: "2026-06-25T00:00:00.000Z",
   })
-  const action = await client.startPayToAction({
-    actionType: "setup",
+  const action = await client.startHostedPaytagAction({
+    actionType: "paytag_enable",
     dappUserUuid: "dapp_user_123",
-    idempotencyKey: "payto_action_key_123",
-    metadata: { flow: "globalpayto_setup" },
+    idempotencyKey: "paytag_action_key_123",
+    metadata: { flow: "mypaytag_setup" },
     requiredPasskeyAssurance: true,
-    returnUrl: "https://globalpayto.example/pay-to/callback",
+    returnUrl: "https://mypaytag.example/paytag/callback",
   })
 
   assert.equal(eligibility.status, "checked")
@@ -1086,9 +1086,9 @@ test("pay-to core helpers use initialized client credentials and normalize redac
   assert.equal(grant.grantStatus, "active")
   assert.equal(events.events[0]?.eventRef, "pay_to_event:evt_123")
   assert.equal(events.events[0]?.eventType, "pay_to.grant.revoked")
-  assert.equal(action.idempotencyKey, "payto_action_key_123")
+  assert.equal(action.idempotencyKey, "paytag_action_key_123")
   assert.equal(action.hostedUrl, "/pay-to/actions/complete?action_token=pta_act_123")
-  assert.equal(calls[4]?.headers.get("Idempotency-Key"), "payto_action_key_123")
+  assert.equal(calls[4]?.headers.get("Idempotency-Key"), "paytag_action_key_123")
 
   assert.deepEqual(calls.map((call) => call.path), [
     "/api/v3/pay-to/stamps/eligibility/check",
@@ -1110,112 +1110,20 @@ test("pay-to core helpers use initialized client credentials and normalize redac
     api_key: "api_key",
     dapp_id: "dapp_123",
     dapp_user_uuid: "dapp_user_123",
-    resolver_key: "resolver_globalpayto",
+    resolver_key: "resolver_mypaytag",
   })
   assert.deepEqual(calls[4]?.body, {
-    action_type: "setup",
+    action_type: "paytag_enable",
     api_key: "api_key",
     dapp_id: "dapp_123",
     dapp_user_uuid: "dapp_user_123",
-    metadata: { flow: "globalpayto_setup" },
+    metadata: { flow: "mypaytag_setup" },
     required_passkey_assurance: true,
-    return_url: "https://globalpayto.example/pay-to/callback",
+    return_url: "https://mypaytag.example/paytag/callback",
   })
 })
 
-test("pay-to payment intent notification helper is constrained and idempotent", async () => {
-  const calls: Array<{
-    body: unknown
-    headers: Headers
-    input: string | URL | Request
-  }> = []
-  const client = createCubidApiClient({
-    apiKey: "api_key",
-    baseUrl: "https://passport.cubid.me",
-    dappId: "dapp_123",
-    fetch: async (input, init) => {
-      calls.push({
-        body: JSON.parse(String(init?.body)),
-        headers: new Headers(init?.headers),
-        input,
-      })
-      return createJsonResponse({
-        data: {
-          category: "TRANSACTIONAL",
-          createdAt: "2026-06-25T12:00:00.000Z",
-          eventId: "notif_evt_payto_123",
-          priority: "HIGH",
-          selectedChannelType: "email",
-          status: "accepted",
-        },
-      })
-    },
-  })
-
-  const response = await client.sendPaymentIntentCreatedNotification({
-    body: "A payment intent is ready for review.",
-    dappUserUuid: "dapp_user_123",
-    idempotencyKey: "payment_intent_key_123",
-    metadata: { intentId: "pi_123" },
-    priority: "HIGH",
-    title: "Payment intent created",
-  })
-
-  assert.equal(response.category, "TRANSACTIONAL")
-  assert.equal(response.paymentEventType, "payment_intent_created")
-  assert.equal(response.eventId, "notif_evt_payto_123")
-  assert.equal(response.idempotencyKey, "payment_intent_key_123")
-  assert.equal(
-    String(calls[0]?.input),
-    "https://passport.cubid.me/api/v3/notifications/send"
-  )
-  assert.equal(
-    calls[0]?.headers.get("Idempotency-Key"),
-    "payment_intent_key_123"
-  )
-  assert.deepEqual(calls[0]?.body, {
-    apikey: "api_key",
-    body: "A payment intent is ready for review.",
-    category: "TRANSACTIONAL",
-    dapp_id: "dapp_123",
-    dapp_user_uuid: "dapp_user_123",
-    metadata: { intentId: "pi_123" },
-    payment_event_type: "payment_intent_created",
-    priority: "HIGH",
-    title: "Payment intent created",
-  })
-})
-
-test("pay-to payment notification helper cannot be retargeted to unsupported events", async () => {
-  let body: Record<string, unknown> = {}
-  const client = createCubidApiClient({
-    apiKey: "api_key",
-    baseUrl: "https://passport.cubid.me",
-    fetch: async (_input, init) => {
-      body = JSON.parse(String(init?.body)) as Record<string, unknown>
-      return createJsonResponse({
-        data: {
-          eventId: "notif_evt_payto_locked",
-          status: "accepted",
-        },
-      })
-    },
-  })
-
-  await client.sendPaymentIntentCreatedNotification({
-    body: "A payment intent is ready for review.",
-    dappUserUuid: "dapp_user_123",
-    paymentEventType: "payment_received",
-    priority: "CRITICAL",
-    title: "Payment received",
-  } as never)
-
-  assert.equal(body?.category, "TRANSACTIONAL")
-  assert.equal(body?.payment_event_type, "payment_intent_created")
-  assert.equal("payment_received" in body, false)
-})
-
-test("pay-to write helpers auto-generate idempotency keys when omitted", async () => {
+test("paytag hosted action helper auto-generates idempotency key when omitted", async () => {
   const idempotencyKeys: string[] = []
   const client = createCubidApiClient({
     apiKey: "api_key",
@@ -1228,40 +1136,185 @@ test("pay-to write helpers auto-generate idempotency keys when omitted", async (
         return createJsonResponse({
           data: {
             actionToken: "pta_act_auto",
-            actionType: "route_authorization",
+            actionType: "paytag_grant",
             hostedUrl: "/pay-to/actions/complete?action_token=pta_act_auto",
             status: "pending",
           },
         })
       }
 
+      return createJsonResponse({ data: { status: "ok" } })
+    },
+  })
+
+  const action = await client.startHostedPaytagAction({
+    actionType: "paytag_grant",
+    dappUserUuid: "dapp_user_123",
+  })
+
+  assert.equal(action.idempotencyKey, idempotencyKeys[0])
+  assert.match(String(idempotencyKeys[0]), /^[0-9a-f-]{36}$/)
+})
+
+test("paytag hosted action helper rejects route-oriented compatibility action strings", () => {
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async () => createJsonResponse({ data: { status: "unreachable" } }),
+  })
+
+  for (const actionType of [
+    "setup",
+    "route_registration",
+    "route_authorization",
+    "route_selection",
+    "grant_revocation",
+  ]) {
+    assert.throws(
+      () =>
+        client.startHostedPaytagAction({
+          actionType: actionType as "paytag_enable",
+          dappUserUuid: "dapp_user_123",
+        }),
+      (error) => {
+        assert.ok(error instanceof CubidApiError)
+        assert.equal(error.code, "INVALID_INPUT")
+        assert.match(error.message, /canonical paytag_\* actions/)
+        return true
+      }
+    )
+  }
+})
+
+test("typed paytag action helpers send canonical action types through the initialized client", async () => {
+  const calls: Array<{ actionType: unknown; body: unknown; idempotencyKey: string | null }> = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    dappId: "dapp_123",
+    fetch: async (_input, init) => {
+      const body = JSON.parse(String(init?.body))
+      calls.push({
+        actionType: body.action_type,
+        body,
+        idempotencyKey: new Headers(init?.headers).get("Idempotency-Key"),
+      })
+
       return createJsonResponse({
         data: {
-          category: "TRANSACTIONAL",
-          eventId: "notif_evt_payto_auto",
-          status: "accepted",
+          actionToken: `pta_${String(body.action_type)}`,
+          actionType: body.action_type,
+          hostedUrl: `/pay-to/actions/complete?action_token=pta_${String(body.action_type)}`,
+          status: "pending",
         },
       })
     },
   })
 
-  const action = await client.startPayToAction({
-    actionType: "route_authorization",
-    dappUserUuid: "dapp_user_123",
-  })
-  const notification = await client.sendPaymentIntentCreatedNotification({
-    body: "A payment intent is ready for review.",
-    dappUserUuid: "dapp_user_123",
-    title: "Payment intent created",
-  })
+  const helpers = [
+    ["paytag_enable", client.startPaytagEnableAction.bind(client)],
+    ["paytag_alias_create", client.startPaytagAliasCreateAction.bind(client)],
+    ["paytag_alias_select", client.startPaytagAliasSelectAction.bind(client)],
+    ["paytag_grant", client.startPaytagGrantAction.bind(client)],
+    ["paytag_revoke", client.startPaytagRevokeAction.bind(client)],
+  ] as const
 
-  assert.equal(action.idempotencyKey, idempotencyKeys[0])
-  assert.equal(notification.idempotencyKey, idempotencyKeys[1])
-  assert.match(String(idempotencyKeys[0]), /^[0-9a-f-]{36}$/)
-  assert.match(String(idempotencyKeys[1]), /^[0-9a-f-]{36}$/)
+  for (const [actionType, helper] of helpers) {
+    const response = await helper({
+      ...(actionType === "paytag_alias_create"
+        ? { metadata: { flow: "default_alias" } }
+        : {}),
+      dappUserUuid: "dapp_user_123",
+      idempotencyKey: `${actionType}_key`,
+      returnUrl: "https://mypaytag.example/paytag/callback",
+    })
+
+    assert.equal(response.actionType, actionType)
+    assert.equal(response.idempotencyKey, `${actionType}_key`)
+  }
+
+  assert.deepEqual(
+    calls.map((call) => call.actionType),
+    [
+      "paytag_enable",
+      "paytag_alias_create",
+      "paytag_alias_select",
+      "paytag_grant",
+      "paytag_revoke",
+    ]
+  )
+  for (const call of calls) {
+    assert.equal(call.idempotencyKey, `${String(call.actionType)}_key`)
+    const expectedBody: Record<string, unknown> = {
+      action_type: call.actionType,
+      api_key: "api_key",
+      dapp_id: "dapp_123",
+      dapp_user_uuid: "dapp_user_123",
+      return_url: "https://mypaytag.example/paytag/callback",
+    }
+    if (call.actionType === "paytag_alias_create") {
+      expectedBody.metadata = {
+        flow: "default_alias",
+        paytag_alias_exposure: "opaque",
+      }
+    }
+    assert.deepEqual(call.body, expectedBody)
+  }
 })
 
-test("pay-to helpers reject malformed successful payloads", async () => {
+test("paytag alias creation defaults to opaque aliases and rejects raw stamp exposure", async () => {
+  const bodies: unknown[] = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      const body = JSON.parse(String(init?.body))
+      bodies.push(body)
+
+      return createJsonResponse({
+        data: {
+          actionToken: "pta_alias_create",
+          actionType: "paytag_alias_create",
+          hostedUrl: "/pay-to/actions/complete?action_token=pta_alias_create",
+          status: "pending",
+        },
+      })
+    },
+  })
+
+  await client.startPaytagAliasCreateAction({
+    dappUserUuid: "dapp_user_123",
+    idempotencyKey: "opaque_alias_key",
+  })
+
+  assert.deepEqual(bodies[0], {
+    action_type: "paytag_alias_create",
+    api_key: "api_key",
+    dapp_user_uuid: "dapp_user_123",
+    metadata: {
+      paytag_alias_exposure: "opaque",
+    },
+  })
+  assert.equal(JSON.stringify(bodies[0]).includes("+1234569999"), false)
+  assert.equal(JSON.stringify(bodies[0]).includes("payment"), false)
+  assert.equal(JSON.stringify(bodies[0]).includes("route"), false)
+
+  assert.throws(
+    () =>
+      client.startPaytagAliasCreateAction({
+        aliasExposure: "raw_stamp" as "opaque",
+        dappUserUuid: "dapp_user_123",
+      }),
+    (error) => {
+      assert.ok(error instanceof CubidApiError)
+      assert.equal(error.code, "INVALID_INPUT")
+      assert.match(error.message, /raw-stamp exposure requires a separate/)
+      return true
+    }
+  )
+})
+
+test("paytag helpers reject malformed successful payloads", async () => {
   const client = createCubidApiClient({
     apiKey: "api_key",
     baseUrl: "https://passport.cubid.me",
@@ -1270,7 +1323,7 @@ test("pay-to helpers reject malformed successful payloads", async () => {
 
   await assert.rejects(
     () =>
-      client.checkPayToEligibility({
+      client.checkPaytagAuthorization({
         candidates: [
           { stampType: "email", value: "user@example.com" },
         ],
@@ -1285,7 +1338,7 @@ test("pay-to helpers reject malformed successful payloads", async () => {
   )
 })
 
-test("pay-to resolver surface stays anti-enumeration focused", async () => {
+test("paytag surface stays anti-enumeration focused", async () => {
   const client = createCubidApiClient({
     apiKey: "api_key",
     baseUrl: "https://passport.cubid.me",
@@ -1311,13 +1364,17 @@ test("pay-to resolver surface stays anti-enumeration focused", async () => {
   })
 
   assert.equal("listPayToStamps" in client, false)
+  assert.equal("checkPayToEligibility" in client, false)
+  assert.equal("resolvePayToAliases" in client, false)
+  assert.equal("startPayToAction" in client, false)
+  assert.equal("sendPaymentIntentCreatedNotification" in client, false)
   assert.equal("listPaymentEnabledStamps" in client, false)
 
-  const eligibility = await client.checkPayToEligibility({
+  const eligibility = await client.checkPaytagAuthorization({
     candidates: [{ candidateRef: "unknown", stampType: "phone", value: "+15555550123" }],
     dappUserUuid: "dapp_user_123",
   })
-  const events = await client.listPayToEvents({
+  const events = await client.listPaytagLifecycleEvents({
     dappUserUuid: "dapp_user_123",
   })
 

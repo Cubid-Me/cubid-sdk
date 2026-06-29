@@ -54,15 +54,15 @@ export interface HostedSiwcSigningRequestActionRequest {
   signingRequestId: string;
 }
 
-export type PayToHostedActionOpener = (
+export type PaytagHostedActionOpener = (
   url: string,
   target?: string,
   features?: string
 ) => WindowProxy | null;
 
-export interface PayToHostedActionOpenOptions {
+export interface PaytagHostedActionOpenOptions {
   features?: string;
-  opener?: PayToHostedActionOpener;
+  opener?: PaytagHostedActionOpener;
   target?: string;
 }
 

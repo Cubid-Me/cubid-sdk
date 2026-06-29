@@ -86,6 +86,28 @@ Shared-wallet migrations now have a dedicated guide:
 Recoverable-wallet hosted validation has a dedicated smoke strategy:
 - `docs/engineering/recoverable-wallet-hosted-smoke.md`
 
+## HTTP API Docs
+
+The OpenAPI source of truth for public Cubid HTTP APIs lives at
+`api/openapi.yaml`. Interactive local docs are served with Scalar at `/docs/`,
+and the Postman collection at `api/postman_collection.json` is generated from
+the OpenAPI spec.
+
+- API docs workflow: `docs/api-readme.md`
+- OpenAPI spec: `api/openapi.yaml`
+- Generated Postman collection: `api/postman_collection.json`
+
+Use these commands when editing HTTP API docs:
+
+```sh
+pnpm api:validate
+pnpm api:postman
+pnpm dev
+```
+
+Do not manually edit `api/postman_collection.json`; regenerate it from
+`api/openapi.yaml`.
+
 ## Examples
 
 - Passkey-first SIWC integration guide:
@@ -108,6 +130,9 @@ long-term default.
 - `pnpm test:unit`
 - `pnpm test:acceptance`
 - `pnpm test:coverage`
+- `pnpm api:validate`
+- `pnpm api:postman`
+- `pnpm dev`
 - `pnpm docs:api:build`
 - `pnpm docs:api:check`
 - `pnpm lint`

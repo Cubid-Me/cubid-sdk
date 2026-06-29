@@ -1,0 +1,1936 @@
+{
+  "item": [
+    {
+      "name": "Health",
+      "description": {
+        "content": "Service health and diagnostics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "name": "Check API health",
+          "request": {
+            "name": "Check API health",
+            "description": {
+              "content": "Returns a lightweight health response for operational checks.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "name": "The API is reachable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"ok\",\n  \"service\": \"cubid-passport\",\n  \"timestamp\": \"2026-06-27T12:00:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Unexpected server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "name": "Paytag",
+      "description": {
+        "content": "Privacy-preserving MyPayTag identity, consent, alias, and hosted action APIs.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "name": "Check submitted paytag authorization",
+          "request": {
+            "name": "Check submitted paytag authorization",
+            "description": {
+              "content": "Checks whether submitted paytag candidates are valid and consented for\nthe dapp context. This route is deliberately candidate-based and does\nnot expose a list-all paytag or payment-stamp resolver.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v3",
+                "pay-to",
+                "stamps",
+                "eligibility",
+                "check"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"candidates\": [\n    {\n      \"stampType\": \"<string>\",\n      \"value\": \"<string>\",\n      \"candidateRef\": \"<string>\"\n    }\n  ],\n  \"dapp_id\": \"<string,number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Authorization was checked for the submitted candidates.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "stamps",
+                    "eligibility",
+                    "check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"status\": \"checked\",\n    \"results\": [\n      {\n        \"candidateRef\": \"payee-1\",\n        \"eligible\": true\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Request failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "stamps",
+                    "eligibility",
+                    "check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Missing or invalid authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "stamps",
+                    "eligibility",
+                    "check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The authenticated caller is not allowed to perform this operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "stamps",
+                    "eligibility",
+                    "check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The caller exceeded a rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "stamps",
+                    "eligibility",
+                    "check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before retrying, when available.",
+                  "key": "Retry-After",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Unexpected server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "stamps",
+                    "eligibility",
+                    "check"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"candidates\": [\n    {\n      \"candidateRef\": \"payee-1\",\n      \"stampType\": \"email\",\n      \"value\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Start a hosted paytag action",
+          "request": {
+            "name": "Start a hosted paytag action",
+            "description": {
+              "content": "Creates a Cubid-hosted paytag setup or consent action for a single\ndapp user. This write route requires an `Idempotency-Key` header.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v3",
+                "pay-to",
+                "actions",
+                "start"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
+                "key": "Idempotency-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"action_type\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"dapp_id\": \"<string,number>\",\n  \"return_url\": \"<uri>\",\n  \"required_passkey_assurance\": false,\n  \"metadata\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Hosted action was created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "actions",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
+                    "key": "Idempotency-Key",
+                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"status\": \"created\",\n    \"action_token\": \"pta_act_123\",\n    \"action_type\": \"paytag_enable\",\n    \"hosted_url\": \"https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123\",\n    \"expires_at\": \"2026-06-27T12:15:00.000Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Request failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "actions",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
+                    "key": "Idempotency-Key",
+                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Missing or invalid authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "actions",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
+                    "key": "Idempotency-Key",
+                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The authenticated caller is not allowed to perform this operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "actions",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
+                    "key": "Idempotency-Key",
+                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Request conflicts with the current resource state or idempotency state.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "actions",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
+                    "key": "Idempotency-Key",
+                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The caller exceeded a rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "actions",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
+                    "key": "Idempotency-Key",
+                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before retrying, when available.",
+                  "key": "Retry-After",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Unexpected server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "actions",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Stable caller-generated key used to make write requests safe to retry.",
+                    "key": "Idempotency-Key",
+                    "value": "idem_01JZ0D0W4WB4VT9PR3J50XQ6TA"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"action_type\": \"paytag_enable\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"return_url\": \"https://mypaytag.example/paytag/callback\",\n  \"required_passkey_assurance\": true,\n  \"metadata\": {\n    \"correlation_id\": \"paytag_setup_123\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Validate submitted opaque paytag aliases",
+          "request": {
+            "name": "Validate submitted opaque paytag aliases",
+            "description": {
+              "content": "Validates submitted opaque paytag aliases for a dapp user. This route\naccepts caller-submitted aliases only and does not expose raw stamp\nidentifiers, wallet routes, route priorities, provider callbacks, or\npayment execution details.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v3",
+                "pay-to",
+                "aliases",
+                "resolve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"aliases\": [\n    {\n      \"alias\": \"<string>\",\n      \"aliasRef\": \"<string>\"\n    }\n  ],\n  \"dapp_id\": \"<string,number>\",\n  \"resolver_key\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Alias validation completed for the submitted aliases.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "aliases",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"aliases\": [\n    {\n      \"aliasRef\": \"alias-1\",\n      \"alias\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"status\": \"checked\",\n    \"results\": [\n      {\n        \"aliasRef\": \"alias-1\",\n        \"eligible\": true\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Request failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "aliases",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"aliases\": [\n    {\n      \"aliasRef\": \"alias-1\",\n      \"alias\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Missing or invalid authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "aliases",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"aliases\": [\n    {\n      \"aliasRef\": \"alias-1\",\n      \"alias\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The authenticated caller is not allowed to perform this operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "aliases",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"aliases\": [\n    {\n      \"aliasRef\": \"alias-1\",\n      \"alias\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The caller exceeded a rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "aliases",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"aliases\": [\n    {\n      \"aliasRef\": \"alias-1\",\n      \"alias\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before retrying, when available.",
+                  "key": "Retry-After",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Unexpected server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "aliases",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"aliases\": [\n    {\n      \"aliasRef\": \"alias-1\",\n      \"alias\": \"abd123@cubid.mypaytag\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Get dapp-scoped paytag grant status",
+          "request": {
+            "name": "Get dapp-scoped paytag grant status",
+            "description": {
+              "content": "Returns the redacted consent-grant status for one dapp-scoped user.\nThe response is scoped to the caller's app context and does not include\nraw destinations, raw stamp values, route preferences, wallet graphs,\nor cross-app grant information.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v3",
+                "pay-to",
+                "grants",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"dapp_id\": \"<string,number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Grant status for the dapp-scoped user.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "grants",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"dappUserUuid\": \"dapp_user_123\",\n    \"grantStatus\": \"active\",\n    \"grantedAt\": \"2026-06-27T12:00:00.000Z\",\n    \"revokedAt\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Request failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "grants",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Missing or invalid authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "grants",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The authenticated caller is not allowed to perform this operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "grants",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The caller exceeded a rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "grants",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before retrying, when available.",
+                  "key": "Retry-After",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Unexpected server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "grants",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "List redacted paytag lifecycle events",
+          "request": {
+            "name": "List redacted paytag lifecycle events",
+            "description": {
+              "content": "Lists redacted identity, alias, and consent lifecycle events for one\ndapp-scoped user. This route is for state reconciliation only; it does\nnot return payment instructions, route diagnostics, provider callback\npayloads, settlement state, solvers, bridges, swaps, or execution data.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v3",
+                "pay-to",
+                "events",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"dapp_id\": \"<string,number>\",\n  \"since\": \"<dateTime>\",\n  \"limit\": 25\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Redacted lifecycle events for the dapp-scoped user.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "events",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"since\": \"2026-06-27T00:00:00.000Z\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"status\": \"ok\",\n    \"events\": [\n      {\n        \"eventRef\": \"paytag_event_123\",\n        \"eventType\": \"pay_to.grant.revoked\",\n        \"createdAt\": \"2026-06-27T12:05:00.000Z\",\n        \"outcome\": \"success\",\n        \"reason\": \"user_revoked\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Request failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "events",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"since\": \"2026-06-27T00:00:00.000Z\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Missing or invalid authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "events",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"since\": \"2026-06-27T00:00:00.000Z\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The authenticated caller is not allowed to perform this operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "events",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"since\": \"2026-06-27T00:00:00.000Z\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "The caller exceeded a rate limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "events",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"since\": \"2026-06-27T00:00:00.000Z\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of seconds to wait before retrying, when available.",
+                  "key": "Retry-After",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "Unexpected server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v3",
+                    "pay-to",
+                    "events",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"api_key\": \"cubid_dapp_api_key\",\n  \"dapp_user_uuid\": \"dapp_user_123\",\n  \"since\": \"2026-06-27T00:00:00.000Z\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Missing or invalid dapp API key.\",\n    \"details\": {},\n    \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n  },\n  \"request_id\": \"req_01JZ0D0W4WB4VT9PR3J50XQ6TA\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:3000",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "name": "Cubid Public API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This OpenAPI document is the source of truth for lightweight HTTP API\ndocumentation in this SDK repository.\n\nThe first documented surface is the server/Edge MyPayTag paytag identity\nand consent contract used by `@cubid/core`. These routes are\ndapp-authenticated and must be called from trusted server runtimes, not\ndirectly from browsers.\n",
+      "type": "text/plain"
+    }
+  }
+}

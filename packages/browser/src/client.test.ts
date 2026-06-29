@@ -5,7 +5,7 @@ import {
   buildHostedSiwcAccountRequestAction,
   buildHostedSiwcSigningRequestAction,
   buildHostedVerificationUrl,
-  openPayToHostedAction
+  openHostedPaytagAction
 } from "./hosted";
 import { createCubidWeb2Client } from "./client";
 
@@ -258,45 +258,83 @@ describe("@cubid/browser", () => {
     ).toThrow('Hosted SIWC actions require decision to be "approve" or "reject".');
   });
 
-  it("opens Pay-To hosted action URLs without accepting dapp API keys", () => {
+  it("opens server-created Paytag hosted action URLs for canonical action helpers", () => {
     const opener = vi.fn(() => null);
 
-    expect(
-      openPayToHostedAction(
-        "/pay-to/actions/complete?action_token=pta_act_123",
-        {
-          features: "popup=yes",
-          opener,
-          target: "_blank"
-        }
-      )
-    ).toBeNull();
-    expect(opener).toHaveBeenCalledWith(
-      "https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123",
+    for (const actionType of [
+      "paytag_enable",
+      "paytag_alias_create",
+      "paytag_alias_select",
+      "paytag_grant",
+      "paytag_revoke"
+    ]) {
+      expect(
+        openHostedPaytagAction(
+          `/pay-to/actions/complete?action_token=pta_${actionType}`,
+          {
+            features: "popup=yes",
+            opener,
+            target: "_blank"
+          }
+        )
+      ).toBeNull();
+    }
+
+    expect(opener).toHaveBeenCalledTimes(5);
+    expect(opener).toHaveBeenNthCalledWith(
+      1,
+      "https://passport.cubid.me/pay-to/actions/complete?action_token=pta_paytag_enable",
       "_blank",
       "popup=yes"
     );
+    expect(opener).toHaveBeenNthCalledWith(
+      5,
+      "https://passport.cubid.me/pay-to/actions/complete?action_token=pta_paytag_revoke",
+      "_blank",
+      "popup=yes"
+    );
+  });
+
+  it("rejects Paytag hosted action URLs that include dapp API keys or unsafe targets", () => {
+    const opener = vi.fn(() => null);
+
+    for (const key of [
+      "apikey",
+      "api_key",
+      "api-key",
+      "Api_Key",
+      "dappApiKey",
+      "dapp_api_key",
+      "dapp-api-key",
+      "DAPP_API_KEY"
+    ]) {
+      expect(() =>
+        openHostedPaytagAction(
+          `/pay-to/actions/complete?action_token=pta_act_123&${key}=secret`,
+          { opener }
+        )
+      ).toThrow("Paytag hosted action URLs must not contain dapp API keys.");
+    }
 
     expect(() =>
-      openPayToHostedAction(
-        "/pay-to/actions/complete?action_token=pta_act_123&api_key=secret",
-        { opener }
-      )
-    ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
-    expect(() =>
-      openPayToHostedAction(
-        "/pay-to/actions/complete?action_token=pta_act_123&dappApiKey=secret",
-        { opener }
-      )
-    ).toThrow("Pay-To hosted action URLs must not contain dapp API keys.");
-    expect(() =>
-      openPayToHostedAction(
+      openHostedPaytagAction(
         "https://attacker.example/pay-to/actions/complete?action_token=pta_act_123",
         { opener }
       )
-    ).toThrow("Pay-To hosted action URLs must use the Cubid Passport origin.");
+    ).toThrow("Paytag hosted action URLs must use the Cubid Passport origin.");
     expect(() =>
-      openPayToHostedAction("/api/pay-to/stamps/list", { opener })
-    ).toThrow("Pay-To hosted action URLs must target /pay-to/actions/complete.");
+      openHostedPaytagAction("/api/pay-to/stamps/list", { opener })
+    ).toThrow("Paytag hosted action URLs must target /pay-to/actions/complete.");
+    expect(() =>
+      openHostedPaytagAction("/pay-to/actions", { opener })
+    ).toThrow("Paytag hosted action URLs must target /pay-to/actions/complete.");
+    expect(() =>
+      openHostedPaytagAction("/pay-to/actions/complete", { opener })
+    ).toThrow("Paytag hosted action URLs must include a server-created action token.");
+    expect(() =>
+      openHostedPaytagAction("not a hosted action url", { opener })
+    ).toThrow("Paytag hosted action URLs must target /pay-to/actions/complete.");
+
+    expect(opener).not.toHaveBeenCalled();
   });
 });
