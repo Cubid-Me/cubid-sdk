@@ -127,6 +127,7 @@ endpoints plus the first server-facing API v3 write helpers:
 - `listPaytagLifecycleEvents`
 - `startHostedPaytagAction`
 - `startPaytagEnableAction`
+- `startPaytagRawExposureAction`
 - `startPaytagAliasCreateAction`
 - `startPaytagAliasSelectAction`
 - `startPaytagGrantAction`
@@ -202,6 +203,7 @@ The current API v3 helpers stay server-side as well:
 - `listPaytagLifecycleEvents({ dappUserUuid, since?, limit? })`
 - `startHostedPaytagAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `startPaytagEnableAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
+- `startPaytagRawExposureAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `startPaytagAliasCreateAction({ dappUserUuid, aliasExposure?: "opaque", returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `startPaytagAliasSelectAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
 - `startPaytagGrantAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`
@@ -273,16 +275,24 @@ const aliasAction = await cubid.startPaytagAliasCreateAction({
   aliasExposure: "opaque",
   idempotencyKey: crypto.randomUUID(),
 })
+
+const rawExposureAction = await cubid.startPaytagRawExposureAction({
+  dappUserUuid: "app-user-123",
+  idempotencyKey: crypto.randomUUID(),
+  metadata: { stampRef: "stamp:1602" },
+  returnUrl: "https://mypaytag.example/paytag/callback",
+})
 ```
 
 Prefer the typed action helpers for ordinary MVP flows:
-`startPaytagEnableAction`, `startPaytagAliasCreateAction`,
-`startPaytagAliasSelectAction`, `startPaytagGrantAction`, and
-`startPaytagRevokeAction`. `startHostedPaytagAction` remains available as a
-lower-level primitive for canonical Paytag action strings only, but app code
-should not need to pass raw action strings for common Paytag flows. Route
-registration, route authorization, and route selection belong to MyPayTag, not
-to Cubid Paytag SDK helpers.
+`startPaytagEnableAction`, `startPaytagRawExposureAction`,
+`startPaytagAliasCreateAction`, `startPaytagAliasSelectAction`,
+`startPaytagGrantAction`, and `startPaytagRevokeAction`.
+`startHostedPaytagAction` remains available as a lower-level primitive for
+canonical Paytag action strings only, but app code should not need to pass raw
+action strings for common Paytag flows. Route registration, route
+authorization, and route selection belong to MyPayTag, not to Cubid Paytag SDK
+helpers.
 
 Paytag helpers are deliberately submitted-candidate or opaque-alias based.
 There is no dapp helper for listing all user paytags or payment-enabled
@@ -290,13 +300,11 @@ stamps. Negative responses such as `resolution_unavailable` and `no_events`
 are generic by design and should not be expanded into probing-friendly detail.
 Opaque paytags such as `abd123@cubid.mypaytag` are the default. Raw
 stamp-based paytags such as `+1234569999@phone.cubid.mypaytag` require
-explicit user choice outside ordinary dapp validation. The SDK does not expose
-a raw-stamp action helper yet because Passport has not promoted a stable
-separate raw-stamp exposure action contract. Passing `aliasExposure:
-"raw_stamp"` to `startPaytagAliasCreateAction` is rejected; when raw exposure
-is added later it should be a separate, explicitly named helper and must not
-return raw stamp values to dapps unless Passport documents a safe redacted
-response shape.
+explicit user choice through `startPaytagRawExposureAction`. Passing
+`aliasExposure: "raw_stamp"` to `startPaytagAliasCreateAction` is rejected so
+opaque alias creation cannot be confused with raw-stamp exposure. The raw
+exposure helper starts the Cubid-hosted user ceremony; normalized SDK responses
+still do not return raw stamp values to dapps.
 
 Dapp API keys must stay server-side. Browser launch of a hosted Cubid paytag
 action belongs in `@cubid/browser` via

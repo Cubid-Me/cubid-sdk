@@ -60,12 +60,12 @@ Route mapping remains wire-compatible:
 Supported submitted-candidate stamp types are `email`, `phone`, `github`,
 `google`, and `evm`.
 
-Supported SDK action types are `paytag_enable`, `paytag_alias_create`,
-`paytag_alias_select`, `paytag_grant`, and `paytag_revoke`. Route-oriented
-strings such as `route_registration`, `route_authorization`,
-`route_selection`, and `grant_revocation` are not public Paytag SDK actions.
-MyPayTag, not Cubid, owns PayToDapp route registration, route authorization,
-and route selection.
+Supported SDK action types are `paytag_enable`, `paytag_raw_exposure`,
+`paytag_alias_create`, `paytag_alias_select`, `paytag_grant`, and
+`paytag_revoke`. Route-oriented strings such as `route_registration`,
+`route_authorization`, `route_selection`, and `grant_revocation` are not public
+Paytag SDK actions. MyPayTag, not Cubid, owns PayToDapp route registration,
+route authorization, and route selection.
 
 `startPaytagAliasCreateAction` is explicitly opaque by default and only accepts
 `aliasExposure: "opaque"` in the current SDK contract. Raw stamp-based paytags
@@ -181,8 +181,9 @@ Local SDK baseline:
 Hosted staging baseline:
 
 - Cubid hosted action start returns a hosted paytag action URL for each
-  canonical Cubid-owned action: `paytag_enable`, `paytag_alias_create`,
-  `paytag_alias_select`, `paytag_grant`, and `paytag_revoke`.
+  canonical Cubid-owned action: `paytag_enable`, `paytag_raw_exposure`,
+  `paytag_alias_create`, `paytag_alias_select`, `paytag_grant`, and
+  `paytag_revoke`.
 - `@cubid/browser` opens only the Cubid-hosted paytag action URL and rejects
   dapp API keys in the URL.
 - Paytag enable smoke proves a verified Cubid stamp can become paytag-capable

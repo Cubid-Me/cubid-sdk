@@ -3381,6 +3381,50 @@
           ]
         },
         {
+          "name": "startPaytagRawExposureAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagRawExposureAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagRawExposureActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
           "name": "startPaytagRevokeAction",
           "variant": "declaration",
           "kind": 2048,
@@ -11711,7 +11755,7 @@
                     "summary": [
                       {
                         "kind": "text",
-                        "text": "Opaque paytag aliases are the only SDK-supported default. Explicit\nraw-stamp exposure requires a separate Passport-hosted action contract\nbefore the SDK can expose a typed helper for it."
+                        "text": "Opaque paytag aliases are the only SDK-supported default. Explicit\nraw-stamp exposure uses startPaytagRawExposureAction so the user choice\nremains a separate hosted Cubid ceremony."
                       }
                     ]
                   },
@@ -11751,6 +11795,17 @@
     },
     {
       "name": "CubidStartPaytagGrantActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CubidStartPaytagRawExposureActionInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -14423,6 +14478,17 @@
       }
     },
     {
+      "name": "StartPaytagRawExposureActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagRawExposureActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "StartPaytagRevokeActionInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -14827,6 +14893,10 @@
             {
               "type": "literal",
               "value": "paytag_enable"
+            },
+            {
+              "type": "literal",
+              "value": "paytag_raw_exposure"
             },
             {
               "type": "literal",
@@ -16422,6 +16492,14 @@
     },
     {
       "kind": "code",
+      "text": "`startPaytagRawExposureAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`startPaytagAliasCreateAction`"
     },
     {
@@ -16830,6 +16908,14 @@
     },
     {
       "kind": "code",
+      "text": "`startPaytagRawExposureAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
       "text": "`startPaytagAliasCreateAction({ dappUserUuid, aliasExposure?: \"opaque\", returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
     },
     {
@@ -17126,7 +17212,7 @@
     },
     {
       "kind": "code",
-      "text": "```ts\nconst authorization = await cubid.checkPaytagAuthorization({\n  dappUserUuid: \"app-user-123\",\n  candidates: [\n    { candidateRef: \"paytag-1\", stampType: \"email\", value: \"abd123@cubid.mypaytag\" },\n  ],\n})\n\nconst aliases = await cubid.validatePaytagAliases({\n  dappUserUuid: \"app-user-123\",\n  aliases: [{ aliasRef: \"alias-1\", alias: \"abd123@cubid.mypaytag\" }],\n})\n\nconst action = await cubid.startPaytagEnableAction({\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  returnUrl: \"https://mypaytag.example/paytag/callback\",\n  requiredPasskeyAssurance: true,\n})\n\nconst aliasAction = await cubid.startPaytagAliasCreateAction({\n  dappUserUuid: \"app-user-123\",\n  aliasExposure: \"opaque\",\n  idempotencyKey: crypto.randomUUID(),\n})\n```"
+      "text": "```ts\nconst authorization = await cubid.checkPaytagAuthorization({\n  dappUserUuid: \"app-user-123\",\n  candidates: [\n    { candidateRef: \"paytag-1\", stampType: \"email\", value: \"abd123@cubid.mypaytag\" },\n  ],\n})\n\nconst aliases = await cubid.validatePaytagAliases({\n  dappUserUuid: \"app-user-123\",\n  aliases: [{ aliasRef: \"alias-1\", alias: \"abd123@cubid.mypaytag\" }],\n})\n\nconst action = await cubid.startPaytagEnableAction({\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  returnUrl: \"https://mypaytag.example/paytag/callback\",\n  requiredPasskeyAssurance: true,\n})\n\nconst aliasAction = await cubid.startPaytagAliasCreateAction({\n  dappUserUuid: \"app-user-123\",\n  aliasExposure: \"opaque\",\n  idempotencyKey: crypto.randomUUID(),\n})\n\nconst rawExposureAction = await cubid.startPaytagRawExposureAction({\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  metadata: { stampRef: \"stamp:1602\" },\n  returnUrl: \"https://mypaytag.example/paytag/callback\",\n})\n```"
     },
     {
       "kind": "text",
@@ -17142,7 +17228,7 @@
     },
     {
       "kind": "code",
-      "text": "`startPaytagAliasCreateAction`"
+      "text": "`startPaytagRawExposureAction`"
     },
     {
       "kind": "text",
@@ -17150,7 +17236,7 @@
     },
     {
       "kind": "code",
-      "text": "`startPaytagAliasSelectAction`"
+      "text": "`startPaytagAliasCreateAction`"
     },
     {
       "kind": "text",
@@ -17158,11 +17244,19 @@
     },
     {
       "kind": "code",
+      "text": "`startPaytagAliasSelectAction`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
       "text": "`startPaytagGrantAction`"
     },
     {
       "kind": "text",
-      "text": ", and\n"
+      "text": ", and "
     },
     {
       "kind": "code",
@@ -17170,7 +17264,7 @@
     },
     {
       "kind": "text",
-      "text": ". "
+      "text": ".\n"
     },
     {
       "kind": "code",
@@ -17178,7 +17272,7 @@
     },
     {
       "kind": "text",
-      "text": " remains available as a\nlower-level primitive for canonical Paytag action strings only, but app code\nshould not need to pass raw action strings for common Paytag flows. Route\nregistration, route authorization, and route selection belong to MyPayTag, not\nto Cubid Paytag SDK helpers.\n\nPaytag helpers are deliberately submitted-candidate or opaque-alias based.\nThere is no dapp helper for listing all user paytags or payment-enabled\nstamps. Negative responses such as "
+      "text": " remains available as a lower-level primitive for\ncanonical Paytag action strings only, but app code should not need to pass raw\naction strings for common Paytag flows. Route registration, route\nauthorization, and route selection belong to MyPayTag, not to Cubid Paytag SDK\nhelpers.\n\nPaytag helpers are deliberately submitted-candidate or opaque-alias based.\nThere is no dapp helper for listing all user paytags or payment-enabled\nstamps. Negative responses such as "
     },
     {
       "kind": "code",
@@ -17210,11 +17304,19 @@
     },
     {
       "kind": "text",
-      "text": " require\nexplicit user choice outside ordinary dapp validation. The SDK does not expose\na raw-stamp action helper yet because Passport has not promoted a stable\nseparate raw-stamp exposure action contract. Passing "
+      "text": " require\nexplicit user choice through "
     },
     {
       "kind": "code",
-      "text": "`aliasExposure:\n\"raw_stamp\"`"
+      "text": "`startPaytagRawExposureAction`"
+    },
+    {
+      "kind": "text",
+      "text": ". Passing\n"
+    },
+    {
+      "kind": "code",
+      "text": "`aliasExposure: \"raw_stamp\"`"
     },
     {
       "kind": "text",
@@ -17226,7 +17328,7 @@
     },
     {
       "kind": "text",
-      "text": " is rejected; when raw exposure\nis added later it should be a separate, explicitly named helper and must not\nreturn raw stamp values to dapps unless Passport documents a safe redacted\nresponse shape.\n\nDapp API keys must stay server-side. Browser launch of a hosted Cubid paytag\naction belongs in "
+      "text": " is rejected so\nopaque alias creation cannot be confused with raw-stamp exposure. The raw\nexposure helper starts the Cubid-hosted user ceremony; normalized SDK responses\nstill do not return raw stamp values to dapps.\n\nDapp API keys must stay server-side. Browser launch of a hosted Cubid paytag\naction belongs in "
     },
     {
       "kind": "code",

@@ -1213,6 +1213,7 @@ test("typed paytag action helpers send canonical action types through the initia
 
   const helpers = [
     ["paytag_enable", client.startPaytagEnableAction.bind(client)],
+    ["paytag_raw_exposure", client.startPaytagRawExposureAction.bind(client)],
     ["paytag_alias_create", client.startPaytagAliasCreateAction.bind(client)],
     ["paytag_alias_select", client.startPaytagAliasSelectAction.bind(client)],
     ["paytag_grant", client.startPaytagGrantAction.bind(client)],
@@ -1237,6 +1238,7 @@ test("typed paytag action helpers send canonical action types through the initia
     calls.map((call) => call.actionType),
     [
       "paytag_enable",
+      "paytag_raw_exposure",
       "paytag_alias_create",
       "paytag_alias_select",
       "paytag_grant",
@@ -1312,6 +1314,46 @@ test("paytag alias creation defaults to opaque aliases and rejects raw stamp exp
       return true
     }
   )
+})
+
+test("paytag raw exposure helper is explicit and does not use alias creation", async () => {
+  const bodies: unknown[] = []
+  const client = createCubidApiClient({
+    apiKey: "api_key",
+    baseUrl: "https://passport.cubid.me",
+    fetch: async (_input, init) => {
+      const body = JSON.parse(String(init?.body))
+      bodies.push(body)
+
+      return createJsonResponse({
+        data: {
+          actionToken: "pta_raw_exposure",
+          actionType: "paytag_raw_exposure",
+          hostedUrl: "/pay-to/actions/complete?action_token=pta_raw_exposure",
+          status: "pending",
+        },
+      })
+    },
+  })
+
+  const action = await client.startPaytagRawExposureAction({
+    dappUserUuid: "dapp_user_123",
+    idempotencyKey: "raw_exposure_key",
+    metadata: { stampRef: "stamp:1602" },
+  })
+
+  assert.equal(action.actionType, "paytag_raw_exposure")
+  assert.deepEqual(bodies[0], {
+    action_type: "paytag_raw_exposure",
+    api_key: "api_key",
+    dapp_user_uuid: "dapp_user_123",
+    metadata: {
+      stampRef: "stamp:1602",
+    },
+  })
+  assert.equal(JSON.stringify(bodies[0]).includes("+1234569999"), false)
+  assert.equal(JSON.stringify(bodies[0]).includes("payment"), false)
+  assert.equal(JSON.stringify(bodies[0]).includes("route"), false)
 })
 
 test("paytag helpers reject malformed successful payloads", async () => {

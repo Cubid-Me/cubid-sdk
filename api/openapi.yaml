@@ -414,6 +414,7 @@ components:
       type: string
       enum:
         - paytag_enable
+        - paytag_raw_exposure
         - paytag_alias_create
         - paytag_alias_select
         - paytag_grant

@@ -36,6 +36,7 @@ const publicPaytagHelpers = new Map([
   ["listPaytagLifecycleEvents", "listPaytagLifecycleEvents"],
   ["startHostedPaytagAction", "startHostedPaytagAction"],
   ["startPaytagEnableAction", "startHostedPaytagAction"],
+  ["startPaytagRawExposureAction", "startHostedPaytagAction"],
   ["startPaytagAliasCreateAction", "startHostedPaytagAction"],
   ["startPaytagAliasSelectAction", "startHostedPaytagAction"],
   ["startPaytagGrantAction", "startHostedPaytagAction"],

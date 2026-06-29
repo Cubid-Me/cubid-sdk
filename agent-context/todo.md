@@ -1841,7 +1841,7 @@ Acceptance notes:
 
 ### S20. Close code-verified Cubid SDK paytag gaps
 
-- Status: Todo
+- Status: Complete
 - Timestamp started: TBD
 - Timestamp completed: TBD
 - Feature branch: `codex/mypaytag-mvp-code-gap-todos-20260629`

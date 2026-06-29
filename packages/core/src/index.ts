@@ -592,6 +592,7 @@ export const CUBID_PAYTAG_STAMP_TYPES = [
 
 export const CUBID_PAYTAG_ACTION_TYPES = [
   "paytag_enable",
+  "paytag_raw_exposure",
   "paytag_alias_create",
   "paytag_alias_select",
   "paytag_grant",
@@ -722,12 +723,15 @@ export type CubidStartTypedPaytagActionInput = Omit<
 
 export type CubidStartPaytagEnableActionInput = CubidStartTypedPaytagActionInput
 
+export type CubidStartPaytagRawExposureActionInput =
+  CubidStartTypedPaytagActionInput
+
 export type CubidStartPaytagAliasCreateActionInput =
   CubidStartTypedPaytagActionInput & {
     /**
      * Opaque paytag aliases are the only SDK-supported default. Explicit
-     * raw-stamp exposure requires a separate Passport-hosted action contract
-     * before the SDK can expose a typed helper for it.
+     * raw-stamp exposure uses startPaytagRawExposureAction so the user choice
+     * remains a separate hosted Cubid ceremony.
      */
     aliasExposure?: CubidPaytagAliasExposure
   }
@@ -1321,6 +1325,8 @@ export type StartHostedPaytagActionInput = CubidStartHostedPaytagActionInput
 export type StartHostedPaytagActionResponse = CubidStartHostedPaytagActionResponse
 export type StartTypedPaytagActionInput = CubidStartTypedPaytagActionInput
 export type StartPaytagEnableActionInput = CubidStartPaytagEnableActionInput
+export type StartPaytagRawExposureActionInput =
+  CubidStartPaytagRawExposureActionInput
 export type StartPaytagAliasCreateActionInput =
   CubidStartPaytagAliasCreateActionInput
 export type StartPaytagAliasSelectActionInput =
@@ -1420,6 +1426,9 @@ export type CubidApiClient = {
   ): Promise<CubidStartHostedPaytagActionResponse>
   startPaytagEnableAction(
     input: CubidStartPaytagEnableActionInput
+  ): Promise<CubidStartHostedPaytagActionResponse>
+  startPaytagRawExposureAction(
+    input: CubidStartPaytagRawExposureActionInput
   ): Promise<CubidStartHostedPaytagActionResponse>
   startPaytagAliasCreateAction(
     input: CubidStartPaytagAliasCreateActionInput
@@ -4672,6 +4681,13 @@ export const createCubidApiClient = (
       return client.startHostedPaytagAction({
         ...input,
         actionType: "paytag_enable",
+      })
+    },
+
+    startPaytagRawExposureAction(input) {
+      return client.startHostedPaytagAction({
+        ...input,
+        actionType: "paytag_raw_exposure",
       })
     },
 
