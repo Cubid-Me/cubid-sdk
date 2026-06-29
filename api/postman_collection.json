@@ -188,7 +188,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"candidates\": [\n    {\n      \"stampType\": \"<string>\",\n      \"value\": \"<string>\",\n      \"candidateRef\": \"<string>\"\n    }\n  ]\n}",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"candidates\": [\n    {\n      \"stampType\": \"<string>\",\n      \"value\": \"<string>\",\n      \"candidateRef\": \"<string>\"\n    }\n  ],\n  \"dapp_id\": \"<string,number>\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -532,7 +532,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"api_key\": \"<string>\",\n  \"action_type\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"return_url\": \"<uri>\",\n  \"required_passkey_assurance\": false,\n  \"metadata\": {}\n}",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"action_type\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"dapp_id\": \"<string,number>\",\n  \"return_url\": \"<uri>\",\n  \"required_passkey_assurance\": false,\n  \"metadata\": {}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -952,7 +952,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"aliases\": [\n    {\n      \"alias\": \"<string>\",\n      \"aliasRef\": \"<string>\"\n    }\n  ],\n  \"resolver_key\": \"<string>\"\n}",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"aliases\": [\n    {\n      \"alias\": \"<string>\",\n      \"aliasRef\": \"<string>\"\n    }\n  ],\n  \"dapp_id\": \"<string,number>\",\n  \"resolver_key\": \"<string>\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1284,7 +1284,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\"\n}",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"dapp_id\": \"<string,number>\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1616,7 +1616,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"since\": \"<dateTime>\",\n  \"limit\": 25\n}",
+              "raw": "{\n  \"api_key\": \"<string>\",\n  \"dapp_user_uuid\": \"<string>\",\n  \"dapp_id\": \"<string,number>\",\n  \"since\": \"<dateTime>\",\n  \"limit\": 25\n}",
               "options": {
                 "raw": {
                   "language": "json"

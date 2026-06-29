@@ -123,3 +123,12 @@
 - summary: Regenerated Postman and TypeDoc API reference artifacts after S19 public type, README, OpenAPI, and browser-helper changes; marked S19 complete; and updated repo-status with the Paytag MVP gap-closure baseline.
 - validation: `corepack pnpm api:postman`; `corepack pnpm docs:api:build`; `corepack pnpm docs:api:check`; `corepack pnpm --filter @cubid/core test`; `corepack pnpm --filter @cubid/browser build`; `corepack pnpm api:validate`; `corepack pnpm paytag:check`; `git diff --check`; targeted scans confirmed old Pay-To helper names are absent from generated artifacts/public source and route compatibility strings only remain in negative tests or explanatory boundary docs.
 - follow-ups: Run the full `corepack pnpm validate:yeet` bundle before opening or updating the PR if time allows.
+
+## 2026-06-29T02:42:52Z - PR27 Paytag OpenAPI dapp_id review fix
+
+- agent: Codex
+- branch: codex/mypaytag-mvp-realignment-20260628
+- head: 2bad2a84
+- summary: Addressed Codex PR review feedback by adding optional `dapp_id` to every Paytag OpenAPI request schema that can receive SDK-injected dapp IDs through `withV3Credentials`, then regenerated the Postman collection.
+- validation: `corepack pnpm api:validate`; `corepack pnpm api:postman`; `corepack pnpm paytag:check`.
+- follow-ups: Push the fix, reply to the review thread, and resolve it on PR #27.
