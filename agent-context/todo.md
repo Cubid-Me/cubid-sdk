@@ -1838,3 +1838,65 @@ Acceptance notes:
 - Run `pnpm --filter @cubid/core test`, `pnpm --filter @cubid/browser build`, `pnpm api:validate`, and the new Paytag/OpenAPI sync guardrail.
 - `git diff --check` passes.
 - Targeted scans confirm no old Pay-To helper names, payment-intent notification helpers, wallet routing fields, provider callback fields, solver/bridge/swap execution fields, service-role secrets, or dapp API keys in browser helpers.
+
+### S20. Close code-verified Cubid SDK paytag gaps
+
+- Status: Todo
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: `codex/mypaytag-mvp-code-gap-todos-20260629`
+- Head: TBD
+- Session-log reference(s): TBD
+
+Track the code-verified follow-up gaps from the MyPayTag MVP implementation
+review. The SDK should expose Cubid-owned identity, consent, opaque alias,
+explicit raw-stamp exposure, grant, and lifecycle helpers while continuing to
+keep wallets, payment routes, PayToDapp priority, provider callbacks, NEAR
+1Click, quotes, settlement, solvers, bridges, swaps, and execution outside
+Cubid ownership.
+
+### S20.1 Add typed helper for explicit raw-stamp paytag exposure
+
+- Status: Todo
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: `codex/mypaytag-mvp-code-gap-todos-20260629`
+- Head: TBD
+- Session-log reference(s): TBD
+
+Add a typed helper for the Cubid-hosted raw-stamp exposure action once
+`cubid-monorepo` exposes the stable action contract. The default alias creation
+and paytag enablement helpers must remain opaque-only.
+
+Acceptance notes:
+
+- Add a typed raw exposure starter that is distinct from `startPaytagEnableAction`
+  and `startPaytagAliasCreateAction`.
+- README, OpenAPI, TypeDoc, and Postman examples show raw stamp paytags only in
+  explicit-exposure sections.
+- Tests prove default helpers do not expose raw stamp values and raw exposure
+  cannot be requested through opaque alias creation.
+- Browser helpers still only open server-created hosted action URLs and never
+  accept dapp API keys.
+
+### S20.2 Add staged smoke coverage for raw exposure and MyPayTag validation
+
+- Status: Todo
+- Timestamp started: TBD
+- Timestamp completed: TBD
+- Feature branch: `codex/mypaytag-mvp-code-gap-todos-20260629`
+- Head: TBD
+- Session-log reference(s): TBD
+
+Extend the Cubid SDK smoke checklist and tests so they prove both opaque and
+explicit raw-stamp paytag flows work with MyPayTag validation without exposing
+payment-route ownership in Cubid SDK.
+
+Acceptance notes:
+
+- Smoke covers paytag enable, opaque alias create/select, explicit raw exposure,
+  grant, revoke, lifecycle polling, and MyPayTag validation after each state.
+- Smoke guidance says PayingDapps resolve payments through MyPayTag, not Cubid.
+- Validation fails if Cubid SDK examples include wallet routes, PayToDapp
+  priority, provider callbacks, payment instructions, NEAR 1Click quotes,
+  settlement, solvers, bridges, swaps, or execution fields.
