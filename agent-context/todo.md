@@ -1857,7 +1857,7 @@ Cubid ownership.
 
 ### S20.1 Add typed helper for explicit raw-stamp paytag exposure
 
-- Status: Todo
+- Status: Complete
 - Timestamp started: TBD
 - Timestamp completed: TBD
 - Feature branch: `codex/mypaytag-mvp-code-gap-todos-20260629`

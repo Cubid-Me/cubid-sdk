@@ -306,6 +306,10 @@ opaque alias creation cannot be confused with raw-stamp exposure. The raw
 exposure helper starts the Cubid-hosted user ceremony; normalized SDK responses
 still do not return raw stamp values to dapps.
 
+PayingDapps resolve payments through MyPayTag, not Cubid. The Cubid SDK surface
+is limited to paytag identity, consent, verified stamps, aliases, grants,
+hosted actions, and lifecycle signals.
+
 Dapp API keys must stay server-side. Browser launch of a hosted Cubid paytag
 action belongs in `@cubid/browser` via
 `openHostedPaytagAction(action.hostedUrl)`.

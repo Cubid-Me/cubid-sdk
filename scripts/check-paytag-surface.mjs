@@ -7,6 +7,11 @@ const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..")
 const read = (path) => readFileSync(join(repoRoot, path), "utf8")
 
 const coreSource = read("packages/core/src/index.ts")
+const coreReadme = read("packages/core/README.md")
+const coreTests = read("packages/core/src/index.test.ts")
+const paytagArchitecture = read(
+  "docs/engineering/mypaytag-paytag-sdk-architecture.md"
+)
 const openApi = read("api/openapi.yaml")
 const postman = read("api/postman_collection.json")
 
@@ -108,6 +113,45 @@ for (const pattern of forbiddenOpenApiFieldPatterns) {
       `OpenAPI appears to document forbidden Paytag-owned field ${match[1]}.`
     )
   }
+}
+
+const stagedSmokeRequirements = [
+  "startPaytagEnableAction",
+  "startPaytagAliasCreateAction",
+  "startPaytagAliasSelectAction",
+  "startPaytagRawExposureAction",
+  "startPaytagGrantAction",
+  "startPaytagRevokeAction",
+  "listPaytagLifecycleEvents",
+  "checkPaytagAuthorization",
+  "validatePaytagAliases",
+]
+
+for (const helper of stagedSmokeRequirements) {
+  if (!coreTests.includes(helper)) {
+    failures.push(`Core tests are missing staged Paytag smoke helper ${helper}.`)
+  }
+  if (!paytagArchitecture.includes(helper)) {
+    failures.push(
+      `Paytag architecture smoke checklist is missing helper ${helper}.`
+    )
+  }
+}
+
+if (
+  !coreReadme.includes("PayingDapps resolve payments through MyPayTag, not Cubid")
+) {
+  failures.push(
+    "Core README must tell PayingDapps to resolve payments through MyPayTag, not Cubid."
+  )
+}
+
+if (
+  !/The Cubid SDK surface\s+is limited to paytag identity, consent, verified stamps, aliases, grants,\s+hosted actions, and lifecycle signals\./.test(coreReadme)
+) {
+  failures.push(
+    "Core README must limit the Cubid SDK surface to identity, consent, aliases, grants, hosted actions, and lifecycle signals."
+  )
 }
 
 if (failures.length) {

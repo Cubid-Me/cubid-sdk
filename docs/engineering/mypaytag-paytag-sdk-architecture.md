@@ -187,20 +187,21 @@ Hosted staging baseline:
 - `@cubid/browser` opens only the Cubid-hosted paytag action URL and rejects
   dapp API keys in the URL.
 - Paytag enable smoke proves a verified Cubid stamp can become paytag-capable
-  identity state without returning raw stamp values to the dapp.
+  identity state through `startPaytagEnableAction` without returning raw stamp
+  values to the dapp.
 - Opaque alias creation smoke proves `abd123@cubid.mypaytag`-style aliases are
   the default and that MyPayTag validates availability before issuance.
 - Opaque alias selection smoke proves the user can select among existing
-  opaque aliases without exposing raw stamp identifiers or cross-app state.
-- Explicit raw-stamp exposure smoke is blocked until Passport exposes a stable
-  separate hosted action contract. When that exists, smoke must prove the user
-  made the explicit choice and that Cubid SDK normalized responses remain
-  redacted unless Passport documents a safe public raw-stamp response field.
-- Grant smoke proves MyPayTag can obtain dapp-scoped consent to validate a
-  submitted paytag through Cubid.
-- Revoke smoke proves the grant can be revoked and subsequent MyPayTag
-  validation receives a generic negative status rather than probing-friendly
-  detail.
+  opaque aliases through `startPaytagAliasSelectAction` without exposing raw
+  stamp identifiers or cross-app state.
+- Explicit raw-stamp exposure smoke uses `startPaytagRawExposureAction` and
+  proves the user made the explicit choice while Cubid SDK normalized
+  responses remain redacted and do not return raw stamp values to dapps.
+- Grant smoke proves MyPayTag can obtain dapp-scoped consent through
+  `startPaytagGrantAction` to validate a submitted paytag through Cubid.
+- Revoke smoke proves the grant can be revoked through
+  `startPaytagRevokeAction` and subsequent MyPayTag validation receives a
+  generic negative status rather than probing-friendly detail.
 - Lifecycle polling smoke proves `listPaytagLifecycleEvents` returns redacted
   identity, alias, and consent events after enable, alias create/select, grant,
   and revoke transitions.
