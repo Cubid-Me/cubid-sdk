@@ -33,7 +33,7 @@ describe("@cubid/acceptance browser consumer flow", () => {
       browser.openHostedPaytagAction("/pay-to/actions/complete?action_token=pta_act_123&apikey=secret", {
         opener: () => null
       })
-    ).toThrow("Paytag hosted action URLs must not contain dapp API keys.");
+    ).toThrow("Paytag hosted action URLs must not contain API-key-like query parameters.");
     expect(() =>
       browser.openHostedPaytagAction(
         "https://attacker.example/pay-to/actions/complete?action_token=pta_act_123",

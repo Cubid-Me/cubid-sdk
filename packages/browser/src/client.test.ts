@@ -295,7 +295,7 @@ describe("@cubid/browser", () => {
     );
   });
 
-  it("rejects Paytag hosted action URLs that include dapp API keys or unsafe targets", () => {
+  it("rejects Paytag hosted action URLs that include API-key-like query parameters or unsafe targets", () => {
     const opener = vi.fn(() => null);
 
     for (const key of [
@@ -317,7 +317,7 @@ describe("@cubid/browser", () => {
           `/pay-to/actions/complete?action_token=pta_act_123&${key}=secret`,
           { opener }
         )
-      ).toThrow("Paytag hosted action URLs must not contain dapp API keys.");
+      ).toThrow("Paytag hosted action URLs must not contain API-key-like query parameters.");
     }
 
     expect(() =>

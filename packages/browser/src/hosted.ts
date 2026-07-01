@@ -51,7 +51,7 @@ function assertPaytagHostedActionUrl(hostedUrl: string): string {
     const normalizedKey = key.replace(/[-_]/g, "").toLowerCase();
 
     if (normalizedKey.includes("apikey")) {
-      throw new Error("Paytag hosted action URLs must not contain dapp API keys.");
+      throw new Error("Paytag hosted action URLs must not contain API-key-like query parameters.");
     }
   }
 
