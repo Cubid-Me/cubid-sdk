@@ -306,7 +306,11 @@ describe("@cubid/browser", () => {
       "dappApiKey",
       "dapp_api_key",
       "dapp-api-key",
-      "DAPP_API_KEY"
+      "DAPP_API_KEY",
+      "X-Cubid-API-Key",
+      "x_cubid_api_key",
+      "cubidApiKey",
+      "not_an_api_key_but_contains_apikey"
     ]) {
       expect(() =>
         openHostedPaytagAction(

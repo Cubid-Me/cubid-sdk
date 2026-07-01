@@ -10,10 +10,6 @@ import type {
 const DEFAULT_PASSPORT_ORIGIN = "https://passport.cubid.me";
 const HOSTED_SIWC_DECISIONS = new Set(["approve", "reject"]);
 const PAYTAG_HOSTED_ACTION_PATH = "/pay-to/actions/complete";
-const SENSITIVE_PAYTAG_QUERY_PARAMS = new Set([
-  "apikey",
-  "dappapikey"
-]);
 
 function normalizePassportOrigin(passportOrigin?: string): string {
   return (passportOrigin ?? DEFAULT_PASSPORT_ORIGIN).replace(/\/+$/, "");
@@ -54,7 +50,7 @@ function assertPaytagHostedActionUrl(hostedUrl: string): string {
   for (const key of parsed.searchParams.keys()) {
     const normalizedKey = key.replace(/[-_]/g, "").toLowerCase();
 
-    if (SENSITIVE_PAYTAG_QUERY_PARAMS.has(normalizedKey)) {
+    if (normalizedKey.includes("apikey")) {
       throw new Error("Paytag hosted action URLs must not contain dapp API keys.");
     }
   }

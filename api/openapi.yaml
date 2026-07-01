@@ -376,11 +376,11 @@ components:
         code:
           type: string
           description: Stable machine-readable error code.
-          example: unauthorized
+          example: request_failed
         message:
           type: string
           description: Human-readable error summary.
-          example: Missing or invalid dapp API key.
+          example: Request failed.
         details:
           type:
             - object
