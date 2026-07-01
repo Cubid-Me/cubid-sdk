@@ -60,6 +60,9 @@ jobs:
       - name: Validate OpenAPI spec
         run: pnpm api:validate
 
+      - name: Check Paytag SDK surface
+        run: pnpm paytag:check
+
       - name: Check API reference artifacts
         run: pnpm docs:api:check
 
