@@ -52,7 +52,7 @@ out of React-specific packages. Today that includes:
 - hosted verification URL builders
 - ClearPass Verify URL builders
 - hosted SIWC approval/rejection request descriptors
-- hosted Pay-To action opener
+- hosted paytag action opener
 
 Use this package when your app needs browser-facing Cubid flow helpers but
 should not embed Cubid API keys, server credentials, or private approval logic
@@ -100,22 +100,25 @@ authentication, fresh passkey step-up, or app policy checks.
 Use them only in environments where the authenticated Passport user session is
 already expected to perform the approval or rejection step.
 
-## Hosted Pay-To Actions
+## Hosted Paytag Actions
 
-`@cubid/browser` exposes `openPayToHostedAction(...)` for server-created Pay-To
-hosted action URLs returned by `@cubid/core`'s `startPayToAction(...)`.
+`@cubid/browser` exposes `openHostedPaytagAction(...)` for server-created
+Cubid hosted paytag action URLs returned by `@cubid/core`'s
+`startHostedPaytagAction(...)`.
 
 ```ts
-import { openPayToHostedAction } from "@cubid/browser"
+import { openHostedPaytagAction } from "@cubid/browser"
 
-openPayToHostedAction(action.hostedUrl)
+openHostedPaytagAction(action.hostedUrl)
 ```
 
-The helper only opens `/pay-to/actions/complete` URLs and rejects URL query
-parameters that look like dapp API keys. It does not create action tokens and
-does not accept dapp API keys. Create hosted Pay-To actions server-side through
-`@cubid/core`.
+The helper only opens `/pay-to/actions/complete` URLs that already include a
+server-created `action_token`, and it rejects URL query parameters that look
+like dapp API keys. It never creates action tokens and does not accept dapp API
+keys. Create hosted paytag actions server-side through `@cubid/core`. The
+`/pay-to/actions/complete` path is backend wire compatibility; the public
+browser SDK API is Paytag-only.
 
-Signed-in owner-management wrappers for Pay-To stamp and grant routes remain
+Signed-in owner-management wrappers for paytag stamp and grant routes remain
 deferred until the SDK has a Cubid-authenticated user-session pattern ready for
 bearer-token calls.

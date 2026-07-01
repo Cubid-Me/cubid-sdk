@@ -1,0 +1,810 @@
+openapi: 3.1.0
+info:
+  title: Cubid Public API
+  summary: Public Cubid dapp API contracts exposed through the Cubid SDK.
+  version: 0.1.0
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  description: |
+    This OpenAPI document is the source of truth for lightweight HTTP API
+    documentation in this SDK repository.
+
+    The first documented surface is the server/Edge MyPayTag paytag identity
+    and consent contract used by `@cubid/core`. These routes are
+    dapp-authenticated and must be called from trusted server runtimes, not
+    directly from browsers.
+servers:
+  - url: http://localhost:3000
+    description: Local Cubid API runtime
+  - url: https://staging.passport.cubid.me
+    description: Staging Cubid Passport API
+  - url: https://passport.cubid.me
+    description: Production Cubid Passport API
+tags:
+  - name: Health
+    description: Service health and diagnostics.
+  - name: Paytag
+    description: Privacy-preserving MyPayTag identity, consent, alias, and hosted action APIs.
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      operationId: getHealth
+      summary: Check API health
+      description: Returns a lightweight health response for operational checks.
+      security: []
+      responses:
+        "200":
+          description: The API is reachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+              examples:
+                ok:
+                  value:
+                    status: ok
+                    service: cubid-passport
+                    timestamp: "2026-06-27T12:00:00.000Z"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/v3/pay-to/stamps/eligibility/check:
+    post:
+      tags:
+        - Paytag
+      operationId: checkPaytagAuthorization
+      summary: Check submitted paytag authorization
+      description: |
+        Checks whether submitted paytag candidates are valid and consented for
+        the dapp context. This route is deliberately candidate-based and does
+        not expose a list-all paytag or payment-stamp resolver.
+      security:
+        - DappApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaytagAuthorizationCheckRequest"
+            examples:
+              emailCandidate:
+                value:
+                  api_key: cubid_dapp_api_key
+                  dapp_user_uuid: dapp_user_123
+                  candidates:
+                    - candidateRef: payee-1
+                      stampType: email
+                      value: abd123@cubid.mypaytag
+      responses:
+        "200":
+          description: Authorization was checked for the submitted candidates.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaytagAuthorizationCheckResponse"
+              examples:
+                checked:
+                  value:
+                    data:
+                      status: checked
+                      results:
+                        - candidateRef: payee-1
+                          eligible: true
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v3/pay-to/actions/start:
+    post:
+      tags:
+        - Paytag
+      operationId: startHostedPaytagAction
+      summary: Start a hosted paytag action
+      description: |
+        Creates a Cubid-hosted paytag setup or consent action for a single
+        dapp user. This write route requires an `Idempotency-Key` header.
+      security:
+        - DappApiKey: []
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaytagActionStartRequest"
+            examples:
+              setup:
+                value:
+                  api_key: cubid_dapp_api_key
+                  action_type: paytag_enable
+                  dapp_user_uuid: dapp_user_123
+                  return_url: https://mypaytag.example/paytag/callback
+                  required_passkey_assurance: true
+                  metadata:
+                    correlation_id: paytag_setup_123
+      responses:
+        "200":
+          description: Hosted action was created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaytagActionStartResponse"
+              examples:
+                created:
+                  value:
+                    data:
+                      status: created
+                      action_token: pta_act_123
+                      action_type: paytag_enable
+                      hosted_url: https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123
+                      expires_at: "2026-06-27T12:15:00.000Z"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v3/pay-to/aliases/resolve:
+    post:
+      tags:
+        - Paytag
+      operationId: validatePaytagAliases
+      summary: Validate submitted opaque paytag aliases
+      description: |
+        Validates submitted opaque paytag aliases for a dapp user. This route
+        accepts caller-submitted aliases only and does not expose raw stamp
+        identifiers, wallet routes, route priorities, provider callbacks, or
+        payment execution details.
+      security:
+        - DappApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaytagAliasValidationRequest"
+            examples:
+              opaqueAlias:
+                value:
+                  api_key: cubid_dapp_api_key
+                  dapp_user_uuid: dapp_user_123
+                  aliases:
+                    - aliasRef: alias-1
+                      alias: abd123@cubid.mypaytag
+      responses:
+        "200":
+          description: Alias validation completed for the submitted aliases.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaytagAliasValidationResponse"
+              examples:
+                checked:
+                  value:
+                    data:
+                      status: checked
+                      results:
+                        - aliasRef: alias-1
+                          eligible: true
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v3/pay-to/grants/status:
+    post:
+      tags:
+        - Paytag
+      operationId: getPaytagGrantStatus
+      summary: Get dapp-scoped paytag grant status
+      description: |
+        Returns the redacted consent-grant status for one dapp-scoped user.
+        The response is scoped to the caller's app context and does not include
+        raw destinations, raw stamp values, route preferences, wallet graphs,
+        or cross-app grant information.
+      security:
+        - DappApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaytagGrantStatusRequest"
+            examples:
+              dappUser:
+                value:
+                  api_key: cubid_dapp_api_key
+                  dapp_user_uuid: dapp_user_123
+      responses:
+        "200":
+          description: Grant status for the dapp-scoped user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaytagGrantStatusResponse"
+              examples:
+                active:
+                  value:
+                    data:
+                      dappUserUuid: dapp_user_123
+                      grantStatus: active
+                      grantedAt: "2026-06-27T12:00:00.000Z"
+                      revokedAt: null
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/v3/pay-to/events/list:
+    post:
+      tags:
+        - Paytag
+      operationId: listPaytagLifecycleEvents
+      summary: List redacted paytag lifecycle events
+      description: |
+        Lists redacted identity, alias, and consent lifecycle events for one
+        dapp-scoped user. This route is for state reconciliation only; it does
+        not return payment instructions, route diagnostics, provider callback
+        payloads, settlement state, solvers, bridges, swaps, or execution data.
+      security:
+        - DappApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaytagLifecycleEventsListRequest"
+            examples:
+              recentEvents:
+                value:
+                  api_key: cubid_dapp_api_key
+                  dapp_user_uuid: dapp_user_123
+                  since: "2026-06-27T00:00:00.000Z"
+                  limit: 10
+      responses:
+        "200":
+          description: Redacted lifecycle events for the dapp-scoped user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaytagLifecycleEventsListResponse"
+              examples:
+                events:
+                  value:
+                    data:
+                      status: ok
+                      events:
+                        - eventRef: paytag_event_123
+                          eventType: pay_to.grant.revoked
+                          createdAt: "2026-06-27T12:05:00.000Z"
+                          outcome: success
+                          reason: user_revoked
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  securitySchemes:
+    DappApiKey:
+      type: apiKey
+      in: header
+      name: X-Cubid-API-Key
+      description: |
+        Dapp API key for server/Edge routes. Current SDK helpers send this
+        credential as `api_key` in paytag request bodies; the header scheme
+        keeps the authentication requirement visible to OpenAPI tools.
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Stable caller-generated key used to make write requests safe to retry.
+      schema:
+        type: string
+        minLength: 1
+        example: idem_01JZ0D0W4WB4VT9PR3J50XQ6TA
+  schemas:
+    HealthResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: ok
+        service:
+          type: string
+          example: cubid-passport
+        timestamp:
+          type: string
+          format: date-time
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          $ref: "#/components/schemas/ErrorObject"
+        request_id:
+          type:
+            - string
+            - "null"
+          description: Request correlation identifier when available.
+          example: req_01JZ0D0W4WB4VT9PR3J50XQ6TA
+    ErrorObject:
+      type: object
+      additionalProperties: true
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Stable machine-readable error code.
+          example: request_failed
+        message:
+          type: string
+          description: Human-readable error summary.
+          example: Request failed.
+        details:
+          type:
+            - object
+            - "null"
+          additionalProperties: true
+        request_id:
+          type:
+            - string
+            - "null"
+          example: req_01JZ0D0W4WB4VT9PR3J50XQ6TA
+    DappUserUuid:
+      type: string
+      minLength: 1
+      description: Dapp-scoped user identifier. Do not use raw Cubid internal IDs.
+      example: dapp_user_123
+    DappId:
+      type:
+        - string
+        - number
+      description: Optional app identifier injected by SDK clients configured with `dappId`.
+      example: dapp_123
+    PaytagStampType:
+      type: string
+      enum:
+        - email
+        - phone
+        - github
+        - google
+        - evm
+    PaytagActionType:
+      type: string
+      enum:
+        - paytag_enable
+        - paytag_alias_create
+        - paytag_alias_select
+        - paytag_grant
+        - paytag_revoke
+    PaytagAuthorizationCandidate:
+      type: object
+      additionalProperties: false
+      required:
+        - stampType
+        - value
+      properties:
+        candidateRef:
+          type: string
+          description: Caller-local reference echoed in the response.
+          example: payee-1
+        stampType:
+          $ref: "#/components/schemas/PaytagStampType"
+        value:
+          type: string
+          description: Submitted candidate value. Responses never return raw values.
+          example: abd123@cubid.mypaytag
+    PaytagAuthorizationCheckRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - api_key
+        - dapp_user_uuid
+        - candidates
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          description: Dapp API key. SDK helpers inject this from initialized client config.
+          writeOnly: true
+        dapp_user_uuid:
+          $ref: "#/components/schemas/DappUserUuid"
+        dapp_id:
+          $ref: "#/components/schemas/DappId"
+        candidates:
+          type: array
+          minItems: 1
+          maxItems: 25
+          items:
+            $ref: "#/components/schemas/PaytagAuthorizationCandidate"
+    PaytagAuthorizationResult:
+      type: object
+      additionalProperties: true
+      required:
+        - eligible
+      properties:
+        candidateRef:
+          type:
+            - string
+            - "null"
+          example: payee-1
+        eligible:
+          type: boolean
+          description: Boolean authorization only; no route counts or raw identifiers.
+          example: true
+    PaytagAuthorizationCheckResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          required:
+            - results
+          properties:
+            status:
+              type: string
+              enum:
+                - checked
+                - resolution_unavailable
+              example: checked
+            results:
+              type: array
+              items:
+                $ref: "#/components/schemas/PaytagAuthorizationResult"
+    PaytagAliasCandidate:
+      type: object
+      additionalProperties: false
+      required:
+        - alias
+      properties:
+        aliasRef:
+          type: string
+          description: Caller-local reference echoed in the response.
+          example: alias-1
+        alias:
+          type: string
+          description: Submitted opaque paytag alias. Responses never return raw stamp values.
+          example: abd123@cubid.mypaytag
+    PaytagAliasValidationRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - api_key
+        - dapp_user_uuid
+        - aliases
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          description: Dapp API key. SDK helpers inject this from initialized client config.
+          writeOnly: true
+        dapp_user_uuid:
+          $ref: "#/components/schemas/DappUserUuid"
+        dapp_id:
+          $ref: "#/components/schemas/DappId"
+        resolver_key:
+          type: string
+          description: Optional caller-owned resolver context key.
+          example: resolver_mypaytag
+        aliases:
+          type: array
+          minItems: 1
+          maxItems: 25
+          items:
+            $ref: "#/components/schemas/PaytagAliasCandidate"
+    PaytagAliasValidationResult:
+      type: object
+      additionalProperties: true
+      required:
+        - eligible
+      properties:
+        aliasRef:
+          type:
+            - string
+            - "null"
+          example: alias-1
+        eligible:
+          type: boolean
+          description: Boolean alias validation only; no raw identifiers or route diagnostics.
+          example: true
+    PaytagAliasValidationResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          required:
+            - results
+          properties:
+            status:
+              type: string
+              enum:
+                - checked
+                - resolution_unavailable
+              example: checked
+            results:
+              type: array
+              items:
+                $ref: "#/components/schemas/PaytagAliasValidationResult"
+    PaytagGrantStatusRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - api_key
+        - dapp_user_uuid
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          description: Dapp API key. SDK helpers inject this from initialized client config.
+          writeOnly: true
+        dapp_user_uuid:
+          $ref: "#/components/schemas/DappUserUuid"
+        dapp_id:
+          $ref: "#/components/schemas/DappId"
+    PaytagGrantStatusResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          properties:
+            dappUserUuid:
+              type:
+                - string
+                - "null"
+              description: Dapp-scoped user identifier only.
+              example: dapp_user_123
+            grantStatus:
+              type:
+                - string
+                - "null"
+              enum:
+                - active
+                - revoked
+                - missing
+                - null
+              example: active
+            grantedAt:
+              type:
+                - string
+                - "null"
+              format: date-time
+            revokedAt:
+              type:
+                - string
+                - "null"
+              format: date-time
+    PaytagLifecycleEvent:
+      type: object
+      additionalProperties: true
+      properties:
+        eventRef:
+          type:
+            - string
+            - "null"
+          example: paytag_event_123
+        eventType:
+          type:
+            - string
+            - "null"
+          enum:
+            - pay_to.stamp.disabled
+            - pay_to.grant.revoked
+            - pay_to.grant.expired
+            - pay_to.identity_state.changed
+            - null
+          example: pay_to.grant.revoked
+        createdAt:
+          type:
+            - string
+            - "null"
+          format: date-time
+        outcome:
+          type:
+            - string
+            - "null"
+          enum:
+            - success
+            - failure
+            - null
+          example: success
+        reason:
+          type:
+            - string
+            - "null"
+          example: user_revoked
+    PaytagLifecycleEventsListRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - api_key
+        - dapp_user_uuid
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          description: Dapp API key. SDK helpers inject this from initialized client config.
+          writeOnly: true
+        dapp_user_uuid:
+          $ref: "#/components/schemas/DappUserUuid"
+        dapp_id:
+          $ref: "#/components/schemas/DappId"
+        since:
+          type: string
+          format: date-time
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+    PaytagLifecycleEventsListResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          properties:
+            status:
+              type: string
+              enum:
+                - ok
+                - no_events
+              example: ok
+            events:
+              type: array
+              items:
+                $ref: "#/components/schemas/PaytagLifecycleEvent"
+    PaytagActionStartRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - api_key
+        - action_type
+        - dapp_user_uuid
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          description: Dapp API key. SDK helpers inject this from initialized client config.
+          writeOnly: true
+        action_type:
+          $ref: "#/components/schemas/PaytagActionType"
+        dapp_user_uuid:
+          $ref: "#/components/schemas/DappUserUuid"
+        dapp_id:
+          $ref: "#/components/schemas/DappId"
+        return_url:
+          type: string
+          format: uri
+          example: https://mypaytag.example/paytag/callback
+        required_passkey_assurance:
+          type: boolean
+          default: false
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Caller-owned redacted metadata for correlation.
+    PaytagActionStartResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          properties:
+            status:
+              type: string
+              example: created
+            action_token:
+              type:
+                - string
+                - "null"
+              example: pta_act_123
+            action_type:
+              $ref: "#/components/schemas/PaytagActionType"
+            hosted_url:
+              type:
+                - string
+                - "null"
+              format: uri
+              example: https://passport.cubid.me/pay-to/actions/complete?action_token=pta_act_123
+            expires_at:
+              type:
+                - string
+                - "null"
+              format: date-time
+  responses:
+    BadRequest:
+      description: Request failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Unauthorized:
+      description: Missing or invalid authentication.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Forbidden:
+      description: The authenticated caller is not allowed to perform this operation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Conflict:
+      description: Request conflicts with the current resource state or idempotency state.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    RateLimited:
+      description: The caller exceeded a rate limit.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before retrying, when available.
+          schema:
+            type: integer
+            minimum: 0
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    InternalServerError:
+      description: Unexpected server error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"

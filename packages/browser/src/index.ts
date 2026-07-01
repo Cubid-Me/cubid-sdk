@@ -4,7 +4,7 @@ export {
   buildHostedSiwcAccountRequestAction,
   buildHostedSiwcSigningRequestAction,
   buildHostedVerificationUrl,
-  openPayToHostedAction
+  openHostedPaytagAction
 } from "./hosted";
 export { WEB2_OAUTH_PROVIDERS } from "./types";
 export type {
@@ -26,8 +26,8 @@ export type {
   HostedVerificationUrlRequest,
   OAuthAuthorizationUrlRequest,
   ParsedCubidAllowFlowParams,
-  PayToHostedActionOpener,
-  PayToHostedActionOpenOptions,
+  PaytagHostedActionOpener,
+  PaytagHostedActionOpenOptions,
   PhoneOtpStartRequest,
   PhoneOtpVerifyRequest,
   PhoneOtpVerifyResult,

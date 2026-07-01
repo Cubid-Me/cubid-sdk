@@ -1593,3 +1593,248 @@ only, generic negative responses, no raw identifier leakage, redacted
 lifecycle events, idempotent action start, and unsupported payment event
 denial before event creation. Add explicit browser and React package tests
 showing Pay-To helpers cannot accept dapp API keys.
+
+### S18. Realign Cubid SDK Paytag Identity And Consent Helpers For MyPayTag
+
+- Status: Completed
+- Timestamp started: 2026-06-28T11:20:45Z
+- Timestamp completed: 2026-06-28T11:29:06Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: b73d3860
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Track the SDK refactor requested in `agent-context/2026-06-28-mypaytag-mvp-realignment.md`. The SDK should expose Cubid as the paytag identity and consent layer for a MyPayTag-branded payment identity, not as a wallet resolver, payment router, PayToDapp route manager, provider callback surface, payment-intent system, settlement layer, solver, bridge, swap, or execution adapter.
+
+### S18.1 Rename and reframe server-only Pay-To helpers as Paytag identity helpers
+
+- Status: Completed
+- Timestamp started: 2026-06-28T11:20:45Z
+- Timestamp completed: 2026-06-28T11:20:45Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: 054dde3b
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Replaced `checkPayToEligibility`, `resolvePayToAliases`, and `startPayToAction` with Paytag-only helpers for submitted paytag authorization, opaque paytag alias validation, grant status, lifecycle events, and hosted Cubid paytag action start. Removed old Pay-To public exports entirely for the breaking 0.2.0 realignment. Present direct validation helpers as MyPayTag/server-only integration tools rather than ordinary PayingDapp APIs. PayingDapps should integrate with MyPayTag and should not directly probe Cubid for paytag state.
+
+### S18.2 Add browser-safe hosted paytag action helpers
+
+- Status: Completed
+- Timestamp started: 2026-06-28T11:22:05Z
+- Timestamp completed: 2026-06-28T11:22:05Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: 51442999
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Added the browser-safe `openHostedPaytagAction(...)` helper for hosted Cubid paytag action URLs and removed the old Pay-To opener export. Deeper signed-in browser/session wrappers remain deferred until `cubid-monorepo` exposes stable user-session routes. Default examples use opaque paytags such as `abd123@cubid.mypaytag`. Explicit raw-stamp exposure should be modeled separately with examples such as `+1234569999@phone.cubid.mypaytag`. Browser helpers must not accept dapp API keys.
+
+### S18.3 Remove payment-intent semantics from Cubid SDK surfaces
+
+- Status: Completed
+- Timestamp started: 2026-06-28T11:25:54Z
+- Timestamp completed: 2026-06-28T11:25:54Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: a5d1155b
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Removed `sendPaymentIntentCreatedNotification` from the public `@cubid/core` client and removed payment-intent notification examples from the documented paytag API surface. OpenAPI examples and README material must not include payment intent ids, payment deep links, settlement language, pending payment copy, provider callbacks, PayToDapp route priority, wallets, solvers, bridges, swaps, or execution as Cubid-owned primitives.
+
+### S18.4 Update OpenAPI and generated docs around paytag identity and consent
+
+- Status: Completed
+- Timestamp started: 2026-06-28T11:25:54Z
+- Timestamp completed: 2026-06-28T11:27:28Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: 1c03fb11
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Reframe documented routes around paytag identity, verified stamps, opaque aliases, grants, consent, and lifecycle state. Add user-owned hosted paytag action documentation when backend support exists. Keep server-only dapp API key boundaries. Do not document list-all paytags for dapps unless it is an explicit user-authorized disclosure path. Use MyPayTag terminology for product-facing paytags while describing Cubid as the identity, consent, verified stamp, and alias provider.
+
+### S18.5 Add SDK tests for the Cubid/MyPayTag separation
+
+- Status: Completed
+- Timestamp started: 2026-06-28T11:28:38Z
+- Timestamp completed: 2026-06-28T11:28:38Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: b73d3860
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Add tests asserting browser helpers reject dapp API keys and only open Cubid-hosted paytag actions. Server helpers should send only paytag candidate, alias, grant, and lifecycle fields. SDK examples and normalized responses must contain no wallet, route, provider, asset, payment intent, settlement, solver, bridge, swap, or execution fields for Cubid paytag operations. PayingDapp examples must call MyPayTag rather than Cubid directly.
+
+### S18.6 Add compatibility and staging smoke guidance
+
+- Status: Completed
+- Timestamp started: 2026-06-28T11:29:06Z
+- Timestamp completed: 2026-06-28T11:29:06Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: b73d3860
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Document the breaking removal of current `PayTo` names and the replacement Paytag examples. Add a staged smoke checklist that pairs the Cubid SDK with Cubid hosted actions, MyPayTag SDK/backend/site, one test PayingDapp, and one test PayToDapp. Local package tests must pass before hosted staging smoke is treated as launch-readiness evidence.
+
+### S19. Close Cubid SDK MyPayTag MVP Gaps
+
+- Status: Completed
+- Timestamp started: 2026-06-28T22:46:54Z
+- Timestamp completed: 2026-06-28T23:03:27Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: aed9f66c
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Track the follow-up gaps recorded in `agent-context/2026-06-28-cubid-sdk-mypaytag-mvp-gap-review.md`. The SDK should keep Cubid limited to paytag identity, consent, verified stamps, opaque aliases, explicit raw-stamp exposure, grants, hosted Cubid actions, and lifecycle signals while MyPayTag owns wallets, routes, priority, provider callbacks, payment instructions, NEAR 1Click, quotes, and execution.
+
+### S19.1 Add typed hosted paytag action starter helpers
+
+- Status: Completed
+- Timestamp started: 2026-06-28T22:46:54Z
+- Timestamp completed: 2026-06-28T22:46:54Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: 123d86e2
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Add typed `@cubid/core` wrappers around `startHostedPaytagAction` so callers do not need to pass raw action strings for common MVP paytag actions.
+
+Acceptance notes:
+
+- Add `startPaytagEnableAction(...)` for enabling/elevating a verified stamp into a paytag-capable identity action.
+- Add `startPaytagAliasCreateAction(...)` for default opaque paytag alias creation.
+- Add `startPaytagAliasSelectAction(...)` if the backend supports selecting among existing opaque aliases.
+- Add `startPaytagGrantAction(...)` and `startPaytagRevokeAction(...)` for consent lifecycle actions.
+- Keep dapp API keys server-side and injected only from initialized `createCubidApiClient(...)` config.
+- Return the same safe normalized fields as hosted action start: action token, action type, hosted URL, expiry, status, raw response, and idempotency key.
+- Keep the generic `startHostedPaytagAction(...)` as the lower-level primitive only if docs clearly steer MVP callers to typed helpers.
+
+### S19.2 Model opaque default and explicit raw-stamp exposure
+
+- Status: Completed
+- Timestamp started: 2026-06-28T22:50:34Z
+- Timestamp completed: 2026-06-28T22:50:34Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: a27aa81a
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Make the SDK contract prove that opaque paytags are default and raw stamp-based paytags require explicit user choice.
+
+Acceptance notes:
+
+- Add typed inputs or options that distinguish opaque alias creation from explicit raw-stamp exposure.
+- Add a raw-stamp exposure action type or typed wrapper only if the backend exposes a stable action for it; otherwise document the backend dependency explicitly.
+- Do not return raw stamp values to dapps in normalized SDK responses unless the user explicitly chose raw exposure and the backend response is intentionally redacted/safe.
+- README examples use `abd123@cubid.mypaytag` as the default opaque example.
+- Raw examples such as `+1234569999@phone.cubid.mypaytag` are shown only in explicit-exposure sections.
+- Tests prove the default helper path does not include raw stamp values or route/payment metadata.
+
+### S19.3 Complete Paytag OpenAPI route coverage
+
+- Status: Completed
+- Timestamp started: 2026-06-28T22:52:52Z
+- Timestamp completed: 2026-06-28T22:52:52Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: a977c773
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Bring `api/openapi.yaml` into line with the implemented Paytag SDK helper surface.
+
+Acceptance notes:
+
+- Add OpenAPI paths, components, request examples, and response examples for `validatePaytagAliases`.
+- Add OpenAPI paths, components, request examples, and response examples for `getPaytagGrantStatus`.
+- Add OpenAPI paths, components, request examples, and response examples for `listPaytagLifecycleEvents`.
+- Existing authorization and hosted action start docs continue to describe dapp API key use as server/Edge-only.
+- OpenAPI examples use opaque paytags by default and do not include wallet routes, PayToDapp priorities, provider callbacks, payment instructions, settlement, solvers, bridges, swaps, or execution details.
+- Postman collection is regenerated through `pnpm api:postman`.
+
+### S19.4 Add Paytag helper and OpenAPI sync guardrails
+
+- Status: Completed
+- Timestamp started: 2026-06-28T22:54:45Z
+- Timestamp completed: 2026-06-28T22:54:45Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: c279297b
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Prevent future drift between implemented Paytag helpers, OpenAPI operation ids, examples, and generated docs.
+
+Acceptance notes:
+
+- Add a repo script or test that checks public Paytag helper names against OpenAPI operation ids.
+- The check fails if `@cubid/core` exposes a Paytag helper without a documented OpenAPI operation unless the helper is explicitly marked internal.
+- The check fails if OpenAPI documents Paytag route/payment/provider/execution fields as Cubid-owned primitives.
+- The check fails if generated TypeDoc or Postman artifacts reintroduce old public Pay-To helper names.
+- Add the new guardrail to the local validation target for this sprint.
+
+### S19.5 Quarantine route-oriented compatibility action strings
+
+- Status: Completed
+- Timestamp started: 2026-06-28T22:57:15Z
+- Timestamp completed: 2026-06-28T22:57:15Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: 3682b355
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Remove route-oriented action strings from the ordinary public Paytag type surface, or explicitly quarantine them as backend wire compatibility.
+
+Acceptance notes:
+
+- Public examples and tests prefer only `paytag_enable`, `paytag_alias_create`, `paytag_alias_select`, `paytag_grant`, and `paytag_revoke`.
+- `route_registration`, `route_authorization`, `route_selection`, and `grant_revocation` are removed from public action types if backend compatibility allows it.
+- If compatibility strings must remain accepted, they are marked deprecated/internal and excluded from generated public examples.
+- Tests no longer use `route_authorization` as the positive hosted action response example.
+- Docs state that MyPayTag, not Cubid, owns PayToDapp route registration, route authorization, and route selection.
+
+### S19.6 Expand browser hosted paytag action tests
+
+- Status: Completed
+- Timestamp started: 2026-06-28T22:59:28Z
+- Timestamp completed: 2026-06-28T22:59:28Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: 173621e5
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Strengthen `@cubid/browser` coverage for hosted paytag action launching.
+
+Acceptance notes:
+
+- Tests cover hosted URLs returned for each supported typed action helper.
+- Tests reject query parameters that normalize to dapp API key names, including casing, dash, and underscore variants.
+- Tests reject foreign origins, non-action paths, list/enumeration paths, and malformed URLs.
+- Tests prove browser helpers do not create action tokens and do not accept dapp API keys.
+- README examples continue to show only server-created hosted action URLs being opened in the browser.
+
+### S19.7 Update Cubid SDK staged smoke checklist
+
+- Status: Completed
+- Timestamp started: 2026-06-28T23:00:57Z
+- Timestamp completed: 2026-06-28T23:00:57Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: 8b4bc701
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Revise smoke guidance so launch readiness proves each Cubid-owned paytag lifecycle path without pulling MyPayTag-owned payment routing into the Cubid SDK.
+
+Acceptance notes:
+
+- Local smoke target includes `pnpm --filter @cubid/core test`, `pnpm --filter @cubid/browser build`, `pnpm api:validate`, `pnpm api:postman`, `pnpm docs:api:build`, and `pnpm docs:api:check`.
+- Hosted smoke covers paytag enable, opaque alias create/select, explicit raw-stamp exposure, grant, revoke, lifecycle event polling, and MyPayTag validation after each state transition.
+- Smoke guidance says PayingDapps call MyPayTag, not Cubid, for paytag payment resolution.
+- Smoke guidance keeps wallets, routes, route priority, provider callbacks, payment instructions, NEAR 1Click, quotes, settlement, solvers, bridges, swaps, and execution outside Cubid SDK ownership.
+- Staged smoke still pairs with MyPayTag backend/site/SDK and one test PayingDapp/PayToDapp for cross-repo readiness.
+
+### S19.8 Regenerate and validate Cubid SDK artifacts
+
+- Status: Completed
+- Timestamp started: 2026-06-28T23:03:27Z
+- Timestamp completed: 2026-06-28T23:03:27Z
+- Feature branch: `codex/mypaytag-mvp-realignment-20260628`
+- Head: aed9f66c
+- Session-log reference(s): `agent-context/session-log/2026-06-28-repo-mypaytag-mvp-realignment-20260628.md`
+
+Refresh generated artifacts and prove the Cubid SDK Paytag surface is internally consistent after S19 gap closure.
+
+Acceptance notes:
+
+- Run `pnpm api:postman` after OpenAPI changes.
+- Run `pnpm docs:api:build` after public type/helper changes.
+- Run `pnpm docs:api:check` to verify generated references are committed.
+- Run `pnpm --filter @cubid/core test`, `pnpm --filter @cubid/browser build`, `pnpm api:validate`, and the new Paytag/OpenAPI sync guardrail.
+- `git diff --check` passes.
+- Targeted scans confirm no old Pay-To helper names, payment-intent notification helpers, wallet routing fields, provider callback fields, solver/bridge/swap execution fields, service-role secrets, or dapp API keys in browser helpers.

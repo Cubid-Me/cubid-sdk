@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cubid API Reference</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import "@scalar/api-reference/style.css"
+      import { createApiReference } from "@scalar/api-reference"
+
+      createApiReference("#app", {
+        layout: "modern",
+        theme: "default",
+        url: "/api/openapi.yaml",
+      })
+    </script>
+  </body>
+</html>

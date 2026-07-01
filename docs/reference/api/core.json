@@ -935,24 +935,24 @@
       }
     },
     {
-      "name": "CheckPayToEligibilityInput",
+      "name": "CheckPaytagAuthorizationInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidCheckPayToEligibilityInput",
+        "name": "CubidCheckPaytagAuthorizationInput",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "CheckPayToEligibilityResponse",
+      "name": "CheckPaytagAuthorizationResponse",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidCheckPayToEligibilityResponse",
+        "name": "CubidCheckPaytagAuthorizationResponse",
         "package": "@cubid/core"
       }
     },
@@ -1741,13 +1741,13 @@
           ]
         },
         {
-          "name": "checkPayToEligibility",
+          "name": "checkPaytagAuthorization",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "name": "checkPayToEligibility",
+              "name": "checkPaytagAuthorization",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
@@ -1759,7 +1759,7 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidCheckPayToEligibilityInput",
+                    "name": "CubidCheckPaytagAuthorizationInput",
                     "package": "@cubid/core"
                   }
                 }
@@ -1774,7 +1774,7 @@
                 "typeArguments": [
                   {
                     "type": "reference",
-                    "name": "CubidCheckPayToEligibilityResponse",
+                    "name": "CubidCheckPaytagAuthorizationResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -2561,13 +2561,13 @@
           ]
         },
         {
-          "name": "getPayToGrantStatus",
+          "name": "getPaytagGrantStatus",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "name": "getPayToGrantStatus",
+              "name": "getPaytagGrantStatus",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
@@ -2579,7 +2579,7 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidGetPayToGrantStatusInput",
+                    "name": "CubidGetPaytagGrantStatusInput",
                     "package": "@cubid/core"
                   }
                 }
@@ -2594,7 +2594,7 @@
                 "typeArguments": [
                   {
                     "type": "reference",
-                    "name": "CubidGetPayToGrantStatusResponse",
+                    "name": "CubidGetPaytagGrantStatusResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -2751,13 +2751,13 @@
           ]
         },
         {
-          "name": "listPayToEvents",
+          "name": "listPaytagLifecycleEvents",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "name": "listPayToEvents",
+              "name": "listPaytagLifecycleEvents",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
@@ -2769,7 +2769,7 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidListPayToEventsInput",
+                    "name": "CubidListPaytagLifecycleEventsInput",
                     "package": "@cubid/core"
                   }
                 }
@@ -2784,7 +2784,7 @@
                 "typeArguments": [
                   {
                     "type": "reference",
-                    "name": "CubidListPayToEventsResponse",
+                    "name": "CubidListPaytagLifecycleEventsResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -2843,50 +2843,6 @@
                   {
                     "type": "reference",
                     "name": "CubidListSigningRequestsResponse",
-                    "package": "@cubid/core"
-                  }
-                ],
-                "name": "Promise",
-                "package": "typescript"
-              }
-            }
-          ]
-        },
-        {
-          "name": "resolvePayToAliases",
-          "variant": "declaration",
-          "kind": 2048,
-          "flags": {},
-          "signatures": [
-            {
-              "name": "resolvePayToAliases",
-              "variant": "signature",
-              "kind": 4096,
-              "flags": {},
-              "parameters": [
-                {
-                  "name": "input",
-                  "variant": "param",
-                  "kind": 32768,
-                  "flags": {},
-                  "type": {
-                    "type": "reference",
-                    "name": "CubidResolvePayToAliasesInput",
-                    "package": "@cubid/core"
-                  }
-                }
-              ],
-              "type": {
-                "type": "reference",
-                "target": {
-                  "packageName": "typescript",
-                  "packagePath": "lib/lib.es5.d.ts",
-                  "qualifiedName": "Promise"
-                },
-                "typeArguments": [
-                  {
-                    "type": "reference",
-                    "name": "CubidResolvePayToAliasesResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -3161,50 +3117,6 @@
           ]
         },
         {
-          "name": "sendPaymentIntentCreatedNotification",
-          "variant": "declaration",
-          "kind": 2048,
-          "flags": {},
-          "signatures": [
-            {
-              "name": "sendPaymentIntentCreatedNotification",
-              "variant": "signature",
-              "kind": 4096,
-              "flags": {},
-              "parameters": [
-                {
-                  "name": "input",
-                  "variant": "param",
-                  "kind": 32768,
-                  "flags": {},
-                  "type": {
-                    "type": "reference",
-                    "name": "CubidSendPaymentIntentCreatedNotificationInput",
-                    "package": "@cubid/core"
-                  }
-                }
-              ],
-              "type": {
-                "type": "reference",
-                "target": {
-                  "packageName": "typescript",
-                  "packagePath": "lib/lib.es5.d.ts",
-                  "qualifiedName": "Promise"
-                },
-                "typeArguments": [
-                  {
-                    "type": "reference",
-                    "name": "CubidSendPaymentIntentCreatedNotificationResponse",
-                    "package": "@cubid/core"
-                  }
-                ],
-                "name": "Promise",
-                "package": "typescript"
-              }
-            }
-          ]
-        },
-        {
           "name": "sendPhoneOtp",
           "variant": "declaration",
           "kind": 2048,
@@ -3249,13 +3161,13 @@
           ]
         },
         {
-          "name": "startPayToAction",
+          "name": "startHostedPaytagAction",
           "variant": "declaration",
           "kind": 2048,
           "flags": {},
           "signatures": [
             {
-              "name": "startPayToAction",
+              "name": "startHostedPaytagAction",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
@@ -3267,7 +3179,7 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidStartPayToActionInput",
+                    "name": "CubidStartHostedPaytagActionInput",
                     "package": "@cubid/core"
                   }
                 }
@@ -3282,7 +3194,227 @@
                 "typeArguments": [
                   {
                     "type": "reference",
-                    "name": "CubidStartPayToActionResponse",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagAliasCreateAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagAliasCreateAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagAliasCreateActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagAliasSelectAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagAliasSelectAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagAliasSelectActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagEnableAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagEnableAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagEnableActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagGrantAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagGrantAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagGrantActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "startPaytagRevokeAction",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "startPaytagRevokeAction",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidStartPaytagRevokeActionInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidStartHostedPaytagActionResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -3371,6 +3503,50 @@
                   {
                     "type": "reference",
                     "name": "CubidIdentitySnapshot",
+                    "package": "@cubid/core"
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "validatePaytagAliases",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "validatePaytagAliases",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "input",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidValidatePaytagAliasesInput",
+                    "package": "@cubid/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "name": "CubidValidatePaytagAliasesResponse",
                     "package": "@cubid/core"
                   }
                 ],
@@ -3836,7 +4012,7 @@
       ]
     },
     {
-      "name": "CubidCheckPayToEligibilityInput",
+      "name": "CubidCheckPaytagAuthorizationInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -3850,7 +4026,7 @@
             "type": "array",
             "elementType": {
               "type": "reference",
-              "name": "CubidPayToEligibilityCandidate",
+              "name": "CubidPaytagAuthorizationCandidate",
               "package": "@cubid/core"
             }
           }
@@ -3868,7 +4044,7 @@
       ]
     },
     {
-      "name": "CubidCheckPayToEligibilityResponse",
+      "name": "CubidCheckPaytagAuthorizationResponse",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -3908,7 +4084,7 @@
             "type": "array",
             "elementType": {
               "type": "reference",
-              "name": "CubidPayToEligibilityResult",
+              "name": "CubidPaytagAuthorizationResult",
               "package": "@cubid/core"
             }
           }
@@ -3923,7 +4099,7 @@
             "types": [
               {
                 "type": "reference",
-                "name": "CubidPayToEligibilityStatus",
+                "name": "CubidPaytagAuthorizationStatus",
                 "package": "@cubid/core"
               },
               {
@@ -6462,7 +6638,7 @@
       ]
     },
     {
-      "name": "CubidGetPayToGrantStatusInput",
+      "name": "CubidGetPaytagGrantStatusInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -6480,7 +6656,7 @@
       ]
     },
     {
-      "name": "CubidGetPayToGrantStatusResponse",
+      "name": "CubidGetPaytagGrantStatusResponse",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -6533,7 +6709,7 @@
             "types": [
               {
                 "type": "reference",
-                "name": "CubidPayToGrantStatus",
+                "name": "CubidPaytagGrantStatus",
                 "package": "@cubid/core"
               },
               {
@@ -6935,7 +7111,7 @@
       ]
     },
     {
-      "name": "CubidListPayToEventsInput",
+      "name": "CubidListPaytagLifecycleEventsInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -6977,7 +7153,7 @@
       ]
     },
     {
-      "name": "CubidListPayToEventsResponse",
+      "name": "CubidListPaytagLifecycleEventsResponse",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -6991,7 +7167,7 @@
             "type": "array",
             "elementType": {
               "type": "reference",
-              "name": "CubidPayToLifecycleEventSummary",
+              "name": "CubidPaytagLifecycleEventSummary",
               "package": "@cubid/core"
             }
           }
@@ -7032,7 +7208,7 @@
             "types": [
               {
                 "type": "reference",
-                "name": "CubidPayToEventsStatus",
+                "name": "CubidPaytagLifecycleStatus",
                 "package": "@cubid/core"
               },
               {
@@ -7824,17 +8000,7 @@
       ]
     },
     {
-      "name": "CubidPaymentIntentCreatedEventType",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "type": {
-        "type": "literal",
-        "value": "payment_intent_created"
-      }
-    },
-    {
-      "name": "CubidPayToActionType",
+      "name": "CubidPaytagActionType",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -7848,14 +8014,14 @@
           "type": "query",
           "queryType": {
             "type": "reference",
-            "name": "CUBID_PAY_TO_ACTION_TYPES",
+            "name": "CUBID_PAYTAG_ACTION_TYPES",
             "package": "@cubid/core"
           }
         }
       }
     },
     {
-      "name": "CubidPayToAliasCandidate",
+      "name": "CubidPaytagAliasCandidate",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -7885,7 +8051,17 @@
       ]
     },
     {
-      "name": "CubidPayToAliasResolutionResult",
+      "name": "CubidPaytagAliasExposure",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "literal",
+        "value": "opaque"
+      }
+    },
+    {
+      "name": "CubidPaytagAliasValidationResult",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -7948,7 +8124,7 @@
       ]
     },
     {
-      "name": "CubidPayToAliasResolutionStatus",
+      "name": "CubidPaytagAliasValidationStatus",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -7971,7 +8147,7 @@
       }
     },
     {
-      "name": "CubidPayToEligibilityCandidate",
+      "name": "CubidPaytagAuthorizationCandidate",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -7995,7 +8171,7 @@
           "flags": {},
           "type": {
             "type": "reference",
-            "name": "CubidPayToStampType",
+            "name": "CubidPaytagStampType",
             "package": "@cubid/core"
           }
         },
@@ -8012,7 +8188,7 @@
       ]
     },
     {
-      "name": "CubidPayToEligibilityResult",
+      "name": "CubidPaytagAuthorizationResult",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -8075,7 +8251,7 @@
       ]
     },
     {
-      "name": "CubidPayToEligibilityStatus",
+      "name": "CubidPaytagAuthorizationStatus",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -8098,30 +8274,7 @@
       }
     },
     {
-      "name": "CubidPayToEventsStatus",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "type": {
-        "type": "union",
-        "types": [
-          {
-            "type": "literal",
-            "value": "ok"
-          },
-          {
-            "type": "literal",
-            "value": "no_events"
-          },
-          {
-            "type": "intrinsic",
-            "name": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "CubidPayToGrantStatus",
+      "name": "CubidPaytagGrantStatus",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -8148,7 +8301,7 @@
       }
     },
     {
-      "name": "CubidPayToLifecycleEventSummary",
+      "name": "CubidPaytagLifecycleEventSummary",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -8201,7 +8354,7 @@
             "types": [
               {
                 "type": "reference",
-                "name": "CubidPayToLifecycleEventType",
+                "name": "CubidPaytagLifecycleEventType",
                 "package": "@cubid/core"
               },
               {
@@ -8286,7 +8439,7 @@
       ]
     },
     {
-      "name": "CubidPayToLifecycleEventType",
+      "name": "CubidPaytagLifecycleEventType",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -8303,7 +8456,7 @@
               "type": "query",
               "queryType": {
                 "type": "reference",
-                "name": "CUBID_PAY_TO_LIFECYCLE_EVENT_TYPES",
+                "name": "CUBID_PAYTAG_LIFECYCLE_EVENT_TYPES",
                 "package": "@cubid/core"
               }
             }
@@ -8316,7 +8469,30 @@
       }
     },
     {
-      "name": "CubidPayToStampType",
+      "name": "CubidPaytagLifecycleStatus",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "ok"
+          },
+          {
+            "type": "literal",
+            "value": "no_events"
+          },
+          {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidPaytagStampType",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -8330,7 +8506,7 @@
           "type": "query",
           "queryType": {
             "type": "reference",
-            "name": "CUBID_PAY_TO_STAMP_TYPES",
+            "name": "CUBID_PAYTAG_STAMP_TYPES",
             "package": "@cubid/core"
           }
         }
@@ -9020,118 +9196,6 @@
               {
                 "type": "intrinsic",
                 "name": "string"
-              },
-              {
-                "type": "literal",
-                "value": null
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidResolvePayToAliasesInput",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "children": [
-        {
-          "name": "aliases",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "array",
-            "elementType": {
-              "type": "reference",
-              "name": "CubidPayToAliasCandidate",
-              "package": "@cubid/core"
-            }
-          }
-        },
-        {
-          "name": "dappUserUuid",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "intrinsic",
-            "name": "string"
-          }
-        },
-        {
-          "name": "resolverKey",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true
-          },
-          "type": {
-            "type": "intrinsic",
-            "name": "string"
-          }
-        }
-      ]
-    },
-    {
-      "name": "CubidResolvePayToAliasesResponse",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "children": [
-        {
-          "name": "raw",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "reference",
-            "target": {
-              "packageName": "typescript",
-              "packagePath": "lib/lib.es5.d.ts",
-              "qualifiedName": "Record"
-            },
-            "typeArguments": [
-              {
-                "type": "intrinsic",
-                "name": "string"
-              },
-              {
-                "type": "intrinsic",
-                "name": "unknown"
-              }
-            ],
-            "name": "Record",
-            "package": "typescript"
-          }
-        },
-        {
-          "name": "results",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "array",
-            "elementType": {
-              "type": "reference",
-              "name": "CubidPayToAliasResolutionResult",
-              "package": "@cubid/core"
-            }
-          }
-        },
-        {
-          "name": "status",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {},
-          "type": {
-            "type": "union",
-            "types": [
-              {
-                "type": "reference",
-                "name": "CubidPayToAliasResolutionStatus",
-                "package": "@cubid/core"
               },
               {
                 "type": "literal",
@@ -9954,164 +10018,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "CubidSendPaymentIntentCreatedNotificationInput",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "type": {
-        "type": "intersection",
-        "types": [
-          {
-            "type": "reference",
-            "name": "CubidIdempotentRequestOptions",
-            "package": "@cubid/core"
-          },
-          {
-            "type": "reflection",
-            "declaration": {
-              "name": "__type",
-              "variant": "declaration",
-              "kind": 65536,
-              "flags": {},
-              "children": [
-                {
-                  "name": "body",
-                  "variant": "declaration",
-                  "kind": 1024,
-                  "flags": {},
-                  "type": {
-                    "type": "intrinsic",
-                    "name": "string"
-                  }
-                },
-                {
-                  "name": "dappUserUuid",
-                  "variant": "declaration",
-                  "kind": 1024,
-                  "flags": {},
-                  "type": {
-                    "type": "intrinsic",
-                    "name": "string"
-                  }
-                },
-                {
-                  "name": "deepLink",
-                  "variant": "declaration",
-                  "kind": 1024,
-                  "flags": {
-                    "isOptional": true
-                  },
-                  "type": {
-                    "type": "intrinsic",
-                    "name": "string"
-                  }
-                },
-                {
-                  "name": "metadata",
-                  "variant": "declaration",
-                  "kind": 1024,
-                  "flags": {
-                    "isOptional": true
-                  },
-                  "type": {
-                    "type": "reference",
-                    "target": {
-                      "packageName": "typescript",
-                      "packagePath": "lib/lib.es5.d.ts",
-                      "qualifiedName": "Record"
-                    },
-                    "typeArguments": [
-                      {
-                        "type": "intrinsic",
-                        "name": "string"
-                      },
-                      {
-                        "type": "intrinsic",
-                        "name": "unknown"
-                      }
-                    ],
-                    "name": "Record",
-                    "package": "typescript"
-                  }
-                },
-                {
-                  "name": "priority",
-                  "variant": "declaration",
-                  "kind": 1024,
-                  "flags": {
-                    "isOptional": true
-                  },
-                  "type": {
-                    "type": "reference",
-                    "name": "CubidNotificationPriority",
-                    "package": "@cubid/core"
-                  }
-                },
-                {
-                  "name": "title",
-                  "variant": "declaration",
-                  "kind": 1024,
-                  "flags": {},
-                  "type": {
-                    "type": "intrinsic",
-                    "name": "string"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "CubidSendPaymentIntentCreatedNotificationResponse",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "type": {
-        "type": "intersection",
-        "types": [
-          {
-            "type": "reference",
-            "name": "CubidSendNotificationResponse",
-            "package": "@cubid/core"
-          },
-          {
-            "type": "reflection",
-            "declaration": {
-              "name": "__type",
-              "variant": "declaration",
-              "kind": 65536,
-              "flags": {},
-              "children": [
-                {
-                  "name": "category",
-                  "variant": "declaration",
-                  "kind": 1024,
-                  "flags": {},
-                  "type": {
-                    "type": "literal",
-                    "value": "TRANSACTIONAL"
-                  }
-                },
-                {
-                  "name": "paymentEventType",
-                  "variant": "declaration",
-                  "kind": 1024,
-                  "flags": {},
-                  "type": {
-                    "type": "reference",
-                    "name": "CubidPaymentIntentCreatedEventType",
-                    "package": "@cubid/core"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
     },
     {
       "name": "CubidSendPhoneOtpInput",
@@ -11530,7 +11436,7 @@
       }
     },
     {
-      "name": "CubidStartPayToActionInput",
+      "name": "CubidStartHostedPaytagActionInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -11557,7 +11463,7 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "name": "CubidPayToActionType",
+                    "name": "CubidPaytagActionType",
                     "package": "@cubid/core"
                   }
                 },
@@ -11630,7 +11536,7 @@
       }
     },
     {
-      "name": "CubidStartPayToActionResponse",
+      "name": "CubidStartHostedPaytagActionResponse",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
@@ -11664,7 +11570,7 @@
             "types": [
               {
                 "type": "reference",
-                "name": "CubidPayToActionType",
+                "name": "CubidPaytagActionType",
                 "package": "@cubid/core"
               },
               {
@@ -11772,6 +11678,98 @@
           }
         }
       ]
+    },
+    {
+      "name": "CubidStartPaytagAliasCreateActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "intersection",
+        "types": [
+          {
+            "type": "reference",
+            "name": "CubidStartTypedPaytagActionInput",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "aliasExposure",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Opaque paytag aliases are the only SDK-supported default. Explicit\nraw-stamp exposure requires a separate Passport-hosted action contract\nbefore the SDK can expose a typed helper for it."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidPaytagAliasExposure",
+                    "package": "@cubid/core"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidStartPaytagAliasSelectActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CubidStartPaytagEnableActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CubidStartPaytagGrantActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "CubidStartPaytagRevokeActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
     },
     {
       "name": "CubidStartRecoveryBundleReleaseInput",
@@ -11890,6 +11888,33 @@
       ]
     },
     {
+      "name": "CubidStartTypedPaytagActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "typescript",
+          "packagePath": "lib/lib.es5.d.ts",
+          "qualifiedName": "Omit"
+        },
+        "typeArguments": [
+          {
+            "type": "reference",
+            "name": "CubidStartHostedPaytagActionInput",
+            "package": "@cubid/core"
+          },
+          {
+            "type": "literal",
+            "value": "actionType"
+          }
+        ],
+        "name": "Omit",
+        "package": "typescript"
+      }
+    },
+    {
       "name": "CubidUnknownSigningResult",
       "variant": "declaration",
       "kind": 2097152,
@@ -11932,6 +11957,118 @@
               {
                 "type": "intrinsic",
                 "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidValidatePaytagAliasesInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "aliases",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidPaytagAliasCandidate",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "dappUserUuid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "resolverKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidValidatePaytagAliasesResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "children": [
+        {
+          "name": "raw",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "results",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "name": "CubidPaytagAliasValidationResult",
+              "package": "@cubid/core"
+            }
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidPaytagAliasValidationStatus",
+                "package": "@cubid/core"
               },
               {
                 "type": "literal",
@@ -13494,24 +13631,24 @@
       }
     },
     {
-      "name": "GetPayToGrantStatusInput",
+      "name": "GetPaytagGrantStatusInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidGetPayToGrantStatusInput",
+        "name": "CubidGetPaytagGrantStatusInput",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "GetPayToGrantStatusResponse",
+      "name": "GetPaytagGrantStatusResponse",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidGetPayToGrantStatusResponse",
+        "name": "CubidGetPaytagGrantStatusResponse",
         "package": "@cubid/core"
       }
     },
@@ -13615,24 +13752,24 @@
       }
     },
     {
-      "name": "ListPayToEventsInput",
+      "name": "ListPaytagLifecycleEventsInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidListPayToEventsInput",
+        "name": "CubidListPaytagLifecycleEventsInput",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "ListPayToEventsResponse",
+      "name": "ListPaytagLifecycleEventsResponse",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidListPayToEventsResponse",
+        "name": "CubidListPaytagLifecycleEventsResponse",
         "package": "@cubid/core"
       }
     },
@@ -13758,145 +13895,145 @@
       }
     },
     {
-      "name": "PaymentIntentCreatedEventType",
+      "name": "PaytagActionType",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPaymentIntentCreatedEventType",
+        "name": "CubidPaytagActionType",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToActionType",
+      "name": "PaytagAliasCandidate",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToActionType",
+        "name": "CubidPaytagAliasCandidate",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToAliasCandidate",
+      "name": "PaytagAliasExposure",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToAliasCandidate",
+        "name": "CubidPaytagAliasExposure",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToAliasResolutionResult",
+      "name": "PaytagAliasValidationResult",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToAliasResolutionResult",
+        "name": "CubidPaytagAliasValidationResult",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToAliasResolutionStatus",
+      "name": "PaytagAliasValidationStatus",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToAliasResolutionStatus",
+        "name": "CubidPaytagAliasValidationStatus",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToEligibilityCandidate",
+      "name": "PaytagAuthorizationCandidate",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToEligibilityCandidate",
+        "name": "CubidPaytagAuthorizationCandidate",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToEligibilityResult",
+      "name": "PaytagAuthorizationResult",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToEligibilityResult",
+        "name": "CubidPaytagAuthorizationResult",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToEligibilityStatus",
+      "name": "PaytagAuthorizationStatus",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToEligibilityStatus",
+        "name": "CubidPaytagAuthorizationStatus",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToEventsStatus",
+      "name": "PaytagGrantStatus",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToEventsStatus",
+        "name": "CubidPaytagGrantStatus",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToGrantStatus",
+      "name": "PaytagLifecycleEventSummary",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToGrantStatus",
+        "name": "CubidPaytagLifecycleEventSummary",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToLifecycleEventSummary",
+      "name": "PaytagLifecycleEventType",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToLifecycleEventSummary",
+        "name": "CubidPaytagLifecycleEventType",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToLifecycleEventType",
+      "name": "PaytagLifecycleStatus",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToLifecycleEventType",
+        "name": "CubidPaytagLifecycleStatus",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "PayToStampType",
+      "name": "PaytagStampType",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidPayToStampType",
+        "name": "CubidPaytagStampType",
         "package": "@cubid/core"
       }
     },
@@ -13952,28 +14089,6 @@
       "type": {
         "type": "reference",
         "name": "CubidRecoveryBundleSummary",
-        "package": "@cubid/core"
-      }
-    },
-    {
-      "name": "ResolvePayToAliasesInput",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "type": {
-        "type": "reference",
-        "name": "CubidResolvePayToAliasesInput",
-        "package": "@cubid/core"
-      }
-    },
-    {
-      "name": "ResolvePayToAliasesResponse",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "type": {
-        "type": "reference",
-        "name": "CubidResolvePayToAliasesResponse",
         "package": "@cubid/core"
       }
     },
@@ -14110,28 +14225,6 @@
       }
     },
     {
-      "name": "SendPaymentIntentCreatedNotificationInput",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "type": {
-        "type": "reference",
-        "name": "CubidSendPaymentIntentCreatedNotificationInput",
-        "package": "@cubid/core"
-      }
-    },
-    {
-      "name": "SendPaymentIntentCreatedNotificationResponse",
-      "variant": "declaration",
-      "kind": 2097152,
-      "flags": {},
-      "type": {
-        "type": "reference",
-        "name": "CubidSendPaymentIntentCreatedNotificationResponse",
-        "package": "@cubid/core"
-      }
-    },
-    {
       "name": "SendPhoneOtpInput",
       "variant": "declaration",
       "kind": 2097152,
@@ -14264,24 +14357,79 @@
       }
     },
     {
-      "name": "StartPayToActionInput",
+      "name": "StartHostedPaytagActionInput",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidStartPayToActionInput",
+        "name": "CubidStartHostedPaytagActionInput",
         "package": "@cubid/core"
       }
     },
     {
-      "name": "StartPayToActionResponse",
+      "name": "StartHostedPaytagActionResponse",
       "variant": "declaration",
       "kind": 2097152,
       "flags": {},
       "type": {
         "type": "reference",
-        "name": "CubidStartPayToActionResponse",
+        "name": "CubidStartHostedPaytagActionResponse",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagAliasCreateActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagAliasCreateActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagAliasSelectActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagAliasSelectActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagEnableActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagEnableActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagGrantActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagGrantActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "StartPaytagRevokeActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartPaytagRevokeActionInput",
         "package": "@cubid/core"
       }
     },
@@ -14308,6 +14456,17 @@
       }
     },
     {
+      "name": "StartTypedPaytagActionInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidStartTypedPaytagActionInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
       "name": "UnknownSigningResult",
       "variant": "declaration",
       "kind": 2097152,
@@ -14315,6 +14474,28 @@
       "type": {
         "type": "reference",
         "name": "CubidUnknownSigningResult",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "ValidatePaytagAliasesInput",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidValidatePaytagAliasesInput",
+        "package": "@cubid/core"
+      }
+    },
+    {
+      "name": "ValidatePaytagAliasesResponse",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "name": "CubidValidatePaytagAliasesResponse",
         "package": "@cubid/core"
       }
     },
@@ -14631,7 +14812,7 @@
       "defaultValue": "..."
     },
     {
-      "name": "CUBID_PAY_TO_ACTION_TYPES",
+      "name": "CUBID_PAYTAG_ACTION_TYPES",
       "variant": "declaration",
       "kind": 32,
       "flags": {
@@ -14645,23 +14826,23 @@
           "elements": [
             {
               "type": "literal",
-              "value": "setup"
+              "value": "paytag_enable"
             },
             {
               "type": "literal",
-              "value": "route_registration"
+              "value": "paytag_alias_create"
             },
             {
               "type": "literal",
-              "value": "route_authorization"
+              "value": "paytag_alias_select"
             },
             {
               "type": "literal",
-              "value": "route_selection"
+              "value": "paytag_grant"
             },
             {
               "type": "literal",
-              "value": "grant_revocation"
+              "value": "paytag_revoke"
             }
           ]
         }
@@ -14669,7 +14850,7 @@
       "defaultValue": "..."
     },
     {
-      "name": "CUBID_PAY_TO_LIFECYCLE_EVENT_TYPES",
+      "name": "CUBID_PAYTAG_LIFECYCLE_EVENT_TYPES",
       "variant": "declaration",
       "kind": 32,
       "flags": {
@@ -14703,7 +14884,7 @@
       "defaultValue": "..."
     },
     {
-      "name": "CUBID_PAY_TO_STAMP_TYPES",
+      "name": "CUBID_PAYTAG_STAMP_TYPES",
       "variant": "declaration",
       "kind": 32,
       "flags": {
@@ -16193,7 +16374,7 @@
     },
     {
       "kind": "code",
-      "text": "`checkPayToEligibility`"
+      "text": "`checkPaytagAuthorization`"
     },
     {
       "kind": "text",
@@ -16201,7 +16382,7 @@
     },
     {
       "kind": "code",
-      "text": "`resolvePayToAliases`"
+      "text": "`validatePaytagAliases`"
     },
     {
       "kind": "text",
@@ -16209,7 +16390,7 @@
     },
     {
       "kind": "code",
-      "text": "`getPayToGrantStatus`"
+      "text": "`getPaytagGrantStatus`"
     },
     {
       "kind": "text",
@@ -16217,7 +16398,7 @@
     },
     {
       "kind": "code",
-      "text": "`listPayToEvents`"
+      "text": "`listPaytagLifecycleEvents`"
     },
     {
       "kind": "text",
@@ -16225,7 +16406,7 @@
     },
     {
       "kind": "code",
-      "text": "`startPayToAction`"
+      "text": "`startHostedPaytagAction`"
     },
     {
       "kind": "text",
@@ -16233,7 +16414,39 @@
     },
     {
       "kind": "code",
-      "text": "`sendPaymentIntentCreatedNotification`"
+      "text": "`startPaytagEnableAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasCreateAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasSelectAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagGrantAction`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagRevokeAction`"
     },
     {
       "kind": "text",
@@ -16569,7 +16782,7 @@
     },
     {
       "kind": "code",
-      "text": "`checkPayToEligibility({ dappUserUuid, candidates })`"
+      "text": "`checkPaytagAuthorization({ dappUserUuid, candidates })`"
     },
     {
       "kind": "text",
@@ -16577,7 +16790,7 @@
     },
     {
       "kind": "code",
-      "text": "`resolvePayToAliases({ dappUserUuid, aliases, resolverKey? })`"
+      "text": "`validatePaytagAliases({ dappUserUuid, aliases, resolverKey? })`"
     },
     {
       "kind": "text",
@@ -16585,7 +16798,7 @@
     },
     {
       "kind": "code",
-      "text": "`getPayToGrantStatus({ dappUserUuid })`"
+      "text": "`getPaytagGrantStatus({ dappUserUuid })`"
     },
     {
       "kind": "text",
@@ -16593,7 +16806,7 @@
     },
     {
       "kind": "code",
-      "text": "`listPayToEvents({ dappUserUuid, since?, limit? })`"
+      "text": "`listPaytagLifecycleEvents({ dappUserUuid, since?, limit? })`"
     },
     {
       "kind": "text",
@@ -16601,7 +16814,7 @@
     },
     {
       "kind": "code",
-      "text": "`startPayToAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+      "text": "`startHostedPaytagAction({ dappUserUuid, actionType, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
     },
     {
       "kind": "text",
@@ -16609,7 +16822,39 @@
     },
     {
       "kind": "code",
-      "text": "`sendPaymentIntentCreatedNotification({ dappUserUuid, title, body, priority?, deepLink?, metadata?, idempotencyKey? })`"
+      "text": "`startPaytagEnableAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasCreateAction({ dappUserUuid, aliasExposure?: \"opaque\", returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasSelectAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagGrantAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagRevokeAction({ dappUserUuid, returnUrl?, metadata?, requiredPasskeyAssurance?, idempotencyKey? })`"
     },
     {
       "kind": "text",
@@ -16845,7 +17090,7 @@
     },
     {
       "kind": "text",
-      "text": " now targets the v3 write\ncontract only.\n\n## GlobalPayTo Pay-To Helpers\n\n"
+      "text": " now targets the v3 write\ncontract only.\n\n## MyPayTag Paytag Identity Helpers\n\n"
     },
     {
       "kind": "code",
@@ -16853,7 +17098,7 @@
     },
     {
       "kind": "text",
-      "text": " exposes the server/Edge side of the GlobalPayTo Pay-To MVP\ncontract. These helpers use the initialized client configuration, including\n"
+      "text": " exposes the server/Edge side of Cubid's MyPayTag identity and\nconsent contract. These helpers use the initialized client configuration,\nincluding "
     },
     {
       "kind": "code",
@@ -16877,15 +17122,63 @@
     },
     {
       "kind": "text",
-      "text": ".\n\n"
+      "text": ".\nThey answer paytag identity, alias, grant, and lifecycle questions only; Cubid\ndoes not own wallets, routes, payment instructions, settlement, solvers,\nbridges, swaps, or execution.\n\n"
     },
     {
       "kind": "code",
-      "text": "```ts\nconst eligibility = await cubid.checkPayToEligibility({\n  dappUserUuid: \"app-user-123\",\n  candidates: [\n    { candidateRef: \"payee-1\", stampType: \"email\", value: \"payee@example.com\" },\n  ],\n})\n\nconst action = await cubid.startPayToAction({\n  actionType: \"setup\",\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  returnUrl: \"https://app.example/pay-to/callback\",\n  requiredPasskeyAssurance: true,\n})\n\nawait cubid.sendPaymentIntentCreatedNotification({\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  title: \"Payment intent created\",\n  body: \"Review the pending payment intent.\",\n  metadata: { intentId: \"pi_123\" },\n})\n```"
+      "text": "```ts\nconst authorization = await cubid.checkPaytagAuthorization({\n  dappUserUuid: \"app-user-123\",\n  candidates: [\n    { candidateRef: \"paytag-1\", stampType: \"email\", value: \"abd123@cubid.mypaytag\" },\n  ],\n})\n\nconst aliases = await cubid.validatePaytagAliases({\n  dappUserUuid: \"app-user-123\",\n  aliases: [{ aliasRef: \"alias-1\", alias: \"abd123@cubid.mypaytag\" }],\n})\n\nconst action = await cubid.startPaytagEnableAction({\n  dappUserUuid: \"app-user-123\",\n  idempotencyKey: crypto.randomUUID(),\n  returnUrl: \"https://mypaytag.example/paytag/callback\",\n  requiredPasskeyAssurance: true,\n})\n\nconst aliasAction = await cubid.startPaytagAliasCreateAction({\n  dappUserUuid: \"app-user-123\",\n  aliasExposure: \"opaque\",\n  idempotencyKey: crypto.randomUUID(),\n})\n```"
     },
     {
       "kind": "text",
-      "text": "\n\nPay-To resolver helpers are deliberately submitted-candidate or opaque-alias\nbased. There is no dapp resolver helper for listing all payment-enabled stamps.\nNegative responses such as "
+      "text": "\n\nPrefer the typed action helpers for ordinary MVP flows:\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagEnableAction`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasCreateAction`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasSelectAction`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagGrantAction`"
+    },
+    {
+      "kind": "text",
+      "text": ", and\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagRevokeAction`"
+    },
+    {
+      "kind": "text",
+      "text": ". "
+    },
+    {
+      "kind": "code",
+      "text": "`startHostedPaytagAction`"
+    },
+    {
+      "kind": "text",
+      "text": " remains available as a\nlower-level primitive for canonical Paytag action strings only, but app code\nshould not need to pass raw action strings for common Paytag flows. Route\nregistration, route authorization, and route selection belong to MyPayTag, not\nto Cubid Paytag SDK helpers.\n\nPaytag helpers are deliberately submitted-candidate or opaque-alias based.\nThere is no dapp helper for listing all user paytags or payment-enabled\nstamps. Negative responses such as "
     },
     {
       "kind": "code",
@@ -16901,7 +17194,39 @@
     },
     {
       "kind": "text",
-      "text": " are\ngeneric by design and should not be expanded into probing-friendly detail.\n\nDapp API keys must stay server-side. Browser launch of a hosted Pay-To action\nbelongs in "
+      "text": "\nare generic by design and should not be expanded into probing-friendly detail.\nOpaque paytags such as "
+    },
+    {
+      "kind": "code",
+      "text": "`abd123@cubid.mypaytag`"
+    },
+    {
+      "kind": "text",
+      "text": " are the default. Raw\nstamp-based paytags such as "
+    },
+    {
+      "kind": "code",
+      "text": "`+1234569999@phone.cubid.mypaytag`"
+    },
+    {
+      "kind": "text",
+      "text": " require\nexplicit user choice outside ordinary dapp validation. The SDK does not expose\na raw-stamp action helper yet because Passport has not promoted a stable\nseparate raw-stamp exposure action contract. Passing "
+    },
+    {
+      "kind": "code",
+      "text": "`aliasExposure:\n\"raw_stamp\"`"
+    },
+    {
+      "kind": "text",
+      "text": " to "
+    },
+    {
+      "kind": "code",
+      "text": "`startPaytagAliasCreateAction`"
+    },
+    {
+      "kind": "text",
+      "text": " is rejected; when raw exposure\nis added later it should be a separate, explicitly named helper and must not\nreturn raw stamp values to dapps unless Passport documents a safe redacted\nresponse shape.\n\nDapp API keys must stay server-side. Browser launch of a hosted Cubid paytag\naction belongs in "
     },
     {
       "kind": "code",
@@ -16909,11 +17234,11 @@
     },
     {
       "kind": "text",
-      "text": " via "
+      "text": " via\n"
     },
     {
       "kind": "code",
-      "text": "`openPayToHostedAction(action.hostedUrl)`"
+      "text": "`openHostedPaytagAction(action.hostedUrl)`"
     },
     {
       "kind": "text",
@@ -16957,7 +17282,15 @@
     },
     {
       "kind": "text",
-      "text": ", "
+      "text": ",\n"
+    },
+    {
+      "kind": "code",
+      "text": "`startHostedPaytagAction`"
+    },
+    {
+      "kind": "text",
+      "text": ", the typed Paytag action helpers,\n"
     },
     {
       "kind": "code",
@@ -16965,7 +17298,7 @@
     },
     {
       "kind": "text",
-      "text": ",\n"
+      "text": ", "
     },
     {
       "kind": "code",
@@ -16973,7 +17306,7 @@
     },
     {
       "kind": "text",
-      "text": ", and "
+      "text": ", and\n"
     },
     {
       "kind": "code",
@@ -16981,7 +17314,7 @@
     },
     {
       "kind": "text",
-      "text": " automatically generate an\nidempotency key when callers omit one, and they return the resolved\n"
+      "text": " automatically generate an idempotency key when callers\nomit one, and they return the resolved "
     },
     {
       "kind": "code",
@@ -16989,7 +17322,7 @@
     },
     {
       "kind": "text",
-      "text": " alongside the normalized response so callers can log or\nreconcile retries safely.\n\n"
+      "text": " alongside the\nnormalized response so callers can log or reconcile retries safely.\n\n"
     },
     {
       "kind": "code",
