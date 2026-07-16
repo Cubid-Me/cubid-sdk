@@ -251,6 +251,43 @@ export type CubidDisclosureState<TClaim extends string> = {
   state: CubidDisclosureAvailability
 }
 
+export const CUBID_FRIENDR_PUBLIC_CONTRACT_NAMES = [
+  "self_account_type_claim_v1",
+  "cubid_kyc_presence_v1",
+  "friendr_unique_human_confidence_v1",
+  "friendr_unique_human_confidence",
+] as const
+
+export type CubidFriendrPublicContractName =
+  (typeof CUBID_FRIENDR_PUBLIC_CONTRACT_NAMES)[number]
+
+export type CubidFriendrPublicContractKind =
+  | "claimAlias"
+  | "userinfoClaim"
+  | "stampImportType"
+  | "stampSummaryClaim"
+
+export type CubidFriendrPublicContractSummary = {
+  canonicalName: string
+  idTokenEligible: boolean
+  kind: CubidFriendrPublicContractKind
+  mutableSource: boolean
+  name: CubidFriendrPublicContractName
+  redirectParameterEligible: boolean
+  scope: "cubid:profile" | "cubid:stamps"
+  userInfoEligible: boolean
+}
+
+export type CubidFriendrUniqueHumanConfidenceSummary = {
+  claimName: "friendr_unique_human_confidence"
+  issuedAt?: string | null
+  modelVersion?: string | null
+  scoreBand?: string | null
+  stampType: "friendr_unique_human_confidence_v1"
+  status?: string | null
+  value: Record<string, unknown> | null
+}
+
 export type CubidFetchStampsInput = {
   userId: string
 }
@@ -1295,6 +1332,11 @@ export type SaveSecretInput = CubidSaveSecretInput
 export type SaveSecretResponse = CubidSaveSecretResponse
 export type SendNotificationInput = CubidSendNotificationInput
 export type SendNotificationResponse = CubidSendNotificationResponse
+export type FriendrPublicContractName = CubidFriendrPublicContractName
+export type FriendrPublicContractKind = CubidFriendrPublicContractKind
+export type FriendrPublicContractSummary = CubidFriendrPublicContractSummary
+export type FriendrUniqueHumanConfidenceSummary =
+  CubidFriendrUniqueHumanConfidenceSummary
 export type PaytagStampType = CubidPaytagStampType
 export type PaytagAliasExposure = CubidPaytagAliasExposure
 export type PaytagActionType = CubidPaytagActionType
@@ -2123,6 +2165,72 @@ export const getCubidStampTypeName = (stampTypeId: number): CubidStampType | str
 export const getCubidStampTypeNamesById = (): Record<number, string> => ({
   ...STAMP_TYPE_NAMES_BY_ID,
 })
+
+const FRIENDR_PUBLIC_CONTRACTS = {
+  self_account_type_claim_v1: {
+    canonicalName: "cubid_actor_type",
+    idTokenEligible: false,
+    kind: "claimAlias",
+    mutableSource: false,
+    name: "self_account_type_claim_v1",
+    redirectParameterEligible: false,
+    scope: "cubid:profile",
+    userInfoEligible: true,
+  },
+  cubid_kyc_presence_v1: {
+    canonicalName: "cubid_kyc_presence_v1",
+    idTokenEligible: false,
+    kind: "userinfoClaim",
+    mutableSource: false,
+    name: "cubid_kyc_presence_v1",
+    redirectParameterEligible: false,
+    scope: "cubid:profile",
+    userInfoEligible: true,
+  },
+  friendr_unique_human_confidence_v1: {
+    canonicalName: "friendr_unique_human_confidence_v1",
+    idTokenEligible: false,
+    kind: "stampImportType",
+    mutableSource: false,
+    name: "friendr_unique_human_confidence_v1",
+    redirectParameterEligible: false,
+    scope: "cubid:stamps",
+    userInfoEligible: false,
+  },
+  friendr_unique_human_confidence: {
+    canonicalName: "friendr_unique_human_confidence",
+    idTokenEligible: false,
+    kind: "stampSummaryClaim",
+    mutableSource: false,
+    name: "friendr_unique_human_confidence",
+    redirectParameterEligible: false,
+    scope: "cubid:stamps",
+    userInfoEligible: true,
+  },
+} as const satisfies Record<
+  CubidFriendrPublicContractName,
+  CubidFriendrPublicContractSummary
+>
+
+export const getCubidFriendrPublicContract = (
+  name: string
+): CubidFriendrPublicContractSummary | null =>
+  isCubidFriendrPublicContractName(name)
+    ? { ...FRIENDR_PUBLIC_CONTRACTS[name] }
+    : null
+
+export const isCubidFriendrPublicContractName = (
+  name: string
+): name is CubidFriendrPublicContractName =>
+  CUBID_FRIENDR_PUBLIC_CONTRACT_NAMES.includes(
+    name as CubidFriendrPublicContractName
+  )
+
+export const isCubidFriendrIdTokenEligible = (name: string): boolean =>
+  getCubidFriendrPublicContract(name)?.idTokenEligible ?? false
+
+export const isCubidFriendrRedirectParameterEligible = (name: string): boolean =>
+  getCubidFriendrPublicContract(name)?.redirectParameterEligible ?? false
 
 export const createCubidAppScopedSubject = (
   userId: string

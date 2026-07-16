@@ -6,13 +6,17 @@ import {
   createRecoveryBundleIdempotencyKey,
   createCubidAppScopedSubject,
   createCubidApiClient,
+  CUBID_FRIENDR_PUBLIC_CONTRACT_NAMES,
   CubidApiError,
   CubidNotificationSendError,
   CubidRecoverableWalletError,
   CubidSiwcError,
+  getCubidFriendrPublicContract,
   getCubidStampTypeId,
   getCubidStampTypeName,
   getCubidStampTypeNamesById,
+  isCubidFriendrIdTokenEligible,
+  isCubidFriendrRedirectParameterEligible,
   isCubidNotificationSendError,
   isCubidRecoverableWalletError,
   isCubidSignedTransactionResult,
@@ -2490,6 +2494,51 @@ test("stamp registry helpers expose canonical names and ids", () => {
   assert.equal(getCubidStampTypeNamesById()[70], "address")
 })
 
+test("FriendR public contract helpers classify redacted claim and stamp shapes", () => {
+  assert.deepEqual([...CUBID_FRIENDR_PUBLIC_CONTRACT_NAMES], [
+    "self_account_type_claim_v1",
+    "cubid_kyc_presence_v1",
+    "friendr_unique_human_confidence_v1",
+    "friendr_unique_human_confidence",
+  ])
+
+  assert.deepEqual(getCubidFriendrPublicContract("self_account_type_claim_v1"), {
+    canonicalName: "cubid_actor_type",
+    idTokenEligible: false,
+    kind: "claimAlias",
+    mutableSource: false,
+    name: "self_account_type_claim_v1",
+    redirectParameterEligible: false,
+    scope: "cubid:profile",
+    userInfoEligible: true,
+  })
+
+  assert.deepEqual(
+    getCubidFriendrPublicContract("friendr_unique_human_confidence"),
+    {
+      canonicalName: "friendr_unique_human_confidence",
+      idTokenEligible: false,
+      kind: "stampSummaryClaim",
+      mutableSource: false,
+      name: "friendr_unique_human_confidence",
+      redirectParameterEligible: false,
+      scope: "cubid:stamps",
+      userInfoEligible: true,
+    }
+  )
+
+  assert.equal(
+    getCubidFriendrPublicContract("friendr_unique_human_confidence_v1")?.kind,
+    "stampImportType"
+  )
+  assert.equal(isCubidFriendrIdTokenEligible("friendr_unique_human_confidence"), false)
+  assert.equal(
+    isCubidFriendrRedirectParameterEligible("friendr_unique_human_confidence"),
+    false
+  )
+  assert.equal(getCubidFriendrPublicContract("friendr_graph_payload"), null)
+})
+
 test("normalizeStamps falls back to canonical stamp names when string names are absent", async () => {
   const client = createCubidApiClient({
     apiKey: "api_key",
@@ -2532,6 +2581,21 @@ test("app-scoped helpers validate user ids and summarize disclosed stamps", () =
     stampTypeId: 13,
     status: "Verified",
     value: "user@example.com",
+  })
+
+  const friendrSummary = summarizeCubidDisclosedStamp({
+    identity: null,
+    isValid: true,
+    stampType: "friendr_unique_human_confidence_v1",
+    stampTypeId: 10_001,
+    uniqueValue: "redacted",
+  })
+
+  assert.deepEqual(friendrSummary, {
+    stampType: "friendr_unique_human_confidence_v1",
+    stampTypeId: 10001,
+    status: "Verified",
+    value: "redacted",
   })
 
   assert.throws(
