@@ -8,6 +8,7 @@ import {
   buildCubidUserInfoRequest,
   clearCubidAuthSession,
   CUBID_AUTH_SESSION_STORAGE_KEY,
+  CUBID_FRIENDR_OIDC_CLAIM_NAMES,
   createCubidAuthNonce,
   createCubidAuthSession,
   createCubidAuthState,
@@ -20,7 +21,10 @@ import {
   fetchCubidOidcDiscoveryDocument,
   fetchCubidUserInfo,
   getCubidAuthAssurance,
+  getCubidFriendrOidcClaim,
   hasCubidPasskeyAssurance,
+  isCubidFriendrIdTokenClaim,
+  isCubidFriendrRedirectParameter,
   isCubidAuthSessionExpired,
   isCubidIdTokenExpired,
   loadCubidAuthSession,
@@ -181,6 +185,46 @@ describe("@cubid/auth", () => {
       },
       state: "state-123",
     });
+  });
+
+  it("classifies FriendR claims as UserInfo-only public contract fields", () => {
+    expect([...CUBID_FRIENDR_OIDC_CLAIM_NAMES]).toEqual([
+      "self_account_type_claim_v1",
+      "cubid_kyc_presence_v1",
+      "friendr_unique_human_confidence",
+    ]);
+
+    expect(getCubidFriendrOidcClaim("self_account_type_claim_v1")).toEqual({
+      canonicalName: "cubid_actor_type",
+      claimName: "self_account_type_claim_v1",
+      idTokenEligible: false,
+      redirectParameterEligible: false,
+      scope: "cubid:profile",
+      userInfoEligible: true,
+    });
+
+    expect(getCubidFriendrOidcClaim("friendr_unique_human_confidence")).toEqual({
+      canonicalName: "friendr_unique_human_confidence",
+      claimName: "friendr_unique_human_confidence",
+      idTokenEligible: false,
+      redirectParameterEligible: false,
+      scope: "cubid:stamps",
+      userInfoEligible: true,
+    });
+
+    expect(isCubidFriendrIdTokenClaim("friendr_unique_human_confidence")).toBe(false);
+    expect(isCubidFriendrRedirectParameter("friendr_unique_human_confidence")).toBe(false);
+    expect(getCubidFriendrOidcClaim("friendr_graph_payload")).toBeNull();
+  });
+
+  it("does not promote FriendR callback query fields into parsed OIDC helpers", () => {
+    const parsed = parseCubidAuthorizationCallback(
+      "https://dashboard.clearpass.app/callback?code=oidc-code&state=state-123&friendr_unique_human_confidence=0.99"
+    );
+
+    expect(parsed.kind).toBe("success");
+    expect("friendr_unique_human_confidence" in parsed).toBe(false);
+    expect(parsed.raw.friendr_unique_human_confidence).toEqual(["0.99"]);
   });
 
   it("rejects malformed callbacks and mismatched state values", () => {

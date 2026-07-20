@@ -3,6 +3,11 @@ export const CUBID_STAGING_ISSUER = "https://staging-id.cubid.me";
 export const CUBID_DEFAULT_OIDC_SCOPES = ["openid", "email", "profile"] as const;
 export const CUBID_PASSKEY_ACR_VALUE = "urn:cubid:acr:passkey";
 export const CUBID_AUTH_SESSION_STORAGE_KEY = "cubid.auth.session";
+export const CUBID_FRIENDR_OIDC_CLAIM_NAMES = [
+  "self_account_type_claim_v1",
+  "cubid_kyc_presence_v1",
+  "friendr_unique_human_confidence",
+] as const;
 
 const DISCOVERY_PATH = "/.well-known/openid-configuration";
 const textEncoder = new TextEncoder();
@@ -173,10 +178,25 @@ export interface FetchCubidUserInfoInput
 export interface CubidUserInfo {
   email?: string;
   email_verified?: boolean;
+  cubid_kyc_presence_v1?: boolean;
+  friendr_unique_human_confidence?: Record<string, unknown>;
   name?: string;
   preferred_username?: string;
+  self_account_type_claim_v1?: "human" | "agent" | "organization" | string;
   sub: string;
   [key: string]: unknown;
+}
+
+export type CubidFriendrOidcClaimName =
+  (typeof CUBID_FRIENDR_OIDC_CLAIM_NAMES)[number];
+
+export interface CubidFriendrOidcClaimSummary {
+  canonicalName: string;
+  claimName: CubidFriendrOidcClaimName;
+  idTokenEligible: false;
+  redirectParameterEligible: false;
+  scope: "cubid:profile" | "cubid:stamps";
+  userInfoEligible: true;
 }
 
 export interface CubidIdTokenClaims extends Record<string, unknown> {
@@ -626,6 +646,57 @@ function normalizeAcrValues(acrValues?: readonly string[] | string): string[] {
   }
 
   return [...new Set(normalized)];
+}
+
+const FRIENDR_OIDC_CLAIMS = {
+  self_account_type_claim_v1: {
+    canonicalName: "cubid_actor_type",
+    claimName: "self_account_type_claim_v1",
+    idTokenEligible: false,
+    redirectParameterEligible: false,
+    scope: "cubid:profile",
+    userInfoEligible: true,
+  },
+  cubid_kyc_presence_v1: {
+    canonicalName: "cubid_kyc_presence_v1",
+    claimName: "cubid_kyc_presence_v1",
+    idTokenEligible: false,
+    redirectParameterEligible: false,
+    scope: "cubid:profile",
+    userInfoEligible: true,
+  },
+  friendr_unique_human_confidence: {
+    canonicalName: "friendr_unique_human_confidence",
+    claimName: "friendr_unique_human_confidence",
+    idTokenEligible: false,
+    redirectParameterEligible: false,
+    scope: "cubid:stamps",
+    userInfoEligible: true,
+  },
+} as const satisfies Record<CubidFriendrOidcClaimName, CubidFriendrOidcClaimSummary>;
+
+export function isCubidFriendrOidcClaimName(
+  claimName: string
+): claimName is CubidFriendrOidcClaimName {
+  return CUBID_FRIENDR_OIDC_CLAIM_NAMES.includes(
+    claimName as CubidFriendrOidcClaimName
+  );
+}
+
+export function getCubidFriendrOidcClaim(
+  claimName: string
+): CubidFriendrOidcClaimSummary | null {
+  return isCubidFriendrOidcClaimName(claimName)
+    ? { ...FRIENDR_OIDC_CLAIMS[claimName] }
+    : null;
+}
+
+export function isCubidFriendrIdTokenClaim(claimName: string): boolean {
+  return getCubidFriendrOidcClaim(claimName)?.idTokenEligible ?? false;
+}
+
+export function isCubidFriendrRedirectParameter(claimName: string): boolean {
+  return getCubidFriendrOidcClaim(claimName)?.redirectParameterEligible ?? false;
 }
 
 function appendExtraParams(

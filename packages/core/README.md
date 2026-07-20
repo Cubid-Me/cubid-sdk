@@ -188,6 +188,31 @@ as `notGranted` because the current v2 payloads do not reliably distinguish
 does provide enough signal today, such as the profile and location helpers
 above, the SDK exposes typed disclosure metadata directly.
 
+## FriendR Public Contract
+
+`@cubid/core` exposes FriendR public-contract constants and classifiers for
+the redacted unique-human-confidence handoff:
+
+- `self_account_type_claim_v1` is a compatibility alias for Cubid-owned
+  `cubid_actor_type`; it is not a mutable FriendR account-type source.
+- `cubid_kyc_presence_v1` is a coarse boolean UserInfo/disclosure claim.
+- `friendr_unique_human_confidence_v1` is the FriendR aggregate stamp import
+  type.
+- `friendr_unique_human_confidence` is a redacted `cubid:stamps` UserInfo and
+  disclosure claim, not an ID-token or redirect-parameter claim.
+
+Use `getCubidFriendrPublicContract(...)`,
+`isCubidFriendrIdTokenEligible(...)`, and
+`isCubidFriendrRedirectParameterEligible(...)` when apps need to classify these
+names safely. FriendR score effects are visible only through existing consented
+`cubid:score` outputs such as `cubid_score`, `cubid_score_band`, and
+`cubid_personhood_level`.
+
+The SDK does not model or expose raw FriendR graph data, relationship labels,
+classifier or target identities, individual attestations, duplicate reports,
+contacts, XP, raw aggregate payloads, KYC provider details, or internal Cubid
+identifiers.
+
 OTP helpers intentionally return delivery or verification metadata only. They
 never expose raw OTP values, even if a legacy server payload includes one.
 

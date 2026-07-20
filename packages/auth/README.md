@@ -72,6 +72,27 @@ if (!hasCubidPasskeyAssurance(session)) {
 }
 ```
 
+## FriendR Claim Boundary
+
+FriendR unique-human-confidence fields are UserInfo/disclosure contract fields,
+not redirect parameters or default ID-token claims. Use
+`getCubidFriendrOidcClaim(...)`, `isCubidFriendrIdTokenClaim(...)`, and
+`isCubidFriendrRedirectParameter(...)` to classify the public FriendR claim
+names before deciding where to read them.
+
+`self_account_type_claim_v1` is a compatibility alias for Cubid-owned
+`cubid_actor_type`. `cubid_kyc_presence_v1` is a coarse boolean UserInfo claim.
+`friendr_unique_human_confidence` is a redacted `cubid:stamps` UserInfo and
+disclosure claim. FriendR score effects are visible only through existing
+consented `cubid:score` outputs such as `cubid_score`, `cubid_score_band`, and
+`cubid_personhood_level`.
+
+Do not read FriendR-derived score, actor type, KYC presence, stamp summaries,
+or raw aggregate payload details from authorization callback URLs or ID tokens.
+The SDK also does not model raw FriendR graph data, relationship labels,
+classifier or target identities, attestations, duplicate reports, contacts, XP,
+KYC provider details, or internal Cubid identifiers.
+
 This package is intentionally browser-safe. It does not require a Cubid dapp
 API key, a client secret, or any other privileged credential in frontend code.
 
