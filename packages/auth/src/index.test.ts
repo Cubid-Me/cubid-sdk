@@ -345,6 +345,15 @@ describe("@cubid/auth", () => {
   it("checks staging readiness only when staging is explicitly selected", async () => {
     await expect(
       checkCubidIdentityIssuerReadiness({
+        environment: "prod" as never,
+        fetch: createReadinessFetch(createDiscoveryDocument(CUBID_STAGING_ISSUER)),
+      })
+    ).rejects.toMatchObject({
+      code: "invalid_environment",
+    });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
         fetch: createReadinessFetch(createDiscoveryDocument(CUBID_STAGING_ISSUER)),
         issuer: CUBID_STAGING_ISSUER,
       })
@@ -427,6 +436,32 @@ describe("@cubid/auth", () => {
         fetch: createReadinessFetch(createDiscoveryDocument(), { keys: [] }),
       })
     ).rejects.toMatchObject({ code: "empty_jwks" });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(createDiscoveryDocument(), {
+          keys: [
+            {},
+            { alg: "RS256", kty: "RSA", use: "enc" },
+            { alg: "HS256", kty: "oct", use: "sig" },
+            { alg: "ES256", crv: "P-256", key_ops: ["sign"], kty: "EC" },
+          ],
+        }),
+      })
+    ).rejects.toMatchObject({ code: "empty_jwks" });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(createDiscoveryDocument(), {
+          keys: [
+            {},
+            { alg: "RS256", kid: "usable-rsa", kty: "RSA", use: "sig" },
+            { alg: "ES256", crv: "P-256", key_ops: ["verify"], kty: "EC" },
+            { alg: "HS256", kty: "oct", use: "sig" },
+          ],
+        }),
+      })
+    ).resolves.toMatchObject({ jwksKeyCount: 2 });
   });
 
   it("fails readiness when discovery cannot be reached", async () => {

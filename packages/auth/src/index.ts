@@ -762,10 +762,23 @@ function resolveDiscoveryUrl(input: string | URL): string {
   return new URL(DISCOVERY_PATH, `${normalizeIssuer(input)}/`).toString();
 }
 
-function resolveIdentityIssuerEnvironment(
-  environment?: CubidIdentityIssuerEnvironment
-): CubidIdentityIssuerEnvironment {
-  return environment ?? "production";
+function resolveIdentityIssuerEnvironment(environment?: string): CubidIdentityIssuerEnvironment {
+  if (typeof environment === "undefined") {
+    return "production";
+  }
+
+  if (environment === "production" || environment === "staging") {
+    return environment;
+  }
+
+  throw new CubidAuthError("Cubid identity readiness received an unknown environment.", {
+    category: "validation",
+    code: "invalid_environment",
+    raw: {
+      environment,
+      supportedEnvironments: ["production", "staging"],
+    },
+  });
 }
 
 function getExpectedIdentityIssuer(
@@ -939,6 +952,30 @@ function findJwksKey(
 
     return true;
   }) ?? null;
+}
+
+function isUsableJwksSigningKey(key: CubidJsonWebKey): boolean {
+  if (key.use && key.use !== "sig") {
+    return false;
+  }
+
+  if (Array.isArray(key.key_ops) && !key.key_ops.includes("verify")) {
+    return false;
+  }
+
+  if (key.alg && !resolveIdTokenCryptoAlgorithm(key.alg)) {
+    return false;
+  }
+
+  if (key.kty === "RSA") {
+    return !key.alg || key.alg === "RS256";
+  }
+
+  if (key.kty === "EC") {
+    return (!key.alg || key.alg === "ES256") && (!key.crv || key.crv === "P-256");
+  }
+
+  return false;
 }
 
 function assertIdTokenClaims(
@@ -1156,8 +1193,10 @@ export async function checkCubidIdentityIssuerReadiness(
   }
 
   const jwks = await fetchCubidJwks(discovery.jwks_uri, input.fetch);
-  if (jwks.keys.length === 0) {
-    throw new CubidAuthError("Cubid identity JWKS did not include any signing keys.", {
+  const usableSigningKeyCount = jwks.keys.filter(isUsableJwksSigningKey).length;
+
+  if (usableSigningKeyCount === 0) {
+    throw new CubidAuthError("Cubid identity JWKS did not include any usable signing keys.", {
       category: "validation",
       code: "empty_jwks",
       raw: jwks,
@@ -1169,7 +1208,7 @@ export async function checkCubidIdentityIssuerReadiness(
     environment,
     expectedIssuer,
     issuer: discovery.issuer,
-    jwksKeyCount: jwks.keys.length,
+    jwksKeyCount: usableSigningKeyCount,
     jwksUri: discovery.jwks_uri,
     supportsAuthorizationCode: true,
     supportsPairwiseSubjects: true,
