@@ -2124,7 +2124,39 @@
     },
     {
       "kind": "text",
-      "text": "\nfor production endpoint metadata. Passport, Verify, Admin, and internal OIDC\ninteraction routes are not public SDK integration targets."
+      "text": "\nfor production endpoint metadata. Passport, Verify, Admin, and internal OIDC\ninteraction routes are not public SDK integration targets.\n\n## Production And Staging Configuration\n\nProduction apps should configure the provider with the stable Identity issuer:\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\n<CubidAuthProvider\n  clientId=\"your-production-client-id\"\n  issuer=\"https://id.cubid.me\"\n  redirectUri=\"https://app.example.com/auth/callback\"\n>\n  <App />\n</CubidAuthProvider>\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nPreview or staging apps may use "
+    },
+    {
+      "kind": "code",
+      "text": "`https://staging-id.cubid.me`"
+    },
+    {
+      "kind": "text",
+      "text": ", but only when the\nOIDC client registration, callback URLs, and logout URLs are also registered in\nthat staging environment:\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\n<CubidAuthProvider\n  clientId=\"your-staging-client-id\"\n  issuer=\"https://staging-id.cubid.me\"\n  redirectUri=\"https://preview.example.com/auth/callback\"\n>\n  <App />\n</CubidAuthProvider>\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nDo not use staging as an implicit production fallback. Discovery metadata\nchooses the concrete authorization, token, UserInfo, JWKS, and logout endpoints\nfor the selected issuer, but ID tokens still must validate against that exact\nissuer. "
+    },
+    {
+      "kind": "code",
+      "text": "`https://login.cubid.me`"
+    },
+    {
+      "kind": "text",
+      "text": " is a compatibility UI host during cutover, not\nthe issuer value new React integrations should configure."
     }
   ]
 }

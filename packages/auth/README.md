@@ -35,14 +35,17 @@ import {
   createCubidAuthNonce,
   createCubidAuthState,
   createCubidPkcePair,
+  fetchCubidOidcDiscoveryDocument,
 } from "@cubid/auth"
 
+const issuer = "https://id.cubid.me"
+const discovery = await fetchCubidOidcDiscoveryDocument({ issuer })
 const pkce = await createCubidPkcePair()
 const state = createCubidAuthState()
 const nonce = createCubidAuthNonce()
 
 const signInUrl = buildCubidAuthorizationUrl({
-  authorizationEndpoint: "https://id.cubid.me/authorize",
+  authorizationEndpoint: discovery.authorization_endpoint,
   clientId: "clearpass-dashboard",
   codeChallenge: pkce.codeChallenge,
   nonce,
@@ -51,6 +54,11 @@ const signInUrl = buildCubidAuthorizationUrl({
   state,
 })
 ```
+
+Use discovery from the configured issuer instead of hard-coding issuer-relative
+paths. Production apps should expect `discovery.issuer` to equal
+`https://id.cubid.me` exactly, while discovery controls the concrete
+authorization, token, UserInfo, JWKS, and logout endpoints.
 
 `requirePasskey: true` adds `acr_values=urn:cubid:acr:passkey`, which asks the
 Cubid-hosted Identity surface to satisfy the request with Cubid-owned passkey

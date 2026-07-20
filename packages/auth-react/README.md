@@ -88,3 +88,37 @@ locally.
 Use OIDC discovery from `https://id.cubid.me/.well-known/openid-configuration`
 for production endpoint metadata. Passport, Verify, Admin, and internal OIDC
 interaction routes are not public SDK integration targets.
+
+## Production And Staging Configuration
+
+Production apps should configure the provider with the stable Identity issuer:
+
+```tsx
+<CubidAuthProvider
+  clientId="your-production-client-id"
+  issuer="https://id.cubid.me"
+  redirectUri="https://app.example.com/auth/callback"
+>
+  <App />
+</CubidAuthProvider>
+```
+
+Preview or staging apps may use `https://staging-id.cubid.me`, but only when the
+OIDC client registration, callback URLs, and logout URLs are also registered in
+that staging environment:
+
+```tsx
+<CubidAuthProvider
+  clientId="your-staging-client-id"
+  issuer="https://staging-id.cubid.me"
+  redirectUri="https://preview.example.com/auth/callback"
+>
+  <App />
+</CubidAuthProvider>
+```
+
+Do not use staging as an implicit production fallback. Discovery metadata
+chooses the concrete authorization, token, UserInfo, JWKS, and logout endpoints
+for the selected issuer, but ID tokens still must validate against that exact
+issuer. `https://login.cubid.me` is a compatibility UI host during cutover, not
+the issuer value new React integrations should configure.
