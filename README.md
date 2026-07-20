@@ -132,6 +132,7 @@ long-term default.
 - `pnpm test:coverage`
 - `pnpm api:validate`
 - `pnpm api:postman`
+- `pnpm auth:issuer:check`
 - `pnpm dev`
 - `pnpm docs:api:build`
 - `pnpm docs:api:check`
@@ -149,6 +150,17 @@ For the full pre-PR and pre-yeet gate, run:
 
 ```sh
 pnpm validate:yeet
+```
+
+`pnpm auth:issuer:check` is the metadata-only release-readiness gate for the
+production Identity issuer. It checks discovery, exact issuer equality, JWKS,
+authorization-code support, PKCE S256, and pairwise subject metadata without
+exchanging credentials or requiring a user login. It defaults to
+`https://id.cubid.me` and never falls back to staging. To probe staging
+explicitly, run:
+
+```sh
+pnpm auth:issuer:check -- --environment staging --issuer https://staging-id.cubid.me
 ```
 
 ## Workflow
