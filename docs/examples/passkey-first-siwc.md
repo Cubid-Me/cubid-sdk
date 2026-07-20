@@ -91,8 +91,11 @@ import {
   createCubidAuthNonce,
   createCubidAuthState,
   createCubidPkcePair,
+  fetchCubidOidcDiscoveryDocument,
 } from "@cubid/auth";
 
+const issuer = "https://id.cubid.me";
+const discovery = await fetchCubidOidcDiscoveryDocument({ issuer });
 const pkce = await createCubidPkcePair();
 const state = createCubidAuthState();
 const nonce = createCubidAuthNonce();
@@ -107,7 +110,7 @@ sessionStorage.setItem(
 );
 
 const signInUrl = buildCubidAuthorizationUrl({
-  authorizationEndpoint: "https://id.cubid.me/authorize",
+  authorizationEndpoint: discovery.authorization_endpoint,
   clientId: "your-client-id",
   codeChallenge: pkce.codeChallenge,
   nonce,
@@ -119,6 +122,11 @@ const signInUrl = buildCubidAuthorizationUrl({
 
 window.location.assign(signInUrl);
 ```
+
+Use discovery rather than hard-coding issuer-relative endpoint paths. Production
+apps should expect `discovery.issuer` to equal `https://id.cubid.me` exactly,
+while discovery controls the concrete authorization, token, UserInfo, JWKS, and
+logout endpoints for that issuer.
 
 The app callback must verify `state`, exchange the code with the saved PKCE
 verifier, validate issuer/audience/nonce, and then fetch `/userinfo` when the app

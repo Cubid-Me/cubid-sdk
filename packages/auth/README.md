@@ -35,14 +35,17 @@ import {
   createCubidAuthNonce,
   createCubidAuthState,
   createCubidPkcePair,
+  fetchCubidOidcDiscoveryDocument,
 } from "@cubid/auth"
 
+const issuer = "https://id.cubid.me"
+const discovery = await fetchCubidOidcDiscoveryDocument({ issuer })
 const pkce = await createCubidPkcePair()
 const state = createCubidAuthState()
 const nonce = createCubidAuthNonce()
 
 const signInUrl = buildCubidAuthorizationUrl({
-  authorizationEndpoint: "https://id.cubid.me/authorize",
+  authorizationEndpoint: discovery.authorization_endpoint,
   clientId: "clearpass-dashboard",
   codeChallenge: pkce.codeChallenge,
   nonce,
@@ -51,6 +54,11 @@ const signInUrl = buildCubidAuthorizationUrl({
   state,
 })
 ```
+
+Use discovery from the configured issuer instead of hard-coding issuer-relative
+paths. Production apps should expect `discovery.issuer` to equal
+`https://id.cubid.me` exactly, while discovery controls the concrete
+authorization, token, UserInfo, JWKS, and logout endpoints.
 
 `requirePasskey: true` adds `acr_values=urn:cubid:acr:passkey`, which asks the
 Cubid-hosted Identity surface to satisfy the request with Cubid-owned passkey
@@ -106,3 +114,37 @@ Use OIDC discovery from `https://id.cubid.me/.well-known/openid-configuration`
 for production authorization, token, UserInfo, JWKS, logout, revoke, and
 registration endpoints. Do not call Passport, Verify, Admin, or internal OIDC
 interaction routes directly from SDK integrations.
+
+## Identity Issuer Readiness
+
+`@cubid/auth` includes `checkCubidIdentityIssuerReadiness(...)` for
+metadata-only release checks. The helper verifies exact issuer equality,
+discovery shape, required endpoints, JWKS availability, authorization-code
+support, PKCE S256, and pairwise subject metadata without exchanging user
+credentials.
+
+Production is the default and must be `https://id.cubid.me`:
+
+```ts
+import { checkCubidIdentityIssuerReadiness } from "@cubid/auth"
+
+await checkCubidIdentityIssuerReadiness()
+```
+
+Staging is explicit. Passing the staging issuer without
+`environment: "staging"` fails closed instead of silently treating staging as a
+production fallback:
+
+```ts
+await checkCubidIdentityIssuerReadiness({
+  environment: "staging",
+  issuer: "https://staging-id.cubid.me",
+})
+```
+
+The repository CLI gate uses the same helper:
+
+```sh
+pnpm auth:issuer:check
+pnpm auth:issuer:check -- --environment staging --issuer https://staging-id.cubid.me
+```

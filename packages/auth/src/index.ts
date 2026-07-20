@@ -82,6 +82,29 @@ export interface FetchCubidOidcDiscoveryDocumentInput {
   signal?: AbortSignal;
 }
 
+export type CubidIdentityIssuerEnvironment = "production" | "staging";
+
+export interface CheckCubidIdentityIssuerReadinessInput {
+  environment?: CubidIdentityIssuerEnvironment;
+  fetch?: CubidAuthFetch;
+  issuer?: string | URL;
+  signal?: AbortSignal;
+}
+
+export interface CubidIdentityIssuerReadinessReport {
+  authorizationEndpoint: string;
+  environment: CubidIdentityIssuerEnvironment;
+  expectedIssuer: string;
+  issuer: string;
+  jwksKeyCount: number;
+  jwksUri: string;
+  supportsAuthorizationCode: boolean;
+  supportsPairwiseSubjects: boolean;
+  supportsPkceS256: boolean;
+  tokenEndpoint: string;
+  userInfoEndpoint: string | null;
+}
+
 export interface CubidPkcePair {
   codeChallenge: string;
   codeChallengeMethod: "S256";
@@ -739,6 +762,33 @@ function resolveDiscoveryUrl(input: string | URL): string {
   return new URL(DISCOVERY_PATH, `${normalizeIssuer(input)}/`).toString();
 }
 
+function resolveIdentityIssuerEnvironment(environment?: string): CubidIdentityIssuerEnvironment {
+  if (typeof environment === "undefined") {
+    return "production";
+  }
+
+  if (environment === "production" || environment === "staging") {
+    return environment;
+  }
+
+  throw new CubidAuthError("Cubid identity readiness received an unknown environment.", {
+    category: "validation",
+    code: "invalid_environment",
+    raw: {
+      environment,
+      supportedEnvironments: ["production", "staging"],
+    },
+  });
+}
+
+function getExpectedIdentityIssuer(
+  environment: CubidIdentityIssuerEnvironment
+): string {
+  return environment === "production"
+    ? CUBID_PRODUCTION_ISSUER
+    : CUBID_STAGING_ISSUER;
+}
+
 function normalizeTokenResponse(payload: Record<string, unknown>): CubidTokenResponse {
   const accessToken = getRequiredString(payload, "access_token", "token response");
   const tokenType = getRequiredString(payload, "token_type", "token response");
@@ -904,6 +954,30 @@ function findJwksKey(
   }) ?? null;
 }
 
+function isUsableJwksSigningKey(key: CubidJsonWebKey): boolean {
+  if (key.use && key.use !== "sig") {
+    return false;
+  }
+
+  if (Array.isArray(key.key_ops) && !key.key_ops.includes("verify")) {
+    return false;
+  }
+
+  if (key.alg && !resolveIdTokenCryptoAlgorithm(key.alg)) {
+    return false;
+  }
+
+  if (key.kty === "RSA") {
+    return !key.alg || key.alg === "RS256";
+  }
+
+  if (key.kty === "EC") {
+    return (!key.alg || key.alg === "ES256") && (!key.crv || key.crv === "P-256");
+  }
+
+  return false;
+}
+
 function assertIdTokenClaims(
   claims: CubidIdTokenClaims,
   input: ValidateCubidIdTokenInput
@@ -1037,6 +1111,110 @@ export async function fetchCubidOidcDiscoveryDocument(
       "token_endpoint_auth_methods_supported"
     ),
     userinfo_endpoint: getOptionalString(payload, "userinfo_endpoint") ?? undefined,
+  };
+}
+
+export async function checkCubidIdentityIssuerReadiness(
+  input: CheckCubidIdentityIssuerReadinessInput = {}
+): Promise<CubidIdentityIssuerReadinessReport> {
+  const environment = resolveIdentityIssuerEnvironment(input.environment);
+  const expectedIssuer = getExpectedIdentityIssuer(environment);
+  const requestedIssuer = input.issuer ?? expectedIssuer;
+
+  if (normalizeIssuer(requestedIssuer) !== expectedIssuer) {
+    throw new CubidAuthError(
+      "Cubid identity readiness requires an explicit issuer for the selected environment.",
+      {
+        category: "validation",
+        code: "issuer_environment_mismatch",
+        raw: {
+          environment,
+          expectedIssuer,
+          issuer: normalizeIssuer(requestedIssuer),
+        },
+      }
+    );
+  }
+
+  const discovery = await fetchCubidOidcDiscoveryDocument({
+    fetch: input.fetch,
+    issuer: requestedIssuer,
+    signal: input.signal,
+  });
+
+  if (normalizeIssuer(discovery.issuer) !== expectedIssuer) {
+    throw new CubidAuthError(
+      "Cubid identity discovery issuer did not match the selected environment.",
+      {
+        category: "validation",
+        code: "discovery_issuer_mismatch",
+        raw: {
+          discoveryIssuer: discovery.issuer,
+          environment,
+          expectedIssuer,
+        },
+      }
+    );
+  }
+
+  if (!discovery.jwks_uri) {
+    throw new CubidAuthError("Cubid identity discovery metadata did not include a JWKS URI.", {
+      category: "validation",
+      code: "missing_jwks_uri",
+      raw: discovery,
+    });
+  }
+
+  const responseTypes = discovery.response_types_supported ?? [];
+  if (!responseTypes.includes("code")) {
+    throw new CubidAuthError("Cubid identity issuer does not advertise authorization-code flow.", {
+      category: "validation",
+      code: "missing_authorization_code_flow",
+      raw: discovery,
+    });
+  }
+
+  const codeChallengeMethods = discovery.code_challenge_methods_supported ?? [];
+  if (!codeChallengeMethods.includes("S256")) {
+    throw new CubidAuthError("Cubid identity issuer does not advertise PKCE S256.", {
+      category: "validation",
+      code: "missing_pkce_s256",
+      raw: discovery,
+    });
+  }
+
+  const subjectTypes = discovery.subject_types_supported ?? [];
+  if (!subjectTypes.includes("pairwise")) {
+    throw new CubidAuthError("Cubid identity issuer does not advertise pairwise subjects.", {
+      category: "validation",
+      code: "missing_pairwise_subjects",
+      raw: discovery,
+    });
+  }
+
+  const jwks = await fetchCubidJwks(discovery.jwks_uri, input.fetch);
+  const usableSigningKeyCount = jwks.keys.filter(isUsableJwksSigningKey).length;
+
+  if (usableSigningKeyCount === 0) {
+    throw new CubidAuthError("Cubid identity JWKS did not include any usable signing keys.", {
+      category: "validation",
+      code: "empty_jwks",
+      raw: jwks,
+    });
+  }
+
+  return {
+    authorizationEndpoint: discovery.authorization_endpoint,
+    environment,
+    expectedIssuer,
+    issuer: discovery.issuer,
+    jwksKeyCount: usableSigningKeyCount,
+    jwksUri: discovery.jwks_uri,
+    supportsAuthorizationCode: true,
+    supportsPairwiseSubjects: true,
+    supportsPkceS256: true,
+    tokenEndpoint: discovery.token_endpoint,
+    userInfoEndpoint: discovery.userinfo_endpoint ?? null,
   };
 }
 

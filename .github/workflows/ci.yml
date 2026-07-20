@@ -66,5 +66,8 @@ jobs:
       - name: Check API reference artifacts
         run: pnpm docs:api:check
 
+      - name: Check production Identity issuer readiness
+        run: pnpm auth:issuer:check
+
       - name: Core package release dry-runs
         run: pnpm check:core-package
