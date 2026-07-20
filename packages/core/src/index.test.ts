@@ -2488,8 +2488,10 @@ test("parseCubidWebhookEvent returns null data when the payload omits data", () 
 test("stamp registry helpers expose canonical names and ids", () => {
   assert.equal(getCubidStampTypeId("email"), 13)
   assert.equal(getCubidStampTypeId("near-wallet"), 15)
+  assert.equal(getCubidStampTypeId("friendr_unique_human_confidence_v1"), 10001)
   assert.equal(getCubidStampTypeName(13), "email")
   assert.equal(getCubidStampTypeName(15), "near")
+  assert.equal(getCubidStampTypeName(10001), "friendr_unique_human_confidence_v1")
   assert.equal(getCubidStampTypeName(999), "999")
   assert.equal(getCubidStampTypeNamesById()[70], "address")
 })
@@ -2546,21 +2548,32 @@ test("normalizeStamps falls back to canonical stamp names when string names are 
     fetch: async () =>
       createJsonResponse({
         all_stamps: [
-          {
-            id: 1,
-            identity: "user@example.com",
-            is_valid: true,
-            stamptype: 13,
-            uniquevalue: "user@example.com",
-          },
-        ],
-      }),
+        {
+          id: 1,
+          identity: "user@example.com",
+          is_valid: true,
+          stamptype: 13,
+          uniquevalue: "user@example.com",
+        },
+        {
+          id: 2,
+          is_valid: true,
+          stamptype: 10001,
+          uniquevalue: "redacted",
+        },
+      ],
+    }),
   })
 
   const response = await client.fetchStamps({ userId: "dapp_user_123" })
 
   assert.equal(response.allStamps[0]?.stampType, "email")
   assert.equal(response.allStamps[0]?.stampTypeId, 13)
+  assert.equal(
+    response.allStamps[1]?.stampType,
+    "friendr_unique_human_confidence_v1"
+  )
+  assert.equal(response.allStamps[1]?.stampTypeId, 10001)
 })
 
 test("app-scoped helpers validate user ids and summarize disclosed stamps", () => {

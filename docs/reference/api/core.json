@@ -15623,6 +15623,19 @@
               "defaultValue": "17"
             },
             {
+              "name": "friendr_unique_human_confidence_v1",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "type": {
+                "type": "literal",
+                "value": 10001
+              },
+              "defaultValue": "10001"
+            },
+            {
               "name": "gitcoin",
               "variant": "declaration",
               "kind": 1024,

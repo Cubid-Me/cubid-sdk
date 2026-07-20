@@ -301,6 +301,7 @@ export const CUBID_STAMP_TYPE_IDS = {
   facebook: 1,
   farcaster: 68,
   fractal: 17,
+  friendr_unique_human_confidence_v1: 10001,
   github: 2,
   gitcoin: 9,
   gooddollar: 12,

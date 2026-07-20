@@ -31,3 +31,25 @@ Follow-ups:
 - Open a PR from `codex/friendr-public-contract-sdk` into `dev`.
 - Keep FriendR endpoint wrappers out of the public SDK unless a later handoff
   explicitly promotes a stable dapp-facing route.
+
+## 2026-07-20T18:44:49Z — Codex — `codex/friendr-public-contract-sdk` — `ed069e52`
+
+Summary:
+
+- Addressed PR #32 review feedback by adding
+  `friendr_unique_human_confidence_v1` to the core stamp registry with numeric
+  ID `10001`.
+- Extended registry and `fetchStamps` fallback tests so numeric FriendR stamp
+  payloads round-trip to the public stamp type name.
+- Regenerated the core API reference artifact.
+
+Validation:
+
+- `pnpm --filter @cubid/core test`
+- `pnpm docs:api:build`
+- `pnpm docs:api:check`
+- `git diff --check`
+
+Follow-ups:
+
+- Push the review-fix commit, reply to the PR thread, and resolve the thread.
