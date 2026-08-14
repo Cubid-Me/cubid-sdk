@@ -6,8 +6,12 @@ import {
   buildCubidLogoutUrl,
   buildCubidTokenExchangeRequest,
   buildCubidUserInfoRequest,
+  checkCubidIdentityIssuerReadiness,
   clearCubidAuthSession,
   CUBID_AUTH_SESSION_STORAGE_KEY,
+  CUBID_FRIENDR_OIDC_CLAIM_NAMES,
+  CUBID_PRODUCTION_ISSUER,
+  CUBID_STAGING_ISSUER,
   createCubidAuthNonce,
   createCubidAuthSession,
   createCubidAuthState,
@@ -20,7 +24,10 @@ import {
   fetchCubidOidcDiscoveryDocument,
   fetchCubidUserInfo,
   getCubidAuthAssurance,
+  getCubidFriendrOidcClaim,
   hasCubidPasskeyAssurance,
+  isCubidFriendrIdTokenClaim,
+  isCubidFriendrRedirectParameter,
   isCubidAuthSessionExpired,
   isCubidIdTokenExpired,
   loadCubidAuthSession,
@@ -78,6 +85,52 @@ async function createSignedIdToken(payload: Record<string, unknown>) {
       ],
     },
   };
+}
+
+function createDiscoveryDocument(
+  issuer = CUBID_PRODUCTION_ISSUER,
+  overrides: Record<string, unknown> = {}
+) {
+  return {
+    authorization_endpoint: `${issuer}/oauth2/authorize`,
+    code_challenge_methods_supported: ["S256"],
+    issuer,
+    jwks_uri: `${issuer}/.well-known/jwks.json`,
+    response_types_supported: ["code"],
+    subject_types_supported: ["pairwise"],
+    token_endpoint: `${issuer}/oauth2/token`,
+    userinfo_endpoint: `${issuer}/oauth2/userinfo`,
+    ...overrides,
+  };
+}
+
+function createReadinessFetch(
+  discovery: Record<string, unknown>,
+  jwks: Record<string, unknown> = {
+    keys: [{ alg: "RS256", kid: "test-key", kty: "RSA", use: "sig" }],
+  }
+) {
+  return vi.fn(async (input: string | URL | Request) => {
+    const url = String(input);
+    if (url.endsWith("/.well-known/openid-configuration")) {
+      return new Response(JSON.stringify(discovery), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      });
+    }
+
+    if (url.endsWith("/.well-known/jwks.json")) {
+      return new Response(JSON.stringify(jwks), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      });
+    }
+
+    return new Response(JSON.stringify({ error: "unexpected_url", url }), {
+      headers: { "content-type": "application/json" },
+      status: 404,
+    });
+  });
 }
 
 describe("@cubid/auth", () => {
@@ -183,6 +236,46 @@ describe("@cubid/auth", () => {
     });
   });
 
+  it("classifies FriendR claims as UserInfo-only public contract fields", () => {
+    expect([...CUBID_FRIENDR_OIDC_CLAIM_NAMES]).toEqual([
+      "self_account_type_claim_v1",
+      "cubid_kyc_presence_v1",
+      "friendr_unique_human_confidence",
+    ]);
+
+    expect(getCubidFriendrOidcClaim("self_account_type_claim_v1")).toEqual({
+      canonicalName: "cubid_actor_type",
+      claimName: "self_account_type_claim_v1",
+      idTokenEligible: false,
+      redirectParameterEligible: false,
+      scope: "cubid:profile",
+      userInfoEligible: true,
+    });
+
+    expect(getCubidFriendrOidcClaim("friendr_unique_human_confidence")).toEqual({
+      canonicalName: "friendr_unique_human_confidence",
+      claimName: "friendr_unique_human_confidence",
+      idTokenEligible: false,
+      redirectParameterEligible: false,
+      scope: "cubid:stamps",
+      userInfoEligible: true,
+    });
+
+    expect(isCubidFriendrIdTokenClaim("friendr_unique_human_confidence")).toBe(false);
+    expect(isCubidFriendrRedirectParameter("friendr_unique_human_confidence")).toBe(false);
+    expect(getCubidFriendrOidcClaim("friendr_graph_payload")).toBeNull();
+  });
+
+  it("does not promote FriendR callback query fields into parsed OIDC helpers", () => {
+    const parsed = parseCubidAuthorizationCallback(
+      "https://dashboard.clearpass.app/callback?code=oidc-code&state=state-123&friendr_unique_human_confidence=0.99"
+    );
+
+    expect(parsed.kind).toBe("success");
+    expect("friendr_unique_human_confidence" in parsed).toBe(false);
+    expect(parsed.raw.friendr_unique_human_confidence).toEqual(["0.99"]);
+  });
+
   it("rejects malformed callbacks and mismatched state values", () => {
     expect(() => parseCubidAuthorizationCallback("?state=state-123")).toThrow(
       CubidAuthError
@@ -226,6 +319,161 @@ describe("@cubid/auth", () => {
     expect(fetchImpl).toHaveBeenCalledTimes(1);
     expect(discovery.authorization_endpoint).toContain("/oauth2/authorize");
     expect(discovery.token_endpoint_auth_methods_supported).toEqual(["none"]);
+  });
+
+  it("checks production identity issuer readiness from metadata only", async () => {
+    const fetchImpl = createReadinessFetch(createDiscoveryDocument());
+
+    const report = await checkCubidIdentityIssuerReadiness({ fetch: fetchImpl });
+
+    expect(report).toMatchObject({
+      authorizationEndpoint: "https://id.cubid.me/oauth2/authorize",
+      environment: "production",
+      expectedIssuer: CUBID_PRODUCTION_ISSUER,
+      issuer: CUBID_PRODUCTION_ISSUER,
+      jwksKeyCount: 1,
+      jwksUri: "https://id.cubid.me/.well-known/jwks.json",
+      supportsAuthorizationCode: true,
+      supportsPairwiseSubjects: true,
+      supportsPkceS256: true,
+      tokenEndpoint: "https://id.cubid.me/oauth2/token",
+      userInfoEndpoint: "https://id.cubid.me/oauth2/userinfo",
+    });
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+  });
+
+  it("checks staging readiness only when staging is explicitly selected", async () => {
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        environment: "prod" as never,
+        fetch: createReadinessFetch(createDiscoveryDocument(CUBID_STAGING_ISSUER)),
+      })
+    ).rejects.toMatchObject({
+      code: "invalid_environment",
+    });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(createDiscoveryDocument(CUBID_STAGING_ISSUER)),
+        issuer: CUBID_STAGING_ISSUER,
+      })
+    ).rejects.toMatchObject({
+      code: "issuer_environment_mismatch",
+    });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        environment: "staging",
+        fetch: createReadinessFetch(createDiscoveryDocument(CUBID_STAGING_ISSUER)),
+        issuer: CUBID_STAGING_ISSUER,
+      })
+    ).resolves.toMatchObject({
+      environment: "staging",
+      expectedIssuer: CUBID_STAGING_ISSUER,
+      issuer: CUBID_STAGING_ISSUER,
+    });
+  });
+
+  it("fails readiness when discovery advertises the wrong issuer", async () => {
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(
+          createDiscoveryDocument(CUBID_PRODUCTION_ISSUER, {
+            issuer: CUBID_STAGING_ISSUER,
+          })
+        ),
+      })
+    ).rejects.toMatchObject({
+      code: "discovery_issuer_mismatch",
+    });
+  });
+
+  it("fails readiness for missing production metadata capabilities", async () => {
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(
+          createDiscoveryDocument(CUBID_PRODUCTION_ISSUER, {
+            code_challenge_methods_supported: ["plain"],
+          })
+        ),
+      })
+    ).rejects.toMatchObject({ code: "missing_pkce_s256" });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(
+          createDiscoveryDocument(CUBID_PRODUCTION_ISSUER, {
+            response_types_supported: ["id_token"],
+          })
+        ),
+      })
+    ).rejects.toMatchObject({ code: "missing_authorization_code_flow" });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(
+          createDiscoveryDocument(CUBID_PRODUCTION_ISSUER, {
+            subject_types_supported: ["public"],
+          })
+        ),
+      })
+    ).rejects.toMatchObject({ code: "missing_pairwise_subjects" });
+  });
+
+  it("fails readiness for missing or empty JWKS", async () => {
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(
+          createDiscoveryDocument(CUBID_PRODUCTION_ISSUER, {
+            jwks_uri: undefined,
+          })
+        ),
+      })
+    ).rejects.toMatchObject({ code: "missing_jwks_uri" });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(createDiscoveryDocument(), { keys: [] }),
+      })
+    ).rejects.toMatchObject({ code: "empty_jwks" });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(createDiscoveryDocument(), {
+          keys: [
+            {},
+            { alg: "RS256", kty: "RSA", use: "enc" },
+            { alg: "HS256", kty: "oct", use: "sig" },
+            { alg: "ES256", crv: "P-256", key_ops: ["sign"], kty: "EC" },
+          ],
+        }),
+      })
+    ).rejects.toMatchObject({ code: "empty_jwks" });
+
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: createReadinessFetch(createDiscoveryDocument(), {
+          keys: [
+            {},
+            { alg: "RS256", kid: "usable-rsa", kty: "RSA", use: "sig" },
+            { alg: "ES256", crv: "P-256", key_ops: ["verify"], kty: "EC" },
+            { alg: "HS256", kty: "oct", use: "sig" },
+          ],
+        }),
+      })
+    ).resolves.toMatchObject({ jwksKeyCount: 2 });
+  });
+
+  it("fails readiness when discovery cannot be reached", async () => {
+    await expect(
+      checkCubidIdentityIssuerReadiness({
+        fetch: vi.fn(async () => {
+          throw new Error("offline");
+        }),
+      })
+    ).rejects.toMatchObject({
+      code: "discovery_fetch_failed",
+    });
   });
 
   it("builds and exchanges an authorization code token request", async () => {

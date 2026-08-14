@@ -5,11 +5,20 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  brace-expansion@>=5.0.0 <5.0.6: 5.0.6
+  brace-expansion@<1.1.18: 1.1.18
+  brace-expansion@>=2.0.0 <2.1.4: 2.1.4
+  brace-expansion@>=5.0.0 <5.0.9: 5.0.9
   esbuild@>=0.27.3 <0.28.1: 0.28.1
-  js-yaml@4.1.1: 4.2.0
+  fast-uri@>=3.0.0 <3.1.5: 3.1.5
+  js-yaml@>=4.0.0 <4.3.1: 4.3.1
+  linkify-it@>=5.0.0 <5.0.2: 5.0.2
+  lodash@<=4.17.23: 4.18.1
   markdown-it@<=14.1.1: 14.2.0
-  read-yaml-file@1.1.0>js-yaml: 4.2.0
+  nanoid@>=3.0.0 <3.3.18: 3.3.18
+  postcss@>=8.0.0 <8.5.23: 8.5.26
+  read-yaml-file@1.1.0>js-yaml: 4.3.1
+  uuid@<11.1.1: 11.1.1
+  yaml@>=1.0.0 <1.10.3: 1.10.3
   ws@>=8.0.0 <8.21.0: 8.21.0
 
 patchedDependencies:
@@ -64,8 +73,8 @@ importers:
         specifier: ^26.1.0
         version: 26.1.0
       openapi-to-postmanv2:
-        specifier: ^6.1.0
-        version: 6.1.0
+        specifier: ^6.3.0
+        version: 6.3.0
       react:
         specifier: ^19.1.0
         version: 19.2.5
@@ -74,7 +83,7 @@ importers:
         version: 19.2.5(react@19.2.5)
       tsup:
         specifier: ^8.4.0
-        version: 8.5.1(postcss@8.5.15)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.9.0)
+        version: 8.5.1(postcss@8.5.26)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.9.0)
       typedoc:
         specifier: ^0.28.14
         version: 0.28.19(typescript@5.9.3)
@@ -1864,15 +1873,15 @@ packages:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
 
-  brace-expansion@1.1.14:
-    resolution: {integrity: sha512-MWPGfDxnyzKU7rNOW9SP/c50vi3xrmrua/+6hfPbCS2ABNWfx24vPidzvC7krjU/RTo235sV776ymlsMtGKj8g==}
+  brace-expansion@1.1.18:
+    resolution: {integrity: sha512-Edep/X9fGqVNmzKBVsDYIOtD+z1tuezV70LBjdCst9Tqu76lsnvRiZ6oTic1n+/BIwX6QDGAO94PN4N2SADvtw==}
 
-  brace-expansion@2.1.1:
-    resolution: {integrity: sha512-WR1cURNjuvBLMZBMbqM0UoE+WAfdUcEV1ccD8PVBVOI+Z3ND4+SZbN8RsfT2bMuG1qwz5RFvPukSZm5fF2D5eA==}
+  brace-expansion@2.1.4:
+    resolution: {integrity: sha512-hGfVzPxthbf3+2yjg/RBs60cB0FhqBS/zvdV/4wn4/BmN0bNMMHPc4V/BbFieqf1TKAGGAHnY4eSjajCl0f2Xg==}
 
-  brace-expansion@5.0.6:
-    resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
-    engines: {node: 18 || 20 || >=22}
+  brace-expansion@5.0.9:
+    resolution: {integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==}
+    engines: {node: 20 || >=22}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -2185,8 +2194,8 @@ packages:
   fast-safe-stringify@2.1.1:
     resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
 
-  fast-uri@3.1.2:
-    resolution: {integrity: sha512-rVjf7ArG3LTk+FS6Yw81V1DLuZl1bRbNrev6Tmd/9RaroeeRRJhAt7jg/6YFxbvAQXUCavSoZhPPj6oOx+5KjQ==}
+  fast-uri@3.1.5:
+    resolution: {integrity: sha512-gHwA1O9LDIcKunMKhObS/HimwtehO1nPUECKAu5TpKgaO19fcWEl4bliWe1jWxVFvIXztJjjQ4L8XQ1EU9f7Jw==}
 
   fastq@1.20.1:
     resolution: {integrity: sha512-GGToxJ/w1x32s/D2EKND7kTil4n8OVk/9mycTc4VDza13lOvpUZTGX3mFSCtV9ksdGBVzvsyAVLM6mHFThxXxw==}
@@ -2518,12 +2527,8 @@ packages:
   js-tokens@9.0.1:
     resolution: {integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==}
 
-  js-yaml@4.1.0:
-    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
-    hasBin: true
-
-  js-yaml@4.2.0:
-    resolution: {integrity: sha512-ePWsvanv0DWuDRsW8dnt+R4jQ31SCRCQ7hhNcPXZPsoBZiemuZNYGf7adZdqX2D86j6rvKp3RpCxVTSb8WQlOw==}
+  js-yaml@4.3.1:
+    resolution: {integrity: sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==}
     hasBin: true
 
   jsdom@26.1.0:
@@ -2654,8 +2659,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  linkify-it@5.0.1:
-    resolution: {integrity: sha512-wVoTjP4Q6R0NW5hiZkVJaFZPWgtXfoGF+6LucL3/FtiNjmcHhYjEr5f1Kqjirc1nBW07J/ZuRFumqr2oqccEWg==}
+  linkify-it@5.0.2:
+    resolution: {integrity: sha512-ONTm2jCMAVZjgQa/Fy1kScXsuOoF5NPTsoFBdE1KVIZ2vAh/r9+Bqo+0jINCBYnavTPQZz38QzFTme79ENoN3Q==}
 
   liquid-json@0.3.1:
     resolution: {integrity: sha512-wUayTU8MS827Dam6MxgD72Ui+KOSF+u/eIqpatOtjnvgJ0+mnDq33uC2M7J0tPK+upe/DpUAuK4JUU89iBoNKQ==}
@@ -2679,11 +2684,8 @@ packages:
   lodash.startcase@4.4.0:
     resolution: {integrity: sha512-+WKqsK294HMSc2jEbNgpHpd0JfIBhp7rEV4aqXWqFr6AlXov+SlcgB1Fv01y2kGe3Gc8nMW7VA0SrGuSkRfIEg==}
 
-  lodash@4.17.21:
-    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-
-  lodash@4.17.23:
-    resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
   longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}
@@ -2903,8 +2905,8 @@ packages:
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
-  nanoid@3.3.12:
-    resolution: {integrity: sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==}
+  nanoid@3.3.18:
+    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -2970,8 +2972,8 @@ packages:
     resolution: {integrity: sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==}
     engines: {node: '>= 6'}
 
-  openapi-to-postmanv2@6.1.0:
-    resolution: {integrity: sha512-qJ/SYQT0+oNxuOgd492cocXTNPowIgXV2EhifOUzlLt5STKWW3LSoddDqZUhSK9JsMLmdU3D7xbX/xRFqtho2w==}
+  openapi-to-postmanv2@6.3.0:
+    resolution: {integrity: sha512-Gx047TkS+GlAVzNlUIz2Kfgk9GquxAvO2P2uQgF/qRPkaF0SGQZ9fVlev3xKaboweXZly1QSnhJOo+yNEFnM6A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3099,7 +3101,7 @@ packages:
     engines: {node: '>= 18'}
     peerDependencies:
       jiti: '>=1.21.0'
-      postcss: '>=8.0.9'
+      postcss: 8.5.26
       tsx: ^4.8.1
       yaml: ^2.4.2
     peerDependenciesMeta:
@@ -3112,8 +3114,8 @@ packages:
       yaml:
         optional: true
 
-  postcss@8.5.15:
-    resolution: {integrity: sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==}
+  postcss@8.5.26:
+    resolution: {integrity: sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==}
     engines: {node: ^10 || ^12 || >=14}
 
   postman-collection@5.3.0:
@@ -3532,7 +3534,7 @@ packages:
     peerDependencies:
       '@microsoft/api-extractor': ^7.36.0
       '@swc/core': ^1
-      postcss: ^8.4.12
+      postcss: 8.5.26
       typescript: '>=4.5.0'
     peerDependenciesMeta:
       '@microsoft/api-extractor':
@@ -3630,9 +3632,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+  uuid@11.1.1:
+    resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
     hasBin: true
 
   validate.io-array@1.0.6:
@@ -3900,8 +3901,8 @@ packages:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
     engines: {node: '>=10'}
 
-  yaml@1.10.2:
-    resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
+  yaml@1.10.3:
+    resolution: {integrity: sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA==}
     engines: {node: '>= 6'}
 
   yaml@2.8.4:
@@ -4127,7 +4128,7 @@ snapshots:
   '@changesets/parse@0.4.3':
     dependencies:
       '@changesets/types': 6.1.0
-      js-yaml: 4.2.0
+      js-yaml: 4.3.1
 
   '@changesets/pre@2.0.2':
     dependencies:
@@ -4401,7 +4402,7 @@ snapshots:
       globals: 14.0.0
       ignore: 5.3.2
       import-fresh: 3.3.1
-      js-yaml: 4.2.0
+      js-yaml: 4.3.1
       minimatch: 3.1.5
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
@@ -5352,7 +5353,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.58.2
       debug: 4.4.3
       minimatch: 10.2.5
-      semver: 7.7.4
+      semver: 7.8.4
       tinyglobby: 0.2.16
       ts-api-utils: 2.5.0(typescript@5.9.3)
       typescript: 5.9.3
@@ -5468,7 +5469,7 @@ snapshots:
       '@vue/shared': 3.5.39
       estree-walker: 2.0.2
       magic-string: 0.30.21
-      postcss: 8.5.15
+      postcss: 8.5.26
       source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.5.39':
@@ -5602,7 +5603,7 @@ snapshots:
   ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.2
+      fast-uri: 3.1.5
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -5654,16 +5655,16 @@ snapshots:
     dependencies:
       is-windows: 1.0.2
 
-  brace-expansion@1.1.14:
+  brace-expansion@1.1.18:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@2.1.1:
+  brace-expansion@2.1.4:
     dependencies:
       balanced-match: 1.0.2
 
-  brace-expansion@5.0.6:
+  brace-expansion@5.0.9:
     dependencies:
       balanced-match: 4.0.4
 
@@ -5970,7 +5971,7 @@ snapshots:
 
   fast-safe-stringify@2.1.1: {}
 
-  fast-uri@3.1.2: {}
+  fast-uri@3.1.5: {}
 
   fastq@1.20.1:
     dependencies:
@@ -6086,7 +6087,7 @@ snapshots:
 
   graphlib@2.1.8:
     dependencies:
-      lodash: 4.17.21
+      lodash: 4.18.1
 
   guess-json-indent@3.0.1: {}
 
@@ -6355,11 +6356,7 @@ snapshots:
 
   js-tokens@9.0.1: {}
 
-  js-yaml@4.1.0:
-    dependencies:
-      argparse: 2.0.1
-
-  js-yaml@4.2.0:
+  js-yaml@4.3.1:
     dependencies:
       argparse: 2.0.1
 
@@ -6398,13 +6395,13 @@ snapshots:
 
   json-schema-compare@0.2.2:
     dependencies:
-      lodash: 4.17.21
+      lodash: 4.18.1
 
   json-schema-merge-allof@0.8.1:
     dependencies:
       compute-lcm: 1.1.2
       json-schema-compare: 0.2.2
-      lodash: 4.17.21
+      lodash: 4.18.1
 
   json-schema-traverse@0.4.1: {}
 
@@ -6482,7 +6479,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  linkify-it@5.0.1:
+  linkify-it@5.0.2:
     dependencies:
       uc.micro: 2.1.0
 
@@ -6502,9 +6499,7 @@ snapshots:
 
   lodash.startcase@4.4.0: {}
 
-  lodash@4.17.21: {}
-
-  lodash@4.17.23: {}
+  lodash@4.18.1: {}
 
   longest-streak@3.1.0: {}
 
@@ -6546,7 +6541,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
       entities: 4.5.0
-      linkify-it: 5.0.1
+      linkify-it: 5.0.2
       mdurl: 2.0.0
       punycode.js: 2.3.1
       uc.micro: 2.1.0
@@ -6877,15 +6872,15 @@ snapshots:
 
   minimatch@10.2.5:
     dependencies:
-      brace-expansion: 5.0.6
+      brace-expansion: 5.0.9
 
   minimatch@3.1.5:
     dependencies:
-      brace-expansion: 1.1.14
+      brace-expansion: 1.1.18
 
   minimatch@9.0.9:
     dependencies:
-      brace-expansion: 2.1.1
+      brace-expansion: 2.1.4
 
   minipass@7.1.3: {}
 
@@ -6910,7 +6905,7 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  nanoid@3.3.12: {}
+  nanoid@3.3.18: {}
 
   nanoid@5.1.16: {}
 
@@ -6942,7 +6937,7 @@ snapshots:
     dependencies:
       '@exodus/schemasafe': 1.3.0
       should: 13.2.3
-      yaml: 1.10.2
+      yaml: 1.10.3
 
   oas-resolver-browser@2.5.6:
     dependencies:
@@ -6950,7 +6945,7 @@ snapshots:
       oas-kit-common: 1.0.8
       path-browserify: 1.0.1
       reftools: 1.1.9
-      yaml: 1.10.2
+      yaml: 1.10.3
       yargs: 17.7.3
 
   oas-resolver@2.5.6:
@@ -6958,7 +6953,7 @@ snapshots:
       node-fetch-h2: 2.3.0
       oas-kit-common: 1.0.8
       reftools: 1.1.9
-      yaml: 1.10.2
+      yaml: 1.10.3
       yargs: 17.7.3
 
   oas-schema-walker@1.1.5: {}
@@ -6972,13 +6967,13 @@ snapshots:
       oas-schema-walker: 1.1.5
       reftools: 1.1.9
       should: 13.2.3
-      yaml: 1.10.2
+      yaml: 1.10.3
 
   object-assign@4.1.1: {}
 
   object-hash@3.0.0: {}
 
-  openapi-to-postmanv2@6.1.0:
+  openapi-to-postmanv2@6.3.0:
     dependencies:
       ajv: 8.20.0
       ajv-draft-04: 1.0.0(ajv@8.20.0)
@@ -6986,10 +6981,10 @@ snapshots:
       async: 3.2.6
       commander: 2.20.3
       graphlib: 2.1.8
-      js-yaml: 4.1.0
+      js-yaml: 4.3.1
       json-pointer: 0.6.2
       json-schema-merge-allof: 0.8.1
-      lodash: 4.17.21
+      lodash: 4.18.1
       neotraverse: 0.6.15
       oas-resolver-browser: 2.5.6
       object-hash: 3.0.0
@@ -6997,7 +6992,7 @@ snapshots:
       path-browserify: 1.0.1
       postman-collection: 5.3.0
       swagger2openapi: 7.0.8
-      yaml: 1.10.2
+      yaml: 1.10.3
     transitivePeerDependencies:
       - encoding
 
@@ -7108,17 +7103,17 @@ snapshots:
       mlly: 1.8.2
       pathe: 2.0.3
 
-  postcss-load-config@6.0.1(postcss@8.5.15)(tsx@4.21.0)(yaml@2.9.0):
+  postcss-load-config@6.0.1(postcss@8.5.26)(tsx@4.21.0)(yaml@2.9.0):
     dependencies:
       lilconfig: 3.1.3
     optionalDependencies:
-      postcss: 8.5.15
+      postcss: 8.5.26
       tsx: 4.21.0
       yaml: 2.9.0
 
-  postcss@8.5.15:
+  postcss@8.5.26:
     dependencies:
-      nanoid: 3.3.12
+      nanoid: 3.3.18
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -7129,12 +7124,12 @@ snapshots:
       http-reasons: 0.1.0
       iconv-lite: 0.6.3
       liquid-json: 0.3.1
-      lodash: 4.17.23
+      lodash: 4.18.1
       mime: 3.0.0
       mime-format: 2.0.2
       postman-url-encoder: 3.0.8
       semver: 7.7.1
-      uuid: 8.3.2
+      uuid: 11.1.1
 
   postman-url-encoder@3.0.8:
     dependencies:
@@ -7193,7 +7188,7 @@ snapshots:
   read-yaml-file@1.1.0(patch_hash=dfad97f98daa8050a181bdc6137ea4435307e2c4ba5bb54e22920d5a1ef2abfe):
     dependencies:
       graceful-fs: 4.2.11
-      js-yaml: 4.2.0
+      js-yaml: 4.3.1
       pify: 4.0.1
       strip-bom: 3.0.0
 
@@ -7522,7 +7517,7 @@ snapshots:
       oas-schema-walker: 1.1.5
       oas-validator: 5.0.8
       reftools: 1.1.9
-      yaml: 1.10.2
+      yaml: 1.10.3
       yargs: 17.7.3
     transitivePeerDependencies:
       - encoding
@@ -7621,7 +7616,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  tsup@8.5.1(postcss@8.5.15)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.9.0):
+  tsup@8.5.1(postcss@8.5.26)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.9.0):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.28.1)
       cac: 6.7.14
@@ -7632,7 +7627,7 @@ snapshots:
       fix-dts-default-cjs-exports: 1.0.1
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(postcss@8.5.15)(tsx@4.21.0)(yaml@2.9.0)
+      postcss-load-config: 6.0.1(postcss@8.5.26)(tsx@4.21.0)(yaml@2.9.0)
       resolve-from: 5.0.0
       rollup: 4.60.1
       source-map: 0.7.6
@@ -7641,7 +7636,7 @@ snapshots:
       tinyglobby: 0.2.16
       tree-kill: 1.2.2
     optionalDependencies:
-      postcss: 8.5.15
+      postcss: 8.5.26
       typescript: 5.9.3
     transitivePeerDependencies:
       - jiti
@@ -7749,7 +7744,7 @@ snapshots:
     dependencies:
       react: 19.2.5
 
-  uuid@8.3.2: {}
+  uuid@11.1.1: {}
 
   validate.io-array@1.0.6: {}
 
@@ -7824,7 +7819,7 @@ snapshots:
       esbuild: 0.28.1
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
-      postcss: 8.5.15
+      postcss: 8.5.26
       rollup: 4.61.1
       tinyglobby: 0.2.17
     optionalDependencies:
@@ -7838,7 +7833,7 @@ snapshots:
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
-      postcss: 8.5.15
+      postcss: 8.5.26
       rolldown: 1.1.3
       tinyglobby: 0.2.17
     optionalDependencies:
@@ -7993,7 +7988,7 @@ snapshots:
 
   y18n@5.0.8: {}
 
-  yaml@1.10.2: {}
+  yaml@1.10.3: {}
 
   yaml@2.8.4: {}
 

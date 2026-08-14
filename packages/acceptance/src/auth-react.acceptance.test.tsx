@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -53,5 +53,43 @@ describe("@cubid/acceptance auth-react consumer flow", () => {
     const launchedUrl = String(navigate.mock.calls[0]?.[0] ?? "");
     expect(launchedUrl).toContain("client_id=clearpass-dashboard");
     expect(launchedUrl).toContain("code_challenge_method=S256");
+  });
+
+  it("uses explicit staging configuration from the public React entrypoint", async () => {
+    const storage = new MemoryStorage();
+    const navigate = vi.fn();
+    const user = userEvent.setup();
+
+    const view = render(
+      <CubidAuthProvider
+        clientId="clearpass-dashboard-staging"
+        discoveryDocument={{
+          authorization_endpoint: "https://staging-id.cubid.me/oauth2/authorize",
+          issuer: "https://staging-id.cubid.me",
+          token_endpoint: "https://staging-id.cubid.me/oauth2/token",
+        }}
+        issuer="https://staging-id.cubid.me"
+        redirectUri="https://preview.clearpass.app/auth/callback"
+        storage={storage}
+      >
+        <CubidSignInButton
+          onLaunched={navigate}
+          signInOptions={{ nonce: "nonce-123", performRedirect: false }}
+        />
+      </CubidAuthProvider>
+    );
+
+    await user.click(
+      within(view.container).getByRole("button", { name: "Sign in with Cubid" })
+    );
+
+    const launchedUrl = new URL(String(navigate.mock.calls[0]?.[0] ?? ""));
+    expect(launchedUrl.origin).toBe("https://staging-id.cubid.me");
+    expect(launchedUrl.searchParams.get("client_id")).toBe(
+      "clearpass-dashboard-staging"
+    );
+    expect(launchedUrl.searchParams.get("redirect_uri")).toBe(
+      "https://preview.clearpass.app/auth/callback"
+    );
   });
 });

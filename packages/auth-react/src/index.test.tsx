@@ -271,6 +271,175 @@ describe("@cubid/auth-react", () => {
     expect(storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY)).toBeTruthy();
   });
 
+  it("uses discovered endpoints while preserving exact production issuer validation", async () => {
+    const createStorage = () => {
+      const storage = new MemoryStorage();
+      storage.setItem(
+        CUBID_AUTH_TRANSACTION_STORAGE_KEY,
+        JSON.stringify({
+          clientId: "clearpass-dashboard",
+          codeVerifier: "verifier-123",
+          issuer: "https://id.cubid.me",
+          nonce: "nonce-123",
+          redirectUri: "https://dashboard.clearpass.app/auth/callback",
+          scope: ["openid", "email", "profile"],
+          state: "state-123",
+        })
+      );
+      return storage;
+    };
+    const validToken = await createSignedIdToken({
+      aud: "clearpass-dashboard",
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iss: "https://id.cubid.me",
+      nonce: "nonce-123",
+      sub: "pairwise-user-123",
+    });
+    const stagingToken = await createSignedIdToken({
+      aud: "clearpass-dashboard",
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iss: "https://staging-id.cubid.me",
+      nonce: "nonce-123",
+      sub: "pairwise-user-123",
+    });
+    const discoveryDocument = {
+      authorization_endpoint: "https://identity-edge.cubid.me/oauth2/authorize",
+      issuer: "https://id.cubid.me",
+      jwks_uri: "https://keys.cubid.me/production/jwks.json",
+      token_endpoint: "https://identity-edge.cubid.me/oauth2/token",
+      token_endpoint_auth_methods_supported: ["none"],
+      userinfo_endpoint: "https://profile.cubid.me/oauth2/userinfo",
+    };
+
+    const validFetch = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+
+      if (url === "https://identity-edge.cubid.me/oauth2/token") {
+        return new Response(
+          JSON.stringify({
+            access_token: "access-token-123",
+            expires_in: 3600,
+            id_token: validToken.idToken,
+            scope: "openid email profile",
+            token_type: "Bearer",
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      if (url === "https://keys.cubid.me/production/jwks.json") {
+        return new Response(JSON.stringify(validToken.jwks), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        });
+      }
+
+      if (url === "https://profile.cubid.me/oauth2/userinfo") {
+        return new Response(
+          JSON.stringify({
+            email: "developer@clearpass.app",
+            sub: "pairwise-user-123",
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      return new Response(JSON.stringify({ error: "unexpected_url", url }), {
+        headers: { "content-type": "application/json" },
+        status: 404,
+      });
+    });
+
+    const validView = render(
+      <CubidAuthProvider
+        clientId="clearpass-dashboard"
+        discoveryDocument={discoveryDocument}
+        fetch={validFetch}
+        issuer="https://id.cubid.me"
+        redirectUri="https://dashboard.clearpass.app/auth/callback"
+        storage={createStorage()}
+      >
+        <CubidAuthCallback callbackUrl="https://dashboard.clearpass.app/auth/callback?code=oidc-code&state=state-123" />
+        <SessionViewer />
+      </CubidAuthProvider>
+    );
+
+    await waitFor(() => {
+      expect(within(validView.container).getByTestId("status").textContent).toBe(
+        "authenticated"
+      );
+    });
+    expect(validFetch).toHaveBeenCalledWith(
+      "https://identity-edge.cubid.me/oauth2/token",
+      expect.any(Object)
+    );
+    expect(validFetch).toHaveBeenCalledWith(
+      "https://keys.cubid.me/production/jwks.json",
+      expect.any(Object)
+    );
+    expect(validFetch).toHaveBeenCalledWith(
+      "https://profile.cubid.me/oauth2/userinfo",
+      expect.any(Object)
+    );
+
+    const onError = vi.fn();
+    const mismatchFetch = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+
+      if (url === "https://identity-edge.cubid.me/oauth2/token") {
+        return new Response(
+          JSON.stringify({
+            access_token: "access-token-123",
+            expires_in: 3600,
+            id_token: stagingToken.idToken,
+            scope: "openid email profile",
+            token_type: "Bearer",
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      return new Response(JSON.stringify(stagingToken.jwks), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      });
+    });
+
+    render(
+      <CubidAuthProvider
+        autoUserInfo={false}
+        clientId="clearpass-dashboard"
+        discoveryDocument={discoveryDocument}
+        fetch={mismatchFetch}
+        issuer="https://id.cubid.me"
+        redirectUri="https://dashboard.clearpass.app/auth/callback"
+        storage={createStorage()}
+      >
+        <CubidAuthCallback
+          callbackUrl="https://dashboard.clearpass.app/auth/callback?code=oidc-code&state=state-123"
+          onError={onError}
+        />
+      </CubidAuthProvider>
+    );
+
+    await waitFor(() => {
+      expect(onError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code: "invalid_issuer",
+        })
+      );
+    });
+  });
+
   it("handles the authorization callback only once under React StrictMode", async () => {
     const storage = new MemoryStorage();
     const { idToken, jwks } = await createSignedIdToken({

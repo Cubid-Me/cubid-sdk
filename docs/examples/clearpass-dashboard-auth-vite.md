@@ -26,7 +26,9 @@ VITE_CUBID_POST_LOGOUT_REDIRECT_URI=http://localhost:5173/
 Production should use the stable Identity issuer `https://id.cubid.me` and the
 real hosted callback/logout URLs registered for the relying party. Staging or
 Preview integrations may use `https://staging-id.cubid.me` only when their
-client registration is scoped to that environment.
+client registration is scoped to that environment. Do not treat staging as an
+implicit fallback for production; issuer validation is exact and callback/logout
+URLs must match the selected environment's relying-party registration.
 
 ## `src/main.tsx`
 
@@ -139,7 +141,11 @@ ClearPass server or edge routes still need to:
   it as a raw Cubid internal user id.
 - Keep staging and production callback/logout URLs aligned with the relying
   party registered for the Identity issuer.
-- Use OIDC discovery from the configured issuer. Do not call Passport, Verify,
-  Admin, or internal OIDC interaction routes directly from the dashboard.
+- Use OIDC discovery from the configured issuer and let discovery choose the
+  authorization, token, UserInfo, JWKS, and logout endpoint paths. Do not call
+  Passport, Verify, Admin, or internal OIDC interaction routes directly from the
+  dashboard.
+- `https://login.cubid.me` is a compatibility UI host during cutover, not the
+  issuer value for new SDK integrations.
 - If ClearPass later wants a backend-assisted token or cookie exchange, document
   which values remain public browser config and which values stay server-only.
