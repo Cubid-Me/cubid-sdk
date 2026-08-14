@@ -1,6 +1,6 @@
 {
   "name": "@cubid/evm",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "EVM-oriented Cubid wallet helpers built on top of @cubid/core.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
@@ -13,7 +13,11 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
