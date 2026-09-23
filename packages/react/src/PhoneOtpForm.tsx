@@ -7,11 +7,12 @@ import type {
   StampPersistenceRequest
 } from "@cubid/browser";
 
-import { useOptionalCubidWeb2Client } from "./context";
+import { useCubidLook, useOptionalCubidWeb2Client } from "./context";
+import type { CubidLook } from "./theme";
 
 type PhoneOtpStartResult = Awaited<ReturnType<CubidWeb2Client["phone"]["startOtp"]>>;
 
-export interface PhoneOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">, "onSubmit"> {
+export interface PhoneOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">, "onSubmit">, CubidLook {
   client?: CubidWeb2Client;
   defaultPhone?: string;
   onError?: (error: unknown) => void;
@@ -21,16 +22,21 @@ export interface PhoneOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">
 }
 
 export function PhoneOtpForm({
+  classNames,
   client,
   defaultPhone = "",
+  labels: ownLabels,
   onError,
   onStarted,
   onVerified,
   persistStamp,
+  styles: ownStyles,
+  theme,
   ...formProps
 }: PhoneOtpFormProps) {
   const contextualClient = useOptionalCubidWeb2Client();
   const resolvedClient = client ?? contextualClient ?? undefined;
+  const { labels, slot } = useCubidLook({ classNames, labels: ownLabels, styles: ownStyles, theme });
   const phoneId = useId();
   const otpId = useId();
   const [phone, setPhone] = useState(defaultPhone);
@@ -55,7 +61,7 @@ export function PhoneOtpForm({
         });
 
         startTransition(() => {
-          setStatus(result.status ? "Code sent. Enter the OTP to finish verification." : "Unable to send code.");
+          setStatus(result.status ? labels.codeSent : labels.codeNotSent);
           setStep("verify");
         });
       } else if (step === "verify") {
@@ -67,13 +73,13 @@ export function PhoneOtpForm({
         });
 
         startTransition(() => {
-          setStatus(result.isVerified ? "Phone verified." : "Verification failed. Try again.");
+          setStatus(result.isVerified ? `${labels.phoneVerified}.` : labels.codeWrong);
           setStep(result.isVerified ? "verified" : "verify");
         });
       }
     } catch (error) {
       startTransition(() => {
-        setStatus("Something went wrong while processing the phone flow.");
+        setStatus(labels.phoneFailed);
       });
       onError?.(error);
     } finally {
@@ -81,21 +87,36 @@ export function PhoneOtpForm({
     }
   }
 
+  const container = slot("container");
+
   return (
-    <form {...formProps} onSubmit={handleSubmit}>
-      <label htmlFor={phoneId}>Phone</label>
-      <input
-        autoComplete="tel"
-        disabled={isBusy || step === "verified"}
-        id={phoneId}
-        onChange={(event) => setPhone(event.target.value)}
-        type="tel"
-        value={phone}
-      />
+    <form
+      {...formProps}
+      className={[container.className, formProps.className].filter(Boolean).join(" ") || undefined}
+      onSubmit={handleSubmit}
+      style={{ ...container.style, ...formProps.style }}
+    >
+      <div {...slot("field")}>
+        <label {...slot("label")} htmlFor={phoneId}>
+          {labels.phone}
+        </label>
+        <input
+          {...slot("input")}
+          autoComplete="tel"
+          disabled={isBusy || step === "verified"}
+          id={phoneId}
+          onChange={(event) => setPhone(event.target.value)}
+          type="tel"
+          value={phone}
+        />
+      </div>
       {step !== "collect" ? (
-        <>
-          <label htmlFor={otpId}>OTP</label>
+        <div {...slot("field")}>
+          <label {...slot("label")} htmlFor={otpId}>
+            {labels.code}
+          </label>
           <input
+            {...slot("input")}
             autoComplete="one-time-code"
             disabled={isBusy || step === "verified"}
             id={otpId}
@@ -103,14 +124,15 @@ export function PhoneOtpForm({
             onChange={(event) => setOtp(event.target.value)}
             value={otp}
           />
-        </>
+        </div>
       ) : null}
-      <div>
-        <button disabled={isBusy} type="submit">
-          {step === "collect" ? "Send phone code" : step === "verify" ? "Verify phone code" : "Phone verified"}
+      <div {...slot("actions")}>
+        <button {...slot("button")} disabled={isBusy} type="submit">
+          {step === "collect" ? labels.sendPhoneCode : step === "verify" ? labels.verifyPhoneCode : labels.phoneVerified}
         </button>
         {step !== "collect" ? (
           <button
+            {...slot("buttonSecondary")}
             disabled={isBusy}
             onClick={() => {
               startTransition(() => {
@@ -121,11 +143,13 @@ export function PhoneOtpForm({
             }}
             type="button"
           >
-            Reset
+            {labels.reset}
           </button>
         ) : null}
       </div>
-      <p aria-live="polite">{status}</p>
+      <p {...slot("status")} aria-live="polite">
+        {status}
+      </p>
     </form>
   );
 }

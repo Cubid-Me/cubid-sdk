@@ -7,11 +7,12 @@ import type {
   StampPersistenceRequest
 } from "@cubid/browser";
 
-import { useOptionalCubidWeb2Client } from "./context";
+import { useCubidLook, useOptionalCubidWeb2Client } from "./context";
+import type { CubidLook } from "./theme";
 
 type EmailOtpStartResult = Awaited<ReturnType<CubidWeb2Client["email"]["startOtp"]>>;
 
-export interface EmailOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">, "onSubmit"> {
+export interface EmailOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">, "onSubmit">, CubidLook {
   client?: CubidWeb2Client;
   defaultEmail?: string;
   onError?: (error: unknown) => void;
@@ -21,16 +22,21 @@ export interface EmailOtpFormProps extends Omit<ComponentPropsWithoutRef<"form">
 }
 
 export function EmailOtpForm({
+  classNames,
   client,
   defaultEmail = "",
+  labels: ownLabels,
   onError,
   onStarted,
   onVerified,
   persistStamp,
+  styles: ownStyles,
+  theme,
   ...formProps
 }: EmailOtpFormProps) {
   const contextualClient = useOptionalCubidWeb2Client();
   const resolvedClient = client ?? contextualClient ?? undefined;
+  const { labels, slot } = useCubidLook({ classNames, labels: ownLabels, styles: ownStyles, theme });
   const emailId = useId();
   const otpId = useId();
   const [email, setEmail] = useState(defaultEmail);
@@ -55,7 +61,7 @@ export function EmailOtpForm({
         });
 
         startTransition(() => {
-          setStatus(result.sent ? "Code sent. Enter the OTP to finish verification." : "Unable to send code.");
+          setStatus(result.sent ? labels.codeSent : labels.codeNotSent);
           setStep(result.sent ? "verify" : "collect");
         });
       } else if (step === "verify") {
@@ -67,13 +73,13 @@ export function EmailOtpForm({
         });
 
         startTransition(() => {
-          setStatus(result.isVerified ? "Email verified." : "Verification failed. Try again.");
+          setStatus(result.isVerified ? `${labels.emailVerified}.` : labels.codeWrong);
           setStep(result.isVerified ? "verified" : "verify");
         });
       }
     } catch (error) {
       startTransition(() => {
-        setStatus("Something went wrong while processing the email flow.");
+        setStatus(labels.emailFailed);
       });
       onError?.(error);
     } finally {
@@ -81,21 +87,37 @@ export function EmailOtpForm({
     }
   }
 
+  // The form element carries the container slot; the caller's own className and style come after it.
+  const container = slot("container");
+
   return (
-    <form {...formProps} onSubmit={handleSubmit}>
-      <label htmlFor={emailId}>Email</label>
-      <input
-        autoComplete="email"
-        disabled={isBusy || step === "verified"}
-        id={emailId}
-        onChange={(event) => setEmail(event.target.value)}
-        type="email"
-        value={email}
-      />
+    <form
+      {...formProps}
+      className={[container.className, formProps.className].filter(Boolean).join(" ") || undefined}
+      onSubmit={handleSubmit}
+      style={{ ...container.style, ...formProps.style }}
+    >
+      <div {...slot("field")}>
+        <label {...slot("label")} htmlFor={emailId}>
+          {labels.email}
+        </label>
+        <input
+          {...slot("input")}
+          autoComplete="email"
+          disabled={isBusy || step === "verified"}
+          id={emailId}
+          onChange={(event) => setEmail(event.target.value)}
+          type="email"
+          value={email}
+        />
+      </div>
       {step !== "collect" ? (
-        <>
-          <label htmlFor={otpId}>OTP</label>
+        <div {...slot("field")}>
+          <label {...slot("label")} htmlFor={otpId}>
+            {labels.code}
+          </label>
           <input
+            {...slot("input")}
             autoComplete="one-time-code"
             disabled={isBusy || step === "verified"}
             id={otpId}
@@ -103,14 +125,15 @@ export function EmailOtpForm({
             onChange={(event) => setOtp(event.target.value)}
             value={otp}
           />
-        </>
+        </div>
       ) : null}
-      <div>
-        <button disabled={isBusy} type="submit">
-          {step === "collect" ? "Send email code" : step === "verify" ? "Verify email code" : "Email verified"}
+      <div {...slot("actions")}>
+        <button {...slot("button")} disabled={isBusy} type="submit">
+          {step === "collect" ? labels.sendEmailCode : step === "verify" ? labels.verifyEmailCode : labels.emailVerified}
         </button>
         {step !== "collect" ? (
           <button
+            {...slot("buttonSecondary")}
             disabled={isBusy}
             onClick={() => {
               startTransition(() => {
@@ -121,11 +144,13 @@ export function EmailOtpForm({
             }}
             type="button"
           >
-            Reset
+            {labels.reset}
           </button>
         ) : null}
       </div>
-      <p aria-live="polite">{status}</p>
+      <p {...slot("status")} aria-live="polite">
+        {status}
+      </p>
     </form>
   );
 }

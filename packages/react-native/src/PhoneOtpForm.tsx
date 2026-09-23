@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { View } from "react-native";
-import type { StyleProp, ViewStyle } from "react-native";
 
 import type { CubidWeb2Client, PhoneOtpVerifyResult, StampPersistenceRequest } from "@cubid/browser";
 
 import { useOptionalCubidClient } from "./context";
-import { Action, Field, Status, styles } from "./primitives";
+import { Action, Field, Status } from "./primitives";
+import { useCubidLook } from "./theme";
+import type { CubidLook } from "./theme";
 
 type PhoneOtpStartResult = Awaited<ReturnType<CubidWeb2Client["phone"]["startOtp"]>>;
 
-export interface PhoneOtpFormProps {
+export interface PhoneOtpFormProps extends CubidLook {
   client?: CubidWeb2Client;
   defaultPhone?: string;
   onError?: (error: unknown) => void;
@@ -17,13 +18,13 @@ export interface PhoneOtpFormProps {
   onVerified?: (result: PhoneOtpVerifyResult) => Promise<void> | void;
   /** Persist the verified phone as a stamp on the account, so the next sign-in carries it. */
   persistStamp?: StampPersistenceRequest;
-  style?: StyleProp<ViewStyle>;
 }
 
 /** Number, one-time code, verified — with native views. */
-export function PhoneOtpForm({ client, defaultPhone = "", onError, onStarted, onVerified, persistStamp, style }: PhoneOtpFormProps) {
+export function PhoneOtpForm({ client, defaultPhone = "", labels: ownLabels, onError, onStarted, onVerified, persistStamp, styles: ownStyles, theme }: PhoneOtpFormProps) {
   const contextualClient = useOptionalCubidClient();
   const resolvedClient = client ?? contextualClient ?? undefined;
+  const { labels, styles: look } = useCubidLook({ labels: ownLabels, styles: ownStyles, theme });
   const [phone, setPhone] = useState(defaultPhone);
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"collect" | "verified" | "verify">("collect");
@@ -40,15 +41,15 @@ export function PhoneOtpForm({ client, defaultPhone = "", onError, onStarted, on
 
       if (step === "collect") {
         const result = await resolvedClient.phone.startOtp({ onStarted, phone: phone.trim() });
-        setStatus(result.status ?? "Code sent. Enter it to finish.");
+        setStatus(result.status ?? labels.codeSent);
         setStep("verify");
       } else if (step === "verify") {
         const result = await resolvedClient.phone.verifyOtp({ onVerified, otp: otp.trim(), persistStamp, phone: phone.trim() });
-        setStatus(result.isVerified ? "Phone verified." : "That code did not match. Try again.");
+        setStatus(result.isVerified ? `${labels.phoneVerified}.` : labels.codeWrong);
         setStep(result.isVerified ? "verified" : "verify");
       }
     } catch (error) {
-      setStatus("Something went wrong with the phone step.");
+      setStatus(labels.phoneFailed);
       onError?.(error);
     } finally {
       setIsBusy(false);
@@ -56,12 +57,13 @@ export function PhoneOtpForm({ client, defaultPhone = "", onError, onStarted, on
   }
 
   return (
-    <View style={[styles.stack, style]}>
+    <View style={look.container}>
       <Field
         autoComplete="tel"
         editable={!isBusy && step !== "verified"}
         keyboardType="phone-pad"
-        label="Phone"
+        label={labels.phone}
+        look={look}
         onChangeText={setPhone}
         textContentType="telephoneNumber"
         value={phone}
@@ -71,22 +73,25 @@ export function PhoneOtpForm({ client, defaultPhone = "", onError, onStarted, on
           autoComplete="one-time-code"
           editable={!isBusy && step !== "verified"}
           keyboardType="number-pad"
-          label="Code"
+          label={labels.code}
+          look={look}
           onChangeText={setOtp}
           textContentType="oneTimeCode"
           value={otp}
         />
       ) : null}
-      <View style={styles.row}>
+      <View style={look.actions}>
         <Action
           disabled={isBusy || step === "verified" || !phone.trim() || (step === "verify" && !otp.trim())}
-          label={step === "collect" ? "Send phone code" : step === "verify" ? "Verify phone code" : "Phone verified"}
+          label={step === "collect" ? labels.sendPhoneCode : step === "verify" ? labels.verifyPhoneCode : labels.phoneVerified}
+          look={look}
           onPress={() => void submit()}
         />
         {step === "verify" ? (
           <Action
             disabled={isBusy}
-            label="Start over"
+            label={labels.startOver}
+            look={look}
             onPress={() => {
               setOtp("");
               setStatus(undefined);
@@ -96,7 +101,7 @@ export function PhoneOtpForm({ client, defaultPhone = "", onError, onStarted, on
           />
         ) : null}
       </View>
-      <Status>{status}</Status>
+      <Status look={look}>{status}</Status>
     </View>
   );
 }

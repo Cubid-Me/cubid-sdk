@@ -98,3 +98,21 @@ describe("@cubid/react-native", () => {
     expect(screen.queryByText(/location/)).toBeNull();
   });
 });
+
+describe("@cubid/react-native look", () => {
+  it("draws from theme tokens, lets slot styles override, and takes labels from the provider or the component", async () => {
+    const { CubidThemeProvider } = await import("./theme");
+    render(
+      <CubidThemeProvider labels={{ sendEmailCode: "Skicka kod" }} styles={{ button: { paddingVertical: 20 } }} theme={{ accent: "#123456", radius: 4 }}>
+        <EmailOtpForm client={createClient() as never} labels={{ email: "E-post" }} styles={{ input: { borderColor: "#abcdef" } }} />
+      </CubidThemeProvider>
+    );
+    const button = screen.getByText("Skicka kod").parentElement as HTMLElement & { __style?: unknown };
+    // The host mock keeps the style array it was given: theme defaults first, then the provider's and the component's slots.
+    const styleOf = (el: HTMLElement) => JSON.parse(el.getAttribute("data-style") ?? "[]") as unknown[];
+    expect(JSON.stringify(styleOf(button))).toContain('"backgroundColor":"#123456"');
+    expect(JSON.stringify(styleOf(button))).toContain('"borderRadius":4');
+    expect(JSON.stringify(styleOf(button))).toContain('"paddingVertical":20');
+    expect(JSON.stringify(styleOf(screen.getByLabelText("E-post")))).toContain('"borderColor":"#abcdef"');
+  });
+});

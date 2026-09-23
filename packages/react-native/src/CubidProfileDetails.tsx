@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Text, View } from "react-native";
-import type { StyleProp, ViewStyle } from "react-native";
 
 import type { CubidWeb2Client, EmailOtpVerifyResult, PhoneOtpVerifyResult, StampPersistenceRequest } from "@cubid/browser";
 
@@ -9,7 +8,9 @@ import { EmailOtpForm } from "./EmailOtpForm";
 import { collectLocation } from "./location";
 import type { CubidCollectedLocation, CubidLocationRequest, CubidPositionReader } from "./location";
 import { PhoneOtpForm } from "./PhoneOtpForm";
-import { Action, Field, Status, styles } from "./primitives";
+import { Action, Field, Status } from "./primitives";
+import { useCubidLook } from "./theme";
+import type { CubidLook } from "./theme";
 
 export type CubidDetailRequest = "required" | "optional" | "skip";
 
@@ -44,7 +45,7 @@ export interface CubidProfileDetailsResult {
   skipped: Array<keyof CubidProfileDetailsRequest>;
 }
 
-export interface CubidProfileDetailsProps {
+export interface CubidProfileDetailsProps extends CubidLook {
   client?: CubidWeb2Client;
   request: CubidProfileDetailsRequest;
   known?: CubidProfileDetailsKnown;
@@ -56,7 +57,6 @@ export interface CubidProfileDetailsProps {
   persistStamp?: StampPersistenceRequest;
   onComplete: (result: CubidProfileDetailsResult) => Promise<void> | void;
   onError?: (error: unknown) => void;
-  style?: StyleProp<ViewStyle>;
 }
 
 type DetailField = keyof CubidProfileDetailsRequest;
@@ -69,9 +69,11 @@ const ORDER: DetailField[] = ["email", "phone", "name", "picture", "location"];
  * requested fields are still missing, asks for them one at a time, and hands
  * back one result. Location is asked for only at the granularity requested.
  */
-export function CubidProfileDetails({ client, known = {}, onComplete, onError, persistStamp, pickPicture, readPosition, request, style }: CubidProfileDetailsProps) {
+export function CubidProfileDetails({ client, known = {}, labels: ownLabels, onComplete, onError, persistStamp, pickPicture, readPosition, request, styles: ownStyles, theme }: CubidProfileDetailsProps) {
   const contextualClient = useOptionalCubidClient();
   const resolvedClient = client ?? contextualClient ?? undefined;
+  const own = { labels: ownLabels, styles: ownStyles, theme };
+  const { labels, styles: look } = useCubidLook(own);
 
   const [result, setResult] = useState<CubidProfileDetailsResult>(() => ({
     email: known.email ? { value: known.email, verified: !!known.emailVerified } : null,
@@ -135,10 +137,10 @@ export function CubidProfileDetails({ client, known = {}, onComplete, onError, p
       if (uri) {
         advance({ picture: uri });
       } else {
-        setStatus("No picture chosen.");
+        setStatus(labels.noPicture);
       }
     } catch (error) {
-      setStatus("Could not pick a picture.");
+      setStatus(labels.pictureFailed);
       onError?.(error);
     } finally {
       setIsBusy(false);
@@ -160,10 +162,10 @@ export function CubidProfileDetails({ client, known = {}, onComplete, onError, p
       if (location) {
         advance({ location });
       } else {
-        setStatus("No location was shared.");
+        setStatus(labels.noLocation);
       }
     } catch (error) {
-      setStatus("Could not read a location.");
+      setStatus(labels.locationFailed);
       onError?.(error);
     } finally {
       setIsBusy(false);
@@ -176,15 +178,16 @@ export function CubidProfileDetails({ client, known = {}, onComplete, onError, p
     return null;
   }
 
-  const skip = (field: keyof CubidProfileDetailsRequest) => (required(field) ? null : <Action label="Skip" onPress={() => advance({}, field)} secondary />);
-  const progress = steps.length > 1 && step !== "done" ? `Step ${index + 1} of ${steps.length}` : null;
+  const skip = (field: keyof CubidProfileDetailsRequest) => (required(field) ? null : <Action label={labels.skip} look={look} onPress={() => advance({}, field)} secondary />);
+  const progress = steps.length > 1 && step !== "done" ? labels.step(index + 1, steps.length) : null;
 
   return (
-    <View style={[styles.stack, style]}>
-      {progress ? <Text style={styles.label}>{progress}</Text> : null}
+    <View style={look.container}>
+      {progress ? <Text style={look.hint}>{progress}</Text> : null}
       {step === "email" ? (
         <>
           <EmailOtpForm
+            {...own}
             client={resolvedClient}
             defaultEmail={known.email ?? ""}
             onError={onError}
@@ -197,6 +200,7 @@ export function CubidProfileDetails({ client, known = {}, onComplete, onError, p
       {step === "phone" ? (
         <>
           <PhoneOtpForm
+            {...own}
             client={resolvedClient}
             defaultPhone={known.phone ?? ""}
             onError={onError}
@@ -208,35 +212,29 @@ export function CubidProfileDetails({ client, known = {}, onComplete, onError, p
       ) : null}
       {step === "name" ? (
         <>
-          <Field autoComplete="name" label="Your name" onChangeText={setName} textContentType="name" value={name} />
-          <View style={styles.row}>
-            <Action disabled={!name.trim()} label="Continue" onPress={() => advance({ name: name.trim() })} />
+          <Field autoComplete="name" label={labels.name} look={look} onChangeText={setName} textContentType="name" value={name} />
+          <View style={look.actions}>
+            <Action disabled={!name.trim()} label={labels.continue} look={look} onPress={() => advance({ name: name.trim() })} />
             {skip("name")}
           </View>
         </>
       ) : null}
       {step === "picture" ? (
-        <View style={styles.row}>
-          <Action disabled={isBusy} label={isBusy ? "Opening…" : "Choose a picture"} onPress={() => void takePicture()} />
+        <View style={look.actions}>
+          <Action disabled={isBusy} label={isBusy ? labels.openingPicker : labels.choosePicture} look={look} onPress={() => void takePicture()} />
           {skip("picture")}
         </View>
       ) : null}
       {step === "location" ? (
         <>
-          <Text style={styles.label}>
-            {request.location === "rough"
-              ? "Share a rough location (about a city): no precise-location permission is needed."
-              : request.location === "approximate"
-                ? "Share an approximate location (about a neighbourhood)."
-                : "Share your exact location."}
-          </Text>
-          <View style={styles.row}>
-            <Action disabled={isBusy} label={isBusy ? "Reading…" : "Share location"} onPress={() => void shareLocation()} />
+          <Text style={look.hint}>{request.location === "rough" ? labels.locationRough : request.location === "approximate" ? labels.locationApproximate : labels.locationExact}</Text>
+          <View style={look.actions}>
+            <Action disabled={isBusy} label={isBusy ? labels.readingLocation : labels.shareLocation} look={look} onPress={() => void shareLocation()} />
             {skip("location")}
           </View>
         </>
       ) : null}
-      <Status>{status}</Status>
+      <Status look={look}>{status}</Status>
     </View>
   );
 }

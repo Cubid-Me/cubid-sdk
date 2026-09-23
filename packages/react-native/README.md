@@ -90,3 +90,32 @@ import { CubidProfileDetails } from "@cubid/react-native";
 
 - JSON reference: `../../docs/reference/api/react-native.json`
 - Package matrix: `../../README.md`
+
+## Look And Feel
+
+Every component takes an optional, typed look, so the kit sits inside your app
+as if it were your own. Set it once on `CubidProvider` (or
+`CubidThemeProvider` without a client), or per component; the component's
+props win.
+
+```tsx
+<CubidProvider
+  client={client}
+  theme={{ accent: palette.accent, onAccent: palette.accentText, text: palette.text, muted: palette.textMuted, border: palette.divider, surface: palette.surface, radius: 12, fontFamily: fonts.body, fontSize: 16, spacing: 12 }}
+  styles={{ button: { minHeight: 44 }, label: { textTransform: "uppercase", letterSpacing: 1 } }}
+  labels={{ email: "E-post", sendEmailCode: "Skicka kod", step: (i, n) => `${i} av ${n}` }}
+>
+  <CubidProfileDetails … />
+</CubidProvider>
+```
+
+- `theme`: a handful of tokens (`accent`, `onAccent`, `text`, `muted`,
+  `border`, `surface`, `radius`, `fontFamily`, `fontSize`, `spacing`) the
+  defaults are built from.
+- `styles`: a React Native style per slot, laid over the defaults: `container`,
+  `field`, `label`, `input`, `actions`, `button`, `buttonText`,
+  `buttonSecondary`, `buttonSecondaryText`, `buttonDisabled`, `status`, `hint`.
+- `labels`: every string the kit shows, including the `step(i, n)` line.
+
+`@cubid/react` takes the same `theme`, `styles` and `labels`, plus
+`classNames`, in DOM terms.

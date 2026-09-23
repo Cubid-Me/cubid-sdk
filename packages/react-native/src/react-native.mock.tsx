@@ -12,6 +12,7 @@ const host = (tag: string) =>
     const { children, onPress, onChangeText, editable, disabled, accessibilityLabel, accessibilityRole, ...rest } = props;
     const domProps: Record<string, unknown> = {
       "aria-label": accessibilityLabel,
+      "data-style": JSON.stringify(rest.style ?? null),
       "data-tag": tag,
       onClick: disabled ? undefined : onPress,
       onChange: onChangeText ? (event: { target: { value: string } }) => (onChangeText as (value: string) => void)(event.target.value) : undefined,

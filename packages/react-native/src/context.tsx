@@ -3,7 +3,10 @@ import type { ReactNode } from "react";
 
 import type { CubidWeb2Client } from "@cubid/browser";
 
-export interface CubidProviderProps {
+import { CubidThemeProvider } from "./theme";
+import type { CubidLook } from "./theme";
+
+export interface CubidProviderProps extends CubidLook {
   children: ReactNode;
   /** A client from `createCubidWeb2Client` (`@cubid/browser`); it only needs `fetch`, which React Native has. */
   client: CubidWeb2Client;
@@ -11,8 +14,15 @@ export interface CubidProviderProps {
 
 const CubidContext = createContext<CubidWeb2Client | null>(null);
 
-export function CubidProvider({ children, client }: CubidProviderProps) {
-  return <CubidContext.Provider value={client}>{children}</CubidContext.Provider>;
+/** The client, and optionally the look (theme tokens, style slots, labels) for every Cubid component below. */
+export function CubidProvider({ children, client, labels, styles, theme }: CubidProviderProps) {
+  return (
+    <CubidContext.Provider value={client}>
+      <CubidThemeProvider labels={labels} styles={styles} theme={theme}>
+        {children}
+      </CubidThemeProvider>
+    </CubidContext.Provider>
+  );
 }
 
 export function useCubidClient() {

@@ -229,3 +229,27 @@ describe("@cubid/react", () => {
     openSpy.mockRestore();
   });
 });
+
+describe("@cubid/react look", () => {
+  it("stays unstyled without a theme, and draws from tokens, class names, inline styles and labels with one", () => {
+    const client = createClient();
+    const plain = render(<EmailOtpForm client={client as never} />);
+    expect(within(plain.container).getByRole("button", { name: "Send email code" }).getAttribute("style")).toBeNull();
+    plain.unmount();
+
+    const themed = render(
+      <CubidWeb2Provider classNames={{ button: "btn" }} client={client as never} labels={{ sendEmailCode: "Skicka kod" }} theme={{ accent: "#123456", radius: 4 }}>
+        <EmailOtpForm classNames={{ input: "field-input" }} labels={{ email: "E-post" }} styles={{ input: { borderColor: "#abcdef" } }} />
+      </CubidWeb2Provider>
+    );
+    const scope = within(themed.container);
+    const button = scope.getByRole("button", { name: "Skicka kod" });
+    expect(button.className).toBe("btn");
+    expect(button.style.background).toBe("rgb(18, 52, 86)");
+    expect(button.style.borderRadius).toBe("4px");
+    const input = scope.getByLabelText("E-post");
+    expect(input.className).toBe("field-input");
+    expect(input.style.borderColor).toBe("rgb(171, 205, 239)");
+    themed.unmount();
+  });
+});
