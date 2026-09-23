@@ -1,0 +1,58 @@
+{
+  "name": "@cubid/react-native",
+  "version": "0.1.0",
+  "description": "React Native components for Cubid profile completion: email and phone one-time codes, and one component that collects what a profile is missing at a chosen location granularity.",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cubid-Me/cubid-sdk.git",
+    "directory": "packages/react-native"
+  },
+  "homepage": "https://github.com/Cubid-Me/cubid-sdk/tree/main/packages/react-native",
+  "bugs": {
+    "url": "https://github.com/Cubid-Me/cubid-sdk/issues"
+  },
+  "keywords": [
+    "cubid",
+    "identity",
+    "react-native",
+    "expo",
+    "verification",
+    "otp",
+    "sdk"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@cubid/browser": "workspace:*",
+    "@cubid/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.73.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --clean --external react --external react-native",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "react-native": "^0.86.3"
+  }
+}

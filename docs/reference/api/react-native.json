@@ -1,0 +1,3999 @@
+{
+  "schemaVersion": "2.0",
+  "name": "@cubid/react-native",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "name": "CubidCollectedLocation",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "granularity",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidLocationGranularity",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "lat",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidCoordinates.lat"
+          }
+        },
+        {
+          "name": "lng",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isInherited": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidCoordinates.lng"
+          }
+        },
+        {
+          "name": "precisionMetres",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "How coarse the reading is, in metres, after rounding."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidCoordinates",
+          "package": "@cubid/react-native"
+        }
+      ]
+    },
+    {
+      "name": "CubidCoordinates",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "lat",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "lng",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "name": "CubidCollectedLocation"
+        }
+      ]
+    },
+    {
+      "name": "CubidLabels",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Every string the kit shows."
+          }
+        ]
+      },
+      "children": [
+        {
+          "name": "choosePicture",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "codeNotSent",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "codeSent",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "codeWrong",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "continue",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "emailFailed",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "emailVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "locationApproximate",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "locationExact",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "locationFailed",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "locationRough",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "name",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "noLocation",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "noPicture",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "openingPicker",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "phoneFailed",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "phoneVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "pictureFailed",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "readingLocation",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "sendEmailCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "sendPhoneCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "shareLocation",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "skip",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "startOver",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "step",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "\"Step 2 of 3\"."
+              }
+            ]
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "index",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "number"
+                      }
+                    },
+                    {
+                      "name": "count",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "number"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "verifyEmailCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "verifyPhoneCode",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidLook",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "labels",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Partial"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "CubidLabels",
+                "package": "@cubid/react-native"
+              }
+            ],
+            "name": "Partial",
+            "package": "typescript"
+          }
+        },
+        {
+          "name": "styles",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidStyles",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "theme",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidTheme",
+            "package": "@cubid/react-native"
+          }
+        }
+      ],
+      "extendedBy": [
+        {
+          "type": "reference",
+          "name": "CubidProviderProps"
+        },
+        {
+          "type": "reference",
+          "name": "EmailOtpFormProps"
+        },
+        {
+          "type": "reference",
+          "name": "PhoneOtpFormProps"
+        },
+        {
+          "type": "reference",
+          "name": "CubidProfileDetailsProps"
+        }
+      ]
+    },
+    {
+      "name": "CubidProfileDetailsKnown",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "What the account already has, so only what is missing is asked for."
+          }
+        ]
+      },
+      "children": [
+        {
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "emailVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "name",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "phoneVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "name": "picture",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidProfileDetailsProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "known",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidProfileDetailsKnown",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "labels",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Partial"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "CubidLabels",
+                "package": "@cubid/react-native"
+              }
+            ],
+            "name": "Partial",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.labels"
+          }
+        },
+        {
+          "name": "onComplete",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "name": "CubidProfileDetailsResult",
+                        "package": "@cubid/react-native"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Persist verified email and phone as stamps on the account (needs the account's user id and a page id)."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "StampPersistenceRequest"
+            },
+            "name": "StampPersistenceRequest",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "pickPicture",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Opens the app's own picker and resolves to a URI, or null when the user picked nothing. Required when "
+              },
+              {
+                "kind": "code",
+                "text": "`request.picture`"
+              },
+              {
+                "kind": "text",
+                "text": " is asked for."
+              }
+            ]
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "union",
+                        "types": [
+                          {
+                            "type": "intrinsic",
+                            "name": "string"
+                          },
+                          {
+                            "type": "literal",
+                            "value": null
+                          }
+                        ]
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "readPosition",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Reads the device's position at the granularity asked for; the app owns the permission prompt. Required when "
+              },
+              {
+                "kind": "code",
+                "text": "`request.location`"
+              },
+              {
+                "kind": "text",
+                "text": " is not \"none\"."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidPositionReader",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "request",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "name": "CubidProfileDetailsRequest",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "styles",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidStyles",
+            "package": "@cubid/react-native"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.styles"
+          }
+        },
+        {
+          "name": "theme",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidTheme",
+            "package": "@cubid/react-native"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.theme"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidLook",
+          "package": "@cubid/react-native"
+        }
+      ]
+    },
+    {
+      "name": "CubidProfileDetailsRequest",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "What the app wants, field by field; each says whether it may be skipped."
+          }
+        ]
+      },
+      "children": [
+        {
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidDetailRequest",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "location",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Decides what is asked for: \"rough\" never prompts for a precise location, \"none\" never mentions it."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidLocationRequest",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "name",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidDetailRequest",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidDetailRequest",
+            "package": "@cubid/react-native"
+          }
+        },
+        {
+          "name": "picture",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidDetailRequest",
+            "package": "@cubid/react-native"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidProfileDetailsResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "email",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reflection",
+                "declaration": {
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "children": [
+                    {
+                      "name": "value",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    },
+                    {
+                      "name": "verified",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "boolean"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "location",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "name": "CubidCollectedLocation",
+                "package": "@cubid/react-native"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "name",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "phone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reflection",
+                "declaration": {
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "children": [
+                    {
+                      "name": "value",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    },
+                    {
+                      "name": "verified",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "boolean"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "picture",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "A URI the app's picker returned (file, content or data URI)."
+              }
+            ]
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        },
+        {
+          "name": "skipped",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Fields that were optional and skipped."
+              }
+            ]
+          },
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "typeOperator",
+              "operator": "keyof",
+              "target": {
+                "type": "reference",
+                "name": "CubidProfileDetailsRequest",
+                "package": "@cubid/react-native"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidProviderProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "children",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.ReactNode"
+            },
+            "name": "ReactNode",
+            "package": "@types/react",
+            "qualifiedName": "React.ReactNode"
+          }
+        },
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "A client from "
+              },
+              {
+                "kind": "code",
+                "text": "`createCubidWeb2Client`"
+              },
+              {
+                "kind": "text",
+                "text": " ("
+              },
+              {
+                "kind": "code",
+                "text": "`@cubid/browser`"
+              },
+              {
+                "kind": "text",
+                "text": "); it only needs "
+              },
+              {
+                "kind": "code",
+                "text": "`fetch`"
+              },
+              {
+                "kind": "text",
+                "text": ", which React Native has."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "labels",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Partial"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "CubidLabels",
+                "package": "@cubid/react-native"
+              }
+            ],
+            "name": "Partial",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.labels"
+          }
+        },
+        {
+          "name": "styles",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidStyles",
+            "package": "@cubid/react-native"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.styles"
+          }
+        },
+        {
+          "name": "theme",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidTheme",
+            "package": "@cubid/react-native"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.theme"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidLook",
+          "package": "@cubid/react-native"
+        }
+      ]
+    },
+    {
+      "name": "CubidStyles",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "One style per slot the kit draws."
+          }
+        ]
+      },
+      "children": [
+        {
+          "name": "actions",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "ViewStyle"
+                },
+                "name": "ViewStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "button",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "ViewStyle"
+                },
+                "name": "ViewStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "buttonDisabled",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "ViewStyle"
+                },
+                "name": "ViewStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "buttonSecondary",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "ViewStyle"
+                },
+                "name": "ViewStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "buttonSecondaryText",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "TextStyle"
+                },
+                "name": "TextStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "buttonText",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "TextStyle"
+                },
+                "name": "TextStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "container",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "ViewStyle"
+                },
+                "name": "ViewStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "field",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "ViewStyle"
+                },
+                "name": "ViewStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "hint",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The \"Step 1 of 3\" line and the location explanation in CubidProfileDetails."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "TextStyle"
+                },
+                "name": "TextStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "input",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "TextStyle"
+                },
+                "name": "TextStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "label",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "TextStyle"
+                },
+                "name": "TextStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        },
+        {
+          "name": "status",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "react-native",
+              "packagePath": "Libraries/StyleSheet/StyleSheet.d.ts",
+              "qualifiedName": "StyleProp"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "react-native",
+                  "packagePath": "Libraries/StyleSheet/StyleSheetTypes.d.ts",
+                  "qualifiedName": "TextStyle"
+                },
+                "name": "TextStyle",
+                "package": "react-native"
+              }
+            ],
+            "name": "StyleProp",
+            "package": "react-native"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidTheme",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "accent",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Primary action background."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "border",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Input and secondary-action borders."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "fontFamily",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "fontSize",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Base font size; labels and status derive from it."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "muted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Labels, status lines, secondary text."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "onAccent",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Text on the primary action."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "radius",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Corner radius for inputs and actions."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "spacing",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Vertical rhythm between rows."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          }
+        },
+        {
+          "name": "surface",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Input background."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "text",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Body and input text."
+              }
+            ]
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "EmailOtpFormProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "defaultEmail",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "labels",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Partial"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "CubidLabels",
+                "package": "@cubid/react-native"
+              }
+            ],
+            "name": "Partial",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.labels"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onStarted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/core",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidSendEmailOtpResponse"
+                        },
+                        "name": "CubidSendEmailOtpResponse",
+                        "package": "@cubid/core"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/browser",
+                          "packagePath": "src/types.ts",
+                          "qualifiedName": "EmailOtpVerifyResult"
+                        },
+                        "name": "EmailOtpVerifyResult",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Persist the verified email as a stamp on the account, so the next sign-in carries it."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "StampPersistenceRequest"
+            },
+            "name": "StampPersistenceRequest",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "styles",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidStyles",
+            "package": "@cubid/react-native"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.styles"
+          }
+        },
+        {
+          "name": "theme",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidTheme",
+            "package": "@cubid/react-native"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.theme"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidLook",
+          "package": "@cubid/react-native"
+        }
+      ]
+    },
+    {
+      "name": "PhoneOtpFormProps",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "name": "client",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "defaultPhone",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "name": "labels",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Partial"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "CubidLabels",
+                "package": "@cubid/react-native"
+              }
+            ],
+            "name": "Partial",
+            "package": "typescript"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.labels"
+          }
+        },
+        {
+          "name": "onError",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "error",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "unknown"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "void"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onStarted",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/core",
+                          "packagePath": "src/index.ts",
+                          "qualifiedName": "CubidSendPhoneOtpResponse"
+                        },
+                        "name": "CubidSendPhoneOtpResponse",
+                        "package": "@cubid/core"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "onVerified",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "result",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@cubid/browser",
+                          "packagePath": "src/types.ts",
+                          "qualifiedName": "PhoneOtpVerifyResult"
+                        },
+                        "name": "PhoneOtpVerifyResult",
+                        "package": "@cubid/browser"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "persistStamp",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Persist the verified phone as a stamp on the account, so the next sign-in carries it."
+              }
+            ]
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "StampPersistenceRequest"
+            },
+            "name": "StampPersistenceRequest",
+            "package": "@cubid/browser"
+          }
+        },
+        {
+          "name": "styles",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidStyles",
+            "package": "@cubid/react-native"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.styles"
+          }
+        },
+        {
+          "name": "theme",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isInherited": true
+          },
+          "type": {
+            "type": "reference",
+            "name": "CubidTheme",
+            "package": "@cubid/react-native"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "name": "CubidLook.theme"
+          }
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "name": "CubidLook",
+          "package": "@cubid/react-native"
+        }
+      ]
+    },
+    {
+      "name": "CubidDetailRequest",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "required"
+          },
+          {
+            "type": "literal",
+            "value": "optional"
+          },
+          {
+            "type": "literal",
+            "value": "skip"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidLocationGranularity",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "typescript",
+          "packagePath": "lib/lib.es5.d.ts",
+          "qualifiedName": "Exclude"
+        },
+        "typeArguments": [
+          {
+            "type": "reference",
+            "name": "CubidLocationRequest",
+            "package": "@cubid/react-native"
+          },
+          {
+            "type": "literal",
+            "value": "none"
+          }
+        ],
+        "name": "Exclude",
+        "package": "typescript"
+      }
+    },
+    {
+      "name": "CubidLocationRequest",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "none"
+          },
+          {
+            "type": "literal",
+            "value": "rough"
+          },
+          {
+            "type": "literal",
+            "value": "approximate"
+          },
+          {
+            "type": "literal",
+            "value": "exact"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CubidPositionReader",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "What the app is asked to provide. "
+          },
+          {
+            "kind": "code",
+            "text": "`granularity`"
+          },
+          {
+            "kind": "text",
+            "text": " says how coarse a reading is\nenough: \"rough\" needs no precise-location permission on either platform\n(iOS \"reduced accuracy\", Android \"coarse\"), and the kit rounds the answer\nanyway."
+          }
+        ]
+      },
+      "type": {
+        "type": "reflection",
+        "declaration": {
+          "name": "__type",
+          "variant": "declaration",
+          "kind": 65536,
+          "flags": {},
+          "signatures": [
+            {
+              "name": "__type",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "parameters": [
+                {
+                  "name": "granularity",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidLocationGranularity",
+                    "package": "@cubid/react-native"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es5.d.ts",
+                  "qualifiedName": "Promise"
+                },
+                "typeArguments": [
+                  {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "name": "CubidCoordinates",
+                        "package": "@cubid/react-native"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                ],
+                "name": "Promise",
+                "package": "typescript"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "DEFAULT_LABELS",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "reference",
+        "name": "CubidLabels",
+        "package": "@cubid/react-native"
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "DEFAULT_THEME",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "typescript",
+          "packagePath": "lib/lib.es5.d.ts",
+          "qualifiedName": "Required"
+        },
+        "typeArguments": [
+          {
+            "type": "reference",
+            "name": "CubidTheme",
+            "package": "@cubid/react-native"
+          }
+        ],
+        "name": "Required",
+        "package": "typescript"
+      },
+      "defaultValue": "..."
+    },
+    {
+      "name": "coarsen",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "coarsen",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Coarsen a reading to the granularity asked for; never finer than the request."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "coordinates",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidCoordinates",
+                "package": "@cubid/react-native"
+              }
+            },
+            {
+              "name": "granularity",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidLocationGranularity",
+                "package": "@cubid/react-native"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "name": "CubidCollectedLocation",
+            "package": "@cubid/react-native"
+          }
+        }
+      ]
+    },
+    {
+      "name": "collectLocation",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "collectLocation",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Read the device at the requested granularity and coarsen it; null when the app could not or would not provide one."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "read",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidPositionReader",
+                "package": "@cubid/react-native"
+              }
+            },
+            {
+              "name": "granularity",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidLocationGranularity",
+                "package": "@cubid/react-native"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Promise"
+            },
+            "typeArguments": [
+              {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "reference",
+                    "name": "CubidCollectedLocation",
+                    "package": "@cubid/react-native"
+                  },
+                  {
+                    "type": "literal",
+                    "value": null
+                  }
+                ]
+              }
+            ],
+            "name": "Promise",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidProfileDetails",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidProfileDetails",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "One component for everything a profile needs. It works out which of the\nrequested fields are still missing, asks for them one at a time, and hands\nback one result. Location is asked for only at the granularity requested."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidProfileDetailsProps",
+                "package": "@cubid/react-native"
+              }
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@types/react",
+                  "packagePath": "jsx-runtime.d.ts",
+                  "qualifiedName": "JSX.Element"
+                },
+                "name": "Element",
+                "package": "@types/react",
+                "qualifiedName": "JSX.Element"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidProvider",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidProvider",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The client, and optionally the look (theme tokens, style slots, labels) for every Cubid component below."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidProviderProps",
+                "package": "@cubid/react-native"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidThemeProvider",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "CubidThemeProvider",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Set the look once for a whole tree; "
+              },
+              {
+                "kind": "code",
+                "text": "`CubidProvider`"
+              },
+              {
+                "kind": "text",
+                "text": " does this for you."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intersection",
+                "types": [
+                  {
+                    "type": "reference",
+                    "name": "CubidLook",
+                    "package": "@cubid/react-native"
+                  },
+                  {
+                    "type": "reflection",
+                    "declaration": {
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "children": [
+                        {
+                          "name": "children",
+                          "variant": "declaration",
+                          "kind": 1024,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "@types/react",
+                              "packagePath": "index.d.ts",
+                              "qualifiedName": "React.ReactNode"
+                            },
+                            "name": "ReactNode",
+                            "package": "@types/react",
+                            "qualifiedName": "React.ReactNode"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "EmailOtpForm",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "EmailOtpForm",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Address, one-time code, verified: the same flow as "
+              },
+              {
+                "kind": "code",
+                "text": "`@cubid/react`"
+              },
+              {
+                "kind": "text",
+                "text": "'s, drawn with native views."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "EmailOtpFormProps",
+                "package": "@cubid/react-native"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "PhoneOtpForm",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "PhoneOtpForm",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Number, one-time code, verified — with native views."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "__namedParameters",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "PhoneOtpFormProps",
+                "package": "@cubid/react-native"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@types/react",
+              "packagePath": "jsx-runtime.d.ts",
+              "qualifiedName": "JSX.Element"
+            },
+            "name": "Element",
+            "package": "@types/react",
+            "qualifiedName": "JSX.Element"
+          }
+        }
+      ]
+    },
+    {
+      "name": "stylesFromTheme",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "stylesFromTheme",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The defaults, built from the tokens."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "theme",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidTheme",
+                "package": "@cubid/react-native"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es5.d.ts",
+              "qualifiedName": "Required"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "name": "CubidStyles",
+                "package": "@cubid/react-native"
+              }
+            ],
+            "name": "Required",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useCubidClient",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useCubidClient",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/browser",
+              "packagePath": "src/types.ts",
+              "qualifiedName": "CubidWeb2Client"
+            },
+            "name": "CubidWeb2Client",
+            "package": "@cubid/browser"
+          }
+        }
+      ]
+    },
+    {
+      "name": "useCubidLook",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useCubidLook",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The resolved look for a component: defaults from the theme, the provider's slots, then the component's own."
+              }
+            ]
+          },
+          "parameters": [
+            {
+              "name": "own",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "name": "CubidLook",
+                "package": "@cubid/react-native"
+              },
+              "defaultValue": "{}"
+            }
+          ],
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "name": "labels",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "name": "CubidLabels",
+                    "package": "@cubid/react-native"
+                  }
+                },
+                {
+                  "name": "styles",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Required"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "name": "CubidStyles",
+                        "package": "@cubid/react-native"
+                      }
+                    ],
+                    "name": "Required",
+                    "package": "typescript"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "useOptionalCubidClient",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "signatures": [
+        {
+          "name": "useOptionalCubidClient",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "@cubid/browser",
+                  "packagePath": "src/types.ts",
+                  "qualifiedName": "CubidWeb2Client"
+                },
+                "name": "CubidWeb2Client",
+                "package": "@cubid/browser"
+              },
+              {
+                "type": "literal",
+                "value": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "packageName": "@cubid/react-native",
+  "readme": [
+    {
+      "kind": "text",
+      "text": "# "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/react-native`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nReact Native components for Cubid profile completion, built on\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": ". No DOM elements and no "
+    },
+    {
+      "kind": "code",
+      "text": "`react-dom`"
+    },
+    {
+      "kind": "text",
+      "text": " peer: the kit draws with\n"
+    },
+    {
+      "kind": "code",
+      "text": "`View`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`Text`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`TextInput`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`Pressable`"
+    },
+    {
+      "kind": "text",
+      "text": ", so it runs on iOS, Android and\nReact Native Web from one codebase (Expo included).\n\n## When To Choose This Package\n\nUse "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/react-native`"
+    },
+    {
+      "kind": "text",
+      "text": " in a React Native or Expo app. Use "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/react`"
+    },
+    {
+      "kind": "text",
+      "text": " in a\nReact DOM app. Both sit on the same headless "
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/browser`"
+    },
+    {
+      "kind": "text",
+      "text": " client, which only\nneeds "
+    },
+    {
+      "kind": "code",
+      "text": "`fetch`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n\n## Install\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```sh\nnpm install @cubid/react-native @cubid/browser @cubid/core\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`react`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`react-native`"
+    },
+    {
+      "kind": "text",
+      "text": " are peer dependencies.\n\n## Registry Availability\n\n- npm: supported\n- JSR: not published by policy\n\n## Basic Usage\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\nimport { createCubidApiClient } from \"@cubid/core\";\nimport { createCubidWeb2Client } from \"@cubid/browser\";\nimport { CubidProvider, EmailOtpForm, PhoneOtpForm } from \"@cubid/react-native\";\n\nconst client = createCubidWeb2Client(createCubidApiClient({ apiKey, baseUrl, dappId }));\n\n<CubidProvider client={client}>\n  <EmailOtpForm onVerified={(r) => console.log(r.isVerified)} />\n  <PhoneOtpForm onVerified={(r) => console.log(r.isVerified)} />\n</CubidProvider>\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nKeep the dapp API key off the device: point the client at your own server,\nwhich adds the key and forwards the two one-time-code calls.\n\n## One Component For Everything A Profile Needs\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\nimport * as Location from \"expo-location\";\nimport * as ImagePicker from \"expo-image-picker\";\nimport { CubidProfileDetails } from \"@cubid/react-native\";\n\n<CubidProfileDetails\n  client={client}\n  known={{ email: session.email, emailVerified: session.emailVerified }}\n  request={{ email: \"required\", phone: \"optional\", name: \"required\", picture: \"optional\", location: \"rough\" }}\n  readPosition={async (granularity) => {\n    // Ask for coarse permission only when a rough location is enough.\n    const { granted } = await Location.requestForegroundPermissionsAsync();\n    if (!granted) return null;\n    const p = await Location.getCurrentPositionAsync({ accuracy: granularity === \"exact\" ? Location.Accuracy.High : Location.Accuracy.Lowest });\n    return { lat: p.coords.latitude, lng: p.coords.longitude };\n  }}\n  pickPicture={async () => {\n    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: [\"images\"] });\n    return r.canceled ? null : r.assets[0].uri;\n  }}\n  persistStamp={{ pageId, userId }}\n  onComplete={(result) => save(result)}\n/>\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n- Each field says whether it is "
+    },
+    {
+      "kind": "code",
+      "text": "`required`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`optional`"
+    },
+    {
+      "kind": "text",
+      "text": " or "
+    },
+    {
+      "kind": "code",
+      "text": "`skip`"
+    },
+    {
+      "kind": "text",
+      "text": ". The component\n  asks only for what "
+    },
+    {
+      "kind": "code",
+      "text": "`known`"
+    },
+    {
+      "kind": "text",
+      "text": " does not already cover, one step at a time, and\n  hands back one "
+    },
+    {
+      "kind": "code",
+      "text": "`CubidProfileDetailsResult`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n- **Location granularity is an input, and it decides what is asked for.** With\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`location: \"rough\"`"
+    },
+    {
+      "kind": "text",
+      "text": " the app's "
+    },
+    {
+      "kind": "code",
+      "text": "`readPosition`"
+    },
+    {
+      "kind": "text",
+      "text": " is called with "
+    },
+    {
+      "kind": "code",
+      "text": "`\"rough\"`"
+    },
+    {
+      "kind": "text",
+      "text": " (coarse\n  permission is enough), and the reading is rounded to about 11 km before it\n  leaves the device. "
+    },
+    {
+      "kind": "code",
+      "text": "`\"approximate\"`"
+    },
+    {
+      "kind": "text",
+      "text": " rounds to about 1 km, "
+    },
+    {
+      "kind": "code",
+      "text": "`\"exact\"`"
+    },
+    {
+      "kind": "text",
+      "text": " keeps the\n  reading, "
+    },
+    {
+      "kind": "code",
+      "text": "`\"none\"`"
+    },
+    {
+      "kind": "text",
+      "text": " never mentions location.\n- Email and phone are verified through Cubid's one-time codes. With\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`persistStamp`"
+    },
+    {
+      "kind": "text",
+      "text": ", the verified value is written to the account as a stamp, so\n  the next Sign in with Cubid carries "
+    },
+    {
+      "kind": "code",
+      "text": "`email`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`email_verified`"
+    },
+    {
+      "kind": "text",
+      "text": " (or the\n  phone claims) for a client that has consented to those scopes.\n- Name and picture have no Cubid write API yet: they are collected and\n  returned in the result for the app to store, and the location reading is\n  returned the same way. See the package's issue thread for the Passport-side\n  contract.\n\n## API Reference\n\n- JSON reference: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../docs/reference/api/react-native.json`"
+    },
+    {
+      "kind": "text",
+      "text": "\n- Package matrix: "
+    },
+    {
+      "kind": "code",
+      "text": "`../../README.md`"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n## Look And Feel\n\nEvery component takes an optional, typed look, so the kit sits inside your app\nas if it were your own. Set it once on "
+    },
+    {
+      "kind": "code",
+      "text": "`CubidProvider`"
+    },
+    {
+      "kind": "text",
+      "text": " (or\n"
+    },
+    {
+      "kind": "code",
+      "text": "`CubidThemeProvider`"
+    },
+    {
+      "kind": "text",
+      "text": " without a client), or per component; the component's\nprops win.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\n<CubidProvider\n  client={client}\n  theme={{ accent: palette.accent, onAccent: palette.accentText, text: palette.text, muted: palette.textMuted, border: palette.divider, surface: palette.surface, radius: 12, fontFamily: fonts.body, fontSize: 16, spacing: 12 }}\n  styles={{ button: { minHeight: 44 }, label: { textTransform: \"uppercase\", letterSpacing: 1 } }}\n  labels={{ email: \"E-post\", sendEmailCode: \"Skicka kod\", step: (i, n) => `${i} av ${n}` }}\n>\n  <CubidProfileDetails … />\n</CubidProvider>\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`theme`"
+    },
+    {
+      "kind": "text",
+      "text": ": a handful of tokens ("
+    },
+    {
+      "kind": "code",
+      "text": "`accent`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`onAccent`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`text`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`muted`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`border`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`surface`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`radius`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`fontFamily`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`fontSize`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`spacing`"
+    },
+    {
+      "kind": "text",
+      "text": ") the\n  defaults are built from.\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`styles`"
+    },
+    {
+      "kind": "text",
+      "text": ": a React Native style per slot, laid over the defaults: "
+    },
+    {
+      "kind": "code",
+      "text": "`container`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`field`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`label`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`input`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`actions`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`button`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`buttonText`"
+    },
+    {
+      "kind": "text",
+      "text": ",\n  "
+    },
+    {
+      "kind": "code",
+      "text": "`buttonSecondary`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`buttonSecondaryText`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`buttonDisabled`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`status`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`hint`"
+    },
+    {
+      "kind": "text",
+      "text": ".\n- "
+    },
+    {
+      "kind": "code",
+      "text": "`labels`"
+    },
+    {
+      "kind": "text",
+      "text": ": every string the kit shows, including the "
+    },
+    {
+      "kind": "code",
+      "text": "`step(i, n)`"
+    },
+    {
+      "kind": "text",
+      "text": " line.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/react`"
+    },
+    {
+      "kind": "text",
+      "text": " takes the same "
+    },
+    {
+      "kind": "code",
+      "text": "`theme`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`styles`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`labels`"
+    },
+    {
+      "kind": "text",
+      "text": ", plus\n"
+    },
+    {
+      "kind": "code",
+      "text": "`classNames`"
+    },
+    {
+      "kind": "text",
+      "text": ", in DOM terms."
+    }
+  ]
+}

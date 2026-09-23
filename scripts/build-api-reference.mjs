@@ -91,6 +91,14 @@ const packages = [
     registry: "npm-only",
   },
   {
+    slug: "react-native",
+    name: "@cubid/react-native",
+    dir: "packages/react-native",
+    entryPoint: "packages/react-native/src/index.ts",
+    tsconfig: "packages/react-native/tsconfig.json",
+    registry: "npm-only",
+  },
+  {
     slug: "evm",
     name: "@cubid/evm",
     dir: "packages/evm",
