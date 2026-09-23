@@ -20,6 +20,7 @@ provider secrets, passkey verification, migrations, and service-role access.
 | `@cubid/comms` | Signed-in messaging profile helpers for Passport notification channels and preferences. | npm-only |
 | `@cubid/cosmos` | Cosmos-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
 | `@cubid/react` | React components and hooks built on `@cubid/browser`. | npm-only |
+| `@cubid/react-native` | React Native components built on `@cubid/browser`: email and phone one-time codes, and one profile-details component with location granularity. | npm-only |
 | `@cubid/evm` | EVM-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
 | `@cubid/near` | NEAR-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |
 | `@cubid/polkadot` | Polkadot-specific public wallet metadata, provider-adapter, and verification helpers. | npm-only |

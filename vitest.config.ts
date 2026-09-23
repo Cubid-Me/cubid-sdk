@@ -19,6 +19,7 @@ export default defineConfig({
       "@cubid/near": path.resolve(__dirname, "packages/near/src/index.ts"),
       "@cubid/polkadot": path.resolve(__dirname, "packages/polkadot/src/index.ts"),
       "@cubid/react": path.resolve(__dirname, "packages/react/src/index.ts"),
+      "@cubid/react-native": path.resolve(__dirname, "packages/react-native/src/index.ts"),
       "@cubid/solana": path.resolve(__dirname, "packages/solana/src/index.ts"),
       "@cubid/starknet": path.resolve(__dirname, "packages/starknet/src/index.ts"),
       "@cubid/stellar": path.resolve(__dirname, "packages/stellar/src/index.ts"),
@@ -53,6 +54,7 @@ export default defineConfig({
         "packages/comms/src/**/*.{ts,tsx}",
         "packages/cosmos/src/**/*.{ts,tsx}",
         "packages/react/src/**/*.{ts,tsx}",
+        "packages/react-native/src/**/*.{ts,tsx}",
         "packages/evm/src/**/*.{ts,tsx}",
         "packages/near/src/**/*.{ts,tsx}",
         "packages/polkadot/src/**/*.{ts,tsx}",
@@ -86,6 +88,7 @@ export default defineConfig({
             "packages/evm/src/**/*.test.ts",
             "packages/near/src/**/*.test.ts",
             "packages/polkadot/src/**/*.test.ts",
+            "packages/react-native/src/**/*.test.ts",
             "packages/solana/src/**/*.test.ts",
             "packages/starknet/src/**/*.test.ts",
             "packages/stellar/src/**/*.test.ts",
@@ -104,6 +107,7 @@ export default defineConfig({
           include: [
             "packages/auth-react/src/**/*.test.tsx",
             "packages/react/src/**/*.test.tsx",
+            "packages/react-native/src/**/*.test.tsx",
             "packages/wagmi/src/**/*.test.tsx",
             "packages/wallet-recovery-react/src/**/*.test.tsx"
           ],
