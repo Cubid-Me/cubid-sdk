@@ -945,6 +945,24 @@ describe("@cubid/auth cross-app access", () => {
         token_endpoint: `${issuer}/token`,
       })
     ).toBe(false);
+    expect(
+      supportsCubidCrossAppAccess({
+        authorization_endpoint: `${issuer}/authorize`,
+        grant_types_supported: ["authorization_code", CUBID_TOKEN_EXCHANGE_GRANT_TYPE],
+        issuer,
+        token_endpoint: `${issuer}/token`,
+      })
+    ).toBe(true);
+    // An explicit false from discovery wins over the advertised grant type.
+    expect(
+      supportsCubidCrossAppAccess({
+        authorization_endpoint: `${issuer}/authorize`,
+        cross_app_access_supported: false,
+        grant_types_supported: ["authorization_code", CUBID_TOKEN_EXCHANGE_GRANT_TYPE],
+        issuer,
+        token_endpoint: `${issuer}/token`,
+      })
+    ).toBe(false);
   });
 
   it("builds a client-authenticated token exchange for an identity assertion", () => {
@@ -1196,6 +1214,26 @@ describe("@cubid/auth cross-app access", () => {
     await expect(
       validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: assertionAsEvent.fetchJwks, nowSeconds, token: assertionAsEvent.token })
     ).rejects.toMatchObject({ code: "invalid_security_event_token_type" });
+
+    const mismatched = await createSignedJwt(
+      { typ: CUBID_SECURITY_EVENT_JWT_TYPE },
+      {
+        ...claims,
+        events: {
+          [CUBID_SECURITY_EVENT_TYPES.crossAppConsentRevoked]: {
+            reason: "user_withdrew_consent",
+            requesting_client_id: "cubid_wondrbot",
+            subject: { ...subject, sub: "chaincrew-bob" },
+          },
+        },
+      }
+    );
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: mismatched.fetchJwks, nowSeconds, token: mismatched.token })
+    ).rejects.toMatchObject({ code: "invalid_security_event_subject" });
+    expect(() => decodeCubidSecurityEventToken(mismatched.token)).toThrowError(
+      expect.objectContaining({ code: "invalid_security_event_subject" })
+    );
 
     const es256Event = await createSignedJwt({ typ: CUBID_SECURITY_EVENT_JWT_TYPE }, claims, "ES256");
     await expect(

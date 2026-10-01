@@ -1845,6 +1845,6 @@ Acceptance notes:
 
 - Status: Not started
 - Depends on: Cubid-Me/cubid-monorepo#179
-- Context: the helpers landed on `feature/cross-app-access` (Cubid-Me/cubid-sdk#57, #58); see `agent-context/session-log/2026-10-01-feature-cross-app-access.md`.
+- Context: the helpers landed on `feature/cross-app-access` (Cubid-Me/cubid-sdk#57, #58); see `agent-context/session-log/2026-10-01-auth-feature-cross-app-access.md`.
 
 Run the requesting and resource flows from `@cubid/auth` against the staging issuer once a pairing exists, and record the hosted smoke in the session log and `docs/examples/cross-app-access.md`.

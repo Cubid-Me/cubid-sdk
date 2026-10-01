@@ -26,3 +26,12 @@
 - summary: `buildCubidCrossAppResource` strips the URN prefix before validating, so `urn:cubid:client:` is refused. `validateCubidIdentityAssertion` and `validateCubidSecurityEventToken` refuse any `alg` other than RS256 before the JWKS is fetched (the Cubid profile), and a Security Event Token with an empty event type is refused. Session-log heads now record concrete commits and the completed X01 block left `todo.md` (branch log keeps the history; X01 is now the staging smoke follow-up). The cross-repo note convention conflict is answered on the review thread rather than by a new `cross-repo-comms` file, because the monorepo forbids new live notes there.
 - validation: `pnpm lint`; `pnpm --filter @cubid/auth typecheck`; `pnpm --filter @cubid/auth build`; auth unit suite 34 pass (ES256 rejection for assertions and SETs, empty URN suffix, empty event type); `pnpm docs:api:build`; `pnpm docs:api:check`; `git diff --check`.
 - follow-ups: Align `AGENTS.md` with the monorepo's issue-based coordination policy, or reinstate sibling notes in both repos; owner decision.
+
+## 2026-10-01T16:10:00Z - PR #58 review fixes (Codex)
+
+- agent: Claude Fable 5.1
+- branch: feature/cross-app-access
+- head: e5b0288
+- summary: `supportsCubidCrossAppAccess` treats an explicit `cross_app_access_supported` boolean from discovery as authoritative and only falls back to the token-exchange grant type when the flag is absent, so an issuer that has switched cross-app access off is honoured. `parseSecurityEvent` now requires an event-payload `subject` to agree with the top-level `sub_id` (format, iss, sub) before dropping the duplicate, and rejects a mismatch with `invalid_security_event_subject`. The branch log was renamed to carry the package segment (`2026-10-01-auth-feature-cross-app-access.md`) and the `todo.md` reference updated.
+- validation: `pnpm lint`; `pnpm --filter @cubid/auth typecheck`; `pnpm --filter @cubid/auth build`; auth unit suite 34 pass (explicit `false` flag, grant-type fallback, mismatched SET subject); `pnpm docs:api:build`; `pnpm docs:api:check`; `git diff --check`.
+- follow-ups: None new; X01 (staging smoke) and the `AGENTS.md` coordination-policy alignment remain.

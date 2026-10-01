@@ -2013,10 +2013,13 @@ export function supportsCubidCrossAppAccess(
     ? discoveryDocument.grant_types_supported
     : [];
 
-  return (
-    discoveryDocument.cross_app_access_supported === true ||
-    grants.includes(CUBID_TOKEN_EXCHANGE_GRANT_TYPE)
-  );
+  // An explicit flag from discovery is authoritative either way; the grant type
+  // is only a fallback for issuers that do not publish the flag.
+  if (typeof discoveryDocument.cross_app_access_supported === "boolean") {
+    return discoveryDocument.cross_app_access_supported;
+  }
+
+  return grants.includes(CUBID_TOKEN_EXCHANGE_GRANT_TYPE);
 }
 
 /**
@@ -2462,7 +2465,24 @@ function parseSecurityEvent(
   }
   const eventPayload = events[eventType];
   const payload: Record<string, unknown> = isRecord(eventPayload) ? { ...eventPayload } : {};
-  delete payload.subject;
+  if ("subject" in payload) {
+    // RFC 8417 lets the subject travel in the event payload as well as in the
+    // top-level sub_id. The two must name the same person; otherwise a resource
+    // app could act on the wrong account.
+    const payloadSubject = payload.subject;
+    if (
+      !isRecord(payloadSubject) ||
+      payloadSubject.format !== subject.format ||
+      payloadSubject.iss !== subject.iss ||
+      payloadSubject.sub !== subject.sub
+    ) {
+      throw new CubidAuthError(
+        "The Cubid Security Event Token event subject does not match its sub_id.",
+        { category: "validation", code: "invalid_security_event_subject", raw: claims }
+      );
+    }
+    delete payload.subject;
+  }
 
   return {
     audience: clientId,
