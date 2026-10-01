@@ -33,23 +33,33 @@ client grant this on the person's behalf. Both gates fail closed.
 
 ## Requesting app
 
-### Ask for consent at sign-in
+### Ask for consent at first sign-in
 
-Name every paired app the person may later want to connect, so later
-connections need no browser trip:
+The decision recorded in Cubid-Me/cubid-monorepo#181: consent is captured on
+Cubid's consent page and **pre-approved at first sign-in**. Name every app you
+are paired with in the person's first Sign in with Cubid request, so each
+later "Connect" in your app needs no browser trip. Your server can fetch the
+list instead of hard-coding it:
 
 ```ts
 import {
   buildCubidAuthorizationUrl,
-  buildCubidCrossAppResource,
   fetchCubidOidcDiscoveryDocument,
+  listCubidCrossAppPairings,
   supportsCubidCrossAppAccess,
 } from "@cubid/auth"
 
 const discovery = await fetchCubidOidcDiscoveryDocument({ issuer: "https://id.cubid.me" })
-if (!supportsCubidCrossAppAccess(discovery)) {
+if (!supportsCubidCrossAppAccess(discovery) || !discovery.cross_app_access_pairings_endpoint) {
   throw new Error("This issuer does not offer cross-app access yet.")
 }
+
+// Server side: it authenticates with the client secret.
+const pairings = await listCubidCrossAppPairings({
+  clientId: "cubid_wondrbot",
+  clientSecret: process.env.CUBID_CLIENT_SECRET!,
+  pairingsEndpoint: discovery.cross_app_access_pairings_endpoint,
+})
 
 const signInUrl = buildCubidAuthorizationUrl({
   authorizationEndpoint: discovery.authorization_endpoint,
@@ -57,13 +67,16 @@ const signInUrl = buildCubidAuthorizationUrl({
   codeChallenge: pkce.codeChallenge,
   nonce,
   redirectUri: "https://wondrbot.example/callback",
-  resources: [
-    buildCubidCrossAppResource("cubid_chaincrew"),
-    buildCubidCrossAppResource("cubid_friendr"),
-  ],
+  resources: pairings.map((pairing) => pairing.resource),
   state,
 })
 ```
+
+Your own connect sheet should still tell the person what connecting means;
+Cubid's page is where the approval is recorded. A single app can also be
+named directly with `buildCubidCrossAppResource("cubid_chaincrew")`; an app
+the person did not pre-approve costs one Cubid passkey tap plus the consent
+page when it is first connected.
 
 ### Exchange the ID token for an assertion (server only)
 

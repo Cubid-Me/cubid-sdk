@@ -84,6 +84,7 @@ export interface CubidOidcDiscoveryDocument {
   code_challenge_methods_supported?: string[];
   cross_app_access_consent_parameter?: string;
   cross_app_access_issued_token_types_supported?: string[];
+  cross_app_access_pairings_endpoint?: string;
   cross_app_access_supported?: boolean;
   end_session_endpoint?: string;
   grant_types_supported?: string[];
@@ -374,6 +375,27 @@ export interface CubidIdentityAssertionResponse {
   raw: Record<string, unknown>;
   scope: string[];
   tokenType: string;
+}
+
+export interface ListCubidCrossAppPairingsInput {
+  clientAuthenticationMethod?: CubidClientAuthenticationMethod;
+  clientId: string;
+  /** Server-side only. */
+  clientSecret: string;
+  fetch?: CubidAuthFetch;
+  /** `cross_app_access_pairings_endpoint` from discovery. */
+  pairingsEndpoint: string | URL;
+  signal?: AbortSignal;
+}
+
+export interface CubidCrossAppPairing {
+  allowedScopes: string[];
+  audience: string;
+  pairingId: string;
+  /** The value to pass in `resources` when asking the person for consent. */
+  resource: string;
+  resourceClientId: string;
+  resourceClientName: string;
 }
 
 export interface BuildCubidJwtBearerGrantRequestInput {
@@ -2129,6 +2151,79 @@ export async function requestCubidIdentityAssertion(
     scope: normalizeOptionalScopes(getOptionalString(payload, "scope") ?? undefined),
     tokenType: getOptionalString(payload, "token_type") ?? "N_A",
   };
+}
+
+/**
+ * Lists the apps this confidential client is paired with, so its first Sign
+ * in with Cubid request can name every one of them in `resources` and the
+ * person approves them once. Server-side only: it carries the client secret.
+ */
+export async function listCubidCrossAppPairings(
+  input: ListCubidCrossAppPairingsInput
+): Promise<CubidCrossAppPairing[]> {
+  const url = asUrlString(input.pairingsEndpoint, "pairingsEndpoint");
+  const body = new URLSearchParams();
+  const headers: Record<string, string> = {
+    accept: "application/json",
+    "content-type": "application/x-www-form-urlencoded",
+  };
+  applyClientAuthentication(body, headers, {
+    clientAuthenticationMethod: input.clientAuthenticationMethod,
+    clientId: assertNonEmptyString(input.clientId, "clientId"),
+    clientSecret: assertNonEmptyString(input.clientSecret, "clientSecret"),
+  });
+
+  const fetchImpl = getFetch(input.fetch);
+  let response: Response;
+
+  try {
+    response = await fetchImpl(url, {
+      body: body.toString(),
+      headers,
+      method: "POST",
+      signal: input.signal,
+    });
+  } catch (cause) {
+    throw new CubidAuthError("Cubid auth pairing listing failed before a response was received.", {
+      category: "network",
+      code: "pairing_listing_failed",
+      cause,
+    });
+  }
+
+  const payload = await readJsonResponse(response, "pairing listing response");
+
+  if (!response.ok || typeof payload.error === "string") {
+    throw new CubidAuthError(
+      getOptionalString(payload, "error_description") ?? "Cubid auth pairing listing failed.",
+      {
+        category: "protocol",
+        code: getOptionalString(payload, "error") ?? "pairing_listing_failed",
+        raw: payload,
+        status: response.status,
+      }
+    );
+  }
+
+  if (!Array.isArray(payload.pairings)) {
+    throw new CubidAuthError("Cubid auth expected pairing listing response.pairings to be an array.", {
+      category: "parse",
+      code: "invalid_field",
+      raw: payload,
+    });
+  }
+
+  return payload.pairings.map((entry) => {
+    const record = toRecord(entry, "pairing");
+    return {
+      allowedScopes: getOptionalStringArray(record, "allowed_scopes") ?? [],
+      audience: getRequiredString(record, "audience", "pairing"),
+      pairingId: getRequiredString(record, "pairing_id", "pairing"),
+      resource: getRequiredString(record, "resource", "pairing"),
+      resourceClientId: getRequiredString(record, "resource_client_id", "pairing"),
+      resourceClientName: getOptionalString(record, "resource_client_name") ?? getRequiredString(record, "resource_client_id", "pairing"),
+    };
+  });
 }
 
 /** True when the error says the person has not consented to this cross-app access yet. */

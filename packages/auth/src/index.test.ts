@@ -28,6 +28,7 @@ import {
   getCubidCrossAppConsentResource,
   isCubidCrossAppConsentRequired,
   isCubidSecurityEventType,
+  listCubidCrossAppPairings,
   requestCubidIdentityAssertion,
   supportsCubidCrossAppAccess,
   validateCubidIdentityAssertion,
@@ -1187,5 +1188,59 @@ describe("@cubid/auth cross-app access", () => {
     await expect(
       validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: twoEvents.fetchJwks, nowSeconds, token: twoEvents.token })
     ).rejects.toMatchObject({ code: "invalid_security_event" });
+  });
+
+  it("lists the client's pairings so every paired app can be pre-approved at first sign-in", async () => {
+    const fetchImpl = vi.fn(async (_input, init) => {
+      expect(new Headers(init?.headers).get("authorization")).toMatch(/^Basic /u);
+      return new Response(
+        JSON.stringify({
+          pairings: [
+            {
+              allowed_scopes: ["accounts:read"],
+              audience: "https://auth.chaincrew.example",
+              pairing_id: "pair_1",
+              resource: "urn:cubid:client:cubid_chaincrew",
+              resource_client_id: "cubid_chaincrew",
+              resource_client_name: "ChainCrew",
+            },
+          ],
+        }),
+        { headers: { "content-type": "application/json" }, status: 200 }
+      );
+    });
+
+    const pairings = await listCubidCrossAppPairings({
+      clientId: "cubid_wondrbot",
+      clientSecret: "secret",
+      fetch: fetchImpl,
+      pairingsEndpoint: `${issuer}/cross-app/pairings`,
+    });
+
+    expect(pairings).toEqual([
+      {
+        allowedScopes: ["accounts:read"],
+        audience: "https://auth.chaincrew.example",
+        pairingId: "pair_1",
+        resource: "urn:cubid:client:cubid_chaincrew",
+        resourceClientId: "cubid_chaincrew",
+        resourceClientName: "ChainCrew",
+      },
+    ]);
+    expect(fetchImpl).toHaveBeenCalledWith(`${issuer}/cross-app/pairings`, expect.objectContaining({ method: "POST" }));
+
+    await expect(
+      listCubidCrossAppPairings({
+        clientId: "cubid_wondrbot",
+        clientSecret: "secret",
+        fetch: vi.fn(async () =>
+          new Response(JSON.stringify({ error: "unauthorized_client", error_description: "Public clients cannot take part." }), {
+            headers: { "content-type": "application/json" },
+            status: 400,
+          })
+        ),
+        pairingsEndpoint: `${issuer}/cross-app/pairings`,
+      })
+    ).rejects.toMatchObject({ code: "unauthorized_client", status: 400 });
   });
 });
