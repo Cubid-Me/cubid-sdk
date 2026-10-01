@@ -31,7 +31,7 @@
 
 - agent: Claude Fable 5.1
 - branch: feature/cross-app-access
-- head: e5b0288
+- head: 99449f5
 - summary: `supportsCubidCrossAppAccess` treats an explicit `cross_app_access_supported` boolean from discovery as authoritative and only falls back to the token-exchange grant type when the flag is absent, so an issuer that has switched cross-app access off is honoured. `parseSecurityEvent` now requires an event-payload `subject` to agree with the top-level `sub_id` (format, iss, sub) before dropping the duplicate, and rejects a mismatch with `invalid_security_event_subject`. The branch log was renamed to carry the package segment (`2026-10-01-auth-feature-cross-app-access.md`) and the `todo.md` reference updated.
 - validation: `pnpm lint`; `pnpm --filter @cubid/auth typecheck`; `pnpm --filter @cubid/auth build`; auth unit suite 34 pass (explicit `false` flag, grant-type fallback, mismatched SET subject); `pnpm docs:api:build`; `pnpm docs:api:check`; `git diff --check`.
 - follow-ups: None new; X01 (staging smoke) and the `AGENTS.md` coordination-policy alignment remain.
