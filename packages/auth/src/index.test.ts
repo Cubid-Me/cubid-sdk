@@ -3,15 +3,36 @@ import { describe, expect, it, vi } from "vitest";
 import {
   assertCubidAuthorizationState,
   buildCubidAuthorizationUrl,
+  buildCubidCrossAppResource,
+  buildCubidIdentityAssertionRequest,
+  buildCubidJwtBearerGrantRequest,
   buildCubidLogoutUrl,
   buildCubidTokenExchangeRequest,
   buildCubidUserInfoRequest,
   checkCubidIdentityIssuerReadiness,
   clearCubidAuthSession,
+  CUBID_ACCESS_TOKEN_TOKEN_TYPE,
   CUBID_AUTH_SESSION_STORAGE_KEY,
   CUBID_FRIENDR_OIDC_CLAIM_NAMES,
+  CUBID_ID_JAG_JWT_TYPE,
+  CUBID_ID_JAG_TOKEN_TYPE,
+  CUBID_ID_TOKEN_TOKEN_TYPE,
+  CUBID_JWT_BEARER_GRANT_TYPE,
   CUBID_PRODUCTION_ISSUER,
+  CUBID_SECURITY_EVENT_JWT_TYPE,
+  CUBID_SECURITY_EVENT_TYPES,
   CUBID_STAGING_ISSUER,
+  CUBID_TOKEN_EXCHANGE_GRANT_TYPE,
+  decodeCubidIdentityAssertionClaims,
+  decodeCubidSecurityEventToken,
+  getCubidCrossAppConsentResource,
+  isCubidCrossAppConsentRequired,
+  isCubidSecurityEventType,
+  listCubidCrossAppPairings,
+  requestCubidIdentityAssertion,
+  supportsCubidCrossAppAccess,
+  validateCubidIdentityAssertion,
+  validateCubidSecurityEventToken,
   createCubidAuthNonce,
   createCubidAuthSession,
   createCubidAuthState,
@@ -841,5 +862,449 @@ describe("@cubid/auth", () => {
 
     clearCubidAuthSession(storageLike);
     expect(storage.has(CUBID_AUTH_SESSION_STORAGE_KEY)).toBe(false);
+  });
+});
+
+describe("@cubid/auth cross-app access", () => {
+  const issuer = "https://staging-id.cubid.me";
+  const discoveryDocument = {
+    authorization_endpoint: `${issuer}/authorize`,
+    cross_app_access_consent_parameter: "resource",
+    cross_app_access_issued_token_types_supported: [CUBID_ID_JAG_TOKEN_TYPE],
+    cross_app_access_supported: true,
+    grant_types_supported: ["authorization_code", CUBID_TOKEN_EXCHANGE_GRANT_TYPE],
+    issuer,
+    jwks_uri: `${issuer}/jwks`,
+    token_endpoint: `${issuer}/token`,
+  };
+
+  async function createSignedJwt(
+    header: Record<string, unknown>,
+    payload: Record<string, unknown>,
+    algorithm: "ES256" | "RS256" = "RS256"
+  ) {
+    const keyPair =
+      algorithm === "ES256"
+        ? await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"])
+        : await crypto.subtle.generateKey(
+            {
+              hash: "SHA-256",
+              modulusLength: 2048,
+              name: "RSASSA-PKCS1-v1_5",
+              publicExponent: new Uint8Array([1, 0, 1]),
+            },
+            true,
+            ["sign", "verify"]
+          );
+    const publicKey = await crypto.subtle.exportKey("jwk", keyPair.publicKey);
+    const encodedHeader = Buffer.from(JSON.stringify({ alg: algorithm, kid: "cubid-test-key", ...header }), "utf8").toString("base64url");
+    const encodedPayload = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
+    const signature = await crypto.subtle.sign(
+      algorithm === "ES256" ? { hash: "SHA-256", name: "ECDSA" } : "RSASSA-PKCS1-v1_5",
+      keyPair.privateKey,
+      new TextEncoder().encode(`${encodedHeader}.${encodedPayload}`)
+    );
+    const jwks = { keys: [{ ...publicKey, alg: algorithm, kid: "cubid-test-key", use: "sig" }] };
+    const fetchJwks = vi.fn(async () =>
+      new Response(JSON.stringify(jwks), { headers: { "content-type": "application/json" }, status: 200 })
+    );
+
+    return {
+      fetchJwks,
+      token: `${encodedHeader}.${encodedPayload}.${Buffer.from(signature).toString("base64url")}`,
+    };
+  }
+
+  it("names paired apps for the resource parameter and adds them to the authorization request", () => {
+    expect(buildCubidCrossAppResource("cubid_chaincrew")).toBe("urn:cubid:client:cubid_chaincrew");
+    expect(buildCubidCrossAppResource("urn:cubid:client:cubid_chaincrew")).toBe("urn:cubid:client:cubid_chaincrew");
+    expect(() => buildCubidCrossAppResource("has space")).toThrow(CubidAuthError);
+    expect(() => buildCubidCrossAppResource("urn:cubid:client:")).toThrow(CubidAuthError);
+    expect(() => buildCubidCrossAppResource("urn:cubid:client: ")).toThrow(CubidAuthError);
+
+    const url = new URL(
+      buildCubidAuthorizationUrl({
+        authorizationEndpoint: discoveryDocument.authorization_endpoint,
+        clientId: "cubid_wondrbot",
+        codeChallenge: "challenge",
+        redirectUri: "https://wondrbot.example/callback",
+        resources: [buildCubidCrossAppResource("cubid_chaincrew"), "https://auth.friendr.example", "urn:cubid:client:cubid_chaincrew"],
+        state: "state-1",
+      })
+    );
+
+    expect(url.searchParams.getAll("resource")).toEqual([
+      "urn:cubid:client:cubid_chaincrew",
+      "https://auth.friendr.example",
+    ]);
+    expect(supportsCubidCrossAppAccess(discoveryDocument)).toBe(true);
+    expect(
+      supportsCubidCrossAppAccess({
+        authorization_endpoint: `${issuer}/authorize`,
+        issuer,
+        token_endpoint: `${issuer}/token`,
+      })
+    ).toBe(false);
+    expect(
+      supportsCubidCrossAppAccess({
+        authorization_endpoint: `${issuer}/authorize`,
+        grant_types_supported: ["authorization_code", CUBID_TOKEN_EXCHANGE_GRANT_TYPE],
+        issuer,
+        token_endpoint: `${issuer}/token`,
+      })
+    ).toBe(true);
+    // An explicit false from discovery wins over the advertised grant type.
+    expect(
+      supportsCubidCrossAppAccess({
+        authorization_endpoint: `${issuer}/authorize`,
+        cross_app_access_supported: false,
+        grant_types_supported: ["authorization_code", CUBID_TOKEN_EXCHANGE_GRANT_TYPE],
+        issuer,
+        token_endpoint: `${issuer}/token`,
+      })
+    ).toBe(false);
+  });
+
+  it("builds a client-authenticated token exchange for an identity assertion", () => {
+    const prepared = buildCubidIdentityAssertionRequest({
+      audience: "https://auth.chaincrew.example",
+      clientId: "cubid_wondrbot",
+      clientSecret: "s3cret:value",
+      scope: ["accounts:read", "accounts:read"],
+      subjectToken: "id-token",
+      tokenEndpoint: discoveryDocument.token_endpoint,
+    });
+    const body = new URLSearchParams(String(prepared.body));
+    const headers = prepared.init.headers as Record<string, string>;
+
+    expect(prepared.url).toBe(`${issuer}/token`);
+    expect(body.get("grant_type")).toBe(CUBID_TOKEN_EXCHANGE_GRANT_TYPE);
+    expect(body.get("requested_token_type")).toBe(CUBID_ID_JAG_TOKEN_TYPE);
+    expect(body.get("subject_token_type")).toBe(CUBID_ID_TOKEN_TOKEN_TYPE);
+    expect(body.get("subject_token")).toBe("id-token");
+    expect(body.get("audience")).toBe("https://auth.chaincrew.example");
+    expect(body.get("scope")).toBe("accounts:read");
+    expect(body.get("client_id")).toBe("cubid_wondrbot");
+    expect(body.has("client_secret")).toBe(false);
+    expect(headers.authorization).toBe(
+      `Basic ${Buffer.from("cubid_wondrbot:s3cret%3Avalue").toString("base64")}`
+    );
+
+    const posted = new URLSearchParams(
+      String(
+        buildCubidIdentityAssertionRequest({
+          audience: "cubid_chaincrew",
+          clientAuthenticationMethod: "client_secret_post",
+          clientId: "cubid_wondrbot",
+          clientSecret: "secret",
+          subjectToken: "access-token",
+          subjectTokenType: CUBID_ACCESS_TOKEN_TOKEN_TYPE,
+          tokenEndpoint: discoveryDocument.token_endpoint,
+        }).body
+      )
+    );
+    expect(posted.get("client_secret")).toBe("secret");
+    expect(posted.get("subject_token_type")).toBe(CUBID_ACCESS_TOKEN_TOKEN_TYPE);
+
+    expect(() =>
+      buildCubidIdentityAssertionRequest({
+        audience: "cubid_chaincrew",
+        clientId: "cubid_wondrbot",
+        clientSecret: "secret",
+        subjectToken: "token",
+        subjectTokenType: "urn:ietf:params:oauth:token-type:saml2" as never,
+        tokenEndpoint: discoveryDocument.token_endpoint,
+      })
+    ).toThrow(CubidAuthError);
+  });
+
+  it("requests an identity assertion and surfaces the consent_required resource", async () => {
+    const response = await requestCubidIdentityAssertion({
+      audience: "cubid_chaincrew",
+      clientId: "cubid_wondrbot",
+      clientSecret: "secret",
+      fetch: vi.fn(async () =>
+        new Response(
+          JSON.stringify({
+            access_token: "assertion-jwt",
+            expires_in: 300,
+            issued_token_type: CUBID_ID_JAG_TOKEN_TYPE,
+            scope: "accounts:read",
+            token_type: "N_A",
+          }),
+          { headers: { "content-type": "application/json" }, status: 200 }
+        )
+      ),
+      subjectToken: "id-token",
+      tokenEndpoint: discoveryDocument.token_endpoint,
+    });
+
+    expect(response.assertion).toBe("assertion-jwt");
+    expect(response.issuedTokenType).toBe(CUBID_ID_JAG_TOKEN_TYPE);
+    expect(response.tokenType).toBe("N_A");
+    expect(response.expiresIn).toBe(300);
+    expect(response.scope).toEqual(["accounts:read"]);
+
+    const consentError = await requestCubidIdentityAssertion({
+      audience: "cubid_chaincrew",
+      clientId: "cubid_wondrbot",
+      clientSecret: "secret",
+      fetch: vi.fn(async () =>
+        new Response(
+          JSON.stringify({
+            error: "consent_required",
+            error_description:
+              "The person has not authorized WondrBot to act in ChainCrew. Send them through the authorization endpoint with resource=urn:cubid:client:cubid_chaincrew.",
+          }),
+          { headers: { "content-type": "application/json" }, status: 403 }
+        )
+      ),
+      subjectToken: "id-token",
+      tokenEndpoint: discoveryDocument.token_endpoint,
+    }).catch((error: unknown) => error);
+
+    expect(isCubidCrossAppConsentRequired(consentError)).toBe(true);
+    expect((consentError as CubidAuthError).status).toBe(403);
+    expect(getCubidCrossAppConsentResource(consentError)).toBe("urn:cubid:client:cubid_chaincrew");
+    expect(getCubidCrossAppConsentResource(new Error("other"))).toBeNull();
+
+    await expect(
+      requestCubidIdentityAssertion({
+        audience: "cubid_chaincrew",
+        clientId: "cubid_wondrbot",
+        clientSecret: "secret",
+        fetch: vi.fn(async () =>
+          new Response(
+            JSON.stringify({ access_token: "x", issued_token_type: CUBID_ACCESS_TOKEN_TOKEN_TYPE, token_type: "Bearer" }),
+            { headers: { "content-type": "application/json" }, status: 200 }
+          )
+        ),
+        subjectToken: "id-token",
+        tokenEndpoint: discoveryDocument.token_endpoint,
+      })
+    ).rejects.toMatchObject({ code: "unexpected_issued_token_type" });
+  });
+
+  it("builds the JWT bearer grant that redeems an assertion at the resource app", () => {
+    const prepared = buildCubidJwtBearerGrantRequest({
+      assertion: "assertion-jwt",
+      clientId: "wondrbot-at-chaincrew",
+      clientSecret: "chaincrew-secret",
+      scope: "accounts:read",
+      tokenEndpoint: "https://auth.chaincrew.example/token",
+    });
+    const body = new URLSearchParams(String(prepared.body));
+
+    expect(prepared.url).toBe("https://auth.chaincrew.example/token");
+    expect(body.get("grant_type")).toBe(CUBID_JWT_BEARER_GRANT_TYPE);
+    expect(body.get("assertion")).toBe("assertion-jwt");
+    expect(body.get("scope")).toBe("accounts:read");
+    expect((prepared.init.headers as Record<string, string>).authorization).toMatch(/^Basic /u);
+
+    const publicBody = new URLSearchParams(
+      String(buildCubidJwtBearerGrantRequest({ assertion: "a", clientId: "c", tokenEndpoint: "https://auth.chaincrew.example/token" }).body)
+    );
+    expect(publicBody.get("client_id")).toBe("c");
+    expect(publicBody.has("client_secret")).toBe(false);
+  });
+
+  it("validates an identity assertion for the resource app it is addressed to", async () => {
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const claims = {
+      acr: "urn:cubid:acr:passkey",
+      amr: ["passkey"],
+      aud: "https://auth.chaincrew.example",
+      auth_time: nowSeconds - 30,
+      client_id: "cubid_wondrbot",
+      exp: nowSeconds + 300,
+      iat: nowSeconds,
+      iss: issuer,
+      jti: "idjag_1",
+      scope: "accounts:read",
+      sub: "chaincrew-alice",
+    };
+    const { fetchJwks, token } = await createSignedJwt({ typ: CUBID_ID_JAG_JWT_TYPE }, claims);
+
+    expect(decodeCubidIdentityAssertionClaims(token).sub).toBe("chaincrew-alice");
+
+    await expect(
+      validateCubidIdentityAssertion({
+        acceptedClientIds: ["cubid_wondrbot"],
+        assertion: token,
+        audience: "https://auth.chaincrew.example",
+        discoveryDocument,
+        fetch: fetchJwks,
+        nowSeconds,
+      })
+    ).resolves.toMatchObject({ client_id: "cubid_wondrbot", sub: "chaincrew-alice" });
+    expect(fetchJwks).toHaveBeenCalledWith(`${issuer}/jwks`, expect.objectContaining({ method: "GET" }));
+
+    await expect(
+      validateCubidIdentityAssertion({ assertion: token, audience: "https://auth.friendr.example", discoveryDocument, fetch: fetchJwks, nowSeconds })
+    ).rejects.toMatchObject({ code: "invalid_audience" });
+    await expect(
+      validateCubidIdentityAssertion({ acceptedClientIds: ["cubid_other"], assertion: token, audience: claims.aud, discoveryDocument, fetch: fetchJwks, nowSeconds })
+    ).rejects.toMatchObject({ code: "unaccepted_client_id" });
+    await expect(
+      validateCubidIdentityAssertion({ assertion: token, audience: claims.aud, discoveryDocument, fetch: fetchJwks, nowSeconds: nowSeconds + 600 })
+    ).rejects.toMatchObject({ code: "expired_identity_assertion" });
+
+    const idTokenLookalike = await createSignedJwt({ typ: "JWT" }, claims);
+    await expect(
+      validateCubidIdentityAssertion({ assertion: idTokenLookalike.token, audience: claims.aud, discoveryDocument, fetch: idTokenLookalike.fetchJwks, nowSeconds })
+    ).rejects.toMatchObject({ code: "invalid_identity_assertion_type" });
+
+    const tampered = `${token.slice(0, -4)}AAAA`;
+    await expect(
+      validateCubidIdentityAssertion({ assertion: tampered, audience: claims.aud, discoveryDocument, fetch: fetchJwks, nowSeconds })
+    ).rejects.toMatchObject({ code: "invalid_identity_assertion_signature" });
+
+    // The Cubid profile is RS256 only, even though the issuer's JWKS could carry other keys.
+    const es256 = await createSignedJwt({ typ: CUBID_ID_JAG_JWT_TYPE }, claims, "ES256");
+    await expect(
+      validateCubidIdentityAssertion({ assertion: es256.token, audience: claims.aud, discoveryDocument, fetch: es256.fetchJwks, nowSeconds })
+    ).rejects.toMatchObject({ code: "unsupported_identity_assertion_alg" });
+    expect(es256.fetchJwks).not.toHaveBeenCalled();
+  });
+
+  it("validates Security Event Tokens addressed to this client", async () => {
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const subject = { format: "iss_sub", iss: issuer, sub: "chaincrew-alice" };
+    const claims = {
+      aud: "cubid_chaincrew",
+      events: {
+        [CUBID_SECURITY_EVENT_TYPES.crossAppConsentRevoked]: {
+          reason: "user_withdrew_consent",
+          requesting_client_id: "cubid_wondrbot",
+          subject,
+        },
+      },
+      iat: nowSeconds - 5,
+      iss: issuer,
+      jti: "evt_1",
+      sub_id: subject,
+    };
+    const { fetchJwks, token } = await createSignedJwt({ typ: CUBID_SECURITY_EVENT_JWT_TYPE }, claims);
+
+    const decoded = decodeCubidSecurityEventToken(token);
+    expect(decoded.eventType).toBe(CUBID_SECURITY_EVENT_TYPES.crossAppConsentRevoked);
+    expect(isCubidSecurityEventType(decoded.eventType)).toBe(true);
+
+    const event = await validateCubidSecurityEventToken({
+      clientId: "cubid_chaincrew",
+      discoveryDocument,
+      fetch: fetchJwks,
+      maxAgeSeconds: 600,
+      nowSeconds,
+      token,
+    });
+    expect(event.subject).toEqual(subject);
+    expect(event.payload).toEqual({ reason: "user_withdrew_consent", requesting_client_id: "cubid_wondrbot" });
+    expect(event.jti).toBe("evt_1");
+    expect(event.audience).toBe("cubid_chaincrew");
+
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_wondrbot", discoveryDocument, fetch: fetchJwks, nowSeconds, token })
+    ).rejects.toMatchObject({ code: "invalid_audience" });
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: fetchJwks, maxAgeSeconds: 1, nowSeconds, token })
+    ).rejects.toMatchObject({ code: "stale_security_event_token" });
+
+    const assertionAsEvent = await createSignedJwt({ typ: CUBID_ID_JAG_JWT_TYPE }, claims);
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: assertionAsEvent.fetchJwks, nowSeconds, token: assertionAsEvent.token })
+    ).rejects.toMatchObject({ code: "invalid_security_event_token_type" });
+
+    const mismatched = await createSignedJwt(
+      { typ: CUBID_SECURITY_EVENT_JWT_TYPE },
+      {
+        ...claims,
+        events: {
+          [CUBID_SECURITY_EVENT_TYPES.crossAppConsentRevoked]: {
+            reason: "user_withdrew_consent",
+            requesting_client_id: "cubid_wondrbot",
+            subject: { ...subject, sub: "chaincrew-bob" },
+          },
+        },
+      }
+    );
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: mismatched.fetchJwks, nowSeconds, token: mismatched.token })
+    ).rejects.toMatchObject({ code: "invalid_security_event_subject" });
+    expect(() => decodeCubidSecurityEventToken(mismatched.token)).toThrowError(
+      expect.objectContaining({ code: "invalid_security_event_subject" })
+    );
+
+    const es256Event = await createSignedJwt({ typ: CUBID_SECURITY_EVENT_JWT_TYPE }, claims, "ES256");
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: es256Event.fetchJwks, nowSeconds, token: es256Event.token })
+    ).rejects.toMatchObject({ code: "unsupported_security_event_token_alg" });
+
+    const emptyEventType = await createSignedJwt({ typ: CUBID_SECURITY_EVENT_JWT_TYPE }, { ...claims, events: { "": {} } });
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: emptyEventType.fetchJwks, nowSeconds, token: emptyEventType.token })
+    ).rejects.toMatchObject({ code: "invalid_security_event" });
+
+    const twoEvents = await createSignedJwt(
+      { typ: CUBID_SECURITY_EVENT_JWT_TYPE },
+      { ...claims, events: { ...claims.events, [CUBID_SECURITY_EVENT_TYPES.accountPurged]: {} } }
+    );
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: twoEvents.fetchJwks, nowSeconds, token: twoEvents.token })
+    ).rejects.toMatchObject({ code: "invalid_security_event" });
+  });
+
+  it("lists the client's pairings so every paired app can be pre-approved at first sign-in", async () => {
+    const fetchImpl = vi.fn(async (_input, init) => {
+      expect(new Headers(init?.headers).get("authorization")).toMatch(/^Basic /u);
+      return new Response(
+        JSON.stringify({
+          pairings: [
+            {
+              allowed_scopes: ["accounts:read"],
+              audience: "https://auth.chaincrew.example",
+              pairing_id: "pair_1",
+              resource: "urn:cubid:client:cubid_chaincrew",
+              resource_client_id: "cubid_chaincrew",
+              resource_client_name: "ChainCrew",
+            },
+          ],
+        }),
+        { headers: { "content-type": "application/json" }, status: 200 }
+      );
+    });
+
+    const pairings = await listCubidCrossAppPairings({
+      clientId: "cubid_wondrbot",
+      clientSecret: "secret",
+      fetch: fetchImpl,
+      pairingsEndpoint: `${issuer}/cross-app/pairings`,
+    });
+
+    expect(pairings).toEqual([
+      {
+        allowedScopes: ["accounts:read"],
+        audience: "https://auth.chaincrew.example",
+        pairingId: "pair_1",
+        resource: "urn:cubid:client:cubid_chaincrew",
+        resourceClientId: "cubid_chaincrew",
+        resourceClientName: "ChainCrew",
+      },
+    ]);
+    expect(fetchImpl).toHaveBeenCalledWith(`${issuer}/cross-app/pairings`, expect.objectContaining({ method: "POST" }));
+
+    await expect(
+      listCubidCrossAppPairings({
+        clientId: "cubid_wondrbot",
+        clientSecret: "secret",
+        fetch: vi.fn(async () =>
+          new Response(JSON.stringify({ error: "unauthorized_client", error_description: "Public clients cannot take part." }), {
+            headers: { "content-type": "application/json" },
+            status: 400,
+          })
+        ),
+        pairingsEndpoint: `${issuer}/cross-app/pairings`,
+      })
+    ).rejects.toMatchObject({ code: "unauthorized_client", status: 400 });
   });
 });
