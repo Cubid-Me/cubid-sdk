@@ -115,6 +115,28 @@ for production authorization, token, UserInfo, JWKS, logout, revoke, and
 registration endpoints. Do not call Passport, Verify, Admin, or internal OIDC
 interaction routes directly from SDK integrations.
 
+## Cross-App Access
+
+Cubid can vouch for a signed-in person to a sibling app without a second
+sign-in: the identity-assertion authorization grant (RFC 8693 token exchange
+issuing an ID-JAG, redeemed with the RFC 7523 JWT bearer grant). A Cubid
+operator pairs the two apps and the person approves on Cubid's consent page;
+both gates fail closed, and the person can withdraw in Passport.
+
+- Requesting apps add `resources: [buildCubidCrossAppResource("cubid_chaincrew")]`
+  to `buildCubidAuthorizationUrl(...)`, then call
+  `requestCubidIdentityAssertion(...)` **on their server** (it carries the
+  client secret) and redeem the assertion with
+  `buildCubidJwtBearerGrantRequest(...)` at the sibling app. A
+  `consent_required` error means the person has not approved yet;
+  `getCubidCrossAppConsentResource(error)` gives the `resource` to request.
+- Resource apps accept assertions with `validateCubidIdentityAssertion(...)`
+  (the returned `sub` is their own pairwise subject for the person) and
+  receive withdrawals and account deletions as Security Event Tokens with
+  `validateCubidSecurityEventToken(...)`.
+
+See `../../docs/examples/cross-app-access.md` for the full flow.
+
 ## Identity Issuer Readiness
 
 `@cubid/auth` includes `checkCubidIdentityIssuerReadiness(...)` for

@@ -114,6 +114,8 @@ Do not manually edit `api/postman_collection.json`; regenerate it from
   `docs/examples/passkey-first-siwc.md`
 - ClearPass Dashboard Vite auth example:
   `docs/examples/clearpass-dashboard-auth-vite.md`
+- Cross-app access (identity assertions, Security Event Tokens):
+  `docs/examples/cross-app-access.md`
 
 For Sign in with Cubid, `https://id.cubid.me` is the stable public OIDC/SIWC
 issuer and protocol boundary. SDKs should use OIDC discovery from that issuer

@@ -2,9 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildCubidAuthorizationUrl,
+  buildCubidCrossAppResource,
+  buildCubidIdentityAssertionRequest,
   checkCubidIdentityIssuerReadiness,
   createCubidAuthNonce,
   createCubidAuthState,
+  CUBID_TOKEN_EXCHANGE_GRANT_TYPE,
 } from "@cubid/auth";
 
 describe("@cubid/acceptance auth consumer flow", () => {
@@ -75,5 +78,28 @@ describe("@cubid/acceptance auth consumer flow", () => {
     ).rejects.toMatchObject({
       code: "issuer_environment_mismatch",
     });
+  });
+
+  it("requests cross-app access from the public auth entrypoint", () => {
+    const url = new URL(
+      buildCubidAuthorizationUrl({
+        authorizationEndpoint: "https://id.cubid.me/authorize",
+        clientId: "cubid_wondrbot",
+        codeChallenge: "challenge-123",
+        redirectUri: "https://wondrbot.example/callback",
+        resources: [buildCubidCrossAppResource("cubid_chaincrew")],
+        state: createCubidAuthState(16),
+      })
+    );
+    expect(url.searchParams.getAll("resource")).toEqual(["urn:cubid:client:cubid_chaincrew"]);
+
+    const prepared = buildCubidIdentityAssertionRequest({
+      audience: "urn:cubid:client:cubid_chaincrew",
+      clientId: "cubid_wondrbot",
+      clientSecret: "secret",
+      subjectToken: "id-token",
+      tokenEndpoint: "https://id.cubid.me/token",
+    });
+    expect(new URLSearchParams(String(prepared.body)).get("grant_type")).toBe(CUBID_TOKEN_EXCHANGE_GRANT_TYPE);
   });
 });

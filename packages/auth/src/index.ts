@@ -9,6 +9,35 @@ export const CUBID_FRIENDR_OIDC_CLAIM_NAMES = [
   "friendr_unique_human_confidence",
 ] as const;
 
+/**
+ * Cross-app access (identity-assertion authorization grant). A paired,
+ * confidential client exchanges the ID token Cubid issued to it for a
+ * short-lived assertion addressed to a sibling app, carrying the pairwise
+ * subject that app already knows; the sibling app redeems it at its own token
+ * endpoint with the JWT bearer grant. Cubid issues the assertion only while
+ * the person's own consent for that pair stands.
+ */
+export const CUBID_TOKEN_EXCHANGE_GRANT_TYPE =
+  "urn:ietf:params:oauth:grant-type:token-exchange";
+export const CUBID_JWT_BEARER_GRANT_TYPE =
+  "urn:ietf:params:oauth:grant-type:jwt-bearer";
+export const CUBID_ID_JAG_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:id-jag";
+export const CUBID_ID_TOKEN_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:id_token";
+export const CUBID_ACCESS_TOKEN_TOKEN_TYPE =
+  "urn:ietf:params:oauth:token-type:access_token";
+export const CUBID_ID_JAG_JWT_TYPE = "oauth-id-jag+jwt";
+export const CUBID_CROSS_APP_RESOURCE_URN_PREFIX = "urn:cubid:client:";
+export const CUBID_CROSS_APP_CONSENT_REQUIRED_ERROR = "consent_required";
+
+/** Security Event Tokens (RFC 8417) Cubid pushes to a client's `security_events_uri`. */
+export const CUBID_SECURITY_EVENT_JWT_TYPE = "secevent+jwt";
+export const CUBID_SECURITY_EVENT_CONTENT_TYPE = "application/secevent+jwt";
+export const CUBID_SECURITY_EVENT_TYPES = {
+  accountPurged: "https://schemas.openid.net/secevent/risc/event-type/account-purged",
+  consentRevoked: "https://schemas.cubid.me/secevent/consent-revoked",
+  crossAppConsentRevoked: "https://schemas.cubid.me/secevent/cross-app-consent-revoked",
+} as const;
+
 const DISCOVERY_PATH = "/.well-known/openid-configuration";
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
@@ -53,7 +82,11 @@ export class CubidAuthError extends Error {
 export interface CubidOidcDiscoveryDocument {
   authorization_endpoint: string;
   code_challenge_methods_supported?: string[];
+  cross_app_access_consent_parameter?: string;
+  cross_app_access_issued_token_types_supported?: string[];
+  cross_app_access_supported?: boolean;
   end_session_endpoint?: string;
+  grant_types_supported?: string[];
   issuer: string;
   jwks_uri?: string;
   response_types_supported?: string[];
@@ -128,6 +161,13 @@ export interface BuildCubidAuthorizationUrlInput {
   prompt?: string;
   redirectUri: string;
   requirePasskey?: boolean;
+  /**
+   * RFC 8707 `resource` values naming paired apps this client wants to act
+   * in for the person (cross-app access). Use `buildCubidCrossAppResource`
+   * to name an app by its Cubid client id. Each value becomes its own
+   * `resource` parameter and the person approves them on Cubid's consent page.
+   */
+  resources?: readonly string[] | string;
   scope?: readonly string[] | string;
   state: string;
 }
@@ -287,6 +327,126 @@ export interface CubidAuthAssurance {
   acr: string | null;
   amr: string[];
   hasPasskeyAssurance: boolean;
+}
+
+export type CubidClientAuthenticationMethod =
+  | "client_secret_basic"
+  | "client_secret_post";
+
+export type CubidSubjectTokenType =
+  | typeof CUBID_ACCESS_TOKEN_TOKEN_TYPE
+  | typeof CUBID_ID_TOKEN_TOKEN_TYPE;
+
+export interface BuildCubidIdentityAssertionRequestInput {
+  /**
+   * The paired app the assertion is for: its Cubid client id, the
+   * `urn:cubid:client:{client_id}` form, or the audience the operator
+   * configured for the pairing.
+   */
+  audience: string;
+  /** How the confidential client authenticates; defaults to HTTP Basic. */
+  clientAuthenticationMethod?: CubidClientAuthenticationMethod;
+  clientId: string;
+  /** Server-side only. Never ship this helper's inputs to a browser. */
+  clientSecret: string;
+  extraParams?: Record<string, boolean | number | string | undefined>;
+  /** Resource-app scopes to carry; must be within what the pairing allows. */
+  scope?: readonly string[] | string;
+  signal?: AbortSignal;
+  /** The ID token (default) or Cubid access token this client holds for the person. */
+  subjectToken: string;
+  subjectTokenType?: CubidSubjectTokenType;
+  tokenEndpoint: string | URL;
+}
+
+export interface RequestCubidIdentityAssertionInput
+  extends BuildCubidIdentityAssertionRequestInput {
+  fetch?: CubidAuthFetch;
+}
+
+export interface CubidIdentityAssertionResponse {
+  /** The signed ID-JAG, redeemed at the resource app with the JWT bearer grant. */
+  assertion: string;
+  expiresAt: number | null;
+  expiresIn: number | null;
+  issuedAt: number;
+  issuedTokenType: string;
+  raw: Record<string, unknown>;
+  scope: string[];
+  tokenType: string;
+}
+
+export interface BuildCubidJwtBearerGrantRequestInput {
+  /** The ID-JAG received from Cubid. */
+  assertion: string;
+  /** Client credentials as registered at the resource app, when it requires them. */
+  clientAuthenticationMethod?: CubidClientAuthenticationMethod;
+  clientId?: string;
+  clientSecret?: string;
+  extraParams?: Record<string, boolean | number | string | undefined>;
+  scope?: readonly string[] | string;
+  signal?: AbortSignal;
+  /** The resource app's own token endpoint, not Cubid's. */
+  tokenEndpoint: string | URL;
+}
+
+export interface CubidIdentityAssertionClaims extends Record<string, unknown> {
+  acr?: string;
+  amr?: string[];
+  aud?: string | string[];
+  auth_time?: number;
+  client_id?: string;
+  exp?: number;
+  iat?: number;
+  iss?: string;
+  jti?: string;
+  scope?: string;
+  sub?: string;
+}
+
+export interface ValidateCubidIdentityAssertionInput {
+  /** Requesting client ids this app accepts assertions from; any when omitted. */
+  acceptedClientIds?: readonly string[];
+  assertion: string;
+  /** The audience this app expects, as configured in the Cubid pairing. */
+  audience: string;
+  /** Cubid's discovery document, for the issuer and JWKS. */
+  discoveryDocument: CubidOidcDiscoveryDocument;
+  fetch?: CubidAuthFetch;
+  nowSeconds?: number;
+}
+
+export type CubidSecurityEventType =
+  (typeof CUBID_SECURITY_EVENT_TYPES)[keyof typeof CUBID_SECURITY_EVENT_TYPES];
+
+export interface CubidSecurityEventSubject {
+  format: "iss_sub";
+  iss: string;
+  sub: string;
+}
+
+export interface CubidSecurityEvent {
+  /** The client the event was addressed to. */
+  audience: string;
+  eventType: CubidSecurityEventType | string;
+  issuedAt: number | null;
+  issuer: string;
+  jti: string | null;
+  /** Event-specific fields; never carries internal Cubid identifiers. */
+  payload: Record<string, unknown>;
+  raw: Record<string, unknown>;
+  /** The person, named by this client's own pairwise subject. */
+  subject: CubidSecurityEventSubject;
+}
+
+export interface ValidateCubidSecurityEventTokenInput {
+  clientId: string;
+  discoveryDocument: CubidOidcDiscoveryDocument;
+  fetch?: CubidAuthFetch;
+  /** Reject events issued more than this many seconds ago; off when omitted. */
+  maxAgeSeconds?: number;
+  nowSeconds?: number;
+  token: string;
 }
 
 export interface CubidAuthStorageLike {
@@ -581,14 +741,21 @@ function decodeBase64UrlJson(input: string, context: string): Record<string, unk
   }
 }
 
-function decodeCompactJwt(idToken: string) {
-  const token = assertNonEmptyString(idToken, "idToken");
+function decodeCompactJwt(
+  idToken: string,
+  label: { code: string; fieldName: string; name: string } = {
+    code: "invalid_id_token",
+    fieldName: "idToken",
+    name: "ID token",
+  }
+) {
+  const token = assertNonEmptyString(idToken, label.fieldName);
   const segments = token.split(".");
 
   if (segments.length !== 3 || segments.some((segment) => segment.length === 0)) {
-    throw new CubidAuthError("Cubid auth expected an ID token with three JWT segments.", {
+    throw new CubidAuthError(`Cubid auth expected an ${label.name} with three JWT segments.`, {
       category: "parse",
-      code: "invalid_id_token",
+      code: label.code,
     });
   }
 
@@ -598,10 +765,75 @@ function decodeCompactJwt(idToken: string) {
     encodedHeader,
     encodedPayload,
     encodedSignature,
-    header: decodeBase64UrlJson(encodedHeader, "id token header"),
-    payload: decodeBase64UrlJson(encodedPayload, "id token claims") as CubidIdTokenClaims,
+    header: decodeBase64UrlJson(encodedHeader, `${label.name} header`),
+    payload: decodeBase64UrlJson(encodedPayload, `${label.name} claims`) as CubidIdTokenClaims,
     signedData: textEncoder.encode(`${encodedHeader}.${encodedPayload}`),
   };
+}
+
+type DecodedCompactJwt = ReturnType<typeof decodeCompactJwt>;
+
+/**
+ * Verifies a Cubid-signed JWT against the issuer's JWKS. Shared by ID token,
+ * identity assertion, and Security Event Token validation.
+ */
+async function verifyCubidJwtSignature(
+  decoded: DecodedCompactJwt,
+  discoveryDocument: CubidOidcDiscoveryDocument,
+  fetchImpl: CubidAuthFetch | undefined,
+  label: { name: string; unsupportedAlgCode: string; invalidSignatureCode: string }
+): Promise<void> {
+  const alg = typeof decoded.header.alg === "string" ? decoded.header.alg : null;
+  const cryptoAlgorithm = alg ? resolveIdTokenCryptoAlgorithm(alg) : null;
+
+  if (!alg || !cryptoAlgorithm) {
+    throw new CubidAuthError(`Cubid auth does not support this ${label.name} signing algorithm.`, {
+      category: "validation",
+      code: label.unsupportedAlgCode,
+      raw: decoded.header,
+    });
+  }
+
+  if (!discoveryDocument.jwks_uri) {
+    throw new CubidAuthError("Cubid auth discovery metadata did not include a JWKS URI.", {
+      category: "validation",
+      code: "missing_jwks_uri",
+      raw: discoveryDocument,
+    });
+  }
+
+  const jwks = await fetchCubidJwks(discoveryDocument.jwks_uri, fetchImpl);
+  const jwk = findJwksKey(jwks.keys, decoded.header);
+
+  if (!jwk) {
+    throw new CubidAuthError(`Cubid auth could not find a matching ${label.name} signing key.`, {
+      category: "validation",
+      code: "missing_signing_key",
+      raw: decoded.header,
+    });
+  }
+
+  const key = await getCrypto().subtle.importKey(
+    "jwk",
+    jwk,
+    cryptoAlgorithm.importAlgorithm,
+    false,
+    ["verify"]
+  );
+  const verified = await getCrypto().subtle.verify(
+    cryptoAlgorithm.verifyAlgorithm,
+    key,
+    toArrayBuffer(base64UrlToBytes(decoded.encodedSignature)),
+    toArrayBuffer(decoded.signedData)
+  );
+
+  if (!verified) {
+    throw new CubidAuthError(`Cubid auth could not verify the ${label.name} signature.`, {
+      category: "validation",
+      code: label.invalidSignatureCode,
+      raw: decoded.header,
+    });
+  }
 }
 
 function createRandomString(byteLength: number): string {
@@ -669,6 +901,77 @@ function normalizeAcrValues(acrValues?: readonly string[] | string): string[] {
   }
 
   return [...new Set(normalized)];
+}
+
+function normalizeResources(resources?: readonly string[] | string): string[] {
+  if (!resources) {
+    return [];
+  }
+
+  const values = typeof resources === "string" ? resources.split(/\s+/u) : [...resources];
+  const normalized = values.map((value) => value.trim()).filter((value) => value.length > 0);
+
+  for (const value of normalized) {
+    if (/[\s#]/u.test(value)) {
+      throw new CubidAuthError("Cubid auth resource values cannot contain whitespace or fragments.", {
+        category: "validation",
+        code: "invalid_resource",
+        raw: value,
+      });
+    }
+  }
+
+  return [...new Set(normalized)];
+}
+
+function normalizeOptionalScopes(scope?: readonly string[] | string): string[] {
+  if (!scope) {
+    return [];
+  }
+
+  const values =
+    typeof scope === "string"
+      ? scope.split(/\s+/u)
+      : [...scope];
+
+  return [...new Set(values.map((value) => value.trim()).filter((value) => value.length > 0))];
+}
+
+function encodeBasicCredentials(clientId: string, clientSecret: string): string {
+  const credentials = `${encodeURIComponent(clientId)}:${encodeURIComponent(clientSecret)}`;
+  return encodeBinaryToBase64(credentials);
+}
+
+function applyClientAuthentication(
+  body: URLSearchParams,
+  headers: Record<string, string>,
+  input: {
+    clientAuthenticationMethod?: CubidClientAuthenticationMethod;
+    clientId?: string;
+    clientSecret?: string;
+  }
+): void {
+  if (!input.clientId && !input.clientSecret) {
+    return;
+  }
+
+  const clientId = assertNonEmptyString(input.clientId ?? "", "clientId");
+
+  if (!input.clientSecret) {
+    body.set("client_id", clientId);
+    return;
+  }
+
+  const clientSecret = assertNonEmptyString(input.clientSecret, "clientSecret");
+
+  if ((input.clientAuthenticationMethod ?? "client_secret_basic") === "client_secret_post") {
+    body.set("client_id", clientId);
+    body.set("client_secret", clientSecret);
+    return;
+  }
+
+  body.set("client_id", clientId);
+  headers.authorization = `Basic ${encodeBasicCredentials(clientId, clientSecret)}`;
 }
 
 const FRIENDR_OIDC_CLAIMS = {
@@ -1251,6 +1554,10 @@ export function buildCubidAuthorizationUrl(
     url.searchParams.set("max_age", String(input.maxAge));
   }
 
+  for (const resource of normalizeResources(input.resources)) {
+    url.searchParams.append("resource", resource);
+  }
+
   appendExtraParams(url.searchParams, input.extraParams);
 
   const acrValues = normalizeAcrValues(input.acrValues);
@@ -1482,9 +1789,8 @@ export async function validateCubidIdToken(
 ): Promise<CubidIdTokenClaims> {
   const decoded = decodeCompactJwt(input.idToken);
   const alg = typeof decoded.header.alg === "string" ? decoded.header.alg : null;
-  const cryptoAlgorithm = alg ? resolveIdTokenCryptoAlgorithm(alg) : null;
 
-  if (!alg || !cryptoAlgorithm) {
+  if (!alg || !resolveIdTokenCryptoAlgorithm(alg)) {
     throw new CubidAuthError("Cubid auth does not support this ID token signing algorithm.", {
       category: "validation",
       code: "unsupported_id_token_alg",
@@ -1501,39 +1807,11 @@ export async function validateCubidIdToken(
   }
 
   assertIdTokenClaims(decoded.payload, input);
-
-  const jwks = await fetchCubidJwks(input.discoveryDocument.jwks_uri, input.fetch);
-  const jwk = findJwksKey(jwks.keys, decoded.header);
-
-  if (!jwk) {
-    throw new CubidAuthError("Cubid auth could not find a matching ID token signing key.", {
-      category: "validation",
-      code: "missing_signing_key",
-      raw: decoded.header,
-    });
-  }
-
-  const key = await getCrypto().subtle.importKey(
-    "jwk",
-    jwk,
-    cryptoAlgorithm.importAlgorithm,
-    false,
-    ["verify"]
-  );
-  const verified = await getCrypto().subtle.verify(
-    cryptoAlgorithm.verifyAlgorithm,
-    key,
-    toArrayBuffer(base64UrlToBytes(decoded.encodedSignature)),
-    toArrayBuffer(decoded.signedData)
-  );
-
-  if (!verified) {
-    throw new CubidAuthError("Cubid auth could not verify the ID token signature.", {
-      category: "validation",
-      code: "invalid_id_token_signature",
-      raw: decoded.header,
-    });
-  }
+  await verifyCubidJwtSignature(decoded, input.discoveryDocument, input.fetch, {
+    invalidSignatureCode: "invalid_id_token_signature",
+    name: "ID token",
+    unsupportedAlgCode: "unsupported_id_token_alg",
+  });
 
   return decoded.payload;
 }
@@ -1678,4 +1956,492 @@ export function isCubidAuthSessionExpired(
   now = Date.now()
 ): boolean {
   return session.expiresAt !== null ? session.expiresAt <= now : false;
+}
+
+// ---------------------------------------------------------------------------
+// Cross-app access (identity-assertion authorization grant)
+// ---------------------------------------------------------------------------
+
+/** Names a paired app for the `resource` parameter by its Cubid client id. */
+export function buildCubidCrossAppResource(resourceClientId: string): string {
+  const clientId = assertNonEmptyString(resourceClientId, "resourceClientId");
+
+  if (/[\s#]/u.test(clientId)) {
+    throw new CubidAuthError("Cubid auth resource client ids cannot contain whitespace or fragments.", {
+      category: "validation",
+      code: "invalid_resource",
+      raw: clientId,
+    });
+  }
+
+  return clientId.startsWith(CUBID_CROSS_APP_RESOURCE_URN_PREFIX)
+    ? clientId
+    : `${CUBID_CROSS_APP_RESOURCE_URN_PREFIX}${clientId}`;
+}
+
+/** True when discovery advertises token exchange for cross-app access. */
+export function supportsCubidCrossAppAccess(
+  discoveryDocument: CubidOidcDiscoveryDocument
+): boolean {
+  const grants = Array.isArray(discoveryDocument.grant_types_supported)
+    ? discoveryDocument.grant_types_supported
+    : [];
+
+  return (
+    discoveryDocument.cross_app_access_supported === true ||
+    grants.includes(CUBID_TOKEN_EXCHANGE_GRANT_TYPE)
+  );
+}
+
+/**
+ * Prepares the RFC 8693 token exchange that asks Cubid for an identity
+ * assertion addressed to a paired app. Server-side only: it carries the
+ * requesting client's secret.
+ */
+export function buildCubidIdentityAssertionRequest(
+  input: BuildCubidIdentityAssertionRequestInput
+): CubidPreparedRequest {
+  const url = asUrlString(input.tokenEndpoint, "tokenEndpoint");
+  const subjectTokenType = input.subjectTokenType ?? CUBID_ID_TOKEN_TOKEN_TYPE;
+
+  if (
+    subjectTokenType !== CUBID_ID_TOKEN_TOKEN_TYPE &&
+    subjectTokenType !== CUBID_ACCESS_TOKEN_TOKEN_TYPE
+  ) {
+    throw new CubidAuthError("Cubid auth subject tokens must be a Cubid ID token or access token.", {
+      category: "validation",
+      code: "invalid_subject_token_type",
+      raw: subjectTokenType,
+    });
+  }
+
+  const audience = assertNonEmptyString(input.audience, "audience");
+  if (/[\s#]/u.test(audience)) {
+    throw new CubidAuthError("Cubid auth audience values cannot contain whitespace or fragments.", {
+      category: "validation",
+      code: "invalid_audience",
+      raw: audience,
+    });
+  }
+
+  const body = new URLSearchParams({
+    audience,
+    grant_type: CUBID_TOKEN_EXCHANGE_GRANT_TYPE,
+    requested_token_type: CUBID_ID_JAG_TOKEN_TYPE,
+    subject_token: assertNonEmptyString(input.subjectToken, "subjectToken"),
+    subject_token_type: subjectTokenType,
+  });
+
+  const scopes = normalizeOptionalScopes(input.scope);
+  if (scopes.length > 0) {
+    body.set("scope", scopes.join(" "));
+  }
+
+  const headers: Record<string, string> = {
+    accept: "application/json",
+    "content-type": "application/x-www-form-urlencoded",
+  };
+  applyClientAuthentication(body, headers, {
+    clientAuthenticationMethod: input.clientAuthenticationMethod,
+    clientId: assertNonEmptyString(input.clientId, "clientId"),
+    clientSecret: assertNonEmptyString(input.clientSecret, "clientSecret"),
+  });
+  appendExtraParams(body, input.extraParams);
+
+  return {
+    body: body.toString(),
+    init: {
+      body: body.toString(),
+      headers,
+      method: "POST",
+      signal: input.signal,
+    },
+    url,
+  };
+}
+
+/**
+ * Asks Cubid for an identity assertion. A `CubidAuthError` with code
+ * `consent_required` means the person has not yet allowed this client to act
+ * in that app; `getCubidCrossAppConsentResource` reads the `resource` value to
+ * send through `buildCubidAuthorizationUrl` so they can.
+ */
+export async function requestCubidIdentityAssertion(
+  input: RequestCubidIdentityAssertionInput
+): Promise<CubidIdentityAssertionResponse> {
+  const prepared = buildCubidIdentityAssertionRequest(input);
+  const fetchImpl = getFetch(input.fetch);
+  let response: Response;
+
+  try {
+    response = await fetchImpl(prepared.url, prepared.init);
+  } catch (cause) {
+    throw new CubidAuthError(
+      "Cubid auth identity assertion request failed before a response was received.",
+      {
+        category: "network",
+        code: "identity_assertion_request_failed",
+        cause,
+      }
+    );
+  }
+
+  const payload = await readJsonResponse(response, "identity assertion response");
+
+  if (!response.ok || typeof payload.error === "string") {
+    throw new CubidAuthError(
+      getOptionalString(payload, "error_description") ??
+        "Cubid auth identity assertion request failed.",
+      {
+        category: "protocol",
+        code: getOptionalString(payload, "error") ?? "identity_assertion_request_failed",
+        raw: payload,
+        status: response.status,
+      }
+    );
+  }
+
+  const issuedTokenType = getRequiredString(
+    payload,
+    "issued_token_type",
+    "identity assertion response"
+  );
+
+  if (issuedTokenType !== CUBID_ID_JAG_TOKEN_TYPE) {
+    throw new CubidAuthError("Cubid auth expected an identity assertion token type.", {
+      category: "protocol",
+      code: "unexpected_issued_token_type",
+      raw: payload,
+      status: response.status,
+    });
+  }
+
+  const expiresIn = getOptionalNumber(payload, "expires_in", "identity assertion response");
+  const issuedAt = Date.now();
+
+  return {
+    assertion: getRequiredString(payload, "access_token", "identity assertion response"),
+    expiresAt: expiresIn === null ? null : issuedAt + expiresIn * 1000,
+    expiresIn,
+    issuedAt,
+    issuedTokenType,
+    raw: payload,
+    scope: normalizeOptionalScopes(getOptionalString(payload, "scope") ?? undefined),
+    tokenType: getOptionalString(payload, "token_type") ?? "N_A",
+  };
+}
+
+/** True when the error says the person has not consented to this cross-app access yet. */
+export function isCubidCrossAppConsentRequired(error: unknown): error is CubidAuthError {
+  return (
+    error instanceof CubidAuthError &&
+    error.code === CUBID_CROSS_APP_CONSENT_REQUIRED_ERROR
+  );
+}
+
+/**
+ * Reads the `resource` value named in a `consent_required` error description,
+ * ready for `buildCubidAuthorizationUrl({ resources: [value] })`.
+ */
+export function getCubidCrossAppConsentResource(error: unknown): string | null {
+  if (!isCubidCrossAppConsentRequired(error)) {
+    return null;
+  }
+
+  const match = /resource=(\S+?)(?:[.,;]?\s|[.,;]?$)/u.exec(error.message);
+  return match?.[1] ?? null;
+}
+
+/**
+ * Prepares the RFC 7523 JWT bearer grant that redeems an identity assertion
+ * at the resource app's own token endpoint. Client credentials are the ones
+ * the requesting client holds at that app, when it requires them.
+ */
+export function buildCubidJwtBearerGrantRequest(
+  input: BuildCubidJwtBearerGrantRequestInput
+): CubidPreparedRequest {
+  const url = asUrlString(input.tokenEndpoint, "tokenEndpoint");
+  const body = new URLSearchParams({
+    assertion: assertNonEmptyString(input.assertion, "assertion"),
+    grant_type: CUBID_JWT_BEARER_GRANT_TYPE,
+  });
+
+  const scopes = normalizeOptionalScopes(input.scope);
+  if (scopes.length > 0) {
+    body.set("scope", scopes.join(" "));
+  }
+
+  const headers: Record<string, string> = {
+    accept: "application/json",
+    "content-type": "application/x-www-form-urlencoded",
+  };
+  applyClientAuthentication(body, headers, input);
+  appendExtraParams(body, input.extraParams);
+
+  return {
+    body: body.toString(),
+    init: {
+      body: body.toString(),
+      headers,
+      method: "POST",
+      signal: input.signal,
+    },
+    url,
+  };
+}
+
+const IDENTITY_ASSERTION_LABEL = {
+  code: "invalid_identity_assertion",
+  fieldName: "assertion",
+  name: "identity assertion",
+};
+
+export function decodeCubidIdentityAssertionClaims(
+  assertion: string
+): CubidIdentityAssertionClaims {
+  return decodeCompactJwt(assertion, IDENTITY_ASSERTION_LABEL).payload as CubidIdentityAssertionClaims;
+}
+
+/**
+ * Validates an identity assertion received at a resource app's token
+ * endpoint: `typ`, issuer, audience, expiry, requesting client, and the
+ * signature against Cubid's JWKS. The returned `sub` is this app's own
+ * pairwise subject for the person. Replay protection on `jti` is the app's.
+ */
+export async function validateCubidIdentityAssertion(
+  input: ValidateCubidIdentityAssertionInput
+): Promise<CubidIdentityAssertionClaims> {
+  const decoded = decodeCompactJwt(input.assertion, IDENTITY_ASSERTION_LABEL);
+  const claims = decoded.payload as CubidIdentityAssertionClaims;
+  const nowSeconds = input.nowSeconds ?? Math.floor(Date.now() / 1000);
+
+  if (decoded.header.typ !== CUBID_ID_JAG_JWT_TYPE) {
+    throw new CubidAuthError("The Cubid identity assertion did not carry the ID-JAG token type.", {
+      category: "validation",
+      code: "invalid_identity_assertion_type",
+      raw: decoded.header,
+    });
+  }
+
+  const expectedIssuer = normalizeIssuer(input.discoveryDocument.issuer);
+  if (typeof claims.iss !== "string" || normalizeIssuer(claims.iss) !== expectedIssuer) {
+    throw new CubidAuthError("The Cubid identity assertion issuer did not match discovery metadata.", {
+      category: "validation",
+      code: "invalid_issuer",
+      raw: claims,
+    });
+  }
+
+  const expectedAudience = assertNonEmptyString(input.audience, "audience");
+  const audience = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
+  if (!audience.includes(expectedAudience)) {
+    throw new CubidAuthError("The Cubid identity assertion audience did not match this app.", {
+      category: "validation",
+      code: "invalid_audience",
+      raw: claims,
+    });
+  }
+
+  if (typeof claims.exp !== "number" || !Number.isFinite(claims.exp)) {
+    throw new CubidAuthError("The Cubid identity assertion expiration claim was missing or invalid.", {
+      category: "validation",
+      code: "invalid_expiration",
+      raw: claims,
+    });
+  }
+
+  if (claims.exp <= nowSeconds) {
+    throw new CubidAuthError("The Cubid identity assertion has expired.", {
+      category: "validation",
+      code: "expired_identity_assertion",
+      raw: claims,
+    });
+  }
+
+  if (typeof claims.sub !== "string" || claims.sub.length === 0) {
+    throw new CubidAuthError("The Cubid identity assertion did not name a subject.", {
+      category: "validation",
+      code: "missing_subject",
+      raw: claims,
+    });
+  }
+
+  if (typeof claims.client_id !== "string" || claims.client_id.length === 0) {
+    throw new CubidAuthError("The Cubid identity assertion did not name the requesting client.", {
+      category: "validation",
+      code: "missing_client_id",
+      raw: claims,
+    });
+  }
+
+  if (input.acceptedClientIds && !input.acceptedClientIds.includes(claims.client_id)) {
+    throw new CubidAuthError("The Cubid identity assertion came from a client this app does not accept.", {
+      category: "validation",
+      code: "unaccepted_client_id",
+      raw: claims,
+    });
+  }
+
+  if (typeof claims.jti !== "string" || claims.jti.length === 0) {
+    throw new CubidAuthError("The Cubid identity assertion did not carry a JWT id.", {
+      category: "validation",
+      code: "missing_jti",
+      raw: claims,
+    });
+  }
+
+  await verifyCubidJwtSignature(decoded, input.discoveryDocument, input.fetch, {
+    invalidSignatureCode: "invalid_identity_assertion_signature",
+    name: "identity assertion",
+    unsupportedAlgCode: "unsupported_identity_assertion_alg",
+  });
+
+  return claims;
+}
+
+const SECURITY_EVENT_LABEL = {
+  code: "invalid_security_event_token",
+  fieldName: "token",
+  name: "Security Event Token",
+};
+
+function parseSecurityEvent(
+  claims: Record<string, unknown>,
+  clientId: string
+): CubidSecurityEvent {
+  const subject = claims.sub_id;
+  if (
+    !isRecord(subject) ||
+    subject.format !== "iss_sub" ||
+    typeof subject.iss !== "string" ||
+    typeof subject.sub !== "string" ||
+    subject.sub.length === 0
+  ) {
+    throw new CubidAuthError("The Cubid Security Event Token did not carry an iss_sub subject.", {
+      category: "validation",
+      code: "invalid_security_event_subject",
+      raw: claims,
+    });
+  }
+
+  const events = claims.events;
+  if (!isRecord(events) || Object.keys(events).length !== 1) {
+    throw new CubidAuthError("The Cubid Security Event Token must carry exactly one event.", {
+      category: "validation",
+      code: "invalid_security_event",
+      raw: claims,
+    });
+  }
+
+  const eventType = Object.keys(events)[0] as string;
+  const eventPayload = events[eventType];
+  const payload: Record<string, unknown> = isRecord(eventPayload) ? { ...eventPayload } : {};
+  delete payload.subject;
+
+  return {
+    audience: clientId,
+    eventType,
+    issuedAt: typeof claims.iat === "number" && Number.isFinite(claims.iat) ? claims.iat : null,
+    issuer: typeof claims.iss === "string" ? claims.iss : "",
+    jti: typeof claims.jti === "string" && claims.jti.length > 0 ? claims.jti : null,
+    payload,
+    raw: claims,
+    subject: { format: "iss_sub", iss: subject.iss, sub: subject.sub },
+  };
+}
+
+export function isCubidSecurityEventType(value: unknown): value is CubidSecurityEventType {
+  return (
+    typeof value === "string" &&
+    (Object.values(CUBID_SECURITY_EVENT_TYPES) as string[]).includes(value)
+  );
+}
+
+/** Decodes a Security Event Token without verifying it. */
+export function decodeCubidSecurityEventToken(token: string): CubidSecurityEvent {
+  const decoded = decodeCompactJwt(token, SECURITY_EVENT_LABEL);
+  const audience = Array.isArray(decoded.payload.aud) ? decoded.payload.aud[0] : decoded.payload.aud;
+  return parseSecurityEvent(decoded.payload, typeof audience === "string" ? audience : "");
+}
+
+/**
+ * Validates a Security Event Token Cubid pushed to this client's
+ * `security_events_uri`: `typ`, issuer, audience, issued-at, subject shape,
+ * and the signature against Cubid's JWKS. Answer any 2xx to acknowledge.
+ */
+export async function validateCubidSecurityEventToken(
+  input: ValidateCubidSecurityEventTokenInput
+): Promise<CubidSecurityEvent> {
+  const decoded = decodeCompactJwt(input.token, SECURITY_EVENT_LABEL);
+  const claims = decoded.payload as Record<string, unknown>;
+  const nowSeconds = input.nowSeconds ?? Math.floor(Date.now() / 1000);
+
+  if (decoded.header.typ !== CUBID_SECURITY_EVENT_JWT_TYPE) {
+    throw new CubidAuthError("The Cubid Security Event Token did not carry the secevent token type.", {
+      category: "validation",
+      code: "invalid_security_event_token_type",
+      raw: decoded.header,
+    });
+  }
+
+  const expectedIssuer = normalizeIssuer(input.discoveryDocument.issuer);
+  if (typeof claims.iss !== "string" || normalizeIssuer(claims.iss) !== expectedIssuer) {
+    throw new CubidAuthError("The Cubid Security Event Token issuer did not match discovery metadata.", {
+      category: "validation",
+      code: "invalid_issuer",
+      raw: claims,
+    });
+  }
+
+  const clientId = assertNonEmptyString(input.clientId, "clientId");
+  const audience = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
+  if (!audience.includes(clientId)) {
+    throw new CubidAuthError("The Cubid Security Event Token audience did not include the client ID.", {
+      category: "validation",
+      code: "invalid_audience",
+      raw: claims,
+    });
+  }
+
+  if (typeof claims.iat !== "number" || !Number.isFinite(claims.iat)) {
+    throw new CubidAuthError("The Cubid Security Event Token issued-at claim was missing or invalid.", {
+      category: "validation",
+      code: "invalid_issued_at",
+      raw: claims,
+    });
+  }
+
+  if (typeof input.maxAgeSeconds === "number" && nowSeconds - claims.iat > input.maxAgeSeconds) {
+    throw new CubidAuthError("The Cubid Security Event Token is older than this app accepts.", {
+      category: "validation",
+      code: "stale_security_event_token",
+      raw: claims,
+    });
+  }
+
+  if (typeof claims.jti !== "string" || claims.jti.length === 0) {
+    throw new CubidAuthError("The Cubid Security Event Token did not carry a JWT id.", {
+      category: "validation",
+      code: "missing_jti",
+      raw: claims,
+    });
+  }
+
+  const event = parseSecurityEvent(claims, clientId);
+
+  if (normalizeIssuer(event.subject.iss) !== expectedIssuer) {
+    throw new CubidAuthError("The Cubid Security Event Token subject issuer did not match the issuer.", {
+      category: "validation",
+      code: "invalid_security_event_subject",
+      raw: claims,
+    });
+  }
+
+  await verifyCubidJwtSignature(decoded, input.discoveryDocument, input.fetch, {
+    invalidSignatureCode: "invalid_security_event_token_signature",
+    name: "Security Event Token",
+    unsupportedAlgCode: "unsupported_security_event_token_alg",
+  });
+
+  return event;
 }

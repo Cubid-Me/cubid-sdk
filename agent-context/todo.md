@@ -1838,3 +1838,25 @@ Acceptance notes:
 - Run `pnpm --filter @cubid/core test`, `pnpm --filter @cubid/browser build`, `pnpm api:validate`, and the new Paytag/OpenAPI sync guardrail.
 - `git diff --check` passes.
 - Targeted scans confirm no old Pay-To helper names, payment-intent notification helpers, wallet routing fields, provider callback fields, solver/bridge/swap execution fields, service-role secrets, or dapp API keys in browser helpers.
+
+## X. Cross-Repo Protocol Features
+
+### X01. Cross-app access helpers (identity-assertion authorization grant)
+
+- Status: Completed
+- Timestamp started: 2026-10-01T04:35:00Z
+- Timestamp completed: 2026-10-01T04:50:00Z
+- Feature branch: `feature/cross-app-access`
+- Head: see session log
+- Session-log reference(s): `agent-context/session-log/2026-10-01-feature-cross-app-access.md`
+- Issues: Cubid-Me/cubid-sdk#57; parent Cubid-Me/cubid-monorepo#176 (tracker #182)
+
+Add the `@cubid/auth` helpers for requesting apps (consent via `resource`, server-side token exchange for an ID-JAG, JWT bearer redemption) and resource apps (assertion validation, Security Event Token receiver), with docs and tests, matching `docs/engineering/oidc-cross-app-access.md` in cubid-monorepo.
+
+### X01.1 Staging smoke for cross-app access
+
+- Status: Not started
+- Depends on: Cubid-Me/cubid-monorepo#179
+
+Run the requesting and resource flows from `@cubid/auth` against the staging issuer once a pairing exists, and record the hosted smoke in the session log and `docs/examples/cross-app-access.md`.
+
