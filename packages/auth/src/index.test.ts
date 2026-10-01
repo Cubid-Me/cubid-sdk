@@ -878,26 +878,33 @@ describe("@cubid/auth cross-app access", () => {
     token_endpoint: `${issuer}/token`,
   };
 
-  async function createSignedJwt(header: Record<string, unknown>, payload: Record<string, unknown>) {
-    const keyPair = await crypto.subtle.generateKey(
-      {
-        hash: "SHA-256",
-        modulusLength: 2048,
-        name: "RSASSA-PKCS1-v1_5",
-        publicExponent: new Uint8Array([1, 0, 1]),
-      },
-      true,
-      ["sign", "verify"]
-    );
+  async function createSignedJwt(
+    header: Record<string, unknown>,
+    payload: Record<string, unknown>,
+    algorithm: "ES256" | "RS256" = "RS256"
+  ) {
+    const keyPair =
+      algorithm === "ES256"
+        ? await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"])
+        : await crypto.subtle.generateKey(
+            {
+              hash: "SHA-256",
+              modulusLength: 2048,
+              name: "RSASSA-PKCS1-v1_5",
+              publicExponent: new Uint8Array([1, 0, 1]),
+            },
+            true,
+            ["sign", "verify"]
+          );
     const publicKey = await crypto.subtle.exportKey("jwk", keyPair.publicKey);
-    const encodedHeader = Buffer.from(JSON.stringify({ alg: "RS256", kid: "cubid-test-key", ...header }), "utf8").toString("base64url");
+    const encodedHeader = Buffer.from(JSON.stringify({ alg: algorithm, kid: "cubid-test-key", ...header }), "utf8").toString("base64url");
     const encodedPayload = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
     const signature = await crypto.subtle.sign(
-      "RSASSA-PKCS1-v1_5",
+      algorithm === "ES256" ? { hash: "SHA-256", name: "ECDSA" } : "RSASSA-PKCS1-v1_5",
       keyPair.privateKey,
       new TextEncoder().encode(`${encodedHeader}.${encodedPayload}`)
     );
-    const jwks = { keys: [{ ...publicKey, alg: "RS256", kid: "cubid-test-key", use: "sig" }] };
+    const jwks = { keys: [{ ...publicKey, alg: algorithm, kid: "cubid-test-key", use: "sig" }] };
     const fetchJwks = vi.fn(async () =>
       new Response(JSON.stringify(jwks), { headers: { "content-type": "application/json" }, status: 200 })
     );
@@ -912,6 +919,8 @@ describe("@cubid/auth cross-app access", () => {
     expect(buildCubidCrossAppResource("cubid_chaincrew")).toBe("urn:cubid:client:cubid_chaincrew");
     expect(buildCubidCrossAppResource("urn:cubid:client:cubid_chaincrew")).toBe("urn:cubid:client:cubid_chaincrew");
     expect(() => buildCubidCrossAppResource("has space")).toThrow(CubidAuthError);
+    expect(() => buildCubidCrossAppResource("urn:cubid:client:")).toThrow(CubidAuthError);
+    expect(() => buildCubidCrossAppResource("urn:cubid:client: ")).toThrow(CubidAuthError);
 
     const url = new URL(
       buildCubidAuthorizationUrl({
@@ -1131,6 +1140,13 @@ describe("@cubid/auth cross-app access", () => {
     await expect(
       validateCubidIdentityAssertion({ assertion: tampered, audience: claims.aud, discoveryDocument, fetch: fetchJwks, nowSeconds })
     ).rejects.toMatchObject({ code: "invalid_identity_assertion_signature" });
+
+    // The Cubid profile is RS256 only, even though the issuer's JWKS could carry other keys.
+    const es256 = await createSignedJwt({ typ: CUBID_ID_JAG_JWT_TYPE }, claims, "ES256");
+    await expect(
+      validateCubidIdentityAssertion({ assertion: es256.token, audience: claims.aud, discoveryDocument, fetch: es256.fetchJwks, nowSeconds })
+    ).rejects.toMatchObject({ code: "unsupported_identity_assertion_alg" });
+    expect(es256.fetchJwks).not.toHaveBeenCalled();
   });
 
   it("validates Security Event Tokens addressed to this client", async () => {
@@ -1180,6 +1196,16 @@ describe("@cubid/auth cross-app access", () => {
     await expect(
       validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: assertionAsEvent.fetchJwks, nowSeconds, token: assertionAsEvent.token })
     ).rejects.toMatchObject({ code: "invalid_security_event_token_type" });
+
+    const es256Event = await createSignedJwt({ typ: CUBID_SECURITY_EVENT_JWT_TYPE }, claims, "ES256");
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: es256Event.fetchJwks, nowSeconds, token: es256Event.token })
+    ).rejects.toMatchObject({ code: "unsupported_security_event_token_alg" });
+
+    const emptyEventType = await createSignedJwt({ typ: CUBID_SECURITY_EVENT_JWT_TYPE }, { ...claims, events: { "": {} } });
+    await expect(
+      validateCubidSecurityEventToken({ clientId: "cubid_chaincrew", discoveryDocument, fetch: emptyEventType.fetchJwks, nowSeconds, token: emptyEventType.token })
+    ).rejects.toMatchObject({ code: "invalid_security_event" });
 
     const twoEvents = await createSignedJwt(
       { typ: CUBID_SECURITY_EVENT_JWT_TYPE },

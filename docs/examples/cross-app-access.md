@@ -151,7 +151,9 @@ const claims = await validateCubidIdentityAssertion({
 ```
 
 Validation covers the `oauth-id-jag+jwt` type, issuer, audience, expiry,
-subject, requesting client and the RS256 signature against Cubid's JWKS. Keep
+subject, requesting client and the RS256 signature against Cubid's JWKS. Any
+other `alg` is refused before the JWKS is consulted; the Cubid profile is
+RS256 only for assertions and Security Event Tokens. Keep
 your own replay check on `claims.jti` if you want one; assertions live five
 minutes.
 

@@ -1986,19 +1986,23 @@ export function isCubidAuthSessionExpired(
 
 /** Names a paired app for the `resource` parameter by its Cubid client id. */
 export function buildCubidCrossAppResource(resourceClientId: string): string {
-  const clientId = assertNonEmptyString(resourceClientId, "resourceClientId");
+  const raw = assertNonEmptyString(resourceClientId, "resourceClientId").trim();
+  const clientId = raw.startsWith(CUBID_CROSS_APP_RESOURCE_URN_PREFIX)
+    ? raw.slice(CUBID_CROSS_APP_RESOURCE_URN_PREFIX.length)
+    : raw;
 
-  if (/[\s#]/u.test(clientId)) {
-    throw new CubidAuthError("Cubid auth resource client ids cannot contain whitespace or fragments.", {
-      category: "validation",
-      code: "invalid_resource",
-      raw: clientId,
-    });
+  if (clientId.length === 0 || /[\s#]/u.test(clientId)) {
+    throw new CubidAuthError(
+      "Cubid auth resource client ids must be non-empty and cannot contain whitespace or fragments.",
+      {
+        category: "validation",
+        code: "invalid_resource",
+        raw,
+      }
+    );
   }
 
-  return clientId.startsWith(CUBID_CROSS_APP_RESOURCE_URN_PREFIX)
-    ? clientId
-    : `${CUBID_CROSS_APP_RESOURCE_URN_PREFIX}${clientId}`;
+  return `${CUBID_CROSS_APP_RESOURCE_URN_PREFIX}${clientId}`;
 }
 
 /** True when discovery advertises token exchange for cross-app access. */
@@ -2285,6 +2289,21 @@ export function buildCubidJwtBearerGrantRequest(
   };
 }
 
+const CUBID_SIGNED_ARTIFACT_ALG = "RS256";
+
+function assertCubidProfileAlgorithm(
+  header: Record<string, unknown>,
+  label: { name: string; unsupportedAlgCode: string }
+): void {
+  if (header.alg !== CUBID_SIGNED_ARTIFACT_ALG) {
+    throw new CubidAuthError(`Cubid ${label.name}s are signed with RS256 only.`, {
+      category: "validation",
+      code: label.unsupportedAlgCode,
+      raw: header,
+    });
+  }
+}
+
 const IDENTITY_ASSERTION_LABEL = {
   code: "invalid_identity_assertion",
   fieldName: "assertion",
@@ -2309,6 +2328,11 @@ export async function validateCubidIdentityAssertion(
   const decoded = decodeCompactJwt(input.assertion, IDENTITY_ASSERTION_LABEL);
   const claims = decoded.payload as CubidIdentityAssertionClaims;
   const nowSeconds = input.nowSeconds ?? Math.floor(Date.now() / 1000);
+
+  assertCubidProfileAlgorithm(decoded.header, {
+    name: "identity assertion",
+    unsupportedAlgCode: "unsupported_identity_assertion_alg",
+  });
 
   if (decoded.header.typ !== CUBID_ID_JAG_JWT_TYPE) {
     throw new CubidAuthError("The Cubid identity assertion did not carry the ID-JAG token type.", {
@@ -2429,6 +2453,13 @@ function parseSecurityEvent(
   }
 
   const eventType = Object.keys(events)[0] as string;
+  if (eventType.trim().length === 0) {
+    throw new CubidAuthError("The Cubid Security Event Token event type must be a non-empty URI.", {
+      category: "validation",
+      code: "invalid_security_event",
+      raw: claims,
+    });
+  }
   const eventPayload = events[eventType];
   const payload: Record<string, unknown> = isRecord(eventPayload) ? { ...eventPayload } : {};
   delete payload.subject;
@@ -2470,6 +2501,11 @@ export async function validateCubidSecurityEventToken(
   const decoded = decodeCompactJwt(input.token, SECURITY_EVENT_LABEL);
   const claims = decoded.payload as Record<string, unknown>;
   const nowSeconds = input.nowSeconds ?? Math.floor(Date.now() / 1000);
+
+  assertCubidProfileAlgorithm(decoded.header, {
+    name: "Security Event Token",
+    unsupportedAlgCode: "unsupported_security_event_token_alg",
+  });
 
   if (decoded.header.typ !== CUBID_SECURITY_EVENT_JWT_TYPE) {
     throw new CubidAuthError("The Cubid Security Event Token did not carry the secevent token type.", {
