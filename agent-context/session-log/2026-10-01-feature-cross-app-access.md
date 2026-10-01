@@ -17,3 +17,12 @@
 - summary: Decision on Cubid-Me/cubid-monorepo#181 is "keep Cubid-hosted consent; pre-approve at first sign-in". Added `listCubidCrossAppPairings` (server-side, client-authenticated call to the issuer's `cross_app_access_pairings_endpoint`, now typed on the discovery document) so a requesting app can put every paired app in its first `resources` request; the guide shows that pattern first.
 - validation: `pnpm lint`; `pnpm typecheck`; `pnpm --filter @cubid/auth build`; auth unit suite 34 pass (1 new); `pnpm docs:api:build`; `pnpm docs:api:check`; `git diff --check`.
 - follow-ups: None beyond X01.1 (staging smoke).
+
+## 2026-10-01T15:55:00Z - PR #58 review fixes (Copilot)
+
+- agent: Claude Fable 5.1
+- branch: feature/cross-app-access
+- head: 92ee0f0
+- summary: `buildCubidCrossAppResource` strips the URN prefix before validating, so `urn:cubid:client:` is refused. `validateCubidIdentityAssertion` and `validateCubidSecurityEventToken` refuse any `alg` other than RS256 before the JWKS is fetched (the Cubid profile), and a Security Event Token with an empty event type is refused. Session-log heads now record concrete commits and the completed X01 block left `todo.md` (branch log keeps the history; X01 is now the staging smoke follow-up). The cross-repo note convention conflict is answered on the review thread rather than by a new `cross-repo-comms` file, because the monorepo forbids new live notes there.
+- validation: `pnpm lint`; `pnpm --filter @cubid/auth typecheck`; `pnpm --filter @cubid/auth build`; auth unit suite 34 pass (ES256 rejection for assertions and SETs, empty URN suffix, empty event type); `pnpm docs:api:build`; `pnpm docs:api:check`; `git diff --check`.
+- follow-ups: Align `AGENTS.md` with the monorepo's issue-based coordination policy, or reinstate sibling notes in both repos; owner decision.
