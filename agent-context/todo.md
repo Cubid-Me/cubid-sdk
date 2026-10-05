@@ -1838,3 +1838,13 @@ Acceptance notes:
 - Run `pnpm --filter @cubid/core test`, `pnpm --filter @cubid/browser build`, `pnpm api:validate`, and the new Paytag/OpenAPI sync guardrail.
 - `git diff --check` passes.
 - Targeted scans confirm no old Pay-To helper names, payment-intent notification helpers, wallet routing fields, provider callback fields, solver/bridge/swap execution fields, service-role secrets, or dapp API keys in browser helpers.
+
+## X. Cross-Repo Protocol Features
+
+### X01. Staging smoke for cross-app access
+
+- Status: Not started
+- Depends on: Cubid-Me/cubid-monorepo#179
+- Context: the helpers landed on `feature/cross-app-access` (Cubid-Me/cubid-sdk#57, #58); see `agent-context/session-log/2026-10-01-auth-feature-cross-app-access.md`.
+
+Run the requesting and resource flows from `@cubid/auth` against the staging issuer once a pairing exists, and record the hosted smoke in the session log and `docs/examples/cross-app-access.md`.
