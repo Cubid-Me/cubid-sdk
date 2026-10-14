@@ -24,6 +24,7 @@ import {
   type BuildCubidAuthorizationUrlInput,
   type CubidAuthAssurance,
   type CubidAuthFetch,
+  type CubidAuthCrypto,
   type CubidAuthSession,
   type CubidAuthStorageLike,
   type CubidIdTokenClaims,
@@ -62,6 +63,7 @@ export interface CubidAuthSignInOptions {
   nonce?: string;
   performRedirect?: boolean;
   prompt?: string;
+  provider?: BuildCubidAuthorizationUrlInput["provider"];
   requirePasskey?: boolean;
   scope?: readonly string[] | string;
   stateByteLength?: number;
@@ -82,6 +84,7 @@ export interface CubidAuthLogoutOptions {
 }
 
 export interface CubidAuthProviderProps {
+  crypto?: CubidAuthCrypto;
   autoUserInfo?: boolean;
   children: ReactNode;
   clientId: string;
@@ -252,6 +255,31 @@ function getCurrentUrl(input: string | URL | undefined) {
   });
 }
 
+function assertCallbackDestination(callbackUrl: string, redirectUri: string) {
+  let callback: URL;
+  let registered: URL;
+  try {
+    callback = new URL(callbackUrl);
+    registered = new URL(redirectUri);
+  } catch {
+    throw new CubidAuthError("Cubid callback requires the registered absolute redirect destination.", {
+      category: "validation", code: "invalid_callback_destination",
+    });
+  }
+  const destinationKeys = ["protocol", "username", "password", "host", "pathname"] as const;
+  const hasRegisteredQuery = Array.from(new Set(registered.searchParams.keys())).every((key) => {
+    const actual = callback.searchParams.getAll(key);
+    const expected = registered.searchParams.getAll(key);
+    return actual.length === expected.length && actual.every((value, index) => value === expected[index]);
+  });
+  if (callbackUrl.includes("#") || redirectUri.includes("#") ||
+      destinationKeys.some((key) => callback[key] !== registered[key]) || !hasRegisteredQuery) {
+    throw new CubidAuthError("Cubid callback does not match the registered redirect destination.", {
+      category: "validation", code: "invalid_callback_destination",
+    });
+  }
+}
+
 function navigateTo(url: string, navigate?: (url: string) => void) {
   if (navigate) {
     navigate(url);
@@ -286,6 +314,11 @@ function mergeSession(
   idTokenClaims: CubidIdTokenClaims | null,
   userInfo: CubidUserInfo | null
 ): CubidAuthSession {
+  if (userInfo && session.subject && userInfo.sub !== session.subject) {
+    throw new CubidAuthError("Cubid UserInfo subject does not match the active session.", {
+      category: "validation", code: "invalid_userinfo_subject",
+    });
+  }
   return {
     ...session,
     idTokenClaims,
@@ -300,6 +333,7 @@ export function CubidAuthProvider({
   autoUserInfo = true,
   children,
   clientId,
+  crypto,
   discoveryDocument = null,
   fetch,
   issuer,
@@ -365,20 +399,11 @@ export function CubidAuthProvider({
       const nextDiscovery = await ensureDiscoveryDocument();
       const nextScope = normalizeScope(options.scope ?? scope);
       const pkce = await createCubidPkcePair({
+        crypto,
         verifierByteLength: options.verifierByteLength,
       });
-      const state = createCubidAuthState(options.stateByteLength);
-      const nonce = options.nonce ?? createCubidAuthNonce(options.nonceByteLength);
-
-      writeTransaction(storage, {
-        clientId,
-        codeVerifier: pkce.codeVerifier,
-        issuer,
-        nonce,
-        redirectUri,
-        scope: nextScope,
-        state,
-      });
+      const state = createCubidAuthState(options.stateByteLength, crypto);
+      const nonce = options.nonce ?? createCubidAuthNonce(options.nonceByteLength, crypto);
 
       const url = buildCubidAuthorizationUrl({
         authorizationEndpoint: nextDiscovery.authorization_endpoint,
@@ -391,8 +416,19 @@ export function CubidAuthProvider({
         maxAge: options.maxAge,
         nonce,
         prompt: options.prompt,
+        provider: options.provider,
         redirectUri,
         requirePasskey: options.requirePasskey ?? requirePasskey,
+        scope: nextScope,
+        state,
+      });
+
+      writeTransaction(storage, {
+        clientId,
+        codeVerifier: pkce.codeVerifier,
+        issuer,
+        nonce,
+        redirectUri,
         scope: nextScope,
         state,
       });
@@ -425,7 +461,22 @@ export function CubidAuthProvider({
         });
       }
 
-      const callback = parseCubidAuthorizationCallback(getCurrentUrl(options.callbackUrl));
+      const callbackUrl = getCurrentUrl(options.callbackUrl);
+      assertCallbackDestination(callbackUrl, transaction.redirectUri);
+      const callback = parseCubidAuthorizationCallback(callbackUrl);
+
+      assertCubidAuthorizationState(transaction.state, callback.state);
+      if (transaction.clientId !== clientId || transaction.issuer !== issuer || transaction.redirectUri !== redirectUri) {
+        throw new CubidAuthError("Cubid callback does not match this client transaction.", {
+          category: "validation", code: "invalid_transaction",
+        });
+      }
+      const callbackIssuer = callback.raw.iss?.[0];
+      if (typeof callbackIssuer !== "undefined" && callbackIssuer !== transaction.issuer) {
+        throw new CubidAuthError("Cubid callback issuer does not match the stored transaction.", {
+          category: "validation", code: "invalid_issuer",
+        });
+      }
 
       if (callback.kind === "error") {
         throw new CubidAuthError(
@@ -440,9 +491,12 @@ export function CubidAuthProvider({
         );
       }
 
-      assertCubidAuthorizationState(transaction.state, callback.state);
-
       const nextDiscovery = await ensureDiscoveryDocument();
+      if (nextDiscovery.issuer !== transaction.issuer) {
+        throw new CubidAuthError("Cubid discovery issuer does not match the stored transaction.", {
+          category: "validation", code: "invalid_issuer",
+        });
+      }
       const tokenResponse = await exchangeCubidAuthorizationCode({
         clientId: transaction.clientId,
         code: callback.code,
@@ -478,35 +532,14 @@ export function CubidAuthProvider({
       const idTokenClaims = tokenResponse.idToken
         ? await validateCubidIdToken({
             clientId: transaction.clientId,
+            crypto,
+            expectedNonce: transaction.nonce,
             discoveryDocument: nextDiscovery,
             fetch,
             idToken: tokenResponse.idToken,
           })
         : null;
 
-      if (tokenResponse.idToken) {
-        if (typeof idTokenClaims?.nonce !== "string") {
-          throw new CubidAuthError(
-            "The Cubid ID token nonce was missing from the token response.",
-            {
-              category: "validation",
-              code: "missing_nonce",
-              raw: idTokenClaims,
-            }
-          );
-        }
-
-        if (idTokenClaims.nonce !== transaction.nonce) {
-          throw new CubidAuthError(
-            "The Cubid ID token nonce did not match the stored transaction.",
-            {
-              category: "validation",
-              code: "invalid_nonce",
-              raw: idTokenClaims,
-            }
-          );
-        }
-      }
 
       const nextSession = createCubidAuthSession({
         clientId: transaction.clientId,

@@ -148,3 +148,16 @@ The repository CLI gate uses the same helper:
 pnpm auth:issuer:check
 pnpm auth:issuer:check -- --environment staging --issuer https://staging-id.cubid.me
 ```
+
+## Federated Login And Native Compatibility
+
+See [Federated SIWC contract v1](../../docs/examples/federated-siwc.md) and
+[Native OIDC integration](../../docs/examples/native-siwc.md). Optional provider
+hints select a Cubid-hosted UI choice; they never establish assurance or bypass
+consent. Native crypto adapters can be scoped to the SDK. Existing browser
+behavior and omitted-hint requests are preserved.
+
+Under the current Cubid verified-email profile, email is optional and is disclosed
+only when verified and authorized. Do not require `email_verified` or email for
+Cubid authentication. Its optional deprecated typing is retained for legacy or
+other OIDC issuers, whose verification semantics still apply.

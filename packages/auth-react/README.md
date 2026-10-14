@@ -122,3 +122,16 @@ chooses the concrete authorization, token, UserInfo, JWKS, and logout endpoints
 for the selected issuer, but ID tokens still must validate against that exact
 issuer. `https://login.cubid.me` is a compatibility UI host during cutover, not
 the issuer value new React integrations should configure.
+
+## Federated Login And Native Compatibility
+
+See [Federated SIWC contract v1](../../docs/examples/federated-siwc.md) and
+[Native OIDC integration](../../docs/examples/native-siwc.md). Optional provider
+hints select a Cubid-hosted UI choice; they never establish assurance or bypass
+consent. Native crypto adapters can be scoped to the SDK. Existing browser
+behavior and omitted-hint requests are preserved.
+
+Under the current Cubid verified-email profile, email is optional and is disclosed
+only when verified and authorized. Do not require `email_verified` or email for
+Cubid authentication. Its optional deprecated typing is retained for legacy or
+other OIDC issuers, whose verification semantics still apply.

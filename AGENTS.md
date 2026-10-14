@@ -39,25 +39,24 @@ This repo is the canonical public SDK home for Cubid and is intended to live at
 
 ## Cross-Repo Coordination
 
-- When an SDK change has corresponding implementation or follow-up impact in
-  `cubid-passport`, create or update a sibling thread in both repos under
-  `agent-context/cross-repo-comms/`.
-- Treat any new dirty files in this repo under
-  `agent-context/cross-repo-comms/` as incoming sibling notes from Passport-side
-  or downstream agents and review or address them as part of the current task.
-- Keep legacy `messages-from-*` folders as archives. Do not create new live
-  cross-repo notes there unless the user explicitly asks for the old path.
-- Every live cross-repo note must have a sibling file in each corresponding repo
-  with the same `thread_id`; when one sibling gets substantive prose, update the
-  other sibling in the same working session so git status notifies both agents.
-- When you update a sibling cross-repo note in another local repo, intentionally
-  leave that other repo dirty unless the user explicitly asks you to switch over
-  and commit it there too; the dirty state is the notification mechanism for the
-  other repo's active agent.
-- When cross-repo sibling notes or other inbound coordination files appear dirty
-  in this repo, treat them as actionable inbox items: review them, address them
-  if appropriate, and commit the resulting update in this repo rather than
-  leaving the local inbox state unresolved.
+- Use GitHub Issues and the owner-level `Cubid Project` as the source of truth
+  for coordination with the Cubid runtime owner (currently
+  `Cubid-Me/cubid-monorepo`; older SDK notes call it `cubid-passport`).
+- Link the related issues, versioned contract, sibling PRs, requested outcome,
+  implementation ownership, and remaining acceptance/deployment gates in the
+  SDK PR. Use parent-authorized task messages for immediate implementation
+  handoffs; preserve durable evidence in the linked issue/PR records.
+- Update related issues only within the user's authorized scope. If an issue
+  comment is not authorized, retain the handoff in the linked PR and task
+  checkpoint rather than publishing it or creating a new communication path.
+- Read and respect the corresponding repo's current coordination instructions.
+  The monorepo archives `agent-context/cross-repo-comms/`, `agent-context/inbox/`,
+  and `messages-from-*`; do not create new live sibling files there or leave
+  another checkout dirty as a notification mechanism.
+- Preserve the SDK's existing cross-repo files as historical archives. Do not
+  revive their live-mailbox protocol or treat a dirty historical note as a new
+  authorized work request. Keep current work in branch-scoped session logs and
+  the linked GitHub records instead.
 
 ## Current Migration Direction
 

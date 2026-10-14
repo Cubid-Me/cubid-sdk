@@ -1,9 +1,16 @@
-# Cross-Repo Agent Comms
+# Cross-Repo Agent Comms Archive
 
-This folder is the live git-backed mailbox for agent-to-agent notes that span
-Cubid SDK, Cubid Passport, SmarTrust, and other related repos.
+This folder preserves historical notes spanning Cubid SDK, Cubid Passport,
+SmarTrust, and related repos. It is no longer a live mailbox. Current coordination
+uses linked GitHub Issues/PRs and the owner-level Cubid Project as described in
+[AGENTS.md](../../AGENTS.md#cross-repo-coordination). Do not create new live sibling
+files or leave another checkout dirty as a notification mechanism; the runtime
+monorepo explicitly prohibits that legacy protocol. Preserve the existing notes.
 
-## Protocol
+## Historical Protocol (Reference Only)
+
+The following rules and examples document the archived format, not instructions
+for new work.
 
 - Use one thematic Markdown file per conversation thread.
 - Every live note must have a sibling file in each corresponding repo named
@@ -52,7 +59,7 @@ Full prose in the owner repo, or a sibling sync note that points to the owner
 entry and summarizes what changed.
 ```
 
-## Current Threads
+## Archived Threads
 
 - [`2026-05-13-dashboard-sign-in-with-cubid-blocker.md`](./2026-05-13-dashboard-sign-in-with-cubid-blocker.md):
   ClearPass dashboard browser-safe Sign in with Cubid blocker for a Vite/React
