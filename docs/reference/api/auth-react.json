@@ -2557,7 +2557,7 @@
     },
     {
       "kind": "text",
-      "text": " until storage resolves and ignores old loads after a\nnew auth action or storage/client/issuer/redirect change. Sessions from a different\nclient or issuer are not restored. Transaction writes finish before navigation;\ncallback session writes finish before transaction removal and authenticated state.\nWrites and removals are ordered so logout cannot be undone by an in-flight callback\nwrite. Superseded actions reject with "
+      "text": " until storage resolves and ignores old loads after a\nnew auth action or storage/client/issuer/redirect change. Sessions from a different\nclient or issuer are not restored. Transaction writes finish before navigation;\ncallback session writes finish before transaction removal and authenticated state.\nWrites and removals share a transient queue for the same stable storage adapter,\nincluding provider remounts, so hydration waits for commit/rollback and logout\ncannot be undone by an in-flight callback write. Keep the adapter identity stable;\nseparate adapters/processes accessing the same underlying store require host\ncoordination. Duplicate delivery of the same in-flight callback shares one code exchange.\nSuperseded actions reject with "
     },
     {
       "kind": "code",
@@ -2565,7 +2565,7 @@
     },
     {
       "kind": "text",
-      "text": ".\n\n"
+      "text": ". Only committed provider\nconfiguration changes supersede active work.\n\n"
     },
     {
       "kind": "code",
@@ -2613,7 +2613,15 @@
     },
     {
       "kind": "text",
-      "text": "; fix/retry the failing store before\nassuming persistent logout across restart. A failed callback write retains the\ntransaction for diagnosis but does not authenticate; an authorization code may\nalready have been consumed, so start a new sign-in rather than assuming replay."
+      "text": "; fix/retry the failing store before\nassuming persistent logout across restart. A failed callback commit rolls back to the prior stored session and retains the\ntransaction for diagnosis. If rollback also fails, "
+    },
+    {
+      "kind": "code",
+      "text": "`session_rollback_failed`"
+    },
+    {
+      "kind": "text",
+      "text": "\nrequires repairing or clearing the store before restarting auth; an authorization code may already have been consumed, so start a new sign-in\nrather than assuming replay."
     }
   ]
 }
