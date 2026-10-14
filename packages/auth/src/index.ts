@@ -9,9 +9,33 @@ export const CUBID_FRIENDR_OIDC_CLAIM_NAMES = [
   "friendr_unique_human_confidence",
 ] as const;
 
+/** Hosted UI preferences only; they never establish authentication assurance. */
+export const CUBID_AUTH_PROVIDERS = ["google", "github", "apple", "passkey"] as const;
+export type CubidAuthProviderHint = (typeof CUBID_AUTH_PROVIDERS)[number];
+
+/** A scoped Web Crypto adapter. Implementations must use secure native primitives. */
+export type CubidAuthCrypto = Pick<Crypto, "getRandomValues"> & {
+  subtle: Pick<SubtleCrypto, "digest" | "importKey" | "verify">;
+};
+
 const DISCOVERY_PATH = "/.well-known/openid-configuration";
-const textEncoder = new TextEncoder();
-const textDecoder = new TextDecoder();
+function encodeUtf8(value: string): Uint8Array {
+  if (typeof globalThis.TextEncoder === "function") return new TextEncoder().encode(value);
+  const encoded = encodeURIComponent(value);
+  const bytes: number[] = [];
+  for (let index = 0; index < encoded.length; index += 1) {
+    if (encoded[index] === "%") {
+      bytes.push(Number.parseInt(encoded.slice(index + 1, index + 3), 16));
+      index += 2;
+    } else bytes.push(encoded.charCodeAt(index));
+  }
+  return new Uint8Array(bytes);
+}
+
+function decodeUtf8(bytes: Uint8Array): string {
+  if (typeof globalThis.TextDecoder === "function") return new TextDecoder().decode(bytes);
+  return decodeURIComponent(Array.from(bytes, (byte) => `%${byte.toString(16).padStart(2, "0")}`).join(""));
+}
 
 export type CubidAuthFetch = (
   input: string | URL | Request,
@@ -51,6 +75,10 @@ export class CubidAuthError extends Error {
 }
 
 export interface CubidOidcDiscoveryDocument {
+  /** Selection syntax version, not proof that any provider is enabled. */
+  cubid_federation_contract_version?: string;
+  cubid_provider_hint_parameter?: string;
+  cubid_provider_hint_values_supported?: string[];
   authorization_endpoint: string;
   code_challenge_methods_supported?: string[];
   end_session_endpoint?: string;
@@ -112,6 +140,7 @@ export interface CubidPkcePair {
 }
 
 export interface CreateCubidPkcePairOptions {
+  crypto?: CubidAuthCrypto;
   verifierByteLength?: number;
 }
 
@@ -126,6 +155,8 @@ export interface BuildCubidAuthorizationUrlInput {
   maxAge?: number;
   nonce?: string;
   prompt?: string;
+  /** Prefer a Cubid-hosted choice without bypassing consent or required assurance. */
+  provider?: CubidAuthProviderHint;
   redirectUri: string;
   requirePasskey?: boolean;
   scope?: readonly string[] | string;
@@ -200,6 +231,7 @@ export interface FetchCubidUserInfoInput
 
 export interface CubidUserInfo {
   email?: string;
+  /** @deprecated Cubid verified-email profile omits this boolean. Older/other OIDC issuers may include it. */
   email_verified?: boolean;
   cubid_kyc_presence_v1?: boolean;
   friendr_unique_human_confidence?: Record<string, unknown>;
@@ -227,6 +259,7 @@ export interface CubidIdTokenClaims extends Record<string, unknown> {
   amr?: string[];
   aud?: string | string[];
   email?: string;
+  /** @deprecated Cubid verified-email profile omits this boolean. Older/other OIDC issuers may include it. */
   email_verified?: boolean;
   exp?: number;
   iat?: number;
@@ -238,6 +271,9 @@ export interface CubidIdTokenClaims extends Record<string, unknown> {
 }
 
 export interface ValidateCubidIdTokenInput {
+  /** Bind the ID token to the nonce stored for this authorization transaction. */
+  expectedNonce?: string;
+  crypto?: CubidAuthCrypto;
   clientId: string;
   discoveryDocument: CubidOidcDiscoveryDocument;
   fetch?: CubidAuthFetch;
@@ -497,15 +533,16 @@ function getFetch(fetchImpl?: CubidAuthFetch): CubidAuthFetch {
   return globalThis.fetch.bind(globalThis);
 }
 
-function getCrypto(): Crypto {
-  if (!globalThis.crypto?.subtle || typeof globalThis.crypto.getRandomValues !== "function") {
+function getCrypto(provider?: CubidAuthCrypto): CubidAuthCrypto {
+  const crypto = provider ?? globalThis.crypto;
+  if (!crypto?.subtle || typeof crypto.getRandomValues !== "function") {
     throw new CubidAuthError("Cubid auth requires Web Crypto support in this runtime.", {
       category: "config",
       code: "missing_crypto",
     });
   }
 
-  return globalThis.crypto;
+  return crypto;
 }
 
 function encodeBinaryToBase64(binary: string): string {
@@ -517,10 +554,18 @@ function encodeBinaryToBase64(binary: string): string {
     return Buffer.from(binary, "binary").toString("base64");
   }
 
-  throw new CubidAuthError("Cubid auth requires base64 encoding support in this runtime.", {
-    category: "config",
-    code: "missing_base64",
-  });
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  let encoded = "";
+  for (let index = 0; index < binary.length; index += 3) {
+    const first = binary.charCodeAt(index);
+    const second = binary.charCodeAt(index + 1);
+    const third = binary.charCodeAt(index + 2);
+    encoded += alphabet[first >> 2];
+    encoded += alphabet[((first & 3) << 4) | ((second || 0) >> 4)];
+    encoded += index + 1 < binary.length ? alphabet[((second & 15) << 2) | ((third || 0) >> 6)] : "=";
+    encoded += index + 2 < binary.length ? alphabet[third & 63] : "=";
+  }
+  return encoded;
 }
 
 function decodeBase64ToBinary(base64: string): string {
@@ -532,10 +577,23 @@ function decodeBase64ToBinary(base64: string): string {
     return Buffer.from(base64, "base64").toString("binary");
   }
 
-  throw new CubidAuthError("Cubid auth requires base64 decoding support in this runtime.", {
-    category: "config",
-    code: "missing_base64",
-  });
+  if (!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/u.test(base64)) {
+    throw new CubidAuthError("Cubid auth received invalid base64 data.", {
+      category: "parse", code: "invalid_base64",
+    });
+  }
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  let binary = "";
+  for (let index = 0; index < base64.length; index += 4) {
+    const a = alphabet.indexOf(base64[index]!);
+    const b = alphabet.indexOf(base64[index + 1]!);
+    const c = alphabet.indexOf(base64[index + 2]!);
+    const d = alphabet.indexOf(base64[index + 3]!);
+    binary += String.fromCharCode((a << 2) | (b >> 4));
+    if (c >= 0) binary += String.fromCharCode(((b & 15) << 4) | (c >> 2));
+    if (d >= 0) binary += String.fromCharCode(((c & 3) << 6) | d);
+  }
+  return binary;
 }
 
 function bytesToBase64Url(bytes: Uint8Array): string {
@@ -566,7 +624,7 @@ function base64UrlToBytes(input: string): Uint8Array {
 
 function decodeBase64UrlJson(input: string, context: string): Record<string, unknown> {
   try {
-    const decoded = textDecoder.decode(base64UrlToBytes(input));
+    const decoded = decodeUtf8(base64UrlToBytes(input));
     return toRecord(JSON.parse(decoded), context);
   } catch (cause) {
     if (cause instanceof CubidAuthError) {
@@ -600,12 +658,12 @@ function decodeCompactJwt(idToken: string) {
     encodedSignature,
     header: decodeBase64UrlJson(encodedHeader, "id token header"),
     payload: decodeBase64UrlJson(encodedPayload, "id token claims") as CubidIdTokenClaims,
-    signedData: textEncoder.encode(`${encodedHeader}.${encodedPayload}`),
+    signedData: encodeUtf8(`${encodedHeader}.${encodedPayload}`),
   };
 }
 
-function createRandomString(byteLength: number): string {
-  const crypto = getCrypto();
+function createRandomString(byteLength: number, provider?: CubidAuthCrypto): string {
+  const crypto = getCrypto(provider);
   const bytes = new Uint8Array(assertByteLength(byteLength, "byteLength"));
   crypto.getRandomValues(bytes);
   return bytesToBase64Url(bytes);
@@ -993,6 +1051,24 @@ function assertIdTokenClaims(
     });
   }
 
+  if (typeof claims.sub !== "string" || claims.sub.trim().length === 0) {
+    throw new CubidAuthError("The Cubid ID token subject was missing or invalid.", {
+      category: "validation", code: "invalid_subject",
+    });
+  }
+  if (typeof input.expectedNonce !== "undefined") {
+    if (typeof claims.nonce !== "string") {
+      throw new CubidAuthError("The Cubid ID token nonce was missing.", {
+        category: "validation", code: "missing_nonce",
+      });
+    }
+    if (claims.nonce !== assertNonEmptyString(input.expectedNonce, "expectedNonce")) {
+      throw new CubidAuthError("The Cubid ID token nonce did not match the authorization transaction.", {
+        category: "validation", code: "invalid_nonce",
+      });
+    }
+  }
+
   const audience = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
 
   if (!audience.includes(input.clientId)) {
@@ -1028,34 +1104,34 @@ function assertIdTokenClaims(
   }
 }
 
-export function createCubidPkceCodeVerifier(byteLength = 64): string {
-  return createRandomString(byteLength);
+export function createCubidPkceCodeVerifier(byteLength = 64, crypto?: CubidAuthCrypto): string {
+  return createRandomString(byteLength, crypto);
 }
 
-export async function createCubidPkceCodeChallenge(codeVerifier: string): Promise<string> {
+export async function createCubidPkceCodeChallenge(codeVerifier: string, crypto?: CubidAuthCrypto): Promise<string> {
   const verifier = assertNonEmptyString(codeVerifier, "codeVerifier");
-  const digest = await getCrypto().subtle.digest("SHA-256", textEncoder.encode(verifier));
+  const digest = await getCrypto(crypto).subtle.digest("SHA-256", toArrayBuffer(encodeUtf8(verifier)));
   return bytesToBase64Url(new Uint8Array(digest));
 }
 
 export async function createCubidPkcePair(
   options: CreateCubidPkcePairOptions = {}
 ): Promise<CubidPkcePair> {
-  const codeVerifier = createCubidPkceCodeVerifier(options.verifierByteLength ?? 64);
+  const codeVerifier = createCubidPkceCodeVerifier(options.verifierByteLength ?? 64, options.crypto);
 
   return {
-    codeChallenge: await createCubidPkceCodeChallenge(codeVerifier),
+    codeChallenge: await createCubidPkceCodeChallenge(codeVerifier, options.crypto),
     codeChallengeMethod: "S256",
     codeVerifier,
   };
 }
 
-export function createCubidAuthState(byteLength = 32): string {
-  return createRandomString(byteLength);
+export function createCubidAuthState(byteLength = 32, crypto?: CubidAuthCrypto): string {
+  return createRandomString(byteLength, crypto);
 }
 
-export function createCubidAuthNonce(byteLength = 32): string {
-  return createRandomString(byteLength);
+export function createCubidAuthNonce(byteLength = 32, crypto?: CubidAuthCrypto): string {
+  return createRandomString(byteLength, crypto);
 }
 
 export async function fetchCubidOidcDiscoveryDocument(
@@ -1223,6 +1299,15 @@ export function buildCubidAuthorizationUrl(
 ): string {
   const url = new URL(asUrlString(input.authorizationEndpoint, "authorizationEndpoint"));
   const scopes = normalizeScopes(input.scope);
+  const providerHints: unknown[] = url.searchParams.getAll("cubid_provider");
+  if (typeof input.provider !== "undefined") providerHints.push(input.provider);
+  if (typeof input.extraParams?.cubid_provider !== "undefined") providerHints.push(input.extraParams.cubid_provider);
+  if (providerHints.length > 1 || (providerHints.length === 1 &&
+    !CUBID_AUTH_PROVIDERS.includes(providerHints[0] as CubidAuthProviderHint))) {
+    throw new CubidAuthError("Cubid provider must be one supported, unambiguous hosted UI choice.", {
+      category: "validation", code: "invalid_provider",
+    });
+  }
 
   url.searchParams.set("client_id", assertNonEmptyString(input.clientId, "clientId"));
   url.searchParams.set("redirect_uri", assertNonEmptyString(input.redirectUri, "redirectUri"));
@@ -1252,6 +1337,7 @@ export function buildCubidAuthorizationUrl(
   }
 
   appendExtraParams(url.searchParams, input.extraParams);
+  if (providerHints.length === 1) url.searchParams.set("cubid_provider", providerHints[0] as string);
 
   const acrValues = normalizeAcrValues(input.acrValues);
   if (input.requirePasskey && !acrValues.includes(CUBID_PASSKEY_ACR_VALUE)) {
@@ -1272,12 +1358,20 @@ export function parseCubidAuthorizationCallback(
     input instanceof URLSearchParams
       ? input
       : new URL(
-          typeof input === "string" && !input.startsWith("http")
+          typeof input === "string" && !/^[A-Za-z][A-Za-z0-9+.-]*:/u.test(input)
             ? `https://callback.invalid/?${input.replace(/^\?/u, "")}`
             : String(input)
         ).searchParams;
 
   const raw = toQueryRecord(params);
+  const singleValueKeys = ["code", "state", "iss", "error", "error_description", "error_uri", "session_state"];
+  if (singleValueKeys.some((key) => params.getAll(key).length > 1) ||
+    (params.has("error") && params.has("code")) ||
+    (params.has("error") && !params.get("error"))) {
+    throw new CubidAuthError("Cubid auth callback contains ambiguous protocol parameters.", {
+      category: "parse", code: "invalid_callback",
+    });
+  }
   const error = params.get("error");
 
   if (error) {
@@ -1513,14 +1607,14 @@ export async function validateCubidIdToken(
     });
   }
 
-  const key = await getCrypto().subtle.importKey(
+  const key = await getCrypto(input.crypto).subtle.importKey(
     "jwk",
     jwk,
     cryptoAlgorithm.importAlgorithm,
     false,
     ["verify"]
   );
-  const verified = await getCrypto().subtle.verify(
+  const verified = await getCrypto(input.crypto).subtle.verify(
     cryptoAlgorithm.verifyAlgorithm,
     key,
     toArrayBuffer(base64UrlToBytes(decoded.encodedSignature)),
@@ -1578,6 +1672,11 @@ export function createCubidAuthSession(
 ): CubidAuthSession {
   const idTokenClaims =
     input.idTokenClaims ?? (input.tokenResponse.idToken ? decodeCubidIdTokenClaims(input.tokenResponse.idToken) : null);
+  if (input.userInfo && typeof idTokenClaims?.sub === "string" && input.userInfo.sub !== idTokenClaims.sub) {
+    throw new CubidAuthError("Cubid UserInfo subject does not match the ID token subject.", {
+      category: "validation", code: "invalid_userinfo_subject",
+    });
+  }
   const subject = input.userInfo?.sub ?? (typeof idTokenClaims?.sub === "string" ? idTokenClaims.sub : null);
 
   return {

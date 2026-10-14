@@ -843,3 +843,23 @@ describe("@cubid/auth", () => {
     expect(storage.has(CUBID_AUTH_SESSION_STORAGE_KEY)).toBe(false);
   });
 });
+
+describe("mandatory Cubid ID-token identity and transaction binding", () => {
+  it.each([undefined, 123, "", "   "])("rejects a signed token with invalid subject %j", async (sub) => {
+    const issuer = "https://id.cubid.me";
+    const signed = await createSignedIdToken({ iss: issuer, aud: "example-rp", sub, exp: Math.floor(Date.now() / 1000) + 300 });
+    await expect(validateCubidIdToken({ clientId: "example-rp", discoveryDocument: { issuer, authorization_endpoint: `${issuer}/authorize`, token_endpoint: `${issuer}/token`, jwks_uri: `${issuer}/jwks` }, idToken: signed.idToken,
+      fetch: async () => Response.json(signed.jwks),
+    })).rejects.toMatchObject({ code: "invalid_subject" });
+  });
+
+  it.each([
+    [undefined, "missing_nonce"], ["other-transaction", "invalid_nonce"],
+  ])("checks the expected authorization nonce: %s", async (nonce, code) => {
+    const issuer = "https://id.cubid.me";
+    const signed = await createSignedIdToken({ iss: issuer, aud: "example-rp", sub: "pairwise", nonce, exp: Math.floor(Date.now() / 1000) + 300 });
+    await expect(validateCubidIdToken({ clientId: "example-rp", expectedNonce: "expected", discoveryDocument: { issuer, authorization_endpoint: `${issuer}/authorize`, token_endpoint: `${issuer}/token`, jwks_uri: `${issuer}/jwks` }, idToken: signed.idToken,
+      fetch: async () => Response.json(signed.jwks),
+    })).rejects.toMatchObject({ code });
+  });
+});

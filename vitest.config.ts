@@ -74,6 +74,7 @@ export default defineConfig({
     },
     projects: [
       {
+        extends: true,
         test: {
           environment: "node",
           include: [
@@ -102,6 +103,7 @@ export default defineConfig({
         }
       },
       {
+        extends: true,
         test: {
           environment: "jsdom",
           include: [

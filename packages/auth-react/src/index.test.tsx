@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   CUBID_AUTH_SESSION_STORAGE_KEY,
+  CubidAuthError,
   serializeCubidAuthSession,
   type CubidAuthStorageLike,
 } from "@cubid/auth";
@@ -94,10 +95,19 @@ describe("@cubid/auth-react", () => {
   it("launches sign-in from the React provider and stores the PKCE transaction", async () => {
     const storage = new MemoryStorage();
     const navigate = vi.fn();
+    const injectedCrypto = {
+      getRandomValues: vi.fn(crypto.getRandomValues.bind(crypto)),
+      subtle: {
+        digest: vi.fn(crypto.subtle.digest.bind(crypto.subtle)),
+        importKey: crypto.subtle.importKey.bind(crypto.subtle),
+        verify: crypto.subtle.verify.bind(crypto.subtle),
+      },
+    };
     const user = userEvent.setup();
 
     const view = render(
       <CubidAuthProvider
+        crypto={injectedCrypto}
         clientId="clearpass-dashboard"
         fetch={vi.fn(async (input: string | URL | Request) => {
           expect(String(input)).toBe(
@@ -126,7 +136,7 @@ describe("@cubid/auth-react", () => {
       >
         <CubidSignInButton
           onLaunched={navigate}
-          signInOptions={{ navigate, nonce: "nonce-123", performRedirect: false }}
+          signInOptions={{ navigate, nonce: "nonce-123", performRedirect: false, provider: "google" }}
         />
       </CubidAuthProvider>
     );
@@ -138,11 +148,14 @@ describe("@cubid/auth-react", () => {
     await waitFor(() => {
       expect(navigate).toHaveBeenCalledTimes(1);
     });
+    expect(injectedCrypto.getRandomValues).toHaveBeenCalledTimes(2);
+    expect(injectedCrypto.subtle.digest).toHaveBeenCalledTimes(1);
     const launchedUrl = navigate.mock.calls[0]?.[0];
     expect(typeof launchedUrl).toBe("string");
     const parsed = new URL(String(launchedUrl));
     expect(parsed.searchParams.get("client_id")).toBe("clearpass-dashboard");
     expect(parsed.searchParams.get("nonce")).toBe("nonce-123");
+    expect(parsed.searchParams.get("cubid_provider")).toBe("google");
     expect(parsed.searchParams.get("acr_values")).toBe(
       "urn:cubid:acr:passkey"
     );
@@ -729,5 +742,69 @@ describe("@cubid/auth-react", () => {
       expect(within(view.container).getByTestId("status").textContent).toBe("error");
     });
     expect(storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY)).toBeNull();
+  });
+});
+
+function CallbackProbe({ callbackUrl, onError }: { callbackUrl: string; onError: (error: unknown) => void }) {
+  const auth = useCubidAuth();
+  return <button onClick={() => { void auth.handleCallback({ callbackUrl }).catch(onError); }}>Handle callback</button>;
+}
+
+describe("federation callback binding", () => {
+  it.each([
+    ["error=access_denied&state=wrong", "state_mismatch"],
+    ["error=access_denied", "state_mismatch"],
+    ["error=access_denied&state=expected", "access_denied"],
+    ["code=synthetic&state=expected&iss=https%3A%2F%2Fother.example", "invalid_issuer"],
+    ["error=access_denied&state=expected&iss=https%3A%2F%2Fother.example", "invalid_issuer"],
+    ["code=synthetic&state=expected&state=wrong", "invalid_callback"],
+  ])("binds success and error callbacks before network exchange: %s", async (query, code) => {
+    const storage = new MemoryStorage();
+    storage.setItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY, JSON.stringify({
+      clientId: "native-rp", codeVerifier: "verifier", issuer: "https://id.cubid.me",
+      nonce: "nonce", redirectUri: "cubidexample://auth/callback", scope: ["openid"], state: "expected",
+    }));
+    const fetch = vi.fn();
+    const onError = vi.fn();
+    const view = render(<CubidAuthProvider clientId="native-rp" issuer="https://id.cubid.me" redirectUri="cubidexample://auth/callback" storage={storage} fetch={fetch}>
+      <CallbackProbe callbackUrl={`cubidexample://auth/callback?${query}`} onError={onError} />
+    </CubidAuthProvider>);
+    await userEvent.setup().click(within(view.container).getByRole("button", { name: "Handle callback" }));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(expect.objectContaining({ code })));
+    expect(onError.mock.calls[0]?.[0]).toBeInstanceOf(CubidAuthError);
+    expect(fetch).not.toHaveBeenCalled();
+    expect(storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY)).toBeNull();
+  });
+});
+
+describe("registered callback destination", () => {
+  it.each([
+    ["cubidexample://wrong/callback?code=x&state=expected", "cubidexample://auth/callback"],
+    ["cubidexample://auth/wrong?code=x&state=expected", "cubidexample://auth/callback"],
+    ["other://auth/callback?code=x&state=expected", "cubidexample://auth/callback"],
+    ["cubidexample://auth/callback?code=x&state=expected#fragment", "cubidexample://auth/callback"],
+    ["cubidexample://auth/callback?code=x&state=expected#", "cubidexample://auth/callback"],
+    ["cubidexample://auth/callback?tenant=other&code=x&state=expected", "cubidexample://auth/callback?tenant=registered"],
+  ])("rejects an unregistered incoming destination: %s", async (callbackUrl, redirectUri) => {
+    const storage = new MemoryStorage();
+    storage.setItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY, JSON.stringify({ clientId: "native-rp", codeVerifier: "verifier", issuer: "https://id.cubid.me", nonce: "nonce", redirectUri, scope: ["openid"], state: "expected" }));
+    const fetch = vi.fn();
+    const onError = vi.fn();
+    const view = render(<CubidAuthProvider clientId="native-rp" issuer="https://id.cubid.me" redirectUri={redirectUri} storage={storage} fetch={fetch}><CallbackProbe callbackUrl={callbackUrl} onError={onError} /></CubidAuthProvider>);
+    await userEvent.setup().click(within(view.container).getByRole("button", { name: "Handle callback" }));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(expect.objectContaining({ code: "invalid_callback_destination" })));
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("allows the exact registered native destination and fixed query on a bound error", async () => {
+    const storage = new MemoryStorage();
+    const redirectUri = "cubidexample://auth/callback?tenant=registered";
+    storage.setItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY, JSON.stringify({ clientId: "native-rp", codeVerifier: "verifier", issuer: "https://id.cubid.me", nonce: "nonce", redirectUri, scope: ["openid"], state: "expected" }));
+    const fetch = vi.fn();
+    const onError = vi.fn();
+    const view = render(<CubidAuthProvider clientId="native-rp" issuer="https://id.cubid.me" redirectUri={redirectUri} storage={storage} fetch={fetch}><CallbackProbe callbackUrl={`${redirectUri}&error=access_denied&state=expected`} onError={onError} /></CubidAuthProvider>);
+    await userEvent.setup().click(within(view.container).getByRole("button", { name: "Handle callback" }));
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(expect.objectContaining({ code: "access_denied" })));
+    expect(fetch).not.toHaveBeenCalled();
   });
 });

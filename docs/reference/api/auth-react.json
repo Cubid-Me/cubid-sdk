@@ -924,6 +924,24 @@
           }
         },
         {
+          "name": "crypto",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@cubid/auth",
+              "packagePath": "src/index.ts",
+              "qualifiedName": "CubidAuthCrypto"
+            },
+            "name": "CubidAuthCrypto",
+            "package": "@cubid/auth"
+          }
+        },
+        {
           "name": "discoveryDocument",
           "variant": "declaration",
           "kind": 1024,
@@ -1259,6 +1277,35 @@
           "type": {
             "type": "intrinsic",
             "name": "string"
+          }
+        },
+        {
+          "name": "provider",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "google"
+              },
+              {
+                "type": "literal",
+                "value": "github"
+              },
+              {
+                "type": "literal",
+                "value": "apple"
+              },
+              {
+                "type": "literal",
+                "value": "passkey"
+              }
+            ]
           }
         },
         {
@@ -2156,7 +2203,31 @@
     },
     {
       "kind": "text",
-      "text": " is a compatibility UI host during cutover, not\nthe issuer value new React integrations should configure."
+      "text": " is a compatibility UI host during cutover, not\nthe issuer value new React integrations should configure.\n\n## Federated Login And Native Compatibility\n\nSee [Federated SIWC contract v1]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../docs/examples/federated-siwc.md"
+    },
+    {
+      "kind": "text",
+      "text": ") and\n[Native OIDC integration]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../docs/examples/native-siwc.md"
+    },
+    {
+      "kind": "text",
+      "text": "). Optional provider\nhints select a Cubid-hosted UI choice; they never establish assurance or bypass\nconsent. Native crypto adapters can be scoped to the SDK. Existing browser\nbehavior and omitted-hint requests are preserved.\n\nUnder the current Cubid verified-email profile, email is optional and is disclosed\nonly when verified and authorized. Do not require "
+    },
+    {
+      "kind": "code",
+      "text": "`email_verified`"
+    },
+    {
+      "kind": "text",
+      "text": " or email for\nCubid authentication. Its optional deprecated typing is retained for legacy or\nother OIDC issuers, whose verification semantics still apply."
     }
   ]
 }
