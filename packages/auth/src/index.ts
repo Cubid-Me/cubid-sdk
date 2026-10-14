@@ -1170,6 +1170,9 @@ export async function fetchCubidOidcDiscoveryDocument(
 
   return {
     ...payload,
+    cubid_federation_contract_version: getOptionalString(payload, "cubid_federation_contract_version") ?? undefined,
+    cubid_provider_hint_parameter: getOptionalString(payload, "cubid_provider_hint_parameter") ?? undefined,
+    cubid_provider_hint_values_supported: getOptionalStringArray(payload, "cubid_provider_hint_values_supported"),
     authorization_endpoint: getRequiredString(payload, "authorization_endpoint", "discovery document"),
     code_challenge_methods_supported: getOptionalStringArray(
       payload,

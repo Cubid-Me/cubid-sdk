@@ -6,6 +6,7 @@ import {
   createCubidAuthSession,
   createCubidPkceCodeVerifier,
   decodeCubidIdTokenClaims,
+  fetchCubidOidcDiscoveryDocument,
   parseCubidAuthorizationCallback,
   type CubidAuthProviderHint,
 } from "./index";
@@ -107,4 +108,28 @@ it("preserves older/other issuer optional email verification booleans", () => {
   });
   expect(session.idTokenClaims?.email_verified).toBe(false);
   expect(session.userInfo?.email_verified).toBe(false);
+});
+
+describe("federation discovery field normalization", () => {
+  const discovery = { issuer: "https://id.cubid.me", authorization_endpoint: "https://id.cubid.me/authorize", token_endpoint: "https://id.cubid.me/token" };
+
+  it("preserves valid v1 syntax metadata and legacy field omission", async () => {
+    const metadata = { cubid_federation_contract_version: "1", cubid_provider_hint_parameter: "cubid_provider", cubid_provider_hint_values_supported: ["google", "passkey"] };
+    const parsed = await fetchCubidOidcDiscoveryDocument({ issuer: discovery.issuer, fetch: async () => Response.json({ ...discovery, ...metadata }) });
+    expect(parsed).toMatchObject(metadata);
+    const legacy = await fetchCubidOidcDiscoveryDocument({ issuer: discovery.issuer, fetch: async () => Response.json(discovery) });
+    expect(legacy.cubid_federation_contract_version).toBeUndefined();
+    expect(legacy.cubid_provider_hint_parameter).toBeUndefined();
+    expect(legacy.cubid_provider_hint_values_supported).toBeUndefined();
+  });
+
+  it.each([null, 1, {}, [], false, ""])("does not expose nonstring syntax metadata: %j", async (value) => {
+    const parsed = await fetchCubidOidcDiscoveryDocument({ issuer: discovery.issuer, fetch: async () => Response.json({ ...discovery, cubid_federation_contract_version: value, cubid_provider_hint_parameter: value }) });
+    expect(parsed.cubid_federation_contract_version).toBeUndefined();
+    expect(parsed.cubid_provider_hint_parameter).toBeUndefined();
+  });
+
+  it.each([null, 1, {}, "google", ["google", 1]])("rejects malformed provider-value arrays: %j", async (value) => {
+    await expect(fetchCubidOidcDiscoveryDocument({ issuer: discovery.issuer, fetch: async () => Response.json({ ...discovery, cubid_provider_hint_values_supported: value }) })).rejects.toMatchObject({ category: "parse", code: "invalid_field" });
+  });
 });

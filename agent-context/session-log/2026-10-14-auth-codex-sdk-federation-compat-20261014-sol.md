@@ -28,3 +28,12 @@ Tracking: Cubid monorepo #185/#191, SDK #40/#43/#44/#46/#48/#51. Identity contra
 - summary: Ran .github/scripts/pr-version-bump.mjs --base dev after the implementation commit, preparing auth 0.2.1 and auth-react 0.1.2 and matching reference-manifest versions. No dependencies, lockfiles or releases changed.
 - validation: Exact version-only manifest diff inspected; refreshed origin/dev remains b901a69f. Full source unit suite, scoped lint/typechecks/builds and emitted native smoke passed on implementation. Canonical generated-reference check and built-auth acceptance suite are active.
 - follow-ups: Collect checks; open draft PR into dev and follow CI/review. No package publishing or main merge.
+
+## 2026-10-14T08:20:16.610771+00:00 - Resolve original Codex review findings
+
+- agent: Codex SDK stream
+- branch: codex/sdk-federation-compat-20261014-sol
+- head: ec9ed0d46e34915638f57fa75f1916760fb3dd0e
+- summary: Normalized optional federation discovery strings/arrays over untrusted spread JSON and added malformed/legacy/v1 regression coverage (review 4268288764). Aligned SDK-only AGENTS and archive README with current monorepo GitHub coordination policy (review 4268288777); Identity explicitly confirmed alignment. No sibling checkout dirtied, live coordination note created, or denied SDK40 issue comment retried.
+- validation: 102 focused tests pass; auth typecheck, scoped lint, auth CJS/ESM/declaration build, reference consistency and diff check pass. Independent reviewer verified both remediations with no actionable regression or policy finding. Original full CI and ready-state version check passed on ec9ed0d4; post-fix CI required after push.
+- follow-ups: Push fix; reply to and resolve the original threads with exact policy/commit evidence; wait for post-fix CI. Do not request another review or publish packages. Retain worktree and leave remaining hosted/device gates explicit.
