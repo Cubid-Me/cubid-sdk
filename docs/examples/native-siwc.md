@@ -127,21 +127,23 @@ adapter. Do not replace signature verification with decoding or a success stub.
 The SDK has portable base64 and UTF-8 fallbacks and accepts custom-scheme callback
 URLs; the host must still provide working `URL`, `URLSearchParams` and Fetch APIs.
 Existing browser/Node defaults remain unchanged. `CubidAuthProvider` also accepts
-`crypto` for PKCE, state/nonce and validation, but its storage is currently synchronous.
+`crypto` for PKCE, state/nonce and validation. Its provider storage accepts synchronous
+or asynchronous adapters; await the hook's persistence operations.
 
-Async storage support (#45), complete native React redirect ergonomics (#46), a
-full Expo/server example and device smoke (#47), refresh/re-auth policy (#49),
+Async provider persistence (#45) supplies cold-start restoration. Complete native
+React redirect ergonomics (#46), a full Expo/server example and device smoke (#47), refresh/re-auth policy (#49),
 step-up helper (#50) remain follow-ups. The auth source boundary guard (#51)
 runs within existing unit CI; a real Hermes/device smoke remains outstanding. Persist app
-sessions in host-controlled appropriate storage; do not assume asynchronous storage
-works with the current React auth provider. Never assume a refresh token is issued.
+sessions in host-controlled appropriate storage and await persistence/removal
+errors; see [async provider storage](../../packages/auth-react/README.md#asynchronous-native-storage).
+Never assume a refresh token is issued.
 At expiry, start fresh Cubid authentication until an issuer-backed refresh policy is
 implemented. For sensitive actions, request `prompt: "login"`, `maxAge: 0` and
 `requirePasskey: true`, then verify returned passkey assurance on the trusted backend.
 
 ## React hook overrides for native hosts
 
-For a host with synchronous storage and an injected crypto adapter, the hook's
+For a host with synchronous or asynchronous storage and an injected crypto adapter, the hook's
 browser touch points are explicit overrides:
 
 - Supply `storage` to `CubidAuthProvider` to replace the localStorage default.
