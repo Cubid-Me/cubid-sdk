@@ -2557,7 +2557,15 @@
     },
     {
       "kind": "text",
-      "text": " until storage resolves and ignores old loads after a\nnew auth action or storage/client/issuer/redirect change. Sessions from a different\nclient or issuer are not restored. Transaction writes finish before navigation;\ncallback session writes finish before transaction removal and authenticated state.\nWrites and removals share a transient queue for the same stable storage adapter,\nincluding provider remounts, so hydration waits for commit/rollback and logout\ncannot be undone by an in-flight callback write. Keep the adapter identity stable;\nseparate adapters/processes accessing the same underlying store require host\ncoordination. Duplicate delivery of the same in-flight callback shares one code exchange.\nSuperseded actions reject with "
+      "text": " until storage resolves and ignores old loads after a\nnew auth action or storage/client/issuer/redirect change. Sessions from a different\nclient or issuer are not restored. Transaction writes finish before navigation;\ncallback session writes finish before transaction removal and authenticated state.\nWrites and removals share a transient queue for the same stable storage adapter,\nincluding provider remounts, so hydration waits for commit/rollback and logout\ncannot be undone by an in-flight callback write. Keep the adapter identity stable;\nseparate adapters/processes accessing the same underlying store require host\ncoordination. Equivalent in-flight authorization responses share one code exchange even when\nquery ordering/URL encoding differs. Destination, single-value fields and issuer\nare checked before coalescing; a different pending response rejects with\n"
+    },
+    {
+      "kind": "code",
+      "text": "`callback_in_progress`"
+    },
+    {
+      "kind": "text",
+      "text": " instead of discarding the active exchange.\nSuperseded actions reject with "
     },
     {
       "kind": "code",
@@ -2565,7 +2573,15 @@
     },
     {
       "kind": "text",
-      "text": ". Only committed provider\nconfiguration changes supersede active work.\n\n"
+      "text": ". Only committed provider\nconfiguration changes supersede active work, including actions from child layout\neffects. An initial callback loads a prior valid same-client/issuer session before\nexchanging the code, so failure retains it and "
+    },
+    {
+      "kind": "code",
+      "text": "`clearError()`"
+    },
+    {
+      "kind": "text",
+      "text": " can resume it.\n\n"
     },
     {
       "kind": "code",

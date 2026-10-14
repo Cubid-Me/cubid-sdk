@@ -174,9 +174,14 @@ Writes and removals share a transient queue for the same stable storage adapter,
 including provider remounts, so hydration waits for commit/rollback and logout
 cannot be undone by an in-flight callback write. Keep the adapter identity stable;
 separate adapters/processes accessing the same underlying store require host
-coordination. Duplicate delivery of the same in-flight callback shares one code exchange.
+coordination. Equivalent in-flight authorization responses share one code exchange even when
+query ordering/URL encoding differs. Destination, single-value fields and issuer
+are checked before coalescing; a different pending response rejects with
+`callback_in_progress` instead of discarding the active exchange.
 Superseded actions reject with `operation_superseded`. Only committed provider
-configuration changes supersede active work.
+configuration changes supersede active work, including actions from child layout
+effects. An initial callback loads a prior valid same-client/issuer session before
+exchanging the code, so failure retains it and `clearError()` can resume it.
 
 `await auth.clearSession()` now waits for session and transaction removal; memory
 is cleared immediately. Also await `logout`, `signIn`, `handleCallback` and

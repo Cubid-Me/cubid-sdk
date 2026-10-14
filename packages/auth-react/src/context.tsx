@@ -31,7 +31,7 @@ import {
   type CubidOidcDiscoveryDocument,
   type CubidUserInfo,
 } from "@cubid/auth";
-import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useInsertionEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 export const CUBID_AUTH_TRANSACTION_STORAGE_KEY = "cubid.auth.transaction";
@@ -347,7 +347,7 @@ export function CubidAuthProvider({
   const currentOwner = useRef(owner);
   const mounted = useRef(true);
   const callbackRequest = useRef<{
-    owner: object; revision: number; url: string; promise: Promise<CubidAuthSession>;
+    owner: object; revision: number; key: string; promise: Promise<CubidAuthSession>;
   } | null>(null);
   const [discoveryState, setDiscoveryState] = useState<OwnedState<CubidOidcDiscoveryDocument | null>>({ owner, value: discoveryDocument });
   const discovery = discoveryDocument ?? (discoveryState.owner === owner ? discoveryState.value : null);
@@ -386,14 +386,12 @@ export function CubidAuthProvider({
     return result;
   }
 
-  useLayoutEffect(() => {
+  useInsertionEffect(() => {
+    // Publish committed identity before any descendant layout effect starts auth.
     currentOwner.current = owner;
-  }, [owner]);
-
-  useLayoutEffect(() => {
     mounted.current = true;
     return () => { mounted.current = false; };
-  }, []);
+  }, [owner]);
 
   useEffect(() => {
     let cancelled = false;
@@ -558,19 +556,66 @@ export function CubidAuthProvider({
   }
 
   async function handleCallback(options: CubidAuthHandleCallbackOptions = {}) {
-    const url = options.callbackUrl instanceof URL ? options.callbackUrl.toString()
-      : options.callbackUrl ?? (typeof window === "undefined" ? "" : window.location.href);
-    const existing = callbackRequest.current;
-    if (existing?.owner === owner && existing.url === url && isCurrent(existing.revision)) {
-      return existing.promise;
+    let url: string;
+    let key: string;
+    try {
+      url = getCurrentUrl(options.callbackUrl);
+      // Validate before coalescing: an invalid destination/ambiguous response must
+      // never inherit a valid request's result merely by carrying its code/state.
+      assertCallbackDestination(url, redirectUri);
+      const response = parseCubidAuthorizationCallback(url);
+      const responseIssuer = response.raw.iss?.[0];
+      if (typeof responseIssuer !== "undefined" && responseIssuer !== issuer) {
+        throw new CubidAuthError("Cubid callback issuer does not match this provider.", {
+          category: "validation", code: "invalid_issuer",
+        });
+      }
+      key = JSON.stringify([
+        response.kind, response.state,
+        response.kind === "success" ? response.code : response.error,
+        responseIssuer ?? issuer,
+      ]);
+    } catch (nextError) {
+      const normalizedError = normalizeError(nextError);
+      if (!callbackRequest.current) {
+        setError(normalizedError);
+        setStatus("error");
+      }
+      throw normalizedError;
     }
-    const promise = performCallback(options);
-    const request = { owner, revision: owner.revision, url, promise };
+    const existing = callbackRequest.current;
+    if (existing?.owner === owner && isCurrent(existing.revision)) {
+      if (existing.key === key) return existing.promise;
+      throw new CubidAuthError("Another authorization response is already being handled.", {
+        category: "validation", code: "callback_in_progress",
+      });
+    }
+    const promise = performCallback({ ...options, callbackUrl: url });
+    const request = { owner, revision: owner.revision, key, promise };
     callbackRequest.current = request;
     try {
       return await promise;
     } finally {
       if (callbackRequest.current === request) callbackRequest.current = null;
+    }
+  }
+
+  async function restorePriorSession(revision: number) {
+    if (session || !storage) return;
+    await storageMutations.get(storage);
+    assertCurrent(revision);
+    const raw = await storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY);
+    assertCurrent(revision);
+    if (!raw) return;
+    let restored: CubidAuthSession;
+    try {
+      restored = parseCubidAuthSession(raw);
+    } catch {
+      // A malformed old session is not a prerequisite for a fresh code exchange.
+      return;
+    }
+    if (restored.clientId === clientId && restored.issuer === issuer && !isCubidAuthSessionExpired(restored)) {
+      setSession(restored);
     }
   }
 
@@ -581,6 +626,9 @@ export function CubidAuthProvider({
     setStatus("loading");
 
     try {
+      // Callback children can start before initial hydration. Retain a prior valid
+      // session so protocol/persistence failure and clearError do not erase it.
+      await restorePriorSession(revision);
       const transaction = await readTransaction(storage);
       assertCurrent(revision);
 

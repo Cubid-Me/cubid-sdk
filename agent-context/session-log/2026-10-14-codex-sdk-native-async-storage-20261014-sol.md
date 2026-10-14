@@ -23,3 +23,11 @@ Agent: SDK / Sol. Branch: codex/sdk-native-async-storage-20261014-sol. Pre-commi
 Full CI38539201609 passed; PR60 marked ready once for automatic Codex review, currently pending. Parent then supplied explicit standing dev-merge authority for frozen PR59. Fresh head91883d7b checks/reviews/threads/mergeability and repo rules/workflows confirmed eligible, without automatic dev publication or production deployment. PR59 merged non-squash at d251c86fb9ed37f93662a4a2ffb16dda148f7fc3; GitHub MERGED/dev head verified; fetched dev tree exactly matches frozen PR59. All branches/worktrees retained.
 
 Preparing Native45 retarget to dev in same sole checkout: repository script calculates auth-react0.1.3 (from new dev0.1.2), updates only package manifest; matching API manifest version updated. No dependency/lockfile, wire or source change. Version metadata is not publication. Follow-up: retarget/push, fresh CI/version checks and complete original automatic review before Native45 merge eligibility. No rereview trigger, main merge or cleanup.
+
+## 2026-10-14T09:19:55.132390+00:00
+
+Agent: SDK / Sol. Branch: codex/sdk-native-async-storage-20261014-sol. Pre-commit head: 1dfbba22d743e1f84628dce8b576669af0b1d21e. Base: dev.
+
+Original automatic Codex review completed on34c93223 with three P2s. Repaired committed owner publication with insertion lifecycle before descendant layout actions; initial callback restores only valid same-client/issuer prior session before exchange; callback coalescing keys validated response identity instead of raw URL, with invalid destination/ambiguous/issuer checks and distinct-response rejection before superseding. Added layout-effect, initial callback failure, query reorder/encoding/optional-issuer and invalid coalescing regressions. README/reference updated.
+
+Validation:141 focused tests across5 files pass (39 async-storage +20 existing React +82 auth/federation/runtime), auth-react typecheck/lint/CJS+ESM+declarations and scoped canonical-equivalent reference consistency check pass. Independent read-only repair review clear. Repo version script already matches0.1.3. Follow-ups: push, reply/resolve original threads4268858604/4268858614/4268858622, final CI and exact-head merge eligibility. No rereview requested. No sync-core/wire edits, real tokens, package publication, production changes or cleanup.

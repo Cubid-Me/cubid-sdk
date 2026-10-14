@@ -1,4 +1,4 @@
-import { startTransition, Suspense, useLayoutEffect, useState } from "react";
+import { startTransition, Suspense, useLayoutEffect, useState, type ReactNode } from "react";
 import { act, render, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -9,6 +9,7 @@ import {
 import {
   CUBID_AUTH_TRANSACTION_STORAGE_KEY,
   CubidAuthProvider,
+  CubidAuthCallback,
   useCubidAuth,
   type CubidAuthContextValue,
   type CubidAuthProviderProps,
@@ -64,13 +65,14 @@ function Capture({ capture }: { capture: (auth: CubidAuthContextValue) => void }
   useLayoutEffect(() => { capture(auth); }, [auth, capture]);
   return null;
 }
-function mount(storage: CubidAuthProviderStorage, props: Partial<CubidAuthProviderProps> = {}) {
+function mount(storage: CubidAuthProviderStorage, props: Partial<CubidAuthProviderProps> = {}, extraChildren?: ReactNode) {
   let auth!: CubidAuthContextValue;
   const capture = (value: CubidAuthContextValue) => { auth = value; };
   const tree = (next: Partial<CubidAuthProviderProps> = {}) => (
     <CubidAuthProvider clientId={clientId} issuer={issuer} redirectUri={redirectUri}
       discoveryDocument={discovery} storage={storage} {...props} {...next}>
       <Capture capture={capture} />
+      {extraChildren}
     </CubidAuthProvider>
   );
   const view = render(tree());
@@ -302,7 +304,7 @@ describe("async auth-react persistence", () => {
     expect(app.auth().status).toBe("signed_out");
   });
 
-  it("deduplicates an in-flight callback so a one-use code is exchanged once", async () => {
+  it.each(["same string", "reordered query", "normalized URL", "optional issuer"])("deduplicates an in-flight one-use callback: %s", async (delivery) => {
     const storage = new AsyncStorage();
     seedTransaction(storage);
     const token = deferred<Response>();
@@ -320,7 +322,10 @@ describe("async auth-react persistence", () => {
     let duplicate!: Promise<CubidAuthSession>;
     act(() => { first = app.auth().handleCallback({ callbackUrl }); });
     await waitFor(() => expect(fetch).toHaveBeenCalled());
-    act(() => { duplicate = app.auth().handleCallback({ callbackUrl }); });
+    const alternate = delivery === "reordered query" ? `${redirectUri}?state=synthetic-state&code=synthetic-code`
+      : delivery === "normalized URL" ? new URL(`${redirectUri}?state=%73ynthetic-state&code=synthetic-code`)
+      : delivery === "optional issuer" ? `${callbackUrl}&iss=${encodeURIComponent(issuer)}` : callbackUrl;
+    act(() => { duplicate = app.auth().handleCallback({ callbackUrl: alternate }); });
     await act(async () => {
       token.resolve(new Response(JSON.stringify({ access_token: "synthetic-access-token", token_type: "Bearer", expires_in: 60 })));
       expect(await duplicate).toBe(await first);
@@ -448,6 +453,82 @@ describe("async auth-react persistence", () => {
       await ready(restart);
       expect(restart.auth().isAuthenticated).toBe(false);
     }
+  });
+
+  it.each(["clearSession", "logout", "signIn", "handleCallback"])("starts %s from a descendant layout effect after a committed storage change", async (action) => {
+    const oldStorage = new AsyncStorage();
+    const newStorage = new AsyncStorage();
+    seedTransaction(newStorage);
+    const done = vi.fn();
+    const failed = vi.fn();
+    function LayoutAction({ active }: { active: boolean }) {
+      const auth = useCubidAuth();
+      useLayoutEffect(() => {
+        if (!active) return;
+        const pending = action === "signIn" ? auth.signIn({ performRedirect: false })
+          : action === "handleCallback" ? auth.handleCallback({ callbackUrl })
+          : action === "logout" ? auth.logout({ performRedirect: false }) : auth.clearSession();
+        void pending.then(done, failed);
+      }, [active]);
+      return null;
+    }
+    const tree = (storage: AsyncStorage, active: boolean) =>
+      <CubidAuthProvider clientId={clientId} issuer={issuer} redirectUri={redirectUri}
+        discoveryDocument={discovery} storage={storage} fetch={callbackFetch()}>
+        <LayoutAction active={active} />
+      </CubidAuthProvider>;
+    const view = render(tree(oldStorage, false));
+    view.rerender(tree(newStorage, true));
+    await waitFor(() => expect(done).toHaveBeenCalledOnce());
+    expect(failed).not.toHaveBeenCalled();
+    expect(oldStorage.values.size).toBe(0);
+  });
+
+  it.each(["exchange", "validation", "persistence"])("retains a stored session after an initial callback %s failure", async (stage) => {
+    const storage = new AsyncStorage();
+    seedTransaction(storage);
+    const previous = serializeCubidAuthSession(storedSession("prior-valid-subject"));
+    storage.values.set(CUBID_AUTH_SESSION_STORAGE_KEY, previous);
+    if (stage === "validation") {
+      const transaction = JSON.parse(storage.values.get(CUBID_AUTH_TRANSACTION_STORAGE_KEY) ?? "{}");
+      transaction.scope = ["openid"];
+      storage.values.set(CUBID_AUTH_TRANSACTION_STORAGE_KEY, JSON.stringify(transaction));
+    }
+    if (stage === "persistence") storage.removeItem.mockImplementation(async (key) => {
+      if (key === CUBID_AUTH_TRANSACTION_STORAGE_KEY) throw new Error("synthetic removal failure");
+      storage.values.delete(key);
+    });
+    const fetch = stage === "exchange" ? vi.fn(async () => new Response(JSON.stringify({ error: "invalid_grant" }), { status: 400 })) : callbackFetch();
+    const app = mount(storage, { fetch }, <CubidAuthCallback callbackUrl={callbackUrl} />);
+    await ready(app, "error");
+    expect(app.auth().session?.subject).toBe("prior-valid-subject");
+    expect(storage.values.get(CUBID_AUTH_SESSION_STORAGE_KEY)).toBe(previous);
+    act(() => app.auth().clearError());
+    expect(app.auth().status).toBe("authenticated");
+    expect(app.auth().isAuthenticated).toBe(true);
+  });
+
+  it("never coalesces an invalid callback destination or ambiguous response with a valid exchange", async () => {
+    const storage = new AsyncStorage();
+    seedTransaction(storage);
+    const token = deferred<Response>();
+    const fetch = vi.fn(async (input: string | URL | Request) =>
+      String(input).endsWith("/token") ? token.promise : new Response(JSON.stringify({ sub: "synthetic-new-subject" })));
+    const app = mount(storage, { fetch });
+    await ready(app);
+    let pending!: Promise<CubidAuthSession>;
+    act(() => { pending = app.auth().handleCallback({ callbackUrl }); });
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+    await act(async () => {
+      await expect(app.auth().handleCallback({ callbackUrl: callbackUrl.replace("/callback", "/wrong") })).rejects.toMatchObject({ code: "invalid_callback_destination" });
+      await expect(app.auth().handleCallback({ callbackUrl: `${callbackUrl}&code=synthetic-code` })).rejects.toMatchObject({ code: "invalid_callback" });
+      await expect(app.auth().handleCallback({ callbackUrl: `${callbackUrl}&iss=https://other.example` })).rejects.toMatchObject({ code: "invalid_issuer" });
+      await expect(app.auth().handleCallback({ callbackUrl: callbackUrl.replace("synthetic-code", "other-code") })).rejects.toMatchObject({ code: "callback_in_progress" });
+      token.resolve(new Response(JSON.stringify({ access_token: "synthetic-access-token", token_type: "Bearer", expires_in: 60 })));
+      await pending;
+    });
+    expect(fetch.mock.calls.filter(([url]) => String(url).endsWith("/token"))).toHaveLength(1);
+    expect(app.auth().status).toBe("authenticated");
   });
 
   it("clearSession clears memory immediately, attempts both removals and rejects on failure", async () => {
