@@ -9,14 +9,14 @@
     },
     {
       "name": "@cubid/auth",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "Runtime-agnostic OIDC and PKCE helpers for Sign in with Cubid.",
       "registry": "npm-only",
       "referencePath": "auth.json"
     },
     {
       "name": "@cubid/auth-react",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "React session bindings and components for Sign in with Cubid.",
       "registry": "npm-only",
       "referencePath": "auth-react.json"
