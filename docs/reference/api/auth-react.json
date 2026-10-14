@@ -334,6 +334,14 @@
           "variant": "declaration",
           "kind": 1024,
           "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Clears memory immediately; await persistence completion and handle storage errors."
+              }
+            ]
+          },
           "type": {
             "type": "reflection",
             "declaration": {
@@ -348,8 +356,20 @@
                   "kind": 4096,
                   "flags": {},
                   "type": {
-                    "type": "intrinsic",
-                    "name": "void"
+                    "type": "reference",
+                    "target": {
+                      "packageName": "typescript",
+                      "packagePath": "lib/lib.es5.d.ts",
+                      "qualifiedName": "Promise"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      }
+                    ],
+                    "name": "Promise",
+                    "package": "typescript"
                   }
                 }
               ]
@@ -1070,19 +1090,233 @@
             "types": [
               {
                 "type": "reference",
-                "target": {
-                  "packageName": "@cubid/auth",
-                  "packagePath": "src/index.ts",
-                  "qualifiedName": "CubidAuthStorageLike"
-                },
-                "name": "CubidAuthStorageLike",
-                "package": "@cubid/auth"
+                "name": "CubidAuthProviderStorage",
+                "package": "@cubid/auth-react"
               },
               {
                 "type": "literal",
                 "value": null
               }
             ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CubidAuthProviderStorage",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Provider storage accepts synchronous browser stores and asynchronous native adapters.\nCore @cubid/auth storage helpers remain synchronous."
+          }
+        ]
+      },
+      "children": [
+        {
+          "name": "getItem",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "key",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "union",
+                            "types": [
+                              {
+                                "type": "intrinsic",
+                                "name": "string"
+                              },
+                              {
+                                "type": "literal",
+                                "value": null
+                              }
+                            ]
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "removeItem",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "key",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "setItem",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "type": {
+            "type": "reflection",
+            "declaration": {
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "signatures": [
+                {
+                  "name": "__type",
+                  "variant": "signature",
+                  "kind": 4096,
+                  "flags": {},
+                  "parameters": [
+                    {
+                      "name": "key",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    },
+                    {
+                      "name": "value",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "void"
+                      },
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Promise"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "intrinsic",
+                            "name": "void"
+                          }
+                        ],
+                        "name": "Promise",
+                        "package": "typescript"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
           }
         }
       ]
@@ -2227,7 +2461,183 @@
     },
     {
       "kind": "text",
-      "text": " or email for\nCubid authentication. Its optional deprecated typing is retained for legacy or\nother OIDC issuers, whose verification semantics still apply."
+      "text": " or email for\nCubid authentication. Its optional deprecated typing is retained for legacy or\nother OIDC issuers, whose verification semantics still apply.\n\n## Asynchronous Native Storage\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`CubidAuthProvider.storage`"
+    },
+    {
+      "kind": "text",
+      "text": " accepts "
+    },
+    {
+      "kind": "code",
+      "text": "`CubidAuthProviderStorage`"
+    },
+    {
+      "kind": "text",
+      "text": ": "
+    },
+    {
+      "kind": "code",
+      "text": "`getItem`"
+    },
+    {
+      "kind": "text",
+      "text": " may return\n"
+    },
+    {
+      "kind": "code",
+      "text": "`string | null`"
+    },
+    {
+      "kind": "text",
+      "text": " or a promise; "
+    },
+    {
+      "kind": "code",
+      "text": "`setItem`"
+    },
+    {
+      "kind": "text",
+      "text": " and "
+    },
+    {
+      "kind": "code",
+      "text": "`removeItem`"
+    },
+    {
+      "kind": "text",
+      "text": " may return "
+    },
+    {
+      "kind": "code",
+      "text": "`void`"
+    },
+    {
+      "kind": "text",
+      "text": " or a\npromise. Existing synchronous browser "
+    },
+    {
+      "kind": "code",
+      "text": "`localStorage`"
+    },
+    {
+      "kind": "text",
+      "text": " adapters still work. Core\n"
+    },
+    {
+      "kind": "code",
+      "text": "`@cubid/auth`"
+    },
+    {
+      "kind": "text",
+      "text": " storage interfaces and session helpers remain synchronous.\n\nSupply a stable host-owned adapter, for example an existing native store:\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\nimport AsyncStorage from \"@react-native-async-storage/async-storage\";\n\n<CubidAuthProvider\n  clientId=\"your-registered-native-client\"\n  issuer=\"https://id.cubid.me\"\n  redirectUri=\"yourapp://auth/callback\"\n  storage={AsyncStorage}\n  crypto={hostCrypto}\n>\n  <App />\n</CubidAuthProvider>\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\nThe host chooses storage appropriate for its token/session security model; this\nexample does not add a native storage dependency to the SDK. For server-mediated\nOIDC, keep Cubid tokens on the app server and use host session persistence instead.\nSee the [native guide]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../docs/examples/native-siwc.md"
+    },
+    {
+      "kind": "text",
+      "text": ") for registration, system\nbrowser and callback handling. The bundled DOM buttons/callback UI are browser\ncomponents; native screens use the hook and host navigation adapters.\n\nHydration reports "
+    },
+    {
+      "kind": "code",
+      "text": "`loading`"
+    },
+    {
+      "kind": "text",
+      "text": " until storage resolves and ignores old loads after a\nnew auth action or storage/client/issuer/redirect change. Sessions from a different\nclient or issuer are not restored. Transaction writes finish before navigation;\ncallback session writes finish before transaction removal and authenticated state.\nWrites and removals share a transient queue for the same stable storage adapter,\nincluding provider remounts, so hydration waits for commit/rollback and logout\ncannot be undone by an in-flight callback write. Keep the adapter identity stable;\nseparate adapters/processes accessing the same underlying store require host\ncoordination. Equivalent in-flight authorization responses share one code exchange even when\nquery ordering/URL encoding differs. Destination, single-value fields and issuer\nare checked before coalescing; a different pending response rejects with\n"
+    },
+    {
+      "kind": "code",
+      "text": "`callback_in_progress`"
+    },
+    {
+      "kind": "text",
+      "text": " instead of discarding the active exchange.\nSuperseded actions reject with "
+    },
+    {
+      "kind": "code",
+      "text": "`operation_superseded`"
+    },
+    {
+      "kind": "text",
+      "text": ". Only committed provider\nconfiguration changes supersede active work, including actions from child layout\neffects. An initial callback loads a prior valid same-client/issuer session before\nexchanging the code, so failure retains it and "
+    },
+    {
+      "kind": "code",
+      "text": "`clearError()`"
+    },
+    {
+      "kind": "text",
+      "text": " can resume it.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "`await auth.clearSession()`"
+    },
+    {
+      "kind": "text",
+      "text": " now waits for session and transaction removal; memory\nis cleared immediately. Also await "
+    },
+    {
+      "kind": "code",
+      "text": "`logout`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`signIn`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`handleCallback`"
+    },
+    {
+      "kind": "text",
+      "text": " and\n"
+    },
+    {
+      "kind": "code",
+      "text": "`refreshUserInfo`"
+    },
+    {
+      "kind": "text",
+      "text": ", and handle rejected storage operations. Removal failures leave\nmemory signed out with "
+    },
+    {
+      "kind": "code",
+      "text": "`status: \"error\"`"
+    },
+    {
+      "kind": "text",
+      "text": "; fix/retry the failing store before\nassuming persistent logout across restart. A failed callback commit rolls back to the prior stored session and retains the\ntransaction for diagnosis. If rollback also fails, "
+    },
+    {
+      "kind": "code",
+      "text": "`session_rollback_failed`"
+    },
+    {
+      "kind": "text",
+      "text": "\nrequires repairing or clearing the store before restarting auth; an authorization code may already have been consumed, so start a new sign-in\nrather than assuming replay."
     }
   ]
 }

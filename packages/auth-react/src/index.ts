@@ -12,6 +12,7 @@ export type {
   CubidAuthHandleCallbackOptions,
   CubidAuthLogoutOptions,
   CubidAuthProviderProps,
+  CubidAuthProviderStorage,
   CubidAuthSignInOptions,
   CubidAuthStatus,
 } from "./context";

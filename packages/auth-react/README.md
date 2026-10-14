@@ -135,3 +135,59 @@ Under the current Cubid verified-email profile, email is optional and is disclos
 only when verified and authorized. Do not require `email_verified` or email for
 Cubid authentication. Its optional deprecated typing is retained for legacy or
 other OIDC issuers, whose verification semantics still apply.
+
+## Asynchronous Native Storage
+
+`CubidAuthProvider.storage` accepts `CubidAuthProviderStorage`: `getItem` may return
+`string | null` or a promise; `setItem` and `removeItem` may return `void` or a
+promise. Existing synchronous browser `localStorage` adapters still work. Core
+`@cubid/auth` storage interfaces and session helpers remain synchronous.
+
+Supply a stable host-owned adapter, for example an existing native store:
+
+```tsx
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+<CubidAuthProvider
+  clientId="your-registered-native-client"
+  issuer="https://id.cubid.me"
+  redirectUri="yourapp://auth/callback"
+  storage={AsyncStorage}
+  crypto={hostCrypto}
+>
+  <App />
+</CubidAuthProvider>
+```
+
+The host chooses storage appropriate for its token/session security model; this
+example does not add a native storage dependency to the SDK. For server-mediated
+OIDC, keep Cubid tokens on the app server and use host session persistence instead.
+See the [native guide](../../docs/examples/native-siwc.md) for registration, system
+browser and callback handling. The bundled DOM buttons/callback UI are browser
+components; native screens use the hook and host navigation adapters.
+
+Hydration reports `loading` until storage resolves and ignores old loads after a
+new auth action or storage/client/issuer/redirect change. Sessions from a different
+client or issuer are not restored. Transaction writes finish before navigation;
+callback session writes finish before transaction removal and authenticated state.
+Writes and removals share a transient queue for the same stable storage adapter,
+including provider remounts, so hydration waits for commit/rollback and logout
+cannot be undone by an in-flight callback write. Keep the adapter identity stable;
+separate adapters/processes accessing the same underlying store require host
+coordination. Equivalent in-flight authorization responses share one code exchange even when
+query ordering/URL encoding differs. Destination, single-value fields and issuer
+are checked before coalescing; a different pending response rejects with
+`callback_in_progress` instead of discarding the active exchange.
+Superseded actions reject with `operation_superseded`. Only committed provider
+configuration changes supersede active work, including actions from child layout
+effects. An initial callback loads a prior valid same-client/issuer session before
+exchanging the code, so failure retains it and `clearError()` can resume it.
+
+`await auth.clearSession()` now waits for session and transaction removal; memory
+is cleared immediately. Also await `logout`, `signIn`, `handleCallback` and
+`refreshUserInfo`, and handle rejected storage operations. Removal failures leave
+memory signed out with `status: "error"`; fix/retry the failing store before
+assuming persistent logout across restart. A failed callback commit rolls back to the prior stored session and retains the
+transaction for diagnosis. If rollback also fails, `session_rollback_failed`
+requires repairing or clearing the store before restarting auth; an authorization code may already have been consumed, so start a new sign-in
+rather than assuming replay.

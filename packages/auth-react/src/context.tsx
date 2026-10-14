@@ -5,7 +5,7 @@ import {
   buildCubidAuthorizationUrl,
   buildCubidLogoutUrl,
   CUBID_DEFAULT_OIDC_SCOPES,
-  clearCubidAuthSession,
+  CUBID_AUTH_SESSION_STORAGE_KEY,
   createCubidAuthNonce,
   createCubidAuthSession,
   createCubidAuthState,
@@ -16,8 +16,8 @@ import {
   fetchCubidUserInfo,
   getCubidAuthAssurance,
   isCubidAuthSessionExpired,
-  loadCubidAuthSession,
-  persistCubidAuthSession,
+  parseCubidAuthSession,
+  serializeCubidAuthSession,
   parseCubidAuthorizationCallback,
   CubidAuthError,
   validateCubidIdToken,
@@ -31,7 +31,7 @@ import {
   type CubidOidcDiscoveryDocument,
   type CubidUserInfo,
 } from "@cubid/auth";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useInsertionEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 export const CUBID_AUTH_TRANSACTION_STORAGE_KEY = "cubid.auth.transaction";
@@ -83,6 +83,15 @@ export interface CubidAuthLogoutOptions {
   state?: string;
 }
 
+/** Provider storage accepts synchronous browser stores and asynchronous native adapters.
+ * Core @cubid/auth storage helpers remain synchronous.
+ */
+export interface CubidAuthProviderStorage {
+  getItem: (key: string) => string | null | Promise<string | null>;
+  setItem: (key: string, value: string) => void | Promise<void>;
+  removeItem: (key: string) => void | Promise<void>;
+}
+
 export interface CubidAuthProviderProps {
   crypto?: CubidAuthCrypto;
   autoUserInfo?: boolean;
@@ -95,13 +104,14 @@ export interface CubidAuthProviderProps {
   redirectUri: string;
   requirePasskey?: boolean;
   scope?: readonly string[] | string;
-  storage?: CubidAuthStorageLike | null;
+  storage?: CubidAuthProviderStorage | null;
 }
 
 export interface CubidAuthContextValue {
   assurance: CubidAuthAssurance;
   clearError: () => void;
-  clearSession: () => void;
+  /** Clears memory immediately; await persistence completion and handle storage errors. */
+  clearSession: () => Promise<void>;
   discovery: CubidOidcDiscoveryDocument | null;
   error: Error | null;
   handleCallback: (options?: CubidAuthHandleCallbackOptions) => Promise<CubidAuthSession>;
@@ -114,6 +124,13 @@ export interface CubidAuthContextValue {
   status: CubidAuthStatus;
 }
 
+interface OwnedState<T> {
+  owner: object;
+  value: T;
+}
+
+// Stable adapters share transient serialization even across provider remounts.
+const storageMutations = new WeakMap<CubidAuthProviderStorage, Promise<void>>();
 const CubidAuthContext = createContext<CubidAuthContextValue | null>(null);
 
 function normalizeError(error: unknown): Error {
@@ -143,12 +160,12 @@ function normalizeScope(scope: readonly string[] | string | undefined): string[]
   return [...CUBID_DEFAULT_OIDC_SCOPES];
 }
 
-function readTransaction(storage: CubidAuthStorageLike | null): CubidAuthTransaction | null {
+async function readTransaction(storage: CubidAuthProviderStorage | null): Promise<CubidAuthTransaction | null> {
   if (!storage) {
     return null;
   }
 
-  const raw = storage.getItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY);
+  const raw = await storage.getItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY);
 
   if (!raw) {
     return null;
@@ -177,13 +194,13 @@ function readTransaction(storage: CubidAuthStorageLike | null): CubidAuthTransac
       };
     }
   } catch {
-    storage.removeItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY);
+    // Invalid transactions are rejected without mutating storage during a read.
   }
 
   return null;
 }
 
-function writeTransaction(storage: CubidAuthStorageLike | null, transaction: CubidAuthTransaction) {
+async function writeTransaction(storage: CubidAuthProviderStorage | null, transaction: CubidAuthTransaction) {
   if (!storage) {
     throw new CubidAuthError(
       "Cubid auth requires a storage backend to persist the PKCE transaction.",
@@ -194,11 +211,11 @@ function writeTransaction(storage: CubidAuthStorageLike | null, transaction: Cub
     );
   }
 
-  storage.setItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY, JSON.stringify(transaction));
+  await storage.setItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY, JSON.stringify(transaction));
 }
 
-function clearTransaction(storage: CubidAuthStorageLike | null) {
-  storage?.removeItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY);
+async function clearTransaction(storage: CubidAuthProviderStorage | null) {
+  await storage?.removeItem(CUBID_AUTH_TRANSACTION_STORAGE_KEY);
 }
 
 function getWindowStorage(): CubidAuthStorageLike | null {
@@ -213,27 +230,8 @@ function getWindowStorage(): CubidAuthStorageLike | null {
   }
 }
 
-function resolveStorage(storage: CubidAuthStorageLike | null | undefined) {
+function resolveStorage(storage: CubidAuthProviderStorage | null | undefined) {
   return storage ?? getWindowStorage();
-}
-
-function loadPersistedSession(storage: CubidAuthStorageLike | null): CubidAuthSession | null {
-  if (!storage) {
-    return null;
-  }
-
-  const session = loadCubidAuthSession(storage);
-
-  if (!session) {
-    return null;
-  }
-
-  if (isCubidAuthSessionExpired(session)) {
-    clearCubidAuthSession(storage);
-    return null;
-  }
-
-  return session;
 }
 
 function getCurrentUrl(input: string | URL | undefined) {
@@ -344,19 +342,98 @@ export function CubidAuthProvider({
   storage: providedStorage,
 }: CubidAuthProviderProps) {
   const storage = resolveStorage(providedStorage);
-  const [discovery, setDiscovery] = useState<CubidOidcDiscoveryDocument | null>(discoveryDocument);
-  const [error, setError] = useState<Error | null>(null);
-  const [session, setSession] = useState<CubidAuthSession | null>(null);
-  const [status, setStatus] = useState<CubidAuthStatus>("idle");
+  // A context change invalidates pending work without changing the core storage API.
+  const owner = useMemo(() => ({ revision: 0 }), [storage, clientId, issuer, redirectUri]);
+  const currentOwner = useRef(owner);
+  const mounted = useRef(true);
+  const callbackRequest = useRef<{
+    owner: object; revision: number; key: string; promise: Promise<CubidAuthSession>;
+  } | null>(null);
+  const [discoveryState, setDiscoveryState] = useState<OwnedState<CubidOidcDiscoveryDocument | null>>({ owner, value: discoveryDocument });
+  const discovery = discoveryDocument ?? (discoveryState.owner === owner ? discoveryState.value : null);
+  const [errorState, setErrorState] = useState<OwnedState<Error | null>>({ owner, value: null });
+  const error = errorState.owner === owner ? errorState.value : null;
+  const [sessionState, setSessionState] = useState<OwnedState<CubidAuthSession | null>>({ owner, value: null });
+  const session = sessionState.owner === owner ? sessionState.value : null;
+  const [statusState, setStatusState] = useState<OwnedState<CubidAuthStatus>>({ owner, value: "idle" });
+  const status = statusState.owner === owner ? statusState.value : "idle";
+  const setDiscovery = (value: CubidOidcDiscoveryDocument) => setDiscoveryState({ owner, value });
+  const setError = (value: Error | null) => setErrorState({ owner, value });
+  const setSession = (value: CubidAuthSession | null) => setSessionState({ owner, value });
+  const setStatus = (value: CubidAuthStatus) => setStatusState({ owner, value });
+
+  function isCurrent(revision: number) {
+    return mounted.current && currentOwner.current === owner && owner.revision === revision;
+  }
+
+  function assertCurrent(revision: number) {
+    if (!isCurrent(revision)) {
+      throw new CubidAuthError("A newer auth action or provider configuration superseded this operation.", {
+        category: "validation", code: "operation_superseded",
+      });
+    }
+  }
+
+  // Serialize writes/removals so a logout queued during a session write removes it last.
+  function mutateStorage(task: () => Promise<void>) {
+    if (!storage) return task();
+    const result = (storageMutations.get(storage) ?? Promise.resolve()).then(task);
+    const settled = result.catch(() => undefined);
+    storageMutations.set(storage, settled);
+    void settled.then(() => {
+      if (storageMutations.get(storage) === settled) storageMutations.delete(storage);
+    });
+    return result;
+  }
+
+  useInsertionEffect(() => {
+    // Publish committed identity before any descendant layout effect starts auth.
+    currentOwner.current = owner;
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, [owner]);
 
   useEffect(() => {
-    const nextSession = loadPersistedSession(storage);
+    let cancelled = false;
+    const revision = owner.revision;
+    // A callback child may start before this parent effect on initial mount.
+    if (revision !== 0) return;
+    const active = () => !cancelled && isCurrent(revision);
+    setStatus("loading");
+    void (async () => {
+      try {
+        // A new committed context must not observe a pending callback's partial write.
+        if (storage) await storageMutations.get(storage);
+        if (!active()) return;
+        const raw = await storage?.getItem(CUBID_AUTH_SESSION_STORAGE_KEY);
+        if (!active()) return;
+        const restored = raw ? parseCubidAuthSession(raw) : null;
+        const nextSession = restored && restored.clientId === clientId && restored.issuer === issuer
+          ? restored : null;
+        if (nextSession && isCubidAuthSessionExpired(nextSession)) {
+          await mutateStorage(async () => {
+            if (active()) await storage?.removeItem(CUBID_AUTH_SESSION_STORAGE_KEY);
+          });
+          if (!active()) return;
+          setSession(null);
+          setStatus("signed_out");
+          return;
+        }
+        setSession(nextSession);
+        setStatus(nextSession ? "authenticated" : "signed_out");
+      } catch (nextError) {
+        if (active()) {
+          setError(normalizeError(nextError));
+          setStatus("error");
+        }
+      }
+    })();
+    return () => { cancelled = true; };
+    // These values identify the storage/client lifetime; state updates do not rehydrate.
+  }, [owner]);
 
-    setSession(nextSession);
-    setStatus(nextSession ? "authenticated" : "signed_out");
-  }, [storage]);
-
-  async function ensureDiscoveryDocument() {
+  async function ensureDiscoveryDocument(revision: number) {
+    assertCurrent(revision);
     if (discovery) {
       return discovery;
     }
@@ -366,6 +443,7 @@ export function CubidAuthProvider({
       issuer,
     });
 
+    assertCurrent(revision);
     setDiscovery(nextDiscovery);
     return nextDiscovery;
   }
@@ -381,22 +459,46 @@ export function CubidAuthProvider({
     setStatus("signed_out");
   }
 
-  function clearSession() {
-    if (storage) {
-      clearCubidAuthSession(storage);
-    }
-    clearTransaction(storage);
+  async function removeStoredAuth(revision: number) {
+    await mutateStorage(async () => {
+      assertCurrent(revision);
+      // Attempt both removals even when one fails, and propagate the failure.
+      const results = await Promise.allSettled([
+        Promise.resolve().then(() => storage?.removeItem(CUBID_AUTH_SESSION_STORAGE_KEY)),
+        Promise.resolve().then(() => clearTransaction(storage)),
+      ]);
+      const failure = results.find((result) => result.status === "rejected");
+      if (failure?.status === "rejected") throw failure.reason;
+    });
+    assertCurrent(revision);
+  }
+
+  async function clearSession() {
+    const revision = ++owner.revision;
+    assertCurrent(revision);
     setError(null);
     setSession(null);
     setStatus("signed_out");
+    try {
+      await removeStoredAuth(revision);
+    } catch (nextError) {
+      const normalizedError = normalizeError(nextError);
+      if (isCurrent(revision)) {
+        setError(normalizedError);
+        setStatus("error");
+      }
+      throw normalizedError;
+    }
   }
 
   async function signIn(options: CubidAuthSignInOptions = {}) {
+    const revision = ++owner.revision;
+    assertCurrent(revision);
     setError(null);
     setStatus("loading");
 
     try {
-      const nextDiscovery = await ensureDiscoveryDocument();
+      const nextDiscovery = await ensureDiscoveryDocument(revision);
       const nextScope = normalizeScope(options.scope ?? scope);
       const pkce = await createCubidPkcePair({
         crypto,
@@ -423,15 +525,19 @@ export function CubidAuthProvider({
         state,
       });
 
-      writeTransaction(storage, {
-        clientId,
-        codeVerifier: pkce.codeVerifier,
-        issuer,
-        nonce,
-        redirectUri,
-        scope: nextScope,
-        state,
+      await mutateStorage(async () => {
+        assertCurrent(revision);
+        await writeTransaction(storage, {
+          clientId,
+          codeVerifier: pkce.codeVerifier,
+          issuer,
+          nonce,
+          redirectUri,
+          scope: nextScope,
+          state,
+        });
       });
+      assertCurrent(revision);
 
       if (options.performRedirect !== false) {
         navigateTo(url, options.navigate);
@@ -441,18 +547,90 @@ export function CubidAuthProvider({
       return url;
     } catch (nextError) {
       const normalizedError = normalizeError(nextError);
-      setError(normalizedError);
-      setStatus("error");
+      if (isCurrent(revision)) {
+        setError(normalizedError);
+        setStatus("error");
+      }
       throw normalizedError;
     }
   }
 
   async function handleCallback(options: CubidAuthHandleCallbackOptions = {}) {
+    let url: string;
+    let key: string;
+    try {
+      url = getCurrentUrl(options.callbackUrl);
+      // Validate before coalescing: an invalid destination/ambiguous response must
+      // never inherit a valid request's result merely by carrying its code/state.
+      assertCallbackDestination(url, redirectUri);
+      const response = parseCubidAuthorizationCallback(url);
+      const responseIssuer = response.raw.iss?.[0];
+      if (typeof responseIssuer !== "undefined" && responseIssuer !== issuer) {
+        throw new CubidAuthError("Cubid callback issuer does not match this provider.", {
+          category: "validation", code: "invalid_issuer",
+        });
+      }
+      key = JSON.stringify([
+        response.kind, response.state,
+        response.kind === "success" ? response.code : response.error,
+        responseIssuer ?? issuer,
+      ]);
+    } catch (nextError) {
+      const normalizedError = normalizeError(nextError);
+      if (!callbackRequest.current) {
+        setError(normalizedError);
+        setStatus("error");
+      }
+      throw normalizedError;
+    }
+    const existing = callbackRequest.current;
+    if (existing?.owner === owner && isCurrent(existing.revision)) {
+      if (existing.key === key) return existing.promise;
+      throw new CubidAuthError("Another authorization response is already being handled.", {
+        category: "validation", code: "callback_in_progress",
+      });
+    }
+    const promise = performCallback({ ...options, callbackUrl: url });
+    const request = { owner, revision: owner.revision, key, promise };
+    callbackRequest.current = request;
+    try {
+      return await promise;
+    } finally {
+      if (callbackRequest.current === request) callbackRequest.current = null;
+    }
+  }
+
+  async function restorePriorSession(revision: number) {
+    if (session || !storage) return;
+    await storageMutations.get(storage);
+    assertCurrent(revision);
+    const raw = await storage.getItem(CUBID_AUTH_SESSION_STORAGE_KEY);
+    assertCurrent(revision);
+    if (!raw) return;
+    let restored: CubidAuthSession;
+    try {
+      restored = parseCubidAuthSession(raw);
+    } catch {
+      // A malformed old session is not a prerequisite for a fresh code exchange.
+      return;
+    }
+    if (restored.clientId === clientId && restored.issuer === issuer && !isCubidAuthSessionExpired(restored)) {
+      setSession(restored);
+    }
+  }
+
+  async function performCallback(options: CubidAuthHandleCallbackOptions) {
+    const revision = ++owner.revision;
+    assertCurrent(revision);
     setError(null);
     setStatus("loading");
 
     try {
-      const transaction = readTransaction(storage);
+      // Callback children can start before initial hydration. Retain a prior valid
+      // session so protocol/persistence failure and clearError do not erase it.
+      await restorePriorSession(revision);
+      const transaction = await readTransaction(storage);
+      assertCurrent(revision);
 
       if (!transaction) {
         throw new CubidAuthError("No Cubid auth transaction was found for this callback.", {
@@ -491,7 +669,7 @@ export function CubidAuthProvider({
         );
       }
 
-      const nextDiscovery = await ensureDiscoveryDocument();
+      const nextDiscovery = await ensureDiscoveryDocument(revision);
       if (nextDiscovery.issuer !== transaction.issuer) {
         throw new CubidAuthError("Cubid discovery issuer does not match the stored transaction.", {
           category: "validation", code: "invalid_issuer",
@@ -506,6 +684,7 @@ export function CubidAuthProvider({
         tokenEndpoint: nextDiscovery.token_endpoint,
       });
 
+      assertCurrent(revision);
       const expectsIdToken = transaction.scope.includes("openid");
 
       if (expectsIdToken && !tokenResponse.idToken) {
@@ -529,6 +708,7 @@ export function CubidAuthProvider({
         });
       }
 
+      assertCurrent(revision);
       const idTokenClaims = tokenResponse.idToken
         ? await validateCubidIdToken({
             clientId: transaction.clientId,
@@ -549,74 +729,100 @@ export function CubidAuthProvider({
         userInfo,
       });
 
-      if (storage) {
-        persistCubidAuthSession(storage, nextSession);
-      }
-      clearTransaction(storage);
+      await mutateStorage(async () => {
+        assertCurrent(revision);
+        const previous = await storage?.getItem(CUBID_AUTH_SESSION_STORAGE_KEY);
+        assertCurrent(revision);
+        try {
+          await storage?.setItem(CUBID_AUTH_SESSION_STORAGE_KEY, serializeCubidAuthSession(nextSession));
+          assertCurrent(revision);
+          await clearTransaction(storage);
+          assertCurrent(revision);
+        } catch (cause) {
+          // Do not restore a callback session on cold start if completion failed.
+          try {
+            if (typeof previous === "string") {
+              await storage?.setItem(CUBID_AUTH_SESSION_STORAGE_KEY, previous);
+            } else {
+              await storage?.removeItem(CUBID_AUTH_SESSION_STORAGE_KEY);
+            }
+          } catch (rollbackError) {
+            throw new CubidAuthError("Session persistence rollback failed; repair or clear the store before restarting auth.", {
+              category: "config", code: "session_rollback_failed", cause: rollbackError,
+            });
+          }
+          throw cause;
+        }
+      });
+      assertCurrent(revision);
       setSession(nextSession);
       setStatus("authenticated");
       return nextSession;
     } catch (nextError) {
       const normalizedError = normalizeError(nextError);
-      setError(normalizedError);
-      setStatus("error");
+      if (isCurrent(revision)) {
+        setError(normalizedError);
+        setStatus("error");
+      }
       throw normalizedError;
     }
   }
 
   async function refreshUserInfo() {
-    const activeSession = assertActiveSession(session);
-    const nextDiscovery = await ensureDiscoveryDocument();
-
-    if (!nextDiscovery.userinfo_endpoint) {
-      return null;
-    }
-
+    const revision = ++owner.revision;
+    assertCurrent(revision);
     setError(null);
     setStatus("loading");
 
     try {
+      const activeSession = assertActiveSession(session);
+      const nextDiscovery = await ensureDiscoveryDocument(revision);
+      if (!nextDiscovery.userinfo_endpoint) {
+        setStatus("authenticated");
+        return null;
+      }
       const userInfo = await fetchCubidUserInfo({
         accessToken: activeSession.accessToken,
         fetch,
         userInfoEndpoint: nextDiscovery.userinfo_endpoint,
       });
+      assertCurrent(revision);
       const idTokenClaims = activeSession.idToken
         ? decodeCubidIdTokenClaims(activeSession.idToken)
         : activeSession.idTokenClaims;
       const nextSession = mergeSession(activeSession, idTokenClaims, userInfo);
 
-      if (storage) {
-        persistCubidAuthSession(storage, nextSession);
-      }
+      await mutateStorage(async () => {
+        assertCurrent(revision);
+        await storage?.setItem(CUBID_AUTH_SESSION_STORAGE_KEY, serializeCubidAuthSession(nextSession));
+      });
+      assertCurrent(revision);
       setSession(nextSession);
       setStatus("authenticated");
       return userInfo;
     } catch (nextError) {
       const normalizedError = normalizeError(nextError);
-      setError(normalizedError);
-      setStatus("error");
+      if (isCurrent(revision)) {
+        setError(normalizedError);
+        setStatus("error");
+      }
       throw normalizedError;
     }
   }
 
   async function logout(options: CubidAuthLogoutOptions = {}) {
+    const revision = ++owner.revision;
+    assertCurrent(revision);
     const activeSession = session;
 
-    if (storage) {
-      clearCubidAuthSession(storage);
-    }
-    clearTransaction(storage);
     setError(null);
     setSession(null);
     setStatus("signed_out");
 
-    if (!activeSession) {
-      return null;
-    }
-
     try {
-      const nextDiscovery = await ensureDiscoveryDocument();
+      await removeStoredAuth(revision);
+      if (!activeSession) return null;
+      const nextDiscovery = await ensureDiscoveryDocument(revision);
 
       if (!nextDiscovery.end_session_endpoint) {
         return null;
@@ -637,8 +843,10 @@ export function CubidAuthProvider({
       return logoutUrl;
     } catch (nextError) {
       const normalizedError = normalizeError(nextError);
-      setError(normalizedError);
-      setStatus("error");
+      if (isCurrent(revision)) {
+        setError(normalizedError);
+        setStatus("error");
+      }
       throw normalizedError;
     }
   }

@@ -16,7 +16,7 @@
     },
     {
       "name": "@cubid/auth-react",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "description": "React session bindings and components for Sign in with Cubid.",
       "registry": "npm-only",
       "referencePath": "auth-react.json"
