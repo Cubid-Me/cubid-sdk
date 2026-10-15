@@ -1,5 +1,17 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "noEmit": true, "types": ["node"], "paths": {} },
-  "include": ["*.ts", "../../packages/acceptance/src/expo-reference-backend.acceptance.test.ts"]
+  "compilerOptions": {
+    "noEmit": true,
+    "types": [
+      "node"
+    ],
+    "paths": {},
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": [
+    "*.ts",
+    "../../packages/acceptance/src/expo-reference-backend.acceptance.test.ts",
+    "../../packages/acceptance/src/expo-native-shell.acceptance.test.ts"
+  ]
 }

@@ -9,8 +9,8 @@
 
 ## Active native integration follow-up
 
-- Current: SDK47 source-only reference backend/store in `examples/expo-siwc/` on `codex/sdk-expo-reference-backend-20261015-sol`; synthetic public-SDK validation and review gates. SDK46 hook evidence merged through PR63.
-- Ready next: bounded Expo system-browser/deep-link shell with secure storage, explicit local transport, cancellation and cold-launch delivery; reuse the reference controller/contracts and measurement tooling. See `examples/expo-siwc/README.md` and `docs/examples/expo-siwc-reference-scope.md`. A retail app, new stream or Starter rewrite is not required.
+- Current: SDK47 native-shell source on `codex/sdk-expo-native-shell-20261015-sol`: private isolated Expo UI/adapters, local RPC handler/client, lifecycle/persistence/cold-launch/step-up tests and review gates. Backend slice merged through PR64; SDK46 hook evidence through PR63.
+- Next acceptance: approved existing native client/issuer/exact callbacks, reachable approved reference-backend TLS/store, application/build identity and operator-owned device ceremonies. Exact queue is in `examples/expo-siwc/native/README.md`; source tests/types/JS exports do not prove device readiness. A retail app, new stream or Starter rewrite is not required.
 - Before device acceptance: parent confirms the approved existing client/environment, exact callbacks/devices, reviewed package source/version and development versus approved hosted reference-backend scope. No new registration, credentials, package publication or deployment is authorized.
 - SDK49 session-policy decision follows observed ordinary system-browser reauthentication; do not infer silent login from timing/browser success or add refresh tokens before measured evidence.
 
