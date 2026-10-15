@@ -7,6 +7,13 @@
 - If the local checkout is missing `.git`, note that explicitly in status updates and session logs before doing branch- or publish-related work.
 - Keep todo state and implementation history separate: status here, narrative in `session-log.md`.
 
+## Active native-session follow-up
+
+- Current: SDK49 offline measurement preparation on `codex/sdk-native-session-measurement-20261015-sol`: closed-schema example/report tool, synthetic acceptance tests and device matrix. No hosted result, refresh grant or issuer contract change.
+- Ready next: collect focused checks, independent review and PR/CI; then use the kit in an authorized native app/device measurement.
+- Parent decision for SDK47: confirm runnable Expo app owner/location. Recommend Starter/adopting-team ownership and a separately authorized isolated Starter checkout; preserve the existing dirty checkout. SDK supplies reusable adapters/fixtures.
+- SDK49 session-policy decision follows observed ordinary system-browser reauthentication; do not infer silent login from browser success/timing or add refresh tokens before that evidence.
+
 ## S. SDK Foundation
 
 ### S01. Adopt `@cubid/core` as the canonical public API package

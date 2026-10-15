@@ -138,7 +138,8 @@ remains separate. The auth source boundary guard (#51)
 runs within existing unit CI; a real Hermes/device smoke remains outstanding. Persist app
 sessions in host-controlled appropriate storage and await persistence/removal
 errors; see [async provider storage](../../packages/auth-react/README.md#asynchronous-native-storage).
-Never assume a refresh token is issued.
+Never assume a refresh token is issued. The [native session measurement kit](./native-session-measurement.md)
+prepares the device observations required by #49 without assuming silent login or adding refresh tokens.
 At expiry, start fresh Cubid authentication until an issuer-backed refresh policy is
 implemented. For sensitive identity actions, use the [step-up flow](./step-up-siwc.md) with
 signed authentication-time, same-subject and passkey checks on the trusted backend.
