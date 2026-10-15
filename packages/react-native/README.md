@@ -79,8 +79,14 @@ import { CubidProfileDetails } from "@cubid/react-native";
   reading, `"none"` never mentions location.
 - Email and phone are verified through Cubid's one-time codes. With
   `persistStamp`, the verified value is written to the account as a stamp, so
-  the next Sign in with Cubid carries `email` and `email_verified` (or the
-  phone claims) for a client that has consented to those scopes.
+  a later Sign in with Cubid can disclose it only when the client requests the
+  relevant scope and disclosure is authorized. Collection does not grant that
+  permission. Under the current Cubid verified-email profile, authorized email
+  is an optional verified `email` string; `email_verified` is omitted. Older
+  Cubid/other OIDC profiles may retain that boolean. Phone verification fields
+  are unchanged. Missing optional claims must not prevent authentication or
+  cause email-based account matching. See the
+  [profile migration guidance](../../docs/examples/federated-siwc.md#cubid-verified-email-profile-migration).
 - Name and picture have no Cubid write API yet: they are collected and
   returned in the result for the app to store, and the location reading is
   returned the same way. See the package's issue thread for the Passport-side
