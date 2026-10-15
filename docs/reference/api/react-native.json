@@ -3585,11 +3585,75 @@
     },
     {
       "kind": "text",
-      "text": "\n\nKeep the dapp API key off the device: point the client at your own server,\nwhich adds the key and forwards the two one-time-code calls.\n\n## One Component For Everything A Profile Needs\n\n"
+      "text": "\n\nKeep the dapp API key off the device: point the client at your own server,\nwhich adds the key and forwards the two one-time-code calls.\n\n## One Component For Everything A Profile Needs\n\nNormalize the app's already validated session before passing "
     },
     {
       "kind": "code",
-      "text": "```tsx\nimport * as Location from \"expo-location\";\nimport * as ImagePicker from \"expo-image-picker\";\nimport { CubidProfileDetails } from \"@cubid/react-native\";\n\n<CubidProfileDetails\n  client={client}\n  known={{ email: session.email, emailVerified: session.emailVerified }}\n  request={{ email: \"required\", phone: \"optional\", name: \"required\", picture: \"optional\", location: \"rough\" }}\n  readPosition={async (granularity) => {\n    // Ask for coarse permission only when a rough location is enough.\n    const { granted } = await Location.requestForegroundPermissionsAsync();\n    if (!granted) return null;\n    const p = await Location.getCurrentPositionAsync({ accuracy: granularity === \"exact\" ? Location.Accuracy.High : Location.Accuracy.Lowest });\n    return { lat: p.coords.latitude, lng: p.coords.longitude };\n  }}\n  pickPicture={async () => {\n    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: [\"images\"] });\n    return r.canceled ? null : r.assets[0].uri;\n  }}\n  persistStamp={{ pageId, userId }}\n  onComplete={(result) => save(result)}\n/>\n```"
+      "text": "`known`"
+    },
+    {
+      "kind": "text",
+      "text": ". The\ncomponent needs an app-owned "
+    },
+    {
+      "kind": "code",
+      "text": "`emailVerified`"
+    },
+    {
+      "kind": "text",
+      "text": " flag to skip a redundant OTP step;\nthat UI flag is not a new OIDC disclosure claim. When copying an older/generic\n"
+    },
+    {
+      "kind": "code",
+      "text": "`email_verified`"
+    },
+    {
+      "kind": "text",
+      "text": " claim into "
+    },
+    {
+      "kind": "code",
+      "text": "`session.emailVerified`"
+    },
+    {
+      "kind": "text",
+      "text": ", preserve omission as\n"
+    },
+    {
+      "kind": "code",
+      "text": "`undefined`"
+    },
+    {
+      "kind": "text",
+      "text": "; do not coerce it to "
+    },
+    {
+      "kind": "code",
+      "text": "`false`"
+    },
+    {
+      "kind": "text",
+      "text": ". Confirm the exact issuer and\ndeployed verified-email profile in trusted application configuration. Do not\nderive that confirmation from user input, a decoded unverified token, provider\nhints or the mere presence of an email. Older/other issuers still need their\nexplicit verified boolean, and an explicit "
+    },
+    {
+      "kind": "code",
+      "text": "`false`"
+    },
+    {
+      "kind": "text",
+      "text": " never becomes verified.\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```ts\nfunction toKnownEmail(\n  session: { issuer: string; email?: string; emailVerified?: boolean },\n  expectedIssuer: string,\n  usesCurrentCubidVerifiedEmailProfile: boolean,\n) {\n  const hasEmail = typeof session.email === \"string\" && session.email.length > 0;\n  const confirmedProfileOmission = usesCurrentCubidVerifiedEmailProfile &&\n    session.emailVerified === undefined;\n  return {\n    email: session.email,\n    emailVerified: session.issuer === expectedIssuer && hasEmail &&\n      (session.emailVerified === true || confirmedProfileOmission),\n  };\n}\n```"
+    },
+    {
+      "kind": "text",
+      "text": "\n\n"
+    },
+    {
+      "kind": "code",
+      "text": "```tsx\nimport * as Location from \"expo-location\";\nimport * as ImagePicker from \"expo-image-picker\";\nimport { CubidProfileDetails } from \"@cubid/react-native\";\n\n<CubidProfileDetails\n  client={client}\n  known={toKnownEmail(session, expectedIssuer, usesCurrentCubidVerifiedEmailProfile)}\n  request={{ email: \"required\", phone: \"optional\", name: \"required\", picture: \"optional\", location: \"rough\" }}\n  readPosition={async (granularity) => {\n    // Ask for coarse permission only when a rough location is enough.\n    const { granted } = await Location.requestForegroundPermissionsAsync();\n    if (!granted) return null;\n    const p = await Location.getCurrentPositionAsync({ accuracy: granularity === \"exact\" ? Location.Accuracy.High : Location.Accuracy.Lowest });\n    return { lat: p.coords.latitude, lng: p.coords.longitude };\n  }}\n  pickPicture={async () => {\n    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: [\"images\"] });\n    return r.canceled ? null : r.assets[0].uri;\n  }}\n  persistStamp={{ pageId, userId }}\n  onComplete={(result) => save(result)}\n/>\n```"
     },
     {
       "kind": "text",
