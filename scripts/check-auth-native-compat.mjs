@@ -77,10 +77,38 @@ try {
   assert.equal(session.userInfo.email_verified, undefined);
   assert.throws(() => auth.createCubidAuthSession({ clientId, issuer, tokenResponse, idTokenClaims, userInfo: { sub: "mismatched" } }), { code: "invalid_userinfo_subject" });
   assert.equal(exchanges, 1);
+  // Run fresh step-up through the same source/emitted package with all convenience
+  // globals still masked. Only synthetic issuer responses and locally signed keys.
+  const stepUpSession = Object.freeze({ issuer, clientId, subject: claims.sub });
+  const stepUpEpoch = Math.floor(Date.now() / 1000);
+  let stepUpNonce;
+  const stepUpFetch = async (input) => {
+    if (String(input).endsWith("/jwks")) return { ok: true, status: 200, json: async () => ({ keys: [{ ...jwk, kid: "synthetic", alg: "RS256", use: "sig" }] }) };
+    assert.equal(String(input), discovery.token_endpoint);
+    const stepUpClaims = { ...claims, iat: stepUpEpoch, auth_time: stepUpEpoch, nonce: stepUpNonce, acr: "urn:cubid:acr:passkey", amr: ["passkey"] };
+    const data = `${NodeBuffer.from(JSON.stringify({ alg: "RS256", kid: "synthetic" })).toString("base64url")}.${NodeBuffer.from(JSON.stringify(stepUpClaims)).toString("base64url")}`;
+    const proof = await webcrypto.subtle.sign("RSASSA-PKCS1-v1_5", keys.privateKey, NodeBuffer.from(data));
+    return { ok: true, status: 200, json: async () => ({ access_token: "synthetic-unused", token_type: "Bearer", id_token: `${data}.${NodeBuffer.from(proof).toString("base64url")}` }) };
+  };
+  const fresh = await auth.reauthenticateCubidSession({
+    session: stepUpSession, discoveryDocument: discovery, redirectUri, crypto: webcrypto,
+    nowSeconds: stepUpEpoch, fetch: stepUpFetch,
+    openAuthorizationSession: async (url) => {
+      const params = new URL(url).searchParams;
+      assert.equal(params.get("prompt"), "login");
+      assert.equal(params.get("scope"), "openid");
+      stepUpNonce = params.get("nonce");
+      return `${redirectUri}?code=synthetic-step-up&state=${params.get("state")}`;
+    },
+  });
+  assert.equal(fresh.status, "authenticated");
+  assert.equal(fresh.subject, claims.sub);
+  assert.equal(Object.hasOwn(fresh, "accessToken"), false);
+  assert.deepEqual(await auth.reauthenticateCubidSession({ session: stepUpSession, discoveryDocument: discovery, redirectUri, crypto: webcrypto, openAuthorizationSession: async () => null }), { status: "cancelled" });
 } finally {
   for (const [key, descriptor] of descriptors) {
     if (descriptor) Object.defineProperty(globalThis, key, descriptor);
     else delete globalThis[key];
   }
 }
-console.log("PASS: synthetic native Cubid federation, PKCE/signature binding, omitted claims and provider-hint compatibility. No hosted login was exercised.");
+console.log("PASS: synthetic native Cubid federation, PKCE/signature binding, omitted claims, provider-hint compatibility and fresh step-up. No hosted login was exercised.");

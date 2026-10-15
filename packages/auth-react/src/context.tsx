@@ -2,6 +2,7 @@
 
 import {
   assertCubidAuthorizationState,
+  assertCubidAuthorizationCallbackDestination as assertCallbackDestination,
   buildCubidAuthorizationUrl,
   buildCubidLogoutUrl,
   CUBID_DEFAULT_OIDC_SCOPES,
@@ -251,31 +252,6 @@ function getCurrentUrl(input: string | URL | undefined) {
     category: "validation",
     code: "missing_callback_url",
   });
-}
-
-function assertCallbackDestination(callbackUrl: string, redirectUri: string) {
-  let callback: URL;
-  let registered: URL;
-  try {
-    callback = new URL(callbackUrl);
-    registered = new URL(redirectUri);
-  } catch {
-    throw new CubidAuthError("Cubid callback requires the registered absolute redirect destination.", {
-      category: "validation", code: "invalid_callback_destination",
-    });
-  }
-  const destinationKeys = ["protocol", "username", "password", "host", "pathname"] as const;
-  const hasRegisteredQuery = Array.from(new Set(registered.searchParams.keys())).every((key) => {
-    const actual = callback.searchParams.getAll(key);
-    const expected = registered.searchParams.getAll(key);
-    return actual.length === expected.length && actual.every((value, index) => value === expected[index]);
-  });
-  if (callbackUrl.includes("#") || redirectUri.includes("#") ||
-      destinationKeys.some((key) => callback[key] !== registered[key]) || !hasRegisteredQuery) {
-    throw new CubidAuthError("Cubid callback does not match the registered redirect destination.", {
-      category: "validation", code: "invalid_callback_destination",
-    });
-  }
 }
 
 function navigateTo(url: string, navigate?: (url: string) => void) {

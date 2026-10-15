@@ -255,6 +255,7 @@ export interface CubidFriendrOidcClaimSummary {
 }
 
 export interface CubidIdTokenClaims extends Record<string, unknown> {
+  auth_time?: number;
   acr?: string;
   amr?: string[];
   aud?: string | string[];
@@ -1780,4 +1781,260 @@ export function isCubidAuthSessionExpired(
   now = Date.now()
 ): boolean {
   return session.expiresAt !== null ? session.expiresAt <= now : false;
+}
+
+export function assertCubidAuthorizationCallbackDestination(callbackUrl: string, redirectUri: string) {
+  let callback: URL;
+  let registered: URL;
+  try {
+    callback = new URL(callbackUrl);
+    registered = new URL(redirectUri);
+  } catch {
+    throw new CubidAuthError("Cubid callback requires the registered absolute redirect destination.", {
+      category: "validation", code: "invalid_callback_destination",
+    });
+  }
+  const destinationKeys = ["protocol", "username", "password", "host", "pathname"] as const;
+  const hasRegisteredQuery = Array.from(new Set(registered.searchParams.keys())).every((key) => {
+    const actual = callback.searchParams.getAll(key);
+    const expected = registered.searchParams.getAll(key);
+    return actual.length === expected.length && actual.every((value, index) => value === expected[index]);
+  });
+  if (callbackUrl.includes("#") || redirectUri.includes("#") ||
+      destinationKeys.some((key) => callback[key] !== registered[key]) || !hasRegisteredQuery) {
+    throw new CubidAuthError("Cubid callback does not match the registered redirect destination.", {
+      category: "validation", code: "invalid_callback_destination",
+    });
+  }
+}
+
+
+/** Existing app identity; tokens and the app session itself are never replaced by step-up. */
+export type CubidReauthenticationSession = Pick<CubidAuthSession, "clientId" | "issuer" | "subject">;
+
+/** Private one-use transaction. Store server-side; never return this object to an app/device. */
+export interface CubidReauthenticationTransaction {
+  clientId: string;
+  issuer: string;
+  redirectUri: string;
+  subject: string;
+  state: string;
+  nonce: string;
+  codeVerifier: string;
+  requestedAtSeconds: number;
+  expiresAtSeconds: number;
+  maxAge: number;
+  requirePasskey: boolean;
+}
+
+export interface CreateCubidReauthenticationRequestInput {
+  session: CubidReauthenticationSession;
+  discoveryDocument: CubidOidcDiscoveryDocument;
+  redirectUri: string;
+  /** Default 60 seconds. The signed authentication time must also be no earlier than this request (within clock tolerance). */
+  maxAge?: number;
+  /** Default true; a provider hint is never assurance. */
+  requirePasskey?: boolean;
+  provider?: CubidAuthProviderHint;
+  crypto?: CubidAuthCrypto;
+  /** Trusted host clock, in whole Unix seconds; normally omitted. */
+  nowSeconds?: number;
+}
+
+export interface CubidReauthenticationRequest {
+  authorizationUrl: string;
+  transaction: CubidReauthenticationTransaction;
+}
+
+export type CubidReauthenticationResult =
+  | { status: "authenticated"; subject: string; authTime: number; assurance: CubidAuthAssurance }
+  | { status: "cancelled" }
+  | { status: "denied"; reason: "access_denied" | "login_required" | "interaction_required" | "consent_required" };
+
+export interface CompleteCubidReauthenticationInput {
+  callbackUrl: string | URL;
+  session: CubidReauthenticationSession;
+  discoveryDocument: CubidOidcDiscoveryDocument;
+  redirectUri: string;
+  /** Atomically claim AND remove the private transaction by state; return null on replay/absence. */
+  consumeTransaction: (state: string) => CubidReauthenticationTransaction | null | Promise<CubidReauthenticationTransaction | null>;
+  fetch?: CubidAuthFetch;
+  crypto?: CubidAuthCrypto;
+  nowSeconds?: number;
+  /** Default 5 seconds, bounded to 0–60; does not extend transaction or ID-token expiry. */
+  clockToleranceSeconds?: number;
+}
+
+export interface ReauthenticateCubidSessionInput extends CreateCubidReauthenticationRequestInput {
+  /** Host-owned system browser/popup handoff. Return null for user dismissal; never use an embedded WebView. */
+  openAuthorizationSession: (authorizationUrl: string) => Promise<string | URL | null>;
+  fetch?: CubidAuthFetch;
+  clockToleranceSeconds?: number;
+}
+
+const REAUTHENTICATION_TRANSACTION_SECONDS = 300;
+
+function stepUpError(code: string, message: string): CubidAuthError {
+  return new CubidAuthError(message, { category: "validation", code });
+}
+
+function stepUpInteger(value: number, name: string, maximum = Number.MAX_SAFE_INTEGER): number {
+  if (!Number.isSafeInteger(value) || value < 0 || value > maximum) {
+    throw stepUpError("invalid_reauthentication_options", `Cubid step-up requires a bounded nonnegative integer ${name}.`);
+  }
+  return value;
+}
+
+function stepUpNow(nowSeconds?: number): number {
+  return stepUpInteger(nowSeconds ?? Math.floor(Date.now() / 1000), "nowSeconds", Number.MAX_SAFE_INTEGER - REAUTHENTICATION_TRANSACTION_SECONDS);
+}
+
+function assertStepUpSession(session: CubidReauthenticationSession, discovery: CubidOidcDiscoveryDocument) {
+  if (typeof session.subject !== "string" || !session.subject.trim() ||
+      typeof session.clientId !== "string" || !session.clientId.trim() || session.issuer !== discovery.issuer) {
+    throw stepUpError("invalid_reauthentication_session", "Cubid step-up requires the existing app subject/client and exact issuer.");
+  }
+  if (discovery.token_endpoint_auth_methods_supported && !discovery.token_endpoint_auth_methods_supported.includes("none")) {
+    throw stepUpError("unsupported_client_authentication", "This step-up helper requires a registered public PKCE client.");
+  }
+}
+
+/** Prepare a fresh, minimal-scope Cubid ceremony without changing the existing app session. */
+export async function createCubidReauthenticationRequest(
+  input: CreateCubidReauthenticationRequestInput
+): Promise<CubidReauthenticationRequest> {
+  assertStepUpSession(input.session, input.discoveryDocument);
+  const requestedAtSeconds = stepUpNow(input.nowSeconds);
+  const maxAge = stepUpInteger(input.maxAge ?? 60, "maxAge");
+  if (typeof input.requirePasskey !== "undefined" && typeof input.requirePasskey !== "boolean") {
+    throw stepUpError("invalid_reauthentication_options", "requirePasskey must be a boolean.");
+  }
+  // Check a registered absolute destination before creating any private material.
+  assertCubidAuthorizationCallbackDestination(input.redirectUri, input.redirectUri);
+  const pkce = await createCubidPkcePair({ crypto: input.crypto });
+  const transaction: CubidReauthenticationTransaction = {
+    clientId: input.session.clientId, issuer: input.session.issuer,
+    subject: input.session.subject as string, redirectUri: input.redirectUri,
+    state: createCubidAuthState(32, input.crypto), nonce: createCubidAuthNonce(32, input.crypto),
+    codeVerifier: pkce.codeVerifier, requestedAtSeconds,
+    expiresAtSeconds: requestedAtSeconds + REAUTHENTICATION_TRANSACTION_SECONDS,
+    maxAge, requirePasskey: input.requirePasskey ?? true,
+  };
+  const authorizationUrl = buildCubidAuthorizationUrl({
+    authorizationEndpoint: input.discoveryDocument.authorization_endpoint,
+    clientId: transaction.clientId, redirectUri: transaction.redirectUri,
+    state: transaction.state, nonce: transaction.nonce,
+    codeChallenge: pkce.codeChallenge, codeChallengeMethod: "S256",
+    prompt: "login", maxAge, requirePasskey: transaction.requirePasskey,
+    provider: input.provider, scope: ["openid"],
+  });
+  return { authorizationUrl, transaction };
+}
+
+/** Complete exactly one private step-up. A plain returned object is not a portable bearer credential. */
+export async function completeCubidReauthentication(
+  input: CompleteCubidReauthenticationInput
+): Promise<CubidReauthenticationResult> {
+  assertStepUpSession(input.session, input.discoveryDocument);
+  const tolerance = stepUpInteger(input.clockToleranceSeconds ?? 5, "clockToleranceSeconds", 60);
+  assertCubidAuthorizationCallbackDestination(String(input.callbackUrl), input.redirectUri);
+  const callback = parseCubidAuthorizationCallback(input.callbackUrl);
+  if (!callback.state) throw stepUpError("state_mismatch", "Step-up callback requires the original state.");
+  const callbackIssuer = callback.raw.iss?.[0];
+  if (typeof callbackIssuer !== "undefined" && callbackIssuer !== input.session.issuer) {
+    throw stepUpError("invalid_issuer", "Step-up callback issuer does not match the app session.");
+  }
+  const transaction = await input.consumeTransaction(callback.state);
+  if (!transaction) throw stepUpError("missing_transaction", "No unconsumed step-up transaction was found.");
+  assertCubidAuthorizationState(transaction.state, callback.state);
+  if (transaction.clientId !== input.session.clientId || transaction.issuer !== input.session.issuer ||
+      transaction.redirectUri !== input.redirectUri || transaction.subject !== input.session.subject ||
+      typeof transaction.nonce !== "string" || !transaction.nonce.trim() ||
+      typeof transaction.codeVerifier !== "string" || !transaction.codeVerifier.trim() ||
+      typeof transaction.requirePasskey !== "boolean") {
+    throw stepUpError("invalid_transaction", "Step-up transaction does not match the current app binding.");
+  }
+  stepUpInteger(transaction.maxAge, "stored maxAge");
+  stepUpInteger(transaction.requestedAtSeconds, "stored requestedAtSeconds");
+  if (transaction.expiresAtSeconds !== transaction.requestedAtSeconds + REAUTHENTICATION_TRANSACTION_SECONDS) {
+    throw stepUpError("invalid_transaction", "Step-up transaction lifetime is invalid.");
+  }
+  const assertWindow = () => {
+    const now = stepUpNow(input.nowSeconds);
+    if (now < transaction.requestedAtSeconds - tolerance || now >= transaction.expiresAtSeconds) {
+      throw stepUpError("expired_transaction", "Step-up transaction is outside its allowed lifetime.");
+    }
+    return now;
+  };
+  assertWindow();
+  if (callback.kind === "error") {
+    const reason = callback.error;
+    if (reason === "access_denied" || reason === "login_required" || reason === "interaction_required" || reason === "consent_required") {
+      return { status: "denied", reason };
+    }
+    throw stepUpError("reauthentication_failed", "Cubid rejected the step-up request.");
+  }
+  const response = await exchangeCubidAuthorizationCode({
+    clientId: transaction.clientId, code: callback.code, codeVerifier: transaction.codeVerifier,
+    redirectUri: transaction.redirectUri, tokenEndpoint: input.discoveryDocument.token_endpoint, fetch: input.fetch,
+  });
+  if (!response.idToken) throw stepUpError("missing_id_token", "Step-up requires a signed Cubid ID token.");
+  const claims = await validateCubidIdToken({
+    clientId: transaction.clientId, discoveryDocument: input.discoveryDocument,
+    idToken: response.idToken, expectedNonce: transaction.nonce,
+    fetch: input.fetch, crypto: input.crypto, nowSeconds: stepUpNow(input.nowSeconds),
+  });
+  const now = assertWindow();
+  if (claims.iss !== transaction.issuer) {
+    throw stepUpError("invalid_issuer", "Step-up ID token must use the exact registered issuer.");
+  }
+  if (claims.sub !== transaction.subject) {
+    throw stepUpError("reauthentication_subject_mismatch", "Step-up must prove the existing app identity.");
+  }
+  const audiences = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
+  if (audiences.length !== 1 || audiences[0] !== transaction.clientId) {
+    throw stepUpError("invalid_audience", "Step-up ID token must target only this app client.");
+  }
+  if (typeof claims.azp !== "undefined" && claims.azp !== transaction.clientId) {
+    throw stepUpError("invalid_authorized_party", "Step-up ID token names another authorized party.");
+  }
+  if (typeof claims.iat !== "number" || !Number.isSafeInteger(claims.iat) ||
+      claims.iat < transaction.requestedAtSeconds - tolerance || claims.iat > now + tolerance) {
+    throw stepUpError("invalid_issued_at", "Step-up ID token requires a valid recent issued-at time.");
+  }
+  if (typeof claims.exp !== "number" || claims.exp <= now) {
+    throw stepUpError("expired_id_token", "Step-up ID token expired during verification.");
+  }
+  const authTime = claims.auth_time;
+  if (typeof authTime !== "number" || !Number.isSafeInteger(authTime) || authTime < 0 || authTime > now + tolerance || authTime > claims.iat + tolerance) {
+    throw stepUpError("invalid_auth_time", "Step-up ID token requires a valid signed authentication time.");
+  }
+  if (authTime < transaction.requestedAtSeconds - tolerance || authTime < now - transaction.maxAge - tolerance) {
+    throw stepUpError("stale_auth_time", "Cubid authentication is too old for this step-up.");
+  }
+  const assurance = getCubidAuthAssurance(claims);
+  if (transaction.requirePasskey && !assurance.hasPasskeyAssurance) {
+    throw stepUpError("insufficient_assurance", "Step-up did not prove the requested Cubid passkey assurance.");
+  }
+  return { status: "authenticated", subject: transaction.subject, authTime, assurance };
+}
+
+/** Same-process convenience for a host-controlled system browser; never mutates/persists the app session. */
+export async function reauthenticateCubidSession(
+  input: ReauthenticateCubidSessionInput
+): Promise<CubidReauthenticationResult> {
+  // Validate tolerance before opening any UI.
+  stepUpInteger(input.clockToleranceSeconds ?? 5, "clockToleranceSeconds", 60);
+  const request = await createCubidReauthenticationRequest(input);
+  const callbackUrl = await input.openAuthorizationSession(request.authorizationUrl);
+  if (callbackUrl === null) return { status: "cancelled" };
+  let consumed = false;
+  return completeCubidReauthentication({
+    ...input, callbackUrl,
+    consumeTransaction: (state) => {
+      if (consumed || state !== request.transaction.state) return null;
+      consumed = true;
+      return request.transaction;
+    },
+  });
 }

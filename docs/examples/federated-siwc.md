@@ -76,13 +76,13 @@ to Cubid's hosted UI.
 ```tsx
 const auth = useCubidAuth();
 await auth.signIn({ provider: "google", requirePasskey: false });
-// For a sensitive action, request fresh Cubid passkey assurance explicitly:
-await auth.signIn({ provider: "passkey", requirePasskey: true, prompt: "login", maxAge: 0 });
+// For ordinary login, the existing session hook handles the callback.
 ```
 
 `CubidAuthProvider` retains its existing `requirePasskey: true` default. Selecting
-Google alone does not turn it off. Check the returned, validated assurance before
-a sensitive operation; the hint is not assurance. `CubidSignInButton` forwards
+Google alone does not turn it off. For a sensitive identity operation, use the [step-up helper](./step-up-siwc.md)
+to verify signed freshness, same-subject binding and requested assurance; the hint
+and an existing authenticated session are not evidence of a fresh ceremony. `CubidSignInButton` forwards
 `signInOptions.provider`. Use custom native host controls rather than DOM buttons
 in a React Native app.
 
