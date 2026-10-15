@@ -44,6 +44,33 @@ which adds the key and forwards the two one-time-code calls.
 
 ## One Component For Everything A Profile Needs
 
+Normalize the app's already validated session before passing `known`. The
+component needs an app-owned `emailVerified` flag to skip a redundant OTP step;
+that UI flag is not a new OIDC disclosure claim. When copying an older/generic
+`email_verified` claim into `session.emailVerified`, preserve omission as
+`undefined`; do not coerce it to `false`. Confirm the exact issuer and
+deployed verified-email profile in trusted application configuration. Do not
+derive that confirmation from user input, a decoded unverified token, provider
+hints or the mere presence of an email. Older/other issuers still need their
+explicit verified boolean, and an explicit `false` never becomes verified.
+
+```ts
+function toKnownEmail(
+  session: { issuer: string; email?: string; emailVerified?: boolean },
+  expectedIssuer: string,
+  usesCurrentCubidVerifiedEmailProfile: boolean,
+) {
+  const hasEmail = typeof session.email === "string" && session.email.length > 0;
+  const confirmedProfileOmission = usesCurrentCubidVerifiedEmailProfile &&
+    session.emailVerified === undefined;
+  return {
+    email: session.email,
+    emailVerified: session.issuer === expectedIssuer && hasEmail &&
+      (session.emailVerified === true || confirmedProfileOmission),
+  };
+}
+```
+
 ```tsx
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
@@ -51,7 +78,7 @@ import { CubidProfileDetails } from "@cubid/react-native";
 
 <CubidProfileDetails
   client={client}
-  known={{ email: session.email, emailVerified: session.emailVerified }}
+  known={toKnownEmail(session, expectedIssuer, usesCurrentCubidVerifiedEmailProfile)}
   request={{ email: "required", phone: "optional", name: "required", picture: "optional", location: "rough" }}
   readPosition={async (granularity) => {
     // Ask for coarse permission only when a rough location is enough.
@@ -79,8 +106,14 @@ import { CubidProfileDetails } from "@cubid/react-native";
   reading, `"none"` never mentions location.
 - Email and phone are verified through Cubid's one-time codes. With
   `persistStamp`, the verified value is written to the account as a stamp, so
-  the next Sign in with Cubid carries `email` and `email_verified` (or the
-  phone claims) for a client that has consented to those scopes.
+  a later Sign in with Cubid can disclose it only when the client requests the
+  relevant scope and disclosure is authorized. Collection does not grant that
+  permission. Under the current Cubid verified-email profile, authorized email
+  is an optional verified `email` string; `email_verified` is omitted. Older
+  Cubid/other OIDC profiles may retain that boolean. Phone verification fields
+  are unchanged. Missing optional claims must not prevent authentication or
+  cause email-based account matching. See the
+  [profile migration guidance](../../docs/examples/federated-siwc.md#cubid-verified-email-profile-migration).
 - Name and picture have no Cubid write API yet: they are collected and
   returned in the result for the app to store, and the location reading is
   returned the same way. See the package's issue thread for the Passport-side

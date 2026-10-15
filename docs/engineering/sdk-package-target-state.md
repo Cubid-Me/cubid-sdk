@@ -223,6 +223,17 @@ internal OIDC interaction routes directly. It must not require a Cubid dapp API
 key, client secret, service-role credential, Passport internal token, or any
 other privileged material in browser code.
 
+Optional OIDC disclosure follows the configured issuer profile. Current Cubid
+discloses verified `email` only when authorized and available, and omits the
+legacy `email_verified` boolean. Generic SDK types preserve that optional field
+for older Cubid and other OIDC issuers; do not reinterpret their `false` value
+as verified. Missing optional data must not invalidate authentication, and
+pairwise `sub` remains the identity key. Recovery/contact collection is separate
+from disclosure. Keep exact partial-consent and hosted omission claims gated
+on the validated runtime, including atomic consent #192 before selection #74.
+See the [Cubid profile migration](../examples/federated-siwc.md#cubid-verified-email-profile-migration)
+and [current compatibility status](./sdk-client-compatibility-status.md).
+
 `@cubid/auth-react` now owns the React layer for Sign in with Cubid. It should
 provide provider, hook, callback, sign-in, and logout ergonomics for browser
 apps while keeping protected-route authorization and server-side scope

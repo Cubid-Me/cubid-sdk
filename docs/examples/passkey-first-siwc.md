@@ -20,7 +20,8 @@ The important boundary is simple:
 ### New Cubid User
 
 1. The app sends the user to the Cubid issuer authorization endpoint with PKCE,
-   `openid profile email`, and `acr_values=urn:cubid:acr:passkey`.
+   `openid`, and `acr_values=urn:cubid:acr:passkey`. Add profile or contact scopes
+   only when the app needs those optional disclosures.
 2. Identity creates the Cubid passkey and account, including the
    duplicate-account acknowledgement when account creation is required.
 3. The user approves the minimum identity information requested by the app.
@@ -116,7 +117,7 @@ const signInUrl = buildCubidAuthorizationUrl({
   nonce,
   redirectUri: "http://localhost:5173/auth/callback",
   requirePasskey: true,
-  scope: ["openid", "profile", "email"],
+  scope: ["openid"],
   state,
 });
 
@@ -135,13 +136,32 @@ needs consented profile claims.
 To receive verified identifiers, request the standard OIDC scopes that match
 the app's Admin-configured SIWC page policy:
 
-- `email` releases consented `email` and `email_verified` claims.
+- Under the current Cubid verified-email profile, `email` permits an optional,
+  verified `email` string when authorized and available. Otherwise `email` is
+  absent. This profile omits `email_verified`; do not require that boolean or
+  email itself to establish the authenticated app session.
 - `phone` releases consented `phone_number` and `phone_number_verified` claims.
 
 Admin may require verified email, verified phone, either identifier, or both
 before Identity shows consent or redirects back to the app. That requirement
 does not put raw identifiers in redirect parameters; the app still reads them
-only from ID token claims or `/userinfo` after consent.
+only from authorized ID token claims or `/userinfo` after consent. Collecting
+an identifier for recovery or hosted policy does not authorize disclosure to
+the app and is not a reason to add a scope the app does not need.
+
+Use the validated pairwise `sub` for the app's identity key; an optional email
+may be used for authorized contact/display, never to match or merge accounts.
+The [verified-email migration guidance](./federated-siwc.md#cubid-verified-email-profile-migration)
+distinguishes this Cubid profile from older Cubid and other OIDC issuers, whose
+optional `email_verified` boolean remains represented by the generic SDK types.
+Confirm the configured runtime profile before migrating a legacy email check.
+Phone verification fields are unchanged.
+
+Requested scopes are not a promise of returned optional data. Apps must handle
+omitted claims. Atomic selective-consent completion and hosted omission evidence
+remain gated on Identity [#192](https://github.com/Cubid-Me/cubid-monorepo/issues/192)
+before optional selection [#74](https://github.com/Cubid-Me/cubid-monorepo/issues/74);
+this guide does not establish their deployment or acceptance.
 
 ## React With `@cubid/auth-react`
 
@@ -186,6 +206,7 @@ export function App() {
       issuer="https://id.cubid.me"
       postLogoutRedirectUri="http://localhost:5173/"
       redirectUri="http://localhost:5173/auth/callback"
+      scope={["openid"]}
     >
       <SiwcPanel />
     </CubidAuthProvider>
@@ -195,6 +216,9 @@ export function App() {
 
 `CubidAuthProvider` requires passkey assurance by default. Only set
 `requirePasskey={false}` for an explicitly scoped compatibility test.
+Both examples explicitly select `openid` to minimize requested data. The SDK's
+existing default scopes remain `openid email profile` for compatibility; this
+guide does not change them.
 
 ## App-Specific Setup Checklist
 
@@ -204,10 +228,9 @@ For SmarTrust, i-am-human, ChainCrew, and starter/demo apps:
    use.
 2. Register exact callback and post-logout redirect URIs for local, preview,
    staging, and production domains.
-3. Request only the minimum scopes needed. Start with `openid profile email`.
-   Add `phone` only when the app needs the standard `phone_number` /
-   `phone_number_verified` OIDC claims or when the Admin SIWC page policy
-   requires a verified phone identifier.
+3. Request only the minimum scopes needed. Start with `openid`; add `profile`,
+   `email` or `phone` only for optional data the app needs. Hosted identifier
+   collection requirements remain separate from the app's disclosure scopes.
 4. Ensure sign-in launches include `acr_values=urn:cubid:acr:passkey`.
 5. Confirm the app stores only app-scoped OIDC identifiers, such as the pairwise
    `sub`, and does not depend on global Cubid user IDs.
@@ -217,9 +240,11 @@ For SmarTrust, i-am-human, ChainCrew, and starter/demo apps:
    with a passkey, returning user completes Cubid-hosted QR handoff from another
    device, and lost-passkey user recovers at Cubid and returns to the app.
 
-Starter/demo apps can show the OIDC calls and responses in a panel to teach
-developers what is happening, but that panel should still use the real hosted
-Cubid flow. Do not mock passkey or recovery behavior in the consuming app.
+Starter/demo apps can show sanitized OIDC stages and claim-presence flags in a
+panel to teach developers what is happening. Keep tokens, codes, state, nonce,
+verifiers, cookies and raw personal data out of that panel and evidence logs.
+Use the real hosted Cubid flow; do not mock passkey or recovery behavior in the
+consuming app.
 
 ## Validation Checklist
 
@@ -237,9 +262,11 @@ Before calling a consuming app integration ready:
   or `useCubidAuth().hasPasskeyAssurance` instead of manually parsing `acr` and
   `amr`.
 - `/userinfo` succeeds with the returned access token.
-- Apps that requested `email` or `phone` receive only the consented standard
-  OIDC claims they requested: `email` / `email_verified` and/or
-  `phone_number` / `phone_number_verified`.
+- Apps receive only authorized optional claims and authenticate successfully
+  when those claims are absent. Under the current Cubid profile, disclosed
+  `email` is verified and `email_verified` is omitted; phone claims remain
+  `phone_number` / `phone_number_verified`. Confirm the deployed profile and
+  preserve older/other issuers' verification semantics during migration.
 - The app creates its own session from app-scoped claims.
 - Logout clears the app session and routes through Cubid logout when needed.
 - Lost-passkey recovery returns to the original app flow after Cubid enrolls a

@@ -1,6 +1,6 @@
 {
   "name": "@cubid/react-native",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Native components for Cubid profile completion: email and phone one-time codes, and one component that collects what a profile is missing at a chosen location granularity.",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
