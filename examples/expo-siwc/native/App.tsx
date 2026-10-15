@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Linking, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { AppState, Button, Linking, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { fetch as expoFetch } from "expo/fetch";
 import { createHttpReferenceClient } from "../transport";
 import { createNativeController } from "./controller";
 import type { Message, NativeSnapshot } from "./controller";
 import { createExpoPorts } from "./expo-ports";
 import { configuration } from "./config";
+import { connectNativeLinks } from "./links";
 
 const messages: Record<Message, string> = {
   signed_out: "Signed out of the reference app.", signed_in: "App session verified by the reference backend.", restored: "Existing app session verified by the backend.",
@@ -20,13 +21,12 @@ export default function App() {
     const session = createNativeController(ports, configuration);
     controller.current = session;
     const unsubscribe = session.subscribe(() => setState(session.getSnapshot()));
-    let live = true;
-    void Linking.getInitialURL().then((url) => { if (live) return session.initialize(url); }).catch(() => { if (live) void session.initialize(); });
-    const subscription = Linking.addEventListener("url", ({ url }) => {
-      // Active AuthSession owns its returned URL; only interrupted/out-of-session app links use this path.
-      if (!ports.isBrowserActive()) void session.handleIncoming(url);
-    });
-    return () => { live = false; unsubscribe(); subscription.remove(); session.dispose(); controller.current = null; };
+    const stopLinks = connectNativeLinks(session, {
+      getInitialURL: () => Linking.getInitialURL(),
+      subscribe(listener) { const subscription = Linking.addEventListener("url", ({ url }) => listener(url)); return () => subscription.remove(); },
+    }, () => ports.isBrowserActive());
+    const appState = AppState.addEventListener("change", (state) => { if (state === "active") session.checkExpiry(); });
+    return () => { unsubscribe(); stopLinks(); appState.remove(); session.dispose(); controller.current = null; };
   }, []);
   return <SafeAreaView style={styles.screen}>
     <Text style={styles.eyebrow}>CUBID SDK REFERENCE</Text>

@@ -49,11 +49,13 @@ export function createNativeController(ports: NativePorts, config: Configuration
       ["https:", "http:", "javascript:", "data:"].includes(callbackBase.protocol)) throw new Error("invalid_configuration");
   let credential: string | null = null;
   let verified = false;
+  let acceptedExpiry = 0;
+  let expiryTimer: ReturnType<typeof setTimeout> | null = null;
   let pending: Pending | null = null;
   let active = false;
   let disposed = false;
   let generation = 0;
-  let queuedUrl: string | null = null;
+  const queuedUrls: string[] = [];
   let cancellation: Promise<void> | null = null;
   let snapshot: NativeSnapshot = { signedIn: false, busy: false, pending: false, message: "signed_out" };
   const listeners = new Set<() => void>();
@@ -63,10 +65,30 @@ export function createNativeController(ports: NativePorts, config: Configuration
     return work;
   };
   const current = (own: number) => !disposed && profile.owner === owner && own === generation;
+  const clearExpiry = () => { if (expiryTimer !== null) clearTimeout(expiryTimer); expiryTimer = null; acceptedExpiry = 0; };
+  const checkExpiry = () => {
+    if (disposed || profile.owner !== owner || !verified || acceptedExpiry > now()) return false;
+    const expired = credential; credential = null; verified = false; clearExpiry();
+    if (expired) void removeMatching(credentialKey, "credential", expired).catch(() => {});
+    return true;
+  };
   const publish = (message: Message) => {
     if (disposed || profile.owner !== owner) return;
+    if (checkExpiry()) message = "signed_out";
     snapshot = Object.freeze({ signedIn: verified, busy: active, pending: pending !== null, message });
     for (const listener of listeners) listener();
+  };
+  const acceptExpiry = (expiresAt: number) => {
+    clearExpiry(); acceptedExpiry = expiresAt; verified = true;
+    const schedule = () => {
+      expiryTimer = setTimeout(() => {
+        if (disposed || profile.owner !== owner || !verified || acceptedExpiry !== expiresAt) return;
+        if (checkExpiry()) publish("signed_out"); else schedule();
+      }, Math.max(1, Math.min(2147483647, acceptedExpiry * 1000 - Date.now())));
+      // Native timers are numbers; Node's source-test timer should not keep a worker alive.
+      (expiryTimer as ReturnType<typeof setTimeout> & { unref?: () => void }).unref?.();
+    };
+    schedule();
   };
   const removeMatching = (key: string, field: "credential" | "transactionId", expected: string) => enqueue(async () => {
     const text = await ports.storage.getItem(key);
@@ -87,18 +109,19 @@ export function createNativeController(ports: NativePorts, config: Configuration
     } catch { /* Local cancellation remains effective; server transaction expires. */ }
   };
   const revoke = async (value: string) => { try { await ports.client.logout(value); } catch { /* bounded backend session expires */ } };
-  const matches = (url: string, ceremony: Pending) => {
+  const callbackState = (url: string): string | null => {
     try {
-      if (url.length > 8192 || url.includes("#")) return false;
+      if (url.length > 8192 || url.includes("#")) return null;
       const actual = new URL(url);
-      if (actual.hash || actual.protocol !== callbackBase.protocol || actual.host !== callbackBase.host || actual.pathname !== callbackBase.pathname || actual.username || actual.password) return false;
-      for (const key of ["state", "code", "error", "iss"]) if (actual.searchParams.getAll(key).length > 1) return false;
-      return actual.searchParams.get("state") === ceremony.transactionId &&
+      if (actual.hash || actual.protocol !== callbackBase.protocol || actual.host !== callbackBase.host || actual.pathname !== callbackBase.pathname || actual.username || actual.password) return null;
+      for (const key of ["state", "code", "error", "iss"]) if (actual.searchParams.getAll(key).length > 1) return null;
+      return opaque(actual.searchParams.get("state")) &&
         (actual.searchParams.has("code") !== actual.searchParams.has("error")) &&
         Boolean(actual.searchParams.get("code") || actual.searchParams.get("error")) &&
-        (!actual.searchParams.has("iss") || actual.searchParams.get("iss") === config.issuer);
-    } catch { return false; }
+        (!actual.searchParams.has("iss") || actual.searchParams.get("iss") === config.issuer) ? actual.searchParams.get("state") : null;
+    } catch { return null; }
   };
+  const matches = (url: string, ceremony: Pending) => callbackState(url) === ceremony.transactionId;
   const validRequest = (request: Awaited<ReturnType<ReferenceClient["startLogin"]>>) => {
     const url = new URL(request.authorizationUrl);
     for (const key of ["state", "redirect_uri", "client_id", "response_type", "scope", "code_challenge", "code_challenge_method", "nonce", "acr_values"]) {
@@ -118,12 +141,16 @@ export function createNativeController(ports: NativePorts, config: Configuration
         } finally { await revoke(saved.credential); }
       };
       if (!current(own)) { await revoke(saved.credential); return; }
+      const displaced = credential !== saved.credential ? credential : null;
       try { await ports.storage.setItem(credentialKey, JSON.stringify(saved)); }
       catch { await rollback(); throw new Error("storage_error"); }
       if (!current(own)) { await rollback(); return; }
+      if (displaced) await revoke(displaced);
+      if (!current(own)) { await rollback(); return; }
+      if (saved.expiresAt <= now()) { await rollback(); throw new ReferenceClientError("unauthorized"); }
       // Commit while the same owner still holds the barrier. A new mount can restore it afterwards.
       credential = saved.credential;
-      verified = true;
+      acceptExpiry(saved.expiresAt);
     });
   };
   const finish = async (ceremony: Pending, callbackUrl: string, own: number) => {
@@ -143,9 +170,15 @@ export function createNativeController(ports: NativePorts, config: Configuration
           if (current(own)) publish("signed_in");
         } else if (current(own)) publish("denied");
       } else {
+        checkExpiry();
         if (!credential || !verified) throw new ReferenceClientError("unauthorized");
-        const result = await ports.client.completeDemoAction(credential, input);
-        if (current(own)) publish(result.status === "confirmed" ? "confirmed" : "denied");
+        const ownerCredential = credential;
+        const result = await ports.client.completeDemoAction(ownerCredential, input);
+        if (current(own)) {
+          checkExpiry();
+          if (!verified || credential !== ownerCredential) throw new ReferenceClientError("unauthorized");
+          publish(result.status === "confirmed" ? "confirmed" : "denied");
+        }
       }
     } catch (error) {
       if (issuedCredential) await revoke(issuedCredential);
@@ -157,18 +190,26 @@ export function createNativeController(ports: NativePorts, config: Configuration
   const reportFailure = async (error: unknown, own: number) => {
     if (!current(own)) return;
     if (error instanceof ReferenceClientError && error.code === "unauthorized") {
-      const old = credential; credential = null; verified = false;
+      const old = credential; credential = null; verified = false; clearExpiry();
       try { if (old) await removeMatching(credentialKey, "credential", old); }
       catch { if (current(own)) publish("storage_error"); return; }
       if (current(own)) publish("signed_out");
     } else publish(errorMessage(error));
   };
   const drain = () => {
-    if (!active && queuedUrl && !disposed) { const url = queuedUrl; queuedUrl = null; void handleIncoming(url); }
+    if (!active && !disposed) {
+      const url = pending ? queuedUrls.find((candidate) => matches(candidate, pending!)) : undefined;
+      queuedUrls.length = 0;
+      if (url) void handleIncoming(url);
+    }
   };
   async function handleIncoming(url: string) {
     if (disposed) return false;
-    if (active) { queuedUrl = url; return false; }
+    if (active) {
+      // Bound untrusted arrivals, retain earlier candidates, and select by restored state.
+      if (callbackState(url) && (!pending || matches(url, pending)) && queuedUrls.length < 16 && !queuedUrls.includes(url)) queuedUrls.push(url);
+      return false;
+    }
     const ceremony = pending;
     if (!ceremony || !matches(url, ceremony)) return false;
     const own = ++generation;
@@ -181,28 +222,42 @@ export function createNativeController(ports: NativePorts, config: Configuration
     if (disposed || profile.owner !== owner) return Promise.resolve();
     if (cancellation) return cancellation;
     const ceremony = pending; const ownerCredential = credential; const own = ++generation;
-    active = true; pending = null; queuedUrl = null; publish("working");
+    active = true; pending = null; queuedUrls.length = 0; publish("working");
     const cleanup = enqueue(async () => {
-      const text = await ports.storage.getItem(pendingKey);
-      let stored: Pending | null = null;
-      try { stored = parseSaved<Pending>(text, ["version", "kind", "transactionId", "verifier", "expiresAt"], (v) => (v.kind === "login" || v.kind === "step_up") && opaque(v.transactionId) && opaque(v.verifier) && Number.isSafeInteger(v.expiresAt)); } catch { /* Clear corrupt proof without forwarding it. */ }
-      if (!ceremony || stored?.transactionId === ceremony.transactionId) await ports.storage.removeItem(pendingKey);
-      return ceremony ?? stored;
+      let recovered = ceremony; let storageFailed = false;
+      try {
+        const text = await ports.storage.getItem(pendingKey);
+        let stored: Pending | null = null;
+        try { stored = parseSaved<Pending>(text, ["version", "kind", "transactionId", "verifier", "expiresAt"], (v) => (v.kind === "login" || v.kind === "step_up") && opaque(v.transactionId) && opaque(v.verifier) && Number.isSafeInteger(v.expiresAt)); } catch { /* Clear corrupt proof without forwarding it. */ }
+        recovered ??= stored;
+        if (!ceremony || stored?.transactionId === ceremony.transactionId) await ports.storage.removeItem(pendingKey);
+      } catch { storageFailed = true; }
+      // Keep cancellation ahead of a replacement mount, independently of storage failure.
+      let cancellationCredential = ownerCredential;
+      if (recovered?.kind === "step_up" && !cancellationCredential) {
+        try {
+          cancellationCredential = parseSaved<SavedSession>(await ports.storage.getItem(credentialKey), ["version", "credential", "expiresAt"], (v) => opaque(v.credential) && Number.isSafeInteger(v.expiresAt))?.credential ?? null;
+        } catch { storageFailed = true; }
+      }
+      if (recovered) await cancelServer(recovered, cancellationCredential);
+      return storageFailed;
     });
     cancellation = (async () => {
       let message: Message = "cancelled";
+      const dismissal = ports.dismissBrowser().catch(() => {});
       try {
-        const recovered = await cleanup.finally(() => ports.dismissBrowser().catch(() => {}));
-        if (recovered) await cancelServer(recovered, ownerCredential);
+        const storageFailed = await cleanup.finally(() => dismissal);
+        if (storageFailed) message = "storage_error";
       } catch { message = "storage_error"; }
       finally { if (current(own)) { active = false; publish(message); } cancellation = null; }
     })();
     return cancellation;
   }
   async function start(kind: Pending["kind"]) {
+    if (checkExpiry()) publish("signed_out");
     if (disposed || active) return;
     if (pending) await cancel();
-    if (disposed || active || (kind === "step_up" && (!verified || !credential))) return;
+    if (disposed || active || (kind === "step_up" && (!verified || !credential)) || (kind === "login" && verified)) return;
     const own = ++generation;
     const ownerCredential = credential;
     active = true; publish("working");
@@ -229,7 +284,8 @@ export function createNativeController(ports: NativePorts, config: Configuration
     } finally { if (current(own)) { active = false; publish(snapshot.message); drain(); } }
   }
   return {
-    getSnapshot: () => snapshot,
+    getSnapshot: () => { if (checkExpiry()) publish("signed_out"); return snapshot; },
+    checkExpiry: () => { if (checkExpiry()) publish("signed_out"); },
     subscribe(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener); }; },
     signIn: () => start("login"),
     confirmDemoAction: () => start("step_up"),
@@ -242,14 +298,14 @@ export function createNativeController(ports: NativePorts, config: Configuration
         const saved = parseSaved<SavedSession>(await enqueue(() => ports.storage.getItem(credentialKey)), ["version", "credential", "expiresAt"], (v) => opaque(v.credential) && Number.isSafeInteger(v.expiresAt));
         if (!current(own)) return;
         credential = saved?.credential ?? null;
-        verified = false;
+        verified = false; clearExpiry();
         if (saved) {
           try {
             if (saved.expiresAt <= now()) throw new ReferenceClientError("unauthorized");
             const response = await ports.client.session(saved.credential);
             if (response.expiresAt <= now()) throw new ReferenceClientError("unauthorized");
             if (!current(own)) return;
-            verified = true;
+            acceptExpiry(Math.min(saved.expiresAt, response.expiresAt));
           } catch (error) {
             if (!(error instanceof ReferenceClientError) || error.code !== "unauthorized") throw error;
             await removeMatching(credentialKey, "credential", saved.credential);
@@ -273,7 +329,7 @@ export function createNativeController(ports: NativePorts, config: Configuration
       await cancel();
       if (disposed || profile.owner !== owner) return;
       const own = ++generation;
-      credential = null; verified = false; active = true; publish("working");
+      credential = null; verified = false; clearExpiry(); active = true; publish("working");
       try {
         const outcome = await enqueue(async () => {
           let storageFailed = false; let revocationFailed = false;
@@ -292,6 +348,6 @@ export function createNativeController(ports: NativePorts, config: Configuration
       } catch { if (current(own)) publish("unavailable"); }
       finally { if (current(own)) { active = false; publish(snapshot.message); } }
     },
-    dispose() { disposed = true; ++generation; listeners.clear(); }, // Preserve pending proof for a real cold-launch callback.
+    dispose() { disposed = true; ++generation; clearExpiry(); queuedUrls.length = 0; listeners.clear(); }, // Preserve pending proof for a real cold-launch callback.
   };
 }

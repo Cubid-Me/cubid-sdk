@@ -1,13 +1,14 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createHttpReferenceClient, createReferenceHandler, ReferenceClientError } from "../../../examples/expo-siwc/transport";
 import { createNativeController } from "../../../examples/expo-siwc/native/controller";
+import { connectNativeLinks } from "../../../examples/expo-siwc/native/links";
 import type { NativePorts, SecureStorage } from "../../../examples/expo-siwc/native/controller";
 import { createCubidAuthState, createCubidPkceCodeChallenge } from "../../../examples/expo-siwc/sdk";
 import { advance, clientId, epoch, fixture, issuer, prepareSigningKey, redirectUri } from "./fixtures/expo-reference";
 
 beforeAll(prepareSigningKey);
 beforeEach(() => { vi.spyOn(Date, "now").mockReturnValue(epoch * 1000); });
-afterEach(() => { vi.restoreAllMocks(); });
+afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
 const prefix = "cubid.sdk.reference.test.v1";
 const config = { issuer, clientId, callback: redirectUri, storagePrefix: prefix };
 const origin = "http://127.0.0.1:8787";
@@ -164,7 +165,89 @@ describe("native source lifecycle over the real reference backend and synthetic 
   });
   it("clears a cached session when protected step-up explicitly rejects its expired app credential", async () => {
     const h = await host(); await h.app.signIn(); advance(900); await h.app.confirmDemoAction();
-    expect(h.app.getSnapshot()).toMatchObject({ signedIn: false, message: "signed_out" }); expect(h.session()).toBeNull();
+    expect(h.app.getSnapshot()).toMatchObject({ signedIn: false, message: "signed_out" }); await vi.waitFor(() => expect(h.session()).toBeNull());
+  });
+  it.each(["timer", "resume"] as const)("expires a mounted authenticated session through %s without a protected request", async (mode) => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    const h = await host(); await h.app.signIn(); const listener = vi.fn(); h.app.subscribe(listener);
+    advance(900);
+    if (mode === "timer") await vi.advanceTimersByTimeAsync(900_000); else h.app.checkExpiry();
+    expect(listener).toHaveBeenCalled();
+    expect(h.app.getSnapshot()).toMatchObject({ signedIn: false, message: "signed_out" });
+    await h.app.confirmDemoAction(); expect(h.backend.tokenCalls()).toBe(1);
+    await vi.waitFor(() => expect(h.session()).toBeNull()); h.app.dispose();
+  });
+  it("does not report a late confirmed step-up after the accepted app session expires", async () => {
+    const h = await host(); await h.app.signIn(); const entered = deferred<void>(); const gate = deferred<void>();
+    const original = h.client.completeDemoAction;
+    h.client.completeDemoAction = async (...args) => { const result = await original(...args); entered.resolve(); await gate.promise; return result; };
+    const step = h.app.confirmDemoAction(); await entered.promise; advance(900); h.app.checkExpiry(); gate.resolve(); await step;
+    expect(h.app.getSnapshot()).toMatchObject({ signedIn: false, message: "signed_out" });
+  });
+  it("restores before initial-URL lookup resolves and preserves an early matching warm link among later unrelated arrivals", async () => {
+    const h = await host(); const browser = deferred<{ type: "success"; url: string }>(); let authorization = "";
+    h.ports.openBrowser = async (url) => { authorization = url; return browser.promise; };
+    const interrupted = h.app.signIn(); await vi.waitFor(() => expect(authorization).not.toBe("")); h.app.dispose();
+    const entered = deferred<void>(); const gate = deferred<void>(); let once = true;
+    h.storage.beforeRead = async (key) => { if (once && key.endsWith(".session")) { once = false; entered.resolve(); await gate.promise; } };
+    const initial = deferred<string | null>(); let incoming: (url: string) => void = () => { throw new Error("listener not installed"); };
+    const restored = h.create(); const stop = connectNativeLinks(restored, {
+      getInitialURL: () => initial.promise,
+      subscribe(listener) { incoming = listener; return () => {}; },
+    }, () => false);
+    await entered.promise; const callback = h.backend.callbackFor(authorization); incoming(callback);
+    for (let i = 0; i < 20; i++) { const unrelated = new URL(callback); unrelated.searchParams.set("state", createCubidAuthState()); incoming(unrelated.toString()); }
+    initial.resolve(null); gate.resolve();
+    await vi.waitFor(() => expect(restored.getSnapshot().signedIn).toBe(true));
+    expect(h.backend.tokenCalls()).toBe(1); stop(); browser.resolve({ type: "success", url: callback }); await interrupted; restored.dispose();
+  });
+  it("cancels the server transaction despite failed pending-proof deletion and rejects its restored late callback", async () => {
+    const h = await host(); const browser = deferred<{ type: "success"; url: string }>(); let authorization = "";
+    h.ports.openBrowser = async (url) => { authorization = url; return browser.promise; };
+    const interrupted = h.app.signIn(); await vi.waitFor(() => expect(authorization).not.toBe(""));
+    h.storage.beforeRemove = async (key) => { if (key.endsWith(".pending")) throw new Error("private removal error"); };
+    await h.app.cancel(); expect(h.app.getSnapshot()).toMatchObject({ signedIn: false, message: "storage_error" });
+    const callback = h.backend.callbackFor(authorization); h.app.dispose(); const restored = h.create(); await restored.initialize(callback);
+    expect(restored.getSnapshot().signedIn).toBe(false); expect(h.backend.tokenCalls()).toBe(0);
+    browser.resolve({ type: "success", url: callback }); await interrupted; restored.dispose();
+  });
+  it("holds replacement restoration behind pending-proof cancellation even when deletion fails", async () => {
+    const h = await host(); const browser = deferred<{ type: "success"; url: string }>(); let authorization = "";
+    h.ports.openBrowser = async (url) => { authorization = url; return browser.promise; };
+    const interrupted = h.app.signIn(); await vi.waitFor(() => expect(authorization).not.toBe(""));
+    h.storage.beforeRemove = async () => { throw new Error("remove failed"); };
+    const entered = deferred<void>(); const gate = deferred<void>(); const original = h.client.cancelLogin;
+    h.client.cancelLogin = async (...args) => { entered.resolve(); await gate.promise; return original(...args); };
+    const cancelling = h.app.cancel(); await entered.promise; h.app.dispose();
+    const callback = h.backend.callbackFor(authorization); const restored = h.create(); const loading = restored.initialize(callback);
+    expect(restored.getSnapshot().signedIn).toBe(false); expect(h.backend.tokenCalls()).toBe(0);
+    gate.resolve(); await Promise.all([cancelling, loading]);
+    expect(restored.getSnapshot().signedIn).toBe(false); expect(h.backend.tokenCalls()).toBe(0);
+    browser.resolve({ type: "success", url: callback }); await interrupted; restored.dispose();
+  });
+  it("recovers the app credential for cancellation when an interrupted step-up is cancelled before session restoration", async () => {
+    const h = await host(); await h.app.signIn(); const browser = deferred<{ type: "success"; url: string }>(); let authorization = "";
+    h.ports.openBrowser = async (url) => { authorization = url; return browser.promise; };
+    const interrupted = h.app.confirmDemoAction(); await vi.waitFor(() => expect(authorization).not.toBe("")); h.app.dispose();
+    const entered = deferred<void>(); const gate = deferred<void>(); let once = true;
+    h.storage.beforeRead = async (key) => { if (once && key.endsWith(".session")) { once = false; entered.resolve(); await gate.promise; } };
+    h.storage.beforeRemove = async (key) => { if (key.endsWith(".pending")) throw new Error("remove failed"); };
+    const restored = h.create(); const loading = restored.initialize(); await entered.promise;
+    const cancelling = restored.cancel(); gate.resolve(); await Promise.all([loading, cancelling]);
+    expect(restored.getSnapshot().message).toBe("storage_error");
+    const callback = h.backend.callbackFor(authorization); await restored.initialize(callback);
+    expect(restored.getSnapshot().message).not.toBe("confirmed"); expect(h.backend.tokenCalls()).toBe(1);
+    browser.resolve({ type: "success", url: callback }); await interrupted; restored.dispose();
+  });
+  it.each([false, true])("revokes a displaced outage credential only after successful replacement persistence (write fails: %s)", async (failWrite) => {
+    const h = await host(); await h.app.signIn(); const previous = h.session()!; const original = h.client.session;
+    h.client.session = async () => { throw new ReferenceClientError("unavailable"); };
+    const restored = h.create(); await restored.initialize(); expect(restored.getSnapshot().signedIn).toBe(false); h.client.session = original;
+    if (failWrite) h.storage.beforeWrite = async (key) => { if (key.endsWith(".session")) throw new Error("write failed"); };
+    await restored.signIn();
+    if (failWrite) { expect(h.session()).toEqual(previous); await expect(original(previous.credential)).resolves.toMatchObject({ status: "authenticated" }); }
+    else { expect(h.session()?.credential).not.toBe(previous.credential); await expect(original(previous.credential)).rejects.toMatchObject({ code: "unauthorized" }); await expect(original(h.session()!.credential)).resolves.toMatchObject({ status: "authenticated" }); }
+    restored.dispose();
   });
   it("rejects corrupted/extra private storage fields without exposing raw content in state", async () => {
     const h = await host(); h.storage.values.set(`${h.storagePrefix}.session`, JSON.stringify({ version: 1, credential: createCubidAuthState(), expiresAt: epoch + 900, id_token: "synthetic-private" }));

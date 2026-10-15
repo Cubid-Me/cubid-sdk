@@ -70,10 +70,23 @@ controller/transport tests without installing the isolated Expo dependencies.
   ordering and ownership across React mounts for the same profile namespace;
   an old write cannot overwrite a newer credential or become trusted after remount.
   Unmount preserves already stored pending proof for cold-launch delivery.
+- Restoration starts before initial-URL lookup or warm-link subscription. Up to
+  16 distinct well-formed callback candidates are held in memory during active
+  work, then selected by the restored transaction state; later unrelated links
+  cannot displace an earlier valid candidate. Raw links never enter UI/storage.
+- Accepted app-session expiry is tracked by a timer and checked again on app
+  resume, snapshot reads and protected actions. An expired mounted session stops
+  reporting authenticated, and a late step-up reply cannot confirm it.
+- Pending-proof deletion and backend cancellation are attempted independently,
+  with the shared storage barrier held through the server attempt. If both the OS
+  deletion and backend cancellation fail, no durable cancellation across process
+  restart can be promised before the backend transaction expires.
 - A fresh login credential is accepted only after secure persistence succeeds.
   Failed/stale writes revoke that credential and clear the matching local value.
   Backend revocation failures cannot be promised away: local state stays signed
   out and the development backend's bounded expiry remains the final backstop.
+  A replacement login after a status outage attempts to revoke the displaced
+  credential only after new persistence succeeds, before accepting the replacement.
 - Restored storage is not authentication proof. The app verifies its opaque
   credential through `session` before enabling the demo. Outages preserve the
   stored credential without marking it authenticated; backend rejection/expiry
