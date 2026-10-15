@@ -161,3 +161,13 @@ Under the current Cubid verified-email profile, email is optional and is disclos
 only when verified and authorized. Do not require `email_verified` or email for
 Cubid authentication. Its optional deprecated typing is retained for legacy or
 other OIDC issuers, whose verification semantics still apply.
+
+## Fresh step-up for sensitive identity actions
+
+Use `createCubidReauthenticationRequest` and `completeCubidReauthentication` for
+a private one-use server transaction, or `reauthenticateCubidSession` with a host
+system-browser adapter. These helpers require fresh signed `auth_time`, the same
+app subject and requested passkey assurance without changing the existing session.
+See [step-up SIWC](../../docs/examples/step-up-siwc.md) for cancellation, clock and
+server authorization boundaries. `auth_time` stays optional for ordinary ID-token
+claims; step-up requires it. No refresh grant or provider enablement is added.

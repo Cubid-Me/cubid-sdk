@@ -131,15 +131,17 @@ Existing browser/Node defaults remain unchanged. `CubidAuthProvider` also accept
 or asynchronous adapters; await the hook's persistence operations.
 
 Async provider persistence (#45) supplies cold-start restoration. Complete native
-React redirect ergonomics (#46), a full Expo/server example and device smoke (#47), refresh/re-auth policy (#49),
-step-up helper (#50) remain follow-ups. The auth source boundary guard (#51)
+React redirect ergonomics (#46), a full Expo/server example and device smoke (#47),
+and refresh/re-auth policy (#49) remain follow-ups. The [step-up helper (#50)](./step-up-siwc.md)
+is available against the merged issuer #134 contract; hosted/device acceptance
+remains separate. The auth source boundary guard (#51)
 runs within existing unit CI; a real Hermes/device smoke remains outstanding. Persist app
 sessions in host-controlled appropriate storage and await persistence/removal
 errors; see [async provider storage](../../packages/auth-react/README.md#asynchronous-native-storage).
 Never assume a refresh token is issued.
 At expiry, start fresh Cubid authentication until an issuer-backed refresh policy is
-implemented. For sensitive actions, request `prompt: "login"`, `maxAge: 0` and
-`requirePasskey: true`, then verify returned passkey assurance on the trusted backend.
+implemented. For sensitive identity actions, use the [step-up flow](./step-up-siwc.md) with
+signed authentication-time, same-subject and passkey checks on the trusted backend.
 
 ## React hook overrides for native hosts
 
