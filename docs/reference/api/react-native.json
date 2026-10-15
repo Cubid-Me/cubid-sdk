@@ -3689,7 +3689,7 @@
     },
     {
       "kind": "text",
-      "text": ", the verified value is written to the account as a stamp, so\n  the next Sign in with Cubid carries "
+      "text": ", the verified value is written to the account as a stamp, so\n  a later Sign in with Cubid can disclose it only when the client requests the\n  relevant scope and disclosure is authorized. Collection does not grant that\n  permission. Under the current Cubid verified-email profile, authorized email\n  is an optional verified "
     },
     {
       "kind": "code",
@@ -3697,7 +3697,7 @@
     },
     {
       "kind": "text",
-      "text": " and "
+      "text": " string; "
     },
     {
       "kind": "code",
@@ -3705,7 +3705,16 @@
     },
     {
       "kind": "text",
-      "text": " (or the\n  phone claims) for a client that has consented to those scopes.\n- Name and picture have no Cubid write API yet: they are collected and\n  returned in the result for the app to store, and the location reading is\n  returned the same way. See the package's issue thread for the Passport-side\n  contract.\n\n## API Reference\n\n- JSON reference: "
+      "text": " is omitted. Older\n  Cubid/other OIDC profiles may retain that boolean. Phone verification fields\n  are unchanged. Missing optional claims must not prevent authentication or\n  cause email-based account matching. See the\n  [profile migration guidance]("
+    },
+    {
+      "kind": "relative-link",
+      "text": "../../docs/examples/federated-siwc.md#cubid-verified-email-profile-migration",
+      "targetAnchor": "cubid-verified-email-profile-migration"
+    },
+    {
+      "kind": "text",
+      "text": ").\n- Name and picture have no Cubid write API yet: they are collected and\n  returned in the result for the app to store, and the location reading is\n  returned the same way. See the package's issue thread for the Passport-side\n  contract.\n\n## API Reference\n\n- JSON reference: "
     },
     {
       "kind": "code",
