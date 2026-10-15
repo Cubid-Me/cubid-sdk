@@ -9,8 +9,8 @@
 
 ## Active native integration follow-up
 
-- Current: SDK46 cohesive signed-token native hook handoff/cold-start/logout tests and documentation on `codex/sdk-native-redirect-example-20261015-sol`; collect validation and normal PR review gates.
-- Ready next: bounded SDK-owned `examples/expo-siwc/` reference harness, reusing SDK contracts and measurement tooling; proposal is in `docs/examples/expo-siwc-reference-scope.md`. A retail app, new stream or Starter rewrite is not required.
+- Current: SDK47 source-only reference backend/store in `examples/expo-siwc/` on `codex/sdk-expo-reference-backend-20261015-sol`; synthetic public-SDK validation and review gates. SDK46 hook evidence merged through PR63.
+- Ready next: bounded Expo system-browser/deep-link shell with secure storage, explicit local transport, cancellation and cold-launch delivery; reuse the reference controller/contracts and measurement tooling. See `examples/expo-siwc/README.md` and `docs/examples/expo-siwc-reference-scope.md`. A retail app, new stream or Starter rewrite is not required.
 - Before device acceptance: parent confirms the approved existing client/environment, exact callbacks/devices, reviewed package source/version and development versus approved hosted reference-backend scope. No new registration, credentials, package publication or deployment is authorized.
 - SDK49 session-policy decision follows observed ordinary system-browser reauthentication; do not infer silent login from timing/browser success or add refresh tokens before measured evidence.
 

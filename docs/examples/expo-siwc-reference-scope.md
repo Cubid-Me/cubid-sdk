@@ -57,6 +57,10 @@ Destination: **`cubid-sdk/examples/expo-siwc/`**, owned by this existing SDK str
 Keep it private and isolated from the published package entry points. Use the
 existing SDK checkout/worktree; do not restructure Starter or create a new repository.
 
+The first [source-only backend/store slice](../../examples/expo-siwc/README.md)
+now demonstrates this contract with synthetic tests. The Expo shell and device
+acceptance remain separate follow-ups; the controller does not start a server.
+
 | Part | Bounded responsibility |
 | --- | --- |
 | One native screen | Sign in, minimal status, cancel, sign out and confirm one harmless demo action; no retail flows |
