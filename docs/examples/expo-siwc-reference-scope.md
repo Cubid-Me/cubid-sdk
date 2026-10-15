@@ -58,8 +58,10 @@ Keep it private and isolated from the published package entry points. Use the
 existing SDK checkout/worktree; do not restructure Starter or create a new repository.
 
 The first [source-only backend/store slice](../../examples/expo-siwc/README.md)
-now demonstrates this contract with synthetic tests. The Expo shell and device
-acceptance remain separate follow-ups; the controller does not start a server.
+now demonstrates this contract with synthetic tests. The [native shell source](../../examples/expo-siwc/native/README.md)
+adds the bounded UI and lifecycle adapters with synthetic/local configuration.
+Real device acceptance remains outstanding; neither controller nor transport
+adapter starts a server.
 
 | Part | Bounded responsibility |
 | --- | --- |

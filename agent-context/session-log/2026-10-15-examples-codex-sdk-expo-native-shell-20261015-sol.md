@@ -1,0 +1,17 @@
+## 2026-10-15T06:00:30.358976+00:00 - Native lifecycle source reference
+
+- agent: Codex SDK stream, GPT6.1 Sol High
+- branch: codex/sdk-expo-native-shell-20261015-sol
+- head: 7094764e91a3912d44cd97e79fee74c3fdab9cce
+- summary: Add an isolated private Expo screen/system-browser/secure-storage shell and bounded JSON transport for SDK47's merged reference backend. Bind pending ceremony proof before browser handoff; verify restored opaque app sessions; handle cancellation, cold links, remount/write ordering, app-only logout and fresh same-subject no-op step-up. Keep synthetic configuration and explicit external-input queue. No listener, registration, credentials, native binary, package publication, root manifests/lock/CI or Starter changes.
+- validation: 69 focused synthetic tests pass after standalone native tsconfig repair; backend/contracts/tests and actual pinned Expo/RN App/adapters typechecks pass; scoped lint passes. Full local acceptance previously passed122 tests before final expiry regression (included in focused69). Independent review confirmed partial-write/remount and storage-failure revocation repairs, explicit Expo streaming fetch semantics, and self-contained config repair. JS-only iOS export remains active; initial ancestor-extends Metro resolver failure diagnosed, repaired config reviewed, no export-success claim. Staged whitespace check repaired fixture EOF.
+- follow-ups: Draft PR into dev, canonical CI, single automatic ready review and exact-head merge gates. Collect JS-only export result before source acceptance. Device acceptance still needs approved client/issuer/exact callbacks, reachable approved TLS backend/store, build identity/operator workflow and owner-run device ceremonies. No issue47 closure or device readiness claim; retain all worktrees/refs.
+
+## 2026-10-15T06:24:22.882758+00:00 - Repair original PR65 lifecycle findings
+
+- agent: Codex SDK stream, GPT6.1 Sol High
+- branch: codex/sdk-expo-native-shell-20261015-sol
+- head: bbd7485f2b288b4635114aef602e7593fe8972b6
+- summary: Address all five original automatic-review P2s: track live accepted expiry with timer/resume/read/protected-action checks; restore before initial-URL lookup and warm subscription; retain bounded callback candidates and select matching state; cancel backend transactions independently of failed proof deletion inside the shared barrier, including interrupted step-up before credential restoration; revoke displaced outage credentials after successful replacement persistence with post-await owner/expiry checks. Add nine timing/failure regressions and document concrete failure limits.
+- validation: 78 focused tests pass (35 backend +43 native/transport), both contract/test and actual Expo/RN typechecks pass, explicit source lint and whitespace checks pass. Independent repair review clear for all five and final interrupted-step-up cancellation. Original canonicalCI38690042816 passed381 unit+123 acceptance on bbd7485f before repairs; refreshed dual-platform JS-only export active. Initial lint rerun traversed ignored generated exports; explicit source rerun passes. No package/root lock/dependency/CI or Identity contract change.
+- follow-ups: Push repair to existing ready PR65, reply/resolve the five original threads, collect refreshed source exports and new exact-head canonicalCI/version checks before dev merge. Do not request another review or cycle draft state. External device-input queue and all worktree/ref preservation remain unchanged.

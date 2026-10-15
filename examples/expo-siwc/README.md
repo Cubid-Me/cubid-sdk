@@ -1,4 +1,4 @@
-# Expo SIWC reference: local backend slice
+# Expo SIWC reference source
 
 This is the first **source-only** slice of [SDK47](https://github.com/Cubid-Me/cubid-sdk/issues/47).
 It supplies a transport-neutral reference RP controller and a bounded in-memory
@@ -6,10 +6,13 @@ store, tested against a synthetic issuer. It does not yet contain an Expo binary
 HTTP server or hosted service. Nothing here registers a client, publishes a package
 or proves physical-device, Hermes, hosted login or provider readiness.
 
-The next slice is a small Expo system-browser/deep-link shell with secure storage,
-an explicit development transport, cancellation and cold-launch delivery. Its UI
-only needs sign-in/status, sign-out and one harmless confirmation action. See the
-[scope assessment](../../docs/examples/expo-siwc-reference-scope.md).
+The [native shell source](./native/README.md) adds an isolated private Expo example,
+system-browser/secure-storage adapters, explicit local RPC transport, cancellation
+and cold-launch delivery. Its single screen has sign-in/status, app-only sign-out
+and a harmless confirmation action. Synthetic integration tests exercise the
+shell's lifecycle against this backend without opening a socket or device.
+The [scope assessment](../../docs/examples/expo-siwc-reference-scope.md) and native
+README retain the concrete real-acceptance inputs; no device readiness is claimed.
 
 ## Run the synthetic checks
 

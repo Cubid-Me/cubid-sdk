@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Cubid SDK local reference",
+    "slug": "cubid-sdk-local-reference",
+    "scheme": "cubidexample",
+    "version": "0.0.0",
+    "plugins": [
+      "expo-secure-store"
+    ],
+    "extra": {
+      "evidence": "source-only; no device acceptance or registered client"
+    }
+  }
+}
