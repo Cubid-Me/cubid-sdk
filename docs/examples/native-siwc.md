@@ -130,8 +130,8 @@ Existing browser/Node defaults remain unchanged. `CubidAuthProvider` also accept
 `crypto` for PKCE, state/nonce and validation. Its provider storage accepts synchronous
 or asynchronous adapters; await the hook's persistence operations.
 
-Async provider persistence (#45) supplies cold-start restoration. Complete native
-React redirect ergonomics (#46), a full Expo/server example and device smoke (#47),
+Async provider persistence (#45) supplies cold-start restoration. The hook handoff contract (#46) is documented below. A bounded runnable
+[Expo reference integration and device acceptance (#47)](./expo-siwc-reference-scope.md),
 and refresh/re-auth policy (#49) remain follow-ups. The [step-up helper (#50)](./step-up-siwc.md)
 is available against the merged issuer #134 contract; hosted/device acceptance
 remains separate. The auth source boundary guard (#51)
@@ -155,12 +155,62 @@ browser touch points are explicit overrides:
 - Pass `callbackUrl` to `handleCallback` instead of reading window.location.
 - Supply `navigate`/`performRedirect: false` for logout for the same reason.
 
+Configure both exact callbacks and the stable host adapters before mounting native
+controls. `registeredLogoutUri` must also be registered for this client if the issuer
+supports hosted logout; this SDK session does not register it automatically.
+
 ```tsx
-const auth = useCubidAuth();
-const authorizationUrl = await auth.signIn({ provider: "google", requirePasskey: false, performRedirect: false });
-const result = await WebBrowser.openAuthSessionAsync(authorizationUrl, redirectUri);
-if (result.type === "success") await auth.handleCallback({ callbackUrl: result.url });
+<CubidAuthProvider
+  clientId={registeredNativeClientId}
+  issuer={configuredCubidIssuer}
+  redirectUri={redirectUri}
+  postLogoutRedirectUri={registeredLogoutUri}
+  storage={nativeStore}
+  crypto={nativeCryptoAdapter}
+  scope={["openid"]}
+>
+  <NativeAuthControls />
+</CubidAuthProvider>
 ```
+
+Choose one handoff style. `performRedirect: false` suppresses **all** SDK
+navigation, including an injected `navigate`. It returns the URL after the private
+transaction is persisted; the host then opens it and explicitly completes the callback:
+
+```tsx
+const auth = useCubidAuth(); // inside a native host component using the provider
+
+async function signInFromNativeControl() {
+  const authorizationUrl = await auth.signIn({ performRedirect: false });
+  const result = await WebBrowser.openAuthSessionAsync(authorizationUrl, redirectUri);
+  if (result.type !== "success") return null; // dismissal is not authentication
+  return auth.handleCallback({ callbackUrl: result.url });
+}
+
+async function signOutFromNativeControl() {
+  const logoutUrl = await auth.logout({ performRedirect: false });
+  if (logoutUrl) await WebBrowser.openAuthSessionAsync(logoutUrl, registeredLogoutUri);
+}
+```
+
+Alternatively, `signIn({ navigate: hostNavigate })` invokes the host navigator
+instead of `window.location.assign`; leave `performRedirect` enabled. The navigator
+has a synchronous `void` contract. A host that opens an asynchronous auth session
+must own its completion/error handling; the SDK does not await a Promise returned
+by that callback. The same rule applies to `logout({ navigate: hostNavigate })`.
+For an awaited Expo auth-session flow, prefer the manual style above.
+
+For a cold-launch URL, restore the same stable host storage adapter first and pass
+the launch callback explicitly to `handleCallback({ callbackUrl: initialUrl })`.
+This uses the persisted state, nonce and PKCE verifier, rather than the unrelated
+browser `window.location`. Handle unrelated, invalid, expired or replayed callbacks
+as errors; a deep link alone is not authentication. Avoid duplicate live callback
+listeners where the platform auth session already delivers its result.
+
+The cohesive `native-redirect.test.tsx` tests both navigation styles with signed
+synthetic Cubid tokens and async host storage, a custom-scheme callback after
+unmount/remount, verified-session restoration and host-owned logout. They are
+hook/contract tests in jsdom, not physical-device or Hermes acceptance.
 
 This on-device variant holds Cubid tokens in the configured store. Prefer the
 server-mediated variant when your security/storage model calls for app-session
