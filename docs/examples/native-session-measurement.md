@@ -6,11 +6,12 @@ prepares that measurement and can be reused by the future [Expo example #47](htt
 It does not open a browser, register a client, contact an issuer or prove that
 silent mobile login works. No refresh grant or new Identity contract is added.
 
-The runnable app's owner/location remains a parent decision. Recommended ownership
-is the Starter/adopting team, with SDK examples and protocol helpers consumed here.
-A full app needs a separately authorized isolated Starter checkout, an already
-registered native client, and device acceptance. Preserve the existing dirty
-Starter checkout; this kit needs no second worktree or Expo dependencies.
+The [bounded Expo reference proposal](./expo-siwc-reference-scope.md) recommends
+`cubid-sdk/examples/expo-siwc/` within the current SDK stream. A one-screen native
+harness can satisfy the issue's integration scope; a retail app, separate product
+owner or Starter rewrite is unnecessary. Device acceptance still needs an already
+authorized native client/environment and physical-device evidence. Preserve the
+dirty Starter checkout; this kit needs no second worktree or Expo dependencies.
 
 ## Run the offline example
 

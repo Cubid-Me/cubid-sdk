@@ -7,12 +7,12 @@
 - If the local checkout is missing `.git`, note that explicitly in status updates and session logs before doing branch- or publish-related work.
 - Keep todo state and implementation history separate: status here, narrative in `session-log.md`.
 
-## Active native-session follow-up
+## Active native integration follow-up
 
-- Current: SDK49 offline measurement preparation on `codex/sdk-native-session-measurement-20261015-sol`: closed-schema example/report tool, synthetic acceptance tests and device matrix. No hosted result, refresh grant or issuer contract change.
-- Ready next: collect focused checks, independent review and PR/CI; then use the kit in an authorized native app/device measurement.
-- Parent decision for SDK47: confirm runnable Expo app owner/location. Recommend Starter/adopting-team ownership and a separately authorized isolated Starter checkout; preserve the existing dirty checkout. SDK supplies reusable adapters/fixtures.
-- SDK49 session-policy decision follows observed ordinary system-browser reauthentication; do not infer silent login from browser success/timing or add refresh tokens before that evidence.
+- Current: SDK46 cohesive signed-token native hook handoff/cold-start/logout tests and documentation on `codex/sdk-native-redirect-example-20261015-sol`; collect validation and normal PR review gates.
+- Ready next: bounded SDK-owned `examples/expo-siwc/` reference harness, reusing SDK contracts and measurement tooling; proposal is in `docs/examples/expo-siwc-reference-scope.md`. A retail app, new stream or Starter rewrite is not required.
+- Before device acceptance: parent confirms the approved existing client/environment, exact callbacks/devices, reviewed package source/version and development versus approved hosted reference-backend scope. No new registration, credentials, package publication or deployment is authorized.
+- SDK49 session-policy decision follows observed ordinary system-browser reauthentication; do not infer silent login from timing/browser success or add refresh tokens before measured evidence.
 
 ## S. SDK Foundation
 
