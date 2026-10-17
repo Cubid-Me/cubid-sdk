@@ -1,5 +1,11 @@
 # Bounded Expo reference integration for SDK #47
 
+**2026-10-17 update:** the user selected the existing Starter web app for the
+first physical-device browser test. Follow the
+[Starter readiness and acceptance runbook](../../examples/starter-device/README.md)
+for that pass. The Expo source below remains SDK #47 preparation; it does not
+make Starter native or turn mobile web evidence into native acceptance.
+
 ## What the issue requires
 
 [SDK #47](https://github.com/Cubid-Me/cubid-sdk/issues/47) asks for a **runnable
