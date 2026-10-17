@@ -1,5 +1,12 @@
 # SDK client compatibility status
 
+**2026-10-17 acceptance selection:** the user chose the existing Next.js Starter
+for the first real-device browser login pass. The
+[Starter runbook and explicit-target preflight](../../examples/starter-device/README.md)
+record current checkout/deployment/source-pin evidence and the isolated dev
+configuration and operator steps still required. This is a web acceptance path;
+the native build/device gates below remain separate.
+
 Audited on 2026-10-15 against SDK `dev` at
 `ceba9ca351592b0e07a4e1774a57121b9976dd9b`, current open SDK/Identity PRs,
 and the agreed [Identity federation contract v1](https://github.com/Cubid-Me/cubid-monorepo/blob/dev/docs/engineering/federated-login-contract-v1.md).
