@@ -119,4 +119,26 @@ describe("email disclosure keeps the established subject and issuer profile", ()
     expect(userInfo).toEqual({ sub: oidcSubject });
     expect(session({ sub: oidcSubject }, userInfo).subject).toBe(oidcSubject);
   });
+
+  it.each([
+    { email: "fixture@example.invalid", email_verified: true },
+    { sub: "", email: "fixture@example.invalid", email_verified: true },
+  ])("rejects UserInfo missing a subject even when an email is marked verified", async (payload) => {
+    await expect(fetchCubidUserInfo({
+      accessToken: tokenResponse.accessToken, userInfoEndpoint: `${issuer}/userinfo`,
+      fetch: async () => Response.json(payload),
+    })).rejects.toThrow();
+  });
+
+  it("does not synthesize an OIDC verification boolean from an unrelated UI marker", async () => {
+    const userInfo = await fetchCubidUserInfo({
+      accessToken: tokenResponse.accessToken, userInfoEndpoint: `${issuer}/userinfo`,
+      fetch: async () => Response.json({ sub: oidcSubject, email: "fixture@example.invalid", isVerified: true }),
+    });
+    const result = session({ sub: oidcSubject }, userInfo);
+    expect(result.userInfo).not.toHaveProperty("email_verified");
+    expect(result.idTokenClaims).not.toHaveProperty("email_verified");
+    expect(result.idTokenClaims).not.toHaveProperty("email");
+    expect(result.subject).toBe(oidcSubject);
+  });
 });

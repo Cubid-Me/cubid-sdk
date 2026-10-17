@@ -1,11 +1,24 @@
 # Consumer identity boundaries
 
-This guide covers existing public SDK behavior while the Identity owner finalizes
+This guide covers existing public SDK behavior alongside the Identity-owned
 [event ordering #218](https://github.com/Cubid-Me/cubid-monorepo/issues/218),
 [hosted verified-email collection #219](https://github.com/Cubid-Me/cubid-monorepo/issues/219)
 and the [private allocator mapping #220](https://github.com/Cubid-Me/cubid-monorepo/issues/220).
-It does not introduce a resolver endpoint, response schema, email profile or SET
-claim. Those versioned contracts and hosted acceptance remain owner decisions.
+It does not add a public resolver, private transport or SET parser. The parent
+reconciled the following contracts on 2026-10-17; backend implementation and
+hosted acceptance remain separate from agreement:
+
+- #218 uses signed top-level integer `toe` from persisted event time. The same
+  event retains `toe`, `jti`, content and subject across retries while transport
+  `iat` may advance. Missing event time cannot establish order; equal-second
+  conflicts require conservative handling.
+- #220 preserves strict `2026-08-14` with `fundloop_scoped_uuid` and adds opt-in
+  `2026-10-17` with `fundloop_scoped_uid`. Both identify the same existing target
+  dapp-user UUID. Header/body versions must match; do not add aliases to strict
+  old-version responses. This remains a private workload contract.
+- #219 plans `email_verified: true` only alongside the actually verified,
+  consented email; otherwise both are omitted. Generic SDK boolean compatibility
+  remains unchanged. Agreement does not prove hosted OTP or issuer rollout.
 
 ## Keep identifier namespaces separate
 
@@ -53,8 +66,10 @@ Preserve these distinctions when adapting a finalized resolver response:
   treat a score as permission to create accounts or move money.
 
 The private allocator is a separate server workload boundary, not a new browser
-or public dapp-key SDK method. Its final response spelling/version and lifecycle
-guarantees must come from Identity before an adapter is published. No private
+or public dapp-key SDK method. A private consumer must pin the agreed version and
+use its matching target-ID field, never infer the version from whichever alias
+happens to be present. Identity owns implementation, lifecycle guarantees and
+release evidence. No private
 request signer, credentials, endpoint implementation or transport DTO is copied
 into this guide or the public SDK.
 
@@ -86,17 +101,21 @@ returns a verified, consented email string when available and omits
 `email_verified`. Older Cubid and other OIDC issuers can return the optional
 boolean. Generic SDK types preserve `true`, `false` and absence separately;
 never reinterpret `false` as verified or assume an omission profile for an
-unconfirmed issuer/runtime. Issue #219's requested boolean must be reconciled by
-Identity in its versioned contract before this guidance or a consumer changes
-verification policy. No new profile is asserted here.
+unconfirmed issuer/runtime. The reconciled #219 addition derives the companion
+only alongside that same verified, consented email; it must not be inferred by
+the SDK from email presence, a UI flag or a legacy `false`. Consumers need the
+owner's running-issuer profile/version evidence before changing policy. The
+current v1 omission profile is not silently reclassified by this guide.
 
 ## Order verified events by the agreed event clock
 
 A later delivery or signing time does not mean the underlying event happened
 later. [RFC 8417 section 2.2](https://www.rfc-editor.org/rfc/rfc8417.html#section-2.2)
 defines optional `toe` as event time; its omission does not convey that time.
-Cubid #218 must specify its stable event-time or stable-issuance profile before
-receivers select a field or legacy fallback.
+The reconciled Cubid #218 profile selects persisted integer `toe`, retaining
+`iat` as issuance time. Do not use fresh transport `iat` as a fallback when
+`toe` is missing or malformed. Owner implementation and signed-token coverage
+must establish the profile before a receiver enables it.
 
 For example, withdrawal at T100 retried at T300 must not revoke a grant that
 was re-consented at T200. The consumer needs an issuer-defined event clock and

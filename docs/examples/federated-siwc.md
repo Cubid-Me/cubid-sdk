@@ -98,7 +98,7 @@ privately, consume it once, and validate nonce before establishing an app sessio
 ## Cubid verified-email profile migration
 
 For app UUID versus OIDC subject boundaries, hosted-email ownership and the
-pending #218–#220 consumer contracts, see
+agreed #218–#220 consumer contracts and remaining delivery gates, see
 [Consumer identity boundaries](./scoped-identity-consumers.md). That work does
 not change the issuer profile below without a versioned Identity contract.
 
