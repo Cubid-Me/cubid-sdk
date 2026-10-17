@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildCubidAuthorizationUrl } from "@cubid/auth";
+import { buildCubidAuthorizationUrl, createCubidAuthNonce, createCubidAuthState, createCubidPkcePair } from "@cubid/auth";
 import { checkStarterDeviceReadiness } from "../../../examples/starter-device/preflight.mjs";
 
 const config = {
@@ -10,29 +10,30 @@ const config = {
 const authorizationEndpoint = `${config.issuer}/oauth/authorize`;
 type Mutation = (url: URL, response: Response) => Response;
 
-function fixture(mutate: Mutation = (_url, response) => response) {
+function fixture(mutate: Mutation = (_url, response) => response, endpoint = authorizationEndpoint) {
   const calls: Array<{ url: URL; init?: RequestInit }> = [];
   const fetchImpl = async (input: string | URL, init?: RequestInit) => {
     const url = new URL(String(input));
     calls.push({ url, init });
     let response: Response;
     if (url.pathname.endsWith("openid-configuration")) {
-      response = Response.json({ issuer: config.issuer, authorization_endpoint: authorizationEndpoint });
+      response = Response.json({ issuer: config.issuer, authorization_endpoint: endpoint });
     } else if (url.pathname.endsWith("/session")) {
       response = Response.json({ authenticated: false, status: "not_signed_in", trace: [] });
     } else {
       // Exercise the reviewed SDK builder, including the existing passkey ACR.
+      const pkce = await createCubidPkcePair();
       const authorization = buildCubidAuthorizationUrl({
-        authorizationEndpoint, clientId: config.clientId, scope: ["openid"],
+        authorizationEndpoint: endpoint, clientId: config.clientId, scope: ["openid"],
         redirectUri: `${config.origin}/api/cubid/siwc/callback`,
-        codeChallenge: "c".repeat(43), codeChallengeMethod: "S256",
-        nonce: "n".repeat(43), state: "s".repeat(43), requirePasskey: true,
+        codeChallenge: pkce.codeChallenge, codeChallengeMethod: pkce.codeChallengeMethod,
+        nonce: createCubidAuthNonce(), state: createCubidAuthState(), requirePasskey: true,
         prompt: url.searchParams.get("prompt") ?? undefined,
         maxAge: url.searchParams.has("max_age") ? 0 : undefined,
       });
       const headers = new Headers({ location: authorization });
       for (const name of ["cubid_siwc_txn", "cubid_siwc_return_to", "cubid_siwc_trace"]) {
-        headers.append("set-cookie", `${name}=synthetic; HttpOnly; Secure; SameSite=Lax; Path=/`);
+        headers.append("set-cookie", `${name}=synthetic-${calls.length}; HttpOnly; Secure; SameSite=Lax; Path=/`);
       }
       response = new Response(null, { status: 307, headers });
     }
@@ -107,6 +108,51 @@ describe("Starter physical-browser preflight", () => {
       return response;
     });
     await expect(checkStarterDeviceReadiness({ ...config, fetchImpl })).rejects.toThrow("secure cookie attributes");
+  });
+
+  it.each(["state", "nonce", "code_challenge"])("rejects reused %s across independent launches", async (key) => {
+    let first: string | null = null;
+    const { fetchImpl } = fixture(changeAuthorization((url) => {
+      first ??= url.searchParams.get(key);
+      url.searchParams.set(key, first!);
+    }));
+    await expect(checkStarterDeviceReadiness({ ...config, fetchImpl })).rejects.toThrow(`fresh ${key}`);
+  });
+
+  it("rejects a reused transaction cookie even when URL parameters are fresh", async () => {
+    let first: string | undefined;
+    const { fetchImpl } = fixture((url, response) => {
+      if (url.pathname.endsWith("/start")) {
+        const cookies = response.headers.getSetCookie();
+        first ??= cookies.find((cookie) => cookie.startsWith("cubid_siwc_txn="));
+        response.headers.delete("set-cookie");
+        for (const cookie of cookies) response.headers.append("set-cookie",
+          cookie.startsWith("cubid_siwc_txn=") ? first! : cookie);
+      }
+      return response;
+    });
+    await expect(checkStarterDeviceReadiness({ ...config, fetchImpl })).rejects.toThrow("fresh transaction");
+  });
+
+  it.each([32, 42, 44, 64])("rejects an S256 challenge of length %s", async (length) => {
+    const { fetchImpl } = fixture(changeAuthorization((url) => url.searchParams.set("code_challenge", "c".repeat(length))));
+    await expect(checkStarterDeviceReadiness({ ...config, fetchImpl })).rejects.toThrow("code_challenge presence");
+  });
+
+  const fixedQueryEndpoint = `${authorizationEndpoint}?tenant=synthetic&route=one&route=two`;
+  it("retains discovered fixed query parameters, including repeated values", async () => {
+    const { fetchImpl } = fixture(undefined, fixedQueryEndpoint);
+    await expect(checkStarterDeviceReadiness({ ...config, fetchImpl })).resolves.toHaveProperty("checks");
+  });
+
+  it.each([
+    (url: URL) => url.searchParams.delete("tenant"),
+    (url: URL) => url.searchParams.set("tenant", "other"),
+    (url: URL) => url.searchParams.set("route", "one"),
+    (url: URL) => url.searchParams.append("tenant", "synthetic"),
+  ])("rejects dropped, changed or duplicated fixed endpoint query parameters", async (change) => {
+    const { fetchImpl } = fixture(changeAuthorization(change), fixedQueryEndpoint);
+    await expect(checkStarterDeviceReadiness({ ...config, fetchImpl })).rejects.toThrow("fixed endpoint query");
   });
 
   it("rejects a different discovered issuer before making app requests", async () => {

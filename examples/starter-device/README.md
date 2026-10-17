@@ -2,8 +2,8 @@
 
 The user selected the existing [Cubid Starter](https://github.com/Cubid-Me/cubid-starter-v3)
 as the first real-device Cubid login client. It is a Next.js web application.
-Use Safari/Chrome on a physical phone and the existing **SIWC / SSO protocol
-demo** panel. This selection does not require an Expo app, native build,
+The first selected device is the user's **iPhone, using Safari** and the existing
+**SIWC / SSO protocol demo** panel. This selection does not require an Expo app, native build,
 custom scheme, universal link or app-store signing.
 
 This SDK-owned slice supplies a credential-free preflight and an acceptance
@@ -105,7 +105,10 @@ The tool fetches discovery, unsigned session status and three authorization
 launches. It never follows the authorization redirect, sends browser cookies,
 submits credentials or completes login. It checks the discovered endpoint,
 exact client/callback, S256, state/nonce presence, passkey ACR, scopes,
-prompt/max-age modes and each transaction cookie's security attributes.
+prompt/max-age modes and each transaction cookie's security attributes. Fixed
+query parameters from discovery are preserved; S256 challenges are exactly 43
+base64url characters. State, nonce, challenge and transaction-cookie values must
+be fresh across the independent launches, and are retained only in memory.
 
 Output contains fixed check labels and explicitly pending authenticated
 acceptance. It omits URLs, identifiers, headers, cookies and response bodies.
@@ -118,17 +121,27 @@ Offline regression tests use synthetic hosts and the reviewed SDK's actual
 authorization builder:
 
 ```sh
+pnpm --filter @cubid/auth build
 cd packages/acceptance
 node ../../node_modules/vitest/vitest.mjs run --config vitest.config.ts src/starter-device.acceptance.test.ts
 ```
 
 ## Operator-device acceptance
 
-Use an approved marked non-personal fixture and a physical phone. Record only
+Open the verified approved dev Starter URL in **Safari on the user's iPhone**.
+Use an approved marked non-personal fixture. Record only
 OS/browser versions, reviewed deployment/SDK SHA, environment label, timestamp,
 scenario result and redacted screenshots. Do not save HAR, callback URLs,
 cookies, raw console/network traces, token bodies, subjects or personal data.
 The operator performs passkey/biometric prompts; no credential automation.
+
+Short operator pass: open the unsigned panel, tap **Sign in with Cubid**, complete
+the fixture's passkey/consent, and confirm return to Starter. Then **Clear starter
+session** and sign in again; try **Force login** (cancel once, retry successfully)
+and **Force consent**; reload/background Safari and clear the session at the end.
+Only provide the clickable URL after the isolated backend and exact callback
+preflight are verified. A production URL or an invented Preview alias is not a
+substitute for that verified target.
 
 | Scenario | Expected observation / evidence |
 | --- | --- |

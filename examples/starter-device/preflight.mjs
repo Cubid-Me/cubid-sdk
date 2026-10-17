@@ -5,11 +5,11 @@ const requireCheck = (condition, label) => {
   if (!condition) throw new Error(`Starter preflight failed: ${label}`);
 };
 
-function httpsUrl(value, label, originOnly = false) {
+function httpsUrl(value, label, originOnly = false, allowQuery = false) {
   let url;
   try { url = new URL(value); } catch { requireCheck(false, label); }
   requireCheck(url.protocol === "https:" && !url.username && !url.password &&
-    !url.search && !url.hash && (!originOnly || url.pathname === "/"), label);
+    (allowQuery || !url.search) && !url.hash && (!originOnly || url.pathname === "/"), label);
   return url;
 }
 
@@ -42,13 +42,18 @@ export async function checkStarterDeviceReadiness({
   const discovery = await json(await request(`${issuerId}/.well-known/openid-configuration`),
     "discovery response");
   requireCheck(discovery?.issuer?.replace(/\/$/u, "") === issuerId, "discovery issuer");
-  const authorization = httpsUrl(discovery.authorization_endpoint, "discovery authorization endpoint");
+  const authorization = httpsUrl(discovery.authorization_endpoint, "discovery authorization endpoint", false, true);
   checks.push("configured issuer matches discovery");
 
   const session = await json(await request(new URL("/api/cubid/siwc/session", app)), "session response");
   requireCheck(session?.authenticated === false && session.status === "not_signed_in" &&
     Array.isArray(session.trace), "unsigned web session");
   checks.push("unsigned web session");
+  const observed = new Map(["state", "nonce", "code_challenge", "transaction"].map((key) => [key, new Set()]));
+  const rememberFresh = (key, value, label) => {
+    requireCheck(!observed.get(key).has(value), `${label} fresh ${key}`);
+    observed.get(key).add(value);
+  };
 
   for (const [label, query, prompt, maxAge] of [
     ["normal", "", null, null],
@@ -62,6 +67,12 @@ export async function checkStarterDeviceReadiness({
     catch { requireCheck(false, `${label} location`); }
     requireCheck(target.origin === authorization.origin && target.pathname === authorization.pathname &&
       !target.username && !target.password && !target.hash, `${label} discovered endpoint`);
+    for (const key of new Set(authorization.searchParams.keys())) {
+      const fixed = authorization.searchParams.getAll(key);
+      const actual = target.searchParams.getAll(key);
+      requireCheck(fixed.length === actual.length && fixed.every((value, index) => value === actual[index]),
+        `${label} fixed endpoint query`);
+    }
     const expected = {
       response_type: "code", client_id: clientId,
       redirect_uri: new URL("/api/cubid/siwc/callback", app).href,
@@ -73,8 +84,10 @@ export async function checkStarterDeviceReadiness({
         `${label} ${key}`);
     }
     for (const key of ["state", "nonce", "code_challenge"]) {
-      requireCheck(target.searchParams.getAll(key).length === 1 &&
-        /^[A-Za-z0-9_-]{32,}$/u.test(target.searchParams.get(key)), `${label} ${key} presence`);
+      const value = target.searchParams.get(key);
+      const format = key === "code_challenge" ? /^[A-Za-z0-9_-]{43}$/u : /^[A-Za-z0-9_-]{32,}$/u;
+      requireCheck(target.searchParams.getAll(key).length === 1 && format.test(value), `${label} ${key} presence`);
+      rememberFresh(key, value, label);
     }
     requireCheck(target.searchParams.getAll("scope").length === 1 &&
       target.searchParams.get("scope").split(" ").sort().join(" ") === [...scope].sort().join(" "),
@@ -88,6 +101,11 @@ export async function checkStarterDeviceReadiness({
       const attributes = matches[0].split(";").slice(1).map((v) => v.trim().toLowerCase());
       requireCheck(["httponly", "secure", "samesite=lax", "path=/"].every((v) => attributes.includes(v)),
         `${label} secure cookie attributes`);
+      if (name === "cubid_siwc_txn") {
+        const value = matches[0].split(";", 1)[0].slice(name.length + 1);
+        requireCheck(value.length > 0, `${label} transaction cookie value`);
+        rememberFresh("transaction", value, label);
+      }
     }
     checks.push(`${label} passkey launch`);
   }
