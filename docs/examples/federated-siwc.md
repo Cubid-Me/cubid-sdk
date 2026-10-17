@@ -97,6 +97,11 @@ privately, consume it once, and validate nonce before establishing an app sessio
 
 ## Cubid verified-email profile migration
 
+For app UUID versus OIDC subject boundaries, hosted-email ownership and the
+pending #218–#220 consumer contracts, see
+[Consumer identity boundaries](./scoped-identity-consumers.md). That work does
+not change the issuer profile below without a versioned Identity contract.
+
 This is the current **Cubid issuer profile**, not a universal OIDC rule. For Cubid,
 a consented, verified email string is disclosed only when authorized and available;
 otherwise `email` is absent. An authenticated user may legitimately disclose only
