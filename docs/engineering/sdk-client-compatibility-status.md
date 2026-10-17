@@ -1,5 +1,12 @@
 # SDK client compatibility status
 
+**2026-10-17 consumer contract priority:** Identity owns monorepo #218/#219/#220;
+this SDK stream owns [existing-entrypoint consumer tests and integration guidance](../examples/scoped-identity-consumers.md).
+The parent reconciled event-time/email rules and strict old/opt-in new allocator
+versions; backend implementation, release evidence and cross-project acceptance
+remain owner gates. No private resolver API is added to the public SDK, no deferred
+main-only integration is assumed and no paired issue is closed by these checks.
+
 **2026-10-17 acceptance selection:** the user chose the existing Next.js Starter
 for the first real-device browser login pass. The
 [Starter runbook and explicit-target preflight](../../examples/starter-device/README.md)
