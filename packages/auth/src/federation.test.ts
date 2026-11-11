@@ -8,6 +8,8 @@ import {
   decodeCubidIdTokenClaims,
   fetchCubidOidcDiscoveryDocument,
   parseCubidAuthorizationCallback,
+  parseCubidAuthSession,
+  serializeCubidAuthSession,
   type CubidAuthProviderHint,
 } from "./index";
 
@@ -37,6 +39,16 @@ describe("Cubid federation contract v1", () => {
     expect(url.searchParams.get("state")).toBe("state");
     expect(url.searchParams.get("nonce")).toBe("nonce");
     expect(url.searchParams.get("code_challenge_method")).toBe("S256");
+  });
+
+  it.each([undefined, "urn:cubid:acr:passkey"])("ordinary Google example preserves explicit ACR %s", (acrValues) => {
+    const url = new URL(buildCubidAuthorizationUrl({
+      ...authorization, provider: "google", requirePasskey: false, acrValues,
+    }));
+    expect(url.searchParams.get("cubid_provider")).toBe("google");
+    expect(url.searchParams.get("acr_values")).toBe(acrValues ?? null);
+    expect(url.searchParams.has("max_age")).toBe(false);
+    expect(url.searchParams.has("prompt")).toBe(false);
   });
 
   it("preserves legacy requests and accepts one valid low-level hint", () => {
@@ -101,13 +113,18 @@ describe("runtime-agnostic auth compatibility", () => {
   });
 });
 
-it("preserves older/other issuer optional email verification booleans", () => {
-  const claims = { sub: "pairwise", email: "legacy@example.invalid", email_verified: false };
+it.each([true, false, undefined])("preserves optional email verification %s through session storage", (emailVerified) => {
+  const claims = {
+    sub: "pairwise",
+    ...(emailVerified === undefined ? {} : { email: "verified@example.invalid", email_verified: emailVerified }),
+  };
   const session = createCubidAuthSession({ clientId: "legacy-client", issuer: "https://legacy.example", idTokenClaims: claims,
     userInfo: claims, tokenResponse: { accessToken: "synthetic", tokenType: "Bearer", expiresAt: null, expiresIn: null, issuedAt: Date.now(), idToken: null, refreshToken: null, scope: ["openid", "email"], raw: {} },
   });
-  expect(session.idTokenClaims?.email_verified).toBe(false);
-  expect(session.userInfo?.email_verified).toBe(false);
+  const restored = parseCubidAuthSession(serializeCubidAuthSession(session));
+  expect(restored.subject).toBe("pairwise");
+  expect(restored.idTokenClaims).toEqual(claims);
+  expect(restored.userInfo).toEqual(claims);
 });
 
 describe("federation discovery field normalization", () => {

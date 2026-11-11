@@ -69,8 +69,11 @@ export function App() {
 
 `CubidAuthProvider` requests Cubid passkey assurance by default using
 `acr_values=urn:cubid:acr:passkey`. Set `requirePasskey={false}` only for a
-compatibility flow that intentionally does not require passkey-backed Cubid
-authentication.
+flow whose RP policy permits assurance without a Cubid passkey. The per-call
+ordinary Google example is `await auth.signIn({ provider: "google",
+requirePasskey: false })`, with no `acrValues`, `maxAge` or `prompt`. A provider
+hint alone retains the passkey default. Explicit `acrValues` remain authoritative
+even when `requirePasskey` is false.
 
 `useCubidAuth()` exposes `assurance` and `hasPasskeyAssurance` so React apps can
 render passkey-backed state without manually decoding `acr` or `amr` claims.
@@ -131,10 +134,16 @@ hints select a Cubid-hosted UI choice; they never establish assurance or bypass
 consent. Native crypto adapters can be scoped to the SDK. Existing browser
 behavior and omitted-hint requests are preserved.
 
-Under the current Cubid verified-email profile, email is optional and is disclosed
-only when verified and authorized. Do not require `email_verified` or email for
-Cubid authentication. Its optional deprecated typing is retained for legacy or
-other OIDC issuers, whose verification semantics still apply.
+Under Identity's current #219 contract, verified, scoped and consented `email`
+is co-disclosed with `email_verified: true` in ID token and UserInfo; otherwise
+both are absent. Authentication uses the validated issuer and pairwise `sub`,
+never email matching. Apps requiring email may defer their own session until
+Cubid independently verifies it and the user consents to disclosure. Generic SDK
+types/parsing still preserve `true`, `false` and absence for older or other issuers;
+never infer verification from provider email or a browser callback boolean.
+Confirm the running issuer contract before changing email policy. This source
+guidance does not establish published package contents, issuer deployment/provider
+enablement or real Google-to-RP acceptance.
 
 ## Asynchronous Native Storage
 

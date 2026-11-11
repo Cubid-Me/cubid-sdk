@@ -155,12 +155,22 @@ See [Federated SIWC contract v1](../../docs/examples/federated-siwc.md) and
 [Native OIDC integration](../../docs/examples/native-siwc.md). Optional provider
 hints select a Cubid-hosted UI choice; they never establish assurance or bypass
 consent. Native crypto adapters can be scoped to the SDK. Existing browser
-behavior and omitted-hint requests are preserved.
+behavior and omitted-hint requests are preserved. For ordinary Google login,
+pass `provider: "google", requirePasskey: false` to `buildCubidAuthorizationUrl`
+only when RP policy permits that assurance, omitting `acrValues`, `maxAge` and
+`prompt`. Explicit `acrValues` remain authoritative even when `requirePasskey`
+is false; provider selection never weakens them.
 
-Under the current Cubid verified-email profile, email is optional and is disclosed
-only when verified and authorized. Do not require `email_verified` or email for
-Cubid authentication. Its optional deprecated typing is retained for legacy or
-other OIDC issuers, whose verification semantics still apply.
+Under Identity's current #219 contract, verified, scoped and consented `email`
+is co-disclosed with `email_verified: true` in ID token and UserInfo; otherwise
+both are absent. Authentication uses the validated issuer and pairwise `sub`,
+never email matching. Apps requiring email may defer their own session until
+Cubid independently verifies it and the user consents to disclosure. Generic SDK
+types/parsing still preserve `true`, `false` and absence for older or other issuers;
+never infer verification from provider email or a browser callback boolean.
+Confirm the running issuer contract before changing email policy. This source
+guidance does not establish published package contents, issuer deployment/provider
+enablement or real Google-to-RP acceptance.
 
 ## Fresh step-up for sensitive identity actions
 

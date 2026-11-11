@@ -199,6 +199,22 @@ describe("async auth-react persistence", () => {
     expect(new URL(String(navigate.mock.calls[0]?.[0])).searchParams.get("cubid_provider")).toBe("google");
   });
 
+  it.each([undefined, "urn:cubid:acr:passkey"])("launches ordinary Google sign-in without dropping explicit ACR %s", async (acrValues) => {
+    const app = mount(new AsyncStorage());
+    await ready(app);
+    let authorizationUrl!: string;
+    await act(async () => {
+      authorizationUrl = await app.auth().signIn({
+        provider: "google", requirePasskey: false, acrValues, performRedirect: false,
+      });
+    });
+    const params = new URL(authorizationUrl).searchParams;
+    expect(params.get("cubid_provider")).toBe("google");
+    expect(params.get("acr_values")).toBe(acrValues ?? null);
+    expect(params.has("max_age")).toBe(false);
+    expect(params.has("prompt")).toBe(false);
+  });
+
   it("does not navigate after a rejected transaction write", async () => {
     const storage = new AsyncStorage();
     const failure = new Error("synthetic write rejected");
