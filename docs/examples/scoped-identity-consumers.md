@@ -16,8 +16,8 @@ hosted acceptance remain separate from agreement:
   `2026-10-17` with `fundloop_scoped_uid`. Both identify the same existing target
   dapp-user UUID. Header/body versions must match; do not add aliases to strict
   old-version responses. This remains a private workload contract.
-- #219 plans `email_verified: true` only alongside the actually verified,
-  consented email; otherwise both are omitted. Generic SDK boolean compatibility
+- The current #219 Identity contract derives `email_verified: true` only alongside
+  the actually verified, scoped and consented email; otherwise both are omitted. Generic SDK boolean compatibility
   remains unchanged. Agreement does not prove hosted OTP or issuer rollout.
 
 ## Keep identifier namespaces separate
@@ -97,15 +97,14 @@ Missing optional email remains a valid subject-only authentication result;
 application contact/onboarding policy is a separate decision.
 
 The [current Cubid verified-email profile](./federated-siwc.md#cubid-verified-email-profile-migration)
-returns a verified, consented email string when available and omits
-`email_verified`. Older Cubid and other OIDC issuers can return the optional
-boolean. Generic SDK types preserve `true`, `false` and absence separately;
-never reinterpret `false` as verified or assume an omission profile for an
-unconfirmed issuer/runtime. The reconciled #219 addition derives the companion
-only alongside that same verified, consented email; it must not be inferred by
-the SDK from email presence, a UI flag or a legacy `false`. Consumers need the
-owner's running-issuer profile/version evidence before changing policy. The
-current v1 omission profile is not silently reclassified by this guide.
+co-discloses an actually verified, scoped and consented `email` with
+`email_verified: true` in ID token and UserInfo, or omits both. It supersedes the
+earlier v1 omission profile. Older Cubid and other OIDC issuers can return the
+optional boolean. Generic SDK types preserve `true`, `false` and absence
+separately; never reinterpret `false` as verified or derive the companion from
+email presence, provider email or a browser UI flag. Consumers need the owner's
+running-issuer contract/version evidence before changing policy. The source
+contract does not establish hosted OTP, rollout or real acceptance.
 
 ## Order verified events by the agreed event clock
 

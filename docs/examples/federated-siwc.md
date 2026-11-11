@@ -1,11 +1,13 @@
 # Federated Sign in with Cubid: client contract v1
 
-This guide consumes Identity's [federation contract v1](https://github.com/Cubid-Me/cubid-monorepo/blob/a8bcc3a/docs/engineering/federated-login-contract-v1.md)
+This guide consumes Identity's [federation contract v1](https://github.com/Cubid-Me/cubid-monorepo/blob/ad2a07c9831d9b4e8b4c74a4ca922d009c6179b2/docs/engineering/federated-login-contract-v1.md)
 for [SDK acceptance #191](https://github.com/Cubid-Me/cubid-monorepo/issues/191). It describes SDK client
 compatibility, not a production provider enablement or release. Identity owns
 provider binding/provisioning, consent, redirects, account linking and recovery.
-The entry/verification slice is [Identity PR #193](https://github.com/Cubid-Me/cubid-monorepo/pull/193);
-it does not enable primary Google login.
+The Identity source baseline includes the hosted Google transport from
+[PR #253](https://github.com/Cubid-Me/cubid-monorepo/pull/253). Implemented source,
+published SDK artifacts, exact-SHA issuer deployment/provider enablement and real
+Google-to-RP acceptance are separate gates; this guide establishes none of the latter.
 
 ## Route every entry through Cubid
 
@@ -32,7 +34,8 @@ const authorizationUrl = buildCubidAuthorizationUrl({
   codeChallenge: pkce.codeChallenge,
   state, nonce,
   provider: "google",
-  // Request passkey assurance only when the application's policy requires it.
+  // Ordinary Google login only when RP policy permits its assurance.
+  // Do not add acrValues, maxAge or prompt for a fresh/silent ceremony here.
   requirePasskey: false,
 });
 ```
@@ -74,13 +77,17 @@ to Cubid's hosted UI.
 ## React integration
 
 ```tsx
+// Only when RP policy permits ordinary Google assurance:
 const auth = useCubidAuth();
 await auth.signIn({ provider: "google", requirePasskey: false });
 // For ordinary login, the existing session hook handles the callback.
 ```
 
 `CubidAuthProvider` retains its existing `requirePasskey: true` default. Selecting
-Google alone does not turn it off. For a sensitive identity operation, use the [step-up helper](./step-up-siwc.md)
+Google alone does not turn it off. `requirePasskey: false` suppresses only the
+implicit passkey request: explicit `acrValues` remain authoritative, including
+`urn:cubid:acr:passkey`. Ordinary examples omit `acrValues`, `maxAge` and `prompt`;
+a provider hint never weakens a caller-specified requirement. For a sensitive identity operation, use the [step-up helper](./step-up-siwc.md)
 to verify signed freshness, same-subject binding and requested assurance; the hint
 and an existing authenticated session are not evidence of a fresh ceremony. `CubidSignInButton` forwards
 `signInOptions.provider`. Use custom native host controls rather than DOM buttons
@@ -99,15 +106,20 @@ privately, consume it once, and validate nonce before establishing an app sessio
 
 For app UUID versus OIDC subject boundaries, hosted-email ownership and the
 agreed #218–#220 consumer contracts and remaining delivery gates, see
-[Consumer identity boundaries](./scoped-identity-consumers.md). That work does
-not change the issuer profile below without a versioned Identity contract.
+[Consumer identity boundaries](./scoped-identity-consumers.md). The pinned Identity
+contract above includes the #219 successor to the earlier omission profile.
 
 This is the current **Cubid issuer profile**, not a universal OIDC rule. For Cubid,
-a consented, verified email string is disclosed only when authorized and available;
-otherwise `email` is absent. An authenticated user may legitimately disclose only
-`sub`. Collection for recovery/contact and disclosure to an RP are separate choices.
-Do not reject authentication when optional email, name, phone or other claims are
-missing, and do not widen scopes to work around omitted claims.
+an actually verified, scoped and consented email is disclosed with
+`email_verified: true` in both ID token and UserInfo; otherwise both fields are
+absent. The companion flag is derived, not an independently selectable claim.
+An authenticated user may legitimately disclose only `sub`. Collection for recovery/contact and disclosure to an RP are separate choices.
+Keep authentication keyed by the validated issuer and app-specific pairwise `sub`,
+never email. Missing optional email, name or phone does not invalidate that
+identity; do not widen scopes to work around omitted claims. An app requiring
+email may defer its own session until Cubid independently verifies it and the
+user consents to disclosure. Provider email and browser callback booleans are
+not proof of Cubid contact verification or authority to link accounts.
 
 ```ts
 const subject = session.subject; // use Cubid's app-specific subject for identity
@@ -119,18 +131,20 @@ if (email) {
 }
 ```
 
-`email_verified` remains an optional deprecated compatibility property on the
-public types. Older Cubid and other standards-based issuers may return it. Generic
-OIDC integrations must follow their issuer's verification semantics; this SDK
-change does not erase their boolean or reinterpret `false` as verified. Migrate
-Cubid-specific checks that require `email_verified === true` to the documented
-Cubid verified-email profile only after confirming the configured runtime version.
-Phone verification fields are unchanged. Generic parsing preserves legacy fields.
+`email_verified` remains optional on the public types (including existing legacy
+API annotations). Generic parsing preserves `true`, `false` and absence for
+older Cubid and other OIDC issuers; never reinterpret `false` or synthesize a
+verification boolean from email presence. Do not migrate current Cubid consumers
+away from `email_verified === true` on the basis of the superseded omission
+profile. Confirm the configured issuer's running contract before changing an
+application's email policy. Phone verification fields are unchanged.
 
-This additive minor SDK change retains existing generic claim types. Selective
-consent completion and hosted omission smoke remain dependent on Identity's
-runtime predecessors (including #192 before optional-selection #74); this guide
-and synthetic tests do not close that deployment gate.
+No public API, default, package version or publication changes in this guidance
+checkpoint. Source package versions alone do not prove published contents.
+Selective consent, hosted omission, real Google login, same-account return and
+passkey step-up acceptance require separate exact-deployment evidence under
+[#191](https://github.com/Cubid-Me/cubid-monorepo/issues/191); synthetic SDK tests
+do not establish those outcomes.
 
 ## Native consumers and remaining example work
 

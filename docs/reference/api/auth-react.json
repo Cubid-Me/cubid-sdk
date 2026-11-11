@@ -2341,7 +2341,55 @@
     },
     {
       "kind": "text",
-      "text": " only for a\ncompatibility flow that intentionally does not require passkey-backed Cubid\nauthentication.\n\n"
+      "text": " only for a\nflow whose RP policy permits assurance without a Cubid passkey. The per-call\nordinary Google example is "
+    },
+    {
+      "kind": "code",
+      "text": "`await auth.signIn({ provider: \"google\",\nrequirePasskey: false })`"
+    },
+    {
+      "kind": "text",
+      "text": ", with no "
+    },
+    {
+      "kind": "code",
+      "text": "`acrValues`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`maxAge`"
+    },
+    {
+      "kind": "text",
+      "text": " or "
+    },
+    {
+      "kind": "code",
+      "text": "`prompt`"
+    },
+    {
+      "kind": "text",
+      "text": ". A provider\nhint alone retains the passkey default. Explicit "
+    },
+    {
+      "kind": "code",
+      "text": "`acrValues`"
+    },
+    {
+      "kind": "text",
+      "text": " remain authoritative\neven when "
+    },
+    {
+      "kind": "code",
+      "text": "`requirePasskey`"
+    },
+    {
+      "kind": "text",
+      "text": " is false.\n\n"
     },
     {
       "kind": "code",
@@ -2453,15 +2501,47 @@
     },
     {
       "kind": "text",
-      "text": "). Optional provider\nhints select a Cubid-hosted UI choice; they never establish assurance or bypass\nconsent. Native crypto adapters can be scoped to the SDK. Existing browser\nbehavior and omitted-hint requests are preserved.\n\nUnder the current Cubid verified-email profile, email is optional and is disclosed\nonly when verified and authorized. Do not require "
+      "text": "). Optional provider\nhints select a Cubid-hosted UI choice; they never establish assurance or bypass\nconsent. Native crypto adapters can be scoped to the SDK. Existing browser\nbehavior and omitted-hint requests are preserved.\n\nUnder Identity's current #219 contract, verified, scoped and consented "
     },
     {
       "kind": "code",
-      "text": "`email_verified`"
+      "text": "`email`"
     },
     {
       "kind": "text",
-      "text": " or email for\nCubid authentication. Its optional deprecated typing is retained for legacy or\nother OIDC issuers, whose verification semantics still apply.\n\n## Asynchronous Native Storage\n\n"
+      "text": "\nis co-disclosed with "
+    },
+    {
+      "kind": "code",
+      "text": "`email_verified: true`"
+    },
+    {
+      "kind": "text",
+      "text": " in ID token and UserInfo; otherwise\nboth are absent. Authentication uses the validated issuer and pairwise "
+    },
+    {
+      "kind": "code",
+      "text": "`sub`"
+    },
+    {
+      "kind": "text",
+      "text": ",\nnever email matching. Apps requiring email may defer their own session until\nCubid independently verifies it and the user consents to disclosure. Generic SDK\ntypes/parsing still preserve "
+    },
+    {
+      "kind": "code",
+      "text": "`true`"
+    },
+    {
+      "kind": "text",
+      "text": ", "
+    },
+    {
+      "kind": "code",
+      "text": "`false`"
+    },
+    {
+      "kind": "text",
+      "text": " and absence for older or other issuers;\nnever infer verification from provider email or a browser callback boolean.\nConfirm the running issuer contract before changing email policy. This source\nguidance does not establish published package contents, issuer deployment/provider\nenablement or real Google-to-RP acceptance.\n\n## Asynchronous Native Storage\n\n"
     },
     {
       "kind": "code",
